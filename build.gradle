@@ -1,0 +1,58 @@
+apply plugin: 'java' 
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+repositories
+{
+    maven
+    {
+        name 'forge'
+        url 'http://files.minecraftforge.net/maven'
+    }
+    mavenCentral()
+    maven
+    {
+        name 'sonatypeSnapshot'
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    maven
+    {
+        name 'minecraft'
+        url 'https://libraries.minecraft.net/'
+    }
+}
+
+dependencies
+{
+    compile 'net.minecraft:launchwrapper:1.9'
+    compile 'org.ow2.asm:asm-debug-all:4.1'
+    compile 'org.scala-lang:scala-library:2.10.2'
+    compile 'org.scala-lang:scala-compiler:2.10.2'
+    compile 'net.sf.jopt-simple:jopt-simple:4.5'
+    compile 'java3d:vecmath:1.3.1'
+    compile 'net.sf.trove4j:trove4j:3.0.3'
+    compile 'com.ibm.icu:icu4j-core-mojang:51.2'
+    compile 'net.sf.jopt-simple:jopt-simple:4.5'
+    compile 'lzma:lzma:0.0.1'
+    compile 'com.paulscode:codecjorbis:20101023'
+    compile 'com.paulscode:codecwav:20101023'
+    compile 'com.paulscode:libraryjavasound:20101123'
+    compile 'com.paulscode:librarylwjglopenal:20100824'
+    compile 'com.paulscode:soundsystem:20120107'
+    compile 'io.netty:netty-all:4.0.10.Final'
+    compile 'com.google.guava:guava:15.0'
+    compile 'org.apache.commons:commons-lang3:3.1'
+    compile 'commons-io:commons-io:2.4'
+    compile 'net.java.jinput:jinput:2.0.5'
+    compile 'net.java.jutils:jutils:1.0.0'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.mojang:authlib:1.3'
+    compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
+    compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+    compile 'org.lwjgl.lwjgl:lwjgl:2.9.0'
+    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.0'
+
+    testCompile 'junit:junit:4.5'
+}
