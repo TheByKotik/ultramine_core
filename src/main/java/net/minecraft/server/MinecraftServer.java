@@ -136,6 +136,11 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	private final MinecraftSessionService field_147143_S;
 	private long field_147142_T = 0L;
 	private static final String __OBFID = "CL_00001462";
+	
+	private static final int TPS = 20;
+	private static final int TICK_TIME = 1000000000 / TPS;
+	public static double currentTPS = 20;
+	private static long catchupTime = 0;
 
 	public MinecraftServer(File p_i45281_1_, Proxy p_i45281_2_)
 	{
@@ -384,45 +389,29 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				this.field_147147_p.func_151315_a(new ChatComponentText(this.motd));
 				this.field_147147_p.func_151321_a(new ServerStatusResponse.MinecraftProtocolVersionIdentifier("1.7.2", 4));
 				this.func_147138_a(this.field_147147_p);
-
-				while (this.serverRunning)
+				
+				for (long lastTick = 0L; this.serverRunning; this.serverIsRunning = true)
 				{
-					long j = getSystemTimeMillis();
-					long k = j - i;
+					long curTime = System.nanoTime();
+					long wait = TICK_TIME - (curTime - lastTick) - catchupTime;
 
-					if (k > 2000L && i - this.timeOfLastWarning >= 15000L)
+					if (wait > 0)
 					{
-						logger.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] {Long.valueOf(k), Long.valueOf(k / 50L)});
-						k = 2000L;
-						this.timeOfLastWarning = i;
-					}
-
-					if (k < 0L)
-					{
-						logger.warn("Time ran backwards! Did the system time change?");
-						k = 0L;
-					}
-
-					l += k;
-					i = j;
-
-					if (this.worldServers[0].areAllPlayersAsleep())
-					{
-						this.tick();
-						l = 0L;
+						Thread.sleep(wait / 1000000);
+						catchupTime = 0;
+						continue;
 					}
 					else
 					{
-						while (l > 50L)
-						{
-							l -= 50L;
-							this.tick();
-						}
+						catchupTime = Math.min(TICK_TIME * TPS, Math.abs(wait));
 					}
 
-					Thread.sleep(1L);
-					this.serverIsRunning = true;
+					currentTPS = (currentTPS * 0.95) + (1E9 / (curTime - lastTick) * 0.05);
+					
+					lastTick = curTime;
+					this.tick();
 				}
+				
 				FMLCommonHandler.instance().handleServerStopping();
 			}
 			else
