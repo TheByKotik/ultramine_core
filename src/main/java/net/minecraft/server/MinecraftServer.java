@@ -420,7 +420,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			}
 			else
 			{
-				this.finalTick((CrashReport)null);
+				//this.finalTick((CrashReport)null);
 			}
 		}
 		catch (StartupQuery.AbortedException e)
@@ -452,7 +452,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				logger.error("We were unable to save this crash report to disk.");
 			}
 
-			this.finalTick(crashreport);
+			//this.finalTick(crashreport);
 		}
 		finally
 		{
@@ -467,9 +467,15 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			}
 			finally
 			{
-				FMLCommonHandler.instance().handleServerStopped();
-				this.serverStopped = true;
-				this.systemExitNow();
+				try
+				{
+					FMLCommonHandler.instance().handleServerStopped();
+				}
+				finally
+				{
+					this.serverStopped = true;
+					this.systemExitNow();
+				}
 			}
 		}
 	}
