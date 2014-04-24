@@ -58,6 +58,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 	{
 		super.setWhiteListEnabled(par1);
 		ConfigurationHandler.getServerConfig().vanilla.whiteList = par1;
+		this.getServerInstance().saveProperties();
 	}
 
 	public void addOp(String par1Str)

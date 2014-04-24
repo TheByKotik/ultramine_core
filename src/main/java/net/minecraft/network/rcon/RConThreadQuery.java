@@ -80,6 +80,8 @@ public class RConThreadQuery extends RConThreadBase
 			this.queryPort = this.serverPort;
 			this.logInfo("Setting default query port to " + this.queryPort);
 			ConfigurationHandler.getServerConfig().vanilla.queryPort = queryPort;
+			par1IServer.setProperty("debug", Boolean.valueOf(false));
+			par1IServer.saveProperties();
 		}
 
 		this.field_72644_p = new HashMap();

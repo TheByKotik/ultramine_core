@@ -39,6 +39,7 @@ public class RConThreadMain extends RConThreadBase
 			this.rconPort = this.serverPort + 10;
 			this.logInfo("Setting default rcon port to " + this.rconPort);
 			ConfigurationHandler.getServerConfig().vanilla.rconPort = rconPort;
+			par1IServer.saveProperties();
 		}
 
 		if (0 == this.hostname.length())

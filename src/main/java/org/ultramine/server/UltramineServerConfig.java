@@ -1,11 +1,13 @@
 package org.ultramine.server;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class UltramineServerConfig
 {
 	public WatchdogThreadConfig	watchdogThread = new WatchdogThreadConfig();
 	public VanillaConfig		vanilla = new VanillaConfig();
-	
-	
+
 	public static class WatchdogThreadConfig
 	{
 		public int timeout = 120;
@@ -48,5 +50,7 @@ public class UltramineServerConfig
 		public int		viewDistance				= 10;
 		public boolean	generateStructures			= true;
 		public String	motd						= "A Minecraft Server";
+
+		public Map<String, Object> 	unresolved = new LinkedHashMap<String, Object>();
 	}
 }
