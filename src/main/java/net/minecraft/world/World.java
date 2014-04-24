@@ -3357,7 +3357,7 @@ public abstract class World implements IBlockAccess
 
 	public int getIndirectPowerLevelTo(int par1, int par2, int par3, int par4)
 	{
-		Block block = this.getBlock(par1, par2, par3);		  
+		Block block = this.getBlock(par1, par2, par3);        
 		return block.shouldCheckWeakPower(this, par1, par2, par3, par4) ? this.getBlockPowerInput(par1, par2, par3) : block.isProvidingWeakPower(this, par1, par2, par3, par4);
 	}
 
@@ -3866,7 +3866,7 @@ public abstract class World implements IBlockAccess
 
 	/**
 	 * Determine if the given block is considered solid on the
-	 * specified side.	Used by placement logic.
+	 * specified side.  Used by placement logic.
 	 *
 	 * @param x Block X Position
 	 * @param y Block Y Position
@@ -3881,7 +3881,7 @@ public abstract class World implements IBlockAccess
 
 	/**
 	 * Determine if the given block is considered solid on the
-	 * specified side.	Used by placement logic.
+	 * specified side.  Used by placement logic.
 	 *
 	 * @param x Block X Position
 	 * @param y Block Y Position

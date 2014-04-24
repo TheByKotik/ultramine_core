@@ -123,7 +123,7 @@ public class GuiScreen extends Gui
 
 	protected void func_146283_a(List p_146283_1_, int p_146283_2_, int p_146283_3_)
 	{
-		drawHoveringText(p_146283_1_, p_146283_2_, p_146283_3_, fontRendererObj);	
+		drawHoveringText(p_146283_1_, p_146283_2_, p_146283_3_, fontRendererObj);   
 	}
 
 	protected void drawHoveringText(List p_146283_1_, int p_146283_2_, int p_146283_3_, FontRenderer font)

@@ -22,12 +22,12 @@ import net.minecraftforge.classloading.FMLForgePlugin;
 
 public class EnumHelper
 {
-	private static Object reflectionFactory		 = null;
+	private static Object reflectionFactory      = null;
 	private static Method newConstructorAccessor = null;
-	private static Method newInstance			 = null;
-	private static Method newFieldAccessor		 = null;
-	private static Method fieldAccessorSet		 = null;
-	private static boolean isSetup				 = false;
+	private static Method newInstance            = null;
+	private static Method newFieldAccessor       = null;
+	private static Method fieldAccessorSet       = null;
+	private static boolean isSetup               = false;
 
 	//Some enums are decompiled with extra arguments, so lets check for that
 	@SuppressWarnings("rawtypes")
@@ -112,11 +112,11 @@ public class EnumHelper
 		try
 		{
 			Method getReflectionFactory = Class.forName("sun.reflect.ReflectionFactory").getDeclaredMethod("getReflectionFactory");
-			reflectionFactory	   = getReflectionFactory.invoke(null);
+			reflectionFactory      = getReflectionFactory.invoke(null);
 			newConstructorAccessor = Class.forName("sun.reflect.ReflectionFactory").getDeclaredMethod("newConstructorAccessor", Constructor.class);
-			newInstance			   = Class.forName("sun.reflect.ConstructorAccessor").getDeclaredMethod("newInstance", Object[].class);
-			newFieldAccessor	   = Class.forName("sun.reflect.ReflectionFactory").getDeclaredMethod("newFieldAccessor", Field.class, boolean.class);
-			fieldAccessorSet	   = Class.forName("sun.reflect.FieldAccessor").getDeclaredMethod("set", Object.class, Object.class);
+			newInstance            = Class.forName("sun.reflect.ConstructorAccessor").getDeclaredMethod("newInstance", Object[].class);
+			newFieldAccessor       = Class.forName("sun.reflect.ReflectionFactory").getDeclaredMethod("newFieldAccessor", Field.class, boolean.class);
+			fieldAccessorSet       = Class.forName("sun.reflect.FieldAccessor").getDeclaredMethod("set", Object.class, Object.class);
 		}
 		catch (Exception e)
 		{
@@ -248,7 +248,7 @@ public class EnumHelper
 			for (Field field : fields)
 			{
 				String mods = String.format("%16s", Integer.toBinaryString(field.getModifiers())).replace(' ', '0');
-				FMLLog.severe("		  %s %s: %s", mods, field.getName(), field.getType().getName());
+				FMLLog.severe("       %s %s: %s", mods, field.getName(), field.getType().getName());
 			}
 			return null;
 		}

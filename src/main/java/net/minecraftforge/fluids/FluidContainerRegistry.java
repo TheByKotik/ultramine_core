@@ -81,7 +81,7 @@ public abstract class FluidContainerRegistry
 	static
 	{
 		registerFluidContainer(FluidRegistry.WATER, new ItemStack(Items.water_bucket), EMPTY_BUCKET);
-		registerFluidContainer(FluidRegistry.LAVA,	new ItemStack(Items.lava_bucket),  EMPTY_BUCKET);
+		registerFluidContainer(FluidRegistry.LAVA,  new ItemStack(Items.lava_bucket),  EMPTY_BUCKET);
 		registerFluidContainer(FluidRegistry.WATER, new ItemStack(Items.potionitem),   EMPTY_BOTTLE);
 	}
 
@@ -91,11 +91,11 @@ public abstract class FluidContainerRegistry
 	 * Register a new fluid containing item.
 	 * 
 	 * @param stack
-	 *			  FluidStack containing the type and amount of the fluid stored in the item.
+	 *            FluidStack containing the type and amount of the fluid stored in the item.
 	 * @param filledContainer
-	 *			  ItemStack representing the container when it is full.
+	 *            ItemStack representing the container when it is full.
 	 * @param emptyContainer
-	 *			  ItemStack representing the container when it is empty.
+	 *            ItemStack representing the container when it is empty.
 	 * @return True if container was successfully registered; false if it already is.
 	 */
 	public static boolean registerFluidContainer(FluidStack stack, ItemStack filledContainer, ItemStack emptyContainer)
@@ -108,11 +108,11 @@ public abstract class FluidContainerRegistry
 	 * registers the Fluid if possible.
 	 * 
 	 * @param fluid
-	 *			  Fluid type that is stored in the item.
+	 *            Fluid type that is stored in the item.
 	 * @param filledContainer
-	 *			  ItemStack representing the container when it is full.
+	 *            ItemStack representing the container when it is full.
 	 * @param emptyContainer
-	 *			  ItemStack representing the container when it is empty.
+	 *            ItemStack representing the container when it is empty.
 	 * @return True if container was successfully registered; false if it already is.
 	 */
 	public static boolean registerFluidContainer(Fluid fluid, ItemStack filledContainer, ItemStack emptyContainer)
@@ -128,9 +128,9 @@ public abstract class FluidContainerRegistry
 	 * Register a new fluid containing item that does not have an empty container.
 	 * 
 	 * @param stack
-	 *			  FluidStack containing the type and amount of the fluid stored in the item.
+	 *            FluidStack containing the type and amount of the fluid stored in the item.
 	 * @param filledContainer
-	 *			  ItemStack representing the container when it is full.
+	 *            ItemStack representing the container when it is full.
 	 * @return True if container was successfully registered; false if it already is.
 	 */
 	public static boolean registerFluidContainer(FluidStack stack, ItemStack filledContainer)
@@ -143,9 +143,9 @@ public abstract class FluidContainerRegistry
 	 * assumed to hold 1000 mB of fluid. Also registers the Fluid if possible.
 	 * 
 	 * @param fluid
-	 *			  Fluid type that is stored in the item.
+	 *            Fluid type that is stored in the item.
 	 * @param filledContainer
-	 *			  ItemStack representing the container when it is full.
+	 *            ItemStack representing the container when it is full.
 	 * @return True if container was successfully registered; false if it already is.
 	 */
 	public static boolean registerFluidContainer(Fluid fluid, ItemStack filledContainer)
@@ -161,7 +161,7 @@ public abstract class FluidContainerRegistry
 	 * Register a new fluid containing item.
 	 * 
 	 * @param data
-	 *			  See {@link FluidContainerData}.
+	 *            See {@link FluidContainerData}.
 	 * @return True if container was successfully registered; false if it already is.
 	 */
 	public static boolean registerFluidContainer(FluidContainerData data)
@@ -186,7 +186,7 @@ public abstract class FluidContainerRegistry
 	 * Determines the fluid type and amount inside a container.
 	 * 
 	 * @param container
-	 *			  The fluid container.
+	 *            The fluid container.
 	 * @return FluidStack representing stored fluid.
 	 */
 	public static FluidStack getFluidForFilledItem(ItemStack container)
@@ -206,9 +206,9 @@ public abstract class FluidContainerRegistry
 	 * NOTE: Returns null on fail, NOT the empty container.
 	 * 
 	 * @param fluid
-	 *			  FluidStack containing the type and amount of fluid to fill.
+	 *            FluidStack containing the type and amount of fluid to fill.
 	 * @param container
-	 *			  ItemStack representing the empty container.
+	 *            ItemStack representing the empty container.
 	 * @return Filled container if successful, otherwise null.
 	 */
 	public static ItemStack fillFluidContainer(FluidStack fluid, ItemStack container)

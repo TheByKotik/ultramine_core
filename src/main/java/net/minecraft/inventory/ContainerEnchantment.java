@@ -125,15 +125,15 @@ public class ContainerEnchantment extends Container
 						{
 							if ((j != 0 || k != 0) && this.worldPointer.isAirBlock(this.posX + k, this.posY, this.posZ + j) && this.worldPointer.isAirBlock(this.posX + k, this.posY + 1, this.posZ + j))
 							{
-								power += ForgeHooks.getEnchantPower(worldPointer, posX + k * 2, posY,	  posZ + j * 2);
+								power += ForgeHooks.getEnchantPower(worldPointer, posX + k * 2, posY,     posZ + j * 2);
 								power += ForgeHooks.getEnchantPower(worldPointer, posX + k * 2, posY + 1, posZ + j * 2);
 
 								if (k != 0 && j != 0)
 								{
-									power += ForgeHooks.getEnchantPower(worldPointer, posX + k * 2, posY,	  posZ + j	  );
-									power += ForgeHooks.getEnchantPower(worldPointer, posX + k * 2, posY + 1, posZ + j	  );
-									power += ForgeHooks.getEnchantPower(worldPointer, posX + k,		posY,	  posZ + j * 2);
-									power += ForgeHooks.getEnchantPower(worldPointer, posX + k,		posY + 1, posZ + j * 2);
+									power += ForgeHooks.getEnchantPower(worldPointer, posX + k * 2, posY,     posZ + j    );
+									power += ForgeHooks.getEnchantPower(worldPointer, posX + k * 2, posY + 1, posZ + j    );
+									power += ForgeHooks.getEnchantPower(worldPointer, posX + k,     posY,     posZ + j * 2);
+									power += ForgeHooks.getEnchantPower(worldPointer, posX + k,     posY + 1, posZ + j * 2);
 								}
 							}
 						}

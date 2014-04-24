@@ -21,16 +21,16 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ChestGenHooks
 {
 	//Currently implemented categories for chests/dispensers, Dungeon loot is still in DungeonHooks
-	public static final String MINESHAFT_CORRIDOR		= "mineshaftCorridor";
-	public static final String PYRAMID_DESERT_CHEST		= "pyramidDesertyChest";
-	public static final String PYRAMID_JUNGLE_CHEST		= "pyramidJungleChest";
+	public static final String MINESHAFT_CORRIDOR       = "mineshaftCorridor";
+	public static final String PYRAMID_DESERT_CHEST     = "pyramidDesertyChest";
+	public static final String PYRAMID_JUNGLE_CHEST     = "pyramidJungleChest";
 	public static final String PYRAMID_JUNGLE_DISPENSER = "pyramidJungleDispenser";
-	public static final String STRONGHOLD_CORRIDOR		= "strongholdCorridor";
-	public static final String STRONGHOLD_LIBRARY		= "strongholdLibrary";
-	public static final String STRONGHOLD_CROSSING		= "strongholdCrossing";
-	public static final String VILLAGE_BLACKSMITH		= "villageBlacksmith";
-	public static final String BONUS_CHEST				= "bonusChest";
-	public static final String DUNGEON_CHEST			= "dungeonChest";
+	public static final String STRONGHOLD_CORRIDOR      = "strongholdCorridor";
+	public static final String STRONGHOLD_LIBRARY       = "strongholdLibrary";
+	public static final String STRONGHOLD_CROSSING      = "strongholdCrossing";
+	public static final String VILLAGE_BLACKSMITH       = "villageBlacksmith";
+	public static final String BONUS_CHEST              = "bonusChest";
+	public static final String DUNGEON_CHEST            = "dungeonChest";
 
 	private static final HashMap<String, ChestGenHooks> chestInfo = new HashMap<String, ChestGenHooks>();
 	private static boolean hasInit = false;
@@ -48,26 +48,26 @@ public class ChestGenHooks
 
 		hasInit = true;
 
-		addInfo(MINESHAFT_CORRIDOR,		  StructureMineshaftPieces.mineshaftChestContents,	 3,	 7);
-		addInfo(PYRAMID_DESERT_CHEST,	  DesertPyramid.itemsToGenerateInTemple,			 2,	 7);
-		addInfo(PYRAMID_JUNGLE_CHEST,	  JunglePyramid.junglePyramidsChestContents,		 2,	 7);
-		addInfo(PYRAMID_JUNGLE_DISPENSER, JunglePyramid.junglePyramidsDispenserContents,	 2,	 2);
-		addInfo(STRONGHOLD_CORRIDOR,	  ChestCorridor.strongholdChestContents,			 2,	 4);
-		addInfo(STRONGHOLD_LIBRARY,		  Library.strongholdLibraryChestContents,			 1,	 5);
-		addInfo(STRONGHOLD_CROSSING,	  RoomCrossing.strongholdRoomCrossingChestContents,	 1,	 5);
-		addInfo(VILLAGE_BLACKSMITH,		  House2.villageBlacksmithChestContents,			 3,	 9);
-		addInfo(BONUS_CHEST,			  WorldServer.bonusChestContent,					10, 10);
-		addInfo(DUNGEON_CHEST,			  WorldGenDungeons.field_111189_a,					 8,	 8);
+		addInfo(MINESHAFT_CORRIDOR,       StructureMineshaftPieces.mineshaftChestContents,   3,  7);
+		addInfo(PYRAMID_DESERT_CHEST,     DesertPyramid.itemsToGenerateInTemple,             2,  7);
+		addInfo(PYRAMID_JUNGLE_CHEST,     JunglePyramid.junglePyramidsChestContents,         2,  7);
+		addInfo(PYRAMID_JUNGLE_DISPENSER, JunglePyramid.junglePyramidsDispenserContents,     2,  2);
+		addInfo(STRONGHOLD_CORRIDOR,      ChestCorridor.strongholdChestContents,             2,  4);
+		addInfo(STRONGHOLD_LIBRARY,       Library.strongholdLibraryChestContents,            1,  5);
+		addInfo(STRONGHOLD_CROSSING,      RoomCrossing.strongholdRoomCrossingChestContents,  1,  5);
+		addInfo(VILLAGE_BLACKSMITH,       House2.villageBlacksmithChestContents,             3,  9);
+		addInfo(BONUS_CHEST,              WorldServer.bonusChestContent,                    10, 10);
+		addInfo(DUNGEON_CHEST,            WorldGenDungeons.field_111189_a,                   8,  8);
 
 		ItemStack book = new ItemStack(Items.enchanted_book, 1, 0);
 		WeightedRandomChestContent tmp = new WeightedRandomChestContent(book, 1, 1, 1);
-		getInfo(MINESHAFT_CORRIDOR	).addItem(tmp);
+		getInfo(MINESHAFT_CORRIDOR  ).addItem(tmp);
 		getInfo(PYRAMID_DESERT_CHEST).addItem(tmp);
 		getInfo(PYRAMID_JUNGLE_CHEST).addItem(tmp);
 		getInfo(STRONGHOLD_CORRIDOR ).addItem(tmp);
-		getInfo(STRONGHOLD_LIBRARY	).addItem(new WeightedRandomChestContent(book, 1, 5, 2));
+		getInfo(STRONGHOLD_LIBRARY  ).addItem(new WeightedRandomChestContent(book, 1, 5, 2));
 		getInfo(STRONGHOLD_CROSSING ).addItem(tmp);
-		getInfo(DUNGEON_CHEST		).addItem(tmp);
+		getInfo(DUNGEON_CHEST       ).addItem(tmp);
 	}
 
 	static void addDungeonLoot(ChestGenHooks dungeon, ItemStack item, int weight, int min, int max)
@@ -231,7 +231,7 @@ public class ChestGenHooks
 	 * Returns a single ItemStack from the possible items in this registry,
 	 * Useful if you just want a quick and dirty random Item.
 	 *
-	 * @param rand	A Random Number gen
+	 * @param rand  A Random Number gen
 	 * @return A single ItemStack, or null if it could not get one.
 	 */
 	public ItemStack getOneItem(Random rand)

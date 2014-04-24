@@ -24,9 +24,9 @@ public class LivingSpawnEvent extends LivingEvent
 	 * Fires before mob spawn events.
 	 * 
 	 * Result is significant:
-	 *	  DEFAULT: use vanilla spawn rules
-	 *	  ALLOW:   allow the spawn
-	 *	  DENY:	   deny the spawn
+	 *    DEFAULT: use vanilla spawn rules
+	 *    ALLOW:   allow the spawn
+	 *    DENY:    deny the spawn
 	 *
 	 */
 	@HasResult

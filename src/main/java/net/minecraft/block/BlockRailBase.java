@@ -283,7 +283,7 @@ public abstract class BlockRailBase extends Block
 	 */
 	public void onMinecartPass(World world, EntityMinecart cart, int y, int x, int z)
 	{
-	}	 
+	}    
 	
 	/**
 	 * Forge: Moved render type to a field and a setter.

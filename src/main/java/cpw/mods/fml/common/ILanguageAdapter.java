@@ -37,12 +37,12 @@ public interface ILanguageAdapter {
 				// of the object directly, or in the object block, i.e.
 				// whether it's:
 				// class ModName {
-				//	 @SidedProxy ...
+				//   @SidedProxy ...
 				// }
 				// object ModName extends ModName {}
 				// which leads to us getting the outer class, or
 				// object ModName {
-				//	 @SidedProxy ...
+				//   @SidedProxy ...
 				// }
 				// which leads to us getting the inner class.
 				if (!proxyTarget.getName().endsWith("$"))
@@ -104,8 +104,8 @@ public interface ILanguageAdapter {
 		{
 			// For Scala mods, we want to enable authors to write them like so:
 			// object ModName {
-			//	 @SidedProxy(...)
-			//	 var proxy: ModProxy = null
+			//   @SidedProxy(...)
+			//   var proxy: ModProxy = null
 			// }
 			// For this to work, we have to search inside the inner class Scala
 			// generates for singletons, which is in called ModName$. These are
@@ -113,8 +113,8 @@ public interface ILanguageAdapter {
 			// internal classes.
 			// Note that it is alternatively possible to write this like so:
 			// class ModName {
-			//	 @SidedProxy(...)
-			//	 var proxy: ModProxy = null
+			//   @SidedProxy(...)
+			//   var proxy: ModProxy = null
 			// }
 			// object ModName extends ModName { ... }
 			// which will fall back to the normal injection code which calls

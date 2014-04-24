@@ -32,7 +32,7 @@ public interface IModGuiFactory {
 	 * can be changed here.
 	 *
 	 * @return A class that will be instantiated on clicks on the config button
-	 *	or null if no GUI is desired.
+	 *  or null if no GUI is desired.
 	 */
 	public Class<? extends GuiScreen> mainConfigGuiClass();
 

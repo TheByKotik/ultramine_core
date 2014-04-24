@@ -32,7 +32,7 @@ public class ClientCommandHandler extends CommandHandler
 
 	/**
 	 * @return 1 if successfully executed, 0 if wrong usage, it doesn't exist or
-	 *		   it was canceled.
+	 *         it was canceled.
 	 */
 	@Override
 	public int executeCommand(ICommandSender sender, String message)

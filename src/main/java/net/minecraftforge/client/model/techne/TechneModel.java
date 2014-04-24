@@ -317,7 +317,7 @@ public class TechneModel extends ModelBase implements IModelCustom {
 
 	@Override
 	public void renderPart(String partName)
-	{		 
+	{        
 		ModelRenderer part = parts.get(partName);
 		if (part != null)
 		{

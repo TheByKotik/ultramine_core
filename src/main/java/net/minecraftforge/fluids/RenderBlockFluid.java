@@ -116,12 +116,12 @@ public class RenderBlockFluid implements ISimpleBlockRenderingHandler
 			if (flow11 != 1)
 			{
 				float flow00 = getFluidHeightForRender(world, x - 1, y, z - 1, theFluid);
-				float flow01 = getFluidHeightForRender(world, x - 1, y, z,	   theFluid);
+				float flow01 = getFluidHeightForRender(world, x - 1, y, z,     theFluid);
 				float flow02 = getFluidHeightForRender(world, x - 1, y, z + 1, theFluid);
-				float flow10 = getFluidHeightForRender(world, x,	 y, z - 1, theFluid);
-				float flow12 = getFluidHeightForRender(world, x,	 y, z + 1, theFluid);
+				float flow10 = getFluidHeightForRender(world, x,     y, z - 1, theFluid);
+				float flow12 = getFluidHeightForRender(world, x,     y, z + 1, theFluid);
 				float flow20 = getFluidHeightForRender(world, x + 1, y, z - 1, theFluid);
-				float flow21 = getFluidHeightForRender(world, x + 1, y, z,	   theFluid);
+				float flow21 = getFluidHeightForRender(world, x + 1, y, z,     theFluid);
 				float flow22 = getFluidHeightForRender(world, x + 1, y, z + 1, theFluid);
 
 				heightNW = getFluidHeightAverage(new float[]{ flow00, flow01, flow10, flow11 });

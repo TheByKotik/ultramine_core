@@ -25,7 +25,7 @@ public class Start
 
 		for( int x = 0; x < args.length; x++)
 		{
-			if (args[x].equals("--username"))	   userIndex = x + 1;
+			if (args[x].equals("--username"))      userIndex = x + 1;
 			else if (args[x].equals("--password")) passIndex = x + 1;
 			else if (args[x].equals("--session"))  sessIndex = x + 1;
 			else if (args[x].equals("--version"))  versIndex = x + 1;

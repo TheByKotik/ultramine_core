@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package cpw.mods.fml.common.registry;
@@ -200,7 +200,7 @@ public class LanguageRegistry
 		InputStream langStream = null;
 		Properties langPack = new Properties();
 
-		try	   {
+		try    {
 			langStream = localizationFile.openStream();
 
 			if (isXML) {
@@ -215,9 +215,9 @@ public class LanguageRegistry
 		catch (IOException e) {
 			FMLLog.log(Level.ERROR, e, "Unable to load localization from file %s", localizationFile);
 		}
-		finally	   {
-			try	   {
-				if (langStream != null)	   {
+		finally    {
+			try    {
+				if (langStream != null)    {
 					langStream.close();
 				}
 			}

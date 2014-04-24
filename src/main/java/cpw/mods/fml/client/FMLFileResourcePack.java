@@ -44,8 +44,8 @@ public class FMLFileResourcePack extends FileResourcePack {
 				FMLLog.log(container.getName(), Level.DEBUG, "Mod %s is missing a pack.mcmeta file, substituting a dummy one", container.getName());
 				return new ByteArrayInputStream(("{\n" +
 						" \"pack\": {\n"+
-						"	\"description\": \"dummy FML pack for "+container.getName()+"\",\n"+
-						"	\"pack_format\": 1\n"+
+						"   \"description\": \"dummy FML pack for "+container.getName()+"\",\n"+
+						"   \"pack_format\": 1\n"+
 						"}\n" +
 						"}").getBytes(Charsets.UTF_8));
 			}

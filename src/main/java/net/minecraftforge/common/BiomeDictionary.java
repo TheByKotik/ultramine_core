@@ -61,7 +61,7 @@ public class BiomeDictionary
 	 * @return returns true if the biome was registered successfully
 	 */
 	public static boolean registerBiomeType(BiomeGenBase biome, Type ... types)
-	{	
+	{   
 		if(BiomeGenBase.getBiomeGenArray()[biome.biomeID] != null)
 		{
 			for(Type type : types)
@@ -180,7 +180,7 @@ public class BiomeDictionary
 	 * @return returns true if the biome has been registered, false otherwise
 	 */
 	public static boolean isBiomeRegistered(BiomeGenBase biome)
-	{	 
+	{    
 		return biomeList[biome.biomeID] != null;
 	}
 
@@ -231,7 +231,7 @@ public class BiomeDictionary
 	 * @param biome the biome to be considered
 	 */
 	public static void makeBestGuess(BiomeGenBase biome)
-	{	 
+	{    
 		if(biome.theBiomeDecorator.treesPerChunk >= 3)
 		{
 			if(biome.isHighHumidity() && biome.temperature >= 1.0F)
@@ -277,7 +277,7 @@ public class BiomeDictionary
 		}
 	}
 
-	//Internal implementation	 
+	//Internal implementation    
 	private static void checkRegistration(BiomeGenBase biome)
 	{
 		if(!isBiomeRegistered(biome))
@@ -293,28 +293,28 @@ public class BiomeDictionary
 
 	private static void registerVanillaBiomes()
 	{
-		registerBiomeType(ocean,			   WATER		  );
-		registerBiomeType(plains,			   PLAINS		  );
-		registerBiomeType(desert,			   DESERT		  );
-		registerBiomeType(extremeHills,		   MOUNTAIN		  );
-		registerBiomeType(forest,			   FOREST		  );
-		registerBiomeType(taiga,			   FOREST,	FROZEN);
-		registerBiomeType(taigaHills,		   FOREST,	FROZEN);
-		registerBiomeType(swampland,		   SWAMP		  );
-		registerBiomeType(river,			   WATER		  );
-		registerBiomeType(frozenOcean,		   WATER,	FROZEN);
-		registerBiomeType(frozenRiver,		   WATER,	FROZEN);
-		registerBiomeType(icePlains,		   FROZEN		  );
-		registerBiomeType(iceMountains,		   FROZEN		  );
-		registerBiomeType(beach,			   BEACH		  );
-		registerBiomeType(desertHills,		   DESERT		  );
-		registerBiomeType(jungle,			   JUNGLE		  );
-		registerBiomeType(jungleHills,		   JUNGLE		  );
-		registerBiomeType(forestHills,		   FOREST		  );
-		registerBiomeType(sky,				   END			  );
-		registerBiomeType(hell,				   NETHER		  );
-		registerBiomeType(mushroomIsland,	   MUSHROOM		  );
-		registerBiomeType(extremeHillsEdge,	   MOUNTAIN		  );
+		registerBiomeType(ocean,               WATER          );
+		registerBiomeType(plains,              PLAINS         );
+		registerBiomeType(desert,              DESERT         );
+		registerBiomeType(extremeHills,        MOUNTAIN       );
+		registerBiomeType(forest,              FOREST         );
+		registerBiomeType(taiga,               FOREST,  FROZEN);
+		registerBiomeType(taigaHills,          FOREST,  FROZEN);
+		registerBiomeType(swampland,           SWAMP          );
+		registerBiomeType(river,               WATER          );
+		registerBiomeType(frozenOcean,         WATER,   FROZEN);
+		registerBiomeType(frozenRiver,         WATER,   FROZEN);
+		registerBiomeType(icePlains,           FROZEN         );
+		registerBiomeType(iceMountains,        FROZEN         );
+		registerBiomeType(beach,               BEACH          );
+		registerBiomeType(desertHills,         DESERT         );
+		registerBiomeType(jungle,              JUNGLE         );
+		registerBiomeType(jungleHills,         JUNGLE         );
+		registerBiomeType(forestHills,         FOREST         );
+		registerBiomeType(sky,                 END            );
+		registerBiomeType(hell,                NETHER         );
+		registerBiomeType(mushroomIsland,      MUSHROOM       );
+		registerBiomeType(extremeHillsEdge,    MOUNTAIN       );
 		registerBiomeType(mushroomIslandShore, MUSHROOM, BEACH);
 	}
 }

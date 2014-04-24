@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package cpw.mods.fml.relauncher;
@@ -338,7 +338,7 @@ public class CoreModManager {
 
 	/**
 	 * @param mcDir
-	 *			  the minecraft home directory
+	 *            the minecraft home directory
 	 * @return the coremod directory
 	 */
 	private static File setupCoreModDir(File mcDir)

@@ -25,8 +25,8 @@ public class ShapedOreRecipe implements IRecipe
 	private int height = 0;
 	private boolean mirrored = true;
 
-	public ShapedOreRecipe(Block	 result, Object... recipe){ this(new ItemStack(result), recipe); }
-	public ShapedOreRecipe(Item		 result, Object... recipe){ this(new ItemStack(result), recipe); }
+	public ShapedOreRecipe(Block     result, Object... recipe){ this(new ItemStack(result), recipe); }
+	public ShapedOreRecipe(Item      result, Object... recipe){ this(new ItemStack(result), recipe); }
 	public ShapedOreRecipe(ItemStack result, Object... recipe)
 	{
 		output = result.copy();

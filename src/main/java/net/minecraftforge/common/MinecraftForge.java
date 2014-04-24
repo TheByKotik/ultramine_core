@@ -29,7 +29,7 @@ public class MinecraftForge
 	 *
 	 * @param seed The item to drop as a seed.
 	 * @param weight The relative probability of the seeds,
-	 *				 where wheat seeds are 10.
+	 *               where wheat seeds are 10.
 	 */
 	public static void addGrassSeed(ItemStack seed, int weight)
 	{

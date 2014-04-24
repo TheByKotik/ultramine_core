@@ -235,7 +235,7 @@ public class BlockRedstoneComparator extends BlockRedstoneDiode implements ITile
 		if (y == tileY && world instanceof World)
 		{
 			onNeighborBlockChange((World)world, x, y, z, world.getBlock(tileX, tileY, tileZ));
-		}	
+		}   
 	}
 	
 	@Override

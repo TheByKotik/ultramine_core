@@ -19,10 +19,10 @@ public abstract class PlayerUseItemEvent extends PlayerEvent
 	/**
 	 * Fired when a player starts 'using' an item, typically when they hold right mouse.
 	 * Examples:
-	 *	 Drawing a bow
-	 *	 Eating Food
-	 *	 Drinking Potions/Milk
-	 *	 Guarding with a sword
+	 *   Drawing a bow
+	 *   Eating Food
+	 *   Drinking Potions/Milk
+	 *   Guarding with a sword
 	 *
 	 * Cancel the event, or set the duration or <= 0 to prevent it from processing.
 	 *
@@ -54,10 +54,10 @@ public abstract class PlayerUseItemEvent extends PlayerEvent
 	/**
 	 * Fired when a player stops using an item without the use duration timing out. 
 	 * Example:
-	 *	 Stop eating 1/2 way through
-	 *	 Stop defending with sword
-	 *	 Stop drawing bow. This case would fire the arrow
-	 *	 
+	 *   Stop eating 1/2 way through
+	 *   Stop defending with sword
+	 *   Stop drawing bow. This case would fire the arrow
+	 *   
 	 * Duration on this event is how long the item had left in it's count down before 'finishing'
 	 *
 	 * Canceling this event will prevent the Item from being notified that it has stopped being used, 

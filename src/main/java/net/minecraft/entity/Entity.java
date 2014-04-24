@@ -2243,18 +2243,18 @@ public abstract class Entity
 	 * Register the instance of IExtendedProperties into the entity's collection.
 	 * @param identifier The identifier which you can use to retrieve these properties for the entity.
 	 * @param properties The instanceof IExtendedProperties to register
-	 * @return The identifier that was used to register the extended properties.  Empty String indicates an error.	If your requested key already existed, this will return a modified one that is unique.
+	 * @return The identifier that was used to register the extended properties.  Empty String indicates an error.  If your requested key already existed, this will return a modified one that is unique.
 	 */
 	public String registerExtendedProperties(String identifier, IExtendedEntityProperties properties)
 	{
 		if (identifier == null)
 		{
-			FMLLog.warning("Someone is attempting to register extended properties using a null identifier.	This is not allowed.  Aborting.	 This may have caused instability.");
+			FMLLog.warning("Someone is attempting to register extended properties using a null identifier.  This is not allowed.  Aborting.  This may have caused instability.");
 			return "";
 		}
 		if (properties == null)
 		{
-			FMLLog.warning("Someone is attempting to register null extended properties.	 This is not allowed.  Aborting.  This may have caused instability.");
+			FMLLog.warning("Someone is attempting to register null extended properties.  This is not allowed.  Aborting.  This may have caused instability.");
 			return "";
 		}
 
@@ -2267,7 +2267,7 @@ public abstract class Entity
 
 		if (baseIdentifier != identifier)
 		{
-			FMLLog.info("An attempt was made to register exended properties using an existing key.	The duplicate identifier (%s) has been remapped to %s.", baseIdentifier, identifier);
+			FMLLog.info("An attempt was made to register exended properties using an existing key.  The duplicate identifier (%s) has been remapped to %s.", baseIdentifier, identifier);
 		}
 
 		this.extendedProperties.put(identifier, properties);

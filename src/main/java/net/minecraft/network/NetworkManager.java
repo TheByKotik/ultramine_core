@@ -151,7 +151,7 @@ public class NetworkManager extends SimpleChannelInboundHandler
 				private static final String __OBFID = "CL_00001241";
 				public void run()
 				{
-					if (enumconnectionstate != enumconnectionstate1	 && !( p_150732_1_ instanceof FMLProxyPacket))
+					if (enumconnectionstate != enumconnectionstate1  && !( p_150732_1_ instanceof FMLProxyPacket))
 					{
 						NetworkManager.this.setConnectionState(enumconnectionstate);
 					}

@@ -99,7 +99,7 @@ public class GuiWinGame extends GuiScreen
 				while ((s = bufferedreader.readLine()) != null)
 				{
 					s = s.replaceAll("PLAYERNAME", this.mc.getSession().getUsername());
-					s = s.replaceAll("\t", "	");
+					s = s.replaceAll("\t", "    ");
 					this.field_146582_i.addAll(this.mc.fontRenderer.listFormattedStringToWidth(s, short1));
 					this.field_146582_i.add("");
 				}
