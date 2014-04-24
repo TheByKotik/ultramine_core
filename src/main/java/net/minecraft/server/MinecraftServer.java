@@ -1322,11 +1322,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				dedicatedserver.canCreateBonusChest(true);
 			}
 
-			if (flag)
-			{
-				dedicatedserver.setGuiEnabled();
-			}
-
 			dedicatedserver.startServerThread();
 			Runtime.getRuntime().addShutdownHook(new Thread("Server Shutdown Thread")
 			{
