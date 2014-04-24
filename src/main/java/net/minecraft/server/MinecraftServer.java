@@ -79,6 +79,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.WatchdogThread;
 
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -390,6 +391,8 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				this.field_147147_p.func_151321_a(new ServerStatusResponse.MinecraftProtocolVersionIdentifier("1.7.2", 4));
 				this.func_147138_a(this.field_147147_p);
 				
+				WatchdogThread.doStart();
+				
 				for (long lastTick = 0L; this.serverRunning; this.serverIsRunning = true)
 				{
 					long curTime = System.nanoTime();
@@ -410,6 +413,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 					
 					lastTick = curTime;
 					this.tick();
+					WatchdogThread.tick();
 				}
 				
 				FMLCommonHandler.instance().handleServerStopping();
