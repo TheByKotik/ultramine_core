@@ -30,13 +30,8 @@ public class PingResponseHandler extends ChannelInboundHandlerAdapter
 
 		try
 		{
-			try
+			if (bytebuf.readUnsignedByte() == 254)
 			{
-				if (bytebuf.readUnsignedByte() != 254)
-				{
-					return;
-				}
-
 				InetSocketAddress inetsocketaddress = (InetSocketAddress)p_channelRead_1_.channel().remoteAddress();
 				MinecraftServer minecraftserver = this.field_151257_b.func_151267_d();
 				int i = bytebuf.readableBytes();
@@ -81,11 +76,12 @@ public class PingResponseHandler extends ChannelInboundHandlerAdapter
 
 				bytebuf.release();
 				flag = false;
+				return;
 			}
-			catch (RuntimeException runtimeexception)
-			{
-				;
-			}
+		}
+		catch (RuntimeException runtimeexception)
+		{
+			return;
 		}
 		finally
 		{
