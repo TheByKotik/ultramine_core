@@ -2,6 +2,7 @@ package net.minecraft.network.rcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -17,6 +18,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
+
+import org.ultramine.server.ConfigurationHandler;
+
 import net.minecraft.server.MinecraftServer;
 
 @SideOnly(Side.SERVER)
@@ -43,7 +47,7 @@ public class RConThreadQuery extends RConThreadBase
 	public RConThreadQuery(IServer par1IServer)
 	{
 		super(par1IServer, "Query Listener");
-		this.queryPort = par1IServer.getIntProperty("query.port", 0);
+		this.queryPort = ConfigurationHandler.getServerConfig().vanilla.queryPort;
 		this.serverHostname = par1IServer.getHostname();
 		this.serverPort = par1IServer.getPort();
 		this.serverMotd = par1IServer.getMotd();
@@ -75,9 +79,7 @@ public class RConThreadQuery extends RConThreadBase
 		{
 			this.queryPort = this.serverPort;
 			this.logInfo("Setting default query port to " + this.queryPort);
-			par1IServer.setProperty("query.port", Integer.valueOf(this.queryPort));
-			par1IServer.setProperty("debug", Boolean.valueOf(false));
-			par1IServer.saveProperties();
+			ConfigurationHandler.getServerConfig().vanilla.queryPort = queryPort;
 		}
 
 		this.field_72644_p = new HashMap();

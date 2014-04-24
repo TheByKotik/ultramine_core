@@ -38,6 +38,7 @@ import net.minecraft.world.WorldType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.UltramineServerConfig.VanillaConfig;
 
 @SideOnly(Side.SERVER)
 public class DedicatedServer extends MinecraftServer implements IServer
@@ -118,7 +119,8 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		FMLCommonHandler.instance().onServerStart(this);
 
 		field_155771_h.info("Loading properties");
-		this.settings = new PropertyManager(new File(ConfigurationHandler.getSettingDir(), "server.properties"));
+		//this.settings = new PropertyManager(new File(ConfigurationHandler.getSettingDir(), "server.properties"));
+		VanillaConfig vconfig = ConfigurationHandler.getServerConfig().vanilla;
 
 		if (this.isSinglePlayer())
 		{
@@ -126,30 +128,30 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		}
 		else
 		{
-			this.setOnlineMode(this.settings.getBooleanProperty("online-mode", true));
-			this.setHostname(this.settings.getStringProperty("server-ip", ""));
+			this.setOnlineMode(vconfig.onlineMode);
+			this.setHostname(vconfig.serverIp);
 		}
 
-		this.setCanSpawnAnimals(this.settings.getBooleanProperty("spawn-animals", true));
-		this.setCanSpawnNPCs(this.settings.getBooleanProperty("spawn-npcs", true));
-		this.setAllowPvp(this.settings.getBooleanProperty("pvp", true));
-		this.setAllowFlight(this.settings.getBooleanProperty("allow-flight", false));
-		this.func_155759_m(this.settings.getStringProperty("resource-pack", ""));
-		this.setMOTD(this.settings.getStringProperty("motd", "A Minecraft Server"));
-		this.setForceGamemode(this.settings.getBooleanProperty("force-gamemode", false));
-		this.func_143006_e(this.settings.getIntProperty("player-idle-timeout", 0));
+		this.setCanSpawnAnimals(vconfig.spawnAnimals);
+		this.setCanSpawnNPCs(vconfig.spawnNPCs);
+		this.setAllowPvp(vconfig.pvp);
+		this.setAllowFlight(vconfig.allowFlight);
+		this.func_155759_m(vconfig.resourcePack);
+		this.setMOTD(vconfig.motd);
+		this.setForceGamemode(vconfig.forceGamemode);
+		this.func_143006_e(vconfig.playerIdleTimeout);
 
-		if (this.settings.getIntProperty("difficulty", 1) < 0)
+		if (vconfig.difficulty < 0)
 		{
-			this.settings.setProperty("difficulty", Integer.valueOf(0));
+			vconfig.difficulty = 0;
 		}
-		else if (this.settings.getIntProperty("difficulty", 1) > 3)
+		else if (vconfig.difficulty > 3)
 		{
-			this.settings.setProperty("difficulty", Integer.valueOf(3));
+			vconfig.difficulty = 3;
 		}
 
-		this.canSpawnStructures = this.settings.getBooleanProperty("generate-structures", true);
-		int i = this.settings.getIntProperty("gamemode", WorldSettings.GameType.SURVIVAL.getID());
+		this.canSpawnStructures = vconfig.generateStructures;
+		int i = vconfig.gamemode;
 		this.gameType = WorldSettings.getGameTypeById(i);
 		field_155771_h.info("Default game type: " + this.gameType);
 		InetAddress inetaddress = null;
@@ -161,7 +163,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 		if (this.getServerPort() < 0)
 		{
-			this.setServerPort(this.settings.getIntProperty("server-port", 25565));
+			this.setServerPort(vconfig.serverPort);
 		}
 
 		field_155771_h.info("Generating keypair");
@@ -195,12 +197,12 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 		if (this.getFolderName() == null)
 		{
-			this.setFolderName(this.settings.getStringProperty("level-name", "world"));
+			this.setFolderName(vconfig.levelName);
 		}
 
-		String s = this.settings.getStringProperty("level-seed", "");
-		String s1 = this.settings.getStringProperty("level-type", "DEFAULT");
-		String s2 = this.settings.getStringProperty("generator-settings", "");
+		String s = vconfig.levelSeed;
+		String s1 = vconfig.levelType;
+		String s2 = vconfig.generatorSettings;
 		long k = (new Random()).nextLong();
 
 		if (s.length() > 0)
@@ -231,10 +233,10 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		this.isCommandBlockEnabled();
 		this.getOpPermissionLevel();
 		this.isSnooperEnabled();
-		this.setBuildLimit(this.settings.getIntProperty("max-build-height", 256));
+		this.setBuildLimit(vconfig.maxBuildHeight);
 		this.setBuildLimit((this.getBuildLimit() + 8) / 16 * 16);
 		this.setBuildLimit(MathHelper.clamp_int(this.getBuildLimit(), 64, 256));
-		this.settings.setProperty("max-build-height", Integer.valueOf(this.getBuildLimit()));
+		vconfig.maxBuildHeight = this.getBuildLimit();
 		if (!FMLCommonHandler.instance().handleServerAboutToStart(this)) { return false; }
 		field_155771_h.info("Preparing level \"" + this.getFolderName() + "\"");
 		this.loadAllWorlds(this.getFolderName(), this.getFolderName(), k, worldtype, s2);
@@ -242,14 +244,14 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		String s3 = String.format("%.3fs", new Object[] {Double.valueOf((double)i1 / 1.0E9D)});
 		field_155771_h.info("Done (" + s3 + ")! For help, type \"help\" or \"?\"");
 
-		if (this.settings.getBooleanProperty("enable-query", false))
+		if (vconfig.enableQuery)
 		{
 			field_155771_h.info("Starting GS4 status listener");
 			this.theRConThreadQuery = new RConThreadQuery(this);
 			this.theRConThreadQuery.startThread();
 		}
 
-		if (this.settings.getBooleanProperty("enable-rcon", false))
+		if (vconfig.enableRcon)
 		{
 			field_155771_h.info("Starting remote control listener");
 			this.theRConThreadMain = new RConThreadMain(this);
@@ -272,12 +274,12 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public EnumDifficulty func_147135_j()
 	{
-		return EnumDifficulty.getDifficultyEnum(this.settings.getIntProperty("difficulty", 1));
+		return EnumDifficulty.getDifficultyEnum(ConfigurationHandler.getServerConfig().vanilla.difficulty);
 	}
 
 	public boolean isHardcore()
 	{
-		return this.settings.getBooleanProperty("hardcore", false);
+		return ConfigurationHandler.getServerConfig().vanilla.hardcore;
 	}
 
 	protected void finalTick(CrashReport par1CrashReport)
@@ -333,12 +335,12 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public boolean getAllowNether()
 	{
-		return this.settings.getBooleanProperty("allow-nether", true);
+		return ConfigurationHandler.getServerConfig().vanilla.allowNether;
 	}
 
 	public boolean allowSpawnMonsters()
 	{
-		return this.settings.getBooleanProperty("spawn-monsters", true);
+		return ConfigurationHandler.getServerConfig().vanilla.spawnMonsters;
 	}
 
 	public void addServerStatsToSnooper(PlayerUsageSnooper par1PlayerUsageSnooper)
@@ -350,7 +352,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public boolean isSnooperEnabled()
 	{
-		return this.settings.getBooleanProperty("snooper-enabled", true);
+		return ConfigurationHandler.getServerConfig().vanilla.snooperEnabled;
 	}
 
 	public void addPendingCommand(String par1Str, ICommandSender par2ICommandSender)
@@ -399,13 +401,13 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public void saveProperties()
 	{
-		this.settings.saveProperties();
+		ConfigurationHandler.saveServerConfig();
+		//this.settings.saveProperties();
 	}
 
 	public String getSettingsFilename()
 	{
-		File file1 = this.settings.getPropertiesFile();
-		return file1 != null ? file1.getAbsolutePath() : "No settings file";
+		return "server.yml";
 	}
 
 	public void setGuiEnabled()
@@ -426,12 +428,12 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public boolean isCommandBlockEnabled()
 	{
-		return this.settings.getBooleanProperty("enable-command-block", false);
+		return ConfigurationHandler.getServerConfig().vanilla.enableCommandBlock;
 	}
 
 	public int getSpawnProtectionSize()
 	{
-		return this.settings.getIntProperty("spawn-protection", super.getSpawnProtectionSize());
+		return 0;
 	}
 
 	public boolean isBlockProtected(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer)
@@ -464,18 +466,18 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public int getOpPermissionLevel()
 	{
-		return this.settings.getIntProperty("op-permission-level", 4);
+		return 4;
 	}
 
 	public void func_143006_e(int par1)
 	{
+		ConfigurationHandler.getServerConfig().vanilla.playerIdleTimeout = par1;
 		super.func_143006_e(par1);
-		this.settings.setProperty("player-idle-timeout", Integer.valueOf(par1));
-		this.saveProperties();
+		//this.saveProperties();
 	}
 
 	public boolean func_147136_ar()
 	{
-		return this.settings.getBooleanProperty("announce-player-achievements", true);
+		return ConfigurationHandler.getServerConfig().vanilla.announcePlayerAchievements;
 	}
 }

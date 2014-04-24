@@ -2,6 +2,7 @@ package net.minecraft.network.rcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -11,6 +12,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.ultramine.server.ConfigurationHandler;
 
 @SideOnly(Side.SERVER)
 public class RConThreadMain extends RConThreadBase
@@ -26,8 +29,8 @@ public class RConThreadMain extends RConThreadBase
 	public RConThreadMain(IServer par1IServer)
 	{
 		super(par1IServer, "RCON Listener");
-		this.rconPort = par1IServer.getIntProperty("rcon.port", 0);
-		this.rconPassword = par1IServer.getStringProperty("rcon.password", "");
+		this.rconPort = ConfigurationHandler.getServerConfig().vanilla.rconPort;
+		this.rconPassword = ConfigurationHandler.getServerConfig().vanilla.rconPassword;
 		this.hostname = par1IServer.getHostname();
 		this.serverPort = par1IServer.getPort();
 
@@ -35,14 +38,7 @@ public class RConThreadMain extends RConThreadBase
 		{
 			this.rconPort = this.serverPort + 10;
 			this.logInfo("Setting default rcon port to " + this.rconPort);
-			par1IServer.setProperty("rcon.port", Integer.valueOf(this.rconPort));
-
-			if (0 == this.rconPassword.length())
-			{
-				par1IServer.setProperty("rcon.password", "");
-			}
-
-			par1IServer.saveProperties();
+			ConfigurationHandler.getServerConfig().vanilla.rconPort = rconPort;
 		}
 
 		if (0 == this.hostname.length())

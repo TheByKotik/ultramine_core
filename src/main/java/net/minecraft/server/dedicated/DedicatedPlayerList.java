@@ -2,16 +2,20 @@ package net.minecraft.server.dedicated;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Iterator;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.ConfigurationHandler;
 
 @SideOnly(Side.SERVER)
 public class DedicatedPlayerList extends ServerConfigurationManager
@@ -26,9 +30,9 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 		super(par1DedicatedServer);
 		this.opsList = par1DedicatedServer.getFile("ops.txt");
 		this.whiteList = par1DedicatedServer.getFile("white-list.txt");
-		this.viewDistance = par1DedicatedServer.getIntProperty("view-distance", 10);
-		this.maxPlayers = par1DedicatedServer.getIntProperty("max-players", 20);
-		this.setWhiteListEnabled(par1DedicatedServer.getBooleanProperty("white-list", false));
+		this.viewDistance = ConfigurationHandler.getServerConfig().vanilla.viewDistance;
+		this.maxPlayers = ConfigurationHandler.getServerConfig().vanilla.maxPlayers;
+		this.setWhiteListEnabled(ConfigurationHandler.getServerConfig().vanilla.whiteList);
 
 		if (!par1DedicatedServer.isSinglePlayer())
 		{
@@ -53,8 +57,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 	public void setWhiteListEnabled(boolean par1)
 	{
 		super.setWhiteListEnabled(par1);
-		this.getServerInstance().setProperty("white-list", Boolean.valueOf(par1));
-		this.getServerInstance().saveProperties();
+		ConfigurationHandler.getServerConfig().vanilla.whiteList = par1;
 	}
 
 	public void addOp(String par1Str)

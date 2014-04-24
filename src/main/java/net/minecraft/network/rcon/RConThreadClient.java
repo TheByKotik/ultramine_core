@@ -2,14 +2,17 @@ package net.minecraft.network.rcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.ConfigurationHandler;
 
 @SideOnly(Side.SERVER)
 public class RConThreadClient extends RConThreadBase
@@ -35,7 +38,7 @@ public class RConThreadClient extends RConThreadBase
 			this.running = false;
 		}
 
-		this.rconPassword = par1IServer.getStringProperty("rcon.password", "");
+		this.rconPassword = ConfigurationHandler.getServerConfig().vanilla.rconPassword;
 		this.logInfo("Rcon connection from: " + par2Socket.getInetAddress());
 	}
 
