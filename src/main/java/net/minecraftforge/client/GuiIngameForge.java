@@ -49,8 +49,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 
 public class GuiIngameForge extends GuiIngame
 {
-	//private static final ResourceLocation VIGNETTE	 = new ResourceLocation("textures/misc/vignette.png");
-	private static final ResourceLocation WIDGITS	   = new ResourceLocation("textures/gui/widgets.png");
+	//private static final ResourceLocation VIGNETTE     = new ResourceLocation("textures/misc/vignette.png");
+	private static final ResourceLocation WIDGITS      = new ResourceLocation("textures/gui/widgets.png");
 	//private static final ResourceLocation PUMPKIN_BLUR = new ResourceLocation("textures/misc/pumpkinblur.png");
 
 	private static final int WHITE = 0xFFFFFF;
@@ -134,9 +134,9 @@ public class GuiIngameForge extends GuiIngame
 			{
 				if (renderHealth) renderHealth(width, height);
 				if (renderArmor)  renderArmor(width, height);
-				if (renderFood)	  renderFood(width, height);
+				if (renderFood)   renderFood(width, height);
 				if (renderHealthMount) renderHealthMount(width, height);
-				if (renderAir)	  renderAir(width, height);
+				if (renderAir)    renderAir(width, height);
 			}
 			if (renderHotbar) renderHotbar(width, height, partialTicks);
 		}
@@ -366,10 +366,10 @@ public class GuiIngameForge extends GuiIngame
 			regen = updateCounter % 25;
 		}
 
-		final int TOP =	 9 * (mc.theWorld.getWorldInfo().isHardcoreModeEnabled() ? 5 : 0);
+		final int TOP =  9 * (mc.theWorld.getWorldInfo().isHardcoreModeEnabled() ? 5 : 0);
 		final int BACKGROUND = (highlight ? 25 : 16);
 		int MARGIN = 16;
-		if (mc.thePlayer.isPotionActive(Potion.poison))		 MARGIN += 36;
+		if (mc.thePlayer.isPotionActive(Potion.poison))      MARGIN += 36;
 		else if (mc.thePlayer.isPotionActive(Potion.wither)) MARGIN += 72;
 		float absorbRemaining = absorb;
 

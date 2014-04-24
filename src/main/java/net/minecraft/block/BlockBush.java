@@ -62,7 +62,7 @@ public class BlockBush extends Block implements IPlantable
 
 	public boolean canBlockStay(World p_149718_1_, int p_149718_2_, int p_149718_3_, int p_149718_4_)
 	{
-		return	p_149718_1_.getBlock(p_149718_2_, p_149718_3_ - 1, p_149718_4_).canSustainPlant(p_149718_1_, p_149718_2_, p_149718_3_ - 1, p_149718_4_, ForgeDirection.UP, this);
+		return  p_149718_1_.getBlock(p_149718_2_, p_149718_3_ - 1, p_149718_4_).canSustainPlant(p_149718_1_, p_149718_2_, p_149718_3_ - 1, p_149718_4_, ForgeDirection.UP, this);
 	}
 
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World p_149668_1_, int p_149668_2_, int p_149668_3_, int p_149668_4_)
@@ -88,21 +88,21 @@ public class BlockBush extends Block implements IPlantable
 	@Override
 	public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z)
 	{
-		if (this == Blocks.wheat)		   return Crop;
-		if (this == Blocks.carrots)		   return Crop;
-		if (this == Blocks.potatoes)	   return Crop;
-		if (this == Blocks.melon_stem)	   return Crop;
+		if (this == Blocks.wheat)          return Crop;
+		if (this == Blocks.carrots)        return Crop;
+		if (this == Blocks.potatoes)       return Crop;
+		if (this == Blocks.melon_stem)     return Crop;
 		if (this == Blocks.pumpkin_stem)   return Crop;
-		if (this == Blocks.deadbush)	   return Desert;
-		if (this == Blocks.waterlily)	   return Water;
+		if (this == Blocks.deadbush)       return Desert;
+		if (this == Blocks.waterlily)      return Water;
 		if (this == Blocks.red_mushroom)   return Cave;
 		if (this == Blocks.brown_mushroom) return Cave;
-		if (this == Blocks.nether_wart)	   return Nether;
-		if (this == Blocks.sapling)		   return Plains;
-		if (this == Blocks.tallgrass)	   return Plains;
+		if (this == Blocks.nether_wart)    return Nether;
+		if (this == Blocks.sapling)        return Plains;
+		if (this == Blocks.tallgrass)      return Plains;
 		if (this == Blocks.double_plant)   return Plains;
-		if (this == Blocks.red_flower)	   return Plains;
-		if (this == Blocks.yellow_flower)  return Plains;		 
+		if (this == Blocks.red_flower)     return Plains;
+		if (this == Blocks.yellow_flower)  return Plains;        
 		return Plains;
 	}
 

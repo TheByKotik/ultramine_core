@@ -550,14 +550,14 @@ public abstract class BiomeGenBase
 	public void addDefaultFlowers()
 	{
 		this.flowers.add(new FlowerEntry(Blocks.yellow_flower, 0, 20));
-		this.flowers.add(new FlowerEntry(Blocks.red_flower,	   0, 10));
+		this.flowers.add(new FlowerEntry(Blocks.red_flower,    0, 10));
 	}
 
 	/** Register a new plant to be planted when bonemeal is used on grass.
 	 * @param block The block to place.
 	 * @param metadata The metadata to set for the block when being placed.
 	 * @param weight The weight of the plant, where red flowers are
-	 *				 10 and yellow flowers are 20.
+	 *               10 and yellow flowers are 20.
 	 */
 	public void addFlower(Block block, int metadata, int weight)
 	{

@@ -24,12 +24,12 @@
   * IN THE SOFTWARE.
   *
   * Change Log:
-  * iiimmddyyn	nnnnn  Description
-  * ----------	-----  -------------------------------------------------------
-  * gls100603a		   Fixes from Torgeir Veimo and Dan Morrione
-  * gls110603a		   Stream not being closed thus preventing a file from
-  *						  being subsequently deleted.
-  * gls031504a		   Error being written to stderr rather than throwing exception
+  * iiimmddyyn  nnnnn  Description
+  * ----------  -----  -------------------------------------------------------
+  * gls100603a         Fixes from Torgeir Veimo and Dan Morrione
+  * gls110603a         Stream not being closed thus preventing a file from
+  *                       being subsequently deleted.
+  * gls031504a         Error being written to stderr rather than throwing exception
   */
 
 package cpw.mods.fml.repackage.com.nothome.delta;

@@ -82,14 +82,14 @@ public class BlockFluidFinite extends BlockFluidBase
 
 		// Flow out if possible
 		int lowerthan = quantaRemaining - 1;
-		if (displaceIfPossible(world, x,	 y, z - 1)) world.setBlock(x,	  y, z - 1, Blocks.air);
-		if (displaceIfPossible(world, x,	 y, z + 1)) world.setBlock(x,	  y, z + 1, Blocks.air);
-		if (displaceIfPossible(world, x - 1, y, z	 )) world.setBlock(x - 1, y, z,		Blocks.air);
-		if (displaceIfPossible(world, x + 1, y, z	 )) world.setBlock(x + 1, y, z,		Blocks.air);
-		int north = getQuantaValueBelow(world, x,	  y, z - 1, lowerthan);
-		int south = getQuantaValueBelow(world, x,	  y, z + 1, lowerthan);
-		int west  = getQuantaValueBelow(world, x - 1, y, z,		lowerthan);
-		int east  = getQuantaValueBelow(world, x + 1, y, z,		lowerthan);
+		if (displaceIfPossible(world, x,     y, z - 1)) world.setBlock(x,     y, z - 1, Blocks.air);
+		if (displaceIfPossible(world, x,     y, z + 1)) world.setBlock(x,     y, z + 1, Blocks.air);
+		if (displaceIfPossible(world, x - 1, y, z    )) world.setBlock(x - 1, y, z,     Blocks.air);
+		if (displaceIfPossible(world, x + 1, y, z    )) world.setBlock(x + 1, y, z,     Blocks.air);
+		int north = getQuantaValueBelow(world, x,     y, z - 1, lowerthan);
+		int south = getQuantaValueBelow(world, x,     y, z + 1, lowerthan);
+		int west  = getQuantaValueBelow(world, x - 1, y, z,     lowerthan);
+		int east  = getQuantaValueBelow(world, x + 1, y, z,     lowerthan);
 		int total = quantaRemaining;
 		int count = 1;
 
@@ -282,10 +282,10 @@ public class BlockFluidFinite extends BlockFluidBase
 				{
 					BlockFluidBase block = (BlockFluidBase)world.getBlock(x, otherY, z);
 					int otherData = world.getBlockMetadata(x, otherY, z);
-					world.setBlock(x, otherY, z, this,	amtToInput - 1, 3);
-					world.setBlock(x, y,	  z, block, otherData, 3);
+					world.setBlock(x, otherY, z, this,  amtToInput - 1, 3);
+					world.setBlock(x, y,      z, block, otherData, 3);
 					world.scheduleBlockUpdate(x, otherY, z, this,  tickRate);
-					world.scheduleBlockUpdate(x, y,		 z, block, block.tickRate(world));
+					world.scheduleBlockUpdate(x, y,      z, block, block.tickRate(world));
 					return 0;
 				}
 			}
@@ -295,10 +295,10 @@ public class BlockFluidFinite extends BlockFluidBase
 				{
 					BlockFluidBase block = (BlockFluidBase)world.getBlock(x, otherY, z);
 					int otherData = world.getBlockMetadata(x, otherY, z);
-					world.setBlock(x, otherY, z, this,	amtToInput - 1, 3);
-					world.setBlock(x, y,	  z, block, otherData, 3);
+					world.setBlock(x, otherY, z, this,  amtToInput - 1, 3);
+					world.setBlock(x, y,      z, block, otherData, 3);
 					world.scheduleBlockUpdate(x, otherY, z, this,  tickRate);
-					world.scheduleBlockUpdate(x, y,		 z, block, block.tickRate(world));
+					world.scheduleBlockUpdate(x, y,      z, block, block.tickRate(world));
 					return 0;
 				}
 			}

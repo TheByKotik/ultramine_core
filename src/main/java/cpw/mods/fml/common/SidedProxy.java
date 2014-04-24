@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package cpw.mods.fml.common;
@@ -28,18 +28,18 @@ import java.lang.annotation.Target;
  * This example will load a CommonProxy on the server side, and a ClientProxy on the client side.
  *
  * <pre>{@code
- *	public class MySidedProxyHolder {
- *		{@literal @}SidedProxy(modId="MyModId",clientSide="mymod.ClientProxy", serverSide="mymod.CommonProxy")
- *		public static CommonProxy proxy;
- *	}
+ *  public class MySidedProxyHolder {
+ *      {@literal @}SidedProxy(modId="MyModId",clientSide="mymod.ClientProxy", serverSide="mymod.CommonProxy")
+ *      public static CommonProxy proxy;
+ *  }
  *
- *	public class CommonProxy {
- *		// Common or server stuff here that needs to be overridden on the client
- *	}
+ *  public class CommonProxy {
+ *      // Common or server stuff here that needs to be overridden on the client
+ *  }
  *
- *	public class ClientProxy extends CommonProxy {
- *		// Override common stuff with client specific stuff here
- *	}
+ *  public class ClientProxy extends CommonProxy {
+ *      // Override common stuff with client specific stuff here
+ *  }
  * }
  * </pre>
  * @author cpw

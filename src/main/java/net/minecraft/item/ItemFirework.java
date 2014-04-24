@@ -63,7 +63,7 @@ public class ItemFirework extends Item
 						{
 							for (int j = 1; j < arraylist.size(); ++j)
 							{
-								arraylist.set(j, "	" + (String)arraylist.get(j));
+								arraylist.set(j, "  " + (String)arraylist.get(j));
 							}
 
 							par3List.addAll(arraylist);

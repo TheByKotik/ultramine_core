@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package cpw.mods.fml.common.discovery;

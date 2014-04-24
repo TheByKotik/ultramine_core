@@ -112,7 +112,7 @@ public class FluidStack
 	 * Determines if the FluidIDs and NBT Tags are equal. This does not check amounts.
 	 *
 	 * @param other
-	 *			  The FluidStack for comparison
+	 *            The FluidStack for comparison
 	 * @return true if the Fluids (IDs and NBT Tags) are the same
 	 */
 	public boolean isFluidEqual(FluidStack other)
@@ -148,7 +148,7 @@ public class FluidStack
 	 * Determines if the FluidIDs, Amounts, and NBT Tags are all equal.
 	 *
 	 * @param other
-	 *			  - the FluidStack for comparison
+	 *            - the FluidStack for comparison
 	 * @return true if the two FluidStacks are exactly the same
 	 */
 	public boolean isFluidStackIdentical(FluidStack other)
@@ -161,7 +161,7 @@ public class FluidStack
 	 * ItemStack. This does not check amounts.
 	 *
 	 * @param other
-	 *			  The ItemStack for comparison
+	 *            The ItemStack for comparison
 	 * @return true if the Fluids (IDs and NBT Tags) are the same
 	 */
 	public boolean isFluidEqual(ItemStack other)

@@ -265,7 +265,7 @@ public class GuiContainerCreative extends InventoryEffectRenderer
 			int tabCount = CreativeTabs.creativeTabArray.length;
 			if (tabCount > 12)
 			{
-				buttonList.add(new GuiButton(101, guiLeft,						 guiTop - 50, 20, 20, "<"));
+				buttonList.add(new GuiButton(101, guiLeft,                       guiTop - 50, 20, 20, "<"));
 				buttonList.add(new GuiButton(102, guiLeft + xSize - 20, guiTop - 50, 20, 20, ">"));
 				maxPages = ((tabCount - 12) / 10) + 1;
 			}

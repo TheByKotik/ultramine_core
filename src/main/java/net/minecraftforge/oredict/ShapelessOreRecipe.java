@@ -20,7 +20,7 @@ public class ShapelessOreRecipe implements IRecipe
 	private ArrayList<Object> input = new ArrayList<Object>();
 
 	public ShapelessOreRecipe(Block result, Object... recipe){ this(new ItemStack(result), recipe); }
-	public ShapelessOreRecipe(Item	result, Object... recipe){ this(new ItemStack(result), recipe); }
+	public ShapelessOreRecipe(Item  result, Object... recipe){ this(new ItemStack(result), recipe); }
 
 	public ShapelessOreRecipe(ItemStack result, Object... recipe)
 	{

@@ -45,7 +45,7 @@ public class ConfigCategory implements Map<String, Property>
 		if (obj instanceof ConfigCategory)
 		{
 			ConfigCategory cat = (ConfigCategory)obj;
-			return name.equals(cat.name) && children.equals(cat.children);	
+			return name.equals(cat.name) && children.equals(cat.children);  
 		}
 		
 		return false;
@@ -198,7 +198,7 @@ public class ConfigCategory implements Map<String, Property>
 		StringBuilder buf = new StringBuilder("");
 		for (int x = 0; x < indent; x++)
 		{
-			buf.append("	");
+			buf.append("    ");
 		}
 		return buf.toString();
 	}

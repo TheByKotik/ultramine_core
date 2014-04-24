@@ -31,7 +31,7 @@ public class PlaySoundSourceEvent extends SoundSourceEvent
 	public PlaySoundSourceEvent(SoundManager manager, ISound sound, String uuid)
 	{
 		super(manager, sound, uuid);
-		this.name = sound.getPositionedSoundLocation().getResourcePath();		 
+		this.name = sound.getPositionedSoundLocation().getResourcePath();        
 		this.manager = manager;
 		this.x = this.y = this.z = 0;
 	}

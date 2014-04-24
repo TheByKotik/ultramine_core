@@ -173,7 +173,7 @@ public class Configuration
 			values[i] = Integer.toString(defaultValue[i]);
 		}
 
-		Property prop =	 get(category, key, values, comment, INTEGER);
+		Property prop =  get(category, key, values, comment, INTEGER);
 		if (!prop.isIntList())
 		{
 			prop.set(values);
@@ -195,7 +195,7 @@ public class Configuration
 			values[i] = Double.toString(defaultValue[i]);
 		}
 
-		Property prop =	 get(category, key, values, comment, DOUBLE);
+		Property prop =  get(category, key, values, comment, DOUBLE);
 		
 		if (!prop.isDoubleList())
 		{
@@ -218,7 +218,7 @@ public class Configuration
 			values[i] = Boolean.toString(defaultValue[i]);
 		}
 
-		Property prop =	 get(category, key, values, comment, BOOLEAN);
+		Property prop =  get(category, key, values, comment, BOOLEAN);
 		
 		if (!prop.isBooleanList())
 		{
@@ -582,7 +582,7 @@ public class Configuration
 	}
 
 	private void save(BufferedWriter out) throws IOException
-	{		 
+	{        
 		for (ConfigCategory cat : categories.values())
 		{
 			if (!cat.isChild())
@@ -725,7 +725,7 @@ public class Configuration
 				size = 4;
 			}
 			else if (bom32 == 0xFFFE0000) //This will never happen as it'll be caught by UTF-16LE,
-			{							  //but if anyone ever runs across a 32LE file, i'd like to disect it.
+			{                             //but if anyone ever runs across a 32LE file, i'd like to disect it.
 				enc = "UTF-32LE";
 				size = 4;
 			}

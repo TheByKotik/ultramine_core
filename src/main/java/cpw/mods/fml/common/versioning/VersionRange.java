@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package cpw.mods.fml.common.versioning;
@@ -17,19 +17,19 @@ package cpw.mods.fml.common.versioning;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.	See the NOTICE file
+ * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.	 See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
@@ -249,24 +249,24 @@ public class VersionRange
 	 * </p>
 	 *
 	 * @param restriction the <code>VersionRange</code> that will be used to restrict this version
-	 *					  range.
+	 *                    range.
 	 * @return the <code>VersionRange</code> that is a restriction of this version range and the
-	 *		   specified version range.
-	 *		   <p>
-	 *		   The restrictions of the returned version range will be an intersection of the restrictions
-	 *		   of this version range and the specified version range if both version ranges have
-	 *		   restrictions. Otherwise, the restrictions on the returned range will be empty.
-	 *		   </p>
-	 *		   <p>
-	 *		   The recommended version of the returned version range will be the recommended version of
-	 *		   this version range, provided that ranges falls within the intersected restrictions. If
-	 *		   the restrictions are empty, this version range's recommended version is used if it is not
-	 *		   <code>null</code>. If it is <code>null</code>, the specified version range's recommended
-	 *		   version is used (provided it is non-<code>null</code>). If no recommended version can be
-	 *		   obtained, the returned version range's recommended version is set to <code>null</code>.
-	 *		   </p>
+	 *         specified version range.
+	 *         <p>
+	 *         The restrictions of the returned version range will be an intersection of the restrictions
+	 *         of this version range and the specified version range if both version ranges have
+	 *         restrictions. Otherwise, the restrictions on the returned range will be empty.
+	 *         </p>
+	 *         <p>
+	 *         The recommended version of the returned version range will be the recommended version of
+	 *         this version range, provided that ranges falls within the intersected restrictions. If
+	 *         the restrictions are empty, this version range's recommended version is used if it is not
+	 *         <code>null</code>. If it is <code>null</code>, the specified version range's recommended
+	 *         version is used (provided it is non-<code>null</code>). If no recommended version can be
+	 *         obtained, the returned version range's recommended version is set to <code>null</code>.
+	 *         </p>
 	 * @throws NullPointerException if the specified <code>VersionRange</code> is
-	 *								<code>null</code>.
+	 *                              <code>null</code>.
 	 */
 	public VersionRange restrict( VersionRange restriction )
 	{

@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package cpw.mods.fml.client;
@@ -283,7 +283,7 @@ public abstract class GuiScrollingList
 			var18.addVertexWithUV((double)this.left, (double)this.top, 0.0D, (double)((float)this.left / var17), (double)((float)(this.top + (int)this.scrollDistance) / var17));
 			var18.draw();
 		}
- //		   boxRight = this.listWidth / 2 - 92 - 16;
+ //        boxRight = this.listWidth / 2 - 92 - 16;
 		var10 = this.top + 4 - (int)this.scrollDistance;
 
 		if (this.field_27262_q)

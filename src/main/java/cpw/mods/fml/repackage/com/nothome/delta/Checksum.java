@@ -127,7 +127,7 @@ public class Checksum {
 	public static long incrementChecksum(long checksum, byte out, byte in, int chunkSize) {
 		char old_c = single_hash[out+128];
 		char new_c = single_hash[in+128];
-		int low	  = ((int)((checksum) & 0xffff) - old_c + new_c) & 0xffff;
+		int low   = ((int)((checksum) & 0xffff) - old_c + new_c) & 0xffff;
 		int high  = ((int)((checksum) >> 16) - (old_c * chunkSize) + low) & 0xffff;
 		return (high << 16) | (low & 0xffff);
 	}

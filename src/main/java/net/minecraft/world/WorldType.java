@@ -169,7 +169,7 @@ public class WorldType
 		return this == FLAT ? 1.0D : 0.03125D;
 	}
 
-/*	  public BiomeGenBase[] getBiomesForWorldType() {
+/*    public BiomeGenBase[] getBiomesForWorldType() {
 		return biomesForWorldType;
 	}
 

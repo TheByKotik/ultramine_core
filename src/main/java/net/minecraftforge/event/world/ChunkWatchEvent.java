@@ -17,11 +17,11 @@ public class ChunkWatchEvent extends Event
 	
 	public static class Watch extends ChunkWatchEvent
 	{
-		public Watch(ChunkCoordIntPair chunk, EntityPlayerMP player) { super(chunk, player); }		  
+		public Watch(ChunkCoordIntPair chunk, EntityPlayerMP player) { super(chunk, player); }        
 	}
 	
 	public static class UnWatch extends ChunkWatchEvent
 	{
-		public UnWatch(ChunkCoordIntPair chunkLocation, EntityPlayerMP player) { super(chunkLocation, player); }		
+		public UnWatch(ChunkCoordIntPair chunkLocation, EntityPlayerMP player) { super(chunkLocation, player); }        
 	}
 }

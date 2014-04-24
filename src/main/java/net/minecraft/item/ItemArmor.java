@@ -288,12 +288,12 @@ public class ItemArmor extends Item
 		{
 			switch (this)
 			{
-				case CLOTH:	  return Items.leather;
-				case CHAIN:	  return Items.iron_ingot;
-				case GOLD:	  return Items.gold_ingot;
-				case IRON:	  return Items.iron_ingot;
+				case CLOTH:   return Items.leather;
+				case CHAIN:   return Items.iron_ingot;
+				case GOLD:    return Items.gold_ingot;
+				case IRON:    return Items.iron_ingot;
 				case DIAMOND: return Items.diamond;
-				default:	  return customCraftingMaterial;
+				default:      return customCraftingMaterial;
 			}
 		}
 	}

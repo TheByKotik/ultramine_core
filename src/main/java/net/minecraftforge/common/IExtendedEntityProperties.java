@@ -31,7 +31,7 @@ public interface IExtendedEntityProperties {
 	 * as the world object.
 	 * Called automatically if you register with the EntityConstructing event.
 	 * @param entity  The entity that this extended properties is attached to
-	 * @param world	 The world in which the entity exists
+	 * @param world  The world in which the entity exists
 	 */
 	public void init(Entity entity, World world);
 }

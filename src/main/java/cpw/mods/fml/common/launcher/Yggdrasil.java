@@ -111,7 +111,7 @@ public class Yggdrasil {
 			if (result.selectedProfile != null)
 			{
 				args.put("--username", result.selectedProfile.name);
-				args.put("--uuid",	   result.selectedProfile.id);
+				args.put("--uuid",     result.selectedProfile.id);
 				args.put("--accessToken", result.accessToken);
 			}
 		}

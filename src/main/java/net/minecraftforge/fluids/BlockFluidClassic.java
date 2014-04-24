@@ -91,21 +91,21 @@ public class BlockFluidClassic extends BlockFluidBase
 		{
 			int y2 = y - densityDir;
 
-			if (world.getBlock(x,	  y2, z	   ) == this ||
-				world.getBlock(x - 1, y2, z	   ) == this ||
-				world.getBlock(x + 1, y2, z	   ) == this ||
-				world.getBlock(x,	  y2, z - 1) == this ||
-				world.getBlock(x,	  y2, z + 1) == this)
+			if (world.getBlock(x,     y2, z    ) == this ||
+				world.getBlock(x - 1, y2, z    ) == this ||
+				world.getBlock(x + 1, y2, z    ) == this ||
+				world.getBlock(x,     y2, z - 1) == this ||
+				world.getBlock(x,     y2, z + 1) == this)
 			{
 				expQuanta = quantaPerBlock - 1;
 			}
 			else
 			{
 				int maxQuanta = -100;
-				maxQuanta = getLargerQuanta(world, x - 1, y, z,		maxQuanta);
-				maxQuanta = getLargerQuanta(world, x + 1, y, z,		maxQuanta);
-				maxQuanta = getLargerQuanta(world, x,	  y, z - 1, maxQuanta);
-				maxQuanta = getLargerQuanta(world, x,	  y, z + 1, maxQuanta);
+				maxQuanta = getLargerQuanta(world, x - 1, y, z,     maxQuanta);
+				maxQuanta = getLargerQuanta(world, x + 1, y, z,     maxQuanta);
+				maxQuanta = getLargerQuanta(world, x,     y, z - 1, maxQuanta);
+				maxQuanta = getLargerQuanta(world, x,     y, z + 1, maxQuanta);
 
 				expQuanta = maxQuanta - 1;
 			}
@@ -155,10 +155,10 @@ public class BlockFluidClassic extends BlockFluidBase
 			}
 			boolean flowTo[] = getOptimalFlowDirections(world, x, y, z);
 
-			if (flowTo[0]) flowIntoBlock(world, x - 1, y, z,	 flowMeta);
-			if (flowTo[1]) flowIntoBlock(world, x + 1, y, z,	 flowMeta);
-			if (flowTo[2]) flowIntoBlock(world, x,	   y, z - 1, flowMeta);
-			if (flowTo[3]) flowIntoBlock(world, x,	   y, z + 1, flowMeta);
+			if (flowTo[0]) flowIntoBlock(world, x - 1, y, z,     flowMeta);
+			if (flowTo[1]) flowIntoBlock(world, x + 1, y, z,     flowMeta);
+			if (flowTo[2]) flowIntoBlock(world, x,     y, z - 1, flowMeta);
+			if (flowTo[3]) flowIntoBlock(world, x,     y, z + 1, flowMeta);
 		}
 	}
 

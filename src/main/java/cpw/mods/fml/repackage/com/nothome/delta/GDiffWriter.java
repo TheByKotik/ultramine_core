@@ -87,7 +87,7 @@ public class GDiffWriter implements DiffWriter {
 	public void addCopy(long offset, int length) throws IOException {
 		writeBuf();
 		
-		//output debug data		   
+		//output debug data        
 		if (debug)
 			System.err.println("COPY off: " + offset + ", len: " + length);
 		
@@ -97,8 +97,8 @@ public class GDiffWriter implements DiffWriter {
 			output.writeByte(COPY_LONG_INT);
 			output.writeLong(offset);
 			output.writeInt(length);
-		} else if (offset < 65536)	{
-			if (length < 256) {				   
+		} else if (offset < 65536)  {
+			if (length < 256) {                
 				output.writeByte(COPY_USHORT_UBYTE);
 				output.writeShort((int)offset);
 				output.writeByte(length);

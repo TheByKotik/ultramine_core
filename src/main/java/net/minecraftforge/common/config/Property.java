@@ -50,8 +50,8 @@ public class Property
 	public Property()
 	{
 		wasRead = false;
-		type	= null;
-		isList	= false;
+		type    = null;
+		isList  = false;
 	}
 
 	public Property(String name, String value, Type type)
@@ -64,8 +64,8 @@ public class Property
 		setName(name);
 		this.value = value;
 		this.type  = type;
-		wasRead	   = read;
-		isList	   = false;
+		wasRead    = read;
+		isList     = false;
 	}
 
 	public Property(String name, String[] values, Type type)
@@ -76,10 +76,10 @@ public class Property
 	Property(String name, String[] values, Type type, boolean read)
 	{
 		setName(name);
-		this.type	= type;
+		this.type   = type;
 		this.values = values;
-		wasRead		= read;
-		isList		= true;
+		wasRead     = read;
+		isList      = true;
 	}
 
 	/**
@@ -401,7 +401,7 @@ public class Property
 		changed = true;
 	}
 
-	public void set(int		value){ set(Integer.toString(value)); }
+	public void set(int     value){ set(Integer.toString(value)); }
 	public void set(boolean value){ set(Boolean.toString(value)); }
-	public void set(double	value){ set(Double.toString(value));  }
+	public void set(double  value){ set(Double.toString(value));  }
 }

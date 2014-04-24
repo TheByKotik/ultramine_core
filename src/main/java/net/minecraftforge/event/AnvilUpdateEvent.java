@@ -16,9 +16,9 @@ public class AnvilUpdateEvent extends Event
 {
 	public final ItemStack left;  // The left side of the input
 	public final ItemStack right; // The right side of the input
-	public final String name;	  // The name to set the item, if the user specified one.
-	public ItemStack output;	  // Set this to set the output stack
-	public int cost;			  // The base cost, set this to change it if output != null
+	public final String name;     // The name to set the item, if the user specified one.
+	public ItemStack output;      // Set this to set the output stack
+	public int cost;              // The base cost, set this to change it if output != null
 
 	public AnvilUpdateEvent(ItemStack left, ItemStack right, String name, int cost)
 	{

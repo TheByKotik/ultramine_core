@@ -34,7 +34,7 @@ public interface ISpecialArmor
 	 * @param player The entity wearing the armor.
 	 * @param armor The ItemStack of the armor item itself.
 	 * @param source The source of the damage, which can be used to alter armor
-	 *	   properties based on the type or source of damage.
+	 *     properties based on the type or source of damage.
 	 * @param damage The total damage being applied to the entity
 	 * @param slot The armor slot the item is in.
 	 * @return A ArmorProperties instance holding information about how the armor effects damage.
@@ -59,7 +59,7 @@ public interface ISpecialArmor
 	 * @param entity The entity wearing the armor
 	 * @param stack The ItemStack of the armor item itself.
 	 * @param source The source of the damage, which can be used to alter armor
-	 *	   properties based on the type or source of damage.
+	 *     properties based on the type or source of damage.
 	 * @param damage The amount of damage being applied to the armor
 	 * @param slot The armor slot the item is in.
 	 */
@@ -67,18 +67,18 @@ public interface ISpecialArmor
 	
 	public static class ArmorProperties implements Comparable<ArmorProperties>
 	{
-		public int	  Priority	  = 0;
-		public int	  AbsorbMax	  = Integer.MAX_VALUE;
+		public int    Priority    = 0;
+		public int    AbsorbMax   = Integer.MAX_VALUE;
 		public double AbsorbRatio = 0;
-		public int	  Slot		  = 0;
+		public int    Slot        = 0;
 		private static final boolean DEBUG = false; //Only enable this if you wish to be spamed with debugging information.
 													//Left it in because I figured it'd be useful for modders developing custom armor.
 
 		public ArmorProperties(int priority, double ratio, int max)
 		{
-			Priority	= priority;
+			Priority    = priority;
 			AbsorbRatio = ratio;
-			AbsorbMax	= max;
+			AbsorbMax   = max;
 		}
 
 		/**
@@ -184,11 +184,11 @@ public interface ISpecialArmor
 		{
 			Arrays.sort(armor);
 
-			int		start	  = 0;
-			double	total	  = 0;
-			int		priority  = armor[0].Priority;
-			int		pStart	  = 0;
-			boolean pChange	  = false;
+			int     start     = 0;
+			double  total     = 0;
+			int     priority  = armor[0].Priority;
+			int     pStart    = 0;
+			boolean pChange   = false;
 			boolean pFinished = false;
 
 			if (DEBUG)
@@ -300,7 +300,7 @@ public interface ISpecialArmor
 			{
 				return o.Priority - Priority;
 			}
-			double left =  (  AbsorbRatio == 0 ? 0 :   AbsorbMax * 100.0D /	  AbsorbRatio);
+			double left =  (  AbsorbRatio == 0 ? 0 :   AbsorbMax * 100.0D /   AbsorbRatio);
 			double right = (o.AbsorbRatio == 0 ? 0 : o.AbsorbMax * 100.0D / o.AbsorbRatio);
 			return (int)(left - right);
 		}
