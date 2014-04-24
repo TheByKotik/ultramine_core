@@ -112,4 +112,9 @@ public class FMLLaunchHandler
 	{
 		INSTANCE.injectPostfixTransformers();
 	}
+	
+	public static File getMinecraftHome()
+	{
+		return INSTANCE.minecraftHome;
+	}
 }

@@ -15,6 +15,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.base64.Base64;
+
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -32,7 +33,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+
 import javax.imageio.ImageIO;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ICommandSender;
@@ -71,9 +74,11 @@ import net.minecraft.world.demo.DemoWorldServer;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.ConfigurationHandler;
 
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -502,7 +507,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	protected File getDataDirectory()
 	{
-		return new File(".");
+		return ConfigurationHandler.getSettingDir();
 	}
 
 	protected void finalTick(CrashReport par1CrashReport) {}
@@ -1290,7 +1295,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				}
 			}
 
-			final DedicatedServer dedicatedserver = new DedicatedServer(new File(s1));
+			final DedicatedServer dedicatedserver = new DedicatedServer(ConfigurationHandler.getWorldsDir());
 
 			if (s != null)
 			{

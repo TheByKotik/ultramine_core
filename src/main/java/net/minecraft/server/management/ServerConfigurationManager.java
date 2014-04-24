@@ -7,6 +7,7 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.File;
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -61,8 +63,10 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.demo.DemoWorldManager;
 import net.minecraft.world.storage.IPlayerFileData;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.ConfigurationHandler;
 
 public abstract class ServerConfigurationManager
 {
@@ -70,8 +74,8 @@ public abstract class ServerConfigurationManager
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd \'at\' HH:mm:ss z");
 	private final MinecraftServer mcServer;
 	public final List playerEntityList = new ArrayList();
-	private final BanList bannedPlayers = new BanList(new File("banned-players.txt"));
-	private final BanList bannedIPs = new BanList(new File("banned-ips.txt"));
+	private final BanList bannedPlayers = new BanList(new File(ConfigurationHandler.getSettingDir(), "banned-players.txt"));
+	private final BanList bannedIPs = new BanList(new File(ConfigurationHandler.getSettingDir(), "banned-ips.txt"));
 	private final Set ops = new HashSet();
 	private final Set whiteListedPlayers = new HashSet();
 	private final Map field_148547_k = Maps.newHashMap();

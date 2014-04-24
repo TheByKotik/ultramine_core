@@ -3,6 +3,7 @@ package net.minecraft.server.dedicated;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
+
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.ServerCommand;
 import net.minecraft.crash.CrashReport;
@@ -32,8 +34,10 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.ConfigurationHandler;
 
 @SideOnly(Side.SERVER)
 public class DedicatedServer extends MinecraftServer implements IServer
@@ -114,7 +118,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		FMLCommonHandler.instance().onServerStart(this);
 
 		field_155771_h.info("Loading properties");
-		this.settings = new PropertyManager(new File("server.properties"));
+		this.settings = new PropertyManager(new File(ConfigurationHandler.getSettingDir(), "server.properties"));
 
 		if (this.isSinglePlayer())
 		{
