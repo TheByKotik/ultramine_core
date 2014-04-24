@@ -204,9 +204,9 @@ public abstract class FMLMessage {
 				if (mX < -maxVel) mX = -maxVel;
 				if (mY < -maxVel) mY = -maxVel;
 				if (mZ < -maxVel) mZ = -maxVel;
-				if (mX >  maxVel) mX =	maxVel;
-				if (mY >  maxVel) mY =	maxVel;
-				if (mZ >  maxVel) mZ =	maxVel;
+				if (mX >  maxVel) mX =  maxVel;
+				if (mY >  maxVel) mY =  maxVel;
+				if (mZ >  maxVel) mZ =  maxVel;
 				buf.writeInt((int)(mX * 8000D));
 				buf.writeInt((int)(mY * 8000D));
 				buf.writeInt((int)(mZ * 8000D));

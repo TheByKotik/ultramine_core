@@ -99,29 +99,29 @@ public class RecipeSorter implements Comparator<IRecipe>
 		}
 	};
 
-	private static Map<Class, Category>		categories = Maps.newHashMap();
-	//private static Map<String, Class>		  types = Maps.newHashMap();
-	private static Map<String, SortEntry>	entries = Maps.newHashMap();
-	private static Map<Class, Integer>		priorities = Maps.newHashMap();
+	private static Map<Class, Category>     categories = Maps.newHashMap();
+	//private static Map<String, Class>       types = Maps.newHashMap();
+	private static Map<String, SortEntry>   entries = Maps.newHashMap();
+	private static Map<Class, Integer>      priorities = Maps.newHashMap();
 
 	public static RecipeSorter INSTANCE = new RecipeSorter();
 	private static boolean isDirty = true;
 
 	private static SortEntry before = new SortEntry("Before", null, UNKNOWN, "");
-	private static SortEntry after	= new SortEntry("After",  null, UNKNOWN, "");
+	private static SortEntry after  = new SortEntry("After",  null, UNKNOWN, "");
 
 	private RecipeSorter()
 	{
-		register("minecraft:shaped",	   ShapedRecipes.class,		  SHAPED,	 "before:minecraft:shapeless");
-		register("minecraft:mapextending", RecipesMapExtending.class, SHAPED,	 "after:minecraft:shaped before:minecraft:shapeless");
-		register("minecraft:shapeless",	   ShapelessRecipes.class,	  SHAPELESS, "after:minecraft:shaped");
-		register("minecraft:bookcloning",  RecipeBookCloning.class,	  SHAPELESS, "after:minecraft:shapeless"); //Size 9
-		register("minecraft:fireworks",	   RecipeFireworks.class,	  SHAPELESS, "after:minecraft:shapeless"); //Size 10
-		register("minecraft:armordyes",	   RecipesArmorDyes.class,	  SHAPELESS, "after:minecraft:shapeless"); //Size 10
-		register("minecraft:mapcloning",   RecipesMapCloning.class,	  SHAPELESS, "after:minecraft:shapeless"); //Size 10
+		register("minecraft:shaped",       ShapedRecipes.class,       SHAPED,    "before:minecraft:shapeless");
+		register("minecraft:mapextending", RecipesMapExtending.class, SHAPED,    "after:minecraft:shaped before:minecraft:shapeless");
+		register("minecraft:shapeless",    ShapelessRecipes.class,    SHAPELESS, "after:minecraft:shaped");
+		register("minecraft:bookcloning",  RecipeBookCloning.class,   SHAPELESS, "after:minecraft:shapeless"); //Size 9
+		register("minecraft:fireworks",    RecipeFireworks.class,     SHAPELESS, "after:minecraft:shapeless"); //Size 10
+		register("minecraft:armordyes",    RecipesArmorDyes.class,    SHAPELESS, "after:minecraft:shapeless"); //Size 10
+		register("minecraft:mapcloning",   RecipesMapCloning.class,   SHAPELESS, "after:minecraft:shapeless"); //Size 10
 
-		register("forge:shapedore",		ShapedOreRecipe.class,	  SHAPED,	 "after:minecraft:shaped before:minecraft:shapeless");
-		register("forge:shapelessore",	ShapelessOreRecipe.class, SHAPELESS, "after:minecraft:shapeless");
+		register("forge:shapedore",     ShapedOreRecipe.class,    SHAPED,    "after:minecraft:shaped before:minecraft:shapeless");
+		register("forge:shapelessore",  ShapelessOreRecipe.class, SHAPELESS, "after:minecraft:shapeless");
 	}
 	
 	@Override
@@ -129,10 +129,10 @@ public class RecipeSorter implements Comparator<IRecipe>
 	{
 		Category c1 = getCategory(r1);
 		Category c2 = getCategory(r2);
-		if (c1 == SHAPELESS && c2 == SHAPED) return	 1;
+		if (c1 == SHAPELESS && c2 == SHAPED) return  1;
 		if (c1 == SHAPED && c2 == SHAPELESS) return -1;
 		if (r2.getRecipeSize() < r1.getRecipeSize()) return -1;
-		if (r2.getRecipeSize() > r1.getRecipeSize()) return	 1;
+		if (r2.getRecipeSize() > r1.getRecipeSize()) return  1;
 		return getPriority(r2) - getPriority(r1); // high priority value first! 
 	}
 
@@ -208,7 +208,7 @@ public class RecipeSorter implements Comparator<IRecipe>
 				if (ret != null)
 				{
 					priorities.put(recipe.getClass(), ret);
-					FMLLog.fine("	 Parent Found: %d - %s", ret.intValue(), cls.getName());
+					FMLLog.fine("    Parent Found: %d - %s", ret.intValue(), cls.getName());
 					return ret.intValue();
 				}
 			}

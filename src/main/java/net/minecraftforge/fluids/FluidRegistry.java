@@ -68,7 +68,7 @@ public abstract class FluidRegistry
 	 * Register a new Fluid. If a fluid with the same name already exists, registration is denied.
 	 *
 	 * @param fluid
-	 *			  The fluid to register.
+	 *            The fluid to register.
 	 * @return True if the fluid was successfully registered; false if there is a name clash.
 	 */
 	public static boolean registerFluid(Fluid fluid)

@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package net.minecraft.src;
@@ -65,8 +65,8 @@ public class FMLRenderAccessLibrary
 		return RenderingRegistry.instance().renderItemAsFull3DBlock(modelId);
 	}
 
-//	  public static void doTextureCopy(Texture atlas, Texture source, int targetX, int targetY)
-//	  {
-//		  TextureFXManager.instance().getHelper().doTextureCopy(atlas, source, targetX, targetY);
-//	  }
+//    public static void doTextureCopy(Texture atlas, Texture source, int targetX, int targetY)
+//    {
+//        TextureFXManager.instance().getHelper().doTextureCopy(atlas, source, targetX, targetY);
+//    }
 }

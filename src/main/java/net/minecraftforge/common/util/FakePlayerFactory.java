@@ -22,7 +22,7 @@ public class FakePlayerFactory
 	{
 		if (MINECRAFT_PLAYER == null)
 		{
-			MINECRAFT_PLAYER = FakePlayerFactory.get(world,	 MINECRAFT);
+			MINECRAFT_PLAYER = FakePlayerFactory.get(world,  MINECRAFT);
 		}
 		return MINECRAFT_PLAYER;
 	}

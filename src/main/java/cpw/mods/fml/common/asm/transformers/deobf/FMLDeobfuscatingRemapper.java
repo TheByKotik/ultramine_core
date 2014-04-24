@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package cpw.mods.fml.common.asm.transformers.deobf;
@@ -381,7 +381,7 @@ public class FMLDeobfuscatingRemapper extends Remapper {
 	}
 	public void mergeSuperMaps(String name, String superName, String[] interfaces)
 	{
-//		  System.out.printf("Computing super maps for %s: %s %s\n", name, superName, Arrays.asList(interfaces));
+//        System.out.printf("Computing super maps for %s: %s %s\n", name, superName, Arrays.asList(interfaces));
 		if (classNameBiMap == null || classNameBiMap.isEmpty())
 		{
 			return;
@@ -424,7 +424,7 @@ public class FMLDeobfuscatingRemapper extends Remapper {
 		}
 		methodNameMaps.put(name, ImmutableMap.copyOf(methodMap));
 		fieldNameMaps.put(name, ImmutableMap.copyOf(fieldMap));
-//		  System.out.printf("Maps: %s %s\n", name, methodMap);
+//        System.out.printf("Maps: %s %s\n", name, methodMap);
 	}
 
 	public Set<String> getObfedClasses()

@@ -44,7 +44,7 @@ public class GenDiffSet {
 
 		for (String name : remapper.getObfedClasses())
 		{
-//			  Logger.getLogger("GENDIFF").info(String.format("Evaluating path for data :%s",name));
+//            Logger.getLogger("GENDIFF").info(String.format("Evaluating path for data :%s",name));
 			String fileName = name;
 			String jarName = name;
 			if (RESERVED_NAMES.contains(name.toUpperCase(Locale.ENGLISH)))

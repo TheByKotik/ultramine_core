@@ -16,11 +16,11 @@ public class DungeonHooks
 	 *
 	 * @param name The name of the monster, use the same name used when registering the entity.
 	 * @param rarity The rarity of selecting this mob over others. Must be greater then 0.
-	 *		  Vanilla Minecraft has the following mobs:
-	 *		  Spider   100
-	 *		  Skeleton 100
-	 *		  Zombie   200
-	 *		  Meaning, Zombies are twice as common as spiders or skeletons.
+	 *        Vanilla Minecraft has the following mobs:
+	 *        Spider   100
+	 *        Skeleton 100
+	 *        Zombie   200
+	 *        Meaning, Zombies are twice as common as spiders or skeletons.
 	 * @return The new rarity of the monster,
 	 */
 	public static float addDungeonMob(String name, int rarity)
@@ -96,7 +96,7 @@ public class DungeonHooks
 	static
 	{
 		addDungeonMob("Skeleton", 100);
-		addDungeonMob("Zombie",	  200);
-		addDungeonMob("Spider",	  100);
+		addDungeonMob("Zombie",   200);
+		addDungeonMob("Spider",   100);
 	}
 }

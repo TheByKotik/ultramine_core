@@ -12,7 +12,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 
 /**
  * Child class of LivingDropEvent that is fired specifically when a
- * player dies.	 Canceling the event will prevent ALL drops from entering the
+ * player dies.  Canceling the event will prevent ALL drops from entering the
  * world.
  */
 @Cancelable

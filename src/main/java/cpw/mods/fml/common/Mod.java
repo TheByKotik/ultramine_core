@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package cpw.mods.fml.common;
@@ -47,15 +47,15 @@ import cpw.mods.fml.common.registry.GameRegistry;
  * // Declare that this is a mod with modId "MyModId", name "My example mod", version "1.0" and dependency on FML.
  * {@literal @}Mod(modId="MyModId",name="My example mod",version="1.0",dependencies="required-after:FML")
  * public class MyMod {
- *		// Populate this field with the instance of the mod created by FML
- *		{@literal @}Instance("MyModId")
- *		public MyMod instance;
+ *      // Populate this field with the instance of the mod created by FML
+ *      {@literal @}Instance("MyModId")
+ *      public MyMod instance;
  *
- *		// Mark this method for receiving an {@link FMLEvent} (in this case, it's the {@link FMLPreInitializationEvent})
- *		{@literal @}EventHandler public void preInit(FMLPreInitializationEvent event)
- *		{
- *			// Do stuff in pre-init phase (read config, create blocks and items, register them)
- *		}
+ *      // Mark this method for receiving an {@link FMLEvent} (in this case, it's the {@link FMLPreInitializationEvent})
+ *      {@literal @}EventHandler public void preInit(FMLPreInitializationEvent event)
+ *      {
+ *          // Do stuff in pre-init phase (read config, create blocks and items, register them)
+ *      }
  * }
  * }
  * </pre>

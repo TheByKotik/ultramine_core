@@ -509,7 +509,7 @@ public class FMLClientHandler implements IFMLSidedHandler
 
 	public void displayMissingMods(Object modMissingPacket)
 	{
-//		  showGuiScreen(new GuiModsMissingForServer(modMissingPacket));
+//        showGuiScreen(new GuiModsMissingForServer(modMissingPacket));
 	}
 
 	/**

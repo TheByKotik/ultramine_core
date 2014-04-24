@@ -21,13 +21,13 @@ public class BiomeGenPlains extends BiomeGenBase
 		this.theBiomeDecorator.flowersPerChunk = 4;
 		this.theBiomeDecorator.grassPerChunk = 10;
 		this.flowers.clear();
-		this.addFlower(Blocks.red_flower,	 4,	 3);
-		this.addFlower(Blocks.red_flower,	 5,	 3);
-		this.addFlower(Blocks.red_flower,	 6,	 3);
-		this.addFlower(Blocks.red_flower,	 7,	 3);
-		this.addFlower(Blocks.red_flower,	 0, 20);
-		this.addFlower(Blocks.red_flower,	 3, 20);
-		this.addFlower(Blocks.red_flower,	 8, 20);
+		this.addFlower(Blocks.red_flower,    4,  3);
+		this.addFlower(Blocks.red_flower,    5,  3);
+		this.addFlower(Blocks.red_flower,    6,  3);
+		this.addFlower(Blocks.red_flower,    7,  3);
+		this.addFlower(Blocks.red_flower,    0, 20);
+		this.addFlower(Blocks.red_flower,    3, 20);
+		this.addFlower(Blocks.red_flower,    8, 20);
 		this.addFlower(Blocks.yellow_flower, 0, 30);
 	}
 

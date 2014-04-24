@@ -31,10 +31,10 @@ public abstract class BlockFluidBase extends Block implements IFluidBlock
 	static
 	{
 		defaultDisplacements.put(Blocks.wooden_door,   false);
-		defaultDisplacements.put(Blocks.iron_door,	   false);
+		defaultDisplacements.put(Blocks.iron_door,     false);
 		defaultDisplacements.put(Blocks.standing_sign, false);
-		defaultDisplacements.put(Blocks.wall_sign,	   false);
-		defaultDisplacements.put(Blocks.reeds,		   false);
+		defaultDisplacements.put(Blocks.wall_sign,     false);
+		defaultDisplacements.put(Blocks.reeds,         false);
 	}
 	protected Map<Block, Boolean> displacements = Maps.newHashMap();
 
@@ -308,12 +308,12 @@ public abstract class BlockFluidBase extends Block implements IFluidBlock
 	@Override
 	public int getMixedBrightnessForBlock(IBlockAccess world, int x, int y, int z)
 	{
-		int lightThis	  = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
-		int lightUp		  = world.getLightBrightnessForSkyBlocks(x, y + 1, z, 0);
+		int lightThis     = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
+		int lightUp       = world.getLightBrightnessForSkyBlocks(x, y + 1, z, 0);
 		int lightThisBase = lightThis & 255;
-		int lightUpBase	  = lightUp & 255;
+		int lightUpBase   = lightUp & 255;
 		int lightThisExt  = lightThis >> 16 & 255;
-		int lightUpExt	  = lightUp >> 16 & 255;
+		int lightUpExt    = lightUp >> 16 & 255;
 		return (lightThisBase > lightUpBase ? lightThisBase : lightUpBase) |
 			   ((lightThisExt > lightUpExt ? lightThisExt : lightUpExt) << 16);
 	}
@@ -434,14 +434,14 @@ public abstract class BlockFluidBase extends Block implements IFluidBlock
 		if (world.getBlock(x, y + 1, z) == this)
 		{
 			boolean flag =
-				isBlockSolid(world, x,	   y,	  z - 1, 2) ||
-				isBlockSolid(world, x,	   y,	  z + 1, 3) ||
-				isBlockSolid(world, x - 1, y,	  z,	 4) ||
-				isBlockSolid(world, x + 1, y,	  z,	 5) ||
-				isBlockSolid(world, x,	   y + 1, z - 1, 2) ||
-				isBlockSolid(world, x,	   y + 1, z + 1, 3) ||
-				isBlockSolid(world, x - 1, y + 1, z,	 4) ||
-				isBlockSolid(world, x + 1, y + 1, z,	 5);
+				isBlockSolid(world, x,     y,     z - 1, 2) ||
+				isBlockSolid(world, x,     y,     z + 1, 3) ||
+				isBlockSolid(world, x - 1, y,     z,     4) ||
+				isBlockSolid(world, x + 1, y,     z,     5) ||
+				isBlockSolid(world, x,     y + 1, z - 1, 2) ||
+				isBlockSolid(world, x,     y + 1, z + 1, 3) ||
+				isBlockSolid(world, x - 1, y + 1, z,     4) ||
+				isBlockSolid(world, x + 1, y + 1, z,     5);
 
 			if (flag)
 			{

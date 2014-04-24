@@ -23,7 +23,7 @@ public interface IFluidBlock
 	 * NOTE: The block is intended to handle its own state changes.
 	 * 
 	 * @param doDrain
-	 *			  If false, the drain will only be simulated.
+	 *            If false, the drain will only be simulated.
 	 * @return
 	 */
 	FluidStack drain(World world, int x, int y, int z, boolean doDrain);
@@ -33,7 +33,7 @@ public interface IFluidBlock
 	 * pumps.
 	 * 
 	 * @param doDrain
-	 *			  If false, the drain will only be simulated.
+	 *            If false, the drain will only be simulated.
 	 * @return
 	 */
 	boolean canDrain(World world, int x, int y, int z);

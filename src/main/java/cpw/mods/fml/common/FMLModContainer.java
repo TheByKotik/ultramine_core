@@ -319,7 +319,7 @@ public class FMLModContainer implements ModContainer
 					}
 					else if (!(Modifier.isStatic(m.getModifiers()) && m.getParameterTypes().length == 0))
 					{
-						FMLLog.log(getModId(),	Level.ERROR, "The InstanceFactory annotation can only apply to a static method, taking zero arguments - it will be ignored on %s(%s)", m.getName(), Arrays.asList(m.getParameterTypes()));
+						FMLLog.log(getModId(),  Level.ERROR, "The InstanceFactory annotation can only apply to a static method, taking zero arguments - it will be ignored on %s(%s)", m.getName(), Arrays.asList(m.getParameterTypes()));
 					}
 					else if (factoryMethod != null)
 					{

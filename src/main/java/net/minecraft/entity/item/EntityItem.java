@@ -34,7 +34,7 @@ public class EntityItem extends Entity
 	private static final String __OBFID = "CL_00001669";
 
 	/**
-	 * The maximum age of this EntityItem.	The item is expired once this is reached.
+	 * The maximum age of this EntityItem.  The item is expired once this is reached.
 	 */
 	public int lifespan = 6000;
 
@@ -54,7 +54,7 @@ public class EntityItem extends Entity
 
 	public EntityItem(World par1World, double par2, double par4, double par6, ItemStack par8ItemStack)
 	{
-		this(par1World, par2, par4, par6);		  
+		this(par1World, par2, par4, par6);        
 		this.setEntityItemStack(par8ItemStack);
 		this.lifespan = (par8ItemStack.getItem() == null ? 6000 : par8ItemStack.getItem().getEntityLifespan(par8ItemStack, par1World));
 	}
@@ -149,7 +149,7 @@ public class EntityItem extends Entity
 			if (!this.worldObj.isRemote && this.age >= lifespan)
 			{
 				if (item != null)
-				{	
+				{   
 					ItemExpireEvent event = new ItemExpireEvent(this, (item.getItem() == null ? 6000 : item.getItem().getEntityLifespan(item, worldObj)));
 					if (MinecraftForge.EVENT_BUS.post(event))
 					{

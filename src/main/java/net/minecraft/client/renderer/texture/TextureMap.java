@@ -420,7 +420,7 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 	}
 
 	//===================================================================================================
-	//											 Forge Start
+	//                                           Forge Start
 	//===================================================================================================
 	/**
 	 * Grabs the registered entry for the specified name, returning null if there was not a entry.

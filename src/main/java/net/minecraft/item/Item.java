@@ -816,7 +816,7 @@ public class Item
 	}
 
 	/**
-	 * Called before a block is broken.	 Return true to prevent default block harvesting.
+	 * Called before a block is broken.  Return true to prevent default block harvesting.
 	 *
 	 * Note: In SMP, this is called on both client and server sides!
 	 *
@@ -1119,11 +1119,11 @@ public class Item
 	/**
 	 * Override this method to have an item handle its own armor rendering.
 	 * 
-	 * @param  entityLiving	 The entity wearing the armor 
+	 * @param  entityLiving  The entity wearing the armor 
 	 * @param  itemStack  The itemStack to render the model of 
 	 * @param  armorSlot  0=head, 1=torso, 2=legs, 3=feet
 	 * 
-	 * @return	A ModelBiped to render instead of the default
+	 * @return  A ModelBiped to render instead of the default
 	 */
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot)
@@ -1133,7 +1133,7 @@ public class Item
 
 	/**
 	 * Called when a entity tries to play the 'swing' animation.
-	 *	
+	 *  
 	 * @param entityLiving The entity swinging the item.
 	 * @param stack The Item stack
 	 * @return True to cancel any further processing by EntityLiving 
@@ -1146,7 +1146,7 @@ public class Item
 	/**
 	 * Called when the client starts rendering the HUD, for whatever item the player currently has as a helmet. 
 	 * This is where pumpkins would render there overlay.
-	 *	
+	 *  
 	 * @param stack The ItemStack that is equipped
 	 * @param player Reference to the current client entity
 	 * @param resolution Resolution information about the current viewport and configured GUI Scale
@@ -1274,11 +1274,11 @@ public class Item
 	 * 
 	 * @param toolClass Class
 	 * @param level Harvest level:
-	 *	   Wood:	0
-	 *	   Stone:	1
-	 *	   Iron:	2
-	 *	   Diamond: 3
-	 *	   Gold:	0
+	 *     Wood:    0
+	 *     Stone:   1
+	 *     Iron:    2
+	 *     Diamond: 3
+	 *     Gold:    0
 	 */
 	public void setHarvestLevel(String toolClass, int level)
 	{
@@ -1306,7 +1306,7 @@ public class Item
 		Integer ret = toolClasses.get(toolClass);
 		return ret == null ? -1 : ret; 
 	}
-	/* ======================================== FORGE END	=====================================*/
+	/* ======================================== FORGE END   =====================================*/
 
 	public static enum ToolMaterial
 	{
@@ -1364,12 +1364,12 @@ public class Item
 		{
 			switch (this)
 			{
-				case WOOD:	  return Item.getItemFromBlock(Blocks.planks);
-				case STONE:	  return Item.getItemFromBlock(Blocks.cobblestone);
-				case GOLD:	  return Items.gold_ingot;
-				case IRON:	  return Items.iron_ingot;
+				case WOOD:    return Item.getItemFromBlock(Blocks.planks);
+				case STONE:   return Item.getItemFromBlock(Blocks.cobblestone);
+				case GOLD:    return Items.gold_ingot;
+				case IRON:    return Items.iron_ingot;
 				case EMERALD: return Items.diamond;
-				default:	  return customCraftingMaterial;
+				default:      return customCraftingMaterial;
 			}
 		}
 	}

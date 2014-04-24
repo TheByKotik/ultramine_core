@@ -100,8 +100,8 @@ public class DimensionManager
 		hasInit = true;
 
 		registerProviderType( 0, WorldProviderSurface.class, true);
-		registerProviderType(-1, WorldProviderHell.class,	 true);
-		registerProviderType( 1, WorldProviderEnd.class,	 false);
+		registerProviderType(-1, WorldProviderHell.class,    true);
+		registerProviderType( 1, WorldProviderEnd.class,     false);
 		registerDimension( 0,  0);
 		registerDimension(-1, -1);
 		registerDimension( 1,  1);
@@ -294,7 +294,7 @@ public class DimensionManager
 			}
 			else
 			{
-				throw new RuntimeException(String.format("No WorldProvider bound for dimension %d", dim)); //It's going to crash anyway at this point.	Might as well be informative
+				throw new RuntimeException(String.format("No WorldProvider bound for dimension %d", dim)); //It's going to crash anyway at this point.  Might as well be informative
 			}
 		}
 		catch (Exception e)

@@ -65,7 +65,7 @@ public class ChunkProviderGenerate implements IChunkProvider
 		mineshaftGenerator = (MapGenMineshaft) TerrainGen.getModdedMapGen(mineshaftGenerator, MINESHAFT);
 		scatteredFeatureGenerator = (MapGenScatteredFeature) TerrainGen.getModdedMapGen(scatteredFeatureGenerator, SCATTERED_FEATURE);
 		ravineGenerator = TerrainGen.getModdedMapGen(ravineGenerator, RAVINE);
-	}	 
+	}    
 
 	public ChunkProviderGenerate(World par1World, long par2, boolean par4)
 	{

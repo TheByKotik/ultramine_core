@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package cpw.mods.fml.common.discovery.asm;
@@ -118,11 +118,11 @@ public class ASMModParser
 
 	public void validate()
 	{
-//		  if (classVersion > 50.0)
-//		  {
+//        if (classVersion > 50.0)
+//        {
 //
-//			  throw new LoaderException(new RuntimeException("Mod compiled for Java 7 detected"));
-//		  }
+//            throw new LoaderException(new RuntimeException("Mod compiled for Java 7 detected"));
+//        }
 	}
 
 	public boolean isBaseMod(List<String> rememberedTypes)

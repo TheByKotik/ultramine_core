@@ -238,7 +238,7 @@ public class GDiffPatcher {
 
 			System.out.println("finished patching file");
 
-		} catch (Exception ioe) {									//gls031504a
+		} catch (Exception ioe) {                                   //gls031504a
 			System.err.println("error while patching: " + ioe);
 		}
 	}

@@ -74,10 +74,10 @@ public class WorldGenCanopyTree extends WorldGenAbstractTree
 				boolean isSoil = block2.canSustainPlant(par1World, par3, par4 - 1, par5, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
 				if (isSoil && par4 < 256 - l - 1)
 				{
-					onPlantGrow(par1World, par3,	 par4 - 1, par5,	 par3, par4, par5);
-					onPlantGrow(par1World, par3 + 1, par4 - 1, par5,	 par3, par4, par5);
+					onPlantGrow(par1World, par3,     par4 - 1, par5,     par3, par4, par5);
+					onPlantGrow(par1World, par3 + 1, par4 - 1, par5,     par3, par4, par5);
 					onPlantGrow(par1World, par3 + 1, par4 - 1, par5 + 1, par3, par4, par5);
-					onPlantGrow(par1World, par3,	 par4 - 1, par5 + 1, par3, par4, par5);
+					onPlantGrow(par1World, par3,     par4 - 1, par5 + 1, par3, par4, par5);
 					int j3 = par2Random.nextInt(4);
 					j1 = l - par2Random.nextInt(4);
 					k1 = 2 - par2Random.nextInt(3);

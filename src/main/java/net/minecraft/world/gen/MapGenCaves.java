@@ -277,9 +277,9 @@ public class MapGenCaves extends MapGenBase
 	protected void digBlock(Block[] data, int index, int x, int y, int z, int chunkX, int chunkZ, boolean foundTop)
 	{
 		BiomeGenBase biome = worldObj.getBiomeGenForCoords(x + chunkX * 16, z + chunkZ * 16);
-		Block top	 = (isExceptionBiome(biome) ? Blocks.grass : biome.topBlock);
+		Block top    = (isExceptionBiome(biome) ? Blocks.grass : biome.topBlock);
 		Block filler = (isExceptionBiome(biome) ? Blocks.dirt  : biome.fillerBlock);
-		Block block	 = data[index];
+		Block block  = data[index];
 
 		if (block == Blocks.stone || block == filler || block == top)
 		{

@@ -38,9 +38,9 @@ public interface IFluidTank
 	/**
 	 * 
 	 * @param resource
-	 *			  FluidStack attempting to fill the tank.
+	 *            FluidStack attempting to fill the tank.
 	 * @param doFill
-	 *			  If false, the fill will only be simulated.
+	 *            If false, the fill will only be simulated.
 	 * @return Amount of fluid that was accepted by the tank.
 	 */
 	int fill(FluidStack resource, boolean doFill);
@@ -48,9 +48,9 @@ public interface IFluidTank
 	/**
 	 * 
 	 * @param maxDrain
-	 *			  Maximum amount of fluid to be removed from the container.
+	 *            Maximum amount of fluid to be removed from the container.
 	 * @param doFill
-	 *			  If false, the fill will only be simulated.
+	 *            If false, the fill will only be simulated.
 	 * @return Amount of fluid that was removed from the tank.
 	 */
 	FluidStack drain(int maxDrain, boolean doDrain);

@@ -7,26 +7,26 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * Contributors:
- *	   cpw - implementation
+ *     cpw - implementation
  */
 
 package cpw.mods.fml.common.versioning;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.	See the NOTICE file
+ * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.	 See the License for the
+ * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
@@ -48,21 +48,21 @@ import java.util.Stack;
  * <ul>
  * <li>mixing of '<code>-</code>' (dash) and '<code>.</code>' (dot) separators,</li>
  * <li>transition between characters and digits also constitutes a separator:
- *	   <code>1.0alpha1 =&gt; [1, 0, alpha, 1]</code></li>
+ *     <code>1.0alpha1 =&gt; [1, 0, alpha, 1]</code></li>
  * <li>unlimited number of version components,</li>
  * <li>version components in the text can be digits or strings,</li>
  * <li>strings are checked for well-known qualifiers and the qualifier ordering is used for version ordering.
- *	   Well-known qualifiers (case insensitive) are:<ul>
- *	   <li><code>snapshot</code></li>
- *	   <li><code>alpha</code> or <code>a</code></li>
- *	   <li><code>beta</code> or <code>b</code></li>
- *	   <li><code>milestone</code> or <code>m</code></li>
- *	   <li><code>rc</code> or <code>cr</code></li>
- *	   <li><code>(the empty string)</code> or <code>ga</code> or <code>final</code></li>
- *	   <li><code>sp</code></li>
- *	   </ul>
- *	   Unknown qualifiers are considered after known qualifiers, with lexical order (always case insensitive),
- *	 </li>
+ *     Well-known qualifiers (case insensitive) are:<ul>
+ *     <li><code>snapshot</code></li>
+ *     <li><code>alpha</code> or <code>a</code></li>
+ *     <li><code>beta</code> or <code>b</code></li>
+ *     <li><code>milestone</code> or <code>m</code></li>
+ *     <li><code>rc</code> or <code>cr</code></li>
+ *     <li><code>(the empty string)</code> or <code>ga</code> or <code>final</code></li>
+ *     <li><code>sp</code></li>
+ *     </ul>
+ *     Unknown qualifiers are considered after known qualifiers, with lexical order (always case insensitive),
+ *   </li>
  * <li>a dash usually precedes a qualifier, and is always less important than something preceded with a dot.</li>
  * </ul></p>
  *

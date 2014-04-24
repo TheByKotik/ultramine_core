@@ -1580,7 +1580,7 @@ public class Block
 	 */
 	public int getBedDirection(IBlockAccess world, int x, int y, int z)
 	{
-		return BlockBed.getDirection(world.getBlockMetadata(x,	y, z));
+		return BlockBed.getDirection(world.getBlockMetadata(x,  y, z));
 	}
 
 	/**
@@ -1594,7 +1594,7 @@ public class Block
 	 */
 	public boolean isBedFoot(IBlockAccess world, int x, int y, int z)
 	{
-		return BlockBed.isBlockHeadOfBed(world.getBlockMetadata(x,	y, z));
+		return BlockBed.isBlockHeadOfBed(world.getBlockMetadata(x,  y, z));
 	}
 
 	/**
@@ -1655,7 +1655,7 @@ public class Block
 	 * @param x X Position
 	 * @param y Y Position
 	 * @param z Z Position
-	 * @return	true if the block is wood (logs)
+	 * @return  true if the block is wood (logs)
 	 */
 	public boolean isWood(IBlockAccess world, int x, int y, int z)
 	{
@@ -1670,7 +1670,7 @@ public class Block
 	 * @param y Y Position
 	 * @param z Z Position
 	 * @param target The generic target block the gen is looking for, Standards define stone
-	 *		for overworld generation, and neatherack for the nether.
+	 *      for overworld generation, and neatherack for the nether.
 	 * @return True to allow this block to be replaced by a ore
 	 */
 	public boolean isReplaceableOreGen(World world, int x, int y, int z, Block target)
@@ -1718,11 +1718,11 @@ public class Block
 	 * Useful to control which sides are inputs and outputs for redstone wires.
 	 *
 	 * Side:
-	 *	-1: UP
-	 *	 0: NORTH
-	 *	 1: EAST
-	 *	 2: SOUTH
-	 *	 3: WEST
+	 *  -1: UP
+	 *   0: NORTH
+	 *   1: EAST
+	 *   2: SOUTH
+	 *   3: WEST
 	 *
 	 * @param world The current world
 	 * @param x X Position
@@ -1839,13 +1839,13 @@ public class Block
 	/**
 	 * Determines if this block can support the passed in plant, allowing it to be planted and grow.
 	 * Some examples:
-	 *	 Reeds check if its a reed, or if its sand/dirt/grass and adjacent to water
-	 *	 Cacti checks if its a cacti, or if its sand
-	 *	 Nether types check for soul sand
-	 *	 Crops check for tilled soil
-	 *	 Caves check if it's a solid surface
-	 *	 Plains check if its grass or dirt
-	 *	 Water check if its still water
+	 *   Reeds check if its a reed, or if its sand/dirt/grass and adjacent to water
+	 *   Cacti checks if its a cacti, or if its sand
+	 *   Nether types check for soul sand
+	 *   Crops check for tilled soil
+	 *   Caves check if it's a solid surface
+	 *   Plains check if its grass or dirt
+	 *   Water check if its still water
 	 *
 	 * @param world The current world
 	 * @param x X Position
@@ -1879,16 +1879,16 @@ public class Block
 		{
 			case Desert: return this == Blocks.sand;
 			case Nether: return this == Blocks.soul_sand;
-			case Crop:	 return this == Blocks.farmland;
-			case Cave:	 return isSideSolid(world, x, y, z, UP);
+			case Crop:   return this == Blocks.farmland;
+			case Cave:   return isSideSolid(world, x, y, z, UP);
 			case Plains: return this == Blocks.grass || this == Blocks.dirt;
-			case Water:	 return world.getBlock(x, y, z).getMaterial() == Material.water && world.getBlockMetadata(x, y, z) == 0;
+			case Water:  return world.getBlock(x, y, z).getMaterial() == Material.water && world.getBlockMetadata(x, y, z) == 0;
 			case Beach:
 				boolean isBeach = this == Blocks.grass || this == Blocks.dirt || this == Blocks.sand;
-				boolean hasWater = (world.getBlock(x - 1, y, z	  ).getMaterial() == Material.water ||
-									world.getBlock(x + 1, y, z	  ).getMaterial() == Material.water ||
-									world.getBlock(x,	  y, z - 1).getMaterial() == Material.water ||
-									world.getBlock(x,	  y, z + 1).getMaterial() == Material.water);
+				boolean hasWater = (world.getBlock(x - 1, y, z    ).getMaterial() == Material.water ||
+									world.getBlock(x + 1, y, z    ).getMaterial() == Material.water ||
+									world.getBlock(x,     y, z - 1).getMaterial() == Material.water ||
+									world.getBlock(x,     y, z + 1).getMaterial() == Material.water);
 				return isBeach && hasWater;
 		}
 
@@ -2134,11 +2134,11 @@ public class Block
 	 * 
 	 * @param toolClass Class
 	 * @param level Harvest level:
-	 *	   Wood:	0
-	 *	   Stone:	1
-	 *	   Iton:	2
-	 *	   Diamond: 3
-	 *	   Gold:	0
+	 *     Wood:    0
+	 *     Stone:   1
+	 *     Iton:    2
+	 *     Diamond: 3
+	 *     Gold:    0
 	 */
 	public void setHarvestLevel(String toolClass, int level)
 	{
@@ -2153,11 +2153,11 @@ public class Block
 	 * 
 	 * @param toolClass Class
 	 * @param level Harvest level:
-	 *	   Wood:	0
-	 *	   Stone:	1
-	 *	   Iton:	2
-	 *	   Diamond: 3
-	 *	   Gold:	0
+	 *     Wood:    0
+	 *     Stone:   1
+	 *     Iton:    2
+	 *     Diamond: 3
+	 *     Gold:    0
 	 * @param metadata The specific metadata to set
 	 */
 	public void setHarvestLevel(String toolClass, int level, int metadata)
