@@ -381,25 +381,25 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public int getIntProperty(String par1Str, int par2)
 	{
-		ConfigurationHandler.log.info("Unresolved server config parameter", new Throwable());
+		logInfo("Attempted to get server config unresolved integer parameter " + par1Str);
 		return settings.unresolved.containsKey(par1Str) ? (Integer)settings.unresolved.get(par1Str) : par2;
 	}
 
 	public String getStringProperty(String par1Str, String par2Str)
 	{
-		ConfigurationHandler.log.info("Unresolved server config parameter", new Throwable());
+		logInfo("Attempted to get server config unresolved string parameter " + par1Str);
 		return settings.unresolved.containsKey(par1Str) ? (String)settings.unresolved.get(par1Str) : par2Str;
 	}
 
 	public boolean getBooleanProperty(String par1Str, boolean par2)
 	{
-		ConfigurationHandler.log.info("Unresolved server config parameter", new Throwable());
+		logInfo("Attempted to get server config unresolved boolean parameter " + par1Str);
 		return settings.unresolved.containsKey(par1Str) ? (Boolean)settings.unresolved.get(par1Str) : par2;
 	}
 
 	public void setProperty(String par1Str, Object par2Obj)
 	{
-		ConfigurationHandler.log.info("Unresolved server config parameter", new Throwable());
+		logInfo("Attempted to set server config unresolved parameter " + par1Str);
 		settings.unresolved.put(par1Str, par2Obj);
 	}
 
@@ -469,7 +469,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public int getOpPermissionLevel()
 	{
-		return getIntProperty("op-permission-level", 4);
+		return settings.opPermissionLevel;
 	}
 
 	public void func_143006_e(int par1)
