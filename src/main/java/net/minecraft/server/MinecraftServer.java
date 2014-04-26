@@ -80,6 +80,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.WatchdogThread;
+import org.ultramine.server.chunk.ChunkIOExecutor;
 
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -576,6 +577,10 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	public void updateTimeLightAndEntities()
 	{
+		theProfiler.startSection("ChunkIOExecutor");
+		ChunkIOExecutor.tick();
+		theProfiler.endSection();
+		
 		this.theProfiler.startSection("levels");
 		int i;
 

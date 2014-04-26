@@ -29,6 +29,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.chunk.storage.IChunkLoader;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -36,17 +37,18 @@ import net.minecraftforge.common.ForgeChunkManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkHash;
+import org.ultramine.server.chunk.ChunkIOExecutor;
 
 public class ChunkProviderServer implements IChunkProvider
 {
 	private static final Logger logger = LogManager.getLogger();
-	private TIntSet chunksToUnload = new TIntHashSet();
+	public TIntSet chunksToUnload = new TIntHashSet();
 	private Chunk defaultEmptyChunk;
-	private IChunkProvider currentChunkProvider;
+	public IChunkProvider currentChunkProvider;
 	public IChunkLoader currentChunkLoader;
 	public boolean loadChunkOnProvideRequest = true;
-	private TIntObjectMap<Chunk> loadedChunkHashMap = new TIntObjectHashMap<Chunk>();
-	private WorldServer worldObj;
+	public TIntObjectMap<Chunk> loadedChunkHashMap = new TIntObjectHashMap<Chunk>();
+	public WorldServer worldObj;
 	private static final String __OBFID = "CL_00001436";
 
 	public ChunkProviderServer(WorldServer par1WorldServer, IChunkLoader par2IChunkLoader, IChunkProvider par3IChunkProvider)
@@ -359,4 +361,20 @@ public class ChunkProviderServer implements IChunkProvider
 	}
 
 	public void recreateStructures(int par1, int par2) {}
+	
+	
+	/* ======================================== ULTRAMINE START =====================================*/
+	
+	public void loadAsync(int x, int z, Runnable callback) //XXX
+	{
+		if(loadedChunkHashMap.containsKey(ChunkHash.chunkToKey(x, z)))
+		{
+			callback.run();
+			return;
+		}
+		else
+		{
+			ChunkIOExecutor.queueChunkLoad(this.worldObj, (AnvilChunkLoader)currentChunkLoader, this, x, z, callback);
+		}
+	}
 }

@@ -2,7 +2,11 @@ package net.minecraft.server.management;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import org.ultramine.server.chunk.ChunkIOExecutor;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S21PacketChunkData;
@@ -285,11 +289,25 @@ public class PlayerManager
 		private int flagsYAreasToUpdate;
 		private long previousWorldTime;
 		private static final String __OBFID = "CL_00001435";
+		
+	    private boolean loaded = false;
+	    private Runnable loadedRunnable = new Runnable()
+	    {
+	        public void run()
+	        {
+	            PlayerInstance.this.loaded = true;
+	            for(Object o : playersWatchingChunk)
+	    		{
+	    			EntityPlayerMP p = (EntityPlayerMP)o;
+	    			p.loadedChunks.add(chunkLocation);
+	    		}
+	        }
+	    };
 
 		public PlayerInstance(int par2, int par3)
 		{
 			this.chunkLocation = new ChunkCoordIntPair(par2, par3);
-			PlayerManager.this.getWorldServer().theChunkProviderServer.loadChunk(par2, par3);
+			getWorldServer().theChunkProviderServer.loadAsync(par2, par3, this.loadedRunnable);
 		}
 
 		public void addPlayer(EntityPlayerMP par1EntityPlayerMP)
@@ -306,7 +324,10 @@ public class PlayerManager
 				}
 
 				this.playersWatchingChunk.add(par1EntityPlayerMP);
-				par1EntityPlayerMP.loadedChunks.add(this.chunkLocation);
+				if(loaded)
+	            {
+					par1EntityPlayerMP.loadedChunks.add(this.chunkLocation);
+	            }
 			}
 		}
 
@@ -314,6 +335,20 @@ public class PlayerManager
 		{
 			if (this.playersWatchingChunk.contains(par1EntityPlayerMP))
 			{
+				
+				if (!this.loaded)
+	            {
+					this.playersWatchingChunk.remove(par1EntityPlayerMP);
+					if(this.playersWatchingChunk.isEmpty())
+	                {
+	                    ChunkIOExecutor.dropQueuedChunkLoad(getWorldServer(), this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos, this.loadedRunnable);
+	                    long i = (long) this.chunkLocation.chunkXPos + 2147483647L | (long) this.chunkLocation.chunkZPos + 2147483647L << 32;
+	                    playerInstances.remove(i);
+	                    chunkWatcherWithPlayers.remove(this);
+	                }
+					return;
+	            }
+				
 				Chunk chunk = PlayerManager.this.theWorldServer.getChunkFromChunkCoords(this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos);
 
 				if (chunk.func_150802_k())

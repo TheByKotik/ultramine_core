@@ -1,5 +1,8 @@
 package net.minecraft.world.chunk.storage;
 
+import gnu.trove.iterator.TIntObjectIterator;
+import gnu.trove.map.hash.TIntObjectHashMap;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -31,14 +34,14 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.chunk.ChunkHash;
 
 import cpw.mods.fml.common.FMLLog;
 
 public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 {
 	private static final Logger logger = LogManager.getLogger();
-	private List chunksToRemove = new ArrayList();
-	private Set pendingAnvilChunksCoordinates = new HashSet();
+	private final TIntObjectHashMap<PendingChunk> pendingSaves = new TIntObjectHashMap<PendingChunk>();
 	private Object syncLockObject = new Object();
 	public final File chunkSaveLocation;
 	private static final String __OBFID = "CL_00000384";
@@ -50,38 +53,18 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
 	public Chunk loadChunk(World par1World, int par2, int par3) throws IOException
 	{
-		NBTTagCompound nbttagcompound = null;
-		ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(par2, par3);
-		Object object = this.syncLockObject;
+		Object[] data = this.loadChunk__Async_CB(par1World, par2, par3);
 
-		synchronized (this.syncLockObject)
+		if (data != null)
 		{
-			if (this.pendingAnvilChunksCoordinates.contains(chunkcoordintpair))
-			{
-				for (int k = 0; k < this.chunksToRemove.size(); ++k)
-				{
-					if (((AnvilChunkLoader.PendingChunk)this.chunksToRemove.get(k)).chunkCoordinate.equals(chunkcoordintpair))
-					{
-						nbttagcompound = ((AnvilChunkLoader.PendingChunk)this.chunksToRemove.get(k)).nbtTags;
-						break;
-					}
-				}
-			}
+			Chunk chunk = (Chunk) data[0];
+			NBTTagCompound nbttagcompound = (NBTTagCompound) data[1];
+			this.loadEntities(chunk, nbttagcompound.getCompoundTag("Level"), par1World);
+			MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Load(chunk, nbttagcompound));
+			return chunk;
 		}
 
-		if (nbttagcompound == null)
-		{
-			DataInputStream datainputstream = RegionFileCache.getChunkInputStream(this.chunkSaveLocation, par2, par3);
-
-			if (datainputstream == null)
-			{
-				return null;
-			}
-
-			nbttagcompound = CompressedStreamTools.read(datainputstream);
-		}
-
-		return this.checkedReadChunkFromNBT(par1World, par2, par3, nbttagcompound);
+		return null;
 	}
 
 	protected Chunk checkedReadChunkFromNBT(World par1World, int par2, int par3, NBTTagCompound par4NBTTagCompound)
@@ -138,20 +121,22 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
 		synchronized (this.syncLockObject)
 		{
-			if (this.pendingAnvilChunksCoordinates.contains(par1ChunkCoordIntPair))
-			{
-				for (int i = 0; i < this.chunksToRemove.size(); ++i)
-				{
-					if (((AnvilChunkLoader.PendingChunk)this.chunksToRemove.get(i)).chunkCoordinate.equals(par1ChunkCoordIntPair))
-					{
-						this.chunksToRemove.set(i, new AnvilChunkLoader.PendingChunk(par1ChunkCoordIntPair, par2NBTTagCompound));
-						return;
-					}
-				}
-			}
+//			if (this.pendingAnvilChunksCoordinates.contains(par1ChunkCoordIntPair))
+//			{
+//				for (int i = 0; i < this.chunksToRemove.size(); ++i)
+//				{
+//					if (((AnvilChunkLoader.PendingChunk)this.chunksToRemove.get(i)).chunkCoordinate.equals(par1ChunkCoordIntPair))
+//					{
+//						this.chunksToRemove.set(i, new AnvilChunkLoader.PendingChunk(par1ChunkCoordIntPair, par2NBTTagCompound));
+//						return;
+//					}
+//				}
+//			}
 
-			this.chunksToRemove.add(new AnvilChunkLoader.PendingChunk(par1ChunkCoordIntPair, par2NBTTagCompound));
-			this.pendingAnvilChunksCoordinates.add(par1ChunkCoordIntPair);
+			int hash = ChunkHash.chunkToKey(par1ChunkCoordIntPair.chunkXPos, par1ChunkCoordIntPair.chunkZPos);
+			
+			pendingSaves.put(hash, new PendingChunk(par1ChunkCoordIntPair, par2NBTTagCompound));
+			//this.pendingAnvilChunksCoordinates.add(par1ChunkCoordIntPair);
 			ThreadedFileIOBase.threadedIOInstance.queueIO(this);
 		}
 	}
@@ -163,13 +148,15 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
 		synchronized (this.syncLockObject)
 		{
-			if (this.chunksToRemove.isEmpty())
+			if (this.pendingSaves.isEmpty())
 			{
 				return false;
 			}
 
-			pendingchunk = (AnvilChunkLoader.PendingChunk)this.chunksToRemove.remove(0);
-			this.pendingAnvilChunksCoordinates.remove(pendingchunk.chunkCoordinate);
+			TIntObjectIterator<PendingChunk> it = pendingSaves.iterator();
+			it.advance();
+			pendingchunk = it.value();
+			it.remove();
 		}
 
 		if (pendingchunk != null)
@@ -377,6 +364,27 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			chunk.setBiomeArray(par2NBTTagCompound.getByteArray("Biomes"));
 		}
 
+		return chunk;
+	}
+
+	static class PendingChunk
+		{
+			public final ChunkCoordIntPair chunkCoordinate;
+			public final NBTTagCompound nbtTags;
+			private static final String __OBFID = "CL_00000385";
+
+			public PendingChunk(ChunkCoordIntPair par1ChunkCoordIntPair, NBTTagCompound par2NBTTagCompound)
+			{
+				this.chunkCoordinate = par1ChunkCoordIntPair;
+				this.nbtTags = par2NBTTagCompound;
+			}
+		}
+	
+	
+	/* ======================================== ULTRAMINE START =====================================*/
+	
+	public void loadEntities(Chunk chunk, NBTTagCompound par2NBTTagCompound, World par1World)
+	{
 		NBTTagList nbttaglist1 = par2NBTTagCompound.getTagList("Entities", 10);
 
 		if (nbttaglist1 != null)
@@ -437,20 +445,51 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 				}
 			}
 		}
-
-		return chunk;
 	}
+	
+	public Object[] loadChunk__Async_CB(World par1World, int par2, int par3)
+    {
+    	NBTTagCompound nbttagcompound = null;
 
-	static class PendingChunk
-		{
-			public final ChunkCoordIntPair chunkCoordinate;
-			public final NBTTagCompound nbtTags;
-			private static final String __OBFID = "CL_00000385";
+        synchronized (this.syncLockObject)
+        {
+        	
+        	PendingChunk anvilchunkloaderpending = pendingSaves.get(ChunkHash.chunkToKey(par2, par3));
+        	
+        	if(anvilchunkloaderpending != null)
+        	{
+        		nbttagcompound = anvilchunkloaderpending.nbtTags;
+        	}
+        }
 
-			public PendingChunk(ChunkCoordIntPair par1ChunkCoordIntPair, NBTTagCompound par2NBTTagCompound)
+        if (nbttagcompound == null)
+        {
+            DataInputStream datainputstream = RegionFileCache.getChunkInputStream(this.chunkSaveLocation, par2, par3);
+
+            if (datainputstream == null)
+            {
+                return null;
+            }
+
+            try
 			{
-				this.chunkCoordinate = par1ChunkCoordIntPair;
-				this.nbtTags = par2NBTTagCompound;
+				nbttagcompound = CompressedStreamTools.read(datainputstream);
 			}
-		}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+				return null;
+			}
+        }
+        
+        if(nbttagcompound == null) return null;
+        Chunk chunk = checkedReadChunkFromNBT(par1World, par2, par3, nbttagcompound);
+        if(chunk == null) return null;
+        
+        Object[] data = new Object[2];
+        data[0] = chunk;
+        data[1] = nbttagcompound;
+
+        return data;
+    }
 }
