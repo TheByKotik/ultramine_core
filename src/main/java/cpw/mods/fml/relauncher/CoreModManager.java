@@ -54,7 +54,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 public class CoreModManager {
 	private static final Attributes.Name COREMODCONTAINSFMLMOD = new Attributes.Name("FMLCorePluginContainsFMLMod");
-	private static String[] rootPlugins = { "cpw.mods.fml.relauncher.FMLCorePlugin", "net.minecraftforge.classloading.FMLForgePlugin" };
+	private static String[] rootPlugins = { "cpw.mods.fml.relauncher.FMLCorePlugin", "net.minecraftforge.classloading.FMLForgePlugin", "org.ultramine.server.UltraminePlugin" };
 	private static List<String> loadedCoremods = Lists.newArrayList();
 	private static List<FMLPluginWrapper> loadPlugins;
 	private static boolean deobfuscatedEnvironment;
