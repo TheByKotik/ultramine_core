@@ -543,14 +543,14 @@ public class WorldServer extends World
 
 				this.pendingTickListEntriesTreeSet.remove(nextticklistentry);
 				this.pendingTickListEntriesHashSet.remove(nextticklistentry);
-				if(activeChunkSet.containsKey(ChunkHash.chunkToKey(nextticklistentry.xCoord >> 4, nextticklistentry.zCoord >> 4)))
-				{
+//				if(activeChunkSet.containsKey(ChunkHash.chunkToKey(nextticklistentry.xCoord >> 4, nextticklistentry.zCoord >> 4)))
+//				{
 					this.pendingTickListEntriesThisTick.add(nextticklistentry);
-				}
-				else
-				{
-					i = Math.min(i+1, pendingTickListEntriesTreeSet.size());
-				}
+//				}
+//				else
+//				{
+//					i = Math.min(i+1, pendingTickListEntriesTreeSet.size());
+//				}
 			}
 
 			this.theProfiler.endSection();

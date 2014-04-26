@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import org.ultramine.server.ConfigurationHandler;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
@@ -18,7 +21,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
-
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -53,22 +55,28 @@ public final class SpawnerAnimals
 				EntityPlayer entityplayer = (EntityPlayer)par1WorldServer.playerEntities.get(i);
 				int j = MathHelper.floor_double(entityplayer.posX / 16.0D);
 				k = MathHelper.floor_double(entityplayer.posZ / 16.0D);
-				byte b0 = 8;
+				int b0 = ConfigurationHandler.getServerConfig().chunkUpdateRadius;
 
 				for (int l = -b0; l <= b0; ++l)
 				{
 					for (int i1 = -b0; i1 <= b0; ++i1)
 					{
-						boolean flag3 = l == -b0 || l == b0 || i1 == -b0 || i1 == b0;
-						ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(l + j, i1 + k);
+						int cx = l + j;
+						int cz = i1 + k;
+						
+						if(par1WorldServer.chunkExists(cx, cz))
+						{
+							boolean flag3 = l == -b0 || l == b0 || i1 == -b0 || i1 == b0;
+							ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(cx, cz);
 
-						if (!flag3)
-						{
-							this.eligibleChunksForSpawning.put(chunkcoordintpair, Boolean.valueOf(false));
-						}
-						else if (!this.eligibleChunksForSpawning.containsKey(chunkcoordintpair))
-						{
-							this.eligibleChunksForSpawning.put(chunkcoordintpair, Boolean.valueOf(true));
+							if (!flag3)
+							{
+								this.eligibleChunksForSpawning.put(chunkcoordintpair, Boolean.valueOf(false));
+							}
+							else if (!this.eligibleChunksForSpawning.containsKey(chunkcoordintpair))
+							{
+								this.eligibleChunksForSpawning.put(chunkcoordintpair, Boolean.valueOf(true));
+							}
 						}
 					}
 				}
