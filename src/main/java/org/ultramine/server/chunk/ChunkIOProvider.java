@@ -66,6 +66,7 @@ class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChu
 		}
 
 		chunk.populateChunk(queuedChunk.provider, queuedChunk.provider, x, z);
+		chunk.func_150804_b(false);
 	}
 
 	public void callStage3(QueuedChunk queuedChunk, Chunk chunk, Runnable runnable) throws RuntimeException
