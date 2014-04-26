@@ -72,7 +72,7 @@ import net.minecraft.entity.EnumCreatureType;
 
 public abstract class World implements IBlockAccess
 {
-   /**
+/**
 	 * Used in the getEntitiesWithinAABB functions to expand the search area for entities.
 	 * Modders should change this variable to a higher value if it is less then the radius
 	 * of one of there entities.
@@ -334,7 +334,7 @@ public abstract class World implements IBlockAccess
 
 	public Block getBlock(int p_147439_1_, int p_147439_2_, int p_147439_3_)
 	{
-		if (p_147439_1_ >= -30000000 && p_147439_3_ >= -30000000 && p_147439_1_ < 30000000 && p_147439_3_ < 30000000 && p_147439_2_ >= 0 && p_147439_2_ < 256)
+		if (p_147439_1_ >= -MAX_BLOCK_COORD && p_147439_3_ >= -MAX_BLOCK_COORD && p_147439_1_ < MAX_BLOCK_COORD && p_147439_3_ < MAX_BLOCK_COORD && p_147439_2_ >= 0 && p_147439_2_ < 256)
 		{
 			Chunk chunk = null;
 
@@ -419,7 +419,7 @@ public abstract class World implements IBlockAccess
 
 	public boolean setBlock(int p_147465_1_, int p_147465_2_, int p_147465_3_, Block p_147465_4_, int p_147465_5_, int p_147465_6_)
 	{
-		if (p_147465_1_ >= -30000000 && p_147465_3_ >= -30000000 && p_147465_1_ < 30000000 && p_147465_3_ < 30000000)
+		if (p_147465_1_ >= -MAX_BLOCK_COORD && p_147465_3_ >= -MAX_BLOCK_COORD && p_147465_1_ < MAX_BLOCK_COORD && p_147465_3_ < MAX_BLOCK_COORD)
 		{
 			if (p_147465_2_ < 0)
 			{
@@ -473,7 +473,7 @@ public abstract class World implements IBlockAccess
 
 	public int getBlockMetadata(int par1, int par2, int par3)
 	{
-		if (par1 >= -30000000 && par3 >= -30000000 && par1 < 30000000 && par3 < 30000000)
+		if (par1 >= -MAX_BLOCK_COORD && par3 >= -MAX_BLOCK_COORD && par1 < MAX_BLOCK_COORD && par3 < MAX_BLOCK_COORD)
 		{
 			if (par2 < 0)
 			{
@@ -499,7 +499,7 @@ public abstract class World implements IBlockAccess
 
 	public boolean setBlockMetadataWithNotify(int par1, int par2, int par3, int par4, int par5)
 	{
-		if (par1 >= -30000000 && par3 >= -30000000 && par1 < 30000000 && par3 < 30000000)
+		if (par1 >= -MAX_BLOCK_COORD && par3 >= -MAX_BLOCK_COORD && par1 < MAX_BLOCK_COORD && par3 < MAX_BLOCK_COORD)
 		{
 			if (par2 < 0)
 			{
@@ -743,7 +743,7 @@ public abstract class World implements IBlockAccess
 
 	public int getBlockLightValue_do(int par1, int par2, int par3, boolean par4)
 	{
-		if (par1 >= -30000000 && par3 >= -30000000 && par1 < 30000000 && par3 < 30000000)
+		if (par1 >= -MAX_BLOCK_COORD && par3 >= -MAX_BLOCK_COORD && par1 < MAX_BLOCK_COORD && par3 < MAX_BLOCK_COORD)
 		{
 			if (par4 && this.getBlock(par1, par2, par3).getUseNeighborBrightness())
 			{
@@ -800,7 +800,7 @@ public abstract class World implements IBlockAccess
 
 	public int getHeightValue(int par1, int par2)
 	{
-		if (par1 >= -30000000 && par2 >= -30000000 && par1 < 30000000 && par2 < 30000000)
+		if (par1 >= -MAX_BLOCK_COORD && par2 >= -MAX_BLOCK_COORD && par1 < MAX_BLOCK_COORD && par2 < MAX_BLOCK_COORD)
 		{
 			if (!this.chunkExists(par1 >> 4, par2 >> 4))
 			{
@@ -820,7 +820,7 @@ public abstract class World implements IBlockAccess
 
 	public int getChunkHeightMapMinimum(int par1, int par2)
 	{
-		if (par1 >= -30000000 && par2 >= -30000000 && par1 < 30000000 && par2 < 30000000)
+		if (par1 >= -MAX_BLOCK_COORD && par2 >= -MAX_BLOCK_COORD && par1 < MAX_BLOCK_COORD && par2 < MAX_BLOCK_COORD)
 		{
 			if (!this.chunkExists(par1 >> 4, par2 >> 4))
 			{
@@ -856,7 +856,7 @@ public abstract class World implements IBlockAccess
 			{
 				return par1EnumSkyBlock.defaultLightValue;
 			}
-			else if (par2 >= -30000000 && par4 >= -30000000 && par2 < 30000000 && par4 < 30000000)
+			else if (par2 >= -MAX_BLOCK_COORD && par4 >= -MAX_BLOCK_COORD && par2 < MAX_BLOCK_COORD && par4 < MAX_BLOCK_COORD)
 			{
 				int l = par2 >> 4;
 				int i1 = par4 >> 4;
@@ -920,7 +920,7 @@ public abstract class World implements IBlockAccess
 			par3 = 255;
 		}
 
-		if (par2 >= -30000000 && par4 >= -30000000 && par2 < 30000000 && par4 < 30000000)
+		if (par2 >= -MAX_BLOCK_COORD && par4 >= -MAX_BLOCK_COORD && par2 < MAX_BLOCK_COORD && par4 < MAX_BLOCK_COORD)
 		{
 			int l = par2 >> 4;
 			int i1 = par4 >> 4;
@@ -943,7 +943,7 @@ public abstract class World implements IBlockAccess
 
 	public void setLightValue(EnumSkyBlock par1EnumSkyBlock, int par2, int par3, int par4, int par5)
 	{
-		if (par2 >= -30000000 && par4 >= -30000000 && par2 < 30000000 && par4 < 30000000)
+		if (par2 >= -MAX_BLOCK_COORD && par4 >= -MAX_BLOCK_COORD && par2 < MAX_BLOCK_COORD && par4 < MAX_BLOCK_COORD)
 		{
 			if (par3 >= 0)
 			{
@@ -1398,7 +1398,7 @@ public abstract class World implements IBlockAccess
 					{
 						Block block;
 
-						if (k1 >= -30000000 && k1 < 30000000 && l1 >= -30000000 && l1 < 30000000)
+						if (k1 >= -MAX_BLOCK_COORD && k1 < MAX_BLOCK_COORD && l1 >= -MAX_BLOCK_COORD && l1 < MAX_BLOCK_COORD)
 						{
 							block = this.getBlock(k1, i2, l1);
 						}
@@ -1456,7 +1456,7 @@ public abstract class World implements IBlockAccess
 					{
 						Block block;
 
-						if (k1 >= -30000000 && k1 < 30000000 && l1 >= -30000000 && l1 < 30000000)
+						if (k1 >= -MAX_BLOCK_COORD && k1 < MAX_BLOCK_COORD && l1 >= -MAX_BLOCK_COORD && l1 < MAX_BLOCK_COORD)
 						{
 							block = this.getBlock(k1, i2, l1);
 						}
@@ -1925,7 +1925,7 @@ public abstract class World implements IBlockAccess
 		{
 			for (Object tile : field_147483_b)
 			{
-			   ((TileEntity)tile).onChunkUnload();
+			((TileEntity)tile).onChunkUnload();
 			}
 			this.loadedTileEntityList.removeAll(this.field_147483_b);
 			this.field_147483_b.clear();
@@ -2569,7 +2569,7 @@ public abstract class World implements IBlockAccess
 
 	public boolean isBlockNormalCubeDefault(int p_147445_1_, int p_147445_2_, int p_147445_3_, boolean p_147445_4_)
 	{
-		if (p_147445_1_ >= -30000000 && p_147445_3_ >= -30000000 && p_147445_1_ < 30000000 && p_147445_3_ < 30000000)
+		if (p_147445_1_ >= -MAX_BLOCK_COORD && p_147445_3_ >= -MAX_BLOCK_COORD && p_147445_1_ < MAX_BLOCK_COORD && p_147445_3_ < MAX_BLOCK_COORD)
 		{
 			Chunk chunk = this.chunkProvider.provideChunk(p_147445_1_ >> 4, p_147445_3_ >> 4);
 
@@ -3357,7 +3357,7 @@ public abstract class World implements IBlockAccess
 
 	public int getIndirectPowerLevelTo(int par1, int par2, int par3, int par4)
 	{
-		Block block = this.getBlock(par1, par2, par3);        
+		Block block = this.getBlock(par1, par2, par3);
 		return block.shouldCheckWeakPower(this, par1, par2, par3, par4) ? this.getBlockPowerInput(par1, par2, par3) : block.isProvidingWeakPower(this, par1, par2, par3, par4);
 	}
 
@@ -3893,7 +3893,7 @@ public abstract class World implements IBlockAccess
 	@Override
 	public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default)
 	{
-		if (x < -30000000 || z < -30000000 || x >= 30000000 || z >= 30000000)
+		if (x < -MAX_BLOCK_COORD || z < -MAX_BLOCK_COORD || x >= MAX_BLOCK_COORD || z >= MAX_BLOCK_COORD)
 		{
 			return _default;
 		}
@@ -3926,7 +3926,7 @@ public abstract class World implements IBlockAccess
 	 */
 	public int getBlockLightOpacity(int x, int y, int z)
 	{
-		if (x < -30000000 || z < -30000000 || x >= 30000000 || z >= 30000000)
+		if (x < -MAX_BLOCK_COORD || z < -MAX_BLOCK_COORD || x >= MAX_BLOCK_COORD || z >= MAX_BLOCK_COORD)
 		{
 			return 0;
 		}
@@ -3954,4 +3954,11 @@ public abstract class World implements IBlockAccess
 		}
 		return count;
 	}
+	
+	
+	
+	/* ======================================== ULTRAMINE START =====================================*/
+	
+	
+	private static final int MAX_BLOCK_COORD = 500000;//524288;
 }

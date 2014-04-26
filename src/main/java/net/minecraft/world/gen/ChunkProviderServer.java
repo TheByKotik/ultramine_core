@@ -1,5 +1,11 @@
 package net.minecraft.world.gen;
 
+import gnu.trove.iterator.TIntIterator;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.set.TIntSet;
+import gnu.trove.set.hash.TIntHashSet;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,19 +32,20 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.IChunkLoader;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.chunk.ChunkHash;
 
 public class ChunkProviderServer implements IChunkProvider
 {
 	private static final Logger logger = LogManager.getLogger();
-	private Set chunksToUnload = new HashSet();
+	private TIntSet chunksToUnload = new TIntHashSet();
 	private Chunk defaultEmptyChunk;
 	private IChunkProvider currentChunkProvider;
 	public IChunkLoader currentChunkLoader;
 	public boolean loadChunkOnProvideRequest = true;
-	private LongHashMap loadedChunkHashMap = new LongHashMap();
-	private List loadedChunks = new ArrayList();
+	private TIntObjectMap<Chunk> loadedChunkHashMap = new TIntObjectHashMap<Chunk>();
 	private WorldServer worldObj;
 	private static final String __OBFID = "CL_00001436";
 
@@ -52,7 +59,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public boolean chunkExists(int par1, int par2)
 	{
-		return this.loadedChunkHashMap.containsItem(ChunkCoordIntPair.chunkXZ2Int(par1, par2));
+		return this.loadedChunkHashMap.containsKey(ChunkHash.chunkToKey(par1, par2));
 	}
 
 	public void unloadChunksIfNotNearSpawn(int par1, int par2)
@@ -66,31 +73,31 @@ public class ChunkProviderServer implements IChunkProvider
 
 			if (k < -short1 || k > short1 || l < -short1 || l > short1)
 			{
-				this.chunksToUnload.add(Long.valueOf(ChunkCoordIntPair.chunkXZ2Int(par1, par2)));
+				this.chunksToUnload.add(ChunkHash.chunkToKey(par1, par2));
 			}
 		}
 		else
 		{
-			this.chunksToUnload.add(Long.valueOf(ChunkCoordIntPair.chunkXZ2Int(par1, par2)));
+			this.chunksToUnload.add(ChunkHash.chunkToKey(par1, par2));
 		}
 	}
 
 	public void unloadAllChunks()
 	{
-		Iterator iterator = this.loadedChunks.iterator();
+		//Iterator iterator = this.loadedChunks.iterator();
 
-		while (iterator.hasNext())
-		{
-			Chunk chunk = (Chunk)iterator.next();
-			this.unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
-		}
+		//while (iterator.hasNext())
+		//{
+		//	Chunk chunk = (Chunk)iterator.next();
+		//	this.unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
+		//}
 	}
 
 	public Chunk loadChunk(int par1, int par2)
 	{
-		long k = ChunkCoordIntPair.chunkXZ2Int(par1, par2);
-		this.chunksToUnload.remove(Long.valueOf(k));
-		Chunk chunk = (Chunk)this.loadedChunkHashMap.getValueByKey(k);
+		int k = ChunkHash.chunkToKey(par1, par2);
+		this.chunksToUnload.remove(k);
+		Chunk chunk = (Chunk)this.loadedChunkHashMap.get(k);
 
 		if (chunk == null)
 		{
@@ -124,8 +131,7 @@ public class ChunkProviderServer implements IChunkProvider
 				}
 			}
 
-			this.loadedChunkHashMap.add(k, chunk);
-			this.loadedChunks.add(chunk);
+			this.loadedChunkHashMap.put(k, chunk);
 			chunk.onChunkLoad();
 			chunk.populateChunk(this, this, par1, par2);
 		}
@@ -135,7 +141,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public Chunk provideChunk(int par1, int par2)
 	{
-		Chunk chunk = (Chunk)this.loadedChunkHashMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(par1, par2));
+		Chunk chunk = this.loadedChunkHashMap.get(ChunkHash.chunkToKey(par1, par2));
 		return chunk == null ? (!this.worldObj.findingSpawnPoint && !this.loadChunkOnProvideRequest ? this.defaultEmptyChunk : this.loadChunk(par1, par2)) : chunk;
 	}
 
@@ -227,10 +233,8 @@ public class ChunkProviderServer implements IChunkProvider
 	{
 		int i = 0;
 
-		for (int j = 0; j < this.loadedChunks.size(); ++j)
+		for (Chunk chunk : loadedChunkHashMap.valueCollection())
 		{
-			Chunk chunk = (Chunk)this.loadedChunks.get(j);
-
 			if (par1)
 			{
 				this.safeSaveExtraChunkData(chunk);
@@ -266,9 +270,10 @@ public class ChunkProviderServer implements IChunkProvider
 		{
 			for (ChunkCoordIntPair forced : this.worldObj.getPersistentChunks().keySet())
 			{
-				this.chunksToUnload.remove(ChunkCoordIntPair.chunkXZ2Int(forced.chunkXPos, forced.chunkZPos));
+				this.chunksToUnload.remove(ChunkHash.chunkToKey(forced.chunkXPos, forced.chunkZPos));
 			}
 
+			/*
 			for (int i = 0; i < 100; ++i)
 			{
 				if (!this.chunksToUnload.isEmpty())
@@ -288,6 +293,36 @@ public class ChunkProviderServer implements IChunkProvider
 					}
 				}
 			}
+			*/
+			
+			int processed = 0;
+			for(TIntIterator it = chunksToUnload.iterator(); it.hasNext();)
+			{
+				if(processed >= 20) break;
+				int hash = it.next();
+				Chunk chunk = loadedChunkHashMap.get(hash);
+				if(chunk != null)
+				{
+					if(true/*chunk.getBindReason().canUnload()*/)
+					{
+						chunk.onChunkUnload();
+						if(true/*chunk.shouldSaveOnUnload()*/)
+						{
+							processed++;
+							safeSaveChunk(chunk);
+						}
+						this.safeSaveExtraChunkData(chunk);
+						this.loadedChunkHashMap.remove(hash);
+						//chunk.postChunkUnload();
+					}
+				}
+				else
+				{
+					logger.warn("Not existing chunk was queued for unload (" + ChunkHash.keyToX(hash) + ", " + ChunkHash.keyToZ(hash) + ")");
+				}
+				
+				it.remove();
+			}
 
 			if (this.currentChunkLoader != null)
 			{
@@ -305,7 +340,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public String makeString()
 	{
-		return "ServerChunkCache: " + this.loadedChunkHashMap.getNumHashElements() + " Drop: " + this.chunksToUnload.size();
+		return "ServerChunkCache: " + this.loadedChunkHashMap.size() + " Drop: " + this.chunksToUnload.size();
 	}
 
 	public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int par2, int par3, int par4)
@@ -320,7 +355,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public int getLoadedChunkCount()
 	{
-		return this.loadedChunkHashMap.getNumHashElements();
+		return this.loadedChunkHashMap.size();
 	}
 
 	public void recreateStructures(int par1, int par2) {}
