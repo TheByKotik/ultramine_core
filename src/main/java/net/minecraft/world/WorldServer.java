@@ -2,6 +2,10 @@ package net.minecraft.world;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gnu.trove.iterator.TIntByteIterator;
+import gnu.trove.set.TIntSet;
+import gnu.trove.set.hash.TIntHashSet;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
 import net.minecraft.block.material.Material;
@@ -65,6 +70,7 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.chunk.ChunkHash;
 
 public class WorldServer extends World
 {
@@ -88,7 +94,7 @@ public class WorldServer extends World
 	private static final String __OBFID = "CL_00001437";
 
 	/** Stores the recently processed (lighting) chunks */
-	protected Set<ChunkCoordIntPair> doneChunks = new HashSet<ChunkCoordIntPair>();
+	protected TIntSet doneChunks = new TIntHashSet(512);
 	public List<Teleporter> customTeleporters = new ArrayList<Teleporter>();
 
 	public WorldServer(MinecraftServer p_i45284_1_, ISaveHandler p_i45284_2_, String p_i45284_3_, int p_i45284_4_, WorldSettings p_i45284_5_, Profiler p_i45284_6_)
@@ -301,9 +307,8 @@ public class WorldServer extends World
 		super.func_147456_g();
 		int i = 0;
 		int j = 0;
-		Iterator iterator = this.activeChunkSet.iterator();
 
-		doneChunks.retainAll(activeChunkSet);
+		doneChunks.retainAll(activeChunkSet.keySet());
 		if (doneChunks.size() == activeChunkSet.size())
 		{
 			doneChunks.clear();
@@ -311,17 +316,21 @@ public class WorldServer extends World
 
 		final long startTime = System.nanoTime();
 
-		while (iterator.hasNext())
+		for (TIntByteIterator iter = activeChunkSet.iterator(); iter.hasNext();)
 		{
-			ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair)iterator.next();
-			int k = chunkcoordintpair.chunkXPos * 16;
-			int l = chunkcoordintpair.chunkZPos * 16;
+			iter.advance();
+			int chunkCoord = iter.key();
+			int chunkX = ChunkHash.keyToX(chunkCoord);
+			int chunkZ = ChunkHash.keyToZ(chunkCoord);
+			int k = chunkX << 4;
+			int l = chunkZ << 4;
+			
 			this.theProfiler.startSection("getChunk");
-			Chunk chunk = this.getChunkFromChunkCoords(chunkcoordintpair.chunkXPos, chunkcoordintpair.chunkZPos);
+			Chunk chunk = this.getChunkFromChunkCoords(chunkX, chunkZ);
 			this.func_147467_a(k, l, chunk);
 			this.theProfiler.endStartSection("tickChunk");
 			//Limits and evenly distributes the lighting update time
-			if (System.nanoTime() - startTime <= 4000000 && doneChunks.add(chunkcoordintpair))
+			if (System.nanoTime() - startTime <= 4000000 && doneChunks.add(chunkCoord))
 			{
 				chunk.func_150804_b(false);
 			}
@@ -534,7 +543,14 @@ public class WorldServer extends World
 
 				this.pendingTickListEntriesTreeSet.remove(nextticklistentry);
 				this.pendingTickListEntriesHashSet.remove(nextticklistentry);
-				this.pendingTickListEntriesThisTick.add(nextticklistentry);
+				if(activeChunkSet.containsKey(ChunkHash.chunkToKey(nextticklistentry.xCoord >> 4, nextticklistentry.zCoord >> 4)))
+				{
+					this.pendingTickListEntriesThisTick.add(nextticklistentry);
+				}
+				else
+				{
+					i = Math.min(i+1, pendingTickListEntriesTreeSet.size());
+				}
 			}
 
 			this.theProfiler.endSection();

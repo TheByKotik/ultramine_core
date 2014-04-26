@@ -2,11 +2,17 @@ package net.minecraft.client.multiplayer;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gnu.trove.iterator.TIntIterator;
+import gnu.trove.set.hash.TIntHashSet;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.Callable;
+
+import org.ultramine.server.chunk.ChunkHash;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -33,7 +39,6 @@ import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.SaveHandlerMP;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -46,7 +51,7 @@ public class WorldClient extends World
 	private Set entityList = new HashSet();
 	private Set entitySpawnQueue = new HashSet();
 	private final Minecraft mc = Minecraft.getMinecraft();
-	private final Set previousActiveChunkSet = new HashSet();
+	private final TIntHashSet previousActiveChunkSet = new TIntHashSet(512);
 	private static final String __OBFID = "CL_00000882";
 
 	public WorldClient(NetHandlerPlayClient p_i45063_1_, WorldSettings p_i45063_2_, int p_i45063_3_, EnumDifficulty p_i45063_4_, Profiler p_i45063_5_)
@@ -104,7 +109,7 @@ public class WorldClient extends World
 	protected void func_147456_g()
 	{
 		super.func_147456_g();
-		this.previousActiveChunkSet.retainAll(this.activeChunkSet);
+		this.previousActiveChunkSet.retainAll(this.activeChunkSet.keySet());
 
 		if (this.previousActiveChunkSet.size() == this.activeChunkSet.size())
 		{
@@ -112,21 +117,22 @@ public class WorldClient extends World
 		}
 
 		int i = 0;
-		Iterator iterator = this.activeChunkSet.iterator();
-
-		while (iterator.hasNext())
+		for (TIntIterator iter = activeChunkSet.keySet().iterator(); iter.hasNext();)
 		{
-			ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair)iterator.next();
+			int chunkCoord = iter.next();
 
-			if (!this.previousActiveChunkSet.contains(chunkcoordintpair))
+			if (!this.previousActiveChunkSet.contains(chunkCoord))
 			{
-				int j = chunkcoordintpair.chunkXPos * 16;
-				int k = chunkcoordintpair.chunkZPos * 16;
+				int chunkX = ChunkHash.keyToX(chunkCoord);
+				int chunkZ = ChunkHash.keyToZ(chunkCoord);
+				
+				int j = chunkX << 4;
+				int k = chunkZ << 4;
 				this.theProfiler.startSection("getChunk");
-				Chunk chunk = this.getChunkFromChunkCoords(chunkcoordintpair.chunkXPos, chunkcoordintpair.chunkZPos);
+				Chunk chunk = this.getChunkFromChunkCoords(chunkX, chunkZ);
 				this.func_147467_a(j, k, chunk);
 				this.theProfiler.endSection();
-				this.previousActiveChunkSet.add(chunkcoordintpair);
+				this.previousActiveChunkSet.add(chunkCoord);
 				++i;
 
 				if (i >= 10)

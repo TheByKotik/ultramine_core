@@ -2,6 +2,9 @@ package net.minecraft.world;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gnu.trove.map.TIntByteMap;
+import gnu.trove.map.hash.TIntByteHashMap;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -11,6 +14,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.Callable;
+
+import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.chunk.ChunkHash;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHopper;
 import net.minecraft.block.BlockLiquid;
@@ -51,7 +58,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldInfo;
-
 import cpw.mods.fml.common.FMLLog;
 
 import com.google.common.collect.ImmutableSetMultimap;
@@ -114,7 +120,7 @@ public abstract class World implements IBlockAccess
 	private final Calendar theCalendar = Calendar.getInstance();
 	protected Scoreboard worldScoreboard = new Scoreboard();
 	public boolean isRemote;
-	protected Set activeChunkSet = new HashSet();
+	protected TIntByteMap activeChunkSet = new TIntByteHashMap(512, 0.75F, 0, Byte.MAX_VALUE);//XXX
 	private int ambientTickCountdown;
 	protected boolean spawnHostileMobs;
 	protected boolean spawnPeacefulMobs;
@@ -1881,7 +1887,7 @@ public abstract class World implements IBlockAccess
 		{
 			TileEntity tileentity = (TileEntity)iterator.next();
 
-			if (!tileentity.isInvalid() && tileentity.hasWorldObj() && this.blockExists(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord))
+			if (!tileentity.isInvalid() && tileentity.hasWorldObj() && activeChunkSet.containsKey(ChunkHash.chunkToKey(tileentity.xCoord >> 4, tileentity.zCoord >> 4)))
 			{
 				try
 				{
@@ -1987,16 +1993,17 @@ public abstract class World implements IBlockAccess
 	{
 		int i = MathHelper.floor_double(par1Entity.posX);
 		int j = MathHelper.floor_double(par1Entity.posZ);
-		boolean isForced = getPersistentChunks().containsKey(new ChunkCoordIntPair(i >> 4, j >> 4));
-		byte b0 = isForced ? (byte)0 : 32;
-		boolean canUpdate = !par2 || this.checkChunksExist(i - b0, 0, j - b0, i + b0, 0, j + b0);
-
-		if (!canUpdate)
-		{
-			EntityEvent.CanUpdate event = new EntityEvent.CanUpdate(par1Entity);
-			MinecraftForge.EVENT_BUS.post(event);
-			canUpdate = event.canUpdate;
-		}
+		//boolean isForced = getPersistentChunks().containsKey(new ChunkCoordIntPair(i >> 4, j >> 4));
+		//byte b0 = isForced ? (byte)0 : 32;
+		//boolean canUpdate = !par2 || this.checkChunksExist(i - b0, 0, j - b0, i + b0, 0, j + b0);
+		boolean canUpdate = activeChunkSet.containsKey(ChunkHash.chunkToKey(i >> 4, j >> 4));
+		
+		//if (!canUpdate)
+		//{
+		//	EntityEvent.CanUpdate event = new EntityEvent.CanUpdate(par1Entity);
+		//	MinecraftForge.EVENT_BUS.post(event);
+		//	canUpdate = event.canUpdate;
+		//}
 
 		if (canUpdate)
 		{
@@ -2718,7 +2725,8 @@ public abstract class World implements IBlockAccess
 	{
 		this.activeChunkSet.clear();
 		this.theProfiler.startSection("buildList");
-		this.activeChunkSet.addAll(getPersistentChunks().keySet());
+		if(ConfigurationHandler.getServerConfig().enableChunkLoaders)
+			for(ChunkCoordIntPair c : getPersistentChunks().keySet()) activeChunkSet.put(ChunkHash.chunkToKey(c.chunkXPos, c.chunkZPos), (byte)100);
 		int i;
 		EntityPlayer entityplayer;
 		int j;
@@ -2729,13 +2737,22 @@ public abstract class World implements IBlockAccess
 			entityplayer = (EntityPlayer)this.playerEntities.get(i);
 			j = MathHelper.floor_double(entityplayer.posX / 16.0D);
 			k = MathHelper.floor_double(entityplayer.posZ / 16.0D);
-			byte b0 = 7;
+			int b0 = ConfigurationHandler.getServerConfig().chunkUpdateRadius;
 
 			for (int l = -b0; l <= b0; ++l)
 			{
 				for (int i1 = -b0; i1 <= b0; ++i1)
 				{
-					this.activeChunkSet.add(new ChunkCoordIntPair(l + j, i1 + k));
+					int cx = l + j;
+					int cy = i1 + k;
+					if(chunkExists(cx, cy))
+					{
+						int key = ChunkHash.chunkToKey(cx, cy);
+						int priority = Math.max(Math.abs(l), Math.abs(i1));
+						//Chunk chunk = this.chunkProvider.provideChunk(cx, cy);
+						//if(priority > 1) priority -= Math.min(priority-2, (int)(this.getTotalWorldTime() - chunk.lastActiveOrBindTick)/20);
+						activeChunkSet.put(key, (byte)Math.min(priority, activeChunkSet.get(key)));
+					}
 				}
 			}
 		}

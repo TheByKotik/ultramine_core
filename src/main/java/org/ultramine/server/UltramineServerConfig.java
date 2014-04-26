@@ -7,12 +7,16 @@ public class UltramineServerConfig
 {
 	public WatchdogThreadConfig	watchdogThread = new WatchdogThreadConfig();
 	public VanillaConfig		vanilla = new VanillaConfig();
+	public boolean 				enableChunkLoaders = true;
+	public int	 				chunkUpdateRadius = 7;
 
 	public static class WatchdogThreadConfig
 	{
 		public int timeout = 120;
 		public boolean restart = true;
 	}
+	
+	
 	
 	public static class VanillaConfig
 	{
