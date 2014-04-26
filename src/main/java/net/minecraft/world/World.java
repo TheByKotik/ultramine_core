@@ -408,7 +408,7 @@ public abstract class World implements IBlockAccess
 		}
 	}
 
-	protected boolean chunkExists(int par1, int par2)
+	public boolean chunkExists(int par1, int par2)
 	{
 		return this.chunkProvider.chunkExists(par1, par2);
 	}

@@ -205,7 +205,7 @@ public abstract class ServerConfigurationManager
 		}
 
 		worldserver1.getPlayerManager().addPlayer(par1EntityPlayerMP);
-		worldserver1.theChunkProviderServer.loadChunk((int)par1EntityPlayerMP.posX >> 4, (int)par1EntityPlayerMP.posZ >> 4);
+		//worldserver1.theChunkProviderServer.loadChunk((int)par1EntityPlayerMP.posX >> 4, (int)par1EntityPlayerMP.posZ >> 4);
 	}
 
 	public int getEntityViewDistance()
@@ -245,13 +245,32 @@ public abstract class ServerConfigurationManager
 		}
 	}
 
-	public void playerLoggedIn(EntityPlayerMP par1EntityPlayerMP)
+	public void playerLoggedIn(final EntityPlayerMP par1EntityPlayerMP)
 	{
 		this.sendPacketToAllPlayers(new S38PacketPlayerListItem(par1EntityPlayerMP.getCommandSenderName(), true, 1000));
 		this.playerEntityList.add(par1EntityPlayerMP);
-		WorldServer worldserver = this.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
-		worldserver.spawnEntityInWorld(par1EntityPlayerMP);
-		this.func_72375_a(par1EntityPlayerMP, (WorldServer)null);
+		final WorldServer worldserver = this.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
+		
+		
+		int cx = MathHelper.floor_double(par1EntityPlayerMP.posX) >> 4;
+		int cz = MathHelper.floor_double(par1EntityPlayerMP.posX) >> 4;
+		if(worldserver.chunkExists(cx, cz))
+		{
+			worldserver.spawnEntityInWorld(par1EntityPlayerMP);
+			this.func_72375_a(par1EntityPlayerMP, (WorldServer)null);
+		}
+		else
+		{
+			worldserver.theChunkProviderServer.loadAsync(cx, cz, new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					worldserver.spawnEntityInWorld(par1EntityPlayerMP);
+					func_72375_a(par1EntityPlayerMP, (WorldServer)null);
+				}
+			});
+		}
 
 		for (int i = 0; i < this.playerEntityList.size(); ++i)
 		{
