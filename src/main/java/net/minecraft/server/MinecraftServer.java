@@ -318,7 +318,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	public void stopServer()
 	{
-		if (!this.worldIsBeingDeleted && Loader.instance().hasReachedState(LoaderState.SERVER_STARTED))
+		if (!this.worldIsBeingDeleted && Loader.instance().hasReachedState(LoaderState.SERVER_STARTED) && !serverStopped) // make sure the save is valid and we don't save twice
 		{
 			logger.info("Stopping server");
 
@@ -419,15 +419,18 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 					this.serverIsRunning = true;
 				}
 				FMLCommonHandler.instance().handleServerStopping();
+				FMLCommonHandler.instance().expectServerStopped(); // has to come before finalTick to avoid race conditions
 			}
 			else
 			{
+				FMLCommonHandler.instance().expectServerStopped(); // has to come before finalTick to avoid race conditions
 				this.finalTick((CrashReport)null);
 			}
 		}
 		catch (StartupQuery.AbortedException e)
 		{
 			// ignore silently
+			FMLCommonHandler.instance().expectServerStopped(); // has to come before finalTick to avoid race conditions
 		}
 		catch (Throwable throwable1)
 		{
@@ -454,6 +457,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				logger.error("We were unable to save this crash report to disk.");
 			}
 
+			FMLCommonHandler.instance().expectServerStopped(); // has to come before finalTick to avoid race conditions
 			this.finalTick(crashreport);
 		}
 		finally
