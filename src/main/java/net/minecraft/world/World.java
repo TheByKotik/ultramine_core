@@ -2739,15 +2739,16 @@ public abstract class World implements IBlockAccess
 			k = MathHelper.floor_double(entityplayer.posZ / 16.0D);
 			int b0 = ConfigurationHandler.getServerConfig().chunkUpdateRadius;
 
+			activeChunkSet.put(ChunkHash.chunkToKey(j, k), (byte)0);
 			for (int l = -b0; l <= b0; ++l)
 			{
 				for (int i1 = -b0; i1 <= b0; ++i1)
 				{
 					int cx = l + j;
-					int cy = i1 + k;
-					if(chunkExists(cx, cy))
+					int cz = i1 + k;
+					if(chunkExists(cx, cz) && chunkExists(cx-1, cz) && chunkExists(cx, cz-1) && chunkExists(cx+1, cz) && chunkExists(cx, cz+1))
 					{
-						int key = ChunkHash.chunkToKey(cx, cy);
+						int key = ChunkHash.chunkToKey(cx, cz);
 						int priority = Math.max(Math.abs(l), Math.abs(i1));
 						//Chunk chunk = this.chunkProvider.provideChunk(cx, cy);
 						//if(priority > 1) priority -= Math.min(priority-2, (int)(this.getTotalWorldTime() - chunk.lastActiveOrBindTick)/20);

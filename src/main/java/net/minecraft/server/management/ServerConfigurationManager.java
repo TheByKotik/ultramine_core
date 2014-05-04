@@ -253,7 +253,7 @@ public abstract class ServerConfigurationManager
 		
 		
 		int cx = MathHelper.floor_double(par1EntityPlayerMP.posX) >> 4;
-		int cz = MathHelper.floor_double(par1EntityPlayerMP.posX) >> 4;
+		int cz = MathHelper.floor_double(par1EntityPlayerMP.posZ) >> 4;
 		if(worldserver.chunkExists(cx, cz))
 		{
 			worldserver.spawnEntityInWorld(par1EntityPlayerMP);

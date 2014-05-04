@@ -2,7 +2,9 @@ package net.minecraft.entity.player;
 
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
+
 import io.netty.buffer.Unpooled;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
@@ -95,9 +98,11 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
+
 import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.chunk.ChunkSendManager;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.common.ForgeHooks;
@@ -233,60 +238,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
 			this.playerNetServerHandler.sendPacket(new S13PacketDestroyEntities(aint));
 		}
-
-		if (!this.loadedChunks.isEmpty())
-		{
-			ArrayList arraylist = new ArrayList();
-			Iterator iterator1 = this.loadedChunks.iterator();
-			ArrayList arraylist1 = new ArrayList();
-			Chunk chunk;
-
-			while (iterator1.hasNext() && arraylist.size() < S26PacketMapChunkBulk.func_149258_c())
-			{
-				ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair)iterator1.next();
-
-				if (chunkcoordintpair != null)
-				{
-					if (this.worldObj.blockExists(chunkcoordintpair.chunkXPos << 4, 0, chunkcoordintpair.chunkZPos << 4))
-					{
-						chunk = this.worldObj.getChunkFromChunkCoords(chunkcoordintpair.chunkXPos, chunkcoordintpair.chunkZPos);
-
-						if (chunk.func_150802_k())
-						{
-							arraylist.add(chunk);
-							arraylist1.addAll(((WorldServer)this.worldObj).func_147486_a(chunkcoordintpair.chunkXPos * 16, 0, chunkcoordintpair.chunkZPos * 16, chunkcoordintpair.chunkXPos * 16 + 15, 256, chunkcoordintpair.chunkZPos * 16 + 15));
-							//BugFix: 16 makes it load an extra chunk, which isn't associated with a player, which makes it not unload unless a player walks near it.
-							iterator1.remove();
-						}
-					}
-				}
-				else
-				{
-					iterator1.remove();
-				}
-			}
-
-			if (!arraylist.isEmpty())
-			{
-				this.playerNetServerHandler.sendPacket(new S26PacketMapChunkBulk(arraylist));
-				Iterator iterator2 = arraylist1.iterator();
-
-				while (iterator2.hasNext())
-				{
-					TileEntity tileentity = (TileEntity)iterator2.next();
-					this.func_147097_b(tileentity);
-				}
-
-				iterator2 = arraylist.iterator();
-
-				while (iterator2.hasNext())
-				{
-					chunk = (Chunk)iterator2.next();
-					this.getServerForPlayer().getEntityTracker().func_85172_a(this, chunk);
-					MinecraftForge.EVENT_BUS.post(new ChunkWatchEvent.Watch(chunk.getChunkCoordIntPair(), this));
-				}
-			}
-		}
+		
+		getChunkMgr().update();
 
 		if (this.field_143005_bX > 0L && this.mcServer.func_143007_ar() > 0 && MinecraftServer.getSystemTimeMillis() - this.field_143005_bX > (long)(this.mcServer.func_143007_ar() * 1000 * 60))
 		{
@@ -957,7 +910,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public void func_147100_a(C15PacketClientSettings p_147100_1_)
 	{
 		this.translator = p_147100_1_.func_149524_c();
-		int i = 256 >> p_147100_1_.func_149521_d();
+		int i = /*256 >>*/ p_147100_1_.func_149521_d();
 
 		if (i > 3 && i < 15)
 		{
@@ -1009,5 +962,19 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public float getDefaultEyeHeight()
 	{
 		return 1.62F;
+	}
+	
+	/* ===================================== ULTRAMINE START =====================================*/
+	
+	private final ChunkSendManager chunkMgr = new ChunkSendManager(this);
+	
+	public ChunkSendManager getChunkMgr()
+	{
+		return chunkMgr;
+	}
+	
+	public int getRenderDistance()
+	{
+		return renderDistance;
 	}
 }

@@ -95,7 +95,7 @@ public class PlayerManager
 		}
 	}
 
-	private PlayerManager.PlayerInstance getOrCreateChunkWatcher(int par1, int par2, boolean par3)
+	public PlayerManager.PlayerInstance getOrCreateChunkWatcher(int par1, int par2, boolean par3)
 	{
 		long k = (long)par1 + 2147483647L | (long)par2 + 2147483647L << 32;
 		PlayerManager.PlayerInstance playerinstance = (PlayerManager.PlayerInstance)this.playerInstances.getValueByKey(k);
@@ -124,21 +124,8 @@ public class PlayerManager
 
 	public void addPlayer(EntityPlayerMP par1EntityPlayerMP)
 	{
-		int i = (int)par1EntityPlayerMP.posX >> 4;
-		int j = (int)par1EntityPlayerMP.posZ >> 4;
-		par1EntityPlayerMP.managedPosX = par1EntityPlayerMP.posX;
-		par1EntityPlayerMP.managedPosZ = par1EntityPlayerMP.posZ;
-
-		for (int k = i - this.playerViewRadius; k <= i + this.playerViewRadius; ++k)
-		{
-			for (int l = j - this.playerViewRadius; l <= j + this.playerViewRadius; ++l)
-			{
-				this.getOrCreateChunkWatcher(k, l, true).addPlayer(par1EntityPlayerMP);
-			}
-		}
-
-		this.players.add(par1EntityPlayerMP);
-		this.filterChunkLoadQueue(par1EntityPlayerMP);
+		par1EntityPlayerMP.getChunkMgr().addTo(this);
+		players.add(par1EntityPlayerMP);
 	}
 
 	public void filterChunkLoadQueue(EntityPlayerMP par1EntityPlayerMP)
@@ -197,22 +184,7 @@ public class PlayerManager
 
 	public void removePlayer(EntityPlayerMP par1EntityPlayerMP)
 	{
-		int i = (int)par1EntityPlayerMP.managedPosX >> 4;
-		int j = (int)par1EntityPlayerMP.managedPosZ >> 4;
-
-		for (int k = i - this.playerViewRadius; k <= i + this.playerViewRadius; ++k)
-		{
-			for (int l = j - this.playerViewRadius; l <= j + this.playerViewRadius; ++l)
-			{
-				PlayerManager.PlayerInstance playerinstance = this.getOrCreateChunkWatcher(k, l, false);
-
-				if (playerinstance != null)
-				{
-					playerinstance.removePlayer(par1EntityPlayerMP);
-				}
-			}
-		}
-
+		par1EntityPlayerMP.getChunkMgr().removeFrom(this);
 		this.players.remove(par1EntityPlayerMP);
 	}
 
@@ -225,48 +197,7 @@ public class PlayerManager
 
 	public void updatePlayerPertinentChunks(EntityPlayerMP par1EntityPlayerMP)
 	{
-		int i = (int)par1EntityPlayerMP.posX >> 4;
-		int j = (int)par1EntityPlayerMP.posZ >> 4;
-		double d0 = par1EntityPlayerMP.managedPosX - par1EntityPlayerMP.posX;
-		double d1 = par1EntityPlayerMP.managedPosZ - par1EntityPlayerMP.posZ;
-		double d2 = d0 * d0 + d1 * d1;
-
-		if (d2 >= 64.0D)
-		{
-			int k = (int)par1EntityPlayerMP.managedPosX >> 4;
-			int l = (int)par1EntityPlayerMP.managedPosZ >> 4;
-			int i1 = this.playerViewRadius;
-			int j1 = i - k;
-			int k1 = j - l;
-
-			if (j1 != 0 || k1 != 0)
-			{
-				for (int l1 = i - i1; l1 <= i + i1; ++l1)
-				{
-					for (int i2 = j - i1; i2 <= j + i1; ++i2)
-					{
-						if (!this.overlaps(l1, i2, k, l, i1))
-						{
-							this.getOrCreateChunkWatcher(l1, i2, true).addPlayer(par1EntityPlayerMP);
-						}
-
-						if (!this.overlaps(l1 - j1, i2 - k1, i, j, i1))
-						{
-							PlayerManager.PlayerInstance playerinstance = this.getOrCreateChunkWatcher(l1 - j1, i2 - k1, false);
-
-							if (playerinstance != null)
-							{
-								playerinstance.removePlayer(par1EntityPlayerMP);
-							}
-						}
-					}
-				}
-
-				this.filterChunkLoadQueue(par1EntityPlayerMP);
-				par1EntityPlayerMP.managedPosX = par1EntityPlayerMP.posX;
-				par1EntityPlayerMP.managedPosZ = par1EntityPlayerMP.posZ;
-			}
-		}
+		par1EntityPlayerMP.getChunkMgr().updatePlayerPertinentChunks();
 	}
 
 	public boolean isPlayerWatchingChunk(EntityPlayerMP par1EntityPlayerMP, int par2, int par3)
@@ -280,7 +211,7 @@ public class PlayerManager
 		return par0 * 16 - 16;
 	}
 
-	class PlayerInstance
+	public class PlayerInstance
 	{
 		private final List playersWatchingChunk = new ArrayList();
 		private final ChunkCoordIntPair chunkLocation;
@@ -289,25 +220,11 @@ public class PlayerManager
 		private int flagsYAreasToUpdate;
 		private long previousWorldTime;
 		private static final String __OBFID = "CL_00001435";
-		
-	    private boolean loaded = false;
-	    private Runnable loadedRunnable = new Runnable()
-	    {
-	        public void run()
-	        {
-	            PlayerInstance.this.loaded = true;
-	            for(Object o : playersWatchingChunk)
-	    		{
-	    			EntityPlayerMP p = (EntityPlayerMP)o;
-	    			p.loadedChunks.add(chunkLocation);
-	    		}
-	        }
-	    };
 
 		public PlayerInstance(int par2, int par3)
 		{
 			this.chunkLocation = new ChunkCoordIntPair(par2, par3);
-			getWorldServer().theChunkProviderServer.loadAsync(par2, par3, this.loadedRunnable);
+//			getWorldServer().theChunkProviderServer.loadAsync(par2, par3, this.loadedRunnable);
 		}
 
 		public void addPlayer(EntityPlayerMP par1EntityPlayerMP)
@@ -324,10 +241,6 @@ public class PlayerManager
 				}
 
 				this.playersWatchingChunk.add(par1EntityPlayerMP);
-				if(loaded)
-	            {
-					par1EntityPlayerMP.loadedChunks.add(this.chunkLocation);
-	            }
 			}
 		}
 
@@ -335,29 +248,15 @@ public class PlayerManager
 		{
 			if (this.playersWatchingChunk.contains(par1EntityPlayerMP))
 			{
-				
-				if (!this.loaded)
-	            {
-					this.playersWatchingChunk.remove(par1EntityPlayerMP);
-					if(this.playersWatchingChunk.isEmpty())
-	                {
-	                    ChunkIOExecutor.dropQueuedChunkLoad(getWorldServer(), this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos, this.loadedRunnable);
-	                    long i = (long) this.chunkLocation.chunkXPos + 2147483647L | (long) this.chunkLocation.chunkZPos + 2147483647L << 32;
-	                    playerInstances.remove(i);
-	                    chunkWatcherWithPlayers.remove(this);
-	                }
-					return;
-	            }
-				
 				Chunk chunk = PlayerManager.this.theWorldServer.getChunkFromChunkCoords(this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos);
 
-				if (chunk.func_150802_k())
+//				if (chunk.func_150802_k())
 				{
-					par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S21PacketChunkData(chunk, true, 0));
+					par1EntityPlayerMP.playerNetServerHandler.sendPacket(S21PacketChunkData.makeForUnload(chunk));
 				}
 
 				this.playersWatchingChunk.remove(par1EntityPlayerMP);
-				par1EntityPlayerMP.loadedChunks.remove(this.chunkLocation);
+//				par1EntityPlayerMP.loadedChunks.remove(this.chunkLocation);
 
 				MinecraftForge.EVENT_BUS.post(new ChunkWatchEvent.UnWatch(chunkLocation, par1EntityPlayerMP));
 

@@ -241,4 +241,11 @@ public class S26PacketMapChunkBulk extends Packet
 	{
 		this.processPacket((INetHandlerPlayClient)p_148833_1_);
 	}
+	
+	public static S26PacketMapChunkBulk makeDeflated(List chunks)
+	{
+		S26PacketMapChunkBulk pkt = new S26PacketMapChunkBulk(chunks);
+		pkt.deflate();
+		return pkt;
+	}
 }

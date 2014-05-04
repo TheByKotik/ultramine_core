@@ -378,4 +378,9 @@ public class ChunkProviderServer implements IChunkProvider
 			ChunkIOExecutor.queueChunkLoad(this.worldObj, (AnvilChunkLoader)currentChunkLoader, this, x, z, callback);
 		}
 	}
+	
+	public Chunk getChunkIfExists(int cx, int cz)
+	{
+		return loadedChunkHashMap.get(ChunkHash.chunkToKey(cx, cz));
+	}
 }

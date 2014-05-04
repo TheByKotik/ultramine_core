@@ -216,6 +216,8 @@ public final class SpawnerAnimals
 
 	public static boolean canCreatureTypeSpawnAtLocation(EnumCreatureType par0EnumCreatureType, World par1World, int par2, int par3, int par4)
 	{
+		if(!par1World.blockExists(par2, par3, par4)) return false;
+		
 		if (par0EnumCreatureType.getCreatureMaterial() == Material.water)
 		{
 			return par1World.getBlock(par2, par3, par4).getMaterial().isLiquid() && par1World.getBlock(par2, par3 - 1, par4).getMaterial().isLiquid() && !par1World.getBlock(par2, par3 + 1, par4).isNormalCube();

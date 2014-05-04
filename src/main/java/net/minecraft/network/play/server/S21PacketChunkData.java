@@ -2,11 +2,13 @@ package net.minecraft.network.play.server;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
+
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
@@ -28,6 +30,8 @@ public class S21PacketChunkData extends Packet
 	private static byte[] field_149286_i = new byte[196864];
 	private static final String __OBFID = "CL_00001304";
 	private Semaphore deflateGate;
+	
+	private static final byte[] unloadSequence = new byte[] {0x78, (byte) 0x9C, 0x63, 0x64, 0x1C, (byte) 0xD9, 0x00, 0x00, (byte) 0x81, (byte) 0x80, 0x01, 0x01};
 
 	public S21PacketChunkData() {}
 
@@ -42,10 +46,20 @@ public class S21PacketChunkData extends Packet
 		this.field_149278_f = extracted.field_150282_a;
 		this.deflateGate = new Semaphore(1);
 	}
+	
+	private S21PacketChunkData(Chunk p_i45196_1_) //for unload
+	{
+		this.field_149284_a = p_i45196_1_.xPosition;
+		this.field_149282_b = p_i45196_1_.zPosition;
+		this.field_149279_g = true;
+		
+		this.field_149285_h = unloadSequence.length;
+		this.field_149281_e = unloadSequence;
+	}
 
 	private void deflate()
 	{
-		Deflater deflater = new Deflater(-1);
+		Deflater deflater = new Deflater(7);
 		try
 		{
 			deflater.setInput(this.field_149278_f, 0, this.field_149278_f.length);
@@ -293,4 +307,16 @@ public class S21PacketChunkData extends Packet
 			public int field_150281_c;
 			private static final String __OBFID = "CL_00001305";
 		}
+	
+	public static S21PacketChunkData makeDeflated(Chunk chunk)
+	{
+		S21PacketChunkData pkt = new S21PacketChunkData(chunk, true, 65535);
+		pkt.deflate();
+		return pkt;
+	}
+	
+	public static S21PacketChunkData makeForUnload(Chunk chunk)
+	{
+		return new S21PacketChunkData(chunk);
+	}
 }
