@@ -1142,4 +1142,12 @@ public abstract class EntityLiving extends EntityLivingBase
 
 		this.field_110170_bx = null;
 	}
+	
+	/* ===================================== ULTRAMINE START =====================================*/
+	
+	@Override
+	public boolean isEntityLiving()
+    {
+    	return true;
+    }
 }

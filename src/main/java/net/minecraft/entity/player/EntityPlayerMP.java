@@ -968,6 +968,12 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	
 	private final ChunkSendManager chunkMgr = new ChunkSendManager(this);
 	
+	@Override
+	public boolean isEntityPlayerMP()
+    {
+    	return true;
+    }
+	
 	public ChunkSendManager getChunkMgr()
 	{
 		return chunkMgr;

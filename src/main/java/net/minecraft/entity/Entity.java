@@ -2463,4 +2463,21 @@ public abstract class Entity
 				}
 			}
 		}
+	
+	/* ===================================== ULTRAMINE START =====================================*/
+	
+	public boolean isEntityLiving()
+    {
+    	return false;
+    }
+    
+    public boolean isEntityPlayer()
+    {
+    	return false;
+    }
+    
+    public boolean isEntityPlayerMP()
+    {
+    	return false;
+    }
 }

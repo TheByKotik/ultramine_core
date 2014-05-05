@@ -7,6 +7,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -80,7 +81,6 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.IChunkProvider;
-
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ISpecialArmor.ArmorProperties;
 import net.minecraftforge.common.MinecraftForge;
@@ -2327,4 +2327,12 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
 		private static final String __OBFID = "CL_00001712";
 	}
+	
+	/* ===================================== ULTRAMINE START =====================================*/
+	
+	@Override
+	public boolean isEntityPlayer()
+    {
+    	return true;
+    }
 }
