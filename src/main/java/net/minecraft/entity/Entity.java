@@ -2069,7 +2069,7 @@ public abstract class Entity
 
 	public float func_145772_a(Explosion p_145772_1_, World p_145772_2_, int p_145772_3_, int p_145772_4_, int p_145772_5_, Block p_145772_6_)
 	{
-		return p_145772_6_.getExplosionResistance(this, p_145772_2_, p_145772_3_, p_145772_3_, p_145772_4_, posX, posY + getEyeHeight(), posZ);
+		return p_145772_6_.getExplosionResistance(this, p_145772_2_, p_145772_3_, p_145772_4_, p_145772_5_, posX, posY + getEyeHeight(), posZ);
 	}
 
 	public boolean func_145774_a(Explosion p_145774_1_, World p_145774_2_, int p_145774_3_, int p_145774_4_, int p_145774_5_, Block p_145774_6_, float p_145774_7_)
