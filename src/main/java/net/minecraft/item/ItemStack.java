@@ -758,4 +758,28 @@ public final class ItemStack
 
 		return ichatcomponent;
 	}
+
+	/*========================= Forge Start=======================*/
+	@Override
+	public int hashCode()
+	{
+		int hash = 1;
+		if (field_151002_e != null) hash = 31*hash + field_151002_e.hashCode();
+		hash = 31*hash + itemDamage;
+		hash = 31*hash + stackSize;
+		if (stackTagCompound != null) hash = 31*hash + stackTagCompound.hashCode();
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (!(o instanceof ItemStack)) return false;
+		if (o == this) return true;
+		ItemStack i = (ItemStack)o;
+		if (field_151002_e != i.field_151002_e || stackSize != i.stackSize || itemDamage != i.itemDamage)
+			return false;
+		if (stackTagCompound != null) return stackTagCompound.equals(i.stackTagCompound);
+		return i.stackTagCompound == null;
+	}
 }
