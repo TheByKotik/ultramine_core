@@ -347,21 +347,23 @@ public class Minecraft implements IPlayerUsage
 		File file2 = new File(file1, "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-client.txt");
 		System.out.println(par1CrashReport.getCompleteReport());
 
+		int retVal;
 		if (par1CrashReport.getFile() != null)
 		{
 			System.out.println("#@!@# Game crashed! Crash report saved to: #@!@# " + par1CrashReport.getFile());
-			System.exit(-1);
+			retVal = -1;
 		}
 		else if (par1CrashReport.saveToFile(file2))
 		{
 			System.out.println("#@!@# Game crashed! Crash report saved to: #@!@# " + file2.getAbsolutePath());
-			System.exit(-1);
+			retVal = -1;
 		}
 		else
 		{
 			System.out.println("#@?@# Game crashed! Crash report could not be saved. #@?@#");
-			System.exit(-2);
+			retVal = -2;
 		}
+		FMLCommonHandler.instance().handleExit(retVal);
 	}
 
 	public void setServer(String par1Str, int par2)

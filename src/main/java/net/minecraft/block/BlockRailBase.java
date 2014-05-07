@@ -206,7 +206,7 @@ public abstract class BlockRailBase extends Block
 	 */
 	public boolean isFlexibleRail(IBlockAccess world, int y, int x, int z)
 	{
-		return isPowered();
+		return !isPowered();
 	}
 
 	/**
@@ -318,7 +318,7 @@ public abstract class BlockRailBase extends Block
 			this.field_150659_e = p_i45388_5_;
 			BlockRailBase block = (BlockRailBase)p_i45388_2_.getBlock(p_i45388_3_, p_i45388_4_, p_i45388_5_);
 			int l = block.getBasicRailMetadata(p_i45388_2_, null, p_i45388_3_, p_i45388_4_, p_i45388_5_);
-			this.field_150656_f = block.isFlexibleRail(p_i45388_2_, p_i45388_3_, p_i45388_4_, p_i45388_5_);
+			this.field_150656_f = !block.isFlexibleRail(p_i45388_2_, p_i45388_3_, p_i45388_4_, p_i45388_5_);
 			canMakeSlopes = block.canMakeSlopes(p_i45388_2_, p_i45388_3_, p_i45388_4_, p_i45388_5_);
 			this.func_150648_a(l);
 		}
