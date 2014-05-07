@@ -446,6 +446,7 @@ public class WorldGenBigTree extends WorldGenAbstractTree
 
 		if (!this.validTreeLocation())
 		{
+			this.worldObj = null; //Fix vanilla Mem leak, holds latest world
 			return false;
 		}
 		else
@@ -454,6 +455,7 @@ public class WorldGenBigTree extends WorldGenAbstractTree
 			this.generateLeaves();
 			this.generateTrunk();
 			this.generateLeafNodeBases();
+			this.worldObj = null; //Fix vanilla Mem leak, holds latest world
 			return true;
 		}
 	}

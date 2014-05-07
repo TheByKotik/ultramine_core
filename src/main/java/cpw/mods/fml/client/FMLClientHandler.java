@@ -14,6 +14,7 @@ package cpw.mods.fml.client;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -89,6 +90,7 @@ import cpw.mods.fml.common.StartupQuery;
 import cpw.mods.fml.common.WrongMinecraftVersionException;
 import cpw.mods.fml.common.eventhandler.EventBus;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.toposort.ModSortingException;
@@ -160,7 +162,7 @@ public class FMLClientHandler implements IFMLSidedHandler
 	private Map<ServerStatusResponse,JsonObject> extraServerListData;
 	private Map<ServerData, ExtendedServerListData> serverDataTag;
 
-	private NetHandlerPlayClient currentPlayClient;
+	private WeakReference<NetHandlerPlayClient> currentPlayClient;
 
 	/**
 	 * Called to start the whole game off
@@ -227,6 +229,10 @@ public class FMLClientHandler implements IFMLSidedHandler
 			haltGame("There was a severe problem during mod loading that has caused the game to fail", le);
 			return;
 		}
+		finally
+		{
+			client.refreshResources();
+		}
 
 		Map<String,Map<String,String>> sharedModList = (Map<String, Map<String, String>>) Launch.blackboard.get("modList");
 		if (sharedModList == null)
@@ -279,7 +285,8 @@ public class FMLClientHandler implements IFMLSidedHandler
 			return;
 		}
 
-		// Reload resources
+		// Reload resources has to happen early, or minecraft itself has resource loading issues
+		// This is a second refresh for mods that register stuff late!
 		client.refreshResources();
 		RenderingRegistry.instance().loadEntityRenderers((Map<Class<? extends Entity>, Render>)RenderManager.instance.entityRenderMap);
 		guiFactories = HashBiMap.create();
@@ -564,12 +571,6 @@ public class FMLClientHandler implements IFMLSidedHandler
 		}
 	}
 
-	@Override
-	public void updateResourcePackList()
-	{
-		client.refreshResources();
-	}
-
 	public IResourcePack getResourcePackFor(String modId)
 	{
 		return resourcePackMap.get(modId);
@@ -596,7 +597,7 @@ public class FMLClientHandler implements IFMLSidedHandler
 	@Override
 	public INetHandler getClientPlayHandler()
 	{
-		return this.currentPlayClient;
+		return this.currentPlayClient == null ? null : this.currentPlayClient.get();
 	}
 	@Override
 	public NetworkManager getClientToServerNetworkManager()
@@ -701,7 +702,8 @@ public class FMLClientHandler implements IFMLSidedHandler
 				modListBldr.put(modObj.get("modid").getAsString(), modObj.get("version").getAsString());
 			}
 
-			serverDataTag.put(data, new ExtendedServerListData(type, true, modListBldr.build(), !moddedClientAllowed));
+			Map<String,String> modListMap = modListBldr.build();
+			serverDataTag.put(data, new ExtendedServerListData(type, FMLNetworkHandler.checkModList(modListMap, Side.CLIENT) == null, modListMap, !moddedClientAllowed));
 		}
 		else
 		{
@@ -810,7 +812,7 @@ public class FMLClientHandler implements IFMLSidedHandler
 	public void setPlayClient(NetHandlerPlayClient netHandlerPlayClient)
 	{
 		playClientBlock.countDown();
-		this.currentPlayClient = netHandlerPlayClient;
+		this.currentPlayClient = new WeakReference(netHandlerPlayClient);
 	}
 
 	@Override
