@@ -2009,6 +2009,10 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 			this.experience = par1EntityPlayer.experience;
 			this.setScore(par1EntityPlayer.getScore());
 			this.teleportDirection = par1EntityPlayer.teleportDirection;
+			//Copy and re-init ExtendedProperties when switching dimensions.
+			this.extendedProperties = par1EntityPlayer.extendedProperties;
+			for (net.minecraftforge.common.IExtendedEntityProperties p : this.extendedProperties.values())
+				p.init(this, this.worldObj);
 		}
 		else if (this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
 		{
