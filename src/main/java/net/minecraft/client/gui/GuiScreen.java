@@ -17,6 +17,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent;
+import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
+import net.minecraftforge.common.MinecraftForge;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -214,9 +218,14 @@ public class GuiScreen extends Gui
 
 				if (guibutton.mousePressed(this.mc, par1, par2))
 				{
-					this.selectedButton = guibutton;
-					guibutton.func_146113_a(this.mc.getSoundHandler());
-					this.actionPerformed(guibutton);
+					ActionPerformedEvent.Pre event = new ActionPerformedEvent.Pre(this, guibutton, this.buttonList);
+					if (MinecraftForge.EVENT_BUS.post(event))
+						break;
+					this.selectedButton = event.button;
+					event.button.func_146113_a(this.mc.getSoundHandler());
+					this.actionPerformed(event.button);
+					if (this.mc.currentScreen.equals(this))
+						MinecraftForge.EVENT_BUS.post(new ActionPerformedEvent.Post(this, event.button, this.buttonList));
 				}
 			}
 		}
@@ -241,8 +250,12 @@ public class GuiScreen extends Gui
 		this.fontRendererObj = p_146280_1_.fontRenderer;
 		this.width = p_146280_2_;
 		this.height = p_146280_3_;
-		this.buttonList.clear();
-		this.initGui();
+		if (!MinecraftForge.EVENT_BUS.post(new InitGuiEvent.Pre(this, this.buttonList)))
+		{
+			this.buttonList.clear();
+			this.initGui();
+		}
+		MinecraftForge.EVENT_BUS.post(new InitGuiEvent.Post(this, this.buttonList));
 	}
 
 	public void initGui() {}
