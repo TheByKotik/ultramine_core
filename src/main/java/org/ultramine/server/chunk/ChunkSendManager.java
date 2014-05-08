@@ -93,6 +93,7 @@ public class ChunkSendManager
 	
 	public void removeFrom(PlayerManager manager)
 	{
+		if(this.manager == null) return;
 		if(this.manager != manager) throw new IllegalStateException();
 		
 		toSend.clear();
