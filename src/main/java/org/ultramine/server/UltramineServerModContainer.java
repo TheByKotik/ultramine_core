@@ -7,12 +7,15 @@ import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+
 import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.ModMetadata;
+import cpw.mods.fml.common.event.FMLConstructionEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class UltramineServerModContainer extends DummyModContainer
@@ -31,6 +34,12 @@ public class UltramineServerModContainer extends DummyModContainer
 	{
 		bus.register(this);
 		return true;
+	}
+	
+	@Subscribe
+	public void modConstruction(FMLConstructionEvent evt)
+	{
+		NetworkRegistry.INSTANCE.register(this, this.getClass(), null, evt.getASMHarvestedData());
 	}
 
 	@Subscribe
