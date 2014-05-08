@@ -9,57 +9,6 @@ import spock.lang.Specification
  */
 class GroupPermissionTest extends Specification {
 
-    MetaResolver createMetaResolver(Map meta)
-    {
-        def resolver = new MetaResolver()
-        resolver.merge(meta, 0)
-        return resolver
-    }
-
-    def "Test calculation"() {
-        setup:
-        def resolver = Mock(PermissionResolver)
-        def perm1 = Mock(IPermission) {
-            getKey() >> "p.1"
-            getPermissions() >> resolver
-            getMeta() >> createMetaResolver([test1: "1", test2: "1", test3: "1"])
-            getPriority() >> 1
-        }
-        def perm2 = Mock(IPermission) {
-            getKey() >> "p.2"
-            getPermissions() >> resolver
-            getMeta() >> createMetaResolver([test2: "2"])
-            getPriority() >> 2
-        }
-
-        def group = new GroupPermission("group.test", [test1: "0"])
-        group.permissionResolver = resolver
-        group.addPermission(perm1)
-        group.addPermission(perm2)
-
-        when: "Calculate meta and permissions"
-        group.calculate()
-
-        then: "Permissions are calculated"
-        !group.isDirty()
-        1 * resolver.clear()
-        1 * resolver.merge(resolver, 1)
-        1 * resolver.merge(resolver, 2)
-        0 * resolver._
-
-        and: "Meta is correct"
-        group.getMeta().getString("test1") == "0"
-        group.getMeta().getString("test2") == "2"
-        group.getMeta().getString("test3") == "1"
-
-        when: "Calculate one more time"
-        group.calculate()
-
-        then: "Nothing happens"
-        !group.isDirty()
-        0 * resolver._
-    }
-
     def "Test recursive calculation"() {
         setup: "Prepare recursive groups"
         def group1 = new GroupPermission("g1", [m1: "a"])

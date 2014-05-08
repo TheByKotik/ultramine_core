@@ -1,5 +1,6 @@
 package org.ultramine.permission
 
+import static org.ultramine.permission.PermissionResolver.CheckResult.*
 import spock.lang.Specification
 
 /**
@@ -27,7 +28,7 @@ class NegativePermissionTest extends Specification {
         perm.getDescription() == "NOT: Test Description"
         perm.getPriority() == 100
         perm.getMeta().getString("1") == "mock"
-        !perm.getPermissions().has("test.key")
+        perm.getPermissions().check("test.key") == FALSE
     }
 
     def "Test isDirty IPermission"() {
@@ -83,7 +84,7 @@ class NegativePermissionTest extends Specification {
         perm.getDescription() == "NOT: Test Description"
         perm.getPriority() == 100
         perm.getMeta().getString("1") == "mock"
-        !perm.getPermissions().has("test.key")
+        perm.getPermissions().check("test.key") == FALSE
     }
 
     def "Test isDirty IChangeablePermission"() {

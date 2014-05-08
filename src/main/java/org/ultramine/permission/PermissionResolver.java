@@ -23,14 +23,14 @@ public class PermissionResolver extends Resolver<Boolean>
 		return resolver;
 	}
 
-	public boolean has(String key)
+	public CheckResult check(String key)
 	{
 		if (key == null)
-			return false;
+			return CheckResult.UNRESOLVED;
 
 		key = key.toLowerCase();
 		if (values.containsKey(key))
-			return values.get(key);
+			return toCheckResult(values.get(key));
 
 		int index = key.lastIndexOf('.');
 		while (index >= 0)
@@ -38,13 +38,19 @@ public class PermissionResolver extends Resolver<Boolean>
 			key = key.substring(0, index);
 			String wildcard = key + ".*";
 			if (values.containsKey(wildcard))
-				return values.get(wildcard);
+				return toCheckResult(values.get(wildcard));
 
 			index = key.lastIndexOf('.');
 		}
 		if (values.containsKey("*"))
-			return values.get("*");
+			return toCheckResult(values.get("*"));
 
-		return false;
+		return CheckResult.UNRESOLVED;
+	}
+
+	public enum CheckResult { TRUE, FALSE, UNRESOLVED }
+	private CheckResult toCheckResult(boolean bool)
+	{
+		return bool ? CheckResult.TRUE : CheckResult.FALSE;
 	}
 }

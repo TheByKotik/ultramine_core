@@ -2,6 +2,7 @@ package org.ultramine.permission
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import static org.ultramine.permission.PermissionResolver.CheckResult.*
 
 /**
  * Created by Евгений on 08.05.2014.
@@ -22,7 +23,7 @@ class PermissionResolverTest extends Specification {
         def resolver = PermissionResolver.createForKey(key, 0)
 
         then: "Resolver has this key"
-        resolver.has(key)
+        resolver.check(key) == TRUE
 
         where:
         key << ["test.key", "super.test.*", "^group.admin"]
@@ -38,11 +39,11 @@ class PermissionResolverTest extends Specification {
         def inverted = PermissionResolver.createInverted(resolver)
 
         then: "Permission are inverted"
-        inverted.has("p.false")
-        !inverted.has("p.true")
+        inverted.check("p.false") == TRUE
+        inverted.check("p.true") == FALSE
 
         and: "New permissions are not created"
-        !inverted.has("group.admin")
+        inverted.check("group.admin") == UNRESOLVED
     }
 
     def "Test wildcard"() {
@@ -51,16 +52,16 @@ class PermissionResolverTest extends Specification {
         resolver.addEntry("test.perm.*", true, 0)
 
         expect: "Other permissions are not affected"
-        !resolver.has("group.admin")
-        !resolver.has("group.admin.super")
+        resolver.check("group.admin") == UNRESOLVED
+        resolver.check("group.admin.super") == UNRESOLVED
 
         and: "Parent nodes are not affected"
-        !resolver.has("test")
-        !resolver.has("test.perm")
+        resolver.check("test") == UNRESOLVED
+        resolver.check("test.perm") == UNRESOLVED
 
         and: "Child nodes are affected"
-        resolver.has("test.perm.1")
-        resolver.has("test.perm.2.3")
+        resolver.check("test.perm.1") == TRUE
+        resolver.check("test.perm.2.3") == TRUE
     }
 
     def "Test single permission override wildcard"() {
@@ -70,15 +71,35 @@ class PermissionResolverTest extends Specification {
         resolver.addEntry("test.perm.super", false, 0)
 
         expect: "Wildcard has lower priority"
-        !resolver.has("test.perm.super")
-        resolver.has("test.perm.super2")
+        resolver.check("test.perm.super") == FALSE
+        resolver.check("test.perm.super2") == TRUE
 
         when: "Invert resolver"
         resolver = PermissionResolver.createInverted(resolver)
 
         then: "Same effect"
-        resolver.has("test.perm.super")
-        !resolver.has("test.perm.super2")
+        resolver.check("test.perm.super") == TRUE
+        resolver.check("test.perm.super2") == FALSE
+    }
+
+    def "Test higher node wildcard priority"() {
+        setup: "Resolver with wildcards"
+        def resolver = new PermissionResolver()
+        resolver.addEntry("test.perm.*", true, 1)
+        resolver.addEntry("test.perm.super.*", false, 0)
+
+        expect: "Higher node wildcard has priority"
+        resolver.check("test.perm.super.p") == FALSE
+        resolver.check("test.perm.super.p.p") == FALSE
+        resolver.check("test.perm.p") == TRUE
+
+        when: "Invert resolver"
+        resolver = PermissionResolver.createInverted(resolver)
+
+        then: "Same effect"
+        resolver.check("test.perm.super.p") == TRUE
+        resolver.check("test.perm.super.p.p") == TRUE
+        resolver.check("test.perm.p") == FALSE
     }
 
     def "Test clear"() {
@@ -90,7 +111,7 @@ class PermissionResolverTest extends Specification {
         resolver.clear()
 
         then: "It has no permissions"
-        !resolver.has("test.perm")
+        resolver.check("test.perm") == UNRESOLVED
     }
 
     def "Test merge"() {
@@ -112,11 +133,11 @@ class PermissionResolverTest extends Specification {
         result.merge(resolver2, 2)
 
         then:
-        !result.has("test.perm")
-        !result.has("test.perm.1")
-        !result.has("test.perm.2")
-        result.has("test.perm.3")
-        !result.has("group.admin")
+        result.check("test.perm") == FALSE
+        result.check("test.perm.1") == FALSE
+        result.check("test.perm.2") == FALSE
+        result.check("test.perm.3") == TRUE
+        result.check("group.admin") == UNRESOLVED
 
         when: "Merge second then first"
         result = new PermissionResolver()
@@ -124,21 +145,21 @@ class PermissionResolverTest extends Specification {
         result.merge(resolver1, 1)
 
         then: "Same effect"
-        !result.has("test.perm")
-        !result.has("test.perm.1")
-        !result.has("test.perm.2")
-        result.has("test.perm.3")
-        !result.has("group.admin")
+        result.check("test.perm") == FALSE
+        result.check("test.perm.1") == FALSE
+        result.check("test.perm.2") == FALSE
+        result.check("test.perm.3") == TRUE
+        result.check("group.admin") == UNRESOLVED
 
         when: "Merge first to second"
         resolver2.merge(resolver1, 1)
 
         then:
-        resolver2.has("test.perm")
-        !resolver2.has("test.perm.1")
-        !resolver2.has("test.perm.2")
-        resolver2.has("test.perm.3")
-        !resolver2.has("group.admin")
+        resolver2.check("test.perm") == TRUE
+        resolver2.check("test.perm.1") == FALSE
+        resolver2.check("test.perm.2") == FALSE
+        resolver2.check("test.perm.3") == TRUE
+        resolver2.check("group.admin") == UNRESOLVED
     }
 
     def "Test clear -> merge lower priority"() {
@@ -151,6 +172,6 @@ class PermissionResolverTest extends Specification {
         resolver.merge(inverted, 50)
 
         then:
-        resolver.has("test")
+        resolver.check("test") == TRUE
     }
 }
