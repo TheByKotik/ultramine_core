@@ -1,8 +1,5 @@
 package org.ultramine.permission;
 
-/**
- * Created by uguuseha on 08.05.14.
- */
 public class MetaResolver extends Resolver<Object>
 {
 	public static final MetaResolver BLANK_RESOLVER = new MetaResolver();

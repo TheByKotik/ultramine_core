@@ -62,7 +62,6 @@ class GroupPermissionTest extends Specification {
 
     def "Test recursive calculation"() {
         setup: "Prepare recursive groups"
-        def logger = Mock(Logger)
         def group1 = new GroupPermission("g1", [m1: "a"])
         def group2 = new GroupPermission("g2", [m2: "b"])
         group1.addPermission(group2)
@@ -71,20 +70,13 @@ class GroupPermissionTest extends Specification {
         when: "Calculate permissions"
         group1.calculate()
 
-        then: "Recursive calculation is logged"
-        thrown(RecursiveCalculationException)
-
-        and: "Both groups are not dirty"
+        then: "Both groups are not dirty"
         !group1.isDirty()
         !group2.isDirty()
 
-        and: "Both groups are calculated"
+        and: "Both groups have own meta"
         group1.getMeta().getString("m1")
-        group1.getMeta().getString("m2")
-
-        group2.getMeta().getString("m1")
         group2.getMeta().getString("m2")
-
     }
 
     def "Test dirty notification"() {

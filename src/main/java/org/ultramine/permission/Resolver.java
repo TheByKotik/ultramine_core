@@ -1,16 +1,14 @@
 package org.ultramine.permission;
 
-import java.util.Collection;
+import gnu.trove.map.hash.TObjectIntHashMap;
+
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by uguuseha on 08.05.14.
- */
 public class Resolver<T>
 {
 	protected Map<String, T> values = new HashMap<String, T>();
-	protected Map<String, Integer> priorities = new HashMap<String, Integer>();
+	protected TObjectIntHashMap<String> priorities = new TObjectIntHashMap<String>();
 
 	public void clear()
 	{

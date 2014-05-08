@@ -3,14 +3,15 @@ package org.ultramine.permission;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-/**
- * Created by Евгений on 08.05.2014.
- */
+
 public class GroupPermission extends MetaHolder implements IChangeablePermission, IDirtyListener
 {
-	private static Logger logger = LogManager.getLogger();
+	private static Logger logger = LogManager.getLogger(GroupPermission.class);
 
 	private String key;
 	private boolean dirty;
@@ -83,7 +84,7 @@ public class GroupPermission extends MetaHolder implements IChangeablePermission
 
 		permissions.put(permission.getKey(), permission);
 		if (permission instanceof IChangeablePermission)
-			((IChangeablePermission)permission).subscribe(this);
+			((IChangeablePermission) permission).subscribe(this);
 
 		makeDirty();
 	}
@@ -100,7 +101,7 @@ public class GroupPermission extends MetaHolder implements IChangeablePermission
 
 		IPermission perm = permissions.remove(key);
 		if (perm instanceof IChangeablePermission)
-			((IChangeablePermission)perm).unsubscribe(this);
+			((IChangeablePermission) perm).unsubscribe(this);
 
 		makeDirty();
 	}
@@ -126,6 +127,7 @@ public class GroupPermission extends MetaHolder implements IChangeablePermission
 	@Override
 	public void makeDirty()
 	{
+		logger.error(getName());
 		if (isDirty())
 			return;
 
@@ -148,31 +150,22 @@ public class GroupPermission extends MetaHolder implements IChangeablePermission
 		makeDirty();
 	}
 
-	public void calculate() throws RecursiveCalculationException
+	public void calculate()
 	{
 		if (!isDirty())
 			return;
+		dirty = false;
 
 		permissionResolver.clear();
 		metaResolver.clear();
 
-		try
+		for (IPermission permission : permissions.values())
 		{
-			for (IPermission permission : permissions.values())
-			{
-				permissionResolver.merge(permission.getPermissions(), permission.getPriority());
-				metaResolver.merge(permission.getMeta(), permission.getPriority());
-			}
+			permissionResolver.merge(permission.getPermissions(), permission.getPriority());
+			metaResolver.merge(permission.getMeta(), permission.getPriority());
 		}
-		catch (StackOverflowError ignored)
-		{
-			throw new RecursiveCalculationException(this);
-		}
-		finally
-		{
-			metaResolver.merge(innerMeta, Integer.MAX_VALUE);
-			dirty = false;
-		}
+
+		metaResolver.merge(innerMeta, Integer.MAX_VALUE);
 	}
 
 	@Override
@@ -185,7 +178,7 @@ public class GroupPermission extends MetaHolder implements IChangeablePermission
 	public boolean equals(Object obj)
 	{
 		if (obj instanceof IPermission)
-			return getKey().equals(((IPermission)obj).getKey());
+			return getKey().equals(((IPermission) obj).getKey());
 
 		return super.equals(obj);
 	}

@@ -3,9 +3,6 @@ package org.ultramine.permission;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Евгений on 08.05.2014.
- */
 public abstract class MetaHolder
 {
 	protected Map<String, Object> innerMeta;

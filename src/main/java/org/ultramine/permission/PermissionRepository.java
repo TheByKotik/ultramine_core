@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Евгений on 08.05.2014.
- */
 public class PermissionRepository
 {
 	private Map<String, IPermission> permissions = new HashMap<String, IPermission>();
