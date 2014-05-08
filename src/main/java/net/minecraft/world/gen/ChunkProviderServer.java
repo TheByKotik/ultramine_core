@@ -38,6 +38,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.ChunkIOExecutor;
+import org.ultramine.server.chunk.ChunkMap;
 
 public class ChunkProviderServer implements IChunkProvider
 {
@@ -47,7 +48,7 @@ public class ChunkProviderServer implements IChunkProvider
 	public IChunkProvider currentChunkProvider;
 	public IChunkLoader currentChunkLoader;
 	public boolean loadChunkOnProvideRequest = true;
-	public TIntObjectMap<Chunk> loadedChunkHashMap = new TIntObjectHashMap<Chunk>();
+	public ChunkMap loadedChunkHashMap = new ChunkMap();
 	public WorldServer worldObj;
 	private static final String __OBFID = "CL_00001436";
 
@@ -61,7 +62,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public boolean chunkExists(int par1, int par2)
 	{
-		return this.loadedChunkHashMap.containsKey(ChunkHash.chunkToKey(par1, par2));
+		return this.loadedChunkHashMap.contains(par1, par2);
 	}
 
 	public void unloadChunksIfNotNearSpawn(int par1, int par2)
@@ -99,12 +100,12 @@ public class ChunkProviderServer implements IChunkProvider
 	{
 		int k = ChunkHash.chunkToKey(par1, par2);
 		this.chunksToUnload.remove(k);
-		Chunk chunk = (Chunk)this.loadedChunkHashMap.get(k);
+		Chunk chunk = (Chunk)this.loadedChunkHashMap.get(par1, par2);
 
 		if (chunk == null)
 		{
-			chunk = ForgeChunkManager.fetchDormantChunk(k, this.worldObj);
-			if (chunk == null)
+//			chunk = ForgeChunkManager.fetchDormantChunk(k, this.worldObj);
+//			if (chunk == null)
 			{
 				chunk = this.safeLoadChunk(par1, par2);
 			}
@@ -133,7 +134,7 @@ public class ChunkProviderServer implements IChunkProvider
 				}
 			}
 
-			this.loadedChunkHashMap.put(k, chunk);
+			this.loadedChunkHashMap.put(par1, par2, chunk);
 			chunk.onChunkLoad();
 			chunk.populateChunk(this, this, par1, par2);
 			chunk.func_150804_b(false);
@@ -144,7 +145,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public Chunk provideChunk(int par1, int par2)
 	{
-		Chunk chunk = this.loadedChunkHashMap.get(ChunkHash.chunkToKey(par1, par2));
+		Chunk chunk = this.loadedChunkHashMap.get(par1, par2);
 		return chunk == null ? (!this.worldObj.findingSpawnPoint && !this.loadChunkOnProvideRequest ? this.defaultEmptyChunk : this.loadChunk(par1, par2)) : chunk;
 	}
 
@@ -368,7 +369,7 @@ public class ChunkProviderServer implements IChunkProvider
 	
 	public void loadAsync(int x, int z, Runnable callback) //XXX
 	{
-		if(loadedChunkHashMap.containsKey(ChunkHash.chunkToKey(x, z)))
+		if(loadedChunkHashMap.contains(x, z))
 		{
 			callback.run();
 			return;
@@ -381,6 +382,6 @@ public class ChunkProviderServer implements IChunkProvider
 	
 	public Chunk getChunkIfExists(int cx, int cz)
 	{
-		return loadedChunkHashMap.get(ChunkHash.chunkToKey(cx, cz));
+		return loadedChunkHashMap.get(cx, cz);
 	}
 }

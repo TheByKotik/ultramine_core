@@ -42,7 +42,7 @@ class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChu
 
 		// See if someone already loaded this chunk while we were working on it
 		// (API, etc)
-		if(queuedChunk.provider.loadedChunkHashMap.containsKey(queuedChunk.coords))
+		if(queuedChunk.provider.loadedChunkHashMap.contains(queuedChunk.coords))
 		{
 			// Make sure it isn't queued for unload, we need it
 			queuedChunk.provider.chunksToUnload.remove(queuedChunk.coords); // Spigot
