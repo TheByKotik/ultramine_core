@@ -1,5 +1,8 @@
 package org.ultramine.permission;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.*;
 
 /**
@@ -7,13 +10,15 @@ import java.util.*;
  */
 public class GroupPermission extends MetaHolder implements IChangeablePermission, IDirtyListener
 {
+	private static Logger logger = LogManager.getLogger();
+
 	private String key;
 	private boolean dirty;
 
-	private PermissionResolver resolver = new PermissionResolver();
+	private PermissionResolver permissionResolver = new PermissionResolver();
 	private List<IDirtyListener> listeners = new ArrayList<IDirtyListener>();
-	private Set<IPermission> permissions = new HashSet<IPermission>();
-	private Map<String, Object> effectiveMeta = new HashMap<String, Object>();
+	private Map<String, IPermission> permissions = new HashMap<String, IPermission>();
+	private MetaResolver metaResolver = new MetaResolver();
 
 	public GroupPermission(String key)
 	{
@@ -54,32 +59,49 @@ public class GroupPermission extends MetaHolder implements IChangeablePermission
 	}
 
 	@Override
-	public PermissionResolver getResolver()
+	public PermissionResolver getPermissions()
 	{
 		if (isDirty())
 			calculate();
 
-		return resolver;
+		return permissionResolver;
 	}
 
 	@Override
-	public Map<String, Object> getEffectiveMeta()
+	public MetaResolver getMeta()
 	{
 		if (isDirty())
 			calculate();
 
-		return effectiveMeta;
+		return metaResolver;
 	}
 
 	public void addPermission(IPermission permission)
 	{
-		permissions.add(permission);
+		if (permissions.containsKey(permission.getKey()))
+			return;
+
+		permissions.put(permission.getKey(), permission);
+		if (permission instanceof IChangeablePermission)
+			((IChangeablePermission)permission).subscribe(this);
+
 		makeDirty();
 	}
 
 	public void removePermission(IPermission permission)
 	{
-		permissions.remove(permission);
+		removePermission(permission.getKey());
+	}
+
+	public void removePermission(String key)
+	{
+		if (!permissions.containsKey(key))
+			return;
+
+		IPermission perm = permissions.remove(key);
+		if (perm instanceof IChangeablePermission)
+			((IChangeablePermission)perm).unsubscribe(this);
+
 		makeDirty();
 	}
 
@@ -113,47 +135,50 @@ public class GroupPermission extends MetaHolder implements IChangeablePermission
 	}
 
 	@Override
-	public void setValue(String key, Object value)
+	public void setMeta(String key, Object value)
 	{
-		super.setValue(key, value);
+		super.setMeta(key, value);
 		makeDirty();
 	}
 
 	@Override
-	public void removeValue(String key)
+	public void removeMeta(String key)
 	{
-		super.removeValue(key);
+		super.removeMeta(key);
 		makeDirty();
 	}
 
-	public void calculate()
+	public void calculate() throws RecursiveCalculationException
 	{
 		if (!isDirty())
 			return;
 
-		resolver.clear();
-		for (IPermission permission : permissions)
-			resolver.merge(permission.getResolver(), permission.getPriority());
+		permissionResolver.clear();
+		metaResolver.clear();
 
-		effectiveMeta.clear();
-		Map<String, Integer> priorities = new HashMap<String, Integer>();
-
-		for (IPermission permission : permissions)
+		try
 		{
-			Map<String, Object> meta = permission.getEffectiveMeta();
-
-			for (String key : meta.keySet())
-				if (!priorities.containsKey(key) || permission.getPriority() > priorities.get(key))
-				{
-					effectiveMeta.put(key, meta.get(key));
-					priorities.put(key, permission.getPriority());
-				}
+			for (IPermission permission : permissions.values())
+			{
+				permissionResolver.merge(permission.getPermissions(), permission.getPriority());
+				metaResolver.merge(permission.getMeta(), permission.getPriority());
+			}
 		}
+		catch (StackOverflowError ignored)
+		{
+			throw new RecursiveCalculationException(this);
+		}
+		finally
+		{
+			metaResolver.merge(innerMeta, Integer.MAX_VALUE);
+			dirty = false;
+		}
+	}
 
-		for (String key : innerMeta.keySet())
-			effectiveMeta.put(key, innerMeta.get(key));
 
-		this.dirty = false;
+	private void mergeResolvers() throws StackOverflowError
+	{
+
 	}
 
 	@Override

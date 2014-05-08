@@ -81,15 +81,15 @@ public class PermissionRepository
 		}
 
 		@Override
-		public PermissionResolver getResolver()
+		public PermissionResolver getPermissions()
 		{
-			return wrappedPermission.getResolver();
+			return wrappedPermission.getPermissions();
 		}
 
 		@Override
-		public Map<String, Object> getEffectiveMeta()
+		public MetaResolver getMeta()
 		{
-			return wrappedPermission.getEffectiveMeta();
+			return wrappedPermission.getMeta();
 		}
 
 		@Override

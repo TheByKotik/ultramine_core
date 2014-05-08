@@ -10,8 +10,9 @@ class PermissionResolverTest extends Specification {
 
     def setupSpec() {
         PermissionResolver.metaClass.addEntry = { String key, Boolean value, Integer prio ->
-            delegate.permissions.put(key, value)
+            delegate.values.put(key, value)
             delegate.priorities.put(key, prio)
+            return delegate
         }
     }
 
@@ -138,6 +139,18 @@ class PermissionResolverTest extends Specification {
         !resolver2.has("test.perm.2")
         resolver2.has("test.perm.3")
         !resolver2.has("group.admin")
+    }
 
+    def "Test clear -> merge lower priority"() {
+        setup: "resolver(^test, 100)"
+        def resolver = new PermissionResolver().addEntry("test", false, 100)
+        def inverted = new PermissionResolver().addEntry("test", true, 50)
+
+        when:
+        resolver.clear()
+        resolver.merge(inverted, 50)
+
+        then:
+        resolver.has("test")
     }
 }

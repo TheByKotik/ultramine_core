@@ -20,38 +20,20 @@ public abstract class MetaHolder
 		innerMeta = meta;
 	}
 
-	public void setValue(String key, Object value)
+	public void setMeta(String key, Object value)
 	{
 		innerMeta.put(key, value);
 	}
 
-	public void removeValue(String key)
+	public void removeMeta(String key)
 	{
 		innerMeta.remove(key);
 	}
 
-	public String getString(String key)
-	{
-		Map<String, Object> meta = getEffectiveMeta();
-		if (meta.containsKey(key))
-			return (String)meta.get(key);
-		else
-			return "";
-	}
-
-	public int getInt(String key)
-	{
-		Map<String, Object> meta = getEffectiveMeta();
-		if (meta.containsKey(key))
-			return (Integer)meta.get(key);
-		else
-			return 0;
-	}
-
 	public int getPriority()
 	{
-		return getInt("priority");
+		return getMeta().getInt("priority");
 	}
 
-	public abstract Map<String, Object> getEffectiveMeta();
+	public abstract MetaResolver getMeta();
 }

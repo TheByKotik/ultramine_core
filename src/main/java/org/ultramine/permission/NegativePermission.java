@@ -1,7 +1,5 @@
 package org.ultramine.permission;
 
-import java.util.Map;
-
 /**
  * Created by Евгений on 07.05.2014.
  */
@@ -14,14 +12,14 @@ public class NegativePermission implements IChangeablePermission
 	public NegativePermission(IPermission permission)
 	{
 		this.permission = permission;
-		this.resolver = PermissionResolver.createInverted(permission.getResolver());
+		this.resolver = PermissionResolver.createInverted(permission.getPermissions());
 		this.isChangeable = false;
 	}
 
 	public NegativePermission(IChangeablePermission permission)
 	{
 		this.permission = permission;
-		this.resolver = PermissionResolver.createInverted(permission.getResolver());
+		this.resolver = PermissionResolver.createInverted(permission.getPermissions());
 		this.isChangeable = true;
 	}
 
@@ -53,17 +51,17 @@ public class NegativePermission implements IChangeablePermission
 	}
 
 	@Override
-	public PermissionResolver getResolver()
+	public PermissionResolver getPermissions()
 	{
 		if (isDirty())
-			resolver = PermissionResolver.createInverted(permission.getResolver());
+			resolver = PermissionResolver.createInverted(permission.getPermissions());
 		return resolver;
 	}
 
 	@Override
-	public Map<String, Object> getEffectiveMeta()
+	public MetaResolver getMeta()
 	{
-		return permission.getEffectiveMeta();
+		return permission.getMeta();
 	}
 
 	@Override

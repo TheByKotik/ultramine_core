@@ -14,8 +14,8 @@ class NegativePermissionTest extends Specification {
             getName() >> "Test Name"
             getDescription() >> "Test Description"
             getPriority() >> 100
-            getResolver() >> PermissionResolver.createForKey("test.key", 1)
-            getEffectiveMeta() >> [test: "data"]
+            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
+            getMeta() >> Mock(MetaResolver) { getString(_) >> "mock" }
         }
 
         when: "Create new NegativePermission"
@@ -26,14 +26,14 @@ class NegativePermissionTest extends Specification {
         perm.getName() == "NOT: Test Name"
         perm.getDescription() == "NOT: Test Description"
         perm.getPriority() == 100
-        perm.getEffectiveMeta() == [test: "data"]
-        !perm.getResolver().has("test.key")
+        perm.getMeta().getString("1") == "mock"
+        !perm.getPermissions().has("test.key")
     }
 
     def "Test isDirty IPermission"() {
         setup:
         IPermission permission = Mock(IPermission) {
-            getResolver() >> PermissionResolver.createForKey("test.key", 1)
+            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
             isDirty() >> true
         }
 
@@ -48,7 +48,7 @@ class NegativePermissionTest extends Specification {
     def "Test subscribe/unsubscribe IPermission"() {
         setup:
         IPermission permission = Mock(IPermission) {
-            getResolver() >> PermissionResolver.createForKey("test.key", 1)
+            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
         }
 
         def listener = Mock(IDirtyListener)
@@ -70,8 +70,8 @@ class NegativePermissionTest extends Specification {
             getName() >> "Test Name"
             getDescription() >> "Test Description"
             getPriority() >> 100
-            getResolver() >> PermissionResolver.createForKey("test.key", 1)
-            getEffectiveMeta() >> [test: "data"]
+            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
+            getMeta() >> Mock(MetaResolver) { getString(_) >> "mock" }
         }
 
         when: "Create new NegativePermission"
@@ -82,14 +82,14 @@ class NegativePermissionTest extends Specification {
         perm.getName() == "NOT: Test Name"
         perm.getDescription() == "NOT: Test Description"
         perm.getPriority() == 100
-        perm.getEffectiveMeta() == [test: "data"]
-        !perm.getResolver().has("test.key")
+        perm.getMeta().getString("1") == "mock"
+        !perm.getPermissions().has("test.key")
     }
 
     def "Test isDirty IChangeablePermission"() {
         setup:
         IPermission permission = Mock(IChangeablePermission) {
-            getResolver() >> PermissionResolver.createForKey("test.key", 1)
+            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
         }
         def perm = new NegativePermission(permission)
 
@@ -104,7 +104,7 @@ class NegativePermissionTest extends Specification {
     def "Test subscribe/unsubscribe IChangeablePermission"() {
         setup:
         IPermission permission = Mock(IChangeablePermission) {
-            getResolver() >> PermissionResolver.createForKey("test.key", 1)
+            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
         }
 
         def listener = Mock(IDirtyListener)
@@ -123,7 +123,7 @@ class NegativePermissionTest extends Specification {
     def "Test blank description"() {
         setup: "Permission with blank description"
         IPermission permission = Mock(IChangeablePermission) {
-            getResolver() >> PermissionResolver.createForKey("test.key", 1)
+            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
             getDescription() >> ""
         }
 

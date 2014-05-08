@@ -1,8 +1,5 @@
 package org.ultramine.permission;
 
-import java.util.Collections;
-import java.util.Map;
-
 /**
  * Created by Евгений on 07.05.2014.
  */
@@ -51,15 +48,15 @@ public class Permission implements IPermission
 	}
 
 	@Override
-	public PermissionResolver getResolver()
+	public PermissionResolver getPermissions()
 	{
 		return resolver;
 	}
 
 	@Override
-	public Map<String, Object> getEffectiveMeta()
+	public MetaResolver getMeta()
 	{
-		return Collections.<String, Object>emptyMap();
+		return MetaResolver.BLANK_RESOLVER;
 	}
 
 	@Override
