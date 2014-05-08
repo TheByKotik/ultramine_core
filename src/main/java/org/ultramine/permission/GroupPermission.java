@@ -175,12 +175,6 @@ public class GroupPermission extends MetaHolder implements IChangeablePermission
 		}
 	}
 
-
-	private void mergeResolvers() throws StackOverflowError
-	{
-
-	}
-
 	@Override
 	public int hashCode()
 	{
