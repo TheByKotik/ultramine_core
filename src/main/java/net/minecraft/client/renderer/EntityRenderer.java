@@ -54,6 +54,7 @@ import org.lwjgl.util.glu.Project;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -1056,7 +1057,9 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
 				try
 				{
-					this.mc.currentScreen.drawScreen(k, l, par1);
+					if (!MinecraftForge.EVENT_BUS.post(new DrawScreenEvent.Pre(this.mc.currentScreen, k, l, par1)))
+						this.mc.currentScreen.drawScreen(k, l, par1);
+					MinecraftForge.EVENT_BUS.post(new DrawScreenEvent.Post(this.mc.currentScreen, k, l, par1));
 				}
 				catch (Throwable throwable)
 				{

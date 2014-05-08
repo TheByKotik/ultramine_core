@@ -27,9 +27,15 @@ public class WeightedRandom
 		{
 			throw new IllegalArgumentException();
 		}
-		else
+		return getItem(par1Collection, par0Random.nextInt(par2));
+	}
+
+	//Forge: Added to allow custom random implementations, Modder is responsible for making sure the 
+	//'weight' is under the totalWeight of the items.
+	public static WeightedRandom.Item getItem(Collection par1Collection, int weight)
+	{
 		{
-			int j = par0Random.nextInt(par2);
+			int j = weight;
 			Iterator iterator = par1Collection.iterator();
 			WeightedRandom.Item item;
 
@@ -75,9 +81,15 @@ public class WeightedRandom
 		{
 			throw new IllegalArgumentException();
 		}
-		else
+		return getItem(par1ArrayOfWeightedRandomItem, par0Random.nextInt(par2));
+	}
+
+	//Forge: Added to allow custom random implementations, Modder is responsible for making sure the 
+	//'weight' is under the totalWeight of the items.
+	public static WeightedRandom.Item getItem(WeightedRandom.Item[] par1ArrayOfWeightedRandomItem, int weight)
+	{
 		{
-			int j = par0Random.nextInt(par2);
+			int j = weight;
 			WeightedRandom.Item[] aitem = par1ArrayOfWeightedRandomItem;
 			int k = par1ArrayOfWeightedRandomItem.length;
 

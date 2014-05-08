@@ -135,7 +135,7 @@ public abstract class Entity
 	public ArrayList<EntityItem> capturedDrops = new ArrayList<EntityItem>();
 	private UUID persistentID;
 
-	private HashMap<String, IExtendedEntityProperties> extendedProperties;
+	protected HashMap<String, IExtendedEntityProperties> extendedProperties;
 
 	public int getEntityId()
 	{
