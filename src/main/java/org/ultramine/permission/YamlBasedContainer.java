@@ -1,6 +1,5 @@
 package org.ultramine.permission;
 
-import org.apache.commons.io.FilenameUtils;
 import org.ultramine.server.util.YamlConfigProvider;
 
 import java.io.File;
@@ -11,25 +10,15 @@ import java.util.Map;
 
 public class YamlBasedContainer extends UserContainer<User>
 {
-	private static final String DP_PREFIX = "yaml-dp.";
-
 	private File config;
 	private PermissionRepository repository;
 	private GroupPermission defaultPermissions;
-	private PermissionHolder defaultUser;
 
 	public YamlBasedContainer(PermissionRepository permissionRepository, File config)
 	{
 		this.config = config;
 		this.repository = permissionRepository;
-
-		String name = FilenameUtils.getBaseName(config.getName()).toLowerCase();
-		defaultPermissions = new GroupPermission(DP_PREFIX + name);
-		defaultPermissions.setMeta("description", "Default permissions for " + name);
-
-		defaultUser = new PermissionHolder();
-		defaultUser.addPermission(defaultPermissions);
-		repository.registerPermission(defaultPermissions);
+		this.defaultPermissions = new GroupPermission("");
 
 		reload();
 	}
@@ -94,7 +83,7 @@ public class YamlBasedContainer extends UserContainer<User>
 		PermissionResolver.CheckResult result = super.check(userName, permissionKey);
 
 		if (result == PermissionResolver.CheckResult.UNRESOLVED)
-			result = defaultUser.getPermissions().check(permissionKey);
+			result = defaultPermissions.getPermissions().check(permissionKey);
 
 		return result;
 	}

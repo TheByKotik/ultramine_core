@@ -98,7 +98,7 @@ users:
 """
 
         when: "Try to load this config"
-        def anotherContainer = new YamlBasedContainer(new PermissionRepository(), file)
+        def anotherContainer = new YamlBasedContainer(repository, file)
 
         then: "Container loaded correctly"
         anotherContainer.checkUserPermission("test", "d1")
