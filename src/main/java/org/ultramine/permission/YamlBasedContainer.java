@@ -16,7 +16,7 @@ public class YamlBasedContainer extends UserContainer<User>
 	private File config;
 	private PermissionRepository repository;
 	private GroupPermission defaultPermissions;
-	private User defaultUser;
+	private PermissionHolder defaultUser;
 
 	public YamlBasedContainer(PermissionRepository permissionRepository, File config)
 	{
@@ -27,8 +27,9 @@ public class YamlBasedContainer extends UserContainer<User>
 		defaultPermissions = new GroupPermission(DP_PREFIX + name);
 		defaultPermissions.setMeta("description", "Default permissions for " + name);
 
-		defaultUser = new User(DP_PREFIX + name);
+		defaultUser = new PermissionHolder();
 		defaultUser.addPermission(defaultPermissions);
+		repository.registerPermission(defaultPermissions);
 
 		reload();
 	}
@@ -36,13 +37,20 @@ public class YamlBasedContainer extends UserContainer<User>
 	public void reload()
 	{
 		WorldData data = YamlConfigProvider.getOrCreateConfig(config, WorldData.class);
+		if (data == null)
+			return;
 
 		defaultPermissions.clearPermissions();
-		for (String permission : data.default_permissions)
-			defaultPermissions.addPermission(repository.getPermission(permission));
-		repository.registerPermission(defaultPermissions);
+		if (data.default_permissions != null)
+		{
+			for (String permission : data.default_permissions)
+				defaultPermissions.addPermission(repository.getPermission(permission));
+		}
 
 		clear();
+		if (data.users == null)
+			return;
+
 		for (Map.Entry<String, WorldData.UserData> userData : data.users.entrySet())
 		{
 			User user = new User(userData.getKey(), userData.getValue().meta);
@@ -64,6 +72,7 @@ public class YamlBasedContainer extends UserContainer<User>
 			WorldData.UserData userData = new WorldData.UserData();
 			userData.permissions = user.getInnerPermissions();
 			userData.meta = user.getInnerMeta();
+			data.users.put(user.getName(), userData);
 		}
 
 		YamlConfigProvider.saveConfig(config, data);

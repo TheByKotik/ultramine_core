@@ -45,6 +45,12 @@ public class NegativePermission extends PermissionRepository.ProxyPermission imp
 	}
 
 	@Override
+	public MetaResolver getMeta()
+	{
+		return MetaResolver.BLANK_RESOLVER;
+	}
+
+	@Override
 	public void makeDirty()
 	{
 		dirty = true;
