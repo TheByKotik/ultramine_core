@@ -2,6 +2,9 @@ package net.minecraft.world.chunk;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gnu.trove.map.TShortObjectMap;
+import gnu.trove.map.hash.TShortObjectHashMap;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Callable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -35,6 +39,7 @@ import net.minecraftforge.event.world.ChunkEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.chunk.ChunkHash;
 
 public class Chunk
 {
@@ -819,12 +824,13 @@ public class Chunk
 
 	public TileEntity func_150806_e(int p_150806_1_, int p_150806_2_, int p_150806_3_)
 	{
-		ChunkPosition chunkposition = new ChunkPosition(p_150806_1_, p_150806_2_, p_150806_3_);
-		TileEntity tileentity = (TileEntity)this.chunkTileEntityMap.get(chunkposition);
+		short hash = ChunkHash.chunkCoordToHash(p_150806_1_, p_150806_2_, p_150806_3_);
+		TileEntity tileentity = fastTileEntityMap.get(hash);
 
 		if (tileentity != null && tileentity.isInvalid())
 		{
-			chunkTileEntityMap.remove(chunkposition);
+			chunkTileEntityMap.remove(new ChunkPosition(p_150806_1_, p_150806_2_, p_150806_3_));
+			fastTileEntityMap.remove(hash);
 			tileentity = null;
 		}
 
@@ -861,6 +867,7 @@ public class Chunk
 	public void func_150812_a(int p_150812_1_, int p_150812_2_, int p_150812_3_, TileEntity p_150812_4_)
 	{
 		ChunkPosition chunkposition = new ChunkPosition(p_150812_1_, p_150812_2_, p_150812_3_);
+		short hash = ChunkHash.chunkCoordToHash(p_150812_1_, p_150812_2_, p_150812_3_);
 		p_150812_4_.setWorldObj(this.worldObj);
 		p_150812_4_.xCoord = this.xPosition * 16 + p_150812_1_;
 		p_150812_4_.yCoord = p_150812_2_;
@@ -869,13 +876,12 @@ public class Chunk
 		int metadata = getBlockMetadata(p_150812_1_, p_150812_2_, p_150812_3_);
 		if (this.getBlock(p_150812_1_, p_150812_2_, p_150812_3_).hasTileEntity(metadata))
 		{
-			if (this.chunkTileEntityMap.containsKey(chunkposition))
-			{
-				((TileEntity)this.chunkTileEntityMap.get(chunkposition)).invalidate();
-			}
+			TileEntity old = fastTileEntityMap.get(hash);
+			if(old != null) old.invalidate();
 
 			p_150812_4_.validate();
 			this.chunkTileEntityMap.put(chunkposition, p_150812_4_);
+			fastTileEntityMap.put(hash, p_150812_4_);
 		}
 	}
 
@@ -891,6 +897,8 @@ public class Chunk
 			{
 				tileentity.invalidate();
 			}
+			
+			fastTileEntityMap.remove(ChunkHash.chunkCoordToHash(p_150805_1_, p_150805_2_, p_150805_3_));
 		}
 	}
 
@@ -1482,12 +1490,13 @@ public class Chunk
 	 */
 	public TileEntity getTileEntityUnsafe(int x, int y, int z)
 	{
-		ChunkPosition chunkposition = new ChunkPosition(x, y, z);
-		TileEntity tileentity = (TileEntity)this.chunkTileEntityMap.get(chunkposition);
+		short hash = ChunkHash.chunkCoordToHash(x, y, z);
+		TileEntity tileentity = fastTileEntityMap.get(hash);
 
 		if (tileentity != null && tileentity.isInvalid())
 		{
-			chunkTileEntityMap.remove(chunkposition);
+			chunkTileEntityMap.remove(new ChunkPosition(x, y, z));
+			fastTileEntityMap.remove(hash);
 			tileentity = null;
 		}
 
@@ -1504,14 +1513,19 @@ public class Chunk
 	 */
 	public void removeInvalidTileEntity(int x, int y, int z)
 	{
-		ChunkPosition position = new ChunkPosition(x, y, z);
+		short hash = ChunkHash.chunkCoordToHash(x, y, z);
 		if (isChunkLoaded)
 		{
-			TileEntity entity = (TileEntity)chunkTileEntityMap.get(position);
+			TileEntity entity = fastTileEntityMap.get(hash);
 			if (entity != null && entity.isInvalid())
 			{
-				chunkTileEntityMap.remove(position);
+				chunkTileEntityMap.remove(new ChunkPosition(x, y, z));
+				fastTileEntityMap.remove(hash);
 			}
 		}
 	}
+	
+	/* ======================================== ULTRAMINE START =====================================*/
+	
+	private final TShortObjectMap<TileEntity> fastTileEntityMap = new TShortObjectHashMap<TileEntity>();
 }
