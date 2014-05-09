@@ -7,7 +7,7 @@ import static org.ultramine.permission.PermissionRepository.ProxyPermission.Prox
 
 class PermissionRepositoryTest extends Specification {
 
-    def "Test get proxy permission permission"() {
+    def "Test get proxy permission"() {
         setup:
         def detector = new MockDetector()
         def perm = Mock(IPermission) {
@@ -84,7 +84,7 @@ class PermissionRepositoryTest extends Specification {
         def proxy = repository.getPermission("key")
         proxy.subscribe(listener)
 
-        and: "And IPermission is registered"
+        and: "And IChangeablePermission is registered"
         repository.registerPermission(perm)
 
         then: "Listener is notified"
@@ -120,7 +120,7 @@ class PermissionRepositoryTest extends Specification {
         proxy.subscribe(listener)
         proxy.unsubscribe(listener)
 
-        and: "And IPermission is registered"
+        and: "And IChangeablePermission is registered"
         repository.registerPermission(perm)
 
         then: "0 listener passed to proxy"
