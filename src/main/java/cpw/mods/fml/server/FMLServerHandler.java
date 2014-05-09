@@ -85,6 +85,7 @@ public class FMLServerHandler implements IFMLSidedHandler
 	{
 		server = minecraftServer;
 		Loader.instance().loadMods();
+		Loader.instance().preinitializeMods();
 	}
 
 	/**
@@ -177,8 +178,7 @@ public class FMLServerHandler implements IFMLSidedHandler
 				// rudimentary command processing, check for fml confirm/cancel and stop commands
 				synchronized (dedServer.pendingCommandList)
 				{
-
-					for (Iterator<ServerCommand> it = GenericIterableFactory.newCastingIterable(dedServer.pendingCommandList, ServerCommand.class).iterator(); it.hasNext();)
+					for (Iterator<ServerCommand> it = GenericIterableFactory.newCastingIterable(dedServer.pendingCommandList, ServerCommand.class).iterator(); it.hasNext(); )
 					{
 						String cmd = it.next().command.trim().toLowerCase();
 

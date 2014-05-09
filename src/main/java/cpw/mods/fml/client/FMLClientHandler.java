@@ -234,6 +234,20 @@ public class FMLClientHandler implements IFMLSidedHandler
 			client.refreshResources();
 		}
 
+		try
+		{
+			Loader.instance().preinitializeMods();
+		}
+		catch (CustomModLoadingErrorDisplayException custom)
+		{
+			FMLLog.log(Level.ERROR, custom, "A custom exception was thrown by a mod, the game will now halt");
+			customError = custom;
+		}
+		catch (LoaderException le)
+		{
+			haltGame("There was a severe problem during mod loading that has caused the game to fail", le);
+			return;
+		}
 		Map<String,Map<String,String>> sharedModList = (Map<String, Map<String, String>>) Launch.blackboard.get("modList");
 		if (sharedModList == null)
 		{
@@ -285,8 +299,7 @@ public class FMLClientHandler implements IFMLSidedHandler
 			return;
 		}
 
-		// Reload resources has to happen early, or minecraft itself has resource loading issues
-		// This is a second refresh for mods that register stuff late!
+		// Reload resources
 		client.refreshResources();
 		RenderingRegistry.instance().loadEntityRenderers((Map<Class<? extends Entity>, Render>)RenderManager.instance.entityRenderMap);
 		guiFactories = HashBiMap.create();
@@ -812,7 +825,7 @@ public class FMLClientHandler implements IFMLSidedHandler
 	public void setPlayClient(NetHandlerPlayClient netHandlerPlayClient)
 	{
 		playClientBlock.countDown();
-		this.currentPlayClient = new WeakReference(netHandlerPlayClient);
+		this.currentPlayClient = new WeakReference<NetHandlerPlayClient>(netHandlerPlayClient);
 	}
 
 	@Override
@@ -836,6 +849,7 @@ public class FMLClientHandler implements IFMLSidedHandler
 	{
 		if (side == Side.CLIENT)
 		{
+			waitForPlayClient();
 			bus.post(new FMLNetworkEvent.CustomPacketRegistrationEvent<NetHandlerPlayClient>(manager, channelSet, channel, side, NetHandlerPlayClient.class));
 		}
 		else
