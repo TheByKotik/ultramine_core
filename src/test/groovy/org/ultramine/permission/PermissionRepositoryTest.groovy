@@ -141,4 +141,19 @@ class PermissionRepositoryTest extends Specification {
         repository.getPermission("c").isDirty()
         !repository.getPermission("c").isDirty()
     }
+
+    def "Test negative key"() {
+        setup:
+        def repository = new PermissionRepository()
+
+        when: "Try to get permission with negative key"
+        def perm = repository.getPermission("^group.admin")
+
+        then: "Proxy of negative permission is return"
+        perm.class == NegativePermission
+
+        and: "Negative permission linked to proxy"
+        perm.getWrappedPermission().getName() == "group.admin"
+        perm.getWrappedPermission().getType() == DUMMY
+    }
 }

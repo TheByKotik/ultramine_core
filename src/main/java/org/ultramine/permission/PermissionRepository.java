@@ -2,26 +2,37 @@ package org.ultramine.permission;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class PermissionRepository
 {
-	private Map<String, IPermission> permissions = new HashMap<String, IPermission>();
+	private Set<String> registeredPermissions = new HashSet<String>();
 	private Map<String, ProxyPermission> proxyPermissions = new HashMap<String, ProxyPermission>();
 
 	public ProxyPermission getPermission(String key)
 	{
 		key = key.toLowerCase();
+
 		if (!proxyPermissions.containsKey(key))
-			proxyPermissions.put(key, new ProxyPermission(key));
+		{
+			if (key.startsWith("^"))
+			{
+				proxyPermissions.put(key, new NegativePermission(getPermission(key.substring(1))));
+				registeredPermissions.add(key);
+			}
+			else
+				proxyPermissions.put(key, new ProxyPermission(key));
+		}
 
 		return proxyPermissions.get(key);
 	}
 
 	public void registerPermission(IPermission permission)
 	{
-		if (permissions.containsKey(permission.getKey()))
+		if (registeredPermissions.contains(permission.getKey()))
 			throw new IllegalArgumentException("Permission already registered");
 
 		ProxyPermission proxy = getPermission(permission.getKey());
@@ -30,7 +41,7 @@ public class PermissionRepository
 		else
 			proxy.linkSimple(permission);
 
-		permissions.put(permission.getKey(), permission);
+		registeredPermissions.add(permission.getKey());
 	}
 
 	public static class ProxyPermission implements IChangeablePermission
@@ -40,11 +51,23 @@ public class PermissionRepository
 		private ProxyType proxyType;
 		private List<IDirtyListener> listeners = new ArrayList<IDirtyListener>();
 
-		private ProxyPermission(String key)
+		public ProxyPermission(String key)
 		{
 			this.key = key;
 			this.wrappedPermission = new Permission(key);
 			this.proxyType = ProxyType.DUMMY;
+		}
+
+		public ProxyPermission(IPermission permission)
+		{
+			this.key = permission.getKey();
+			this.wrappedPermission = permission;
+			if (permission instanceof ProxyPermission)
+				proxyType = ProxyType.DUMMY;
+			else if (permission instanceof IChangeablePermission)
+				proxyType = ProxyType.CHANGEABLE;
+			else
+				proxyType = ProxyType.SIMPLE;
 		}
 
 		@Override

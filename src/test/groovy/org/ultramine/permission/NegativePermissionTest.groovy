@@ -97,9 +97,9 @@ class NegativePermissionTest extends Specification {
         when: "Wrapped permission dirty changes"
         permission.isDirty() >>> [true, false]
 
-        then: "Negative permission dirty is changing too"
+        then: "Negative permission dirty is not changing"
         perm.isDirty()
-        !perm.isDirty()
+        perm.isDirty()
     }
 
     def "Test subscribe/unsubscribe IChangeablePermission"() {

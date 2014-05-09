@@ -1,7 +1,5 @@
 package org.ultramine.permission
 
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
 import spock.lang.Specification
 
 /**
@@ -64,45 +62,6 @@ class GroupPermissionTest extends Specification {
         then: "Group unsubscribes to IChangeablePermission"
         1 * cPerm.unsubscribe(group)
         0 * sPerm.unsubscribe(_)
-    }
-
-    def "Test dirty methods"() {
-        setup:
-        def listener = Mock(IDirtyListener)
-        def group = new GroupPermission("group")
-        group.subscribe(listener)
-
-        when: "Call setMeta method"
-        group.calculate()
-        group.setMeta("test", 21)
-
-        then: "Group becomes dirty"
-        group.isDirty()
-        1 * listener.makeDirty()
-
-        when: "Call removeMeta method"
-        group.calculate()
-        group.removeMeta("test")
-
-        then: "Group becomes dirty"
-        group.isDirty()
-        1 * listener.makeDirty()
-
-        when: "Call addPermission method"
-        group.calculate()
-        group.addPermission(new Permission("test"))
-
-        then: "Group becomes dirty"
-        group.isDirty()
-        1 * listener.makeDirty()
-
-        when: "Call removePermission method"
-        group.calculate()
-        group.removePermission("test")
-
-        then: "Group becomes dirty"
-        group.isDirty()
-        1 * listener.makeDirty()
     }
 
     def "Test meta parsing"() {

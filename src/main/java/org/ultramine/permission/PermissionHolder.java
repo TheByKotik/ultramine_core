@@ -1,6 +1,8 @@
 package org.ultramine.permission;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PermissionHolder extends MetaHolder implements IDirtyListener
@@ -69,6 +71,22 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 		makeDirty();
 	}
 
+	public void clearPermissions()
+	{
+		for (IPermission perm : permissions.values())
+		{
+			if (perm instanceof IChangeablePermission)
+				((IChangeablePermission) perm).unsubscribe(this);
+		}
+		permissions.clear();
+		makeDirty();
+	}
+
+	public List<String> getInnerPermissions()
+	{
+		return new ArrayList<String>(permissions.keySet());
+	}
+
 	public boolean isDirty()
 	{
 		return dirty;
@@ -91,6 +109,13 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 	public void removeMeta(String key)
 	{
 		super.removeMeta(key);
+		makeDirty();
+	}
+
+	@Override
+	public void clearMeta()
+	{
+		super.clearMeta();
 		makeDirty();
 	}
 

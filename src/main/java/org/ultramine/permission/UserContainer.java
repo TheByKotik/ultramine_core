@@ -3,9 +3,11 @@ package org.ultramine.permission;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.ultramine.permission.PermissionResolver.CheckResult;
+
 public class UserContainer<T extends User>
 {
-	private Map<String, T> users;
+	protected Map<String, T> users;
 	protected UserContainer parentContainer;
 
 	public UserContainer()
@@ -19,23 +21,28 @@ public class UserContainer<T extends User>
 		this.parentContainer = parentContainer;
 	}
 
-	public boolean checkUserPermission(String userName, String permissionKey)
+	public final boolean checkUserPermission(String userName, String permissionKey)
 	{
-		if (parentContainer != null && parentContainer.contains(userName))
-			switch (parentContainer.get(userName).getPermissions().check(permissionKey))
-			{
-				case TRUE: return true;
-				case FALSE: return false;
-			}
+		switch (check(userName, permissionKey))
+		{
+			case TRUE:
+				return true;
+			default:
+				return false;
+		}
+	}
 
-		if (contains(userName))
-			switch (get(userName).getPermissions().check(permissionKey))
-			{
-				case TRUE: return true;
-				case FALSE: return false;
-			}
+	protected CheckResult check(String userName, String permissionKey)
+	{
+		CheckResult result = CheckResult.UNRESOLVED;
 
-		return false;
+		if (parentContainer != null)
+			result = parentContainer.check(userName, permissionKey);
+
+		if (result == CheckResult.UNRESOLVED && contains(userName))
+			result = get(userName).getPermissions().check(permissionKey);
+
+		return result;
 	}
 
 	public T get(String name)
@@ -59,6 +66,11 @@ public class UserContainer<T extends User>
 	public void remove(User user)
 	{
 		remove(user.getName());
+	}
+
+	public void clear()
+	{
+		users.clear();
 	}
 
 	public boolean contains(String name)

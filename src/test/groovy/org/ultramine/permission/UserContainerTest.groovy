@@ -43,4 +43,17 @@ class UserContainerTest extends Specification {
         parent.checkUserPermission("parent", "parent")
         !parent.checkUserPermission("parent", "child")
     }
+
+    def "Test second user cannot overwrite first"() {
+        setup:
+        def container = new UserContainer()
+        container.add(stubUser("u", [p1: true]))
+
+        when: "Try to add user with same name"
+        container.add(stubUser("u", [p1:false, p2: true]))
+
+        then: "User is not overwritten"
+        container.checkUserPermission("u", "p1")
+        !container.checkUserPermission("u", "p2")
+    }
 }

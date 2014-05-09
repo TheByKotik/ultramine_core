@@ -2,6 +2,8 @@ package org.ultramine.permission
 
 import spock.lang.Specification
 
+import static org.ultramine.permission.PermissionResolver.CheckResult.UNRESOLVED
+
 class PermissionHolderTest extends Specification {
 
     MetaResolver createMetaResolver(Map meta)
@@ -55,36 +57,116 @@ class PermissionHolderTest extends Specification {
         0 * resolver._
     }
 
-    def "Test dirty methods"() {
+    def "Test clearPermissions"() {
+        setup:
+        def perm = Mock(IChangeablePermission) {
+            getKey() >> "p1"
+            getPermissions() >> PermissionResolver.createForKey("p1", 0)
+            getMeta() >> createMetaResolver([p1: 1])
+        }
+        def holder = new PermissionHolder([a: 1, b: 2])
+        holder.addPermission(new Permission("p2"))
+        holder.addPermission(perm)
+
+        when: "Clear holder's permissions"
+        holder.clearPermissions()
+
+        then: "It contains only inner meta"
+        !holder.getMeta().getInt("p1")
+        holder.getMeta().getInt("a") == 1
+        holder.getMeta().getInt("b") == 2
+
+        and: "It contains no permissions"
+        holder.getPermissions().check("p1") == UNRESOLVED
+        holder.getPermissions().check("p2") == UNRESOLVED
+
+        and: "It unsubscribed from all permissions"
+        1 * perm.unsubscribe(holder)
+    }
+
+    def "Test clearMeta"() {
+        setup:
+        def perm = Mock(IChangeablePermission) {
+            getKey() >> "p1"
+            getPermissions() >> PermissionResolver.createForKey("p1", 0)
+            getMeta() >> createMetaResolver([p1: 1])
+        }
+        def holder = new PermissionHolder([a: 1, b: 2])
+        holder.addPermission(new Permission("p2"))
+        holder.addPermission(perm)
+
+        when: "Clear holder's meta"
+        holder.clearMeta()
+
+        then: "It contains only permission's meta"
+        holder.getMeta().getInt("p1") == 1
+        !holder.getMeta().getInt("a")
+        !holder.getMeta().getInt("b")
+
+        and: "It contains all permissions"
+        holder.getPermissions().check("p1") != UNRESOLVED
+        holder.getPermissions().check("p2") != UNRESOLVED
+
+        and: "It did not unsubscribe from all permissions"
+        0 * perm.unsubscribe(holder)
+    }
+
+    def "Test makeDirty"() {
         setup:
         def holder = new PermissionHolder()
+        holder.calculate()
+
+        when: "makeDirty is called"
+        holder.makeDirty()
+
+        then: "holder is dirty"
+        holder.isDirty()
+    }
+
+    def "Test dirty methods"() {
+        setup:
+        def holder = Spy(PermissionHolder)
 
         when: "Call setMeta method"
         holder.calculate()
         holder.setMeta("test", 21)
 
         then: "Group becomes dirty"
-        holder.isDirty()
+        1 * holder.makeDirty()
 
         when: "Call removeMeta method"
         holder.calculate()
         holder.removeMeta("test")
 
         then: "Group becomes dirty"
-        holder.isDirty()
+        1 * holder.makeDirty()
 
         when: "Call addPermission method"
         holder.calculate()
         holder.addPermission(new Permission("test"))
 
         then: "Group becomes dirty"
-        holder.isDirty()
+        1 * holder.makeDirty()
 
         when: "Call removePermission method"
         holder.calculate()
         holder.removePermission("test")
 
         then: "Group becomes dirty"
-        holder.isDirty()
+        1 * holder.makeDirty()
+
+        when: "Call clearPermissions method"
+        holder.calculate()
+        holder.clearPermissions()
+
+        then: "Group becomes dirty"
+        1 * holder.makeDirty()
+
+        when: "Call clearMeta method"
+        holder.calculate()
+        holder.clearMeta()
+
+        then: "Group becomes dirty"
+        1 * holder.makeDirty()
     }
 }

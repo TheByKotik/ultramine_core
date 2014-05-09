@@ -27,9 +27,19 @@ public abstract class MetaHolder
 		innerMeta.remove(key);
 	}
 
+	public void clearMeta()
+	{
+		innerMeta.clear();
+	}
+
 	public int getPriority()
 	{
 		return getMeta().getInt("priority");
+	}
+
+	public Map<String, Object> getInnerMeta()
+	{
+		return new HashMap<String, Object>(innerMeta);
 	}
 
 	public abstract MetaResolver getMeta();
