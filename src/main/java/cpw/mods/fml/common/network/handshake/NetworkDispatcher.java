@@ -31,7 +31,6 @@ import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChatComponentText;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.common.network.FMLNetworkException;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
@@ -230,14 +229,21 @@ public class NetworkDispatcher extends SimpleChannelInboundHandler<Packet> imple
 	private void kickWithMessage(String message)
 	{
 		final ChatComponentText chatcomponenttext = new ChatComponentText(message);
-		manager.scheduleOutboundPacket(new S40PacketDisconnect(chatcomponenttext), new GenericFutureListener<Future<?>>()
+		if (side == Side.CLIENT)
 		{
-			@Override
-			public void operationComplete(Future<?> result)
+			manager.closeChannel(chatcomponenttext);
+		}
+		else
+		{
+			manager.scheduleOutboundPacket(new S40PacketDisconnect(chatcomponenttext), new GenericFutureListener<Future<?>>()
 			{
-				manager.closeChannel(chatcomponenttext);
-			}
-		});
+				@Override
+				public void operationComplete(Future<?> result)
+				{
+					manager.closeChannel(chatcomponenttext);
+				}
+			});
+		}
 		manager.channel().config().setAutoRead(false);
 	}
 
@@ -448,6 +454,7 @@ public class NetworkDispatcher extends SimpleChannelInboundHandler<Packet> imple
 
 	public void abortClientHandshake(String type)
 	{
+		FMLCommonHandler.instance().waitForPlayClient();
 		completeClientSideConnection(ConnectionType.valueOf(type));
 	}
 
@@ -462,7 +469,7 @@ public class NetworkDispatcher extends SimpleChannelInboundHandler<Packet> imple
 		super.exceptionCaught(ctx, cause);
 	}
 
-	// if we add any attributes, we should force removal of them here so that 
+	// if we add any attributes, we should force removal of them here so that
 	//they do not hold references to the world and causes it to leak.
 	private void cleanAttributes(ChannelHandlerContext ctx)
 	{
