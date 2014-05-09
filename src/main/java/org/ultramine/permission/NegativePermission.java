@@ -10,14 +10,7 @@ public class NegativePermission implements IChangeablePermission
 	{
 		this.permission = permission;
 		this.resolver = PermissionResolver.createInverted(permission.getPermissions());
-		this.isChangeable = false;
-	}
-
-	public NegativePermission(IChangeablePermission permission)
-	{
-		this.permission = permission;
-		this.resolver = PermissionResolver.createInverted(permission.getPermissions());
-		this.isChangeable = true;
+		this.isChangeable = permission instanceof IChangeablePermission;
 	}
 
 	@Override
