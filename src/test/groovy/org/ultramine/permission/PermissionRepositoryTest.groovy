@@ -127,21 +127,6 @@ class PermissionRepositoryTest extends Specification {
         0 * perm.subscribe(_)
     }
 
-    def "Test proxy isDirty"() {
-        setup:
-        def repository = new PermissionRepository()
-        repository.registerPermission(Mock(IPermission) { getKey() >> "s" })
-        repository.registerPermission(Mock(IChangeablePermission) { getKey() >> "c"; isDirty() >>> [true, false] })
-
-        expect: "DUMMY and SIMPLE proxies are not dirty"
-        !repository.getPermission("d").isDirty()
-        !repository.getPermission("s").isDirty()
-
-        and: "CHANGEABLE proxy dirty check delegated to wrapped permission"
-        repository.getPermission("c").isDirty()
-        !repository.getPermission("c").isDirty()
-    }
-
     def "Test negative key"() {
         setup:
         def repository = new PermissionRepository()

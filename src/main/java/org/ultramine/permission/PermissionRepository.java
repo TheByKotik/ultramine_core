@@ -117,12 +117,6 @@ public class PermissionRepository
 		}
 
 		@Override
-		public boolean isDirty()
-		{
-			return (proxyType == ProxyType.CHANGEABLE) && ((IChangeablePermission)wrappedPermission).isDirty();
-		}
-
-		@Override
 		public void subscribe(IDirtyListener listener)
 		{
 			switch (proxyType)

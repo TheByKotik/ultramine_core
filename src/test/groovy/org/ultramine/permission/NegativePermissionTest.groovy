@@ -31,21 +31,6 @@ class NegativePermissionTest extends Specification {
         perm.getPermissions().check("test.key") == FALSE
     }
 
-    def "Test isDirty IPermission"() {
-        setup:
-        IPermission permission = Mock(IPermission) {
-            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
-            isDirty() >> true
-        }
-
-        when: "Create new NegativePermission"
-        def perm = new NegativePermission(permission)
-
-        then: "It is not dirty"
-        !perm.isDirty()
-        0 * permission.isDirty()
-    }
-
     def "Test subscribe/unsubscribe IPermission"() {
         setup:
         IPermission permission = Mock(IPermission) {
@@ -85,21 +70,6 @@ class NegativePermissionTest extends Specification {
         perm.getPriority() == 100
         perm.getMeta().getString("1") == "mock"
         perm.getPermissions().check("test.key") == FALSE
-    }
-
-    def "Test isDirty IChangeablePermission"() {
-        setup:
-        IPermission permission = Mock(IChangeablePermission) {
-            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
-        }
-        def perm = new NegativePermission(permission)
-
-        when: "Wrapped permission dirty changes"
-        permission.isDirty() >>> [true, false]
-
-        then: "Negative permission dirty is not changing"
-        perm.isDirty()
-        perm.isDirty()
     }
 
     def "Test subscribe/unsubscribe IChangeablePermission"() {

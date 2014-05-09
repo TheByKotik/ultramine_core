@@ -45,12 +45,6 @@ public class NegativePermission extends PermissionRepository.ProxyPermission imp
 	}
 
 	@Override
-	public boolean isDirty()
-	{
-		return (getType() == ProxyType.CHANGEABLE) && dirty;
-	}
-
-	@Override
 	public void makeDirty()
 	{
 		dirty = true;
