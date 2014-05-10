@@ -34,6 +34,7 @@ public class UserContainer<T extends User>
 
 	protected CheckResult check(String userName, String permissionKey)
 	{
+		userName = userName.toLowerCase();
 		CheckResult result = CheckResult.UNRESOLVED;
 
 		if (parentContainer != null)
@@ -47,7 +48,7 @@ public class UserContainer<T extends User>
 
 	public T get(String name)
 	{
-		return users.get(name);
+		return users.get(name.toLowerCase());
 	}
 
 	public void add(T user)
@@ -60,7 +61,7 @@ public class UserContainer<T extends User>
 
 	public void remove(String name)
 	{
-		users.remove(name);
+		users.remove(name.toLowerCase());
 	}
 
 	public void remove(User user)

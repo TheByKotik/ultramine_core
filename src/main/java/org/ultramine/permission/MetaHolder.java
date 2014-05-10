@@ -14,7 +14,7 @@ public abstract class MetaHolder
 
 	public MetaHolder(Map<String, Object> meta)
 	{
-		innerMeta = meta;
+		setInnerMeta(meta);
 	}
 
 	public void setMeta(String key, Object value)
@@ -40,6 +40,11 @@ public abstract class MetaHolder
 	public Map<String, Object> getInnerMeta()
 	{
 		return new HashMap<String, Object>(innerMeta);
+	}
+
+	public void setInnerMeta(Map<String, Object> meta)
+	{
+		innerMeta = new HashMap<String, Object>(meta);
 	}
 
 	public abstract MetaResolver getMeta();

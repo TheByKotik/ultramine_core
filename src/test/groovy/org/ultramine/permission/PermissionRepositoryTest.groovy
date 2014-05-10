@@ -4,6 +4,9 @@ import org.spockframework.mock.MockDetector
 import spock.lang.Specification
 
 import static org.ultramine.permission.PermissionRepository.ProxyPermission.ProxyType.*
+import static org.ultramine.permission.PermissionResolver.CheckResult.FALSE
+import static org.ultramine.permission.PermissionResolver.CheckResult.TRUE
+import static org.ultramine.permission.PermissionResolver.CheckResult.UNRESOLVED
 
 class PermissionRepositoryTest extends Specification {
 
@@ -140,5 +143,60 @@ class PermissionRepositoryTest extends Specification {
         and: "Negative permission linked to proxy"
         perm.getWrappedPermission().getName() == "group.admin"
         perm.getWrappedPermission().getType() == DUMMY
+    }
+
+    def "Test registre ^* permission"() {
+        setup:
+        def repository = new PermissionRepository()
+
+        when: "Try to register ^* permission"
+        repository.registerPermission(Mock(IPermission) { getKey() >> "^test" })
+
+        then: "Exception is thrown"
+        thrown(IllegalArgumentException)
+    }
+
+    def "Test integration"() {
+        setup:
+        def repository = new PermissionRepository();
+        def group1 = new GroupPermission("group1")
+        group1.addPermission(repository.getPermission("p1"))
+        group1.addPermission(repository.getPermission("group2"))
+        repository.registerPermission(group1)
+
+        when: "Create negative permission"
+        def perm = repository.getPermission("^group1")
+
+        then: "Negative permission contains group1 permissions"
+        perm.getPermissions().check("p1") == FALSE
+        perm.getPermissions().check("p2") == UNRESOLVED
+        perm.getPermissions().check("group2") == FALSE
+        perm.getPermissions().check("p3") == UNRESOLVED
+
+        when: "Group permission updates"
+        group1.addPermission(repository.getPermission("p2"))
+
+        then: "Negative permission also updates"
+        perm.getPermissions().check("p1") == FALSE
+        perm.getPermissions().check("p2") == FALSE
+        perm.getPermissions().check("group2") == FALSE
+        perm.getPermissions().check("p3") == UNRESOLVED
+
+        when: "Register group2"
+        def group2 = new GroupPermission("group2")
+        group2.addPermission(repository.getPermission("^p3"))
+        repository.registerPermission(group2)
+
+        then: "Negative permission also updates"
+        perm.getPermissions().check("p1") == FALSE
+        perm.getPermissions().check("p2") == FALSE
+        perm.getPermissions().check("group2") == UNRESOLVED
+        perm.getPermissions().check("p3") == TRUE
+
+        and: "Group1 updates too"
+        group1.getPermissions().check("p1") == TRUE
+        group1.getPermissions().check("p2") == TRUE
+        group1.getPermissions().check("group2") == UNRESOLVED
+        group1.getPermissions().check("p3") == FALSE
     }
 }

@@ -35,6 +35,9 @@ public class PermissionRepository
 		if (registeredPermissions.contains(permission.getKey()))
 			throw new IllegalArgumentException("Permission already registered");
 
+		if (permission.getKey().startsWith("^"))
+			throw new IllegalArgumentException("^* names are reserved");
+
 		ProxyPermission proxy = getPermission(permission.getKey());
 		if (permission instanceof IChangeablePermission)
 			proxy.linkChangeable((IChangeablePermission)permission);
@@ -62,9 +65,7 @@ public class PermissionRepository
 		{
 			this.key = permission.getKey();
 			this.wrappedPermission = permission;
-			if (permission instanceof ProxyPermission)
-				proxyType = ProxyType.DUMMY;
-			else if (permission instanceof IChangeablePermission)
+			if (permission instanceof IChangeablePermission)
 				proxyType = ProxyType.CHANGEABLE;
 			else
 				proxyType = ProxyType.SIMPLE;

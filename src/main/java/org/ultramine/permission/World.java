@@ -1,31 +1,23 @@
 package org.ultramine.permission;
 
-import org.ultramine.server.util.YamlConfigProvider;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class YamlBasedContainer extends UserContainer<User>
+public class World extends UserContainer<User>
 {
-	private File config;
 	private PermissionRepository repository;
 	private GroupPermission defaultPermissions;
 
-	public YamlBasedContainer(PermissionRepository permissionRepository, File config)
+	public World(PermissionRepository permissionRepository)
 	{
-		this.config = config;
 		this.repository = permissionRepository;
 		this.defaultPermissions = new GroupPermission("");
-
-		reload();
 	}
 
-	public void reload()
+	public void load(WorldData data)
 	{
-		WorldData data = YamlConfigProvider.getOrCreateConfig(config, WorldData.class);
 		if (data == null)
 			return;
 
@@ -40,7 +32,7 @@ public class YamlBasedContainer extends UserContainer<User>
 		if (data.users == null)
 			return;
 
-		for (Map.Entry<String, WorldData.UserData> userData : data.users.entrySet())
+		for (Map.Entry<String, HolderData> userData : data.users.entrySet())
 		{
 			User user = new User(userData.getKey(), userData.getValue().meta);
 			for (String permission : userData.getValue().permissions)
@@ -49,22 +41,17 @@ public class YamlBasedContainer extends UserContainer<User>
 		}
 	}
 
-	public void save()
+	public WorldData save()
 	{
 		WorldData data = new WorldData();
 
 		data.default_permissions = defaultPermissions.getInnerPermissions();
-		data.users = new HashMap<String, WorldData.UserData>(users.size());
+		data.users = new HashMap<String, HolderData>(users.size());
 
 		for (User user : users.values())
-		{
-			WorldData.UserData userData = new WorldData.UserData();
-			userData.permissions = user.getInnerPermissions();
-			userData.meta = user.getInnerMeta();
-			data.users.put(user.getName(), userData);
-		}
+			data.users.put(user.getName(), new HolderData(user));
 
-		YamlConfigProvider.saveConfig(config, data);
+		return data;
 	}
 
 	public GroupPermission getDefaultPermissions()
@@ -91,11 +78,24 @@ public class YamlBasedContainer extends UserContainer<User>
 	public static class WorldData
 	{
 		public List<String> default_permissions = new ArrayList<String>();
-		public Map<String, UserData> users = new HashMap<String, UserData>();
+		public Map<String, HolderData> users = new HashMap<String, HolderData>();
+	}
 
-		public static class UserData {
-			public List<String> permissions = new ArrayList<String>();
-			public Map<String, Object> meta = new HashMap<String, Object>();
+	public static class HolderData
+	{
+		public List<String> permissions;
+		public Map<String, Object> meta;
+
+		public HolderData()
+		{
+			permissions = new ArrayList<String>();
+			meta = new HashMap<String, Object>();
+		}
+
+		public HolderData(PermissionHolder holder)
+		{
+			permissions = holder.getInnerPermissions();
+			meta = holder.getInnerMeta();
 		}
 	}
 }

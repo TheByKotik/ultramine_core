@@ -1,13 +1,13 @@
 package org.ultramine.permission
 
-import org.apache.commons.lang3.RandomStringUtils
 import spock.lang.Specification
 
-class YamlBasedContainerTest extends Specification {
+class WorldTest extends Specification {
 
     def "Test config parsing"() {
         setup:
-        def container = new YamlBasedContainer(new PermissionRepository(), testYaml)
+        def container = new World(new PermissionRepository())
+        container.load(testWorldData)
 
         expect: "Permissions are loaded correctly"
         container.checkUserPermission("user1", "d")
@@ -33,7 +33,8 @@ class YamlBasedContainerTest extends Specification {
     def "Test config reloading"() {
         setup:
         def repository = new PermissionRepository()
-        def container = new YamlBasedContainer(repository, testYaml)
+        def container = new World(repository)
+        container.load(testWorldData)
 
         when: "Add permission and meta to user"
         container.get("user1").addPermission(repository.getPermission("test"))
@@ -44,7 +45,7 @@ class YamlBasedContainerTest extends Specification {
         container.get("user2").getMeta().getString("test") == "data"
 
         when: "Reloading container"
-        container.reload()
+        container.load(testWorldData)
 
         then: "User have not this permission and meta"
         !container.checkUserPermission("user1", "test")
@@ -71,9 +72,8 @@ class YamlBasedContainerTest extends Specification {
 
     def "Test config saving"() {
         setup:
-        def file = File.createTempFile(RandomStringUtils.randomNumeric(10), ".yml")
         def repository = new PermissionRepository()
-        def container = new YamlBasedContainer(repository, file)
+        def container = new World(repository)
         def user = new User("test")
         user.addPermission(repository.getPermission("p1"))
         user.addPermission(repository.getPermission("^p2"))
@@ -83,22 +83,19 @@ class YamlBasedContainerTest extends Specification {
         container.getDefaultPermissions().addPermission(repository.getPermission("d1"))
 
         and: "Save data"
-        container.save()
+        def data = container.save()
 
         then: "Output data is correct"
-        file.text ==
-"""default_permissions:
-- d1
-users:
-  test:
-    meta: {}
-    permissions:
-    - ^p2
-    - p1
-"""
+        data.default_permissions.contains('d1')
+        data.default_permissions.size() == 1
+        data.users.size() == 1
+        data.users['test'].permissions.containsAll(['p1', '^p2'])
+        data.users['test'].permissions.size() == 2
+        data.users['test'].meta.size() == 0
 
         when: "Try to load this config"
-        def anotherContainer = new YamlBasedContainer(repository, file)
+        def anotherContainer = new World(repository)
+        anotherContainer.load(data)
 
         then: "Container loaded correctly"
         anotherContainer.checkUserPermission("test", "d1")
@@ -111,22 +108,16 @@ users:
     }
 
 
-    def testYaml = File.createTempFile(RandomStringUtils.randomNumeric(10), ".yml")
-            .with { write("""
-default_permissions:
-- d
-users:
-  user1:
-    permissions:
-    - p.1
-    - ^p.2
-    meta:
-      a: a
-      b: 1
-  user2:
-    permissions:
-    - ^d
-    - p.3
-    meta: {}
-"""); it }
+    def testWorldData = new  World.WorldData(
+            default_permissions: ['d'],
+            users: [
+                    user1: new World.HolderData(
+                            permissions: ['p.1', '^p.2'],
+                            meta: [a: 'a', b: 1]
+                    ),
+                    user2: new World.HolderData(
+                            permissions: ['^d', 'p.3'],
+                    )
+            ]
+    )
 }
