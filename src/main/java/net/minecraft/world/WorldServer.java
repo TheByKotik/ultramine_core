@@ -423,6 +423,7 @@ public class WorldServer extends World
 
 	public boolean isBlockTickScheduledThisTick(int p_147477_1_, int p_147477_2_, int p_147477_3_, Block p_147477_4_)
 	{
+		//Это не заглушка. Этот метод может использоваться модами по назначению, все работает правильно.
 		return false;
 	}
 
@@ -472,7 +473,14 @@ public class WorldServer extends World
 
 	public void func_147446_b(int p_147446_1_, int p_147446_2_, int p_147446_3_, Block p_147446_4_, int p_147446_5_, int p_147446_6_)
 	{
-		
+		//Данный метод вызывался только при загрузке чанка. Для совместимости с модами, которые неправильно используют этот метод, пытаемся запланировать обновление.
+		Chunk chunk = getChunkIfExists(p_147446_1_ >> 4, p_147446_3_ >> 4);
+
+		if (chunk != null)
+		{
+			PendingBlockUpdate p = new PendingBlockUpdate(p_147446_1_&15, p_147446_2_, p_147446_3_&15, p_147446_4_, worldInfo.getWorldTotalTime() + (long)p_147446_5_, p_147446_6_);
+			chunk.scheduleBlockUpdate(p, true);
+		}
 	}
 
 	public void updateEntities()
@@ -499,11 +507,14 @@ public class WorldServer extends World
 
 	public boolean tickUpdates(boolean par1)
 	{
+		//Выполнение отложенных обновлений перенесено в updatePendingOf(Chunk)
 		return false;
 	}
 
 	public List getPendingBlockUpdates(Chunk par1Chunk, boolean par2)
 	{
+		//Данный метод вызывался только при сохранении чанка. Теперь он не может вызываться нигде, совместимость не предусмотрена.
+		logger.warn("Called deprecated method getPendingBlockUpdates", new Throwable());
 		return null;
 	}
 
