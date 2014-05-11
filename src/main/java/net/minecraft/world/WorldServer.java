@@ -71,6 +71,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkHash;
+import org.ultramine.server.chunk.PendingBlockUpdate;
 
 public class WorldServer extends World
 {
@@ -327,6 +328,8 @@ public class WorldServer extends World
 			
 			this.theProfiler.startSection("getChunk");
 			Chunk chunk = this.getChunkFromChunkCoords(chunkX, chunkZ);
+			this.theProfiler.startSection("updatePending");
+			this.updatePendingOf(chunk);
 			this.func_147467_a(k, l, chunk);
 			this.theProfiler.endStartSection("tickChunk");
 			//Limits and evenly distributes the lighting update time
@@ -420,8 +423,7 @@ public class WorldServer extends World
 
 	public boolean isBlockTickScheduledThisTick(int p_147477_1_, int p_147477_2_, int p_147477_3_, Block p_147477_4_)
 	{
-		NextTickListEntry nextticklistentry = new NextTickListEntry(p_147477_1_, p_147477_2_, p_147477_3_, p_147477_4_);
-		return this.pendingTickListEntriesThisTick.contains(nextticklistentry);
+		return false;
 	}
 
 	public void scheduleBlockUpdate(int p_147464_1_, int p_147464_2_, int p_147464_3_, Block p_147464_4_, int p_147464_5_)
@@ -429,67 +431,48 @@ public class WorldServer extends World
 		this.scheduleBlockUpdateWithPriority(p_147464_1_, p_147464_2_, p_147464_3_, p_147464_4_, p_147464_5_, 0);
 	}
 
-	public void scheduleBlockUpdateWithPriority(int p_147454_1_, int p_147454_2_, int p_147454_3_, Block p_147454_4_, int p_147454_5_, int p_147454_6_)
+	public void scheduleBlockUpdateWithPriority(int x, int y, int z, Block block, int time, int priority)
 	{
-		NextTickListEntry nextticklistentry = new NextTickListEntry(p_147454_1_, p_147454_2_, p_147454_3_, p_147454_4_);
+		//NextTickListEntry nextticklistentry = new NextTickListEntry(x, y, z, block);
 		//Keeping here as a note for future when it may be restored.
 		//boolean isForced = getPersistentChunks().containsKey(new ChunkCoordIntPair(nextticklistentry.xCoord >> 4, nextticklistentry.zCoord >> 4));
 		//byte b0 = isForced ? 0 : 8;
 		byte b0 = 0;
 
-		if (this.scheduledUpdatesAreImmediate && p_147454_4_.getMaterial() != Material.air)
+		if (this.scheduledUpdatesAreImmediate && block.getMaterial() != Material.air)
 		{
-			if (p_147454_4_.func_149698_L())
+			if (block.func_149698_L())
 			{
 				b0 = 8;
 
-				if (this.checkChunksExist(nextticklistentry.xCoord - b0, nextticklistentry.yCoord - b0, nextticklistentry.zCoord - b0, nextticklistentry.xCoord + b0, nextticklistentry.yCoord + b0, nextticklistentry.zCoord + b0))
+				if (this.checkChunksExist(x - b0, y - b0, z - b0, x + b0, y + b0, z + b0))
 				{
-					Block block1 = this.getBlock(nextticklistentry.xCoord, nextticklistentry.yCoord, nextticklistentry.zCoord);
+					Block block1 = this.getBlock(x, y, z);
 
-					if (block1.getMaterial() != Material.air && block1 == nextticklistentry.func_151351_a())
+					if (block1.getMaterial() != Material.air && block1 == block)
 					{
-						block1.updateTick(this, nextticklistentry.xCoord, nextticklistentry.yCoord, nextticklistentry.zCoord, this.rand);
+						block1.updateTick(this, x, y, z, this.rand);
 					}
 				}
 
 				return;
 			}
 
-			p_147454_5_ = 1;
+			time = 1;
 		}
+		
+		Chunk chunk = getChunkIfExists(x >> 4, z >> 4);
 
-		if (this.checkChunksExist(p_147454_1_ - b0, p_147454_2_ - b0, p_147454_3_ - b0, p_147454_1_ + b0, p_147454_2_ + b0, p_147454_3_ + b0))
+		if (chunk != null)
 		{
-			if (p_147454_4_.getMaterial() != Material.air)
-			{
-				nextticklistentry.setScheduledTime((long)p_147454_5_ + this.worldInfo.getWorldTotalTime());
-				nextticklistentry.setPriority(p_147454_6_);
-			}
-
-			if (!this.pendingTickListEntriesHashSet.contains(nextticklistentry))
-			{
-				this.pendingTickListEntriesHashSet.add(nextticklistentry);
-				this.pendingTickListEntriesTreeSet.add(nextticklistentry);
-			}
+			PendingBlockUpdate p = new PendingBlockUpdate(x&15, y, z&15, block, worldInfo.getWorldTotalTime() + (long)time, priority);
+			chunk.scheduleBlockUpdate(p, true);
 		}
 	}
 
 	public void func_147446_b(int p_147446_1_, int p_147446_2_, int p_147446_3_, Block p_147446_4_, int p_147446_5_, int p_147446_6_)
 	{
-		NextTickListEntry nextticklistentry = new NextTickListEntry(p_147446_1_, p_147446_2_, p_147446_3_, p_147446_4_);
-		nextticklistentry.setPriority(p_147446_6_);
-
-		if (p_147446_4_.getMaterial() != Material.air)
-		{
-			nextticklistentry.setScheduledTime((long)p_147446_5_ + this.worldInfo.getWorldTotalTime());
-		}
-
-		if (!this.pendingTickListEntriesHashSet.contains(nextticklistentry))
-		{
-			this.pendingTickListEntriesHashSet.add(nextticklistentry);
-			this.pendingTickListEntriesTreeSet.add(nextticklistentry);
-		}
+		
 	}
 
 	public void updateEntities()
@@ -516,148 +499,12 @@ public class WorldServer extends World
 
 	public boolean tickUpdates(boolean par1)
 	{
-		int i = this.pendingTickListEntriesTreeSet.size();
-
-		if (i != this.pendingTickListEntriesHashSet.size())
-		{
-			throw new IllegalStateException("TickNextTick list out of synch");
-		}
-		else
-		{
-			if (i > 1000)
-			{
-				i = 1000;
-			}
-
-			this.theProfiler.startSection("cleaning");
-			NextTickListEntry nextticklistentry;
-
-			for (int j = 0; j < i; ++j)
-			{
-				nextticklistentry = (NextTickListEntry)this.pendingTickListEntriesTreeSet.first();
-
-				if (!par1 && nextticklistentry.scheduledTime > this.worldInfo.getWorldTotalTime())
-				{
-					break;
-				}
-
-				this.pendingTickListEntriesTreeSet.remove(nextticklistentry);
-				this.pendingTickListEntriesHashSet.remove(nextticklistentry);
-//				if(activeChunkSet.containsKey(ChunkHash.chunkToKey(nextticklistentry.xCoord >> 4, nextticklistentry.zCoord >> 4)))
-//				{
-					this.pendingTickListEntriesThisTick.add(nextticklistentry);
-//				}
-//				else
-//				{
-//					i = Math.min(i+1, pendingTickListEntriesTreeSet.size());
-//				}
-			}
-
-			this.theProfiler.endSection();
-			this.theProfiler.startSection("ticking");
-			Iterator iterator = this.pendingTickListEntriesThisTick.iterator();
-
-			while (iterator.hasNext())
-			{
-				nextticklistentry = (NextTickListEntry)iterator.next();
-				iterator.remove();
-				//Keeping here as a note for future when it may be restored.
-				//boolean isForced = getPersistentChunks().containsKey(new ChunkCoordIntPair(nextticklistentry.xCoord >> 4, nextticklistentry.zCoord >> 4));
-				//byte b0 = isForced ? 0 : 8;
-				byte b0 = 0;
-
-				if (this.checkChunksExist(nextticklistentry.xCoord - b0, nextticklistentry.yCoord - b0, nextticklistentry.zCoord - b0, nextticklistentry.xCoord + b0, nextticklistentry.yCoord + b0, nextticklistentry.zCoord + b0))
-				{
-					Block block = this.getBlock(nextticklistentry.xCoord, nextticklistentry.yCoord, nextticklistentry.zCoord);
-
-					if (block.getMaterial() != Material.air && Block.isEqualTo(block, nextticklistentry.func_151351_a()))
-					{
-						try
-						{
-							block.updateTick(this, nextticklistentry.xCoord, nextticklistentry.yCoord, nextticklistentry.zCoord, this.rand);
-						}
-						catch (Throwable throwable1)
-						{
-							CrashReport crashreport = CrashReport.makeCrashReport(throwable1, "Exception while ticking a block");
-							CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being ticked");
-							int k;
-
-							try
-							{
-								k = this.getBlockMetadata(nextticklistentry.xCoord, nextticklistentry.yCoord, nextticklistentry.zCoord);
-							}
-							catch (Throwable throwable)
-							{
-								k = -1;
-							}
-
-							CrashReportCategory.func_147153_a(crashreportcategory, nextticklistentry.xCoord, nextticklistentry.yCoord, nextticklistentry.zCoord, block, k);
-							throw new ReportedException(crashreport);
-						}
-					}
-				}
-				else
-				{
-					this.scheduleBlockUpdate(nextticklistentry.xCoord, nextticklistentry.yCoord, nextticklistentry.zCoord, nextticklistentry.func_151351_a(), 0);
-				}
-			}
-
-			this.theProfiler.endSection();
-			this.pendingTickListEntriesThisTick.clear();
-			return !this.pendingTickListEntriesTreeSet.isEmpty();
-		}
+		return false;
 	}
 
 	public List getPendingBlockUpdates(Chunk par1Chunk, boolean par2)
 	{
-		ArrayList arraylist = null;
-		ChunkCoordIntPair chunkcoordintpair = par1Chunk.getChunkCoordIntPair();
-		int i = (chunkcoordintpair.chunkXPos << 4) - 2;
-		int j = i + 16 + 2;
-		int k = (chunkcoordintpair.chunkZPos << 4) - 2;
-		int l = k + 16 + 2;
-
-		for (int i1 = 0; i1 < 2; ++i1)
-		{
-			Iterator iterator;
-
-			if (i1 == 0)
-			{
-				iterator = this.pendingTickListEntriesTreeSet.iterator();
-			}
-			else
-			{
-				iterator = this.pendingTickListEntriesThisTick.iterator();
-
-				if (!this.pendingTickListEntriesThisTick.isEmpty())
-				{
-					logger.debug("toBeTicked = " + this.pendingTickListEntriesThisTick.size());
-				}
-			}
-
-			while (iterator.hasNext())
-			{
-				NextTickListEntry nextticklistentry = (NextTickListEntry)iterator.next();
-
-				if (nextticklistentry.xCoord >= i && nextticklistentry.xCoord < j && nextticklistentry.zCoord >= k && nextticklistentry.zCoord < l)
-				{
-					if (par2)
-					{
-						this.pendingTickListEntriesHashSet.remove(nextticklistentry);
-						iterator.remove();
-					}
-
-					if (arraylist == null)
-					{
-						arraylist = new ArrayList();
-					}
-
-					arraylist.add(nextticklistentry);
-				}
-			}
-		}
-
-		return arraylist;
+		return null;
 	}
 
 	public void updateEntityWithOptionalForce(Entity par1Entity, boolean par2)
@@ -1073,4 +920,55 @@ public class WorldServer extends World
 				this();
 			}
 		}
+	
+	/* ======================================== ULTRAMINE START =====================================*/
+	
+	public Chunk getChunkIfExists(int cx, int cz)
+	{
+		return theChunkProviderServer.getChunkIfExists(cx, cz);
+	}
+	
+	private void updatePendingOf(Chunk chunk)
+	{
+		long time = worldInfo.getWorldTotalTime();
+		int x = chunk.xPosition << 4;
+		int z = chunk.zPosition << 4;
+		
+		PendingBlockUpdate p;
+		while((p = chunk.pollPending(time)) != null)
+		{
+			updateBlock(x + p.x, p.y, z + p.z, p.getBlock());
+		}
+	}
+	
+	private void updateBlock(int x, int y, int z, Block block1)
+	{
+		Block block = this.getBlock(x, y, z);
+
+		if (block.getMaterial() != Material.air && Block.isEqualTo(block, block1))
+		{
+			try
+			{
+				block.updateTick(this, x, y, z, this.rand);
+			}
+			catch (Throwable throwable1)
+			{
+				CrashReport crashreport = CrashReport.makeCrashReport(throwable1, "Exception while ticking a block");
+				CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being ticked");
+				int k;
+
+				try
+				{
+					k = this.getBlockMetadata(x, y, z);
+				}
+				catch (Throwable throwable)
+				{
+					k = -1;
+				}
+
+				CrashReportCategory.func_147153_a(crashreportcategory, x, y, z, block, k);
+				throw new ReportedException(crashreport);
+			}
+		}
+	}
 }

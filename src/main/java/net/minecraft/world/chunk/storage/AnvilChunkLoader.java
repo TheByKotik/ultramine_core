@@ -35,6 +35,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkHash;
+import org.ultramine.server.chunk.PendingBlockUpdate;
 
 import cpw.mods.fml.common.FMLLog;
 
@@ -294,27 +295,28 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		}
 
 		par3NBTTagCompound.setTag("TileEntities", nbttaglist3);
-		List list = par2World.getPendingBlockUpdates(par1Chunk, false);
-
-		if (list != null)
+		
+		Set<PendingBlockUpdate> set = par1Chunk.getPendingUpdatesForSave();
+		if(set != null)
 		{
+			int x = par1Chunk.xPosition << 4;
+			int z = par1Chunk.zPosition << 4;
+			
 			long k = par2World.getTotalWorldTime();
 			NBTTagList nbttaglist1 = new NBTTagList();
-			Iterator iterator = list.iterator();
-
-			while (iterator.hasNext())
+			
+			for(PendingBlockUpdate p : set)
 			{
-				NextTickListEntry nextticklistentry = (NextTickListEntry)iterator.next();
 				NBTTagCompound nbttagcompound2 = new NBTTagCompound();
-				nbttagcompound2.setInteger("i", Block.getIdFromBlock(nextticklistentry.func_151351_a()));
-				nbttagcompound2.setInteger("x", nextticklistentry.xCoord);
-				nbttagcompound2.setInteger("y", nextticklistentry.yCoord);
-				nbttagcompound2.setInteger("z", nextticklistentry.zCoord);
-				nbttagcompound2.setInteger("t", (int)(nextticklistentry.scheduledTime - k));
-				nbttagcompound2.setInteger("p", nextticklistentry.priority);
+				nbttagcompound2.setInteger("i", Block.getIdFromBlock(p.getBlock()));
+				nbttagcompound2.setInteger("x", x + p.x);
+				nbttagcompound2.setInteger("y", p.y);
+				nbttagcompound2.setInteger("z", z + p.z);
+				nbttagcompound2.setInteger("t", (int)(p.scheduledTime - k));
+				nbttagcompound2.setInteger("p", p.priority);
 				nbttaglist1.appendTag(nbttagcompound2);
 			}
-
+			
 			par3NBTTagCompound.setTag("TileTicks", nbttaglist1);
 		}
 	}
@@ -438,10 +440,12 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
 			if (nbttaglist3 != null)
 			{
+				long time = par1World.getTotalWorldTime();
 				for (int j1 = 0; j1 < nbttaglist3.tagCount(); ++j1)
 				{
 					NBTTagCompound nbttagcompound5 = nbttaglist3.getCompoundTagAt(j1);
-					par1World.func_147446_b(nbttagcompound5.getInteger("x"), nbttagcompound5.getInteger("y"), nbttagcompound5.getInteger("z"), Block.getBlockById(nbttagcompound5.getInteger("i")), nbttagcompound5.getInteger("t"), nbttagcompound5.getInteger("p"));
+					chunk.scheduleBlockUpdate(new PendingBlockUpdate(nbttagcompound5.getInteger("x")&15, nbttagcompound5.getInteger("y"), nbttagcompound5.getInteger("z")&15,
+							Block.getBlockById(nbttagcompound5.getInteger("i")), (long)nbttagcompound5.getInteger("t") + time, nbttagcompound5.getInteger("p")), false);
 				}
 			}
 		}

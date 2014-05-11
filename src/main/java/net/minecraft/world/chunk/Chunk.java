@@ -8,10 +8,13 @@ import gnu.trove.map.hash.TShortObjectHashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
 
 import net.minecraft.block.Block;
@@ -40,6 +43,7 @@ import net.minecraftforge.event.world.ChunkEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkHash;
+import org.ultramine.server.chunk.PendingBlockUpdate;
 
 public class Chunk
 {
@@ -1528,4 +1532,49 @@ public class Chunk
 	/* ======================================== ULTRAMINE START =====================================*/
 	
 	private final TShortObjectMap<TileEntity> fastTileEntityMap = new TShortObjectHashMap<TileEntity>();
+	
+	private Set<PendingBlockUpdate> pendingUpdatesSet;
+	private TreeSet<PendingBlockUpdate> pendingUpdatesQueue;
+	
+	public PendingBlockUpdate pollPending(long time)
+	{
+		if(pendingUpdatesQueue == null || pendingUpdatesQueue.size() == 0) return null;
+		
+		PendingBlockUpdate p = pendingUpdatesQueue.first();
+		if(p.scheduledTime <= time)
+		{
+			pendingUpdatesSet.remove(p);
+			pendingUpdatesQueue.remove(p);
+			
+			if(pendingUpdatesQueue.size() == 0)
+			{
+				pendingUpdatesSet = null;
+				pendingUpdatesQueue = null;
+			}
+			
+			return p;
+		}
+		
+		return null;
+	}
+	
+	public void scheduleBlockUpdate(PendingBlockUpdate p, boolean check)
+	{
+		if(pendingUpdatesQueue == null)
+		{
+			pendingUpdatesSet = new HashSet<PendingBlockUpdate>();
+			pendingUpdatesQueue = new TreeSet<PendingBlockUpdate>();
+		}
+		
+		if(!check || !pendingUpdatesSet.contains(p))
+		{
+			pendingUpdatesSet.add(p);
+			pendingUpdatesQueue.add(p);
+		}
+	}
+	
+	public Set<PendingBlockUpdate> getPendingUpdatesForSave()
+	{
+		return pendingUpdatesQueue;
+	}
 }
