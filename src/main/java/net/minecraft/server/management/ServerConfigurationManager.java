@@ -68,6 +68,8 @@ import net.minecraft.world.storage.IPlayerFileData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.PermissionHandler;
+import org.ultramine.server.util.OpPermissionProxySet;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 
 public abstract class ServerConfigurationManager
@@ -657,23 +659,23 @@ public abstract class ServerConfigurationManager
 
 	public void addOp(String par1Str)
 	{
-		this.ops.add(par1Str.toLowerCase());
+		PermissionHandler.getInstance().add("global", par1Str, PermissionHandler.OP_PERMISSION);
 	}
 
 	public void removeOp(String par1Str)
 	{
-		this.ops.remove(par1Str.toLowerCase());
+		PermissionHandler.getInstance().remove("global", par1Str, PermissionHandler.OP_PERMISSION);
 	}
 
 	public boolean isAllowedToLogin(String par1Str)
 	{
 		par1Str = par1Str.trim().toLowerCase();
-		return !this.whiteListEnforced || this.ops.contains(par1Str) || this.whiteListedPlayers.contains(par1Str);
+		return !this.whiteListEnforced || PermissionHandler.getInstance().has("global", par1Str, PermissionHandler.OP_PERMISSION) || this.whiteListedPlayers.contains(par1Str);
 	}
 
 	public boolean isPlayerOpped(String par1Str)
 	{
-		return this.ops.contains(par1Str.trim().toLowerCase()) || this.mcServer.isSinglePlayer() && this.mcServer.worldServers[0].getWorldInfo().areCommandsAllowed() && this.mcServer.getServerOwner().equalsIgnoreCase(par1Str) || this.commandsAllowedForAll;
+		return PermissionHandler.getInstance().has("global", par1Str, PermissionHandler.OP_PERMISSION) || this.mcServer.isSinglePlayer() && this.mcServer.worldServers[0].getWorldInfo().areCommandsAllowed() && this.mcServer.getServerOwner().equalsIgnoreCase(par1Str) || this.commandsAllowedForAll;
 	}
 
 	public EntityPlayerMP getPlayerForUsername(String par1Str)
@@ -874,9 +876,10 @@ public abstract class ServerConfigurationManager
 		return this.whiteListedPlayers;
 	}
 
+	@Deprecated
 	public Set getOps()
 	{
-		return this.ops;
+		return new OpPermissionProxySet();
 	}
 
 	public void loadWhiteList() {}

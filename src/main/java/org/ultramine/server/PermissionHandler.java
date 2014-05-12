@@ -8,8 +8,12 @@ import org.ultramine.permission.Permission;
 import org.ultramine.permission.PermissionRepository;
 import org.ultramine.permission.ServerPermissionManager;
 
+import java.util.Set;
+
 public class PermissionHandler implements IPermissionHandler
 {
+	public static final String OP_PERMISSION = "minecraft.op";
+
 	private static PermissionHandler instance;
 	private static PermissionRepository permissionRepository = new PermissionRepository();
 
@@ -116,6 +120,24 @@ public class PermissionHandler implements IPermissionHandler
 	public void setMeta(EntityPlayer player, String key, Object value)
 	{
 		setMeta(worldName(player), player.getDisplayName(), key, value);
+	}
+
+	@Override
+	public Set<String> findUsersWithPermission(String world, String permission)
+	{
+		return handler.findUsersWithPermission(world, permission);
+	}
+
+	@Override
+	public void save()
+	{
+		handler.save();
+	}
+
+	@Override
+	public void reload()
+	{
+		handler.reload();
 	}
 
 	private String worldName(EntityPlayer player)

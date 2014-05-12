@@ -1,7 +1,9 @@
 package org.ultramine.permission;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static org.ultramine.permission.PermissionResolver.CheckResult;
 
@@ -49,6 +51,23 @@ public class UserContainer<T extends User>
 	public T get(String name)
 	{
 		return users.get(name.toLowerCase());
+	}
+
+	public Set<String> getAllWithPermission(String permission)
+	{
+		Set<String> result;
+		if (parentContainer != null)
+			result = parentContainer.getAllWithPermission(permission);
+		else
+			result = new HashSet<String>();
+
+		for (User user : users.values())
+		{
+			if (user.getPermissions().check(permission) == CheckResult.TRUE)
+				result.add(user.getName());
+		}
+
+		return result;
 	}
 
 	public void add(T user)

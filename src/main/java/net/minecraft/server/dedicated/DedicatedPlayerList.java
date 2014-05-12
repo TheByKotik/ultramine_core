@@ -16,6 +16,7 @@ import net.minecraft.server.management.ServerConfigurationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.PermissionHandler;
 
 @SideOnly(Side.SERVER)
 public class DedicatedPlayerList extends ServerConfigurationManager
@@ -44,9 +45,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 		this.getBannedPlayers().saveToFileWithHeader();
 		this.getBannedIPs().loadBanList();
 		this.getBannedIPs().saveToFileWithHeader();
-		this.loadOpsList();
 		this.readWhiteList();
-		this.saveOpsList();
 
 		if (!this.whiteList.exists())
 		{
@@ -64,13 +63,13 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 	public void addOp(String par1Str)
 	{
 		super.addOp(par1Str);
-		this.saveOpsList();
+		PermissionHandler.getInstance().save();
 	}
 
 	public void removeOp(String par1Str)
 	{
 		super.removeOp(par1Str);
-		this.saveOpsList();
+		PermissionHandler.getInstance().save();
 	}
 
 	public void removeFromWhitelist(String par1Str)

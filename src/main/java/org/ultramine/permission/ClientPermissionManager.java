@@ -1,5 +1,7 @@
 package org.ultramine.permission;
 
+import java.util.Set;
+
 public class ClientPermissionManager implements IPermissionHandler
 {
 	private World global;
@@ -63,5 +65,21 @@ public class ClientPermissionManager implements IPermissionHandler
 			global.add(new User(player));
 
 		global.get(player).setMeta(key, value);
+	}
+
+	@Override
+	public Set<String> findUsersWithPermission(String world, String permission)
+	{
+		return global.getAllWithPermission(permission);
+	}
+
+	@Override
+	public void save()
+	{
+	}
+
+	@Override
+	public void reload()
+	{
 	}
 }

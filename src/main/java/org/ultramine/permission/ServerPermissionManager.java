@@ -5,6 +5,7 @@ import org.ultramine.server.util.YamlConfigProvider;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ServerPermissionManager implements IPermissionHandler
 {
@@ -107,6 +108,31 @@ public class ServerPermissionManager implements IPermissionHandler
 			worldContainer.add(new User(player));
 
 		worldContainer.get(player).setMeta(key, value);
+	}
+
+	@Override
+	public Set<String> findUsersWithPermission(String world, String permission)
+	{
+		if (!worlds.containsKey(world))
+			return getGlobal().getAllWithPermission(permission);
+
+		return getWorld(world).getAllWithPermission(permission);
+	}
+
+	@Override
+	public void save()
+	{
+		saveGroups();
+		for (String world : worlds.keySet())
+			saveWorld(world);
+	}
+
+	@Override
+	public void reload()
+	{
+		reloadGroups();
+		for (String world : worlds.keySet())
+			reloadWorld(world);
 	}
 
 	public void reloadWorld(String name)
