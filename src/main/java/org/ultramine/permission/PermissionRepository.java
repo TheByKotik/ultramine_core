@@ -9,8 +9,20 @@ import java.util.Set;
 
 public class PermissionRepository
 {
-	private Set<String> registeredPermissions = new HashSet<String>();
-	private Map<String, ProxyPermission> proxyPermissions = new HashMap<String, ProxyPermission>();
+	private Set<String> registeredPermissions;
+	private Map<String, ProxyPermission> proxyPermissions;
+
+	public PermissionRepository()
+	{
+		registeredPermissions = new HashSet<String>();
+		proxyPermissions = new HashMap<String, ProxyPermission>();
+	}
+
+	public PermissionRepository(PermissionRepository anotherRepository)
+	{
+		registeredPermissions = new HashSet<String>(anotherRepository.registeredPermissions);
+		proxyPermissions = new HashMap<String, ProxyPermission>(anotherRepository.proxyPermissions);
+	}
 
 	public ProxyPermission getPermission(String key)
 	{
@@ -30,13 +42,19 @@ public class PermissionRepository
 		return proxyPermissions.get(key);
 	}
 
-	public void registerPermission(IPermission permission)
+	public ProxyPermission registerPermission(IPermission permission)
 	{
 		if (registeredPermissions.contains(permission.getKey()))
 			throw new IllegalArgumentException("Permission already registered");
 
 		if (permission.getKey().startsWith("^"))
 			throw new IllegalArgumentException("^* names are reserved");
+
+		if (permission instanceof ProxyPermission)
+		{
+			proxyPermissions.put(permission.getKey(), (ProxyPermission)permission);
+			return (ProxyPermission)permission;
+		}
 
 		ProxyPermission proxy = getPermission(permission.getKey());
 		if (permission instanceof IChangeablePermission)
@@ -45,6 +63,7 @@ public class PermissionRepository
 			proxy.linkSimple(permission);
 
 		registeredPermissions.add(permission.getKey());
+		return proxy;
 	}
 
 	public static class ProxyPermission implements IChangeablePermission

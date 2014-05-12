@@ -135,6 +135,12 @@ public class ServerPermissionManager implements IPermissionHandler
 			reloadWorld(world);
 	}
 
+	@Override
+	public PermissionRepository getRepository()
+	{
+		return permissionRepository;
+	}
+
 	public void reloadWorld(String name)
 	{
 		World.WorldData data = YamlConfigProvider.getOrCreateConfig(worldFile(name), World.WorldData.class);

@@ -2,6 +2,7 @@ package org.ultramine.server;
 
 import net.minecraft.entity.player.EntityPlayer;
 import org.ultramine.permission.ClientPermissionManager;
+import org.ultramine.permission.IPermission;
 import org.ultramine.permission.IPermissionHandler;
 import org.ultramine.permission.MetaResolver;
 import org.ultramine.permission.Permission;
@@ -15,30 +16,49 @@ public class PermissionHandler implements IPermissionHandler
 	public static final String OP_PERMISSION = "minecraft.op";
 
 	private static PermissionHandler instance;
-	private static PermissionRepository permissionRepository = new PermissionRepository();
+	private static PermissionRepository mainRepository = new PermissionRepository();
 
 	public static void registerPermission(String key, String name, String description)
 	{
-		permissionRepository.registerPermission(new Permission(key, name, description));
+		if (instance != null)
+			getInstance().getRepository().registerPermission(new Permission(key, name, description));
+		else
+			mainRepository.registerPermission(new Permission(key, name, description));
 	}
 
-	public static PermissionRepository getRepository()
+	public static void registerPermission(IPermission permission)
 	{
-		return permissionRepository;
+		if (instance != null)
+			getInstance().getRepository().registerPermission(permission);
+		else
+			mainRepository.registerPermission(permission);
+	}
+
+	public static PermissionRepository.ProxyPermission getPermission(String key)
+	{
+		if (instance != null)
+			return getInstance().getRepository().getPermission(key);
+
+		return mainRepository.getPermission(key);
 	}
 
 	public static void initServer()
 	{
 		if (instance != null)
 			throw new IllegalStateException("Handler is already initialized");
-		instance = new PermissionHandler(new ServerPermissionManager(ConfigurationHandler.getSettingDir(), permissionRepository));
+		instance = new PermissionHandler(new ServerPermissionManager(ConfigurationHandler.getSettingDir(), new PermissionRepository(mainRepository)));
 	}
 
 	public static void initClient()
 	{
 		if (instance != null)
 			throw new IllegalStateException("Handler is already initialized");
-		instance = new PermissionHandler(new ClientPermissionManager(permissionRepository));
+		instance = new PermissionHandler(new ClientPermissionManager(new PermissionRepository(mainRepository)));
+	}
+
+	public static void reset()
+	{
+		instance = null;
 	}
 
 	public static PermissionHandler getInstance()
@@ -138,6 +158,12 @@ public class PermissionHandler implements IPermissionHandler
 	public void reload()
 	{
 		handler.reload();
+	}
+
+	@Override
+	public PermissionRepository getRepository()
+	{
+		return handler.getRepository();
 	}
 
 	private String worldName(EntityPlayer player)

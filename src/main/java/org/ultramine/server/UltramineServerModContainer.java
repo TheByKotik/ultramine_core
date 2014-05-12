@@ -15,6 +15,7 @@ import cpw.mods.fml.common.event.FMLConstructionEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -88,6 +89,12 @@ public class UltramineServerModContainer extends DummyModContainer
 				PermissionHandler.initServer();
 				break;
 		}
+	}
+
+	@Subscribe
+	public void stopServer(FMLServerStoppedEvent e)
+	{
+		PermissionHandler.reset();
 	}
 
 	@Override

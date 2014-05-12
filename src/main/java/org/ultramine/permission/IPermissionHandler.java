@@ -23,4 +23,6 @@ public interface IPermissionHandler
 	public void save();
 
 	public void reload();
+
+	public PermissionRepository getRepository();
 }

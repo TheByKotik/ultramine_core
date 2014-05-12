@@ -82,4 +82,10 @@ public class ClientPermissionManager implements IPermissionHandler
 	public void reload()
 	{
 	}
+
+	@Override
+	public PermissionRepository getRepository()
+	{
+		return permissionRepository;
+	}
 }
