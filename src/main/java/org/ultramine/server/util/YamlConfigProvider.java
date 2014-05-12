@@ -44,7 +44,10 @@ public class YamlConfigProvider
 			{
 				try
 				{
-					reader.close();
+					if (reader != null)
+					{
+						reader.close();
+					}
 				} catch (IOException ignored) {}
 			}
 		}
@@ -69,7 +72,10 @@ public class YamlConfigProvider
 		{
 			try
 			{
-				writer.close();
+				if (writer != null)
+				{
+					writer.close();
+				}
 			} catch (IOException ignored) {}
 		}
 	}

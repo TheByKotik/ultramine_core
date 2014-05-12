@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServerPermissionManager
+public class ServerPermissionManager implements IPermissionHandler
 {
 	private final static String GLOBAL_WORLD = "global";
 	private final static String GROUPS_CONFIG = "groups.yml";
@@ -16,16 +16,97 @@ public class ServerPermissionManager
 	private PermissionRepository permissionRepository;
 	private Map<String, GroupPermission> groups;
 
-	public ServerPermissionManager(File configDir)
+	public ServerPermissionManager(File configDir, PermissionRepository permissionRepository)
 	{
 		this.configDir = new File(configDir, "permissions");
 		if (!this.configDir.exists())
 			this.configDir.mkdir();
 
-		this.permissionRepository = new PermissionRepository();
+		this.permissionRepository = permissionRepository;
 		this.worlds = new HashMap<String, World>();
 		this.groups = new HashMap<String, GroupPermission>();
+		reloadGroups();
 		reloadWorld(GLOBAL_WORLD);
+	}
+
+
+	@Override
+	public boolean has(String world, String player, String permission)
+	{
+		if (!worlds.containsKey(world))
+			return getGlobal().checkUserPermission(player, permission);
+
+		return getWorld(world).checkUserPermission(player, permission);
+	}
+
+	@Override
+	public void add(String world, String player, String permission)
+	{
+		if (!worlds.containsKey(world))
+			reloadWorld(world);
+
+		World worldContainer = getWorld(world);
+		if (!worldContainer.contains(player))
+			worldContainer.add(new User(player));
+
+		worldContainer.get(player).addPermission(permissionRepository.getPermission(permission));
+	}
+
+	@Override
+	public void add(String world, String permission)
+	{
+		if (!worlds.containsKey(world))
+			reloadWorld(world);
+
+		getWorld(world).getDefaultPermissions().addPermission(permissionRepository.getPermission(permission));
+	}
+
+	@Override
+	public void remove(String world, String player, String permission)
+	{
+		if (!worlds.containsKey(world))
+			return;
+
+		World worldContainer = getWorld(world);
+		if (!worldContainer.contains(player))
+			return;
+
+		worldContainer.get(player).removePermission(permission);
+	}
+
+	@Override
+	public void remove(String world, String permission)
+	{
+		if (!worlds.containsKey(world))
+			return;
+
+		getWorld(world).getDefaultPermissions().removePermission(permission);
+	}
+
+	@Override
+	public MetaResolver getMeta(String world, String player)
+	{
+		if (!worlds.containsKey(world))
+			return MetaResolver.BLANK_RESOLVER;
+
+		World worldContainer = getWorld(world);
+		if (!worldContainer.contains(player))
+			return MetaResolver.BLANK_RESOLVER;
+
+		return worldContainer.get(player).getMeta();
+	}
+
+	@Override
+	public void setMeta(String world, String player, String key, Object value)
+	{
+		if (!worlds.containsKey(world))
+			reloadWorld(world);
+
+		World worldContainer = getWorld(world);
+		if (!worldContainer.contains(player))
+			worldContainer.add(new User(player));
+
+		worldContainer.get(player).setMeta(key, value);
 	}
 
 	public void reloadWorld(String name)
@@ -113,6 +194,6 @@ public class ServerPermissionManager
 
 	public static class GroupData
 	{
-		Map<String, World.HolderData> groups = new HashMap<String, World.HolderData>();
+		public Map<String, World.HolderData> groups = new HashMap<String, World.HolderData>();
 	}
 }
