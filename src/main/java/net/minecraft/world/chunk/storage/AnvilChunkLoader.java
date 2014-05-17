@@ -91,8 +91,6 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 				par4NBTTagCompound.setInteger("zPos", par3);
 				chunk = this.readChunkFromNBT(par1World, par4NBTTagCompound.getCompoundTag("Level"));
 			}
-
-			MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Load(chunk, par4NBTTagCompound));
 			return chunk;
 		}
 	}
