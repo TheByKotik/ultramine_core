@@ -1,6 +1,6 @@
 package org.ultramine.server;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.command.ICommandSender;
 import org.ultramine.permission.ClientPermissionManager;
 import org.ultramine.permission.IPermission;
 import org.ultramine.permission.IPermissionHandler;
@@ -9,6 +9,7 @@ import org.ultramine.permission.Permission;
 import org.ultramine.permission.PermissionRepository;
 import org.ultramine.permission.ServerPermissionManager;
 
+import java.util.List;
 import java.util.Set;
 
 public class PermissionHandler implements IPermissionHandler
@@ -81,9 +82,16 @@ public class PermissionHandler implements IPermissionHandler
 		return handler.has(world, player, permission);
 	}
 
-	public boolean has(EntityPlayer player, String permission)
+	public boolean has(ICommandSender player, String permission)
 	{
-		return has(worldName(player), player.getDisplayName(), permission);
+		return has(worldName(player), player.getCommandSenderName(), permission);
+	}
+
+	public boolean has(ICommandSender player, List<String> permissions)
+	{
+		for (String permission : permissions)
+			if (!has(player, permission)) return false;
+		return true;
 	}
 
 	@Override
@@ -92,9 +100,9 @@ public class PermissionHandler implements IPermissionHandler
 		handler.add(world, player, permission);
 	}
 
-	public void add(EntityPlayer player, String permission)
+	public void add(ICommandSender player, String permission)
 	{
-		add(worldName(player), player.getDisplayName(), permission);
+		add(worldName(player), player.getCommandSenderName(), permission);
 	}
 
 	@Override
@@ -109,9 +117,9 @@ public class PermissionHandler implements IPermissionHandler
 		handler.remove(world, player, permission);
 	}
 
-	public void remove(EntityPlayer player, String permission)
+	public void remove(ICommandSender player, String permission)
 	{
-		remove(worldName(player), player.getDisplayName(), permission);
+		remove(worldName(player), player.getCommandSenderName(), permission);
 	}
 
 	@Override
@@ -126,9 +134,9 @@ public class PermissionHandler implements IPermissionHandler
 		return handler.getMeta(world, player);
 	}
 
-	public MetaResolver getMeta(EntityPlayer player)
+	public MetaResolver getMeta(ICommandSender player)
 	{
-		return getMeta(worldName(player), player.getDisplayName());
+		return getMeta(worldName(player), player.getCommandSenderName());
 	}
 
 	@Override
@@ -137,9 +145,9 @@ public class PermissionHandler implements IPermissionHandler
 		handler.setMeta(world, player, key, value);
 	}
 
-	public void setMeta(EntityPlayer player, String key, Object value)
+	public void setMeta(ICommandSender player, String key, Object value)
 	{
-		setMeta(worldName(player), player.getDisplayName(), key, value);
+		setMeta(worldName(player), player.getCommandSenderName(), key, value);
 	}
 
 	@Override
@@ -166,7 +174,7 @@ public class PermissionHandler implements IPermissionHandler
 		return handler.getRepository();
 	}
 
-	private String worldName(EntityPlayer player)
+	private String worldName(ICommandSender player)
 	{
 		return player.getEntityWorld().getWorldInfo().getWorldName();
 	}

@@ -25,13 +25,7 @@ public class UserContainer<T extends User>
 
 	public final boolean checkUserPermission(String userName, String permissionKey)
 	{
-		switch (check(userName, permissionKey))
-		{
-			case TRUE:
-				return true;
-			default:
-				return false;
-		}
+		return check(userName, permissionKey) == CheckResult.TRUE;
 	}
 
 	protected CheckResult check(String userName, String permissionKey)
