@@ -10,20 +10,20 @@ public class ChunkIOExecutor
 	static final int BASE_THREADS = 1;
 	static final int PLAYERS_PER_THREAD = 50;
 
-	private static final AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException> instance = new AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException>(
-			new ChunkIOProvider(), BASE_THREADS);
+	private static final AsynchronousExecutor<QueuedChunk, Chunk, IChunkLoadCallback, RuntimeException> instance =
+			new AsynchronousExecutor<QueuedChunk, Chunk, IChunkLoadCallback, RuntimeException>(new ChunkIOProvider(), BASE_THREADS);
 
 	// public static void waitForChunkLoad(World world, int x, int z) {
 	// instance.get(new QueuedChunk(ChunkHash.chunkToKey(x, z), null, world,
 	// null));
 	// }
 
-	public static void queueChunkLoad(World world, AnvilChunkLoader loader, ChunkProviderServer provider, int x, int z, Runnable runnable)
+	public static void queueChunkLoad(World world, AnvilChunkLoader loader, ChunkProviderServer provider, int x, int z, IChunkLoadCallback runnable)
 	{
 		instance.add(new QueuedChunk(ChunkHash.chunkToKey(x, z), loader, world, provider), runnable);
 	}
 
-	public static void dropQueuedChunkLoad(net.minecraft.world.World world, int x, int z, Runnable runnable)
+	public static void dropQueuedChunkLoad(net.minecraft.world.World world, int x, int z, IChunkLoadCallback runnable)
 	{
 		instance.drop(new QueuedChunk(ChunkHash.chunkToKey(x, z), null, world, null), runnable);
 	}

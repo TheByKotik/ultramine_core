@@ -39,6 +39,7 @@ import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.ChunkIOExecutor;
 import org.ultramine.server.chunk.ChunkMap;
+import org.ultramine.server.chunk.IChunkLoadCallback;
 
 public class ChunkProviderServer implements IChunkProvider
 {
@@ -367,11 +368,12 @@ public class ChunkProviderServer implements IChunkProvider
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
-	public void loadAsync(int x, int z, Runnable callback) //XXX
+	public void loadAsync(int x, int z, IChunkLoadCallback callback) //XXX
 	{
-		if(loadedChunkHashMap.contains(x, z))
+		Chunk chunk = loadedChunkHashMap.get(x, z);
+		if(chunk != null)
 		{
-			callback.run();
+			callback.onChunkLoaded(chunk);
 			return;
 		}
 		else

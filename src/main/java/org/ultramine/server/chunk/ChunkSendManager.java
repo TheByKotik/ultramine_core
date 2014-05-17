@@ -207,7 +207,7 @@ public class ChunkSendManager
 			sendingQueueSize.incrementAndGet();
 			int ncx = ChunkHash.keyToX(key);
 			int ncz = ChunkHash.keyToZ(key);
-			manager.getWorldServer().theChunkProviderServer.loadAsync(ncx, ncz, new ChunkLoadCallback(ncx, ncz));
+			manager.getWorldServer().theChunkProviderServer.loadAsync(ncx, ncz, chunkLoadCallback);
 		}
 	}
 	
@@ -287,23 +287,14 @@ public class ChunkSendManager
 	
 	
 	
-	private class ChunkLoadCallback implements Runnable
+	private IChunkLoadCallback chunkLoadCallback = new IChunkLoadCallback()
 	{
-		private final int x;
-		private final int z;
-		
-		public ChunkLoadCallback(int x, int z)
-		{
-			this.x = x;
-			this.z = z;
-		}
-		
 		@Override
-		public void run()
+		public void onChunkLoaded(Chunk chunk)
 		{
-			executor.execute(new CompressAndSendChunkTask(player.worldObj.getChunkFromChunkCoords(x, z)));
+			executor.execute(new CompressAndSendChunkTask(chunk));
 		}
-	}
+	};
 	
 	private class CompressAndSendChunkTask implements Runnable
 	{

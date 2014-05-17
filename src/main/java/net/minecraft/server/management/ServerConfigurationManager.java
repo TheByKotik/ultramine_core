@@ -61,12 +61,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.demo.DemoWorldManager;
 import net.minecraft.world.storage.IPlayerFileData;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.chunk.IChunkLoadCallback;
 
 public abstract class ServerConfigurationManager
 {
@@ -261,10 +263,10 @@ public abstract class ServerConfigurationManager
 		}
 		else
 		{
-			worldserver.theChunkProviderServer.loadAsync(cx, cz, new Runnable()
+			worldserver.theChunkProviderServer.loadAsync(cx, cz, new IChunkLoadCallback()
 			{
 				@Override
-				public void run()
+				public void onChunkLoaded(Chunk chunk)
 				{
 					worldserver.spawnEntityInWorld(par1EntityPlayerMP);
 					func_72375_a(par1EntityPlayerMP, (WorldServer)null);

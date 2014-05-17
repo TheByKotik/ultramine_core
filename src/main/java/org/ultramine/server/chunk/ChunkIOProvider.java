@@ -7,7 +7,7 @@ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkDataEvent;
 
-class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChunk, Chunk, Runnable, RuntimeException>
+class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChunk, Chunk, IChunkLoadCallback, RuntimeException>
 {
 	private final AtomicInteger threadNumber = new AtomicInteger(1);
 
@@ -69,9 +69,9 @@ class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChu
 		chunk.func_150804_b(false);
 	}
 
-	public void callStage3(QueuedChunk queuedChunk, Chunk chunk, Runnable runnable) throws RuntimeException
+	public void callStage3(QueuedChunk queuedChunk, Chunk chunk, IChunkLoadCallback runnable) throws RuntimeException
 	{
-		runnable.run();
+		runnable.onChunkLoaded(chunk);
 	}
 
 	public Thread newThread(Runnable runnable)
