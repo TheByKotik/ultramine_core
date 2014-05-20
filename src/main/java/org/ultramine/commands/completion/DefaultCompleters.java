@@ -14,34 +14,34 @@ public class DefaultCompleters
 	@ArgumentCompleter(value = "player", isUsername = true)
 	public static List<String> player(String val, String[] args)
 	{
-		return getListOfStringsMatchingWord(val, MinecraftServer.getServer().getAllUsernames());
+		return filterArray(val, MinecraftServer.getServer().getAllUsernames());
 	}
 
 	@ArgumentCompleter("item")
 	public static List<String> item(String val, String[] args)
 	{
-		return getListOfStringsFromIterableMatchingWord(val, Item.itemRegistry.getKeys());
+		return filterCollection(val, Item.itemRegistry.getKeys());
 	}
 
 	@ArgumentCompleter("block")
 	public static List<String> block(String val, String[] args)
 	{
-		return getListOfStringsFromIterableMatchingWord(val, Block.blockRegistry.getKeys());
+		return filterCollection(val, Block.blockRegistry.getKeys());
 	}
 
 	@ArgumentCompleter("entity")
 	public static List<String> entity(String val, String[] args)
 	{
-		return getListOfStringsFromIterableMatchingWord(val, EntityList.func_151515_b());
+		return filterCollection(val, EntityList.func_151515_b());
 	}
 
 	@ArgumentCompleter("list")
 	public static List<String> list(String val, String[] args)
 	{
-		return getListOfStringsMatchingWord(val, args);
+		return filterArray(val, args);
 	}
 
-	public static List<String> getListOfStringsMatchingWord(String filter, String[] strings)
+	public static List<String> filterArray(String filter, String[] strings)
 	{
 		List<String> result = new ArrayList<String>();
 
@@ -54,7 +54,7 @@ public class DefaultCompleters
 		return result;
 	}
 
-	public static List<String> getListOfStringsFromIterableMatchingWord(String filter, Iterable<String> iterable)
+	public static List<String> filterCollection(String filter, Iterable<String> iterable)
 	{
 		List<String> result = new ArrayList<String>();
 
