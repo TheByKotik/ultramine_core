@@ -2,10 +2,12 @@ package org.ultramine.commands;
 
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.util.IChatComponent;
+import org.ultramine.server.PermissionHandler;
 
 public class CommandContext
 {
@@ -111,5 +113,11 @@ public class CommandContext
 	public void notifyAdmins(String messageKey, Object... messageArgs)
 	{
 		CommandBase.notifyAdmins(sender, messageKey, messageArgs);
+	}
+
+	public void checkSenderPermission(String permission)
+	{
+		if (!PermissionHandler.getInstance().has(sender, permission))
+			throw new CommandException("commands.generic.permission");
 	}
 }

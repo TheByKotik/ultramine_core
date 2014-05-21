@@ -87,11 +87,24 @@ public class PermissionHandler implements IPermissionHandler
 		return has(worldName(player), player.getCommandSenderName(), permission);
 	}
 
-	public boolean has(ICommandSender player, List<String> permissions)
+	public boolean has(ICommandSender player, String... permissions)
 	{
+		if (permissions == null)
+			return true;
+
 		for (String permission : permissions)
 			if (!has(player, permission)) return false;
 		return true;
+	}
+
+	public boolean hasAny(ICommandSender player, String... permissions)
+	{
+		if (permissions == null)
+			return true;
+
+		for (String permission : permissions)
+			if (has(player, permission)) return true;
+		return false;
 	}
 
 	@Override

@@ -2,16 +2,21 @@ package org.ultramine.commands;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import org.ultramine.server.PermissionHandler;
 
 import java.util.List;
 
 public class VanillaCommandWrapper implements IExtendedCommand
 {
 	private ICommand wrappedCommand;
+	private String permission;
+	private String description;
 
 	public VanillaCommandWrapper(ICommand wrappedCommand)
 	{
 		this.wrappedCommand = wrappedCommand;
+		this.permission = "command.vanilla." + wrappedCommand.getCommandName();
+		this.description = "command." + wrappedCommand.getCommandName() + ".description";
 	}
 
 	@Override
@@ -41,7 +46,7 @@ public class VanillaCommandWrapper implements IExtendedCommand
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1)
 	{
-		return wrappedCommand.canCommandSenderUseCommand(var1);
+		return (var1.getCommandSenderName().equals("Server") || PermissionHandler.getInstance().has(var1, permission)) && wrappedCommand.canCommandSenderUseCommand(var1);
 	}
 
 	@Override
@@ -60,5 +65,17 @@ public class VanillaCommandWrapper implements IExtendedCommand
 	public int compareTo(Object o)
 	{
 		return wrappedCommand.compareTo(o);
+	}
+
+	@Override
+	public String getDescription()
+	{
+		return description;
+	}
+
+	@Override
+	public String getGroup()
+	{
+		return "vanilla";
 	}
 }
