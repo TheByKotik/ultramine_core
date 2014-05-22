@@ -1,6 +1,8 @@
 package org.ultramine.server.util;
 
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
 
 import java.io.File;
 import java.io.FileReader;
@@ -9,7 +11,18 @@ import java.io.IOException;
 
 public class YamlConfigProvider
 {
-	private static final Yaml YAML = new Yaml();
+	private static final Yaml YAML;
+	
+	static
+	{
+		PropertyUtils prorutils = new PropertyUtils();
+		prorutils.setSkipMissingProperties(true);
+		
+		Constructor constructor = new Constructor();
+		constructor.setPropertyUtils(prorutils);
+		
+		YAML = new Yaml(constructor);
+	}
 
 	public static <T> T getOrCreateConfig(File configFile, Class<T> clazz)
 	{
