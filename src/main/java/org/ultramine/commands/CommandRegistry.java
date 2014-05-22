@@ -38,7 +38,7 @@ public class CommandRegistry
 			{
 				IExtendedCommand cmd = commandMap.get(alias);
 				if (cmd == null || !cmd.getCommandName().equals(alias))
-					commandMap.put(alias, cmd);
+					commandMap.put(alias, command);
 			}
 		}
 

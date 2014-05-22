@@ -54,12 +54,24 @@ public class ServerPermissionManager implements IPermissionHandler
 	}
 
 	@Override
-	public void add(String world, String permission)
+	public void addToWorld(String world, String permission)
 	{
 		if (!worlds.containsKey(world))
 			reloadWorld(world);
 
 		getWorld(world).getDefaultPermissions().addPermission(permissionRepository.getPermission(permission));
+	}
+
+	@Override
+	public void addToGroup(String group, String permission)
+	{
+		if (!group.startsWith("group."))
+			group = "group." + group;
+
+		if (!groups.containsKey(group))
+			groups.put(group, new GroupPermission(group));
+
+		groups.get(group).addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override
@@ -76,12 +88,24 @@ public class ServerPermissionManager implements IPermissionHandler
 	}
 
 	@Override
-	public void remove(String world, String permission)
+	public void removeFromWorld(String world, String permission)
 	{
 		if (!worlds.containsKey(world))
 			return;
 
 		getWorld(world).getDefaultPermissions().removePermission(permission);
+	}
+
+	@Override
+	public void removeFromGroup(String group, String permission)
+	{
+		if (!group.startsWith("group."))
+			group = "group." + group;
+
+		if (!groups.containsKey(group))
+			return;
+
+		groups.get(group).removePermission(permission);
 	}
 
 	@Override
@@ -177,15 +201,19 @@ public class ServerPermissionManager implements IPermissionHandler
 		for (Map.Entry<String, World.HolderData> groupData : data.groups.entrySet())
 		{
 			GroupPermission group;
-			if (!groups.containsKey(groupData.getKey()))
+			String groupKey = groupData.getKey();
+			if (!groupKey.startsWith("group."))
+				groupKey = "group." + groupKey;
+
+			if (!groups.containsKey(groupKey))
 			{
-				group = new GroupPermission(groupData.getKey(), groupData.getValue().meta);
+				group = new GroupPermission(groupKey, groupData.getValue().meta);
 				permissionRepository.registerPermission(group);
-				groups.put(groupData.getKey(), group);
+				groups.put(groupKey, group);
 			}
 			else
 			{
-				group = groups.get(groupData.getKey());
+				group = groups.get(groupKey);
 				group.setInnerMeta(groupData.getValue().meta);
 			}
 

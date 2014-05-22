@@ -1,0 +1,26 @@
+# Permissions
+command.pconfig.usage=/pconfig <save|reload>
+command.pconfig.description=Save or reload all permissions configs
+command.pconfig.success.save=Permissions are saved
+command.pconfig.success.reload=Permissions are reloaded
+
+command.pworld.usage=/pworld <add|remove> <permissions ...>
+command.pworld.description=Add or remove permissions to all user in current world
+command.pworld.success.add=Add permission <%s> to world <%s>
+command.pworld.success.remove=Remove permission <%s> from world <%s>
+
+command.pworld.super.usage=/pworld.super <world> <add|remove> <permissions ...>
+command.pworld.super.description=Add or remove permissions to all user in world
+
+command.puser.usage=/puser <user> <add|remove> <permissions ...>
+command.puser.description=Add or remove permissions to user in current world
+command.puser.success.add=Add permission <%s> to user <%s> in world <%s>
+command.puser.success.remove=Remove permission <%s> from user <%s> in world <%s>
+
+command.puser.super.usage=/puser.super <world> <user> <add|remove> <permissions ...>
+command.puser.super.description=Add or remove permissions to user in world
+
+command.pgroup.usage=/pgroup <group> <add|remove> <permissions ...>
+command.pgroup.description=Add or remove permissions to group
+command.pgroup.success.add=Add permission <%s> to group <%s>
+command.pgroup.success.remove=Remove permission <%s> from group <%s>

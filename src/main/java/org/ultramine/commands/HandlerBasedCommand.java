@@ -32,6 +32,8 @@ public class HandlerBasedCommand implements IExtendedCommand
 		this.handler = handler;
 		this.usage = "command." + name + ".usage";
 		this.description = "command." + name + ".description";
+
+		handler.setCommand(this);
 	}
 
 	public HandlerBasedCommand withAliases(String... aliases)

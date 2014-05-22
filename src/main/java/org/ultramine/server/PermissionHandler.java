@@ -9,7 +9,6 @@ import org.ultramine.permission.Permission;
 import org.ultramine.permission.PermissionRepository;
 import org.ultramine.permission.ServerPermissionManager;
 
-import java.util.List;
 import java.util.Set;
 
 public class PermissionHandler implements IPermissionHandler
@@ -119,9 +118,15 @@ public class PermissionHandler implements IPermissionHandler
 	}
 
 	@Override
-	public void add(String world, String permission)
+	public void addToWorld(String world, String permission)
 	{
-		handler.add(world, permission);
+		handler.addToWorld(world, permission);
+	}
+
+	@Override
+	public void addToGroup(String group, String permission)
+	{
+		handler.addToGroup(group, permission);
 	}
 
 	@Override
@@ -136,9 +141,15 @@ public class PermissionHandler implements IPermissionHandler
 	}
 
 	@Override
-	public void remove(String world, String permission)
+	public void removeFromWorld(String world, String permission)
 	{
-		handler.remove(world, permission);
+		handler.removeFromWorld(world, permission);
+	}
+
+	@Override
+	public void removeFromGroup(String group, String permission)
+	{
+		handler.removeFromGroup(group, permission);
 	}
 
 	@Override

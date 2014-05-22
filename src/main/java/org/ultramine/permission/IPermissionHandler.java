@@ -8,11 +8,15 @@ public interface IPermissionHandler
 
 	public void add(String world, String player, String permission);
 
-	public void add(String world, String permission);
+	public void addToWorld(String world, String permission);
+
+	public void addToGroup(String group, String permission);
 
 	public void remove(String world, String player, String permission);
 
-	public void remove(String world, String permission);
+	public void removeFromWorld(String world, String permission);
+
+	public void removeFromGroup(String group, String permission);
 
 	public MetaResolver getMeta(String world, String player);
 

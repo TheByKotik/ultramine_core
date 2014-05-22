@@ -1,16 +1,20 @@
 package org.ultramine.permission;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class ClientPermissionManager implements IPermissionHandler
 {
 	private World global;
 	private PermissionRepository permissionRepository;
+	private Map<String, GroupPermission> groups;
 
 	public ClientPermissionManager(PermissionRepository permissionRepository)
 	{
 		this.permissionRepository = permissionRepository;
 		this.global = new World(permissionRepository);
+		this.groups = new HashMap<String, GroupPermission>();
 	}
 
 	@Override
@@ -29,9 +33,21 @@ public class ClientPermissionManager implements IPermissionHandler
 	}
 
 	@Override
-	public void add(String world, String permission)
+	public void addToWorld(String world, String permission)
 	{
 		global.getDefaultPermissions().addPermission(permissionRepository.getPermission(permission));
+	}
+
+	@Override
+	public void addToGroup(String group, String permission)
+	{
+		if (!group.startsWith("group."))
+			group = "group." + group;
+
+		if (!groups.containsKey(group))
+			groups.put(group, new GroupPermission(group));
+
+		groups.get(group).addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override
@@ -44,9 +60,21 @@ public class ClientPermissionManager implements IPermissionHandler
 	}
 
 	@Override
-	public void remove(String world, String permission)
+	public void removeFromWorld(String world, String permission)
 	{
 		global.getDefaultPermissions().removePermission(permission);
+	}
+
+	@Override
+	public void removeFromGroup(String group, String permission)
+	{
+		if (!group.startsWith("group."))
+			group = "group." + group;
+
+		if (!groups.containsKey(group))
+			return;
+
+		groups.get(group).removePermission(permission);
 	}
 
 	@Override

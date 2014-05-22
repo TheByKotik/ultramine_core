@@ -21,6 +21,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import org.ultramine.commands.completion.DefaultCompleters;
 import org.ultramine.commands.completion.RegisterCompletersEvent;
+import org.ultramine.permission.commands.BasicPermissionCommands;
 
 public class UltramineServerModContainer extends DummyModContainer
 {
@@ -97,6 +98,7 @@ public class UltramineServerModContainer extends DummyModContainer
 				PermissionHandler.initServer();
 				break;
 		}
+		e.getCommandRegistry().registerCommands(BasicPermissionCommands.class);
 	}
 
 	@Subscribe
