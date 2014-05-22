@@ -64,7 +64,15 @@ public class VanillaCommandWrapper implements IExtendedCommand
 	@Override
 	public int compareTo(Object o)
 	{
-		return wrappedCommand.compareTo(o);
+		if (o instanceof IExtendedCommand)
+		{
+			int result = getGroup().compareTo(((IExtendedCommand) o).getGroup());
+			if (result == 0)
+				result = getCommandName().compareTo(((IExtendedCommand) o).getCommandName());
+
+			return result;
+		}
+		return -1;
 	}
 
 	@Override

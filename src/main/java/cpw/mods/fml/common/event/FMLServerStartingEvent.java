@@ -16,6 +16,7 @@ import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommand;
 import net.minecraft.server.MinecraftServer;
 import cpw.mods.fml.common.LoaderState.ModState;
+import org.ultramine.commands.CommandRegistry;
 
 public class FMLServerStartingEvent extends FMLStateEvent
 {
@@ -42,5 +43,10 @@ public class FMLServerStartingEvent extends FMLStateEvent
 	{
 		CommandHandler ch = (CommandHandler) getServer().getCommandManager();
 		ch.registerCommand(command);
+	}
+
+	public CommandRegistry getCommandRegistry()
+	{
+		return ((CommandHandler) getServer().getCommandManager()).getRegistry();
 	}
 }

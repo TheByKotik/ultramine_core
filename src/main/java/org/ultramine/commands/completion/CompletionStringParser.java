@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class CompletionStringParser
 	{
 		for (Method handler : cls.getMethods())
 		{
-			if (handler.isAnnotationPresent(ArgumentCompleter.class))
+			if (handler.isAnnotationPresent(ArgumentCompleter.class) && Modifier.isStatic(handler.getModifiers()))
 			{
 				ArgumentCompleter data = handler.getAnnotation(ArgumentCompleter.class);
 				registerHandler(data.value(), new WrappedHandler(handler, data.isUsername()));

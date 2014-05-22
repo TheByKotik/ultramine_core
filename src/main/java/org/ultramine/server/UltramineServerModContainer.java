@@ -19,6 +19,8 @@ import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
+import org.ultramine.commands.completion.DefaultCompleters;
+import org.ultramine.commands.completion.RegisterCompletersEvent;
 
 public class UltramineServerModContainer extends DummyModContainer
 {
@@ -75,6 +77,12 @@ public class UltramineServerModContainer extends DummyModContainer
 		return ImmutableList.of(
 			"org.ultramine.server"
 		);
+	}
+
+	@Subscribe
+	public void registerCommandCompleters(RegisterCompletersEvent event)
+	{
+		event.getCompletionStringParser().registerHandlers(DefaultCompleters.class);
 	}
 
 	@Subscribe
