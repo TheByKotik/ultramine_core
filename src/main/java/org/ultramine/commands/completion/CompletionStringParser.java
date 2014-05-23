@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class CompletionStringParser
 {
-	private static final Pattern argumentPattern = Pattern.compile("<\\s*([^<>\\s]*)\\s*([^<>]*)>");
+	private static final Pattern argumentPattern = Pattern.compile("([\\[<])\\s*(([^<>%\\[\\]\\s]*)\\s*([^<>%\\[\\]]*))(|%\\s*([^<>%\\[\\]\\s]*)\\s*)[\\]>]");
 	private Map<String, IArgumentCompletionHandler> handlers = new HashMap<String, IArgumentCompletionHandler>();
 
 	public CommandCompletionHandler parse(String completionString)
@@ -23,16 +23,27 @@ public class CompletionStringParser
 
 		while (matcher.find())
 		{
-			String handlerName = matcher.group(1);
-
-			if (handlerName.isEmpty() || !handlers.containsKey(handlerName))
+			if (matcher.group(1).equals("["))
 			{
-				result.ignoreNextArgument();
+				String[] params = StringUtils.split(matcher.group(2));
+				result.addNextActionArgument(params);
 			}
 			else
 			{
-				String[] params = StringUtils.split(matcher.group(2));
-				result.addNextArgument(handlers.get(handlerName), params);
+				String handlerName = matcher.group(3);
+				String argumentName = matcher.group(6);
+				if (argumentName == null || argumentName.isEmpty())
+					argumentName = handlerName;
+
+				if (handlerName.isEmpty() || !handlers.containsKey(handlerName))
+				{
+					result.ignoreNextArgument(argumentName);
+				}
+				else
+				{
+					String[] params = StringUtils.split(matcher.group(4));
+					result.addNextArgument(argumentName, handlers.get(handlerName), params);
+				}
 			}
 		}
 

@@ -32,6 +32,15 @@ class CompletionStringParserTest extends Specification {
         0 * argumentHandler._
     }
 
+    def "Test action argument"() {
+        setup:
+        def commandHandler = parser.parse("[ add   remove ]")
+
+        expect: "Action is parsed"
+        commandHandler.getCompletionOptions("a") == ["add"]
+        commandHandler.getNames() == ["action"]
+    }
+
     def "Test several arguments"() {
         setup:
         def playerHandler = Mock(IArgumentCompletionHandler)
@@ -67,6 +76,15 @@ class CompletionStringParserTest extends Specification {
 
         then: "Argument handler is called"
         1 * argumentHandler.handleCompletion("third", "par1", "par2")
+    }
+
+    def "Test naming"() {
+        setup:
+        parser.registerHandler("test", Mock(IArgumentCompletionHandler))
+        def commandHandler = parser.parse("<p1> <test> [add remove] <test % p2> <%p3>")
+
+        expect: "Names are correct"
+        commandHandler.getNames() == ["p1", "test", "action", "p2", "p3"]
     }
 
     def "Test integration"() {

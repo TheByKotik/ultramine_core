@@ -11,7 +11,7 @@ class CommandCompletionHandlerTest extends Specification {
         def argumentHandler = Mock(IArgumentCompletionHandler)
 
         when: "Add argument handler to command handler"
-        commandHandler.addNextArgument(argumentHandler, "p1", "p2")
+        commandHandler.addNextArgument("name", argumentHandler, "p1", "p2")
 
         and: "Get completion for first argument"
         commandHandler.getCompletionOptions("first")
@@ -20,9 +20,17 @@ class CommandCompletionHandlerTest extends Specification {
         1 * argumentHandler.handleCompletion("first", "p1", "p2")
     }
 
+    def "Test action completion"() {
+        setup:
+        commandHandler.addNextActionArgument("add", "adopt", "remove")
+
+        expect:
+        commandHandler.getCompletionOptions("ad") == ["add", "adopt"]
+    }
+
     def "Test ignored argument"() {
         when: "Add ignored argument"
-        commandHandler.ignoreNextArgument()
+        commandHandler.ignoreNextArgument("name")
 
         and: "Get completion for first argument"
         def result = commandHandler.getCompletionOptions("first")
@@ -36,8 +44,8 @@ class CommandCompletionHandlerTest extends Specification {
         def argumentHandler = Mock(IArgumentCompletionHandler)
 
         when: "Add argument handler with linked params to command handler"
-        commandHandler.ignoreNextArgument()
-        commandHandler.addNextArgument(argumentHandler, "p1", "&0", "p3")
+        commandHandler.ignoreNextArgument("name")
+        commandHandler.addNextArgument("name", argumentHandler, "p1", "&0", "p3")
 
         and: "Get completion for second argument"
         commandHandler.getCompletionOptions("first", "second")
@@ -51,8 +59,8 @@ class CommandCompletionHandlerTest extends Specification {
         def argumentHandler = Mock(IArgumentCompletionHandler)
 
         when: "Add argument handler with linked params to command handler"
-        commandHandler.ignoreNextArgument()
-        commandHandler.addNextArgument(argumentHandler, "p1", "&5", "p3")
+        commandHandler.ignoreNextArgument("name")
+        commandHandler.addNextArgument("name", argumentHandler, "p1", "&5", "p3")
 
         and: "Get completion for second argument"
         commandHandler.getCompletionOptions("first", "second")
@@ -64,7 +72,7 @@ class CommandCompletionHandlerTest extends Specification {
     def "Test infinite handler"() {
         setup:
         def argumentHandler = Mock(IArgumentCompletionHandler)
-        commandHandler.addNextArgument(argumentHandler)
+        commandHandler.addNextArgument("name", argumentHandler)
 
         when: "Get completion for second argument"
         def result = commandHandler.getCompletionOptions("first", "second")
@@ -89,9 +97,11 @@ class CommandCompletionHandlerTest extends Specification {
 
     def "Test username argument"() {
         setup: "Command completion with username argument"
-        commandHandler.ignoreNextArgument()
-        commandHandler.addNextArgument(Mock(IArgumentCompletionHandler) { isUsername() >> true })
-        commandHandler.addNextArgument(Mock(IArgumentCompletionHandler))
+        commandHandler.ignoreNextArgument("name")
+        commandHandler.addNextArgument("name", Mock(IArgumentCompletionHandler) {
+            isUsername() >> true
+        })
+        commandHandler.addNextArgument("name", Mock(IArgumentCompletionHandler))
 
         expect: "Username argument is detected correctly"
         !commandHandler.isUsernameIndex(0)
@@ -99,7 +109,9 @@ class CommandCompletionHandlerTest extends Specification {
         !commandHandler.isUsernameIndex(2)
 
         when: "Add another username argument"
-        commandHandler.addNextArgument(Mock(IArgumentCompletionHandler) { isUsername() >> true })
+        commandHandler.addNextArgument("name", Mock(IArgumentCompletionHandler) {
+            isUsername() >> true
+        })
 
         then: "Only first argument is detected"
         !commandHandler.isUsernameIndex(0)
@@ -108,16 +120,64 @@ class CommandCompletionHandlerTest extends Specification {
         !commandHandler.isUsernameIndex(3)
     }
 
-    def "Test black handler"() {
+    def "Test blank handler"() {
         expect: "Always return null"
         commandHandler.getCompletionOptions("first") == null
         commandHandler.getCompletionOptions("first", "second") == null
     }
 
+    def "Test matching"() {
+        setup:
+        commandHandler.ignoreNextArgument("ignored")
+        commandHandler.addNextActionArgument("add")
+        commandHandler.addNextArgument("name", Mock(IArgumentCompletionHandler))
+
+        expect: "Strict matching is correct"
+        !commandHandler.match(true, "arg1")
+        !commandHandler.match(true, "arg1", "add")
+        commandHandler.match(true, "arg1", "add", "arg2")
+        !commandHandler.match(true, "arg1", "add2", "arg2")
+        !commandHandler.match(true, "arg1", "add", "arg2", "arg3")
+
+        and: "Not strict matching is correct"
+        commandHandler.match(false, "arg1")
+        commandHandler.match(false, "arg1", "add")
+        commandHandler.match(false, "arg1", "add", "arg2")
+        !commandHandler.match(false, "arg1", "add2", "arg2")
+        !commandHandler.match(false, "arg1", "add", "arg2", "arg3")
+
+        when: "Make handler infinite"
+        commandHandler.makeInfinite()
+
+        then: "Strict matching is correct"
+        !commandHandler.match(true, "arg1")
+        !commandHandler.match(true, "arg1", "add")
+        commandHandler.match(true, "arg1", "add", "arg2")
+        !commandHandler.match(true, "arg1", "ad", "arg2")
+        commandHandler.match(true, "arg1", "add", "arg2", "arg3")
+
+        and: "Not strict matching is correct"
+        commandHandler.match(false, "arg1")
+        commandHandler.match(false, "arg1", "add")
+        commandHandler.match(false, "arg1", "add", "arg2")
+        !commandHandler.match(false, "arg1", "ad", "arg2")
+        commandHandler.match(false, "arg1", "add", "arg2", "arg3")
+    }
+
+    def "Test names"() {
+        setup:
+        commandHandler.ignoreNextArgument("ignored")
+        commandHandler.addNextActionArgument("add")
+        commandHandler.addNextArgument("name", Mock(IArgumentCompletionHandler))
+
+        expect: "Names are correct"
+        commandHandler.getNames() == ["ignored", "action", "name"]
+    }
+
     def "Test integration"() {
         setup:
-        commandHandler.ignoreNextArgument()
-        commandHandler.addNextArgument(
+        commandHandler.ignoreNextArgument("name")
+        commandHandler.addNextArgument("name",
                 new IArgumentCompletionHandler() {
                     @Override
                     List<String> handleCompletion(String val, String[] args) {
@@ -131,15 +191,9 @@ class CommandCompletionHandlerTest extends Specification {
                 }, "boom", "bod", "&0"
         )
 
-        when: "Get completion"
-        def r1 = commandHandler.getCompletionOptions("ara", "bo")
-        def r2 = commandHandler.getCompletionOptions("zava", "za")
-        def r3 = commandHandler.getCompletionOptions("b", "va", "vaka")
-
-        then: "Result is correct"
-        r1 == ["boom", "bod"]
-        r2 == ["zava"]
-        r3 == null
-
+        expect: "Completions are correct"
+        commandHandler.getCompletionOptions("ara", "bo") == ["boom", "bod"]
+        commandHandler.getCompletionOptions("zava", "za") == ["zava"]
+        commandHandler.getCompletionOptions("b", "va", "vaka") == null
     }
 }
