@@ -1,13 +1,18 @@
 package org.ultramine.commands;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.commands.completion.CommandCompletionHandler;
 import org.ultramine.server.PermissionHandler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HandlerBasedCommand implements IExtendedCommand
 {
@@ -19,7 +24,8 @@ public class HandlerBasedCommand implements IExtendedCommand
 	private String description;
 
 	private ICommandHandler handler;
-	private CommandCompletionHandler completionHandler;
+	private List<CommandCompletionHandler> completionHandlers;
+	private Map<String, ICommandHandler> actionHandlers;
 
 	private List<String> aliases;
 	private String[] permissions;
@@ -32,32 +38,8 @@ public class HandlerBasedCommand implements IExtendedCommand
 		this.handler = handler;
 		this.usage = "command." + name + ".usage";
 		this.description = "command." + name + ".description";
-
-		handler.setCommand(this);
-	}
-
-	public HandlerBasedCommand withAliases(String... aliases)
-	{
-		this.aliases = Arrays.asList(aliases);
-		return this;
-	}
-
-	public HandlerBasedCommand withCompletionHandler(CommandCompletionHandler completionHandler)
-	{
-		this.completionHandler = completionHandler;
-		return this;
-	}
-
-	public HandlerBasedCommand withPermissions(String[] permissions)
-	{
-		this.permissions = permissions;
-		return this;
-	}
-
-	public HandlerBasedCommand withUsableFromServer(boolean isUsableFromServer)
-	{
-		this.isUsableFromServer = isUsableFromServer;
-		return this;
+		this.completionHandlers = new ArrayList<CommandCompletionHandler>();
+		this.actionHandlers = new HashMap<String, ICommandHandler>();
 	}
 
 	@Override
@@ -93,7 +75,20 @@ public class HandlerBasedCommand implements IExtendedCommand
 	@Override
 	public void processCommand(ICommandSender var1, String[] var2)
 	{
-		handler.processCommand(var1, var2);
+		CommandContext.Builder builder = new CommandContext.Builder(this, var1, var2);
+
+		if (completionHandlers.size() > 0)
+		{
+			CommandCompletionHandler completionHandler = findCompletionHandler(var2);
+			if (completionHandler == null)
+				throw new WrongUsageException(usage);
+
+			builder.setArgumentsNames(completionHandler.getNames());
+			if (!builder.getActionName().isEmpty())
+				builder.setActionHandler(actionHandlers.get(builder.getActionName()));
+		}
+
+		handler.processCommand(builder.build());
 	}
 
 	@Override
@@ -105,16 +100,41 @@ public class HandlerBasedCommand implements IExtendedCommand
 	@Override
 	public List addTabCompletionOptions(ICommandSender var1, String[] var2)
 	{
-		if (completionHandler == null)
+		if (completionHandlers.size() == 0)
 			return null;
 
-		return completionHandler.getCompletionOptions(var2);
+		List<String> result = null;
+		String[] tail = ArrayUtils.remove(var2, var2.length - 1);
+
+		for (CommandCompletionHandler completionHandler : completionHandlers)
+		{
+			if (completionHandler.match(false, tail))
+				if (result == null)
+					result = completionHandler.getCompletionOptions(var2);
+				else
+					result.addAll(completionHandler.getCompletionOptions(var2));
+		}
+		return result;
 	}
 
 	@Override
 	public boolean isUsernameIndex(String[] var1, int var2)
 	{
+		CommandCompletionHandler completionHandler = findCompletionHandler(var1);
 		return completionHandler != null && completionHandler.isUsernameIndex(var2);
+	}
+
+	private CommandCompletionHandler findCompletionHandler(String[] args)
+	{
+		if (completionHandlers.size() == 0)
+			return null;
+
+		for (CommandCompletionHandler completionHandler : completionHandlers)
+		{
+			if (completionHandler.match(true, args))
+				return completionHandler;
+		}
+		return null;
 	}
 
 	@Override
@@ -129,5 +149,55 @@ public class HandlerBasedCommand implements IExtendedCommand
 			return result;
 		}
 		return -1;
+	}
+
+	public static class Builder
+	{
+		private HandlerBasedCommand command;
+
+		public Builder(String name, String group, ICommandHandler handler)
+		{
+			command = new HandlerBasedCommand(name, group, handler);
+		}
+
+		public String getName()
+		{
+			return command.name;
+		}
+
+		public Builder setAliases(String... aliases)
+		{
+			command.aliases = Arrays.asList(aliases);
+			return this;
+		}
+
+		public Builder addCompletionHandlers(CommandCompletionHandler completionHandler)
+		{
+			command.completionHandlers.add(completionHandler);
+			return this;
+		}
+
+		public Builder setPermissions(String... permissions)
+		{
+			command.permissions = permissions;
+			return this;
+		}
+
+		public Builder setUsableFromServer(boolean isUsableFromServer)
+		{
+			command.isUsableFromServer = isUsableFromServer;
+			return this;
+		}
+
+		public Builder addAction(String name, ICommandHandler action)
+		{
+			command.actionHandlers.put(name, action);
+			return this;
+		}
+
+		public HandlerBasedCommand build()
+		{
+			return command;
+		}
 	}
 }

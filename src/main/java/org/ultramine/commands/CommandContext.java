@@ -10,130 +10,82 @@ import net.minecraft.item.Item;
 import net.minecraft.util.IChatComponent;
 import org.ultramine.server.PermissionHandler;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CommandContext
 {
 	private ICommandSender sender;
 	private String[] args;
 	private IExtendedCommand command;
+	private Map<String, Argument> argumentMap;
+	private int lastArgumentNum;
+	private String actionName;
+	private ICommandHandler actionHandler;
 
-	public CommandContext(IExtendedCommand command, ICommandSender sender, String[] args)
+	private CommandContext(IExtendedCommand command, ICommandSender sender, String[] args)
 	{
 		this.sender = sender;
 		this.args = args;
 		this.command = command;
+		this.argumentMap = new HashMap<String, Argument>(args.length);
+		this.actionName = "";
+		this.lastArgumentNum = args.length - 1;
 	}
-	
+
+	public Argument get(String key)
+	{
+		if (!argumentMap.containsKey(key))
+			throwBadUsage();
+
+		return argumentMap.get(key);
+	}
+
+	public Argument get(int num)
+	{
+		if (num < 0 || num >= args.length)
+			throwBadUsage();
+
+		return new Argument(num);
+	}
+
+	public boolean contains(String key)
+	{
+		return argumentMap.containsKey(key);
+	}
+
+	public Argument set(String key, String value)
+	{
+		Argument arg = new Argument(value);
+		argumentMap.put(key, arg);
+		return arg;
+	}
+
+	public String getAction()
+	{
+		return actionName;
+	}
+
+	public void doAction()
+	{
+		if (actionHandler != null)
+			actionHandler.processCommand(this);
+	}
+
 	public ICommandSender getSender()
 	{
 		return sender;
 	}
 
-	public String[] getArgs()
+	public boolean senderIsServer()
 	{
-		return args;
-	}
-
-	public int getInt(int argNum)
-	{
-		return CommandBase.parseInt(sender, getString(argNum));
-	}
-
-	public int getInt(int argNum, int minBound)
-	{
-		return CommandBase.parseIntWithMin(sender, getString(argNum), minBound);
-	}
-
-	public int getInt(int argNum, int minBound, int maxBound)
-	{
-		return CommandBase.parseIntBounded(sender, getString(argNum), minBound, maxBound);
-	}
-
-	public double getDouble(int argNum)
-	{
-		return CommandBase.parseDouble(sender, getString(argNum));
-	}
-
-	public double getDouble(int argNum, double minBound)
-	{
-		return CommandBase.parseDoubleWithMin(sender, getString(argNum), minBound);
-	}
-
-	public double getDouble(int argNum, double minBound, double maxBound)
-	{
-		return CommandBase.parseDoubleBounded(sender, getString(argNum), minBound, maxBound);
-	}
-
-	public boolean getBoolean(int argNum)
-	{
-		return CommandBase.parseBoolean(sender, getString(argNum));
-	}
-
-	public String getString(int argNum)
-	{
-		try
-		{
-			return args[argNum];
-		}
-		catch (IndexOutOfBoundsException ignored)
-		{
-			throwBadUsage();
-		}
-		return null;
+		return sender.getCommandSenderName().equals("Server");
 	}
 
 	public EntityPlayerMP getSenderAsPlayer()
 	{
 		return CommandBase.getCommandSenderAsPlayer(sender);
-	}
-
-	public EntityPlayerMP getPlayer(int argNum)
-	{
-		return CommandBase.getPlayer(sender, getString(argNum));
-	}
-
-	public IChatComponent getChatComponent(int startArgNum, boolean emphasizePlayers)
-	{
-		return CommandBase.func_147176_a(sender, args, startArgNum, emphasizePlayers);
-	}
-
-	public String getJoined(int startArgNum)
-	{
-		return CommandBase.func_82360_a(sender, args, startArgNum);
-	}
-
-	public String[] getLast(int startArgNum)
-	{
-		try
-		{
-			return Arrays.copyOfRange(args, startArgNum, args.length);
-		}
-		catch (IllegalArgumentException ignored)
-		{
-			throwBadUsage();
-		}
-		return new String[0];
-	}
-
-	public double getCoordinate(int argNum, double original)
-	{
-		return CommandBase.func_110666_a(sender, original, getString(argNum));
-	}
-
-	public double getCoordinate(int argNum, double original, int minBound, int maxBound)
-	{
-		return CommandBase.func_110665_a(sender, original, getString(argNum), minBound, maxBound);
-	}
-
-	public Item getItem(int argNum)
-	{
-		return CommandBase.getItemByText(sender, getString(argNum));
-	}
-
-	public Block getBlock(int argNum)
-	{
-		return CommandBase.getBlockByText(sender, getString(argNum));
 	}
 
 	public void notifyAdmins(String messageKey, Object... messageArgs)
@@ -153,18 +105,200 @@ public class CommandContext
 			throw new CommandException("commands.generic.permission");
 	}
 
-	public boolean senderIsServer()
-	{
-		return sender.getCommandSenderName().equals("Server");
-	}
-
 	public void throwBadUsage()
 	{
 		throw new WrongUsageException(command.getCommandUsage(sender));
 	}
 
-	public int argsCount()
+	public String[] getArgs()
 	{
-		return args.length;
+		return args;
+	}
+
+	public IExtendedCommand getCommand()
+	{
+		return command;
+	}
+
+	public class Argument
+	{
+		private int num;
+		private boolean last;
+		private String value;
+
+		private Argument(int num)
+		{
+			this.value = args[num];
+			this.num = num;
+			this.last = num == lastArgumentNum;
+		}
+
+		private Argument(int num, boolean last)
+		{
+			this.value = args[num];
+			this.num = num;
+			this.last = last;
+		}
+
+		private Argument(String value)
+		{
+			this.value = value;
+			this.num = -1;
+			this.last = false;
+		}
+
+		private String value()
+		{
+			return value;
+		}
+
+		private String[] args()
+		{
+			if (num >= 0)
+				return args;
+			else
+				return new String[] {value};
+		}
+
+		private int num()
+		{
+			return Math.max(num, 0);
+		}
+
+		public String asString()
+		{
+			if (last)
+				return CommandBase.func_82360_a(sender, args(), num());
+			else
+				return value();
+		}
+
+		public Argument[] asArray()
+		{
+			if (num < 0)
+				return new Argument[] {this};
+
+			Argument[] result = new Argument[args.length - num];
+			for (int i = num; i < args.length; i++)
+				result[i-num] = new Argument(i, false);
+			return result;
+		}
+
+		public int asInt()
+		{
+			return CommandBase.parseInt(sender, value());
+		}
+
+		public int asInt(int minBound)
+		{
+			return CommandBase.parseIntWithMin(sender, value(), minBound);
+		}
+
+		public int asInt(int minBound, int maxBound)
+		{
+			return CommandBase.parseIntBounded(sender, value(), minBound, maxBound);
+		}
+
+		public double asDouble()
+		{
+			return CommandBase.parseDouble(sender, value());
+		}
+
+		public double asDouble(double minBound)
+		{
+			return CommandBase.parseDoubleWithMin(sender, value(), minBound);
+		}
+
+		public double asDouble(double minBound, double maxBound)
+		{
+			return CommandBase.parseDoubleBounded(sender, value(), minBound, maxBound);
+		}
+
+		public boolean asBoolean()
+		{
+			return CommandBase.parseBoolean(sender, value());
+		}
+
+		public EntityPlayerMP asPlayer()
+		{
+			return CommandBase.getPlayer(sender, value());
+		}
+
+		public IChatComponent asChatComponent(boolean emphasizePlayers)
+		{
+			return CommandBase.func_147176_a(sender, args(), num(), emphasizePlayers);
+		}
+
+		public double asCoordinate(double original)
+		{
+			return CommandBase.func_110666_a(sender, original, value());
+		}
+
+		public double asCoordinate(double original, int minBound, int maxBound)
+		{
+			return CommandBase.func_110665_a(sender, original, value(), minBound, maxBound);
+		}
+
+		public Item asItem()
+		{
+			return CommandBase.getItemByText(sender, value());
+		}
+
+		public Block asBlock()
+		{
+			return CommandBase.getBlockByText(sender, value());
+		}
+	}
+
+	public static class Builder
+	{
+		private CommandContext context;
+
+		public Builder(IExtendedCommand command, ICommandSender sender, String[] args)
+		{
+			context = new CommandContext(command, sender, args);
+		}
+
+		public Builder setArgumentsNames(List<String> names)
+		{
+			context.lastArgumentNum = names.size();
+			Map<String, Integer> nameCount = new HashMap<String, Integer>();
+			for (int i = 0; i < names.size(); i++)
+			{
+				String name = names.get(i);
+
+				if (name.equals("action"))
+				{
+					context.actionName = context.actionName.isEmpty() ? context.args[i] : context.actionName + "." + context.args[i];
+					continue;
+				}
+
+				if (context.argumentMap.containsKey(name))
+				{
+					Integer count = nameCount.containsKey(name) ? nameCount.get(name) + 1 : 2;
+					nameCount.put(name, count);
+					name = name + count.toString();
+				}
+
+				context.argumentMap.put(name, context.new Argument(i));
+			}
+			return this;
+		}
+
+		public String getActionName()
+		{
+			return context.getAction();
+		}
+
+		public Builder setActionHandler(ICommandHandler actionHandler)
+		{
+			context.actionHandler = actionHandler;
+			return this;
+		}
+
+		public CommandContext build()
+		{
+			return context;
+		}
 	}
 }

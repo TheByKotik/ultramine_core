@@ -7,12 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Command
+public @interface Action
 {
-	public String name();
-	public String group();
-	public String[] completions() default {};
-	public String[] aliases() default {};
-	public String[] permissions() default {};
-	public boolean isUsableFromServer() default true;
+	String command();
+	String name();
 }

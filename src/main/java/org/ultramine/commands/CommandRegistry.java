@@ -52,21 +52,45 @@ public class CommandRegistry
 
 	public void registerCommands(Class<?> cls)
 	{
+		List<HandlerBasedCommand.Builder> builders = new ArrayList<HandlerBasedCommand.Builder>();
+		Map<String, Map<String, ICommandHandler>> actions = new HashMap<String, Map<String, ICommandHandler>>();
+
 		for (Method method : cls.getMethods())
 		{
 			if (method.isAnnotationPresent(Command.class) && Modifier.isStatic(method.getModifiers()))
 			{
 				Command data = method.getAnnotation(Command.class);
-				ICommandHandler handler = new MethodBasedCommandHandler(method);
+				HandlerBasedCommand.Builder builder = new HandlerBasedCommand.Builder(data.name(), data.group(), new MethodBasedCommandHandler(method))
+						.setAliases(data.aliases())
+						.setPermissions(data.permissions())
+						.setUsableFromServer(data.isUsableFromServer());
 
-				IExtendedCommand cmd = new HandlerBasedCommand(data.name(), data.group(), handler)
-						.withAliases(data.aliases())
-						.withPermissions(data.permissions())
-						.withUsableFromServer(data.isUsableFromServer())
-						.withCompletionHandler(completionStringParser.parse(data.completion()));
+				for (String completion : data.completions())
+					builder.addCompletionHandlers(completionStringParser.parse(completion));
 
-				registerCommand(cmd);
+				builders.add(builder);
 			}
+
+			if (method.isAnnotationPresent(Action.class) && Modifier.isStatic(method.getModifiers()))
+			{
+				Action data = method.getAnnotation(Action.class);
+
+				if (!actions.containsKey(data.command()))
+					actions.put(data.command(), new HashMap<String, ICommandHandler>());
+
+				actions.get(data.command()).put(data.name(), new MethodBasedCommandHandler(method));
+			}
+		}
+
+		for (HandlerBasedCommand.Builder builder : builders)
+		{
+			if (actions.containsKey(builder.getName()))
+			{
+				for (Map.Entry<String, ICommandHandler> action : actions.get(builder.getName()).entrySet())
+					builder.addAction(action.getKey(), action.getValue());
+			}
+
+			registerCommand(builder.build());
 		}
 	}
 
