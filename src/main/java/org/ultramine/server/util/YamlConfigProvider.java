@@ -1,13 +1,19 @@
 package org.ultramine.server.util;
 
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
+import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 public class YamlConfigProvider
 {
@@ -21,7 +27,10 @@ public class YamlConfigProvider
 		Constructor constructor = new Constructor();
 		constructor.setPropertyUtils(prorutils);
 		
-		YAML = new Yaml(constructor);
+		DumperOptions opts = new DumperOptions();
+		opts.setIndent(4);
+		
+		YAML = new Yaml(constructor, new Representer(), opts);
 	}
 
 	public static <T> T getOrCreateConfig(File configFile, Class<T> clazz)
@@ -43,53 +52,44 @@ public class YamlConfigProvider
 		}
 		else
 		{
-			FileReader reader = null;
-			try
-			{
-				reader = new FileReader(configFile);
-				ret = YAML.loadAs(reader, clazz);
-			}
-			catch (IOException e)
-			{
-				throw new RuntimeException("Failed to read config: " + configFile.getPath(), e);
-			}
-			finally
-			{
-				try
-				{
-					if (reader != null)
-					{
-						reader.close();
-					}
-				} catch (IOException ignored) {}
-			}
+			return readConfig(configFile, clazz);
 		}
 
 		return ret;
 	}
-
-	public static void saveConfig(File configFile, Object o)
+	
+	public static <T> T readConfig(File configFile, Class<T> clazz)
 	{
-		FileWriter writer = null;
+		Reader reader = null;
 		try
 		{
-			configFile.createNewFile();
-			writer = new FileWriter(configFile);
-			writer.write(YAML.dumpAsMap(o));
+			reader = new InputStreamReader(new FileInputStream(configFile), Charsets.UTF_8);
+			return YAML.loadAs(reader, clazz);
 		}
 		catch (IOException e)
 		{
-			throw new RuntimeException("Failed to save default config: " + configFile.getPath(), e);
+			throw new RuntimeException("Failed to read config: " + configFile.getPath(), e);
 		}
 		finally
 		{
-			try
-			{
-				if (writer != null)
-				{
-					writer.close();
-				}
-			} catch (IOException ignored) {}
+			IOUtils.closeQuietly(reader);
+		}
+	}
+	
+	public static void saveConfig(File configFile, Object o)
+	{
+		writeFile(configFile, YAML.dumpAsMap(o));
+	}
+	
+	public static void writeFile(File configFile, String text)
+	{
+		try
+		{
+			FileUtils.write(configFile, text, Charsets.UTF_8);
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException("Failed to save config: " + configFile.getPath(), e);
 		}
 	}
 }
