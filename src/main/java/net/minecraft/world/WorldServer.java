@@ -934,6 +934,11 @@ public class WorldServer extends World
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
+	public void checkSessionLock() throws MinecraftException
+	{
+		//Removes world lock checking on server
+	}
+	
 	public Chunk getChunkIfExists(int cx, int cz)
 	{
 		return theChunkProviderServer.getChunkIfExists(cx, cz);
