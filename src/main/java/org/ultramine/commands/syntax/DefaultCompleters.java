@@ -1,4 +1,4 @@
-package org.ultramine.commands.completion;
+package org.ultramine.commands.syntax;
 
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;

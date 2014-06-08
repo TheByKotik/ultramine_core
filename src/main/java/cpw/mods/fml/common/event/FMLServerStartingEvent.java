@@ -17,6 +17,10 @@ import net.minecraft.command.ICommand;
 import net.minecraft.server.MinecraftServer;
 import cpw.mods.fml.common.LoaderState.ModState;
 import org.ultramine.commands.CommandRegistry;
+import org.ultramine.commands.IExtendedCommand;
+import org.ultramine.commands.syntax.ArgumentsPatternParser;
+import org.ultramine.commands.syntax.IArgumentCompletionHandler;
+import org.ultramine.commands.syntax.IArgumentValidationHandler;
 
 public class FMLServerStartingEvent extends FMLStateEvent
 {
@@ -45,8 +49,40 @@ public class FMLServerStartingEvent extends FMLStateEvent
 		ch.registerCommand(command);
 	}
 
-	public CommandRegistry getCommandRegistry()
+	/* ========================================= ULTRAMINE START ======================================*/
+
+	public void registerCommand(IExtendedCommand command)
+	{
+		getCommandRegistry().registerCommand(command);
+	}
+
+	public void registerCommands(Class<?> holder)
+	{
+		getCommandRegistry().registerCommands(holder);
+	}
+
+	public void registerArgumentHandler(String argumentType, IArgumentCompletionHandler handler)
+	{
+		getArgumentsParser().registerHandler(argumentType, handler);
+	}
+
+	public void registerArgumentHandler(String argumentType, IArgumentValidationHandler handler)
+	{
+		getArgumentsParser().registerHandler(argumentType, handler);
+	}
+
+	public void registerArgumentHandlers(Class<?> holder)
+	{
+		getArgumentsParser().registerHandlers(holder);
+	}
+
+	private CommandRegistry getCommandRegistry()
 	{
 		return ((CommandHandler) getServer().getCommandManager()).getRegistry();
+	}
+
+	private ArgumentsPatternParser getArgumentsParser()
+	{
+		return getCommandRegistry().getArgumentsParser();
 	}
 }

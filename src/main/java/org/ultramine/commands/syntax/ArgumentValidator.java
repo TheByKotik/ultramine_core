@@ -1,4 +1,4 @@
-package org.ultramine.commands.completion;
+package org.ultramine.commands.syntax;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface ArgumentCompleter
+public @interface ArgumentValidator
 {
 	String value();
-	boolean isUsername() default false;
 }

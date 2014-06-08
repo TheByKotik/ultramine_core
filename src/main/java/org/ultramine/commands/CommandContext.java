@@ -259,7 +259,7 @@ public class CommandContext
 			context = new CommandContext(command, sender, args);
 		}
 
-		public Builder setArgumentsNames(List<String> names)
+		public Builder resolveArguments(List<String> names)
 		{
 			context.lastArgumentNum = names.size();
 			Map<String, Integer> nameCount = new HashMap<String, Integer>();
@@ -267,11 +267,8 @@ public class CommandContext
 			{
 				String name = names.get(i);
 
-				if (name.equals("action"))
-				{
-					context.actionName = context.actionName.isEmpty() ? context.args[i] : context.actionName + "." + context.args[i];
+				if (name == null || name.isEmpty())
 					continue;
-				}
 
 				if (context.argumentMap.containsKey(name))
 				{
@@ -285,13 +282,9 @@ public class CommandContext
 			return this;
 		}
 
-		public String getActionName()
+		public Builder setAction(String actionName, ICommandHandler actionHandler)
 		{
-			return context.getAction();
-		}
-
-		public Builder setActionHandler(ICommandHandler actionHandler)
-		{
+			context.actionName = actionName;
 			context.actionHandler = actionHandler;
 			return this;
 		}

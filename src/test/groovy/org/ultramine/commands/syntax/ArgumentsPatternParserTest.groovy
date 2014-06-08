@@ -1,10 +1,10 @@
-package org.ultramine.commands.completion
+package org.ultramine.commands.syntax
 
 import spock.lang.Specification
 
-class CompletionStringParserTest extends Specification {
+class ArgumentsPatternParserTest extends Specification {
 
-    def parser = new CompletionStringParser()
+    def parser = new ArgumentsPatternParser()
 
     def "Test single handler"() {
         setup:
@@ -38,7 +38,7 @@ class CompletionStringParserTest extends Specification {
 
         expect: "Action is parsed"
         commandHandler.getCompletionOptions("a") == ["add"]
-        commandHandler.getNames() == ["action"]
+        commandHandler.resolveActionName("add") == "add"
     }
 
     def "Test several arguments"() {
@@ -84,17 +84,18 @@ class CompletionStringParserTest extends Specification {
         def commandHandler = parser.parse("<p1> <test> [add remove] <test % p2> <%p3>")
 
         expect: "Names are correct"
-        commandHandler.getNames() == ["p1", "test", "action", "p2", "p3"]
+        commandHandler.getArgumentsNames() == ["p1", "test", null, "p2", "p3"]
     }
 
     def "Test integration"() {
         setup:
-        parser.registerHandlers(TestHandlers)
         def commnadHander = parser.parse("<player> <list kick kill summon>")
+        parser.registerHandlers(TestHandlers)
 
         expect:
         commnadHander.getCompletionOptions("B") == ["Bob", "Barny"]
         commnadHander.getCompletionOptions("Bob", "ki") == ["kick", "kill"]
+        commnadHander.match("Jenifer", "aza")
         commnadHander.isUsernameIndex(0)
     }
 
@@ -109,6 +110,12 @@ class CompletionStringParserTest extends Specification {
         public static List<String> list(String val, String[] args)
         {
             return args.findAll { it.startsWith(val) }
+        }
+
+        @ArgumentValidator("player")
+        public static boolean player_v(String val, String[] args)
+        {
+            return ["Bob", "Jenifer", "Barny"].contains(val)
         }
     }
 }

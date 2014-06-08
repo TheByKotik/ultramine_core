@@ -3,9 +3,7 @@ package org.ultramine.commands;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraftforge.common.MinecraftForge;
-import org.ultramine.commands.completion.CompletionStringParser;
-import org.ultramine.commands.completion.RegisterCompletersEvent;
+import org.ultramine.commands.syntax.ArgumentsPatternParser;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -13,17 +11,15 @@ import java.util.*;
 
 public class CommandRegistry
 {
-	private Map<String, IExtendedCommand> commandMap;
-	private SortedSet<IExtendedCommand> registeredCommands;
-	private CompletionStringParser completionStringParser;
+	private final Map<String, IExtendedCommand> commandMap;
+	private final SortedSet<IExtendedCommand> registeredCommands;
+	private final ArgumentsPatternParser argumentsPatternParser;
 
 	public CommandRegistry()
 	{
 		commandMap = new HashMap<String, IExtendedCommand>();
 		registeredCommands = new TreeSet<IExtendedCommand>();
-		completionStringParser = new CompletionStringParser();
-
-		MinecraftForge.EVENT_BUS.post(new RegisterCompletersEvent(completionStringParser));
+		argumentsPatternParser = new ArgumentsPatternParser();
 	}
 
 	public IExtendedCommand registerCommand(IExtendedCommand command)
@@ -66,7 +62,7 @@ public class CommandRegistry
 						.setUsableFromServer(data.isUsableFromServer());
 
 				for (String completion : data.completions())
-					builder.addCompletionHandlers(completionStringParser.parse(completion));
+					builder.addArgumentsPattern(argumentsPatternParser.parse(completion));
 
 				builders.add(builder);
 			}
@@ -130,8 +126,8 @@ public class CommandRegistry
 		return result;
 	}
 
-	public CompletionStringParser getCompletionStringParser()
+	public ArgumentsPatternParser getArgumentsParser()
 	{
-		return completionStringParser;
+		return argumentsPatternParser;
 	}
 }
