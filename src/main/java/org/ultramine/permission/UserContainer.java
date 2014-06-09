@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.ultramine.permission.PermissionResolver.CheckResult;
-
 public class UserContainer<T extends User>
 {
 	protected Map<String, T> users;
@@ -37,7 +35,7 @@ public class UserContainer<T extends User>
 			result = parentContainer.check(userName, permissionKey);
 
 		if (result == CheckResult.UNRESOLVED && contains(userName))
-			result = get(userName).getPermissions().check(permissionKey);
+			result = get(userName).getPermissionResolver().check(permissionKey);
 
 		return result;
 	}
@@ -57,7 +55,7 @@ public class UserContainer<T extends User>
 
 		for (User user : users.values())
 		{
-			if (user.getPermissions().check(permission) == CheckResult.TRUE)
+			if (user.getPermissionResolver().check(permission) == CheckResult.TRUE)
 				result.add(user.getName());
 		}
 

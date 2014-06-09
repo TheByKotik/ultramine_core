@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class GroupPermission extends PermissionHolder implements IChangeablePermission
+public class GroupPermission extends PermissionHolder implements IPermission
 {
 	private final String key;
 	private final List<IDirtyListener> listeners = new ArrayList<IDirtyListener>();
@@ -15,7 +15,7 @@ public class GroupPermission extends PermissionHolder implements IChangeablePerm
 		this.key = key.toLowerCase();
 	}
 
-	public GroupPermission(String key, Map<String, Object> meta)
+	public GroupPermission(String key, Map<String, String> meta)
 	{
 		super(meta);
 		this.key = key.toLowerCase();
@@ -28,21 +28,27 @@ public class GroupPermission extends PermissionHolder implements IChangeablePerm
 	}
 
 	@Override
-	public String getName()
+	public CheckResult check(String key)
 	{
-		if (innerMeta.containsKey("name"))
-			return (String) innerMeta.get("name");
-		else
-			return key;
+		return getPermissionResolver().check(key);
 	}
 
 	@Override
-	public String getDescription()
+	public String getMeta(String key)
 	{
-		if (innerMeta.containsKey("description"))
-			return (String) innerMeta.get("description");
-		else
-			return "";
+		return getMetaResolver().getString(key);
+	}
+
+	@Override
+	public void mergeTo(PermissionResolver resolver)
+	{
+		resolver.merge(getPermissionResolver(), getPriority());
+	}
+
+	@Override
+	public void mergeTo(MetaResolver resolver)
+	{
+		resolver.merge(getMetaResolver(), getPriority());
 	}
 
 	@Override

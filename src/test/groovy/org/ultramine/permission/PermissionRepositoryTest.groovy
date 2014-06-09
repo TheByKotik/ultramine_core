@@ -4,9 +4,9 @@ import org.spockframework.mock.MockDetector
 import spock.lang.Specification
 
 import static org.ultramine.permission.PermissionRepository.ProxyPermission.ProxyType.*
-import static org.ultramine.permission.PermissionResolver.CheckResult.FALSE
-import static org.ultramine.permission.PermissionResolver.CheckResult.TRUE
-import static org.ultramine.permission.PermissionResolver.CheckResult.UNRESOLVED
+import static CheckResult.FALSE
+import static CheckResult.TRUE
+import static CheckResult.UNRESOLVED
 
 class PermissionRepositoryTest extends Specification {
 
@@ -23,7 +23,7 @@ class PermissionRepositoryTest extends Specification {
         def proxy = repository.getPermission("key")
 
         then: "Returned proxy of dummy permission"
-        proxy.getWrappedPermission().class == Permission
+        proxy.getWrappedPermission().class == DummyPermission
         proxy.getType() == DUMMY
         proxy.getName() == "key"
 
@@ -80,7 +80,7 @@ class PermissionRepositoryTest extends Specification {
     def "Test proxy of IChangeablePermission"() {
         setup:
         def listener = Mock(IDirtyListener)
-        def perm = Mock(IChangeablePermission) { getKey() >> "key" }
+        def perm = Mock(IPermission) { getKey() >> "key" }
         def repository = new PermissionRepository()
 
         when: "Listener is subscribed to proxy permission"
@@ -115,7 +115,7 @@ class PermissionRepositoryTest extends Specification {
     def "Test proxy unsubscribe"() {
         setup:
         def listener = Mock(IDirtyListener)
-        def perm = Mock(IChangeablePermission) { getKey() >> "key" }
+        def perm = Mock(IPermission) { getKey() >> "key" }
         def repository = new PermissionRepository()
 
         when: "Listener is subscribed and unsubscribe to proxy permission"
@@ -138,7 +138,7 @@ class PermissionRepositoryTest extends Specification {
         def perm = repository.getPermission("^group.admin")
 
         then: "Proxy of negative permission is return"
-        perm.class == NegativePermission
+        perm.class == PermissionRepository.NegativePermission
 
         and: "Negative permission linked to proxy"
         perm.getWrappedPermission().getName() == "group.admin"
@@ -168,19 +168,19 @@ class PermissionRepositoryTest extends Specification {
         def perm = repository.getPermission("^group1")
 
         then: "Negative permission contains group1 permissions"
-        perm.getPermissions().check("p1") == FALSE
-        perm.getPermissions().check("p2") == UNRESOLVED
-        perm.getPermissions().check("group2") == FALSE
-        perm.getPermissions().check("p3") == UNRESOLVED
+        perm.getPermissionResolver().check("p1") == FALSE
+        perm.getPermissionResolver().check("p2") == UNRESOLVED
+        perm.getPermissionResolver().check("group2") == FALSE
+        perm.getPermissionResolver().check("p3") == UNRESOLVED
 
         when: "Group permission updates"
         group1.addPermission(repository.getPermission("p2"))
 
         then: "Negative permission also updates"
-        perm.getPermissions().check("p1") == FALSE
-        perm.getPermissions().check("p2") == FALSE
-        perm.getPermissions().check("group2") == FALSE
-        perm.getPermissions().check("p3") == UNRESOLVED
+        perm.getPermissionResolver().check("p1") == FALSE
+        perm.getPermissionResolver().check("p2") == FALSE
+        perm.getPermissionResolver().check("group2") == FALSE
+        perm.getPermissionResolver().check("p3") == UNRESOLVED
 
         when: "Register group2"
         def group2 = new GroupPermission("group2")
@@ -188,15 +188,15 @@ class PermissionRepositoryTest extends Specification {
         repository.registerPermission(group2)
 
         then: "Negative permission also updates"
-        perm.getPermissions().check("p1") == FALSE
-        perm.getPermissions().check("p2") == FALSE
-        perm.getPermissions().check("group2") == UNRESOLVED
-        perm.getPermissions().check("p3") == TRUE
+        perm.getPermissionResolver().check("p1") == FALSE
+        perm.getPermissionResolver().check("p2") == FALSE
+        perm.getPermissionResolver().check("group2") == UNRESOLVED
+        perm.getPermissionResolver().check("p3") == TRUE
 
         and: "Group1 updates too"
-        group1.getPermissions().check("p1") == TRUE
-        group1.getPermissions().check("p2") == TRUE
-        group1.getPermissions().check("group2") == UNRESOLVED
-        group1.getPermissions().check("p3") == FALSE
+        group1.getPermissionResolver().check("p1") == TRUE
+        group1.getPermissionResolver().check("p2") == TRUE
+        group1.getPermissionResolver().check("group2") == UNRESOLVED
+        group1.getPermissionResolver().check("p3") == FALSE
     }
 }

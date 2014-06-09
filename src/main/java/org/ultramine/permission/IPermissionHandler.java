@@ -20,7 +20,7 @@ public interface IPermissionHandler
 
 	public MetaResolver getMeta(String world, String player);
 
-	public void setMeta(String world, String player, String key, Object value);
+	public void setMeta(String world, String player, String key, String value);
 
 	public Set<String> findUsersWithPermission(String world, String permission);
 

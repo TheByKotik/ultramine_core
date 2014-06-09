@@ -32,7 +32,7 @@ public class PermissionRepository
 		{
 			if (key.startsWith("^"))
 			{
-				proxyPermissions.put(key, new NegativePermission(getPermission(key.substring(1))));
+				proxyPermissions.put(key, new NegativePermission(key));
 				registeredPermissions.add(key);
 			}
 			else
@@ -57,65 +57,41 @@ public class PermissionRepository
 		}
 
 		ProxyPermission proxy = getPermission(permission.getKey());
-		if (permission instanceof IChangeablePermission)
-			proxy.linkChangeable((IChangeablePermission)permission);
-		else
-			proxy.linkSimple(permission);
+		proxy.link(permission);
 
 		registeredPermissions.add(permission.getKey());
 		return proxy;
 	}
 
-	public static class ProxyPermission implements IChangeablePermission
+	public static class ProxyPermission implements IPermission
 	{
-		private String key;
 		private IPermission wrappedPermission;
-		private ProxyType proxyType;
-		private List<IDirtyListener> listeners = new ArrayList<IDirtyListener>();
+		private boolean isDummy;
+		private List<IDirtyListener> listeners;
 
 		public ProxyPermission(String key)
 		{
-			this.key = key;
-			this.wrappedPermission = new Permission(key);
-			this.proxyType = ProxyType.DUMMY;
+			this.wrappedPermission = new DummyPermission(key);
+			this.isDummy = true;
+			listeners = new ArrayList<IDirtyListener>();
 		}
 
 		public ProxyPermission(IPermission permission)
 		{
-			this.key = permission.getKey();
 			this.wrappedPermission = permission;
-			if (permission instanceof IChangeablePermission)
-				proxyType = ProxyType.CHANGEABLE;
-			else
-				proxyType = ProxyType.SIMPLE;
+			this.isDummy = false;
+			listeners = new ArrayList<IDirtyListener>();
 		}
 
 		@Override
 		public String getKey()
 		{
-			return key;
+			return wrappedPermission.getKey();
 		}
 
 		public IPermission getWrappedPermission()
 		{
 			return wrappedPermission;
-		}
-
-		public ProxyType getType()
-		{
-			return proxyType;
-		}
-
-		@Override
-		public String getName()
-		{
-			return wrappedPermission.getName();
-		}
-
-		@Override
-		public String getDescription()
-		{
-			return wrappedPermission.getDescription();
 		}
 
 		@Override
@@ -125,55 +101,48 @@ public class PermissionRepository
 		}
 
 		@Override
-		public PermissionResolver getPermissions()
+		public CheckResult check(String key)
 		{
-			return wrappedPermission.getPermissions();
+			return wrappedPermission.check(key);
 		}
 
 		@Override
-		public MetaResolver getMeta()
+		public String getMeta(String key)
 		{
-			return wrappedPermission.getMeta();
+			return wrappedPermission.getMeta(key);
+		}
+
+		@Override
+		public void mergeTo(PermissionResolver resolver)
+		{
+			wrappedPermission.mergeTo(resolver);
+		}
+
+		@Override
+		public void mergeTo(MetaResolver resolver)
+		{
+			wrappedPermission.mergeTo(resolver);
 		}
 
 		@Override
 		public void subscribe(IDirtyListener listener)
 		{
-			switch (proxyType)
-			{
-				case CHANGEABLE:
-					((IChangeablePermission)wrappedPermission).subscribe(listener);
-					break;
-				case DUMMY:
-					listeners.add(listener);
-					break;
-			}
+			if (isDummy)
+				listeners.add(listener);
+			else
+				wrappedPermission.subscribe(listener);
 		}
 
 		@Override
 		public void unsubscribe(IDirtyListener listener)
 		{
-			switch (proxyType)
-			{
-				case CHANGEABLE:
-					((IChangeablePermission)wrappedPermission).unsubscribe(listener);
-					break;
-				case DUMMY:
-					listeners.remove(listener);
-					break;
-			}
+			if (isDummy)
+				listeners.remove(listener);
+			else
+				wrappedPermission.unsubscribe(listener);
 		}
 
-		private void linkSimple(IPermission permission)
-		{
-			wrappedPermission = permission;
-			for (IDirtyListener listener : listeners)
-				listener.makeDirty();
-			listeners.clear();
-			proxyType = ProxyType.SIMPLE;
-		}
-
-		private void linkChangeable(IChangeablePermission permission)
+		private void link(IPermission permission)
 		{
 			wrappedPermission = permission;
 			for (IDirtyListener listener : listeners)
@@ -181,8 +150,8 @@ public class PermissionRepository
 				permission.subscribe(listener);
 				listener.makeDirty();
 			}
-			listeners.clear();
-			proxyType = ProxyType.CHANGEABLE;
+			listeners = null;
+			isDummy = false;
 		}
 
 		@Override
@@ -202,7 +171,34 @@ public class PermissionRepository
 		{
 			return wrappedPermission.toString();
 		}
+	}
 
-		public static enum ProxyType { DUMMY, SIMPLE, CHANGEABLE }
+	private class NegativePermission extends ProxyPermission
+	{
+		private String key;
+
+		public NegativePermission(String key)
+		{
+			super(getPermission(key.substring(1)));
+			this.key = key;
+		}
+
+		@Override
+		public String getKey()
+		{
+			return key;
+		}
+
+		@Override
+		public CheckResult check(String key)
+		{
+			return super.check(key).invert();
+		}
+
+		@Override
+		public String getMeta(String key)
+		{
+			return "";
+		}
 	}
 }

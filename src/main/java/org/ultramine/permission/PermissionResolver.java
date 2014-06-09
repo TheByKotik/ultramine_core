@@ -30,7 +30,7 @@ public class PermissionResolver extends Resolver<Boolean>
 
 		key = key.toLowerCase();
 		if (values.containsKey(key))
-			return toCheckResult(values.get(key));
+			return CheckResult.fromBoolean(values.get(key));
 
 		int index = key.lastIndexOf('.');
 		while (index >= 0)
@@ -38,19 +38,13 @@ public class PermissionResolver extends Resolver<Boolean>
 			key = key.substring(0, index);
 			String wildcard = key + ".*";
 			if (values.containsKey(wildcard))
-				return toCheckResult(values.get(wildcard));
+				return CheckResult.fromBoolean(values.get(wildcard));
 
 			index = key.lastIndexOf('.');
 		}
 		if (values.containsKey("*"))
-			return toCheckResult(values.get("*"));
+			return CheckResult.fromBoolean(values.get("*"));
 
 		return CheckResult.UNRESOLVED;
-	}
-
-	public enum CheckResult { TRUE, FALSE, UNRESOLVED }
-	private CheckResult toCheckResult(boolean bool)
-	{
-		return bool ? CheckResult.TRUE : CheckResult.FALSE;
 	}
 }

@@ -11,7 +11,7 @@ public @interface Command
 {
 	public String name();
 	public String group();
-	public String[] completions() default {};
+	public String[] syntax() default {};
 	public String[] aliases() default {};
 	public String[] permissions() default {};
 	public boolean isUsableFromServer() default true;

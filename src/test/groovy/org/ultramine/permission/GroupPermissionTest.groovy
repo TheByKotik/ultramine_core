@@ -22,8 +22,8 @@ class GroupPermissionTest extends Specification {
         !group2.isDirty()
 
         and: "Both groups have own meta"
-        group1.getMeta().getString("m1")
-        group2.getMeta().getString("m2")
+        group1.getMetaResolver().getString("m1")
+        group2.getMetaResolver().getString("m2")
     }
 
     def "Test dirty notification"() {
@@ -44,7 +44,7 @@ class GroupPermissionTest extends Specification {
     def "Test subscribing to permission changes"() {
         setup:
         def sPerm = Mock(IPermission) { getKey() >> "p" }
-        def cPerm = Mock(IChangeablePermission) { getKey() >> "c" }
+        def cPerm = Mock(IPermission) { getKey() >> "c" }
         def group = new GroupPermission("group.test")
 
         when: "Add permissions to group"
@@ -78,9 +78,9 @@ class GroupPermissionTest extends Specification {
         group.getName() == "Test1"
         group.getDescription() == "Test2"
         group.getPriority() == 200
-        group.getMeta().getString("perfix") == "Test3"
-        group.getMeta().getString("asd") == ""
-        group.getMeta().getInt("dsa") == 0
+        group.getMetaResolver().getString("perfix") == "Test3"
+        group.getMetaResolver().getString("asd") == ""
+        group.getMetaResolver().getInt("dsa") == 0
     }
 
     def "Test blank group"() {

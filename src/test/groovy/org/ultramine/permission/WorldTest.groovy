@@ -23,11 +23,11 @@ class WorldTest extends Specification {
         !container.checkUserPermission("user2", "group.admin")
 
         and: "Meta is loaded correctly"
-        container.get("user1").getMeta().getString("a") == "a"
-        container.get("user1").getMeta().getInt("b") == 1
+        container.get("user1").getMetaResolver().getString("a") == "a"
+        container.get("user1").getMetaResolver().getInt("b") == 1
 
-        !container.get("user2").getMeta().getString("a")
-        !container.get("user2").getMeta().getInt("b")
+        !container.get("user2").getMetaResolver().getString("a")
+        !container.get("user2").getMetaResolver().getInt("b")
     }
 
     def "Test config reloading"() {
@@ -42,14 +42,14 @@ class WorldTest extends Specification {
 
         then: "User have this permission and meta"
         container.checkUserPermission("user1", "test")
-        container.get("user2").getMeta().getString("test") == "data"
+        container.get("user2").getMetaResolver().getString("test") == "data"
 
         when: "Reloading container"
         container.load(testWorldData)
 
         then: "User have not this permission and meta"
         !container.checkUserPermission("user1", "test")
-        !container.get("user2").getMeta().getString("test")
+        !container.get("user2").getMetaResolver().getString("test")
 
         and: "Container is reloaded correctly"
         container.checkUserPermission("user1", "d")
@@ -64,10 +64,10 @@ class WorldTest extends Specification {
         container.checkUserPermission("user2", "p.3")
         !container.checkUserPermission("user2", "group.admin")
 
-        container.get("user1").getMeta().getString("a") == "a"
-        container.get("user1").getMeta().getInt("b") == 1
-        !container.get("user2").getMeta().getString("a")
-        !container.get("user2").getMeta().getInt("b")
+        container.get("user1").getMetaResolver().getString("a") == "a"
+        container.get("user1").getMetaResolver().getInt("b") == 1
+        !container.get("user2").getMetaResolver().getString("a")
+        !container.get("user2").getMetaResolver().getInt("b")
     }
 
     def "Test config saving"() {

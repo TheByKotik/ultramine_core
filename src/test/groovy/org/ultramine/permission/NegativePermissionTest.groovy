@@ -1,6 +1,6 @@
 package org.ultramine.permission
 
-import static org.ultramine.permission.PermissionResolver.CheckResult.*
+import static CheckResult.*
 import spock.lang.Specification
 
 /**
@@ -15,18 +15,18 @@ class NegativePermissionTest extends Specification {
             getName() >> "Test Name"
             getDescription() >> "Test Description"
             getPriority() >> 100
-            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
+            getPermissionResolver() >> PermissionResolver.createForKey("test.key", 1)
         }
 
         when: "Create new NegativePermission"
-        def perm = new NegativePermission(permission)
+        def perm = new PermissionRepository.NegativePermission(permission)
 
         then: "PermissionResolver was inverted"
         perm.getKey() == "^test.key"
         perm.getName() == "NOT: Test Name"
         perm.getDescription() == "NOT: Test Description"
         perm.getPriority() == 100
-        perm.getPermissions().check("test.key") == FALSE
+        perm.getPermissionResolver().check("test.key") == FALSE
     }
 
     def "Test subscribe/unsubscribe IPermission"() {
@@ -34,7 +34,7 @@ class NegativePermissionTest extends Specification {
         IPermission permission = Mock(IPermission)
 
         def listener = Mock(IDirtyListener)
-        def perm = new NegativePermission(permission)
+        def perm = new PermissionRepository.NegativePermission(permission)
 
         when: "Try to subscribe/unsubscribe listener"
         perm.subscribe(listener)
@@ -47,23 +47,23 @@ class NegativePermissionTest extends Specification {
 
     def "Test wrap IChangeablePermission"() {
         setup: "Create new NegativePermission"
-        IPermission permission = Mock(IChangeablePermission) {
+        IPermission permission = Mock(IPermission) {
             getKey() >> "test.key"
             getName() >> "Test Name"
             getDescription() >> "Test Description"
             getPriority() >> 100
-            getPermissions() >> PermissionResolver.createForKey("test.key", 1)
+            getPermissionResolver() >> PermissionResolver.createForKey("test.key", 1)
         }
 
         when: "Create new NegativePermission"
-        def perm = new NegativePermission(permission)
+        def perm = new PermissionRepository.NegativePermission(permission)
 
         then: "PermissionResolver was inverted"
         perm.getKey() == "^test.key"
         perm.getName() == "NOT: Test Name"
         perm.getDescription() == "NOT: Test Description"
         perm.getPriority() == 100
-        perm.getPermissions().check("test.key") == FALSE
+        perm.getPermissionResolver().check("test.key") == FALSE
 
         and: "Subscribed to permission"
         1 * permission.subscribe(_)
@@ -71,10 +71,10 @@ class NegativePermissionTest extends Specification {
 
     def "Test subscribe/unsubscribe IChangeablePermission"() {
         setup:
-        IPermission permission = Mock(IChangeablePermission)
+        IPermission permission = Mock(IPermission)
 
         def listener = Mock(IDirtyListener)
-        def perm = new NegativePermission(permission)
+        def perm = new PermissionRepository.NegativePermission(permission)
 
         when: "Try to subscribe/unsubscribe listener"
         perm.subscribe(listener)
@@ -88,12 +88,12 @@ class NegativePermissionTest extends Specification {
 
     def "Test blank description"() {
         setup: "Permission with blank description"
-        IPermission permission = Mock(IChangeablePermission) {
+        IPermission permission = Mock(IPermission) {
             getDescription() >> ""
         }
 
         when: "Create new NegativePermission"
-        def perm = new NegativePermission(permission)
+        def perm = new PermissionRepository.NegativePermission(permission)
 
         then: "Description is blank"
         perm.getDescription() == ""
@@ -102,7 +102,7 @@ class NegativePermissionTest extends Specification {
     def "Test blank meta"() {
 
         when: "Create new NegativePermission"
-        def perm = new NegativePermission(Mock(IPermission))
+        def perm = new PermissionRepository.NegativePermission(Mock(IPermission))
 
         then: "Description is blank"
         perm.getMeta() == MetaResolver.BLANK_RESOLVER
@@ -111,19 +111,19 @@ class NegativePermissionTest extends Specification {
     def "Test integration with group permission"() {
         setup:
         def group = new GroupPermission("group")
-        group.addPermission(new Permission("p1"))
+        group.addPermission(new DummyPermission("p1"))
 
         when: "Create negative permission"
-        def perm = new NegativePermission(group)
+        def perm = new PermissionRepository.NegativePermission(group)
 
         then: "Negative permission contains group permissions"
-        perm.getPermissions().check("p1") == FALSE
+        perm.getPermissionResolver().check("p1") == FALSE
 
         when: "Group permission updates"
-        group.addPermission(new Permission("p2"))
+        group.addPermission(new DummyPermission("p2"))
 
         then: "Negative permission also updates"
-        perm.getPermissions().check("p1") == FALSE
-        perm.getPermissions().check("p2") == FALSE
+        perm.getPermissionResolver().check("p1") == FALSE
+        perm.getPermissionResolver().check("p2") == FALSE
     }
 }

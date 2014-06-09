@@ -9,7 +9,7 @@ class UserContainerTest extends Specification {
         resolver.merge(permissions, 0)
         Mock(User) {
             getName() >> name
-            getPermissions() >> resolver
+            getPermissionResolver() >> resolver
         }
     }
 

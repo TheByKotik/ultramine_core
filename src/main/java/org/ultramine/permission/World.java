@@ -65,12 +65,12 @@ public class World extends UserContainer<User>
 	}
 
 	@Override
-	protected PermissionResolver.CheckResult check(String userName, String permissionKey)
+	protected CheckResult check(String userName, String permissionKey)
 	{
-		PermissionResolver.CheckResult result = super.check(userName, permissionKey);
+		CheckResult result = super.check(userName, permissionKey);
 
-		if (result == PermissionResolver.CheckResult.UNRESOLVED)
-			result = defaultPermissions.getPermissions().check(permissionKey);
+		if (result == CheckResult.UNRESOLVED)
+			result = defaultPermissions.getPermissionResolver().check(permissionKey);
 
 		return result;
 	}
@@ -84,12 +84,12 @@ public class World extends UserContainer<User>
 	public static class HolderData
 	{
 		public List<String> permissions;
-		public Map<String, Object> meta;
+		public Map<String, String> meta;
 
 		public HolderData()
 		{
 			permissions = new ArrayList<String>();
-			meta = new HashMap<String, Object>();
+			meta = new HashMap<String, String>();
 		}
 
 		public HolderData(PermissionHolder holder)

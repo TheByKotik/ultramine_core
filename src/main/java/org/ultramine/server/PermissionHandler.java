@@ -1,13 +1,8 @@
 package org.ultramine.server;
 
 import net.minecraft.command.ICommandSender;
-import org.ultramine.permission.ClientPermissionManager;
-import org.ultramine.permission.IPermission;
-import org.ultramine.permission.IPermissionHandler;
-import org.ultramine.permission.MetaResolver;
-import org.ultramine.permission.Permission;
-import org.ultramine.permission.PermissionRepository;
-import org.ultramine.permission.ServerPermissionManager;
+import org.ultramine.permission.*;
+import org.ultramine.permission.DummyPermission;
 
 import java.util.Set;
 
@@ -18,12 +13,13 @@ public class PermissionHandler implements IPermissionHandler
 	private static PermissionHandler instance;
 	private static PermissionRepository mainRepository = new PermissionRepository();
 
+	// TODO: Удалить
 	public static void registerPermission(String key, String name, String description)
 	{
 		if (instance != null)
-			getInstance().getRepository().registerPermission(new Permission(key, name, description));
+			getInstance().getRepository().registerPermission(new DummyPermission(key));
 		else
-			mainRepository.registerPermission(new Permission(key, name, description));
+			mainRepository.registerPermission(new DummyPermission(key));
 	}
 
 	public static void registerPermission(IPermission permission)
@@ -164,12 +160,12 @@ public class PermissionHandler implements IPermissionHandler
 	}
 
 	@Override
-	public void setMeta(String world, String player, String key, Object value)
+	public void setMeta(String world, String player, String key, String value)
 	{
 		handler.setMeta(world, player, key, value);
 	}
 
-	public void setMeta(ICommandSender player, String key, Object value)
+	public void setMeta(ICommandSender player, String key, String value)
 	{
 		setMeta(worldName(player), player.getCommandSenderName(), key, value);
 	}

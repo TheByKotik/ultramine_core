@@ -118,11 +118,11 @@ public class ServerPermissionManager implements IPermissionHandler
 		if (!worldContainer.contains(player))
 			return MetaResolver.BLANK_RESOLVER;
 
-		return worldContainer.get(player).getMeta();
+		return worldContainer.get(player).getMetaResolver();
 	}
 
 	@Override
-	public void setMeta(String world, String player, String key, Object value)
+	public void setMeta(String world, String player, String key, String value)
 	{
 		if (!worlds.containsKey(world))
 			reloadWorld(world);

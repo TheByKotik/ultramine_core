@@ -5,19 +5,19 @@ import java.util.Map;
 
 public abstract class MetaHolder
 {
-	protected Map<String, Object> innerMeta;
+	protected Map<String, String> innerMeta;
 
 	public MetaHolder()
 	{
-		innerMeta = new HashMap<String, Object>();
+		innerMeta = new HashMap<String, String>();
 	}
 
-	public MetaHolder(Map<String, Object> meta)
+	public MetaHolder(Map<String, String> meta)
 	{
 		setInnerMeta(meta);
 	}
 
-	public void setMeta(String key, Object value)
+	public void setMeta(String key, String value)
 	{
 		innerMeta.put(key, value);
 	}
@@ -34,18 +34,18 @@ public abstract class MetaHolder
 
 	public int getPriority()
 	{
-		return getMeta().getInt("priority");
+		return getMetaResolver().getInt("priority");
 	}
 
-	public Map<String, Object> getInnerMeta()
+	public Map<String, String> getInnerMeta()
 	{
-		return new HashMap<String, Object>(innerMeta);
+		return new HashMap<String, String>(innerMeta);
 	}
 
-	public void setInnerMeta(Map<String, Object> meta)
+	public void setInnerMeta(Map<String, String> meta)
 	{
-		innerMeta = new HashMap<String, Object>(meta);
+		innerMeta = new HashMap<String, String>(meta);
 	}
 
-	public abstract MetaResolver getMeta();
+	public abstract MetaResolver getMetaResolver();
 }

@@ -2,7 +2,7 @@ package org.ultramine.permission
 
 import spock.lang.Specification
 
-import static org.ultramine.permission.PermissionResolver.CheckResult.UNRESOLVED
+import static CheckResult.UNRESOLVED
 
 class PermissionHolderTest extends Specification {
 
@@ -18,13 +18,13 @@ class PermissionHolderTest extends Specification {
         def resolver = Mock(PermissionResolver)
         def perm1 = Mock(IPermission) {
             getKey() >> "p.1"
-            getPermissions() >> resolver
+            getPermissionResolver() >> resolver
             getMeta() >> createMetaResolver([test1: "1", test2: "1", test3: "1"])
             getPriority() >> 1
         }
         def perm2 = Mock(IPermission) {
             getKey() >> "p.2"
-            getPermissions() >> resolver
+            getPermissionResolver() >> resolver
             getMeta() >> createMetaResolver([test2: "2"])
             getPriority() >> 2
         }
@@ -45,9 +45,9 @@ class PermissionHolderTest extends Specification {
         0 * resolver._
 
         and: "Meta is correct"
-        holder.getMeta().getString("test1") == "0"
-        holder.getMeta().getString("test2") == "2"
-        holder.getMeta().getString("test3") == "1"
+        holder.getMetaResolver().getString("test1") == "0"
+        holder.getMetaResolver().getString("test2") == "2"
+        holder.getMetaResolver().getString("test3") == "1"
 
         when: "Calculate one more time"
         holder.calculate()
@@ -59,26 +59,26 @@ class PermissionHolderTest extends Specification {
 
     def "Test clearPermissions"() {
         setup:
-        def perm = Mock(IChangeablePermission) {
+        def perm = Mock(IPermission) {
             getKey() >> "p1"
-            getPermissions() >> PermissionResolver.createForKey("p1", 0)
+            getPermissionResolver() >> PermissionResolver.createForKey("p1", 0)
             getMeta() >> createMetaResolver([p1: 1])
         }
         def holder = new PermissionHolder([a: 1, b: 2])
-        holder.addPermission(new Permission("p2"))
+        holder.addPermission(new DummyPermission("p2"))
         holder.addPermission(perm)
 
         when: "Clear holder's permissions"
         holder.clearPermissions()
 
         then: "It contains only inner meta"
-        !holder.getMeta().getInt("p1")
-        holder.getMeta().getInt("a") == 1
-        holder.getMeta().getInt("b") == 2
+        !holder.getMetaResolver().getInt("p1")
+        holder.getMetaResolver().getInt("a") == 1
+        holder.getMetaResolver().getInt("b") == 2
 
         and: "It contains no permissions"
-        holder.getPermissions().check("p1") == UNRESOLVED
-        holder.getPermissions().check("p2") == UNRESOLVED
+        holder.getPermissionResolver().check("p1") == UNRESOLVED
+        holder.getPermissionResolver().check("p2") == UNRESOLVED
 
         and: "It unsubscribed from all permissions"
         1 * perm.unsubscribe(holder)
@@ -86,26 +86,26 @@ class PermissionHolderTest extends Specification {
 
     def "Test clearMeta"() {
         setup:
-        def perm = Mock(IChangeablePermission) {
+        def perm = Mock(IPermission) {
             getKey() >> "p1"
-            getPermissions() >> PermissionResolver.createForKey("p1", 0)
+            getPermissionResolver() >> PermissionResolver.createForKey("p1", 0)
             getMeta() >> createMetaResolver([p1: 1])
         }
         def holder = new PermissionHolder([a: 1, b: 2])
-        holder.addPermission(new Permission("p2"))
+        holder.addPermission(new DummyPermission("p2"))
         holder.addPermission(perm)
 
         when: "Clear holder's meta"
         holder.clearMeta()
 
         then: "It contains only permission's meta"
-        holder.getMeta().getInt("p1") == 1
-        !holder.getMeta().getInt("a")
-        !holder.getMeta().getInt("b")
+        holder.getMetaResolver().getInt("p1") == 1
+        !holder.getMetaResolver().getInt("a")
+        !holder.getMetaResolver().getInt("b")
 
         and: "It contains all permissions"
-        holder.getPermissions().check("p1") != UNRESOLVED
-        holder.getPermissions().check("p2") != UNRESOLVED
+        holder.getPermissionResolver().check("p1") != UNRESOLVED
+        holder.getPermissionResolver().check("p2") != UNRESOLVED
 
         and: "It did not unsubscribe from all permissions"
         0 * perm.unsubscribe(holder)
@@ -143,7 +143,7 @@ class PermissionHolderTest extends Specification {
 
         when: "Call addPermission method"
         holder.calculate()
-        holder.addPermission(new Permission("test"))
+        holder.addPermission(new DummyPermission("test"))
 
         then: "Group becomes dirty"
         1 * holder.makeDirty()

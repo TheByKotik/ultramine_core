@@ -83,11 +83,11 @@ public class ClientPermissionManager implements IPermissionHandler
 		if (!global.contains(player))
 			return MetaResolver.BLANK_RESOLVER;
 
-		return global.get(player).getMeta();
+		return global.get(player).getMetaResolver();
 	}
 
 	@Override
-	public void setMeta(String world, String player, String key, Object value)
+	public void setMeta(String world, String player, String key, String value)
 	{
 		if (!global.contains(player))
 			global.add(new User(player));

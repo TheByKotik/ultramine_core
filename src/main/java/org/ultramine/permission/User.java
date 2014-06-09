@@ -12,7 +12,7 @@ public class User extends PermissionHolder
 		this.name = name.toLowerCase();
 	}
 
-	public User(String name, Map<String, Object> meta)
+	public User(String name, Map<String, String> meta)
 	{
 		super(meta);
 		this.name = name.toLowerCase();
@@ -26,6 +26,6 @@ public class User extends PermissionHolder
 	@Override
 	public int getPriority()
 	{
-		return getMeta().getInt("priority");
+		return getMetaResolver().getInt("priority");
 	}
 }

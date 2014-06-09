@@ -13,7 +13,7 @@ public class BasicPermissionCommands
 			group = "permissions",
 			aliases = {"permissions", "pcfg"},
 			permissions = {"permissions.admin"},
-			completions = {"[save reload]"}
+			syntax = {"[save reload]"}
 	)
 	public static void pcofnig(CommandContext context)
 	{
@@ -35,7 +35,7 @@ public class BasicPermissionCommands
 			name = "pworld",
 			group = "permissions",
 			permissions = {"permissions.admin.world"},
-			completions = {
+			syntax = {
 					"[add remove] <permission>...",
 					"<world> [add remove] <permission>..."
 			}
@@ -84,7 +84,7 @@ public class BasicPermissionCommands
 			name = "puser",
 			group = "permissions",
 			permissions = {"permissions.admin.user"},
-			completions = {
+			syntax = {
 					"<player> [add remove] <permission>...",
 					"<player> [meta] <pmeta> <%value>",
 					"<world> <player> [add remove] <permission>...",
@@ -149,7 +149,7 @@ public class BasicPermissionCommands
 			name = "pgroup",
 			group = "permissions",
 			permissions = {"permissions.admin.group"},
-			completions = {
+			syntax = {
 					"<group> [add remove] <permission>...",
 					"<group> [meta] <pmeta> <%value>"
 			}

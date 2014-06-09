@@ -19,13 +19,13 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 		this.dirty = false;
 	}
 
-	public PermissionHolder(Map<String, Object> meta)
+	public PermissionHolder(Map<String, String> meta)
 	{
 		super(meta);
 		this.dirty = true;
 	}
 
-	public PermissionResolver getPermissions()
+	public PermissionResolver getPermissionResolver()
 	{
 		if (isDirty())
 			calculate();
@@ -34,7 +34,7 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 	}
 
 	@Override
-	public MetaResolver getMeta()
+	public MetaResolver getMetaResolver()
 	{
 		if (isDirty())
 			calculate();
@@ -48,8 +48,7 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 			return;
 
 		permissions.put(permission.getKey(), permission);
-		if (permission instanceof IChangeablePermission)
-			((IChangeablePermission) permission).subscribe(this);
+		permission.subscribe(this);
 
 		makeDirty();
 	}
@@ -64,20 +63,17 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 		if (!permissions.containsKey(key))
 			return;
 
-		IPermission perm = permissions.remove(key);
-		if (perm instanceof IChangeablePermission)
-			((IChangeablePermission) perm).unsubscribe(this);
+		IPermission permission = permissions.remove(key);
+		permission.unsubscribe(this);
 
 		makeDirty();
 	}
 
 	public void clearPermissions()
 	{
-		for (IPermission perm : permissions.values())
-		{
-			if (perm instanceof IChangeablePermission)
-				((IChangeablePermission) perm).unsubscribe(this);
-		}
+		for (IPermission permission : permissions.values())
+			permission.unsubscribe(this);
+
 		permissions.clear();
 		makeDirty();
 	}
@@ -99,7 +95,7 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 	}
 
 	@Override
-	public void setMeta(String key, Object value)
+	public void setMeta(String key, String value)
 	{
 		super.setMeta(key, value);
 		makeDirty();
@@ -130,8 +126,8 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 
 		for (IPermission permission : permissions.values())
 		{
-			permissionResolver.merge(permission.getPermissions(), permission.getPriority());
-			metaResolver.merge(permission.getMeta(), permission.getPriority());
+			permission.mergeTo(getPermissionResolver());
+			permission.mergeTo(getMetaResolver());
 		}
 
 		metaResolver.merge(innerMeta, Integer.MAX_VALUE);

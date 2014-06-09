@@ -61,7 +61,7 @@ public class CommandRegistry
 						.setPermissions(data.permissions())
 						.setUsableFromServer(data.isUsableFromServer());
 
-				for (String completion : data.completions())
+				for (String completion : data.syntax())
 					builder.addArgumentsPattern(argumentsPatternParser.parse(completion));
 
 				builders.add(builder);

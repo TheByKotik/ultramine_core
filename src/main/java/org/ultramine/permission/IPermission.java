@@ -3,10 +3,14 @@ package org.ultramine.permission;
 public interface IPermission
 {
 	public String getKey();
-	public String getName();
-	public String getDescription();
 	public int getPriority();
 
-	public PermissionResolver getPermissions();
-	public MetaResolver getMeta();
+	public CheckResult check(String key);
+	public String getMeta(String key);
+
+	public void mergeTo(PermissionResolver resolver);
+	public void mergeTo(MetaResolver resolver);
+
+	public void subscribe(IDirtyListener listener);
+	public void unsubscribe(IDirtyListener listener);
 }
