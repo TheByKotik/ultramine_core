@@ -1,5 +1,9 @@
 package org.ultramine.permission;
 
+import org.ultramine.permission.internal.CheckResult;
+import org.ultramine.permission.internal.PermissionHolder;
+import org.ultramine.permission.internal.UserContainer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +74,7 @@ public class World extends UserContainer<User>
 		CheckResult result = super.check(userName, permissionKey);
 
 		if (result == CheckResult.UNRESOLVED)
-			result = defaultPermissions.getPermissionResolver().check(permissionKey);
+			result = defaultPermissions.check(permissionKey);
 
 		return result;
 	}

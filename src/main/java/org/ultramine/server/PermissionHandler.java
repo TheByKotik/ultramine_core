@@ -1,8 +1,13 @@
 package org.ultramine.server;
 
 import net.minecraft.command.ICommandSender;
-import org.ultramine.permission.*;
 import org.ultramine.permission.DummyPermission;
+import org.ultramine.permission.IPermission;
+import org.ultramine.permission.IPermissionHandler;
+import org.ultramine.permission.PermissionRepository;
+import org.ultramine.permission.internal.ClientPermissionManager;
+import org.ultramine.permission.internal.MetaResolver;
+import org.ultramine.permission.internal.ServerPermissionManager;
 
 import java.util.Set;
 

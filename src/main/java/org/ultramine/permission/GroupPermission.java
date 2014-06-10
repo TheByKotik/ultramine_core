@@ -1,5 +1,9 @@
 package org.ultramine.permission;
 
+import org.ultramine.permission.internal.MetaResolver;
+import org.ultramine.permission.internal.PermissionHolder;
+import org.ultramine.permission.internal.PermissionResolver;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,25 +32,13 @@ public class GroupPermission extends PermissionHolder implements IPermission
 	}
 
 	@Override
-	public CheckResult check(String key)
-	{
-		return getPermissionResolver().check(key);
-	}
-
-	@Override
-	public String getMeta(String key)
-	{
-		return getMetaResolver().getString(key);
-	}
-
-	@Override
-	public void mergeTo(PermissionResolver resolver)
+	public void mergePermissionsTo(PermissionResolver resolver)
 	{
 		resolver.merge(getPermissionResolver(), getPriority());
 	}
 
 	@Override
-	public void mergeTo(MetaResolver resolver)
+	public void mergeMetaTo(MetaResolver resolver)
 	{
 		resolver.merge(getMetaResolver(), getPriority());
 	}
@@ -72,6 +64,11 @@ public class GroupPermission extends PermissionHolder implements IPermission
 		super.makeDirty();
 		for (IDirtyListener listener : listeners)
 			listener.makeDirty();
+	}
+
+	private int getPriority()
+	{
+		return getMetaResolver().getInt("priority");
 	}
 
 	@Override

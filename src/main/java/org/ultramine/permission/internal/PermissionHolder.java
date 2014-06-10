@@ -1,4 +1,7 @@
-package org.ultramine.permission;
+package org.ultramine.permission.internal;
+
+import org.ultramine.permission.IDirtyListener;
+import org.ultramine.permission.IPermission;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,21 +28,9 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 		this.dirty = true;
 	}
 
-	public PermissionResolver getPermissionResolver()
+	public CheckResult check(String key)
 	{
-		if (isDirty())
-			calculate();
-
-		return permissionResolver;
-	}
-
-	@Override
-	public MetaResolver getMetaResolver()
-	{
-		if (isDirty())
-			calculate();
-
-		return metaResolver;
+		return getPermissionResolver().check(key);
 	}
 
 	public void addPermission(IPermission permission)
@@ -126,10 +117,27 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 
 		for (IPermission permission : permissions.values())
 		{
-			permission.mergeTo(getPermissionResolver());
-			permission.mergeTo(getMetaResolver());
+			permission.mergePermissionsTo(permissionResolver);
+			permission.mergeMetaTo(metaResolver);
 		}
 
-		metaResolver.merge(innerMeta, Integer.MAX_VALUE);
+		mergeInnerMeta();
+	}
+
+	protected PermissionResolver getPermissionResolver()
+	{
+		if (isDirty())
+			calculate();
+
+		return permissionResolver;
+	}
+
+	@Override
+	protected MetaResolver getMetaResolver()
+	{
+		if (isDirty())
+			calculate();
+
+		return metaResolver;
 	}
 }

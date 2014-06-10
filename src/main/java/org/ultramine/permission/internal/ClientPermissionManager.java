@@ -1,4 +1,6 @@
-package org.ultramine.permission;
+package org.ultramine.permission.internal;
+
+import org.ultramine.permission.*;
 
 import java.util.HashMap;
 import java.util.Map;

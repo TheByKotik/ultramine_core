@@ -1,11 +1,11 @@
-package org.ultramine.permission;
+package org.ultramine.permission.internal;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class MetaHolder
 {
-	protected Map<String, String> innerMeta;
+	private Map<String, String> innerMeta;
 
 	public MetaHolder()
 	{
@@ -15,6 +15,11 @@ public abstract class MetaHolder
 	public MetaHolder(Map<String, String> meta)
 	{
 		setInnerMeta(meta);
+	}
+
+	public String getMeta(String key)
+	{
+		return getMetaResolver().getString(key);
 	}
 
 	public void setMeta(String key, String value)
@@ -32,11 +37,6 @@ public abstract class MetaHolder
 		innerMeta.clear();
 	}
 
-	public int getPriority()
-	{
-		return getMetaResolver().getInt("priority");
-	}
-
 	public Map<String, String> getInnerMeta()
 	{
 		return new HashMap<String, String>(innerMeta);
@@ -47,5 +47,10 @@ public abstract class MetaHolder
 		innerMeta = new HashMap<String, String>(meta);
 	}
 
-	public abstract MetaResolver getMetaResolver();
+	protected abstract MetaResolver getMetaResolver();
+
+	protected void mergeInnerMeta()
+	{
+		getMetaResolver().merge(innerMeta, Integer.MAX_VALUE);
+	}
 }

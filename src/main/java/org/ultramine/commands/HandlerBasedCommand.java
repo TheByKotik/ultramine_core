@@ -105,21 +105,13 @@ public class HandlerBasedCommand implements IExtendedCommand
 
 		List<String> result = null;
 		Set<String> dupChecker = null;
-		ArgumentsPattern.MatchResult minimumMatch = ArgumentsPattern.MatchResult.POSSIBLY;
 		String[] tail = ArrayUtils.remove(var2, var2.length - 1);
 
 		for (ArgumentsPattern argumentsPattern : argumentsPatterns)
 		{
 			ArgumentsPattern.MatchResult currentMatch = argumentsPattern.partialMatch(tail);
 
-			if (currentMatch.isGreaterThan(minimumMatch))
-			{
-				minimumMatch = currentMatch;
-				result = null;
-				dupChecker = null;
-			}
-
-			if (!currentMatch.isLessThan(minimumMatch))
+			if (currentMatch != ArgumentsPattern.MatchResult.NOT)
 			{
 				List<String> options = argumentsPattern.getCompletionOptions(var2);
 				if (options == null || options.size() == 0)
@@ -145,6 +137,9 @@ public class HandlerBasedCommand implements IExtendedCommand
 						}
 					}
 				}
+
+				if (currentMatch == ArgumentsPattern.MatchResult.FULLY)
+					break;
 			}
 		}
 		return result;

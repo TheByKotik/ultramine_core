@@ -1,9 +1,14 @@
-package org.ultramine.permission;
+package org.ultramine.permission.internal;
 
 import java.util.Map;
 
 public class PermissionResolver extends Resolver<Boolean>
 {
+	public PermissionResolver()
+	{
+		super();
+	}
+
 	public static PermissionResolver createInverted(PermissionResolver anotherResolver)
 	{
 		PermissionResolver resolver = new PermissionResolver();

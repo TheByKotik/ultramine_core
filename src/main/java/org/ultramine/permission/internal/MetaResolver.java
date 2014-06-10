@@ -1,8 +1,13 @@
-package org.ultramine.permission;
+package org.ultramine.permission.internal;
 
 public class MetaResolver extends Resolver<String>
 {
 	public static final MetaResolver BLANK_RESOLVER = new MetaResolver();
+
+	public MetaResolver()
+	{
+		super();
+	}
 
 	public String getString(String key)
 	{
@@ -27,6 +32,4 @@ public class MetaResolver extends Resolver<String>
 
 		return 0;
 	}
-
-
 }

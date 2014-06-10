@@ -1,5 +1,7 @@
 package org.ultramine.permission;
 
+import org.ultramine.permission.internal.PermissionHolder;
+
 import java.util.Map;
 
 public class User extends PermissionHolder
@@ -21,11 +23,5 @@ public class User extends PermissionHolder
 	public String getName()
 	{
 		return name;
-	}
-
-	@Override
-	public int getPriority()
-	{
-		return getMetaResolver().getInt("priority");
 	}
 }

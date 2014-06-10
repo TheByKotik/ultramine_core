@@ -1,5 +1,7 @@
 package org.ultramine.permission;
 
+import org.ultramine.permission.internal.MetaResolver;
+
 import java.util.Set;
 
 public interface IPermissionHandler

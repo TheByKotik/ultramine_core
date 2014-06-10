@@ -1,8 +1,9 @@
 package org.ultramine.permission
 
+import org.ultramine.permission.internal.PermissionResolver
 import spock.lang.Specification
 import spock.lang.Unroll
-import static CheckResult.*
+import static org.ultramine.permission.internal.CheckResult.*
 
 /**
  * Created by Евгений on 08.05.2014.

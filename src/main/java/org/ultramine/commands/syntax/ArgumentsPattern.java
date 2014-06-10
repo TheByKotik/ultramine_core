@@ -200,24 +200,5 @@ public class ArgumentsPattern
 		}
 	};
 
-	public static enum MatchResult {
-		FULLY(2), POSSIBLY(1), NOT(0);
-
-		private int value;
-
-		private MatchResult(int value)
-		{
-			this.value = value;
-		}
-
-		public boolean isLessThan(MatchResult anotherResult)
-		{
-			return value < anotherResult.value;
-		}
-
-		public boolean isGreaterThan(MatchResult anotherResult)
-		{
-			return value > anotherResult.value;
-		}
-	}
+	public static enum MatchResult { FULLY, POSSIBLY, NOT }
 }

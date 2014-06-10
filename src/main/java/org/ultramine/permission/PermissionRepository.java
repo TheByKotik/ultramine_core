@@ -1,5 +1,9 @@
 package org.ultramine.permission;
 
+import org.ultramine.permission.internal.CheckResult;
+import org.ultramine.permission.internal.MetaResolver;
+import org.ultramine.permission.internal.PermissionResolver;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +36,7 @@ public class PermissionRepository
 		{
 			if (key.startsWith("^"))
 			{
-				proxyPermissions.put(key, new NegativePermission(key));
+				proxyPermissions.put(key, new NegativePermission(key, getPermission(key.substring(1))));
 				registeredPermissions.add(key);
 			}
 			else
@@ -80,7 +84,6 @@ public class PermissionRepository
 		{
 			this.wrappedPermission = permission;
 			this.isDummy = false;
-			listeners = new ArrayList<IDirtyListener>();
 		}
 
 		@Override
@@ -94,10 +97,9 @@ public class PermissionRepository
 			return wrappedPermission;
 		}
 
-		@Override
-		public int getPriority()
+		public boolean isDummy()
 		{
-			return wrappedPermission.getPriority();
+			return isDummy;
 		}
 
 		@Override
@@ -113,15 +115,15 @@ public class PermissionRepository
 		}
 
 		@Override
-		public void mergeTo(PermissionResolver resolver)
+		public void mergePermissionsTo(PermissionResolver resolver)
 		{
-			wrappedPermission.mergeTo(resolver);
+			wrappedPermission.mergePermissionsTo(resolver);
 		}
 
 		@Override
-		public void mergeTo(MetaResolver resolver)
+		public void mergeMetaTo(MetaResolver resolver)
 		{
-			wrappedPermission.mergeTo(resolver);
+			wrappedPermission.mergeMetaTo(resolver);
 		}
 
 		@Override
@@ -170,35 +172,6 @@ public class PermissionRepository
 		public String toString()
 		{
 			return wrappedPermission.toString();
-		}
-	}
-
-	private class NegativePermission extends ProxyPermission
-	{
-		private String key;
-
-		public NegativePermission(String key)
-		{
-			super(getPermission(key.substring(1)));
-			this.key = key;
-		}
-
-		@Override
-		public String getKey()
-		{
-			return key;
-		}
-
-		@Override
-		public CheckResult check(String key)
-		{
-			return super.check(key).invert();
-		}
-
-		@Override
-		public String getMeta(String key)
-		{
-			return "";
 		}
 	}
 }

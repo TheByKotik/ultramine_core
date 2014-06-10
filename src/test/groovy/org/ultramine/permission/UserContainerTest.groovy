@@ -1,16 +1,14 @@
 package org.ultramine.permission
 
+import org.ultramine.permission.internal.UserContainer
 import spock.lang.Specification
 
 class UserContainerTest extends Specification {
 
     def stubUser(String name, Map<String, Boolean> permissions) {
-        def resolver = new PermissionResolver();
-        resolver.merge(permissions, 0)
-        Mock(User) {
-            getName() >> name
-            getPermissionResolver() >> resolver
-        }
+        def user = new User(name)
+        user.permissionResolver.merge(permissions, 0)
+        return user
     }
 
     def "Test permissions"() {

@@ -1,4 +1,4 @@
-package org.ultramine.permission;
+package org.ultramine.permission.internal;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 
@@ -22,13 +22,13 @@ public class Resolver<T>
 		priorities.clear();
 	}
 
-	public void merge(Resolver<T> anotherResolver, int priority)
+	public final void merge(Resolver<T> anotherResolver, int priority)
 	{
 		if (anotherResolver != null)
 			merge(anotherResolver.values, priority);
 	}
 
-	public void merge(Map<String, T> newValues, int priority)
+	public final void merge(Map<String, T> newValues, int priority)
 	{
 		for (Map.Entry<String, T> entry : newValues.entrySet())
 			merge(entry.getKey(), entry.getValue(), priority);

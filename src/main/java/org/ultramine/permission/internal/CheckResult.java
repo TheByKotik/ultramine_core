@@ -1,4 +1,4 @@
-package org.ultramine.permission;
+package org.ultramine.permission.internal;
 
 public enum CheckResult
 {
