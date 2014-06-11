@@ -11,16 +11,14 @@ import java.util.Map;
 
 public class World extends UserContainer<User>
 {
-	private PermissionRepository repository;
 	private GroupPermission defaultPermissions;
 
-	public World(PermissionRepository permissionRepository)
+	public World()
 	{
-		this.repository = permissionRepository;
 		this.defaultPermissions = new GroupPermission("");
 	}
 
-	public void load(WorldData data)
+	public void load(PermissionRepository repository, WorldData data)
 	{
 		if (data == null)
 			return;

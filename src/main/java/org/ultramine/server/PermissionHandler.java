@@ -1,31 +1,17 @@
 package org.ultramine.server;
 
 import net.minecraft.command.ICommandSender;
-import org.ultramine.permission.DummyPermission;
 import org.ultramine.permission.IPermission;
-import org.ultramine.permission.IPermissionHandler;
+import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.PermissionRepository;
 import org.ultramine.permission.internal.ClientPermissionManager;
-import org.ultramine.permission.internal.MetaResolver;
 import org.ultramine.permission.internal.ServerPermissionManager;
+import org.ultramine.permission.internal.UserContainer;
 
-import java.util.Set;
-
-public class PermissionHandler implements IPermissionHandler
+public class PermissionHandler implements IPermissionManager
 {
-	public static final String OP_PERMISSION = "minecraft.op";
-
 	private static PermissionHandler instance;
 	private static PermissionRepository mainRepository = new PermissionRepository();
-
-	// TODO: Удалить
-	public static void registerPermission(String key, String name, String description)
-	{
-		if (instance != null)
-			getInstance().getRepository().registerPermission(new DummyPermission(key));
-		else
-			mainRepository.registerPermission(new DummyPermission(key));
-	}
 
 	public static void registerPermission(IPermission permission)
 	{
@@ -69,9 +55,9 @@ public class PermissionHandler implements IPermissionHandler
 		return instance;
 	}
 
-	private IPermissionHandler handler;
+	private IPermissionManager handler;
 
-	private PermissionHandler(IPermissionHandler handler)
+	private PermissionHandler(IPermissionManager handler)
 	{
 		this.handler = handler;
 	}
@@ -154,14 +140,14 @@ public class PermissionHandler implements IPermissionHandler
 	}
 
 	@Override
-	public MetaResolver getMeta(String world, String player)
+	public String getMeta(String world, String player, String key)
 	{
-		return handler.getMeta(world, player);
+		return handler.getMeta(world, player, key);
 	}
 
-	public MetaResolver getMeta(ICommandSender player)
+	public String getMeta(ICommandSender player, String key)
 	{
-		return getMeta(worldName(player), player.getCommandSenderName());
+		return getMeta(worldName(player), player.getCommandSenderName(), key);
 	}
 
 	@Override
@@ -170,15 +156,15 @@ public class PermissionHandler implements IPermissionHandler
 		handler.setMeta(world, player, key, value);
 	}
 
+	@Override
+	public void setGroupMeta(String group, String key, String value)
+	{
+		handler.setGroupMeta(group, key, value);
+	}
+
 	public void setMeta(ICommandSender player, String key, String value)
 	{
 		setMeta(worldName(player), player.getCommandSenderName(), key, value);
-	}
-
-	@Override
-	public Set<String> findUsersWithPermission(String world, String permission)
-	{
-		return handler.findUsersWithPermission(world, permission);
 	}
 
 	@Override
@@ -197,6 +183,12 @@ public class PermissionHandler implements IPermissionHandler
 	public PermissionRepository getRepository()
 	{
 		return handler.getRepository();
+	}
+
+	@Override
+	public UserContainer getWorldContainer(String world)
+	{
+		return handler.getWorldContainer(world);
 	}
 
 	private String worldName(ICommandSender player)

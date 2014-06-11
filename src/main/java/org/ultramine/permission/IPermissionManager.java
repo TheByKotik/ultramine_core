@@ -1,10 +1,8 @@
 package org.ultramine.permission;
 
-import org.ultramine.permission.internal.MetaResolver;
+import org.ultramine.permission.internal.UserContainer;
 
-import java.util.Set;
-
-public interface IPermissionHandler
+public interface IPermissionManager
 {
 	public boolean has(String world, String player, String permission);
 
@@ -20,15 +18,17 @@ public interface IPermissionHandler
 
 	public void removeFromGroup(String group, String permission);
 
-	public MetaResolver getMeta(String world, String player);
+	public String getMeta(String world, String player, String key);
 
 	public void setMeta(String world, String player, String key, String value);
 
-	public Set<String> findUsersWithPermission(String world, String permission);
+	public void setGroupMeta(String group, String key, String value);
 
 	public void save();
 
 	public void reload();
 
 	public PermissionRepository getRepository();
+
+	public UserContainer getWorldContainer(String world);
 }

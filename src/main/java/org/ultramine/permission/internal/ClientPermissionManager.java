@@ -1,12 +1,16 @@
 package org.ultramine.permission.internal;
 
-import org.ultramine.permission.*;
+import org.ultramine.permission.GroupPermission;
+import org.ultramine.permission.IPermissionManager;
+import org.ultramine.permission.IPermissionManager;
+import org.ultramine.permission.PermissionRepository;
+import org.ultramine.permission.User;
+import org.ultramine.permission.World;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-public class ClientPermissionManager implements IPermissionHandler
+public class ClientPermissionManager implements IPermissionManager
 {
 	private World global;
 	private PermissionRepository permissionRepository;
@@ -15,7 +19,7 @@ public class ClientPermissionManager implements IPermissionHandler
 	public ClientPermissionManager(PermissionRepository permissionRepository)
 	{
 		this.permissionRepository = permissionRepository;
-		this.global = new World(permissionRepository);
+		this.global = new World();
 		this.groups = new HashMap<String, GroupPermission>();
 	}
 
@@ -28,10 +32,7 @@ public class ClientPermissionManager implements IPermissionHandler
 	@Override
 	public void add(String world, String player, String permission)
 	{
-		if (!global.contains(player))
-			global.add(new User(player));
-
-		global.get(player).addPermission(permissionRepository.getPermission(permission));
+		getOrCreateUser(player).addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override
@@ -43,22 +44,17 @@ public class ClientPermissionManager implements IPermissionHandler
 	@Override
 	public void addToGroup(String group, String permission)
 	{
-		if (!group.startsWith("group."))
-			group = "group." + group;
-
-		if (!groups.containsKey(group))
-			groups.put(group, new GroupPermission(group));
-
-		groups.get(group).addPermission(permissionRepository.getPermission(permission));
+		getOrCreateGroup(group).addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override
 	public void remove(String world, String player, String permission)
 	{
-		if (!global.contains(player))
+		User user = global.get(player);
+		if (user == null)
 			return;
 
-		global.get(player).removePermission(permission);
+		user.removePermission(permission);
 	}
 
 	@Override
@@ -70,37 +66,30 @@ public class ClientPermissionManager implements IPermissionHandler
 	@Override
 	public void removeFromGroup(String group, String permission)
 	{
-		if (!group.startsWith("group."))
-			group = "group." + group;
-
-		if (!groups.containsKey(group))
-			return;
-
-		groups.get(group).removePermission(permission);
+		GroupPermission groupObj = groups.get(ServerPermissionManager.fixGroupKey(group));
+		groupObj.removePermission(permission);
 	}
 
 	@Override
-	public MetaResolver getMeta(String world, String player)
+	public String getMeta(String world, String player, String key)
 	{
-		if (!global.contains(player))
-			return MetaResolver.BLANK_RESOLVER;
-
-		return global.get(player).getMetaResolver();
+		User user = global.get(player);
+		if (user == null)
+			return "";
+		else
+			return user.getMeta(key);
 	}
 
 	@Override
 	public void setMeta(String world, String player, String key, String value)
 	{
-		if (!global.contains(player))
-			global.add(new User(player));
-
-		global.get(player).setMeta(key, value);
+		getOrCreateUser(player).setMeta(key, value);
 	}
 
 	@Override
-	public Set<String> findUsersWithPermission(String world, String permission)
+	public void setGroupMeta(String group, String key, String value)
 	{
-		return global.getAllWithPermission(permission);
+		getOrCreateGroup(group).setMeta(key, value);
 	}
 
 	@Override
@@ -117,5 +106,37 @@ public class ClientPermissionManager implements IPermissionHandler
 	public PermissionRepository getRepository()
 	{
 		return permissionRepository;
+	}
+
+	@Override
+	public UserContainer getWorldContainer(String world)
+	{
+		return global;
+	}
+
+	private User getOrCreateUser(String name)
+	{
+		User user = global.get(name);
+		if (user == null)
+		{
+			user = new User(name);
+			global.add(user);
+		}
+
+		return user;
+	}
+
+	private GroupPermission getOrCreateGroup(String name)
+	{
+		String groupKey = ServerPermissionManager.fixGroupKey(name);
+		GroupPermission group = groups.get(groupKey);
+		if (group == null)
+		{
+			group = new GroupPermission(groupKey);
+			permissionRepository.registerPermission(group);
+			groups.put(groupKey, group);
+		}
+
+		return group;
 	}
 }

@@ -85,6 +85,7 @@ public class UserContainer<T extends User>
 	public void clear()
 	{
 		users.clear();
+		parentContainer = null;
 	}
 
 	public boolean contains(String name)

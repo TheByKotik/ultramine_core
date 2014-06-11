@@ -6,8 +6,8 @@ class WorldTest extends Specification {
 
     def "Test config parsing"() {
         setup:
-        def container = new World(new PermissionRepository())
-        container.load(testWorldData)
+        def container = new World()
+        container.load(new PermissionRepository(), testWorldData)
 
         expect: "Permissions are loaded correctly"
         container.checkUserPermission("user1", "d")
@@ -33,8 +33,8 @@ class WorldTest extends Specification {
     def "Test config reloading"() {
         setup:
         def repository = new PermissionRepository()
-        def container = new World(repository)
-        container.load(testWorldData)
+        def container = new World()
+        container.load(repository, testWorldData)
 
         when: "Add permission and meta to user"
         container.get("user1").addPermission(repository.getPermission("test"))
@@ -45,7 +45,7 @@ class WorldTest extends Specification {
         container.get("user2").getMeta("test") == "data"
 
         when: "Reloading container"
-        container.load(testWorldData)
+        container.load(repository, testWorldData)
 
         then: "User have not this permission and meta"
         !container.checkUserPermission("user1", "test")
@@ -73,7 +73,7 @@ class WorldTest extends Specification {
     def "Test config saving"() {
         setup:
         def repository = new PermissionRepository()
-        def container = new World(repository)
+        def container = new World()
         def user = new User("test")
         user.addPermission(repository.getPermission("p1"))
         user.addPermission(repository.getPermission("^p2"))
@@ -94,8 +94,8 @@ class WorldTest extends Specification {
         data.users['test'].meta.size() == 0
 
         when: "Try to load this config"
-        def anotherContainer = new World(repository)
-        anotherContainer.load(data)
+        def anotherContainer = new World()
+        anotherContainer.load(repository, data)
 
         then: "Container loaded correctly"
         anotherContainer.checkUserPermission("test", "d1")

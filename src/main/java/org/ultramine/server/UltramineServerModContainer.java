@@ -50,7 +50,6 @@ public class UltramineServerModContainer extends DummyModContainer
 	public void preInit(FMLPreInitializationEvent e)
 	{
 		ConfigurationHandler.load();
-		PermissionHandler.registerPermission(PermissionHandler.OP_PERMISSION, "Op", "Standard minecraft op permissions");
 	}
 
 	@Subscribe

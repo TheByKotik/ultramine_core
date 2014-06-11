@@ -1,16 +1,19 @@
 package org.ultramine.permission.internal;
 
-import org.ultramine.permission.*;
+import org.ultramine.permission.GroupPermission;
+import org.ultramine.permission.IPermissionManager;
+import org.ultramine.permission.PermissionRepository;
+import org.ultramine.permission.User;
+import org.ultramine.permission.World;
 import org.ultramine.server.util.YamlConfigProvider;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-public class ServerPermissionManager implements IPermissionHandler
+public class ServerPermissionManager implements IPermissionManager
 {
-	private final static String GLOBAL_WORLD = "global";
+	public final static String GLOBAL_WORLD = "global";
 	private final static String GROUPS_CONFIG = "groups.yml";
 	private static final String GROUP_PREFIX = "group.";
 
@@ -32,117 +35,97 @@ public class ServerPermissionManager implements IPermissionHandler
 		reloadWorld(GLOBAL_WORLD);
 	}
 
+	@Override
+	public PermissionRepository getRepository()
+	{
+		return permissionRepository;
+	}
+
+	@Override
+	public UserContainer getWorldContainer(String world)
+	{
+		return worlds.get(world);
+	}
 
 	@Override
 	public boolean has(String world, String player, String permission)
 	{
-		if (!worlds.containsKey(world))
-			return getGlobal().checkUserPermission(player, permission);
+		World worldObj  = worlds.get(world);
+		if (worldObj == null)
+			worldObj = worlds.get(GLOBAL_WORLD);
 
-		return getWorld(world).checkUserPermission(player, permission);
+		return worldObj.checkUserPermission(player, permission);
 	}
 
 	@Override
 	public void add(String world, String player, String permission)
 	{
-		if (!worlds.containsKey(world))
-			reloadWorld(world);
-
-		World worldContainer = getWorld(world);
-		if (!worldContainer.contains(player))
-			worldContainer.add(new User(player));
-
-		worldContainer.get(player).addPermission(permissionRepository.getPermission(permission));
+		getOrCreateUser(world, player).addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override
 	public void addToWorld(String world, String permission)
 	{
-		if (!worlds.containsKey(world))
-			reloadWorld(world);
-
-		getWorld(world).getDefaultPermissions().addPermission(permissionRepository.getPermission(permission));
+		getOrCreateWorld(world).getDefaultPermissions()
+				.addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override
 	public void addToGroup(String group, String permission)
 	{
-		if (!group.startsWith(GROUP_PREFIX))
-			group = GROUP_PREFIX + group;
-
-		if (!groups.containsKey(group))
-			groups.put(group, new GroupPermission(group));
-
-		groups.get(group).addPermission(permissionRepository.getPermission(permission));
+		getOrCreateGroup(group).addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override
 	public void remove(String world, String player, String permission)
 	{
-		if (!worlds.containsKey(world))
+		User user = getUser(world, player);
+		if (user == null)
 			return;
 
-		World worldContainer = getWorld(world);
-		if (!worldContainer.contains(player))
-			return;
-
-		worldContainer.get(player).removePermission(permission);
+		user.removePermission(permission);
 	}
 
 	@Override
 	public void removeFromWorld(String world, String permission)
 	{
-		if (!worlds.containsKey(world))
+		World worldObj = worlds.get(world);
+		if (worldObj == null)
 			return;
 
-		getWorld(world).getDefaultPermissions().removePermission(permission);
+		worldObj.getDefaultPermissions().removePermission(permission);
 	}
 
 	@Override
 	public void removeFromGroup(String group, String permission)
 	{
-		if (!group.startsWith(GROUP_PREFIX))
-			group = GROUP_PREFIX + group;
-
-		if (!groups.containsKey(group))
+		GroupPermission groupObj = groups.get(fixGroupKey(group));
+		if (groupObj == null)
 			return;
 
-		groups.get(group).removePermission(permission);
+		groupObj.removePermission(permission);
 	}
 
 	@Override
-	public MetaResolver getMeta(String world, String player)
+	public String getMeta(String world, String player, String key)
 	{
-		if (!worlds.containsKey(world))
-			return MetaResolver.BLANK_RESOLVER;
-
-		World worldContainer = getWorld(world);
-		if (!worldContainer.contains(player))
-			return MetaResolver.BLANK_RESOLVER;
-
-		return worldContainer.get(player).getMetaResolver();
+		User user = getUser(world, player);
+		if (user == null)
+			return "";
+		else
+			return user.getMeta(key);
 	}
 
 	@Override
 	public void setMeta(String world, String player, String key, String value)
 	{
-		if (!worlds.containsKey(world))
-			reloadWorld(world);
-
-		World worldContainer = getWorld(world);
-		if (!worldContainer.contains(player))
-			worldContainer.add(new User(player));
-
-		worldContainer.get(player).setMeta(key, value);
+		getOrCreateUser(world, player).setMeta(key, value);
 	}
 
 	@Override
-	public Set<String> findUsersWithPermission(String world, String permission)
+	public void setGroupMeta(String group, String key, String value)
 	{
-		if (!worlds.containsKey(world))
-			return getGlobal().getAllWithPermission(permission);
-
-		return getWorld(world).getAllWithPermission(permission);
+		getOrCreateGroup(group).setMeta(key, value);
 	}
 
 	@Override
@@ -161,31 +144,31 @@ public class ServerPermissionManager implements IPermissionHandler
 			reloadWorld(world);
 	}
 
-	@Override
-	public PermissionRepository getRepository()
-	{
-		return permissionRepository;
-	}
-
-	public void reloadWorld(String name)
+	public World reloadWorld(String name)
 	{
 		World.WorldData data = YamlConfigProvider.getOrCreateConfig(worldFile(name), World.WorldData.class);
-		if (!worlds.containsKey(name))
-			worlds.put(name, new World(permissionRepository));
+		World world = worlds.get(name);
+		if (world == null)
+		{
+			world = new World();
+			worlds.put(name, world);
+		}
 
-		worlds.get(name).load(data);
+		world.load(permissionRepository, data);
 
 		if (!name.equals(GLOBAL_WORLD))
-			worlds.get(name).setParentContainer(getGlobal());
+			world.setParentContainer(worlds.get(GLOBAL_WORLD));
 
+		return world;
 	}
 
 	public void saveWorld(String name)
 	{
-		if (!worlds.containsKey(name))
+		World world = worlds.get(name);
+		if (world == null)
 			return;
 
-		YamlConfigProvider.saveConfig(worldFile(name), worlds.get(name).save());
+		YamlConfigProvider.saveConfig(worldFile(name), world.save());
 	}
 
 	public void reloadGroups()
@@ -202,22 +185,8 @@ public class ServerPermissionManager implements IPermissionHandler
 
 		for (Map.Entry<String, World.HolderData> groupData : data.groups.entrySet())
 		{
-			GroupPermission group;
-			String groupKey = groupData.getKey();
-			if (!groupKey.startsWith(GROUP_PREFIX))
-				groupKey = GROUP_PREFIX + groupKey;
-
-			if (!groups.containsKey(groupKey))
-			{
-				group = new GroupPermission(groupKey, groupData.getValue().meta);
-				permissionRepository.registerPermission(group);
-				groups.put(groupKey, group);
-			}
-			else
-			{
-				group = groups.get(groupKey);
-				group.setInnerMeta(groupData.getValue().meta);
-			}
+			GroupPermission group = getOrCreateGroup(groupData.getKey());
+			group.setInnerMeta(groupData.getValue().meta);
 
 			for (String pKey : groupData.getValue().permissions)
 				group.addPermission(permissionRepository.getPermission(pKey));
@@ -234,14 +203,58 @@ public class ServerPermissionManager implements IPermissionHandler
 		YamlConfigProvider.saveConfig(groupsFile(), data);
 	}
 
-	public World getWorld(String name)
+	private World getOrCreateWorld(String name)
 	{
-		return worlds.get(name);
+		World world = worlds.get(name);
+		if (world == null)
+			world = reloadWorld(name);
+
+		return world;
 	}
 
-	public World getGlobal()
+	private User getUser(String worldName, String userName)
 	{
-		return getWorld(GLOBAL_WORLD);
+		World world  = worlds.get(worldName);
+		if (world == null)
+			return null;
+
+		return world.get(userName);
+	}
+
+	private User getOrCreateUser(String worldName, String userName)
+	{
+		World world  = getOrCreateWorld(worldName);
+
+		User user = world.get(userName);
+		if (user == null)
+		{
+			user = new User(userName);
+			world.add(user);
+		}
+
+		return user;
+	}
+
+	public static String fixGroupKey(String key)
+	{
+		if (key.startsWith(GROUP_PREFIX))
+			return key;
+		else
+			return GROUP_PREFIX + key;
+	}
+
+	private GroupPermission getOrCreateGroup(String name)
+	{
+		String groupKey = fixGroupKey(name);
+		GroupPermission group = groups.get(groupKey);
+		if (group == null)
+		{
+			group = new GroupPermission(groupKey);
+			permissionRepository.registerPermission(group);
+			groups.put(groupKey, group);
+		}
+
+		return group;
 	}
 
 	private File worldFile(String name)
