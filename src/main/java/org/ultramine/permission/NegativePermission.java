@@ -38,9 +38,9 @@ class NegativePermission extends PermissionRepository.ProxyPermission
 		super.mergePermissionsTo(new PermissionResolver()
 		{
 			@Override
-			public void merge(String key, Boolean value, int priority)
+			public boolean merge(String key, Boolean value, int priority)
 			{
-				resolver.merge(key, !value, priority);
+				return resolver.merge(key, !value, priority);
 			}
 		});
 	}

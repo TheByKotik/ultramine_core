@@ -35,12 +35,14 @@ public class Resolver<T>
 
 	}
 
-	public void merge(String key, T value, int priority)
+	public boolean merge(String key, T value, int priority)
 	{
 		if (!priorities.containsKey(key) || priorities.get(key) < priority)
 		{
 			values.put(key, value);
 			priorities.put(key, priority);
+			return true;
 		}
+		return false;
 	}
 }

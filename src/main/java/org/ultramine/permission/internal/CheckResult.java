@@ -9,7 +9,7 @@ public enum CheckResult
 		return value ? TRUE : FALSE;
 	}
 
-	public boolean toBoolean()
+	public boolean asBoolean()
 	{
 		return this == TRUE;
 	}

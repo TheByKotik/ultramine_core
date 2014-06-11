@@ -12,6 +12,7 @@ public class ServerPermissionManager implements IPermissionHandler
 {
 	private final static String GLOBAL_WORLD = "global";
 	private final static String GROUPS_CONFIG = "groups.yml";
+	private static final String GROUP_PREFIX = "group.";
 
 	private File configDir;
 	private Map<String, World> worlds;
@@ -66,8 +67,8 @@ public class ServerPermissionManager implements IPermissionHandler
 	@Override
 	public void addToGroup(String group, String permission)
 	{
-		if (!group.startsWith("group."))
-			group = "group." + group;
+		if (!group.startsWith(GROUP_PREFIX))
+			group = GROUP_PREFIX + group;
 
 		if (!groups.containsKey(group))
 			groups.put(group, new GroupPermission(group));
@@ -100,8 +101,8 @@ public class ServerPermissionManager implements IPermissionHandler
 	@Override
 	public void removeFromGroup(String group, String permission)
 	{
-		if (!group.startsWith("group."))
-			group = "group." + group;
+		if (!group.startsWith(GROUP_PREFIX))
+			group = GROUP_PREFIX + group;
 
 		if (!groups.containsKey(group))
 			return;
@@ -203,8 +204,8 @@ public class ServerPermissionManager implements IPermissionHandler
 		{
 			GroupPermission group;
 			String groupKey = groupData.getKey();
-			if (!groupKey.startsWith("group."))
-				groupKey = "group." + groupKey;
+			if (!groupKey.startsWith(GROUP_PREFIX))
+				groupKey = GROUP_PREFIX + groupKey;
 
 			if (!groups.containsKey(groupKey))
 			{

@@ -48,7 +48,7 @@ public class DummyPermission implements IPermission
 	@Override
 	public void mergePermissionsTo(PermissionResolver resolver)
 	{
-		resolver.merge(getKey(), true, Integer.MAX_VALUE);
+		resolver.merge(getKey(), (Boolean)true, Integer.MAX_VALUE);
 	}
 
 	@Override

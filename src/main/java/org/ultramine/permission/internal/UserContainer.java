@@ -25,7 +25,7 @@ public class UserContainer<T extends User>
 
 	public final boolean checkUserPermission(String userName, String permissionKey)
 	{
-		return check(userName, permissionKey) == CheckResult.TRUE;
+		return check(userName, permissionKey).asBoolean();
 	}
 
 	protected CheckResult check(String userName, String permissionKey)
@@ -55,10 +55,10 @@ public class UserContainer<T extends User>
 		else
 			result = new HashSet<String>();
 
-		for (User user : users.values())
+		for (String username : users.keySet())
 		{
-			if (user.check(permission) == CheckResult.TRUE)
-				result.add(user.getName());
+			if (!result.contains(username) && checkUserPermission(username, permission))
+				result.add(username);
 		}
 
 		return result;

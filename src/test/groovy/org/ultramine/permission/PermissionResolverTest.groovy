@@ -10,14 +10,6 @@ import static org.ultramine.permission.internal.CheckResult.*
  */
 class PermissionResolverTest extends Specification {
 
-    def setupSpec() {
-        PermissionResolver.metaClass.addEntry = { String key, Boolean value, Integer prio ->
-            delegate.values.put(key, value)
-            delegate.priorities.put(key, prio)
-            return delegate
-        }
-    }
-
     @Unroll
     def "Test createForKey: #key"() {
         when: "Creating resolver for key"
@@ -33,8 +25,8 @@ class PermissionResolverTest extends Specification {
     def "Test createInverted"() {
         setup:
         def resolver = new PermissionResolver()
-        resolver.addEntry("p.true", true, 0)
-        resolver.addEntry("p.false", false, 0)
+        resolver.merge("p.true", true, 0)
+        resolver.merge("p.false", false, 0)
 
         when: "Create inverted resolver"
         def inverted = PermissionResolver.createInverted(resolver)
@@ -50,7 +42,7 @@ class PermissionResolverTest extends Specification {
     def "Test wildcard"() {
         setup: "Resolver with wildcard permission"
         def resolver = new PermissionResolver()
-        resolver.addEntry("test.perm.*", true, 0)
+        resolver.merge("test.perm.*", true, 0)
 
         expect: "Other permissions are not affected"
         resolver.check("group.admin") == UNRESOLVED
@@ -68,8 +60,8 @@ class PermissionResolverTest extends Specification {
     def "Test single permission override wildcard"() {
         setup: "Resolver with wildcard and permission"
         def resolver = new PermissionResolver()
-        resolver.addEntry("test.perm.*", true, 1)
-        resolver.addEntry("test.perm.super", false, 0)
+        resolver.merge("test.perm.*", true, 1)
+        resolver.merge("test.perm.super", false, 0)
 
         expect: "Wildcard has lower priority"
         resolver.check("test.perm.super") == FALSE
@@ -86,8 +78,8 @@ class PermissionResolverTest extends Specification {
     def "Test higher node wildcard priority"() {
         setup: "Resolver with wildcards"
         def resolver = new PermissionResolver()
-        resolver.addEntry("test.perm.*", true, 1)
-        resolver.addEntry("test.perm.super.*", false, 0)
+        resolver.merge("test.perm.*", true, 1)
+        resolver.merge("test.perm.super.*", false, 0)
 
         expect: "Higher node wildcard has priority"
         resolver.check("test.perm.super.p") == FALSE
@@ -106,7 +98,7 @@ class PermissionResolverTest extends Specification {
     def "Test clear"() {
         setup:
         def resolver = new PermissionResolver()
-        resolver.addEntry("test.perm", true, 0)
+        resolver.merge("test.perm", true, 0)
 
         when: "Clear resolver's data"
         resolver.clear()
@@ -118,15 +110,15 @@ class PermissionResolverTest extends Specification {
     def "Test merge"() {
         setup: "First resolver"
         def resolver1 = new PermissionResolver()
-        resolver1.addEntry("test.perm", true, 1)
-        resolver1.addEntry("test.perm.1", true, 1)
-        resolver1.addEntry("test.perm.2", false, 1)
+        resolver1.merge("test.perm", true, 1)
+        resolver1.merge("test.perm.1", true, 1)
+        resolver1.merge("test.perm.2", false, 1)
 
         and: "Second resolver"
         def resolver2 = new PermissionResolver()
-        resolver2.addEntry("test.perm", false, 0)
-        resolver2.addEntry("test.perm.1", false, 2)
-        resolver2.addEntry("test.perm.3", true, 2)
+        resolver2.merge("test.perm", false, 0)
+        resolver2.merge("test.perm.1", false, 2)
+        resolver2.merge("test.perm.3", true, 2)
 
         when: "Merging first then second"
         def result = new PermissionResolver()
@@ -165,8 +157,10 @@ class PermissionResolverTest extends Specification {
 
     def "Test clear -> merge lower priority"() {
         setup: "resolver(^test, 100)"
-        def resolver = new PermissionResolver().addEntry("test", false, 100)
-        def inverted = new PermissionResolver().addEntry("test", true, 50)
+        def resolver = new PermissionResolver()
+        resolver.merge("test", false, 100)
+        def inverted = new PermissionResolver()
+        inverted.merge("test", true, 50)
 
         when:
         resolver.clear()
