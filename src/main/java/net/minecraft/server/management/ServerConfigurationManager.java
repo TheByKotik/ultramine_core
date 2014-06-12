@@ -659,23 +659,23 @@ public abstract class ServerConfigurationManager
 
 	public void addOp(String par1Str)
 	{
-		PermissionHandler.getInstance().add("global", par1Str, PermissionHandler.OP_PERMISSION);
+		PermissionHandler.getInstance().add("global", par1Str, OpPermissionProxySet.OP_PERMISSION);
 	}
 
 	public void removeOp(String par1Str)
 	{
-		PermissionHandler.getInstance().remove("global", par1Str, PermissionHandler.OP_PERMISSION);
+		PermissionHandler.getInstance().remove("global", par1Str, OpPermissionProxySet.OP_PERMISSION);
 	}
 
 	public boolean isAllowedToLogin(String par1Str)
 	{
 		par1Str = par1Str.trim().toLowerCase();
-		return !this.whiteListEnforced || PermissionHandler.getInstance().has("global", par1Str, PermissionHandler.OP_PERMISSION) || this.whiteListedPlayers.contains(par1Str);
+		return !this.whiteListEnforced || PermissionHandler.getInstance().has("global", par1Str, OpPermissionProxySet.OP_PERMISSION) || this.whiteListedPlayers.contains(par1Str);
 	}
 
 	public boolean isPlayerOpped(String par1Str)
 	{
-		return PermissionHandler.getInstance().has("global", par1Str, PermissionHandler.OP_PERMISSION) || this.mcServer.isSinglePlayer() && this.mcServer.worldServers[0].getWorldInfo().areCommandsAllowed() && this.mcServer.getServerOwner().equalsIgnoreCase(par1Str) || this.commandsAllowedForAll;
+		return PermissionHandler.getInstance().has("global", par1Str, OpPermissionProxySet.OP_PERMISSION) || this.mcServer.isSinglePlayer() && this.mcServer.worldServers[0].getWorldInfo().areCommandsAllowed() && this.mcServer.getServerOwner().equalsIgnoreCase(par1Str) || this.commandsAllowedForAll;
 	}
 
 	public EntityPlayerMP getPlayerForUsername(String par1Str)

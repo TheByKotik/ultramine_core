@@ -1,85 +1,29 @@
 package org.ultramine.server;
 
 import net.minecraft.command.ICommandSender;
-import org.ultramine.permission.ClientPermissionManager;
-import org.ultramine.permission.IPermission;
-import org.ultramine.permission.IPermissionHandler;
-import org.ultramine.permission.MetaResolver;
-import org.ultramine.permission.Permission;
+import net.minecraft.server.MinecraftServer;
+import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.PermissionRepository;
-import org.ultramine.permission.ServerPermissionManager;
+import org.ultramine.permission.internal.UserContainer;
 
-import java.util.List;
-import java.util.Set;
-
-public class PermissionHandler implements IPermissionHandler
+public class PermissionHandler implements IPermissionManager
 {
-	public static final String OP_PERMISSION = "minecraft.op";
-
-	private static PermissionHandler instance;
-	private static PermissionRepository mainRepository = new PermissionRepository();
-
-	public static void registerPermission(String key, String name, String description)
-	{
-		if (instance != null)
-			getInstance().getRepository().registerPermission(new Permission(key, name, description));
-		else
-			mainRepository.registerPermission(new Permission(key, name, description));
-	}
-
-	public static void registerPermission(IPermission permission)
-	{
-		if (instance != null)
-			getInstance().getRepository().registerPermission(permission);
-		else
-			mainRepository.registerPermission(permission);
-	}
-
-	public static PermissionRepository.ProxyPermission getPermission(String key)
-	{
-		if (instance != null)
-			return getInstance().getRepository().getPermission(key);
-
-		return mainRepository.getPermission(key);
-	}
-
-	public static void initServer()
-	{
-		if (instance != null)
-			throw new IllegalStateException("Handler is already initialized");
-		instance = new PermissionHandler(new ServerPermissionManager(ConfigurationHandler.getSettingDir(), new PermissionRepository(mainRepository)));
-	}
-
-	public static void initClient()
-	{
-		if (instance != null)
-			throw new IllegalStateException("Handler is already initialized");
-		instance = new PermissionHandler(new ClientPermissionManager(new PermissionRepository(mainRepository)));
-	}
-
-	public static void reset()
-	{
-		instance = null;
-	}
+	private static PermissionHandler instance = new PermissionHandler();
 
 	public static PermissionHandler getInstance()
 	{
-		if (instance == null)
-			throw new IllegalStateException("Handler is not initialized");
 		return instance;
 	}
 
-	private IPermissionHandler handler;
-
-	private PermissionHandler(IPermissionHandler handler)
+	private IPermissionManager getHandler()
 	{
-		this.handler = handler;
+		return MinecraftServer.getServer().getPermissionManager();
 	}
 
 	@Override
 	public boolean has(String world, String player, String permission)
 	{
-		return handler.has(world, player, permission);
+		return getHandler().has(world, player, permission);
 	}
 
 	public boolean has(ICommandSender player, String permission)
@@ -87,17 +31,30 @@ public class PermissionHandler implements IPermissionHandler
 		return has(worldName(player), player.getCommandSenderName(), permission);
 	}
 
-	public boolean has(ICommandSender player, List<String> permissions)
+	public boolean has(ICommandSender player, String... permissions)
 	{
+		if (permissions == null)
+			return true;
+
 		for (String permission : permissions)
 			if (!has(player, permission)) return false;
 		return true;
 	}
 
+	public boolean hasAny(ICommandSender player, String... permissions)
+	{
+		if (permissions == null)
+			return true;
+
+		for (String permission : permissions)
+			if (has(player, permission)) return true;
+		return false;
+	}
+
 	@Override
 	public void add(String world, String player, String permission)
 	{
-		handler.add(world, player, permission);
+		getHandler().add(world, player, permission);
 	}
 
 	public void add(ICommandSender player, String permission)
@@ -106,15 +63,21 @@ public class PermissionHandler implements IPermissionHandler
 	}
 
 	@Override
-	public void add(String world, String permission)
+	public void addToWorld(String world, String permission)
 	{
-		handler.add(world, permission);
+		getHandler().addToWorld(world, permission);
+	}
+
+	@Override
+	public void addToGroup(String group, String permission)
+	{
+		getHandler().addToGroup(group, permission);
 	}
 
 	@Override
 	public void remove(String world, String player, String permission)
 	{
-		handler.remove(world, player, permission);
+		getHandler().remove(world, player, permission);
 	}
 
 	public void remove(ICommandSender player, String permission)
@@ -123,55 +86,67 @@ public class PermissionHandler implements IPermissionHandler
 	}
 
 	@Override
-	public void remove(String world, String permission)
+	public void removeFromWorld(String world, String permission)
 	{
-		handler.remove(world, permission);
+		getHandler().removeFromWorld(world, permission);
 	}
 
 	@Override
-	public MetaResolver getMeta(String world, String player)
+	public void removeFromGroup(String group, String permission)
 	{
-		return handler.getMeta(world, player);
-	}
-
-	public MetaResolver getMeta(ICommandSender player)
-	{
-		return getMeta(worldName(player), player.getCommandSenderName());
+		getHandler().removeFromGroup(group, permission);
 	}
 
 	@Override
-	public void setMeta(String world, String player, String key, Object value)
+	public String getMeta(String world, String player, String key)
 	{
-		handler.setMeta(world, player, key, value);
+		return getHandler().getMeta(world, player, key);
 	}
 
-	public void setMeta(ICommandSender player, String key, Object value)
+	public String getMeta(ICommandSender player, String key)
+	{
+		return getMeta(worldName(player), player.getCommandSenderName(), key);
+	}
+
+	@Override
+	public void setMeta(String world, String player, String key, String value)
+	{
+		getHandler().setMeta(world, player, key, value);
+	}
+
+	@Override
+	public void setGroupMeta(String group, String key, String value)
+	{
+		getHandler().setGroupMeta(group, key, value);
+	}
+
+	public void setMeta(ICommandSender player, String key, String value)
 	{
 		setMeta(worldName(player), player.getCommandSenderName(), key, value);
 	}
 
 	@Override
-	public Set<String> findUsersWithPermission(String world, String permission)
-	{
-		return handler.findUsersWithPermission(world, permission);
-	}
-
-	@Override
 	public void save()
 	{
-		handler.save();
+		getHandler().save();
 	}
 
 	@Override
 	public void reload()
 	{
-		handler.reload();
+		getHandler().reload();
 	}
 
 	@Override
 	public PermissionRepository getRepository()
 	{
-		return handler.getRepository();
+		return getHandler().getRepository();
+	}
+
+	@Override
+	public UserContainer getWorldContainer(String world)
+	{
+		return getHandler().getWorldContainer(world);
 	}
 
 	private String worldName(ICommandSender player)

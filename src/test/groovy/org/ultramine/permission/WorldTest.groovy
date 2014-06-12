@@ -6,8 +6,8 @@ class WorldTest extends Specification {
 
     def "Test config parsing"() {
         setup:
-        def container = new World(new PermissionRepository())
-        container.load(testWorldData)
+        def container = new World()
+        container.load(new PermissionRepository(), testWorldData)
 
         expect: "Permissions are loaded correctly"
         container.checkUserPermission("user1", "d")
@@ -23,18 +23,18 @@ class WorldTest extends Specification {
         !container.checkUserPermission("user2", "group.admin")
 
         and: "Meta is loaded correctly"
-        container.get("user1").getMeta().getString("a") == "a"
-        container.get("user1").getMeta().getInt("b") == 1
+        container.get("user1").getMeta("a") == "a"
+        container.get("user1").getMeta("b") == "1"
 
-        !container.get("user2").getMeta().getString("a")
-        !container.get("user2").getMeta().getInt("b")
+        !container.get("user2").getMeta("a")
+        !container.get("user2").getMeta("b")
     }
 
     def "Test config reloading"() {
         setup:
         def repository = new PermissionRepository()
-        def container = new World(repository)
-        container.load(testWorldData)
+        def container = new World()
+        container.load(repository, testWorldData)
 
         when: "Add permission and meta to user"
         container.get("user1").addPermission(repository.getPermission("test"))
@@ -42,14 +42,14 @@ class WorldTest extends Specification {
 
         then: "User have this permission and meta"
         container.checkUserPermission("user1", "test")
-        container.get("user2").getMeta().getString("test") == "data"
+        container.get("user2").getMeta("test") == "data"
 
         when: "Reloading container"
-        container.load(testWorldData)
+        container.load(repository, testWorldData)
 
         then: "User have not this permission and meta"
         !container.checkUserPermission("user1", "test")
-        !container.get("user2").getMeta().getString("test")
+        !container.get("user2").getMeta("test")
 
         and: "Container is reloaded correctly"
         container.checkUserPermission("user1", "d")
@@ -64,16 +64,16 @@ class WorldTest extends Specification {
         container.checkUserPermission("user2", "p.3")
         !container.checkUserPermission("user2", "group.admin")
 
-        container.get("user1").getMeta().getString("a") == "a"
-        container.get("user1").getMeta().getInt("b") == 1
-        !container.get("user2").getMeta().getString("a")
-        !container.get("user2").getMeta().getInt("b")
+        container.get("user1").getMeta("a") == "a"
+        container.get("user1").getMeta("b") == "1"
+        !container.get("user2").getMeta("a")
+        !container.get("user2").getMeta("b")
     }
 
     def "Test config saving"() {
         setup:
         def repository = new PermissionRepository()
-        def container = new World(repository)
+        def container = new World()
         def user = new User("test")
         user.addPermission(repository.getPermission("p1"))
         user.addPermission(repository.getPermission("^p2"))
@@ -94,8 +94,8 @@ class WorldTest extends Specification {
         data.users['test'].meta.size() == 0
 
         when: "Try to load this config"
-        def anotherContainer = new World(repository)
-        anotherContainer.load(data)
+        def anotherContainer = new World()
+        anotherContainer.load(repository, data)
 
         then: "Container loaded correctly"
         anotherContainer.checkUserPermission("test", "d1")
@@ -113,7 +113,7 @@ class WorldTest extends Specification {
             users: [
                     user1: new World.HolderData(
                             permissions: ['p.1', '^p.2'],
-                            meta: [a: 'a', b: 1]
+                            meta: [a: 'a', b: "1"]
                     ),
                     user2: new World.HolderData(
                             permissions: ['^d', 'p.3'],

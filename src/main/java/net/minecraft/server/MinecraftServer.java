@@ -78,6 +78,7 @@ import net.minecraft.world.storage.WorldInfo;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.permission.IPermissionManager;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.WatchdogThread;
 import org.ultramine.server.chunk.ChunkIOExecutor;
@@ -143,6 +144,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	private static final int TICK_TIME = 1000000000 / TPS;
 	public static double currentTPS = 20;
 	private static long catchupTime = 0;
+	private IPermissionManager permissionManager;
 
 	public MinecraftServer(File p_i45281_1_, Proxy p_i45281_2_)
 	{
@@ -1432,5 +1434,17 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	public void setForceGamemode(boolean par1)
 	{
 		this.isGamemodeForced = par1;
+	}
+
+	/* ========================================= ULTRAMINE START ======================================*/
+
+	public IPermissionManager getPermissionManager()
+	{
+		return permissionManager;
+	}
+
+	protected void setPermissionManager(IPermissionManager permissionManager)
+	{
+		this.permissionManager = permissionManager;
 	}
 }

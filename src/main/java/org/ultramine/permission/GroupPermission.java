@@ -1,10 +1,14 @@
 package org.ultramine.permission;
 
+import org.ultramine.permission.internal.MetaResolver;
+import org.ultramine.permission.internal.PermissionHolder;
+import org.ultramine.permission.internal.PermissionResolver;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class GroupPermission extends PermissionHolder implements IChangeablePermission
+public class GroupPermission extends PermissionHolder implements IPermission
 {
 	private final String key;
 	private final List<IDirtyListener> listeners = new ArrayList<IDirtyListener>();
@@ -15,7 +19,7 @@ public class GroupPermission extends PermissionHolder implements IChangeablePerm
 		this.key = key.toLowerCase();
 	}
 
-	public GroupPermission(String key, Map<String, Object> meta)
+	public GroupPermission(String key, Map<String, String> meta)
 	{
 		super(meta);
 		this.key = key.toLowerCase();
@@ -28,21 +32,15 @@ public class GroupPermission extends PermissionHolder implements IChangeablePerm
 	}
 
 	@Override
-	public String getName()
+	public void mergePermissionsTo(PermissionResolver resolver)
 	{
-		if (innerMeta.containsKey("name"))
-			return (String) innerMeta.get("name");
-		else
-			return key;
+		resolver.merge(getPermissionResolver(), getPriority());
 	}
 
 	@Override
-	public String getDescription()
+	public void mergeMetaTo(MetaResolver resolver)
 	{
-		if (innerMeta.containsKey("description"))
-			return (String) innerMeta.get("description");
-		else
-			return "";
+		resolver.merge(getMetaResolver(), getPriority());
 	}
 
 	@Override
@@ -66,6 +64,11 @@ public class GroupPermission extends PermissionHolder implements IChangeablePerm
 		super.makeDirty();
 		for (IDirtyListener listener : listeners)
 			listener.makeDirty();
+	}
+
+	private int getPriority()
+	{
+		return getMetaResolver().getInt("priority");
 	}
 
 	@Override

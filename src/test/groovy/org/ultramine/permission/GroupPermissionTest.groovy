@@ -22,8 +22,8 @@ class GroupPermissionTest extends Specification {
         !group2.isDirty()
 
         and: "Both groups have own meta"
-        group1.getMeta().getString("m1")
-        group2.getMeta().getString("m2")
+        group1.getMeta("m1")
+        group2.getMeta("m2")
     }
 
     def "Test dirty notification"() {
@@ -43,44 +43,34 @@ class GroupPermissionTest extends Specification {
 
     def "Test subscribing to permission changes"() {
         setup:
-        def sPerm = Mock(IPermission) { getKey() >> "p" }
-        def cPerm = Mock(IChangeablePermission) { getKey() >> "c" }
+        def permission = Mock(IPermission) { getKey() >> "c" }
         def group = new GroupPermission("group.test")
 
-        when: "Add permissions to group"
-        group.addPermission(sPerm)
-        group.addPermission(cPerm)
+        when: "Add permission to group"
+        group.addPermission(permission)
 
-        then: "Group subscribes to IChangeablePermission"
-        1 * cPerm.subscribe(group)
-        0 * sPerm.subscribe(_)
+        then: "Group subscribes to permission"
+        1 * permission.subscribe(group)
 
-        when: "Remove permissions from group"
-        group.removePermission(sPerm)
-        group.removePermission(cPerm)
+        when: "Remove permission from group"
+        group.removePermission(permission)
 
-        then: "Group unsubscribes to IChangeablePermission"
-        1 * cPerm.unsubscribe(group)
-        0 * sPerm.unsubscribe(_)
+        then: "Group unsubscribes to permission"
+        1 * permission.unsubscribe(group)
     }
 
     def "Test meta parsing"() {
         setup:
         def group = new GroupPermission("group.test", [
-                name: "Test1",
-                description: "Test2",
-                priority: 200,
+                priority: "200",
                 perfix: "Test3"
         ])
 
         expect:
         group.getKey() == "group.test"
-        group.getName() == "Test1"
-        group.getDescription() == "Test2"
         group.getPriority() == 200
-        group.getMeta().getString("perfix") == "Test3"
-        group.getMeta().getString("asd") == ""
-        group.getMeta().getInt("dsa") == 0
+        group.getMeta("perfix") == "Test3"
+        group.getMeta("asd") == ""
     }
 
     def "Test blank group"() {
@@ -89,8 +79,6 @@ class GroupPermissionTest extends Specification {
 
         expect:
         group.getKey() == "group.test"
-        group.getName() == "group.test"
-        group.getDescription() == ""
         group.getPriority() == 0
     }
 }

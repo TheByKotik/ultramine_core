@@ -1,58 +1,52 @@
 package org.ultramine.permission;
 
-public class NegativePermission extends PermissionRepository.ProxyPermission implements IDirtyListener
-{
-	private PermissionResolver resolver;
-	private boolean dirty;
+import org.ultramine.permission.internal.CheckResult;
+import org.ultramine.permission.internal.MetaResolver;
+import org.ultramine.permission.internal.PermissionResolver;
 
-	public NegativePermission(IPermission permission)
+class NegativePermission extends PermissionRepository.ProxyPermission
+{
+	private String key;
+
+	public NegativePermission(String key, IPermission permission)
 	{
 		super(permission);
-		super.subscribe(this);
-		this.dirty = true;
+		this.key = key;
 	}
 
 	@Override
 	public String getKey()
 	{
-		return "^" + super.getKey();
+		return key;
 	}
 
 	@Override
-	public String getName()
+	public CheckResult check(String key)
 	{
-		return "NOT: " + super.getName();
+		return super.check(key).invert();
 	}
 
 	@Override
-	public String getDescription()
+	public String getMeta(String key)
 	{
-		if (!super.getDescription().isEmpty())
-			return "NOT: " + super.getDescription();
-		else
-			return "";
+		return "";
 	}
 
 	@Override
-	public PermissionResolver getPermissions()
+	public void mergePermissionsTo(final PermissionResolver resolver)
 	{
-		if (dirty)
+		super.mergePermissionsTo(new PermissionResolver()
 		{
-			resolver = PermissionResolver.createInverted(super.getPermissions());
-			dirty = false;
-		}
-		return resolver;
+			@Override
+			public boolean merge(String key, Boolean value, int priority)
+			{
+				return resolver.merge(key, !value, priority);
+			}
+		});
 	}
 
 	@Override
-	public MetaResolver getMeta()
+	public void mergeMetaTo(MetaResolver resolver)
 	{
-		return MetaResolver.BLANK_RESOLVER;
-	}
-
-	@Override
-	public void makeDirty()
-	{
-		dirty = true;
 	}
 }

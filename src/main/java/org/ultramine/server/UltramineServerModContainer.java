@@ -19,6 +19,8 @@ import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
+import org.ultramine.commands.syntax.DefaultCompleters;
+import org.ultramine.permission.commands.BasicPermissionCommands;
 
 public class UltramineServerModContainer extends DummyModContainer
 {
@@ -48,7 +50,6 @@ public class UltramineServerModContainer extends DummyModContainer
 	public void preInit(FMLPreInitializationEvent e)
 	{
 		ConfigurationHandler.load();
-		PermissionHandler.registerPermission(PermissionHandler.OP_PERMISSION, "Op", "Standard minecraft op permissions");
 	}
 
 	@Subscribe
@@ -80,21 +81,13 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void serverStarting(FMLServerStartingEvent e)
 	{
-		switch (e.getSide())
-		{
-			case CLIENT:
-				PermissionHandler.initClient();
-				break;
-			case SERVER:
-				PermissionHandler.initServer();
-				break;
-		}
+		e.registerArgumentHandlers(DefaultCompleters.class);
+		e.registerCommands(BasicPermissionCommands.class);
 	}
 
 	@Subscribe
 	public void stopServer(FMLServerStoppedEvent e)
 	{
-		PermissionHandler.reset();
 	}
 
 	@Override

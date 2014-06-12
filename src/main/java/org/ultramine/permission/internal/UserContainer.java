@@ -1,11 +1,11 @@
-package org.ultramine.permission;
+package org.ultramine.permission.internal;
+
+import org.ultramine.permission.User;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import static org.ultramine.permission.PermissionResolver.CheckResult;
 
 public class UserContainer<T extends User>
 {
@@ -25,7 +25,7 @@ public class UserContainer<T extends User>
 
 	public final boolean checkUserPermission(String userName, String permissionKey)
 	{
-		return check(userName, permissionKey) == CheckResult.TRUE;
+		return check(userName, permissionKey).asBoolean();
 	}
 
 	protected CheckResult check(String userName, String permissionKey)
@@ -37,7 +37,7 @@ public class UserContainer<T extends User>
 			result = parentContainer.check(userName, permissionKey);
 
 		if (result == CheckResult.UNRESOLVED && contains(userName))
-			result = get(userName).getPermissions().check(permissionKey);
+			result = get(userName).check(permissionKey);
 
 		return result;
 	}
@@ -55,10 +55,10 @@ public class UserContainer<T extends User>
 		else
 			result = new HashSet<String>();
 
-		for (User user : users.values())
+		for (String username : users.keySet())
 		{
-			if (user.getPermissions().check(permission) == CheckResult.TRUE)
-				result.add(user.getName());
+			if (!result.contains(username) && checkUserPermission(username, permission))
+				result.add(username);
 		}
 
 		return result;
@@ -85,6 +85,7 @@ public class UserContainer<T extends User>
 	public void clear()
 	{
 		users.clear();
+		parentContainer = null;
 	}
 
 	public boolean contains(String name)

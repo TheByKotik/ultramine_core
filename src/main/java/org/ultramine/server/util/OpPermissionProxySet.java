@@ -1,5 +1,6 @@
 package org.ultramine.server.util;
 
+import org.ultramine.permission.internal.ServerPermissionManager;
 import org.ultramine.server.PermissionHandler;
 
 import java.util.Collection;
@@ -12,6 +13,8 @@ import java.util.Set;
 @Deprecated
 public class OpPermissionProxySet implements Set<String>
 {
+	public static final String OP_PERMISSION = "minecraft.op";
+
 	@Override
 	public int size()
 	{
@@ -51,14 +54,14 @@ public class OpPermissionProxySet implements Set<String>
 	@Override
 	public boolean add(String s)
 	{
-		PermissionHandler.getInstance().add("global", s, PermissionHandler.OP_PERMISSION);
+		PermissionHandler.getInstance().add("global", s, OP_PERMISSION);
 		return true;
 	}
 
 	@Override
 	public boolean remove(Object o)
 	{
-		PermissionHandler.getInstance().remove("global", o.toString(), PermissionHandler.OP_PERMISSION);
+		PermissionHandler.getInstance().remove("global", o.toString(), OP_PERMISSION);
 		return true;
 	}
 
@@ -106,6 +109,7 @@ public class OpPermissionProxySet implements Set<String>
 
 	private Set<String> ops()
 	{
-		return PermissionHandler.getInstance().findUsersWithPermission("global", PermissionHandler.OP_PERMISSION);
+		return PermissionHandler.getInstance()
+				.getWorldContainer(ServerPermissionManager.GLOBAL_WORLD).getAllWithPermission(OP_PERMISSION);
 	}
 }
