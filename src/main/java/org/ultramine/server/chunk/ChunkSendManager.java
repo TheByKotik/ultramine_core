@@ -324,6 +324,7 @@ public class ChunkSendManager
 			}
 			else
 			{
+				sendingQueueSize.decrementAndGet();
 				toUnload.add(chunk);
 			}
 		}
