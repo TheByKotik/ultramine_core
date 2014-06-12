@@ -1,0 +1,39 @@
+global: &global
+    dimension: 0
+    generation: &global_gen
+        generateStructures: true
+        generatorSettings: ''
+        levelType: DEFAULT
+        providerID: 0
+        seed: {seed}
+    mobSpawn:
+        spawnAnimals: true
+        spawnMonsters: true
+        spawnNPCs: true
+    settings:
+        difficulty: 1
+        maxBuildHeight: 256
+        pvp: true
+    chunkLoading:
+        viewDistance: 10
+        chunkUpdateRadius: 7
+        enableChunkLoaders: true
+worlds:
+    world:
+        <<: *global
+        dimension: 0
+        generation:
+            <<: *global_gen
+            providerID: 0
+    world_nether:
+        <<: *global
+        dimension: -1
+        generation:
+            <<: *global_gen
+            providerID: -1
+    world_the_end:
+        <<: *global
+        dimension: 1
+        generation:
+            <<: *global_gen
+            providerID: 1
