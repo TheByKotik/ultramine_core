@@ -6,25 +6,20 @@ import org.ultramine.permission.internal.PermissionResolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class PermissionRepository
 {
-	private Set<String> registeredPermissions;
 	private Map<String, ProxyPermission> proxyPermissions;
 
 	public PermissionRepository()
 	{
-		registeredPermissions = new HashSet<String>();
 		proxyPermissions = new HashMap<String, ProxyPermission>();
 	}
 
 	public PermissionRepository(PermissionRepository anotherRepository)
 	{
-		registeredPermissions = new HashSet<String>(anotherRepository.registeredPermissions);
 		proxyPermissions = new HashMap<String, ProxyPermission>(anotherRepository.proxyPermissions);
 	}
 
@@ -32,39 +27,40 @@ public class PermissionRepository
 	{
 		key = key.toLowerCase();
 
-		if (!proxyPermissions.containsKey(key))
+		ProxyPermission permission = proxyPermissions.get(key);
+		if (permission == null)
 		{
 			if (key.startsWith("^"))
-			{
-				proxyPermissions.put(key, new NegativePermission(key, getPermission(key.substring(1))));
-				registeredPermissions.add(key);
-			}
+				permission = new NegativePermission(key, getPermission(key.substring(1)));
+
+			else if (key.endsWith(".*") || key.equals("*"))
+				permission = new ProxyPermission(new DummyPermission(key));
+
 			else
-				proxyPermissions.put(key, new ProxyPermission(key));
+				permission = new ProxyPermission(key);
+
+			proxyPermissions.put(key, permission);
 		}
 
-		return proxyPermissions.get(key);
+		return permission;
 	}
 
 	public ProxyPermission registerPermission(IPermission permission)
 	{
-		if (registeredPermissions.contains(permission.getKey()))
+		ProxyPermission proxy = getPermission(permission.getKey());
+		if (!proxy.isDummy())
 			throw new IllegalArgumentException("Permission already registered");
-
-		if (permission.getKey().startsWith("^"))
-			throw new IllegalArgumentException("^* names are reserved");
 
 		if (permission instanceof ProxyPermission)
 		{
 			proxyPermissions.put(permission.getKey(), (ProxyPermission)permission);
 			return (ProxyPermission)permission;
 		}
-
-		ProxyPermission proxy = getPermission(permission.getKey());
-		proxy.link(permission);
-
-		registeredPermissions.add(permission.getKey());
-		return proxy;
+		else
+		{
+			proxy.link(permission);
+			return proxy;
+		}
 	}
 
 	public static class ProxyPermission implements IPermission

@@ -1,5 +1,7 @@
 package org.ultramine.permission.internal;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import org.ultramine.permission.GroupPermission;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.PermissionRepository;
@@ -11,6 +13,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+@SideOnly(Side.SERVER)
 public class ServerPermissionManager implements IPermissionManager
 {
 	public final static String GLOBAL_WORLD = "global";

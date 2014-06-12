@@ -21,4 +21,4 @@ command.pgroup.usage=/pgroup <group> <add|remove> <permissions ...> OR /pgroup <
 command.pgroup.description=Add/remove permissions OR set meta for group
 command.pgroup.success.add=Add permission <%s> to group <%s>
 command.pgroup.success.remove=Remove permission <%s> from group <%s>
-command.puser.success.meta=Set meta <%s> to <%s> for group <%s>
+command.pgroup.success.meta=Set meta <%s> to <%s> for group <%s>

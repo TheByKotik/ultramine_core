@@ -178,7 +178,10 @@ public class BasicPermissionCommands
 
 		else if (context.getAction().equals("meta"))
 		{
-
+			String key = context.get("key").asString();
+			String value = context.get("value").asString();
+			PermissionHandler.getInstance().setGroupMeta(group, key, value);
+			context.notifyAdmins("command.pgroup.success.meta", key, value, group);
 		}
 	}
 

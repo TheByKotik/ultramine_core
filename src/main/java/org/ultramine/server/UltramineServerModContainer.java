@@ -81,15 +81,6 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void serverStarting(FMLServerStartingEvent e)
 	{
-		switch (e.getSide())
-		{
-			case CLIENT:
-				PermissionHandler.initClient();
-				break;
-			case SERVER:
-				PermissionHandler.initServer();
-				break;
-		}
 		e.registerArgumentHandlers(DefaultCompleters.class);
 		e.registerCommands(BasicPermissionCommands.class);
 	}
@@ -97,7 +88,6 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void stopServer(FMLServerStoppedEvent e)
 	{
-		PermissionHandler.reset();
 	}
 
 	@Override

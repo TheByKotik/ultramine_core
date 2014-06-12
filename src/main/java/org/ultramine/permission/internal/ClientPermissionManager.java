@@ -1,7 +1,8 @@
 package org.ultramine.permission.internal;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import org.ultramine.permission.GroupPermission;
-import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.PermissionRepository;
 import org.ultramine.permission.User;
@@ -10,23 +11,26 @@ import org.ultramine.permission.World;
 import java.util.HashMap;
 import java.util.Map;
 
+@SideOnly(Side.CLIENT)
 public class ClientPermissionManager implements IPermissionManager
 {
 	private World global;
 	private PermissionRepository permissionRepository;
 	private Map<String, GroupPermission> groups;
+	private String owner;
 
-	public ClientPermissionManager(PermissionRepository permissionRepository)
+	public ClientPermissionManager(String owner, PermissionRepository permissionRepository)
 	{
 		this.permissionRepository = permissionRepository;
 		this.global = new World();
 		this.groups = new HashMap<String, GroupPermission>();
+		this.owner = owner;
 	}
 
 	@Override
 	public boolean has(String world, String player, String permission)
 	{
-		return global.checkUserPermission(player, permission);
+		return player.equalsIgnoreCase(owner) || global.checkUserPermission(player, permission);
 	}
 
 	@Override

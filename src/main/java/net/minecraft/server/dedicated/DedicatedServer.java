@@ -37,6 +37,8 @@ import net.minecraft.world.WorldType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.permission.PermissionRepository;
+import org.ultramine.permission.internal.ServerPermissionManager;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.UltramineServerConfig;
 import org.ultramine.server.UltramineServerConfig.VanillaConfig;
@@ -237,6 +239,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		this.setBuildLimit((this.getBuildLimit() + 8) / 16 * 16);
 		this.setBuildLimit(MathHelper.clamp_int(this.getBuildLimit(), 64, 256));
 		settings.maxBuildHeight = this.getBuildLimit();
+		this.setPermissionManager(new ServerPermissionManager(ConfigurationHandler.getSettingDir(), new PermissionRepository())); // ultramine
 		if (!FMLCommonHandler.instance().handleServerAboutToStart(this)) { return false; }
 		field_155771_h.info("Preparing level \"" + this.getFolderName() + "\"");
 		this.loadAllWorlds(this.getFolderName(), this.getFolderName(), k, worldtype, s2);

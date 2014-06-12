@@ -60,7 +60,7 @@ public class PermissionResolver extends Resolver<Boolean>
 	public boolean merge(String key, Boolean value, int priority)
 	{
 		boolean result = super.merge(key, value, priority);
-		if (result && key.endsWith(".*"))
+		if (result && (key.endsWith(".*") || key.equals("*")))
 			wildcards.put(key.substring(0, key.length() - 1), value);
 
 		return result;
