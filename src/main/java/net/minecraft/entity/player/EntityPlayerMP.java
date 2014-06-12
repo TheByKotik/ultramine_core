@@ -983,4 +983,17 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	{
 		return renderDistance;
 	}
+	
+	/**
+	 * Переносит игрока в другой мир без использования порталов. Обратите
+	 * внимение: сначала нужно установить координаты назначения
+	 * <code>setPlayerLocation()</code>, а потом уже переносить в другой мир.
+	 */
+	public void transferToDimension(int dim)
+	{
+		this.mcServer.getConfigurationManager().transferPlayerToDimension(this, dim, null);
+		this.lastExperience = -1;
+		this.lastHealth = -1.0F;
+		this.lastFoodLevel = -1;
+	}
 }

@@ -537,47 +537,59 @@ public abstract class ServerConfigurationManager
 			}
 		}
 		*/
-		if (par1Entity.dimension == 1)
+		if(teleporter != null)
 		{
-			ChunkCoordinates chunkcoordinates;
-
-			if (par2 == 1)
+			if (par1Entity.dimension == 1)
 			{
-				chunkcoordinates = par4WorldServer.getSpawnPoint();
-			}
-			else
-			{
-				chunkcoordinates = par4WorldServer.getEntrancePortalLocation();
-			}
+				ChunkCoordinates chunkcoordinates;
 
-			d0 = (double)chunkcoordinates.posX;
-			par1Entity.posY = (double)chunkcoordinates.posY;
-			d1 = (double)chunkcoordinates.posZ;
-			par1Entity.setLocationAndAngles(d0, par1Entity.posY, d1, 90.0F, 0.0F);
+				if (par2 == 1)
+				{
+					chunkcoordinates = par4WorldServer.getSpawnPoint();
+				}
+				else
+				{
+					chunkcoordinates = par4WorldServer.getEntrancePortalLocation();
+				}
 
-			if (par1Entity.isEntityAlive())
-			{
-				par3WorldServer.updateEntityWithOptionalForce(par1Entity, false);
-			}
-		}
+				d0 = (double)chunkcoordinates.posX;
+				par1Entity.posY = (double)chunkcoordinates.posY;
+				d1 = (double)chunkcoordinates.posZ;
+				par1Entity.setLocationAndAngles(d0, par1Entity.posY, d1, 90.0F, 0.0F);
 
-		par3WorldServer.theProfiler.endSection();
-
-		if (par2 != 1)
-		{
-			par3WorldServer.theProfiler.startSection("placing");
-			d0 = (double)MathHelper.clamp_int((int)d0, -29999872, 29999872);
-			d1 = (double)MathHelper.clamp_int((int)d1, -29999872, 29999872);
-
-			if (par1Entity.isEntityAlive())
-			{
-				par1Entity.setLocationAndAngles(d0, par1Entity.posY, d1, par1Entity.rotationYaw, par1Entity.rotationPitch);
-				teleporter.placeInPortal(par1Entity, d3, d4, d5, f);
-				par4WorldServer.spawnEntityInWorld(par1Entity);
-				par4WorldServer.updateEntityWithOptionalForce(par1Entity, false);
+				if (par1Entity.isEntityAlive())
+				{
+					par3WorldServer.updateEntityWithOptionalForce(par1Entity, false);
+				}
 			}
 
 			par3WorldServer.theProfiler.endSection();
+
+			if (par2 != 1)
+			{
+				par3WorldServer.theProfiler.startSection("placing");
+				d0 = (double)MathHelper.clamp_int((int)d0, -(World.MAX_BLOCK_COORD - 128), World.MAX_BLOCK_COORD - 128);
+				d1 = (double)MathHelper.clamp_int((int)d1, -(World.MAX_BLOCK_COORD - 128), World.MAX_BLOCK_COORD - 128);
+
+				if (par1Entity.isEntityAlive())
+				{
+					par1Entity.setLocationAndAngles(d0, par1Entity.posY, d1, par1Entity.rotationYaw, par1Entity.rotationPitch);
+					teleporter.placeInPortal(par1Entity, d3, d4, d5, f);
+					par4WorldServer.spawnEntityInWorld(par1Entity);
+					par4WorldServer.updateEntityWithOptionalForce(par1Entity, false);
+				}
+
+				par3WorldServer.theProfiler.endSection();
+			}
+		}
+		else
+		{
+			par3WorldServer.theProfiler.endSection();
+			if (par1Entity.isEntityAlive())
+			{
+				par4WorldServer.spawnEntityInWorld(par1Entity);
+				par4WorldServer.updateEntityWithOptionalForce(par1Entity, false);
+			}
 		}
 
 		par1Entity.setWorld(par4WorldServer);
