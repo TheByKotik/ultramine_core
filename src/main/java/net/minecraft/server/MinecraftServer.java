@@ -384,9 +384,10 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	public void run()
 	{
+		boolean normalStarted = false;
 		try
 		{
-			if (this.startServer())
+			if (normalStarted = startServer())
 			{
 				FMLCommonHandler.instance().handleServerStarted();
 				long i = getSystemTimeMillis();
@@ -477,7 +478,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			{
 				try
 				{
-					FMLCommonHandler.instance().handleServerStopped();
+					if(normalStarted) FMLCommonHandler.instance().handleServerStopped();
 				}
 				finally
 				{
