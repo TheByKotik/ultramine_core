@@ -3978,7 +3978,7 @@ public abstract class World implements IBlockAccess
 	/* ======================================== ULTRAMINE START =====================================*/
 	
 	
-	private static final int MAX_BLOCK_COORD = 500000;//524288;
+	public static final int MAX_BLOCK_COORD = 500000;//524288;
 	
 	public boolean chunkRoundExists(int cx, int cz, int radius)
 	{

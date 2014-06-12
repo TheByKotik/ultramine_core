@@ -7,7 +7,12 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.WorldServer;
+
 import org.ultramine.server.PermissionHandler;
 
 import java.util.HashMap;
@@ -103,6 +108,13 @@ public class CommandContext
 	{
 		if (!senderIsServer() && !PermissionHandler.getInstance().has(world, sender.getCommandSenderName(), permission))
 			throw new CommandException("commands.generic.permission");
+	}
+	
+	public void sendMessage(EnumChatFormatting color, String msg, Object... args)
+	{
+		ChatComponentTranslation comp = new ChatComponentTranslation(msg, args);
+		comp.getChatStyle().setColor(color);
+		sender.addChatMessage(comp);
 	}
 
 	public void throwBadUsage()
@@ -222,6 +234,14 @@ public class CommandContext
 		public EntityPlayerMP asPlayer()
 		{
 			return CommandBase.getPlayer(sender, value());
+		}
+		
+		public WorldServer asWorld()
+		{
+			WorldServer world = MinecraftServer.getServer().getMultiWorld().getWorldByNameOrID(value);
+			if(world == null)
+				throw new CommandException("commands.generic.world.invalid", value);
+			return world;
 		}
 
 		public IChatComponent asChatComponent(boolean emphasizePlayers)

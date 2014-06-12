@@ -1,3 +1,6 @@
+#Command generic
+commands.generic.world.invalid=Can't find world '%s'
+
 # Permissions
 command.permissions.serverworld=You must specify world when using this command from console
 

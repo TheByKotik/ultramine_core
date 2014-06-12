@@ -40,6 +40,12 @@ public class DefaultCompleters
 	{
 		return filterArray(val, args);
 	}
+	
+	@ArgumentCompleter("world")
+	public static List<String> world(String val, String[] args)
+	{
+		return filterCollection(val, MinecraftServer.getServer().getMultiWorld().getAllNames());
+	}
 
 	public static List<String> filterArray(String filter, String[] strings)
 	{

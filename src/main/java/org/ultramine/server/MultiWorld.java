@@ -2,10 +2,12 @@ package org.ultramine.server;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.WorldsConfig.WorldConfig;
+import org.ultramine.server.util.BasicTypeParser;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -173,6 +175,16 @@ public class MultiWorld
 	public WorldServer getWorldByName(String name)
 	{
 		return nameToWorldMap.get(name);
+	}
+	
+	public WorldServer getWorldByNameOrID(String id)
+	{
+		return BasicTypeParser.isInt(id) ? dimToWorldMap.get(Integer.parseInt(id)) : nameToWorldMap.get(id);
+	}
+	
+	public Set<String> getAllNames()
+	{
+		return nameToWorldMap.keySet();
 	}
 	
 	public void register()

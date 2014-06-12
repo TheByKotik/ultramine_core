@@ -13,6 +13,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.World;
 
 public abstract class CommandBase implements ICommand
 {
@@ -248,7 +249,7 @@ public abstract class CommandBase implements ICommand
 
 	public static double func_110666_a(ICommandSender par0ICommandSender, double par1, String par3Str)
 	{
-		return func_110665_a(par0ICommandSender, par1, par3Str, -30000000, 30000000);
+		return func_110665_a(par0ICommandSender, par1, par3Str, -World.MAX_BLOCK_COORD, World.MAX_BLOCK_COORD);
 	}
 
 	public static double func_110665_a(ICommandSender par0ICommandSender, double par1, String par3Str, int par4, int par5)
