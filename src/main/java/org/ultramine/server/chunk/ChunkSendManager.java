@@ -34,10 +34,10 @@ import net.minecraftforge.event.world.ChunkWatchEvent;
 public class ChunkSendManager
 {
 	private static final ExecutorService executor = Executors.newFixedThreadPool(1);
-	private static final int MAX_QUEUE_SIZE = 4;
-	private static final int DEFAULT_RATE = 5;
+	private static final int MAX_QUEUE_SIZE = 8;
+	private static final int DEFAULT_RATE = 3;
 	private static final double MIN_RATE = 0.2d;
-	private static final double MAX_RATE = 16d;
+	private static final double MAX_RATE = 8d;
 	
 	private final EntityPlayerMP player;
 	private PlayerManager manager;
@@ -119,6 +119,10 @@ public class ChunkSendManager
 			if(queueSize == 0)
 			{
 				rate += 0.14;
+			}
+			else if(queueSize < DEFAULT_RATE)
+			{
+				rate += 0.07;
 			}
 			else if(queueSize > lastQueueSize)
 			{
