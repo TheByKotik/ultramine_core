@@ -71,7 +71,7 @@ class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChu
 
 	public void callStage3(QueuedChunk queuedChunk, Chunk chunk, IChunkLoadCallback runnable) throws RuntimeException
 	{
-		runnable.onChunkLoaded(chunk);
+		runnable.onChunkLoaded(chunk != null ? chunk : queuedChunk.provider.getChunkIfExists(ChunkHash.keyToX(queuedChunk.coords), ChunkHash.keyToZ(queuedChunk.coords)));
 	}
 
 	public Thread newThread(Runnable runnable)
