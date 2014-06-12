@@ -418,7 +418,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		}
 		else
 		{
-			boolean flag = this.mcServer.isDedicatedServer() && this.mcServer.isPVPEnabled() && "fall".equals(par1DamageSource.damageType);
+			boolean flag = this.mcServer.isDedicatedServer() && getServerForPlayer().getConfig().settings.pvp && "fall".equals(par1DamageSource.damageType);
 
 			if (!flag && this.field_147101_bU > 0 && par1DamageSource != DamageSource.outOfWorld)
 			{
@@ -453,7 +453,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
 	public boolean canAttackPlayer(EntityPlayer par1EntityPlayer)
 	{
-		return !this.mcServer.isPVPEnabled() ? false : super.canAttackPlayer(par1EntityPlayer);
+		return !getServerForPlayer().getConfig().settings.pvp ? false : super.canAttackPlayer(par1EntityPlayer);
 	}
 
 	public void travelToDimension(int par1)

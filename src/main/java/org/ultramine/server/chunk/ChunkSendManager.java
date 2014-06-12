@@ -43,7 +43,7 @@ public class ChunkSendManager
 	private PlayerManager manager;
 	private BlockFace lastFace;
 	
-	private final TIntArrayListImpl toSend = new TIntArrayListImpl((int)Math.pow(ConfigurationHandler.getServerConfig().vanilla.viewDistance, 2));
+	private final TIntArrayListImpl toSend = new TIntArrayListImpl((int)Math.pow(ConfigurationHandler.getWorldsConfig().global.chunkLoading.viewDistance, 2));
 	private final TIntSet sending = TCollections.synchronizedSet(new TIntHashSet());
 	private final TIntSet sended = new TIntHashSet();
 	private final Queue<Chunk> toUpdate = Queues.newConcurrentLinkedQueue();
@@ -76,7 +76,7 @@ public class ChunkSendManager
 		
 		int cx = MathHelper.floor_double(player.posX) >> 4;
 		int cz = MathHelper.floor_double(player.posZ) >> 4;
-		int viewRadius = ConfigurationHandler.getServerConfig().vanilla.viewDistance;
+		int viewRadius = manager.getWorldServer().getConfig().chunkLoading.viewDistance;
 		
 		for (int x = cx - viewRadius; x <= cx + viewRadius; ++x)
 		{
@@ -225,7 +225,7 @@ public class ChunkSendManager
 		{
 			int lastX = MathHelper.floor_double(player.managedPosX) >> 4;
 			int lastZ = MathHelper.floor_double(player.managedPosZ) >> 4;
-			int view = ConfigurationHandler.getServerConfig().vanilla.viewDistance;
+			int view = manager.getWorldServer().getConfig().chunkLoading.viewDistance;
 			int movX = cx - lastX;
 			int movZ = cz - lastZ;
 

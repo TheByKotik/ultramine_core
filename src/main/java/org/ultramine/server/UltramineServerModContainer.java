@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.server.MinecraftServer;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -14,6 +16,7 @@ import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.event.FMLConstructionEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
@@ -56,6 +59,18 @@ public class UltramineServerModContainer extends DummyModContainer
 	public void postInit(FMLPostInitializationEvent e)
 	{
 		ConfigurationHandler.saveServerConfig();
+	}
+	
+	@Subscribe
+	public void serverAboutToStart(FMLServerAboutToStartEvent e)
+	{
+		e.getServer().getMultiWorld().register();
+	}
+	
+	@Subscribe
+	public void serverStopped(FMLServerStoppedEvent e)
+	{
+		MinecraftServer.getServer().getMultiWorld().unregister();
 	}
 	
 	@NetworkCheckHandler

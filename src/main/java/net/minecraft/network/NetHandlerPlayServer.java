@@ -473,7 +473,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 					return;
 				}
 
-				if (j >= this.serverController.getBuildLimit())
+				if (j >= playerEntity.getServerForPlayer().getConfig().settings.maxBuildHeight)
 				{
 					return;
 				}
@@ -522,6 +522,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 		int l = p_147346_1_.func_149568_f();
 		this.playerEntity.func_143004_u();
 
+		int buildlimit = playerEntity.getServerForPlayer().getConfig().settings.maxBuildHeight;
+		
 		if (p_147346_1_.func_149568_f() == 255)
 		{
 			if (itemstack == null)
@@ -535,9 +537,9 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 				this.playerEntity.theItemInWorldManager.tryUseItem(this.playerEntity, worldserver, itemstack);
 			}
 		}
-		else if (p_147346_1_.func_149571_d() >= this.serverController.getBuildLimit() - 1 && (p_147346_1_.func_149568_f() == 1 || p_147346_1_.func_149571_d() >= this.serverController.getBuildLimit()))
+		else if (p_147346_1_.func_149571_d() >= buildlimit - 1 && (p_147346_1_.func_149568_f() == 1 || p_147346_1_.func_149571_d() >= buildlimit))
 		{
-			ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("build.tooHigh", new Object[] {Integer.valueOf(this.serverController.getBuildLimit())});
+			ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("build.tooHigh", new Object[] {Integer.valueOf(buildlimit)});
 			chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
 			this.playerEntity.playerNetServerHandler.sendPacket(new S02PacketChat(chatcomponenttranslation));
 			flag = true;

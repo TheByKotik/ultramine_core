@@ -31,7 +31,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 		super(par1DedicatedServer);
 		this.opsList = par1DedicatedServer.getFile("ops.txt");
 		this.whiteList = par1DedicatedServer.getFile("white-list.txt");
-		this.viewDistance = ConfigurationHandler.getServerConfig().vanilla.viewDistance;
+		this.viewDistance = ConfigurationHandler.getWorldsConfig().global.chunkLoading.viewDistance;
 		this.maxPlayers = ConfigurationHandler.getServerConfig().vanilla.maxPlayers;
 		this.setWhiteListEnabled(ConfigurationHandler.getServerConfig().vanilla.whiteList);
 

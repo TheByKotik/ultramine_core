@@ -55,7 +55,7 @@ public final class SpawnerAnimals
 				EntityPlayer entityplayer = (EntityPlayer)par1WorldServer.playerEntities.get(i);
 				int j = MathHelper.floor_double(entityplayer.posX / 16.0D);
 				k = MathHelper.floor_double(entityplayer.posZ / 16.0D);
-				int b0 = ConfigurationHandler.getServerConfig().chunkUpdateRadius;
+				int b0 = par1WorldServer.getConfig().chunkLoading.chunkUpdateRadius;
 
 				for (int l = -b0; l <= b0; ++l)
 				{

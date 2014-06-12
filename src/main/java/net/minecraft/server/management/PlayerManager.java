@@ -46,7 +46,7 @@ public class PlayerManager
 		}
 		else
 		{
-			this.playerViewRadius = par2;
+			this.playerViewRadius = par1WorldServer.getConfig().chunkLoading.viewDistance;
 			this.theWorldServer = par1WorldServer;
 		}
 	}

@@ -23,7 +23,7 @@ public class AnvilSaveHandler extends SaveHandler
 		File file1 = this.getWorldDirectory();
 		File file2;
 
-		if (par1WorldProvider.getSaveFolder() != null)
+		if (!isSingleStorage && par1WorldProvider.getSaveFolder() != null)
 		{
 			file2 = new File(file1, par1WorldProvider.getSaveFolder());
 			file2.mkdirs();
@@ -53,5 +53,14 @@ public class AnvilSaveHandler extends SaveHandler
 		}
 
 		RegionFileCache.clearRegionFileReferences();
+	}
+	
+	/* ======================================== ULTRAMINE START =====================================*/
+	
+	private boolean isSingleStorage;
+	
+	public void setSingleStorage()
+	{
+		isSingleStorage = true;
 	}
 }

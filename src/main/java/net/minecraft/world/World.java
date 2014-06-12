@@ -2725,7 +2725,7 @@ public abstract class World implements IBlockAccess
 	{
 		this.activeChunkSet.clear();
 		this.theProfiler.startSection("buildList");
-		if(ConfigurationHandler.getServerConfig().enableChunkLoaders)
+		if(isChunkLoaderEnabled())
 			for(ChunkCoordIntPair c : getPersistentChunks().keySet()) activeChunkSet.put(ChunkHash.chunkToKey(c.chunkXPos, c.chunkZPos), (byte)100);
 		int i;
 		EntityPlayer entityplayer;
@@ -2737,7 +2737,7 @@ public abstract class World implements IBlockAccess
 			entityplayer = (EntityPlayer)this.playerEntities.get(i);
 			j = MathHelper.floor_double(entityplayer.posX / 16.0D);
 			k = MathHelper.floor_double(entityplayer.posZ / 16.0D);
-			int b0 = ConfigurationHandler.getServerConfig().chunkUpdateRadius;
+			int b0 = getChunkUpdateRadius();
 
 			activeChunkSet.put(ChunkHash.chunkToKey(j, k), (byte)0);
 			for (int l = -b0; l <= b0; ++l)
@@ -3986,5 +3986,15 @@ public abstract class World implements IBlockAccess
 			for(int z = cz - radius; z < cz + radius; z++)
 				if(!chunkExists(x, z)) return false;
 		return true;
+	}
+	
+	protected boolean isChunkLoaderEnabled()
+	{
+		return true;
+	}
+	
+	protected int getChunkUpdateRadius()
+	{
+		return 7;
 	}
 }

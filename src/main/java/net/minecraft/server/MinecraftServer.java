@@ -80,6 +80,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.MultiWorld;
 import org.ultramine.server.WatchdogThread;
 import org.ultramine.server.chunk.ChunkIOExecutor;
 
@@ -1437,6 +1438,13 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	}
 
 	/* ========================================= ULTRAMINE START ======================================*/
+
+	private final MultiWorld multiworld = new MultiWorld(this);
+	
+	public MultiWorld getMultiWorld()
+	{
+		return multiworld;
+	}
 
 	public IPermissionManager getPermissionManager()
 	{

@@ -70,6 +70,7 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.PendingBlockUpdate;
 
@@ -520,12 +521,12 @@ public class WorldServer extends World
 
 	public void updateEntityWithOptionalForce(Entity par1Entity, boolean par2)
 	{
-		if (!this.mcServer.getCanSpawnAnimals() && (par1Entity instanceof EntityAnimal || par1Entity instanceof EntityWaterMob))
+		if (!getConfig().mobSpawn.spawnAnimals && (par1Entity instanceof EntityAnimal || par1Entity instanceof EntityWaterMob))
 		{
 			par1Entity.setDead();
 		}
 
-		if (!this.mcServer.getCanSpawnNPCs() && par1Entity instanceof INpc)
+		if (!getConfig().mobSpawn.spawnNPCs && par1Entity instanceof INpc)
 		{
 			par1Entity.setDead();
 		}
@@ -934,6 +935,8 @@ public class WorldServer extends World
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
+	private WorldConfig config;
+	
 	public void checkSessionLock() throws MinecraftException
 	{
 		//Removes world lock checking on server
@@ -986,5 +989,25 @@ public class WorldServer extends World
 				throw new ReportedException(crashreport);
 			}
 		}
+	}
+	
+	public void setConfig(WorldConfig config)
+	{
+		this.config = config;
+	}
+	
+	public WorldConfig getConfig()
+	{
+		return config;
+	}
+	
+	protected boolean isChunkLoaderEnabled()
+	{
+		return config.chunkLoading.enableChunkLoaders;
+	}
+	
+	protected int getChunkUpdateRadius()
+	{
+		return config.chunkLoading.chunkUpdateRadius;
 	}
 }

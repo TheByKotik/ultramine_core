@@ -32,6 +32,7 @@ import net.minecraft.util.CryptManager;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 
@@ -40,8 +41,10 @@ import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.PermissionRepository;
 import org.ultramine.permission.internal.ServerPermissionManager;
 import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.MultiWorld;
 import org.ultramine.server.UltramineServerConfig;
 import org.ultramine.server.UltramineServerConfig.VanillaConfig;
+import org.ultramine.server.WorldsConfig.WorldConfig;
 
 @SideOnly(Side.SERVER)
 public class DedicatedServer extends MinecraftServer implements IServer
@@ -123,6 +126,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 		field_155771_h.info("Loading properties");
 		settings = ConfigurationHandler.getServerConfig().vanilla;
+		WorldConfig globalWConf = ConfigurationHandler.getWorldsConfig().global;
 
 		if (this.isSinglePlayer())
 		{
@@ -134,25 +138,16 @@ public class DedicatedServer extends MinecraftServer implements IServer
 			this.setHostname(settings.serverIp);
 		}
 
-		this.setCanSpawnAnimals(settings.spawnAnimals);
-		this.setCanSpawnNPCs(settings.spawnNPCs);
-		this.setAllowPvp(settings.pvp);
+		this.setCanSpawnAnimals(globalWConf.mobSpawn.spawnAnimals);
+		this.setCanSpawnNPCs(globalWConf.mobSpawn.spawnNPCs);
+		this.setAllowPvp(globalWConf.settings.pvp);
 		this.setAllowFlight(settings.allowFlight);
 		this.func_155759_m(settings.resourcePack);
 		this.setMOTD(settings.motd);
 		this.setForceGamemode(settings.forceGamemode);
 		this.func_143006_e(settings.playerIdleTimeout);
 
-		if (settings.difficulty < 0)
-		{
-			settings.difficulty = 0;
-		}
-		else if (settings.difficulty > 3)
-		{
-			settings.difficulty = 3;
-		}
-
-		this.canSpawnStructures = settings.generateStructures;
+		this.canSpawnStructures = globalWConf.generation.generateStructures;
 		int i = settings.gamemode;
 		this.gameType = WorldSettings.getGameTypeById(i);
 		field_155771_h.info("Default game type: " + this.gameType);
@@ -199,12 +194,12 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 		if (this.getFolderName() == null)
 		{
-			this.setFolderName(settings.levelName);
+			this.setFolderName("world");
 		}
 
-		String s = settings.levelSeed;
-		String s1 = settings.levelType;
-		String s2 = settings.generatorSettings;
+		String s = globalWConf.generation.seed;
+		String s1 = globalWConf.generation.levelType;
+		String s2 = globalWConf.generation.generatorSettings;
 		long k = (new Random()).nextLong();
 
 		if (s.length() > 0)
@@ -235,10 +230,10 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		this.isCommandBlockEnabled();
 		this.getOpPermissionLevel();
 		this.isSnooperEnabled();
-		this.setBuildLimit(settings.maxBuildHeight);
+		this.setBuildLimit(globalWConf.settings.maxBuildHeight);
 		this.setBuildLimit((this.getBuildLimit() + 8) / 16 * 16);
 		this.setBuildLimit(MathHelper.clamp_int(this.getBuildLimit(), 64, 256));
-		settings.maxBuildHeight = this.getBuildLimit();
+		globalWConf.settings.maxBuildHeight = this.getBuildLimit();
 		this.setPermissionManager(new ServerPermissionManager(ConfigurationHandler.getSettingDir(), new PermissionRepository())); // ultramine
 		if (!FMLCommonHandler.instance().handleServerAboutToStart(this)) { return false; }
 		field_155771_h.info("Preparing level \"" + this.getFolderName() + "\"");
@@ -277,7 +272,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public EnumDifficulty func_147135_j()
 	{
-		return EnumDifficulty.getDifficultyEnum(settings.difficulty);
+		return EnumDifficulty.getDifficultyEnum(ConfigurationHandler.getWorldsConfig().global.settings.difficulty);
 	}
 
 	public boolean isHardcore()
@@ -338,12 +333,12 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public boolean getAllowNether()
 	{
-		return settings.allowNether;
+		return this.getMultiWorld().getWorldById(-1) != null;
 	}
 
 	public boolean allowSpawnMonsters()
 	{
-		return settings.spawnMonsters;
+		return ConfigurationHandler.getWorldsConfig().global.mobSpawn.spawnMonsters;
 	}
 
 	public void addServerStatsToSnooper(PlayerUsageSnooper par1PlayerUsageSnooper)
@@ -485,5 +480,18 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	public boolean func_147136_ar()
 	{
 		return settings.announcePlayerAchievements;
+	}
+	
+	/* ======================================== ULTRAMINE START =====================================*/
+	
+	protected void loadAllWorlds(String par1Str, String par2Str, long par3, WorldType par5WorldType, String par6Str)
+	{
+		convertMapIfNeeded(par1Str);
+		setUserMessage("menu.loadingLevel");
+		
+		getMultiWorld().handleServerWorldsInit();
+		
+		getConfigurationManager().setPlayerManager(new WorldServer[]{ getMultiWorld().getWorldById(0) });
+		initialWorldChunkLoad();
 	}
 }
