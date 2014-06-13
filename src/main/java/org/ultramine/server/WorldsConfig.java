@@ -34,7 +34,7 @@ public class WorldsConfig
 		
 		public static class Settings
 		{
-			public int difficulty = 1;
+			public String difficulty = "1";
 			public boolean pvp = true;
 			public int maxBuildHeight = 256;
 		}

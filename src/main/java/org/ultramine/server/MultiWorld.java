@@ -189,7 +189,7 @@ public class MultiWorld
 		if (!server.isSinglePlayer())
 			world.getWorldInfo().setGameType(server.getGameType());
 		
-		world.difficultySetting = EnumDifficulty.getDifficultyEnum(conf.settings.difficulty);
+		world.difficultySetting = BasicTypeParser.parseDifficulty(ConfigurationHandler.getWorldsConfig().global.settings.difficulty);
 		world.setAllowedSpawnTypes(conf.mobSpawn.spawnMonsters, conf.mobSpawn.spawnAnimals);
 		world.setConfig(conf);
 

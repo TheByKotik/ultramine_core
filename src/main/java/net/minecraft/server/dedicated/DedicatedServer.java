@@ -45,6 +45,7 @@ import org.ultramine.server.MultiWorld;
 import org.ultramine.server.UltramineServerConfig;
 import org.ultramine.server.UltramineServerConfig.VanillaConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig;
+import org.ultramine.server.util.BasicTypeParser;
 
 @SideOnly(Side.SERVER)
 public class DedicatedServer extends MinecraftServer implements IServer
@@ -272,7 +273,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public EnumDifficulty func_147135_j()
 	{
-		return EnumDifficulty.getDifficultyEnum(ConfigurationHandler.getWorldsConfig().global.settings.difficulty);
+		return BasicTypeParser.parseDifficulty(ConfigurationHandler.getWorldsConfig().global.settings.difficulty);
 	}
 
 	public boolean isHardcore()
