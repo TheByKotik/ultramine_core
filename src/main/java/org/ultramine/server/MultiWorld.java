@@ -11,10 +11,11 @@ import org.ultramine.server.util.BasicTypeParser;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -48,14 +49,15 @@ public class MultiWorld
 	}
 	
 	@SubscribeEvent
-	public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
+	public void onPlayerLoggedIn(FMLNetworkEvent.ServerConnectionFromClientEvent event)
 	{
 		FMLEmbeddedChannel channel = NetworkRegistry.INSTANCE.getChannel("FORGE", Side.SERVER);
-		channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
-        channel.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.player);
+		channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
+        channel.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
 		for (int dim : DimensionManager.getStaticDimensionIDs())
 		{
-			channel.writeAndFlush(new ForgeMessage.DimensionRegisterMessage(dim, DimensionManager.getProviderType(dim)));
+			int pid = DimensionManager.getProviderType(dim);
+			channel.writeAndFlush(new ForgeMessage.DimensionRegisterMessage(dim, pid == -10 ? 0 : pid));
 		}
 	}
 	
