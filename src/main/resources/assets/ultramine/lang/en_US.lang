@@ -1,9 +1,12 @@
 #Command generic
 commands.generic.world.invalid=Can't find world '%s'
 
-# Permissions
-command.permissions.serverworld=You must specify world when using this command from console
+command.tp.usage=/tp [target player] <destination player> OR /tp [target player] [world] <x> <y> <z>
+command.tp.description=Teleport target player (or you) to another player or coordinate
+command.tp.success.player=Teleported <%s> to <%s>
+command.tp.success.coordinate=Teleported <%s> to <%s, %s, %s, %s>
 
+# Permissions
 command.pconfig.usage=/pconfig <save|reload>
 command.pconfig.description=Save or reload all permissions configs
 command.pconfig.success.save=Permissions are saved

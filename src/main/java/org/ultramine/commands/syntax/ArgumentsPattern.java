@@ -95,6 +95,11 @@ public class ArgumentsPattern
 		return builder.toString();
 	}
 
+	public int getArgumentsCount()
+	{
+		return arguments.size();
+	}
+
 	public static class Builder
 	{
 		private ArgumentsPattern pattern;

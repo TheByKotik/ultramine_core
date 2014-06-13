@@ -5,6 +5,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
+import org.ultramine.server.util.BasicTypeParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,12 @@ public class DefaultCompleters
 	public static List<String> world(String val, String[] args)
 	{
 		return filterCollection(val, MinecraftServer.getServer().getMultiWorld().getAllNames());
+	}
+
+	@ArgumentValidator("world")
+	public static boolean world_validator(String val, String[] args)
+	{
+		return BasicTypeParser.isInt(val) || MinecraftServer.getServer().getMultiWorld().getAllNames().contains(val);
 	}
 
 	public static List<String> filterArray(String filter, String[] strings)

@@ -44,9 +44,9 @@ public class ArgumentsPatternParser
 					argumentName = handlerName;
 
 				String[] params = StringUtils.split(matcher.group(4));
-				HandlerBasedArgument argument = new HandlerBasedArgument(argumentName, params);
-				argument.setValidationHandler(validationHandlers.get(argumentName));
-				argument.setCompletionHandler(completionHandlers.get(argumentName));
+				HandlerBasedArgument argument = new HandlerBasedArgument(handlerName, params);
+				argument.setValidationHandler(validationHandlers.get(handlerName));
+				argument.setCompletionHandler(completionHandlers.get(handlerName));
 				arguments.add(argument);
 				builder.addArgument(argumentName, argument);
 			}
@@ -112,8 +112,8 @@ public class ArgumentsPatternParser
 	{
 		for (HandlerBasedArgument argument : arguments)
 		{
-			argument.setCompletionHandler(completionHandlers.get(argument.getName()));
-			argument.setValidationHandler(validationHandlers.get(argument.getName()));
+			argument.setCompletionHandler(completionHandlers.get(argument.getHandlerName()));
+			argument.setValidationHandler(validationHandlers.get(argument.getHandlerName()));
 		}
 	}
 

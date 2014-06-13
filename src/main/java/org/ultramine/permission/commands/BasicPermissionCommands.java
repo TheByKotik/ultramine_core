@@ -1,9 +1,8 @@
 package org.ultramine.permission.commands;
 
-import net.minecraft.command.WrongUsageException;
-import org.ultramine.commands.Action;
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
+import org.ultramine.permission.internal.ServerPermissionManager;
 import org.ultramine.server.PermissionHandler;
 
 public class BasicPermissionCommands
@@ -17,12 +16,12 @@ public class BasicPermissionCommands
 	)
 	public static void pcofnig(CommandContext context)
 	{
-		if (context.getAction().equals("save"))
+		if (context.actionIs("save"))
 		{
 			PermissionHandler.getInstance().save();
 			context.notifyAdmins("command.pconfig.success.save");
 		}
-		else if (context.getAction().equals("reload"))
+		else
 		{
 			PermissionHandler.getInstance().reload();
 			context.notifyAdmins("command.pconfig.success.reload");
@@ -42,42 +41,29 @@ public class BasicPermissionCommands
 	)
 	public static void pworld(CommandContext context)
 	{
-		if (!context.contains("world"))
-		{
-			if (context.senderIsServer())
-				throw new WrongUsageException("command.permissions.serverworld");
+		String world = context.contains("world")
+				? context.get("world").asWorld().getWorldInfo().getWorldName()
+				: ServerPermissionManager.GLOBAL_WORLD;
 
-			context.set("world", context.getSenderAsPlayer().getEntityWorld().getWorldInfo().getWorldName());
+		context.checkSenderPermissionInWorld(world, "permissions.admin.world");
+
+		if (context.actionIs("add"))
+		{
+			for (CommandContext.Argument arg : context.get("permission").asArray())
+			{
+				PermissionHandler.getInstance().addToWorld(world, arg.asString());
+				context.notifyAdmins("command.pworld.success.add", arg.asString(), world);
+			}
 		}
-
-		context.checkSenderPermissionInWorld(context.get("world").asString(), "permissions.admin.world");
-		context.doAction();
-	}
-
-	@Action(command = "pworld", name = "add")
-	public static void pworld_add(CommandContext context)
-	{
-		String world = context.get("world").asString();
-
-		for (CommandContext.Argument arg : context.get("permission").asArray())
+		else
 		{
-			PermissionHandler.getInstance().addToWorld(world, arg.asString());
-			context.notifyAdmins("command.pworld.success.add", arg.asString(), world);
-		}
-	}
-
-	@Action(command = "pworld", name = "remove")
-	public static void pworld_remove(CommandContext context)
-	{
-		String world = context.get("world").asString();
-
-		for (CommandContext.Argument arg : context.get("permission").asArray())
-		{
-			PermissionHandler.getInstance().removeFromWorld(world, arg.asString());
-			context.notifyAdmins("command.pworld.success.remove", arg.asString(), world);
+			for (CommandContext.Argument arg : context.get("permission").asArray())
+			{
+				PermissionHandler.getInstance().removeFromWorld(world, arg.asString());
+				context.notifyAdmins("command.pworld.success.remove", arg.asString(), world);
+			}
 		}
 	}
-
 
 
 	@Command(
@@ -93,56 +79,38 @@ public class BasicPermissionCommands
 	)
 	public static void puser(CommandContext context)
 	{
-		if (!context.contains("world"))
-		{
-			if (context.senderIsServer())
-				throw new WrongUsageException("command.permissions.serverworld");
-
-			context.set("world", context.getSenderAsPlayer().getEntityWorld().getWorldInfo().getWorldName());
-		}
-
-		context.checkSenderPermissionInWorld(context.get("world").asString(), "permissions.admin.user");
-		context.doAction();
-	}
-
-	@Action(command = "puser", name = "add")
-	public static void puser_add(CommandContext context)
-	{
-		String world = context.get("world").asString();
 		String player = context.get("player").asString();
+		String world = context.contains("world")
+				? context.get("world").asWorld().getWorldInfo().getWorldName()
+				: ServerPermissionManager.GLOBAL_WORLD;
 
-		for (CommandContext.Argument arg : context.get("permission").asArray())
+		context.checkSenderPermissionInWorld(world, "permissions.admin.world");
+
+		if (context.actionIs("add"))
 		{
-			PermissionHandler.getInstance().add(world, player, arg.asString());
-			context.notifyAdmins("command.puser.success.add", arg.asString(), player, world);
+			for (CommandContext.Argument arg : context.get("permission").asArray())
+			{
+				PermissionHandler.getInstance().add(world, player, arg.asString());
+				context.notifyAdmins("command.puser.success.add", arg.asString(), player, world);
+			}
 		}
-	}
-
-	@Action(command = "puser", name = "remove")
-	public static void puser_remove(CommandContext context)
-	{
-		String world = context.get("world").asString();
-		String player = context.get("player").asString();
-
-		for (CommandContext.Argument arg : context.get("permission").asArray())
+		else if (context.actionIs("remove"))
 		{
-			PermissionHandler.getInstance().remove(world, player, arg.asString());
-			context.notifyAdmins("command.puser.success.remove", arg.asString(), player, world);
+			for (CommandContext.Argument arg : context.get("permission").asArray())
+			{
+				PermissionHandler.getInstance().remove(world, player, arg.asString());
+				context.notifyAdmins("command.puser.success.remove", arg.asString(), player, world);
+			}
+		}
+		else
+		{
+			String key = context.get("pmeta").asString();
+			String value = context.get("value").asString();
+
+			PermissionHandler.getInstance().setMeta(world, player, key, value);
+			context.notifyAdmins("command.puser.success.meta", key, value, player, world);
 		}
 	}
-
-	@Action(command = "puser", name = "meta")
-	public static void puser_meta(CommandContext context)
-	{
-		String world = context.get("world").asString();
-		String player = context.get("player").asString();
-		String key = context.get("pmeta").asString();
-		String value = context.get("value").asString();
-
-		PermissionHandler.getInstance().setMeta(world, player, key, value);
-		context.notifyAdmins("command.puser.success.meta", key, value, player, world);
-	}
-
 
 
 	@Command(
@@ -158,7 +126,7 @@ public class BasicPermissionCommands
 	{
 		String group = context.get("group").asString();
 
-		if (context.getAction().equals("add"))
+		if (context.actionIs("add"))
 		{
 			for (CommandContext.Argument arg : context.get("permission").asArray())
 			{
@@ -166,8 +134,7 @@ public class BasicPermissionCommands
 				context.notifyAdmins("command.pgroup.success.add", arg.asString(), group);
 			}
 		}
-
-		else if (context.getAction().equals("remove"))
+		else if (context.actionIs("remove"))
 		{
 			for (CommandContext.Argument arg : context.get("permission").asArray())
 			{
@@ -175,8 +142,7 @@ public class BasicPermissionCommands
 				context.notifyAdmins("command.pgroup.success.remove", arg.asString(), group);
 			}
 		}
-
-		else if (context.getAction().equals("meta"))
+		else
 		{
 			String key = context.get("key").asString();
 			String value = context.get("value").asString();
@@ -184,5 +150,4 @@ public class BasicPermissionCommands
 			context.notifyAdmins("command.pgroup.success.meta", key, value, group);
 		}
 	}
-
 }

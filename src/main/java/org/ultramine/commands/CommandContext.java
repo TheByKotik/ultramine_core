@@ -72,6 +72,11 @@ public class CommandContext
 		return actionName;
 	}
 
+	public boolean actionIs(String action)
+	{
+		return actionName.equalsIgnoreCase(action);
+	}
+
 	public void doAction()
 	{
 		if (actionHandler != null)
@@ -159,11 +164,6 @@ public class CommandContext
 			this.last = false;
 		}
 
-		private String value()
-		{
-			return value;
-		}
-
 		private String[] args()
 		{
 			if (num >= 0)
@@ -182,7 +182,7 @@ public class CommandContext
 			if (last)
 				return CommandBase.func_82360_a(sender, args(), num());
 			else
-				return value();
+				return value;
 		}
 
 		public Argument[] asArray()
@@ -198,42 +198,42 @@ public class CommandContext
 
 		public int asInt()
 		{
-			return CommandBase.parseInt(sender, value());
+			return CommandBase.parseInt(sender, value);
 		}
 
 		public int asInt(int minBound)
 		{
-			return CommandBase.parseIntWithMin(sender, value(), minBound);
+			return CommandBase.parseIntWithMin(sender, value, minBound);
 		}
 
 		public int asInt(int minBound, int maxBound)
 		{
-			return CommandBase.parseIntBounded(sender, value(), minBound, maxBound);
+			return CommandBase.parseIntBounded(sender, value, minBound, maxBound);
 		}
 
 		public double asDouble()
 		{
-			return CommandBase.parseDouble(sender, value());
+			return CommandBase.parseDouble(sender, value);
 		}
 
 		public double asDouble(double minBound)
 		{
-			return CommandBase.parseDoubleWithMin(sender, value(), minBound);
+			return CommandBase.parseDoubleWithMin(sender, value, minBound);
 		}
 
 		public double asDouble(double minBound, double maxBound)
 		{
-			return CommandBase.parseDoubleBounded(sender, value(), minBound, maxBound);
+			return CommandBase.parseDoubleBounded(sender, value, minBound, maxBound);
 		}
 
 		public boolean asBoolean()
 		{
-			return CommandBase.parseBoolean(sender, value());
+			return CommandBase.parseBoolean(sender, value);
 		}
 
 		public EntityPlayerMP asPlayer()
 		{
-			return CommandBase.getPlayer(sender, value());
+			return CommandBase.getPlayer(sender, value);
 		}
 		
 		public WorldServer asWorld()
@@ -251,22 +251,22 @@ public class CommandContext
 
 		public double asCoordinate(double original)
 		{
-			return CommandBase.func_110666_a(sender, original, value());
+			return CommandBase.func_110666_a(sender, original, value);
 		}
 
 		public double asCoordinate(double original, int minBound, int maxBound)
 		{
-			return CommandBase.func_110665_a(sender, original, value(), minBound, maxBound);
+			return CommandBase.func_110665_a(sender, original, value, minBound, maxBound);
 		}
 
 		public Item asItem()
 		{
-			return CommandBase.getItemByText(sender, value());
+			return CommandBase.getItemByText(sender, value);
 		}
 
 		public Block asBlock()
 		{
-			return CommandBase.getBlockByText(sender, value());
+			return CommandBase.getBlockByText(sender, value);
 		}
 	}
 

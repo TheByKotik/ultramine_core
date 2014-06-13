@@ -48,7 +48,7 @@ public class HandlerBasedArgument implements IArgument
 		this.validationHandler = validationHandler;
 	}
 
-	public String getName()
+	public String getHandlerName()
 	{
 		return name;
 	}
