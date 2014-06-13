@@ -239,6 +239,8 @@ public class DimensionManager
 			return; // If a provider hasn't been registered then we can't hotload the dim
 		}
 		MinecraftServer mcServer = overworld.func_73046_m();
+		mcServer.getMultiWorld().initDimension(dim);
+		/*
 		ISaveHandler savehandler = overworld.getSaveHandler();
 		WorldSettings worldSettings = new WorldSettings(overworld.getWorldInfo());
 
@@ -251,6 +253,7 @@ public class DimensionManager
 		}
 
 		mcServer.func_147139_a(mcServer.func_147135_j());
+		*/
 	}
 
 	public static WorldServer getWorld(int id)

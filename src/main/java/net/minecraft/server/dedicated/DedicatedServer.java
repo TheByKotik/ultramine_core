@@ -333,7 +333,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public boolean getAllowNether()
 	{
-		return this.getMultiWorld().getWorldById(-1) != null;
+		return this.getMultiWorld().getWorldByID(-1) != null;
 	}
 
 	public boolean allowSpawnMonsters()
@@ -491,7 +491,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		
 		getMultiWorld().handleServerWorldsInit();
 		
-		getConfigurationManager().setPlayerManager(new WorldServer[]{ getMultiWorld().getWorldById(0) });
+		getConfigurationManager().setPlayerManager(new WorldServer[]{ getMultiWorld().getWorldByID(0) });
 		initialWorldChunkLoad();
 	}
 }

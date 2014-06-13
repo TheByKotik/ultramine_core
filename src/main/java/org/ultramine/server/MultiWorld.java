@@ -37,6 +37,7 @@ import net.minecraftforge.event.world.WorldEvent;
 public class MultiWorld
 {
 	private static final Logger log = LogManager.getLogger();
+	private final TIntObjectHashMap<String> dimToNameMap = new TIntObjectHashMap<String>();
 	private final TIntObjectMap<WorldServer> dimToWorldMap = new TIntObjectHashMap<WorldServer>();
 	private final Map<String, WorldServer> nameToWorldMap = new HashMap<String, WorldServer>();
 	private final MinecraftServer server;
@@ -58,6 +59,13 @@ public class MultiWorld
 		}
 	}
 	
+	@SubscribeEvent
+	public void onWorldUnload(WorldEvent.Unload event)
+	{
+		dimToWorldMap.remove(event.world.provider.dimensionId);
+		nameToWorldMap.remove(event.world.getWorldInfo().getWorldName());
+	}
+	
 	public void handleServerWorldsInit()
 	{
 		DimensionManager.unregisterDimension(-1);
@@ -65,7 +73,6 @@ public class MultiWorld
 		DimensionManager.unregisterDimension(1);
 		
 		Map<String, WorldConfig> worlds = ConfigurationHandler.getWorldsConfig().worlds;
-		TIntObjectHashMap<String> dimToNameMap = new TIntObjectHashMap<String>();
 		
 		for(Map.Entry<String, WorldConfig> ent : worlds.entrySet())
 		{
@@ -113,6 +120,32 @@ public class MultiWorld
 			
 			initWorld(world, conf);
 		}
+	}
+	
+	public void initDimension(int dim)
+	{
+		ISaveFormat format = server.getActiveAnvilConverter();
+		
+		String name = dimToNameMap.get(dim);
+		WorldConfig conf = name == null ? null : ConfigurationHandler.getWorldsConfig().worlds.get(name);
+		WorldServer world;
+		
+		if(conf == null)
+		{
+			log.warn("World with dimension id:%d was loaded bypass worlds configuration. Using global config", dim);
+			WorldServer mainWorld = getWorldByID(0);
+			ISaveHandler mainSaveHandler = mainWorld.getSaveHandler();
+			WorldSettings mainSettings = new WorldSettings(mainWorld.getWorldInfo());
+			world = new WorldServerMulti(server, mainSaveHandler, mainWorld.getWorldInfo().getWorldName(), dim, mainSettings, mainWorld, server.theProfiler);
+		}
+		else
+		{
+			ISaveHandler save = format.getSaveLoader(name, false);
+			((AnvilSaveHandler)save).setSingleStorage();
+			world = new WorldServer(server, save, name, dim, makeSettings(save, conf), server.theProfiler);
+		}
+		
+		initWorld(world, conf);
 	}
 	
 	private WorldSettings makeSettings(ISaveHandler save, WorldConfig conf)
@@ -167,7 +200,7 @@ public class MultiWorld
 			nameToWorldMap.put(name, world);
 	}
 	
-	public WorldServer getWorldById(int dim)
+	public WorldServer getWorldByID(int dim)
 	{
 		return dimToWorldMap.get(dim);
 	}
@@ -190,11 +223,13 @@ public class MultiWorld
 	public void register()
 	{
 		FMLCommonHandler.instance().bus().register(this);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	public void unregister()
 	{
 		FMLCommonHandler.instance().bus().unregister(this);
+		MinecraftForge.EVENT_BUS.unregister(this);
 		dimToWorldMap.clear();
 		nameToWorldMap.clear();
 	}
