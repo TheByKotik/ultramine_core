@@ -179,11 +179,13 @@ public class S21PacketChunkData extends Packet
 			p_149269_0_.sendUpdates = true;
 		}
 
+		if(aextendedblockstorage[0] == null) aextendedblockstorage[0] = new ExtendedBlockStorage(0, true);
+
 		int l;
 
 		for (l = 0; l < aextendedblockstorage.length; ++l)
 		{
-			if (aextendedblockstorage[l] != null && (!p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
+			if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
 			{
 				extracted.field_150280_b |= 1 << l;
 
@@ -197,7 +199,7 @@ public class S21PacketChunkData extends Packet
 
 		for (l = 0; l < aextendedblockstorage.length; ++l)
 		{
-			if (aextendedblockstorage[l] != null && (!p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
+			if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
 			{
 				byte[] abyte1 = aextendedblockstorage[l].getBlockLSBArray();
 				System.arraycopy(abyte1, 0, abyte, j, abyte1.length);
@@ -209,7 +211,7 @@ public class S21PacketChunkData extends Packet
 
 		for (l = 0; l < aextendedblockstorage.length; ++l)
 		{
-			if (aextendedblockstorage[l] != null && (!p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
+			if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
 			{
 				nibblearray = aextendedblockstorage[l].getMetadataArray();
 				System.arraycopy(nibblearray.data, 0, abyte, j, nibblearray.data.length);
@@ -219,7 +221,7 @@ public class S21PacketChunkData extends Packet
 
 		for (l = 0; l < aextendedblockstorage.length; ++l)
 		{
-			if (aextendedblockstorage[l] != null && (!p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
+			if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
 			{
 				nibblearray = aextendedblockstorage[l].getBlocklightArray();
 				System.arraycopy(nibblearray.data, 0, abyte, j, nibblearray.data.length);
@@ -231,7 +233,7 @@ public class S21PacketChunkData extends Packet
 		{
 			for (l = 0; l < aextendedblockstorage.length; ++l)
 			{
-				if (aextendedblockstorage[l] != null && (!p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
+				if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
 				{
 					nibblearray = aextendedblockstorage[l].getSkylightArray();
 					System.arraycopy(nibblearray.data, 0, abyte, j, nibblearray.data.length);
@@ -244,7 +246,7 @@ public class S21PacketChunkData extends Packet
 		{
 			for (l = 0; l < aextendedblockstorage.length; ++l)
 			{
-				if (aextendedblockstorage[l] != null && (!p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && aextendedblockstorage[l].getBlockMSBArray() != null && (p_149269_2_ & 1 << l) != 0)
+				if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && aextendedblockstorage[l].getBlockMSBArray() != null && (p_149269_2_ & 1 << l) != 0)
 				{
 					nibblearray = aextendedblockstorage[l].getBlockMSBArray();
 					System.arraycopy(nibblearray.data, 0, abyte, j, nibblearray.data.length);
