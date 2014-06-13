@@ -70,6 +70,7 @@ public class MultiWorld
 	
 	public void handleServerWorldsInit()
 	{
+		DimensionManager.registerProviderType(-10, org.ultramine.server.wempty.WorldProviderEmpty.class, false);
 		DimensionManager.unregisterDimension(-1);
 		DimensionManager.unregisterDimension(0);
 		DimensionManager.unregisterDimension(1);
