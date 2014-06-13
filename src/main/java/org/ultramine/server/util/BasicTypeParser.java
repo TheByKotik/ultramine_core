@@ -1,5 +1,7 @@
 package org.ultramine.server.util;
 
+import net.minecraft.world.EnumDifficulty;
+
 public class BasicTypeParser
 {
 	public static boolean isInt(String val)
@@ -50,5 +52,34 @@ public class BasicTypeParser
 		}
 		
 		return true;
+	}
+	
+	public static EnumDifficulty parseDifficulty(String str)
+	{
+		if(isUnsignedInt(str))
+		{
+			return EnumDifficulty.getDifficultyEnum(Math.min(Integer.parseInt(str), 3));
+		}
+		
+		str = str.toLowerCase();
+		
+		if(str.equals("p") || str.equals("peaceful"))
+		{
+			return EnumDifficulty.PEACEFUL;
+		}
+		else if(str.equals("e") || str.equals("easy"))
+		{
+			return EnumDifficulty.EASY;
+		}
+		else if(str.equals("n") || str.equals("normal"))
+		{
+			return EnumDifficulty.NORMAL;
+		}
+		else if(str.equals("h") || str.equals("hard"))
+		{
+			return EnumDifficulty.HARD;
+		}
+		
+		return null;
 	}
 }

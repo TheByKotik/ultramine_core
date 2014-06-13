@@ -1,20 +1,24 @@
 package org.ultramine.commands.basic;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldServer;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
 import org.ultramine.server.Teleporter;
+import org.ultramine.server.util.BasicTypeParser;
 
-public class TeleportCommands
+public class VanillaCommands
 {
 	@Command(
 			name = "tp",
-			group = "basic",
+			group = "vanilla",
 			aliases = {"tppos", "tpposp", "tpto"},
-			permissions = {"basic.tp"},
+			permissions = {"command.vanilla.tp"},
 			syntax = {
 					"<player%dst>",
 					"<player%target> <player%dst>",
@@ -43,5 +47,29 @@ public class TeleportCommands
 			context.sendMessage(EnumChatFormatting.GOLD, "command.tp.success.coordinate",
 					target.getCommandSenderName(), world.getWorldInfo().getWorldName(), x, y, z);
 		}
+	}
+	
+	@Command(
+			name = "difficulty",
+			group = "vanilla",
+			permissions = {"command.vanilla.difficulty"},
+			syntax = {
+					"<list peaceful easy normal hard % difficulty>",
+					"<world> <list peaceful easy normal hard % difficulty>"
+			}
+	)
+	public static void difficulty(CommandContext ctx)
+	{
+		WorldServer world = ctx.contains("world") ? ctx.get("world").asWorld() : ctx.getSenderAsPlayer().getServerForPlayer();
+		EnumDifficulty difficulty = BasicTypeParser.parseDifficulty(ctx.get("difficulty").asString());
+		if(difficulty == null) ctx.throwBadUsage();
+		ctx.notifyAdmins("command.difficulty.success", world.getWorldInfo().getWorldName(),
+				new ChatComponentTranslation(world.difficultySetting.getDifficultyResourceKey()),
+				new ChatComponentTranslation(difficulty.getDifficultyResourceKey()));
+		MinecraftServer server = MinecraftServer.getServer();
+		if(server.isSinglePlayer())
+			server.func_147139_a(difficulty);
+		else
+			world.difficultySetting = difficulty;
 	}
 }
