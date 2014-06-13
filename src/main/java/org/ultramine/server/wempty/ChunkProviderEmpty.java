@@ -31,16 +31,16 @@ public class ChunkProviderEmpty implements IChunkProvider
 	{
 		Chunk chunk = new Chunk(this.world, par1, par2);
 		
-        byte[] arr = chunk.getBiomeArray();
+		byte[] arr = chunk.getBiomeArray();
 
-        for (int i = 0; i < arr.length; ++i)
-        {
-            arr[i] = (byte)BiomeGenBase.forest.biomeID;
-        }
-        
-        chunk.generateSkylightMap();
-        
-        return chunk;
+		for (int i = 0; i < arr.length; ++i)
+		{
+			arr[i] = (byte)BiomeGenBase.forest.biomeID;
+		}
+		
+		chunk.generateSkylightMap();
+		
+		return chunk;
 	}
 
 	@Override

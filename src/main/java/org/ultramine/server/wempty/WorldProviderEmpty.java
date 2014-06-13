@@ -7,9 +7,9 @@ public class WorldProviderEmpty extends WorldProvider
 {
 	
 	public IChunkProvider createChunkGenerator()
-    {
+	{
 		return new ChunkProviderEmpty(worldObj);
-    }
+	}
 	
 	@Override
 	public String getDimensionName()
