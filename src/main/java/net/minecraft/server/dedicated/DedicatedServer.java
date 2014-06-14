@@ -495,4 +495,9 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		getConfigurationManager().setPlayerManager(new WorldServer[]{ getMultiWorld().getWorldByID(0) });
 		initialWorldChunkLoad();
 	}
+	
+	protected File getDataDirectory()
+	{
+		return ConfigurationHandler.getSettingDir();
+	}
 }

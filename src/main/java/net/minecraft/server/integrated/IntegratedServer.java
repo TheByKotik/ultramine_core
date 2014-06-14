@@ -51,8 +51,8 @@ public class IntegratedServer extends MinecraftServer
 		this.setDemo(par1Minecraft.isDemo());
 		this.canCreateBonusChest(par4WorldSettings.isBonusChestEnabled());
 		this.setBuildLimit(256);
-		this.setConfigurationManager(new IntegratedPlayerList(this));
 		this.mc = par1Minecraft;
+		this.setConfigurationManager(new IntegratedPlayerList(this));
 		this.theWorldSettings = par4WorldSettings;
 	}
 
@@ -75,6 +75,8 @@ public class IntegratedServer extends MinecraftServer
 			MinecraftForge.EVENT_BUS.post(new WorldEvent.Load(world));
 		}
 
+		getMultiWorld().handleClientWorldsInit();
+		
 		this.getConfigurationManager().setPlayerManager(new WorldServer[]{ overWorld });
 		this.func_147139_a(this.func_147135_j());
 		this.initialWorldChunkLoad();

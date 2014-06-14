@@ -13,7 +13,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.util.BlockFace;
 import org.ultramine.server.util.ChunkCoordComparator;
 import org.ultramine.server.util.TIntArrayListImpl;
@@ -43,7 +42,7 @@ public class ChunkSendManager
 	private PlayerManager manager;
 	private BlockFace lastFace;
 	
-	private final TIntArrayListImpl toSend = new TIntArrayListImpl((int)Math.pow(ConfigurationHandler.getWorldsConfig().global.chunkLoading.viewDistance, 2));
+	private final TIntArrayListImpl toSend = new TIntArrayListImpl(441);
 	private final TIntSet sending = TCollections.synchronizedSet(new TIntHashSet());
 	private final TIntSet sended = new TIntHashSet();
 	private final Queue<Chunk> toUpdate = Queues.newConcurrentLinkedQueue();

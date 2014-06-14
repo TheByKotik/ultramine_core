@@ -8,6 +8,10 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+@SideOnly(Side.SERVER)
 public class WatchdogThread extends Thread
 {
 	Logger log = LogManager.getLogger();

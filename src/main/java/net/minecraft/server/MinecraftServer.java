@@ -396,7 +396,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				this.field_147147_p.func_151321_a(new ServerStatusResponse.MinecraftProtocolVersionIdentifier("1.7.2", 4));
 				this.func_147138_a(this.field_147147_p);
 				
-				WatchdogThread.doStart();
+				if(!isSinglePlayer()) WatchdogThread.doStart();
 				
 				for (long lastTick = 0L; this.serverRunning; this.serverIsRunning = true)
 				{
@@ -418,7 +418,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 					
 					lastTick = curTime;
 					this.tick();
-					WatchdogThread.tick();
+					if(!isSinglePlayer()) WatchdogThread.tick();
 				}
 				
 				FMLCommonHandler.instance().handleServerStopping();
@@ -515,7 +515,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	protected File getDataDirectory()
 	{
-		return ConfigurationHandler.getSettingDir();
+		return new File(".");
 	}
 
 	protected void finalTick(CrashReport par1CrashReport) {}
@@ -900,6 +900,8 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	public void func_147139_a(EnumDifficulty p_147139_1_)
 	{
+		if(!isSinglePlayer()) return;
+		
 		for (int i = 0; i < this.worldServers.length; ++i)
 		{
 			WorldServer worldserver = this.worldServers[i];
@@ -910,11 +912,13 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				{
 					worldserver.difficultySetting = EnumDifficulty.HARD;
 					worldserver.setAllowedSpawnTypes(true, true);
+					worldserver.getConfig().mobSpawn.spawnMonsters = true;
 				}
 				else if (this.isSinglePlayer())
 				{
 					worldserver.difficultySetting = p_147139_1_;
 					worldserver.setAllowedSpawnTypes(worldserver.difficultySetting != EnumDifficulty.PEACEFUL, true);
+					worldserver.getConfig().mobSpawn.spawnMonsters = worldserver.difficultySetting != EnumDifficulty.PEACEFUL;
 				}
 				else
 				{

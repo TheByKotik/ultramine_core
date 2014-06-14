@@ -54,13 +54,15 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void preInit(FMLPreInitializationEvent e)
 	{
-		ConfigurationHandler.load();
+		if(e.getSide().isServer())
+			ConfigurationHandler.load();
 	}
 
 	@Subscribe
 	public void postInit(FMLPostInitializationEvent e)
 	{
-		ConfigurationHandler.saveServerConfig();
+		if(e.getSide().isServer())
+			ConfigurationHandler.saveServerConfig();
 	}
 	
 	@Subscribe

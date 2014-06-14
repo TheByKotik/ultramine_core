@@ -9,7 +9,10 @@ import org.ultramine.server.util.Resources;
 import org.ultramine.server.util.YamlConfigProvider;
 
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.SERVER)
 public class ConfigurationHandler
 {
 	public static Logger log = LogManager.getLogger();

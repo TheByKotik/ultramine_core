@@ -18,10 +18,10 @@ import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldManager;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldServerMulti;
@@ -69,6 +69,7 @@ public class MultiWorld
 		nameToWorldMap.remove(event.world.getWorldInfo().getWorldName());
 	}
 	
+	@SideOnly(Side.SERVER)
 	public void handleServerWorldsInit()
 	{
 		DimensionManager.registerProviderType(-10, org.ultramine.server.wempty.WorldProviderEmpty.class, false);
@@ -126,6 +127,18 @@ public class MultiWorld
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public void handleClientWorldsInit()
+	{
+		WorldConfig conf = new WorldConfig();
+		conf.mobSpawn = new WorldConfig.MobSpawn();
+		conf.settings = new WorldConfig.Settings();
+		conf.chunkLoading = new WorldConfig.ChunkLoading();
+		for(WorldServer world : server.worldServers)
+			world.setConfig(conf);
+	}
+	
+	@SideOnly(Side.SERVER)
 	public void initDimension(int dim)
 	{
 		ISaveFormat format = server.getActiveAnvilConverter();
@@ -152,6 +165,7 @@ public class MultiWorld
 		initWorld(world, conf);
 	}
 	
+	@SideOnly(Side.SERVER)
 	private WorldSettings makeSettings(ISaveHandler save, WorldConfig conf)
 	{
 		WorldInfo mainWorldInfo = save.loadWorldInfo();
@@ -183,6 +197,7 @@ public class MultiWorld
 		}
 	}
 	
+	@SideOnly(Side.SERVER)
 	private void initWorld(WorldServer world, WorldConfig conf)
 	{
 		world.addWorldAccess(new WorldManager(server, world));

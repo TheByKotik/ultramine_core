@@ -78,8 +78,8 @@ public abstract class ServerConfigurationManager
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd \'at\' HH:mm:ss z");
 	private final MinecraftServer mcServer;
 	public final List playerEntityList = new ArrayList();
-	private final BanList bannedPlayers = new BanList(new File(ConfigurationHandler.getSettingDir(), "banned-players.txt"));
-	private final BanList bannedIPs = new BanList(new File(ConfigurationHandler.getSettingDir(), "banned-ips.txt"));
+	private final BanList bannedPlayers;
+	private final BanList bannedIPs;
 	private final Set ops = new HashSet();
 	private final Set whiteListedPlayers = new HashSet();
 	private final Map field_148547_k = Maps.newHashMap();
@@ -95,6 +95,8 @@ public abstract class ServerConfigurationManager
 	public ServerConfigurationManager(MinecraftServer par1MinecraftServer)
 	{
 		this.mcServer = par1MinecraftServer;
+		this.bannedPlayers = new BanList(mcServer.getFile("banned-players.txt"));
+		this.bannedIPs = new BanList(mcServer.getFile("banned-ips.txt"));
 		this.bannedPlayers.setListActive(false);
 		this.bannedIPs.setListActive(false);
 		this.maxPlayers = 8;
