@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.WorldsConfig.WorldConfig;
+import org.ultramine.server.WorldsConfig.WorldConfig.Settings.WorldTime;
 import org.ultramine.server.util.BasicTypeParser;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -191,6 +192,7 @@ public class MultiWorld
 		
 		world.difficultySetting = BasicTypeParser.parseDifficulty(ConfigurationHandler.getWorldsConfig().global.settings.difficulty);
 		world.setAllowedSpawnTypes(conf.mobSpawn.spawnMonsters, conf.mobSpawn.spawnAnimals);
+		world.getGameRules().setOrCreateGameRule("doDaylightCycle", Boolean.toString(conf.settings.time != WorldTime.FIXED));
 		world.setConfig(conf);
 
 		MinecraftForge.EVENT_BUS.post(new WorldEvent.Load(world));

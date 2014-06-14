@@ -71,6 +71,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.WorldsConfig.WorldConfig;
+import org.ultramine.server.WorldsConfig.WorldConfig.Settings.WorldTime;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.PendingBlockUpdate;
 
@@ -178,11 +179,17 @@ public class WorldServer extends World
 		}
 
 		this.worldInfo.incrementTotalWorldTime(this.worldInfo.getWorldTotalTime() + 1L);
-
-		if (this.getGameRules().getGameRuleBooleanValue("doDaylightCycle"))
-		{
-			this.worldInfo.setWorldTime(this.worldInfo.getWorldTime() + 1L);
-		}
+		
+		WorldTime time = getConfig().settings.time;
+		long curTime = worldInfo.getWorldTime() % 24000;
+		
+		if(time == WorldTime.DAY && curTime > 10000)
+			worldInfo.setWorldTime(worldInfo.getWorldTime() - curTime  + 24000 + 1000);
+		if(time == WorldTime.NIGHT && (curTime < 14200 || curTime > 21800))
+			worldInfo.setWorldTime(worldInfo.getWorldTime() - curTime + 24000 + 14200);
+		
+		if(time != WorldTime.FIXED && getGameRules().getGameRuleBooleanValue("doDaylightCycle"))
+			worldInfo.setWorldTime(worldInfo.getWorldTime() + 1L);
 
 		this.theProfiler.endStartSection("tickPending");
 		this.tickUpdates(false);
@@ -848,7 +855,29 @@ public class WorldServer extends World
 	protected void updateWeather()
 	{
 		boolean flag = this.isRaining();
-		super.updateWeather();
+		
+		switch(getConfig().settings.weather)
+		{
+		case NONE:
+			if(flag)
+			{
+				worldInfo.setRainTime(12300);
+				worldInfo.setThunderTime(12300);
+				worldInfo.setRaining(false);
+				worldInfo.setThundering(false);
+				prevRainingStrength = rainingStrength = 0F;
+				prevThunderingStrength = thunderingStrength = 0F;
+			}
+			break;
+		case THUNDER:
+			worldInfo.setThunderTime(12300);
+			worldInfo.setThundering(true);
+		case RAIN:
+			worldInfo.setRainTime(12300);
+			worldInfo.setRaining(true);
+		case NORMAL:
+			super.updateWeather();
+		}
 
 		if (this.prevRainingStrength != this.rainingStrength)
 		{

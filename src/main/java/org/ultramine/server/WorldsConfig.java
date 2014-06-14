@@ -37,6 +37,18 @@ public class WorldsConfig
 			public String difficulty = "1";
 			public boolean pvp = true;
 			public int maxBuildHeight = 256;
+			public WorldTime time = WorldTime.NORMAL;
+			public Weather weather = Weather.NORMAL;
+			
+			public enum WorldTime
+			{
+				NORMAL, DAY, NIGHT, FIXED
+			}
+			
+			public enum Weather
+			{
+				NORMAL, NONE, RAIN, THUNDER
+			}
 		}
 		
 		public static class ChunkLoading
