@@ -41,6 +41,7 @@ public class ChunkSendManager
 	private final EntityPlayerMP player;
 	private PlayerManager manager;
 	private BlockFace lastFace;
+	private int lastViewDistance;
 	
 	private final TIntArrayListImpl toSend = new TIntArrayListImpl(441);
 	private final TIntSet sending = TCollections.synchronizedSet(new TIntHashSet());
@@ -58,11 +59,71 @@ public class ChunkSendManager
 		this.player = player;
 	}
 	
+	private int getViewDistance()
+	{
+		return Math.min(manager.getWorldServer().getConfig().chunkLoading.viewDistance, player.getRenderDistance());
+	}
+	
 	private void sortSendQueue()
 	{
 		int cx = MathHelper.floor_double(player.posX) >> 4;
 		int cz = MathHelper.floor_double(player.posZ) >> 4;
 		toSend.sort(ChunkCoordComparator.get(lastFace = BlockFace.yawToFace(player.rotationYaw), cx, cz));
+	}
+	
+	private void checkDistance()
+	{
+		int curView = getViewDistance();
+		if(curView != lastViewDistance)
+		{
+			int cx = MathHelper.floor_double(player.posX) >> 4;
+			int cz = MathHelper.floor_double(player.posZ) >> 4;
+			
+			if(curView < lastViewDistance)
+			{
+				for(TIntIterator it = toSend.iterator(); it.hasNext();)
+				{
+					int key = it.next();
+					if(!overlaps(cx, cz, ChunkHash.keyToX(key), ChunkHash.keyToZ(key), curView))
+						it.remove();
+				}
+				
+				for(TIntIterator it = sending.iterator(); it.hasNext();)
+				{
+					int key = it.next();
+					if(!overlaps(cx, cz, ChunkHash.keyToX(key), ChunkHash.keyToZ(key), curView))
+						it.remove();
+				}
+				
+				for(TIntIterator it = sended.iterator(); it.hasNext();)
+				{
+					int key = it.next();
+					if(!overlaps(cx, cz, ChunkHash.keyToX(key), ChunkHash.keyToZ(key), curView))
+					{
+						PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(ChunkHash.keyToX(key), ChunkHash.keyToZ(key), false);
+						if(pi != null) pi.removePlayer(player);
+						it.remove();
+					}
+				}
+			}
+			else
+			{
+				for (int x = cx - curView; x <= cx + curView; ++x)
+				{
+					for (int z = cz - curView; z <= cz + curView; ++z)
+					{
+						int key = ChunkHash.chunkToKey(x, z);
+						if(!toSend.contains(key) && !sended.contains(key) && !sending.contains(key))
+						{
+							toSend.add(key);
+						}
+					}
+				}
+			}
+			
+			lastViewDistance = curView;
+			sortSendQueue();
+		}
 	}
 	
 	public void addTo(PlayerManager manager)
@@ -75,7 +136,7 @@ public class ChunkSendManager
 		
 		int cx = MathHelper.floor_double(player.posX) >> 4;
 		int cz = MathHelper.floor_double(player.posZ) >> 4;
-		int viewRadius = manager.getWorldServer().getConfig().chunkLoading.viewDistance;
+		int viewRadius = lastViewDistance = getViewDistance();
 		
 		for (int x = cx - viewRadius; x <= cx + viewRadius; ++x)
 		{
@@ -203,19 +264,23 @@ public class ChunkSendManager
 	
 	private void sendChunks(int count)
 	{
-		for(int i = 0, s = Math.min(count, toSend.size()); i < s; i++)
+		count = Math.min(count, toSend.size());
+		for(int i = 0; i < count; i++)
 		{
-			int key = toSend.removeAt(0);
+			int key = toSend.get(i);
 			sending.add(key);
 			sendingQueueSize.incrementAndGet();
 			int ncx = ChunkHash.keyToX(key);
 			int ncz = ChunkHash.keyToZ(key);
 			manager.getWorldServer().theChunkProviderServer.loadAsync(ncx, ncz, chunkLoadCallback);
 		}
+		toSend.remove(0, count);
 	}
 	
 	public void updatePlayerPertinentChunks()
 	{
+		checkDistance();
+		
 		int cx = MathHelper.floor_double(player.posX) >> 4;
 		int cz = MathHelper.floor_double(player.posZ) >> 4;
 		double d0 = player.managedPosX - player.posX;
@@ -228,7 +293,7 @@ public class ChunkSendManager
 		{
 			int lastX = MathHelper.floor_double(player.managedPosX) >> 4;
 			int lastZ = MathHelper.floor_double(player.managedPosZ) >> 4;
-			int view = manager.getWorldServer().getConfig().chunkLoading.viewDistance;
+			int view = getViewDistance();
 			int movX = cx - lastX;
 			int movZ = cz - lastZ;
 

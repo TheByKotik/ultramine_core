@@ -912,10 +912,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		this.translator = p_147100_1_.func_149524_c();
 		int i = /*256 >>*/ p_147100_1_.func_149521_d();
 
-		if (i > 3 && i < 15)
-		{
-			this.renderDistance = i;
-		}
+		this.renderDistance = MathHelper.clamp_int(i, 3, 15);
 
 		this.chatVisibility = p_147100_1_.func_149523_e();
 		this.chatColours = p_147100_1_.func_149520_f();
