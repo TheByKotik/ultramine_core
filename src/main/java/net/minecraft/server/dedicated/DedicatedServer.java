@@ -435,7 +435,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public int getSpawnProtectionSize()
 	{
-		return getIntProperty("spawn-protection", super.getSpawnProtectionSize());
+		return 0;
 	}
 
 	public boolean isBlockProtected(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer)
