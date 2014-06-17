@@ -2,6 +2,7 @@ package org.ultramine.commands;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import org.ultramine.server.PermissionHandler;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class VanillaCommandWrapper implements IExtendedCommand
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1)
 	{
-		return (var1.getCommandSenderName().equals("Server") || PermissionHandler.getInstance().has(var1, permission)) && wrappedCommand.canCommandSenderUseCommand(var1);
+		return (PermissionHandler.getInstance().has(var1, permission) || !(var1 instanceof EntityPlayer)) && wrappedCommand.canCommandSenderUseCommand(var1);
 	}
 
 	@Override

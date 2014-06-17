@@ -2,6 +2,7 @@ package org.ultramine.commands;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.player.EntityPlayer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.ultramine.commands.syntax.ArgumentsPattern;
 import org.ultramine.server.PermissionHandler;
@@ -94,7 +95,7 @@ public class HandlerBasedCommand implements IExtendedCommand
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1)
 	{
-		return (isUsableFromServer && var1.getCommandSenderName().equals("Server")) || PermissionHandler.getInstance().hasAny(var1, permissions);
+		return (isUsableFromServer && !(var1 instanceof EntityPlayer)) || PermissionHandler.getInstance().hasAny(var1, permissions);
 	}
 
 	@Override

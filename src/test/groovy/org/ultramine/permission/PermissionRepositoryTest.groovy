@@ -155,13 +155,13 @@ class PermissionRepositoryTest extends Specification {
         then: "Negative permission also updates"
         perm.check("p1") == FALSE
         perm.check("p2") == FALSE
-        perm.check("group2") == UNRESOLVED
+        perm.check("group2") == FALSE
         perm.check("p3") == TRUE
 
         and: "Group1 updates too"
         group1.check("p1") == TRUE
         group1.check("p2") == TRUE
-        group1.check("group2") == UNRESOLVED
+        group1.check("group2") == TRUE
         group1.check("p3") == FALSE
     }
 }

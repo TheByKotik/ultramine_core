@@ -66,6 +66,13 @@ public class GroupPermission extends PermissionHolder implements IPermission
 			listener.makeDirty();
 	}
 
+	@Override
+	public void calculate()
+	{
+		super.calculate();
+		getPermissionResolver().merge(key, true, Integer.MAX_VALUE);
+	}
+
 	private int getPriority()
 	{
 		return getMetaResolver().getInt("priority");

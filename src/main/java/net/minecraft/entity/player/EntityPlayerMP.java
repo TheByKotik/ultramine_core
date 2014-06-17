@@ -896,7 +896,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
 	public boolean canCommandSenderUseCommand(int par1, String par2Str)
 	{
-		return "seed".equals(par2Str) && !this.mcServer.isDedicatedServer() ? true : (!"tell".equals(par2Str) && !"help".equals(par2Str) && !"me".equals(par2Str) ? (this.mcServer.getConfigurationManager().isPlayerOpped(this.getCommandSenderName()) ? this.mcServer.getOpPermissionLevel() >= par1 : false) : true);
+		return true;
 	}
 
 	public String getPlayerIP()

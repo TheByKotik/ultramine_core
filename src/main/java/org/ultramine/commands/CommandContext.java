@@ -5,6 +5,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
@@ -90,7 +91,7 @@ public class CommandContext
 
 	public boolean senderIsServer()
 	{
-		return sender.getCommandSenderName().equals("Server");
+		return !(sender instanceof EntityPlayer);
 	}
 
 	public EntityPlayerMP getSenderAsPlayer()

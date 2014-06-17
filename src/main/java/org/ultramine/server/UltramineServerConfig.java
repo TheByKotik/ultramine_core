@@ -18,7 +18,6 @@ public class UltramineServerConfig
 	
 	public static class VanillaConfig
 	{
-		public int		opPermissionLevel			= 4;
 		public boolean	enableQuery					= false;
 		public int		queryPort					= 25565;
 		public boolean	allowFlight					= false;

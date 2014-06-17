@@ -2,8 +2,10 @@ package org.ultramine.server;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import org.ultramine.permission.GroupPermission;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.PermissionRepository;
+import org.ultramine.permission.internal.ServerPermissionManager;
 import org.ultramine.permission.internal.UserContainer;
 
 public class PermissionHandler implements IPermissionManager
@@ -29,6 +31,16 @@ public class PermissionHandler implements IPermissionManager
 	public boolean has(ICommandSender player, String permission)
 	{
 		return has(worldName(player), player.getCommandSenderName(), permission);
+	}
+
+	public boolean hasGlobally(String player, String permission)
+	{
+		return has(ServerPermissionManager.GLOBAL_WORLD, player, permission);
+	}
+
+	public boolean hasGlobally(ICommandSender player, String permission)
+	{
+		return has(ServerPermissionManager.GLOBAL_WORLD, player.getCommandSenderName(), permission);
 	}
 
 	public boolean has(ICommandSender player, String... permissions)
@@ -147,6 +159,15 @@ public class PermissionHandler implements IPermissionManager
 	public UserContainer getWorldContainer(String world)
 	{
 		return getHandler().getWorldContainer(world);
+	}
+
+	public GroupPermission createGroup(String name, String... permissions)
+	{
+		GroupPermission group = new GroupPermission(name);
+		for (String permission : permissions)
+			group.addPermission(getRepository().getPermission(permission));
+		getRepository().registerPermission(group);
+		return group;
 	}
 
 	private String worldName(ICommandSender player)
