@@ -2,6 +2,7 @@ package net.minecraft.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,6 +14,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 
 public class BlockIce extends BlockBreakable
 {
@@ -45,12 +47,14 @@ public class BlockIce extends BlockBreakable
 
 		if (this.canSilkHarvest(p_149636_1_, p_149636_2_, p_149636_3_, p_149636_4_, p_149636_5_, p_149636_6_) && EnchantmentHelper.getSilkTouchModifier(p_149636_2_))
 		{
+			ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 			ItemStack itemstack = this.createStackedBlock(p_149636_6_);
 
-			if (itemstack != null)
-			{
-				this.dropBlockAsItem(p_149636_1_, p_149636_3_, p_149636_4_, p_149636_5_, itemstack);
-			}
+			if (itemstack != null) items.add(itemstack);
+
+			ForgeEventFactory.fireBlockHarvesting(items, p_149636_1_, this, p_149636_3_, p_149636_4_, p_149636_5_, p_149636_6_, 0, 1.0f, true, p_149636_2_);
+			for (ItemStack is : items)
+				this.dropBlockAsItem(p_149636_1_, p_149636_3_, p_149636_4_, p_149636_5_, is);
 		}
 		else
 		{
@@ -61,7 +65,9 @@ public class BlockIce extends BlockBreakable
 			}
 
 			int i1 = EnchantmentHelper.getFortuneModifier(p_149636_2_);
+			harvesters.set(p_149636_2_);
 			this.dropBlockAsItem(p_149636_1_, p_149636_3_, p_149636_4_, p_149636_5_, p_149636_6_, i1);
+			harvesters.set(null);
 			Material material = p_149636_1_.getBlock(p_149636_3_, p_149636_4_ - 1, p_149636_5_).getMaterial();
 
 			if (material.blocksMovement() || material.isLiquid())

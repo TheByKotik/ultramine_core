@@ -60,7 +60,7 @@ public class BiomeGenForest extends BiomeGenBase
 			this.flowers.clear();
 			for (int x = 0; x < BlockFlower.field_149859_a.length; x++)
 			{
-				this.addFlower(Blocks.red_flower, x, 10);
+				this.addFlower(Blocks.red_flower, x == 1 ? 0 : x, 10);
 			}
 		}
 	}

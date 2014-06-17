@@ -330,7 +330,7 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 		if (name.isEmpty()) throw new IllegalArgumentException(String.format("Can't use an empty name for the registry, object %s.", thing));
 		if (name.indexOf(':') == -1) throw new IllegalArgumentException(String.format("Can't add the name (%s) without a prefix, object %s", name, thing));
 		if (thing == null) throw new NullPointerException(String.format("Can't add null-object to the registry, name %s.", name));
-		if (name.equals(optionalDefaultName))
+		if (name.equals(optionalDefaultName) && this.optionalDefaultObject == null)
 		{
 			this.optionalDefaultObject = thing;
 		}
@@ -356,7 +356,9 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 		}
 		if (getId(thing) >= 0) // duplicate object
 		{
-			throw new IllegalArgumentException(String.format("The object %s has been registered twice, using the names %s and %s.", thing, getNameForObject(thing), name));
+			int foundId = getId(thing);
+			Object otherThing = getRaw(foundId);
+			throw new IllegalArgumentException(String.format("The object %s{%x} has been registered twice, using the names %s and %s. (Other object at this id is %s{%x})", thing, System.identityHashCode(thing), getNameForObject(thing), name, otherThing, System.identityHashCode(otherThing)));
 		}
 		if (GameData.isFrozen(this))
 		{
@@ -417,5 +419,10 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 
 		underlyingIntegerMap.func_148746_a(thing, id); // obj <-> id
 		super.putObject(name, thing); // name <-> obj
+	}
+
+	public I getDefaultValue()
+	{
+		return optionalDefaultObject;
 	}
 }

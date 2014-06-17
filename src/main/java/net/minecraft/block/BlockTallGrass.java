@@ -56,7 +56,7 @@ public class BlockTallGrass extends BlockBush implements IGrowable, IShearable
 
 	public boolean canBlockStay(World p_149718_1_, int p_149718_2_, int p_149718_3_, int p_149718_4_)
 	{
-		return this.canPlaceBlockOn(p_149718_1_.getBlock(p_149718_2_, p_149718_3_ - 1, p_149718_4_));
+		return super.canBlockStay(p_149718_1_, p_149718_2_, p_149718_3_, p_149718_4_);
 	}
 
 	@SideOnly(Side.CLIENT)

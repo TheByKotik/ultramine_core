@@ -436,12 +436,14 @@ public class EntityTrackerEntry
 							par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(this.myEntity.getEntityId(), potioneffect));
 						}
 					}
+					net.minecraftforge.event.ForgeEventFactory.onStartEntityTracking(myEntity, par1EntityPlayerMP);
 				}
 			}
 			else if (this.trackingPlayers.contains(par1EntityPlayerMP))
 			{
 				this.trackingPlayers.remove(par1EntityPlayerMP);
 				par1EntityPlayerMP.destroyedItemsNetCache.add(Integer.valueOf(this.myEntity.getEntityId()));
+				net.minecraftforge.event.ForgeEventFactory.onStopEntityTracking(myEntity, par1EntityPlayerMP);
 			}
 		}
 	}

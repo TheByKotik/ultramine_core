@@ -799,9 +799,9 @@ public abstract class EntityLivingBase extends Entity
 						this.recentlyHit = 100;
 						this.attackingPlayer = (EntityPlayer)entity;
 					}
-					else if (entity instanceof EntityWolf)
+					else if (entity instanceof net.minecraft.entity.passive.EntityTameable)
 					{
-						EntityWolf entitywolf = (EntityWolf)entity;
+						net.minecraft.entity.passive.EntityTameable entitywolf = (net.minecraft.entity.passive.EntityTameable)entity;
 
 						if (entitywolf.isTamed())
 						{

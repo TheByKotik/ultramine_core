@@ -99,6 +99,7 @@ public class EntityMagmaCube extends EntitySlime
 	{
 		this.motionY = (double)(0.42F + (float)this.getSlimeSize() * 0.1F);
 		this.isAirBorne = true;
+		net.minecraftforge.common.ForgeHooks.onLivingJump(this);
 	}
 
 	protected void fall(float par1) {}

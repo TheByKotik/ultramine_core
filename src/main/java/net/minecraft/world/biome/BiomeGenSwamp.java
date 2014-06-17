@@ -31,7 +31,7 @@ public class BiomeGenSwamp extends BiomeGenBase
 		this.waterColorMultiplier = 14745518;
 		this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntitySlime.class, 1, 1, 1));
 		this.flowers.clear();
-		this.addFlower(Blocks.red_mushroom_block, 0, 10);
+		this.addFlower(Blocks.red_flower, 1, 10);
 	}
 
 	public WorldGenAbstractTree func_150567_a(Random p_150567_1_)

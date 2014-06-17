@@ -2,6 +2,7 @@ package net.minecraft.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import net.minecraft.block.material.Material;
@@ -18,8 +19,9 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IShearable;
 
-public class BlockDoublePlant extends BlockBush implements IGrowable
+public class BlockDoublePlant extends BlockBush implements IGrowable, IShearable
 {
 	public static final String[] field_149892_a = new String[] {"sunflower", "syringa", "grass", "fern", "rose", "paeonia"};
 	@SideOnly(Side.CLIENT)
@@ -262,5 +264,23 @@ public class BlockDoublePlant extends BlockBush implements IGrowable
 	{
 		int l = this.func_149885_e(p_149853_1_, p_149853_3_, p_149853_4_, p_149853_5_);
 		this.dropBlockAsItem(p_149853_1_, p_149853_3_, p_149853_4_, p_149853_5_, new ItemStack(this, 1, l));
+	}
+
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z)
+	{
+		int metadata = world.getBlockMetadata(x, y, z);
+		int type = func_149890_d(metadata);
+		return func_149887_c(metadata) && (type == 3 || type == 4);
+	}
+
+	@Override
+	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		int type = func_149890_d(world.getBlockMetadata(x, y, z));
+		if (type == 3 || type == 2)
+			ret.add(new ItemStack(Blocks.tallgrass, 2, type == 3 ? 2 : 1));
+		return ret;
 	}
 }

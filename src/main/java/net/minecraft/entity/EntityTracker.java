@@ -337,4 +337,23 @@ public class EntityTracker
 			}
 		}
 	}
+	
+	/* ======================================== FORGE START =====================================*/
+	
+	// don't expose the EntityTrackerEntry directly so mods can't mess with the data in there as easily
+	/**
+	 * Get all players tracking the given Entity. The Entity must be part of the World that this Tracker belongs to.
+	 * @param entity the Entity
+	 * @return all players tracking the Entity
+	 */
+	public Set<net.minecraft.entity.player.EntityPlayer> getTrackingPlayers(Entity entity)
+	{
+		EntityTrackerEntry entry = (EntityTrackerEntry) trackedEntityIDs.lookup(entity.getEntityId());
+		if (entry == null)
+			return java.util.Collections.emptySet();
+		else
+			return java.util.Collections.unmodifiableSet(entry.trackingPlayers);
+	}
+	
+	/* ======================================== FORGE END   =====================================*/
 }

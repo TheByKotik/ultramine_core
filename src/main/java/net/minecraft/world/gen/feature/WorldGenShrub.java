@@ -5,6 +5,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class WorldGenShrub extends WorldGenTrees
 {
@@ -35,7 +37,7 @@ public class WorldGenShrub extends WorldGenTrees
 
 		Block block1 = par1World.getBlock(par3, par4, par5);
 
-		if (block1 == Blocks.dirt || block1 == Blocks.grass)
+		if (block1.canSustainPlant(par1World, par3, par4, par5, ForgeDirection.UP, (IPlantable)Blocks.sapling))
 		{
 			++par4;
 			this.setBlockAndNotifyAdequately(par1World, par3, par4, par5, Blocks.log, this.field_150527_b);

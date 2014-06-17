@@ -6,6 +6,7 @@ import com.mojang.authlib.exceptions.InvalidCredentialsException;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -107,7 +108,10 @@ public class NetHandlerLoginClient implements INetHandlerLoginClient
 
 		if (p_147232_2_ == EnumConnectionState.PLAY)
 		{
-			this.field_147393_d.setNetHandler(new NetHandlerPlayClient(this.field_147394_b, this.field_147395_c, this.field_147393_d));
+			NetHandlerPlayClient nhpc = new NetHandlerPlayClient(this.field_147394_b, this.field_147395_c, this.field_147393_d);
+			this.field_147393_d.setNetHandler(nhpc);
+			FMLClientHandler.instance().setPlayClient(nhpc);
+
 		}
 	}
 

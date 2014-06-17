@@ -35,7 +35,9 @@ public class TileEntityNote extends TileEntity
 
 	public void changePitch()
 	{
+		byte old = note;
 		this.note = (byte)((this.note + 1) % 25);
+		if (!net.minecraftforge.common.ForgeHooks.onNoteChange(this, old)) return;
 		this.markDirty();
 	}
 

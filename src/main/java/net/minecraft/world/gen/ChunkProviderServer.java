@@ -33,11 +33,11 @@ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.chunk.storage.IChunkLoader;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.chunkio.ChunkIOExecutor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkHash;
-import org.ultramine.server.chunk.ChunkIOExecutor;
 import org.ultramine.server.chunk.ChunkMap;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 
@@ -98,6 +98,49 @@ public class ChunkProviderServer implements IChunkProvider
 	}
 
 	public Chunk loadChunk(int par1, int par2)
+	{
+		return loadChunk(par1, par2, null);
+	}
+
+	public Chunk loadChunk(int par1, int par2, Runnable runnable)
+	{
+		this.chunksToUnload.remove(ChunkHash.chunkToKey(par1, par2));
+		Chunk chunk = loadedChunkHashMap.get(par1, par2);
+		AnvilChunkLoader loader = null;
+
+		if (this.currentChunkLoader instanceof AnvilChunkLoader)
+		{
+			loader = (AnvilChunkLoader) this.currentChunkLoader;
+		}
+
+		// We can only use the queue for already generated chunks
+		if (chunk == null && loader != null && loader.chunkExists(this.worldObj, par1, par2))
+		{
+			if (runnable != null)
+			{
+				ChunkIOExecutor.queueChunkLoad(this.worldObj, loader, this, par1, par2, runnable);
+				return null;
+			}
+			else
+			{
+				chunk = ChunkIOExecutor.syncChunkLoad(this.worldObj, loader, this, par1, par2);
+			}
+		}
+		else if (chunk == null)
+		{
+			chunk = this.originalLoadChunk(par1, par2);
+		}
+
+		// If we didn't load the chunk async and have a callback run it now
+		if (runnable != null)
+		{
+			runnable.run();
+		}
+
+		return chunk;
+	}
+
+	public Chunk originalLoadChunk(int par1, int par2)
 	{
 		int k = ChunkHash.chunkToKey(par1, par2);
 		this.chunksToUnload.remove(k);
@@ -368,7 +411,7 @@ public class ChunkProviderServer implements IChunkProvider
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
-	public void loadAsync(int x, int z, IChunkLoadCallback callback) //XXX
+	public void loadAsync(int x, int z, IChunkLoadCallback callback)
 	{
 		Chunk chunk = loadedChunkHashMap.get(x, z);
 		if(chunk != null)

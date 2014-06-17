@@ -508,7 +508,7 @@ public class Chunk
 	{
 		int x = (xPosition << 4) + p_150808_1_;
 		int z = (zPosition << 4) + p_150808_3_;
-		return this.getBlock(p_150808_1_, p_150808_2_, p_150808_3_).getLightOpacity(worldObj, x, p_150808_2_, p_150808_3_);
+		return this.getBlock(p_150808_1_, p_150808_2_, p_150808_3_).getLightOpacity(worldObj, x, p_150808_2_, z);
 	}
 
 	public Block getBlock(final int p_150810_1_, final int p_150810_2_, final int p_150810_3_)
@@ -593,6 +593,8 @@ public class Chunk
 
 			int l1 = this.xPosition * 16 + p_150807_1_;
 			int i2 = this.zPosition * 16 + p_150807_3_;
+			
+			int k2 = block1.getLightOpacity(this.worldObj, l1, p_150807_2_, i2);
 
 			if (!this.worldObj.isRemote)
 			{
@@ -627,8 +629,7 @@ public class Chunk
 				}
 				else
 				{
-					int j2 = p_150807_4_.getLightOpacity();
-					int k2 = block1.getLightOpacity();
+					int j2 = p_150807_4_.getLightOpacity(this.worldObj, l1, p_150807_2_, i2);
 
 					if (j2 > 0)
 					{

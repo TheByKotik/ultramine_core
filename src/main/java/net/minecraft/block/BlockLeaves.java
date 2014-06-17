@@ -238,40 +238,7 @@ public abstract class BlockLeaves extends BlockLeavesBase implements IShearable
 
 	public void dropBlockAsItemWithChance(World p_149690_1_, int p_149690_2_, int p_149690_3_, int p_149690_4_, int p_149690_5_, float p_149690_6_, int p_149690_7_)
 	{
-		if (!p_149690_1_.isRemote)
-		{
-			int j1 = this.func_150123_b(p_149690_5_);
-
-			if (p_149690_7_ > 0)
-			{
-				j1 -= 2 << p_149690_7_;
-
-				if (j1 < 10)
-				{
-					j1 = 10;
-				}
-			}
-
-			if (p_149690_1_.rand.nextInt(j1) == 0)
-			{
-				Item item = this.getItemDropped(p_149690_5_, p_149690_1_.rand, p_149690_7_);
-				this.dropBlockAsItem(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, new ItemStack(item, 1, this.damageDropped(p_149690_5_)));
-			}
-
-			j1 = 200;
-
-			if (p_149690_7_ > 0)
-			{
-				j1 -= 10 << p_149690_7_;
-
-				if (j1 < 40)
-				{
-					j1 = 40;
-				}
-			}
-
-			this.func_150124_c(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, p_149690_5_, j1);
-		}
+		super.dropBlockAsItemWithChance(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, p_149690_5_, 1.0f, p_149690_7_);
 	}
 
 	protected void func_150124_c(World p_150124_1_, int p_150124_2_, int p_150124_3_, int p_150124_4_, int p_150124_5_, int p_150124_6_) {}
@@ -347,5 +314,34 @@ public abstract class BlockLeaves extends BlockLeavesBase implements IShearable
 	public boolean isLeaves(IBlockAccess world, int x, int y, int z)
 	{
 		return true;
+	}
+
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		int chance = this.func_150123_b(metadata);
+
+		if (fortune > 0)
+		{
+			chance -= 2 << fortune;
+			if (chance < 10) chance = 10;
+		}
+
+		if (world.rand.nextInt(chance) == 0)
+			ret.add(new ItemStack(this.getItemDropped(metadata, world.rand, fortune), 1, this.damageDropped(metadata)));
+
+		chance = 200;
+		if (fortune > 0)
+		{
+			chance -= 10 << fortune;
+			if (chance < 40) chance = 40;
+		}
+
+		this.captureDrops(true);
+		this.func_150124_c(world, x, y, z, metadata, chance); // Dammet mojang
+		ret.addAll(this.captureDrops(false));
+		return ret;
 	}
 }

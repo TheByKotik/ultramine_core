@@ -2,6 +2,7 @@ package net.minecraft.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -139,12 +140,6 @@ public class BlockFlowerPot extends BlockContainer
 	public void dropBlockAsItemWithChance(World p_149690_1_, int p_149690_2_, int p_149690_3_, int p_149690_4_, int p_149690_5_, float p_149690_6_, int p_149690_7_)
 	{
 		super.dropBlockAsItemWithChance(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, p_149690_5_, p_149690_6_, p_149690_7_);
-		TileEntityFlowerPot tileentityflowerpot = this.func_149929_e(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_);
-
-		if (tileentityflowerpot != null && tileentityflowerpot.getFlowerPotItem() != null)
-		{
-			this.dropBlockAsItem(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, new ItemStack(tileentityflowerpot.getFlowerPotItem(), 1, tileentityflowerpot.getFlowerPotData()));
-		}
 	}
 
 	public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
@@ -241,5 +236,15 @@ public class BlockFlowerPot extends BlockContainer
 		}
 
 		return new TileEntityFlowerPot(Item.getItemFromBlock((Block)object), b0);
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
+		TileEntityFlowerPot te = this.func_149929_e(world, x, y, z);
+		if (te != null && te.getFlowerPotItem() != null)
+			ret.add(new ItemStack(te.getFlowerPotItem(), 1, te.getFlowerPotData()));
+		return ret;
 	}
 }

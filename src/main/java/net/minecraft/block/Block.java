@@ -667,6 +667,11 @@ public class Block
 	{
 		if (!p_149642_1_.isRemote && p_149642_1_.getGameRules().getGameRuleBooleanValue("doTileDrops"))
 		{
+			if (captureDrops.get())
+			{
+				capturedDrops.get().add(p_149642_5_);
+				return;
+			}
 			float f = 0.7F;
 			double d0 = (double)(p_149642_1_.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
 			double d1 = (double)(p_149642_1_.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
@@ -1149,7 +1154,8 @@ public class Block
 	}
 
 	/* ======================================== FORGE START =====================================*/
-	private ThreadLocal<EntityPlayer> harvesters = new ThreadLocal();
+	//For ForgeInternal use Only!
+	protected ThreadLocal<EntityPlayer> harvesters = new ThreadLocal();
 	private ThreadLocal<Integer> silk_check_meta = new ThreadLocal(); 
 	/**
 	 * Get a light value for the block at the specified coordinates, normal ranges are between 0 and 15
@@ -1881,7 +1887,7 @@ public class Block
 			case Nether: return this == Blocks.soul_sand;
 			case Crop:   return this == Blocks.farmland;
 			case Cave:   return isSideSolid(world, x, y, z, UP);
-			case Plains: return this == Blocks.grass || this == Blocks.dirt;
+			case Plains: return this == Blocks.grass || this == Blocks.dirt || this == Blocks.farmland;
 			case Water:  return world.getBlock(x, y, z).getMaterial() == Material.water && world.getBlockMetadata(x, y, z) == 0;
 			case Beach:
 				boolean isBeach = this == Blocks.grass || this == Blocks.dirt || this == Blocks.sand;
@@ -2136,7 +2142,7 @@ public class Block
 	 * @param level Harvest level:
 	 *     Wood:    0
 	 *     Stone:   1
-	 *     Iton:    2
+	 *     Iron:    2
 	 *     Diamond: 3
 	 *     Gold:    0
 	 */
@@ -2155,7 +2161,7 @@ public class Block
 	 * @param level Harvest level:
 	 *     Wood:    0
 	 *     Stone:   1
-	 *     Iton:    2
+	 *     Iron:    2
 	 *     Diamond: 3
 	 *     Gold:    0
 	 * @param metadata The specific metadata to set
@@ -2204,6 +2210,31 @@ public class Block
 			return false;
 		if (harvestTool[metadata] == null) return false;
 		return harvestTool[metadata].equals(type);
+	}
+
+
+	// For Inernal use only to capture droped items inside getDrops
+	protected ThreadLocal<Boolean> captureDrops = new ThreadLocal<Boolean>()
+	{
+		@Override protected Boolean initialValue() { return false; }
+	};
+	protected ThreadLocal<List<ItemStack>> capturedDrops = new ThreadLocal<List<ItemStack>>()
+	{
+		@Override protected List<ItemStack> initialValue() { return new ArrayList<ItemStack>(); }
+	};
+	protected List<ItemStack> captureDrops(boolean start)
+	{
+		if (start)
+		{
+			captureDrops.set(true);
+			capturedDrops.get().clear();
+			return null;
+		}
+		else
+		{
+			captureDrops.set(false);
+			return capturedDrops.get();
+		}
 	}
 	/* ========================================= FORGE END ======================================*/
 

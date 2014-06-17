@@ -2,11 +2,13 @@ package net.minecraft.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityPiston;
 import net.minecraft.util.AxisAlignedBB;
@@ -90,15 +92,7 @@ public class BlockPistonMoving extends BlockContainer
 
 	public void dropBlockAsItemWithChance(World p_149690_1_, int p_149690_2_, int p_149690_3_, int p_149690_4_, int p_149690_5_, float p_149690_6_, int p_149690_7_)
 	{
-		if (!p_149690_1_.isRemote)
-		{
-			TileEntityPiston tileentitypiston = this.func_149963_e(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_);
-
-			if (tileentitypiston != null)
-			{
-				tileentitypiston.getStoredBlockID().dropBlockAsItem(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, tileentitypiston.getBlockMetadata(), 0);
-			}
-		}
+		super.dropBlockAsItemWithChance(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, p_149690_5_, p_149690_6_, p_149690_7_);
 	}
 
 	public void onNeighborBlockChange(World p_149695_1_, int p_149695_2_, int p_149695_3_, int p_149695_4_, Block p_149695_5_)
@@ -230,5 +224,14 @@ public class BlockPistonMoving extends BlockContainer
 	public void registerBlockIcons(IIconRegister p_149651_1_)
 	{
 		this.blockIcon = p_149651_1_.registerIcon("piston_top_normal");
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
+	{
+		TileEntityPiston te = this.func_149963_e(world, x, y, z);
+		if (te != null)
+			return te.getStoredBlockID().getDrops(world, x, y, z, te.getBlockMetadata(), 0);
+		return new ArrayList<ItemStack>();
 	}
 }

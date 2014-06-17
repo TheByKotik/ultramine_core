@@ -1,28 +1,48 @@
 package net.minecraft.world.gen.layer;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeManager;
+import net.minecraftforge.common.BiomeManager.BiomeEntry;
 
 public class GenLayerBiome extends GenLayer
 {
-	private BiomeGenBase[] field_151623_c;
-	private BiomeGenBase[] field_151621_d;
-	private BiomeGenBase[] field_151622_e;
-	private BiomeGenBase[] field_151620_f;
+	private List<BiomeEntry> desertBiomes = new ArrayList<BiomeEntry>();
+	private List<BiomeEntry> warmBiomes = new ArrayList<BiomeEntry>();
+	private List<BiomeEntry> coolBiomes = new ArrayList<BiomeEntry>();
+	private List<BiomeEntry> icyBiomes = new ArrayList<BiomeEntry>();
+	
 	private static final String __OBFID = "CL_00000555";
 
 	public GenLayerBiome(long par1, GenLayer par3GenLayer, WorldType par4WorldType)
 	{
 		super(par1);
-		this.field_151623_c = new BiomeGenBase[] {BiomeGenBase.desert, BiomeGenBase.desert, BiomeGenBase.desert, BiomeGenBase.savanna, BiomeGenBase.savanna, BiomeGenBase.plains};
-		this.field_151621_d = new BiomeGenBase[] {BiomeGenBase.forest, BiomeGenBase.roofedForest, BiomeGenBase.extremeHills, BiomeGenBase.plains, BiomeGenBase.birchForest, BiomeGenBase.swampland};
-		this.field_151622_e = new BiomeGenBase[] {BiomeGenBase.forest, BiomeGenBase.extremeHills, BiomeGenBase.taiga, BiomeGenBase.plains};
-		this.field_151620_f = new BiomeGenBase[] {BiomeGenBase.icePlains, BiomeGenBase.icePlains, BiomeGenBase.icePlains, BiomeGenBase.coldTaiga};
+		
 		this.parent = par3GenLayer;
-
+		
+		this.desertBiomes.addAll(BiomeManager.desertBiomes);
+		this.warmBiomes.addAll(BiomeManager.warmBiomes);
+		this.coolBiomes.addAll(BiomeManager.coolBiomes);
+		this.icyBiomes.addAll(BiomeManager.icyBiomes);
+		
 		if (par4WorldType == WorldType.DEFAULT_1_1)
 		{
-			this.field_151623_c = new BiomeGenBase[] {BiomeGenBase.desert, BiomeGenBase.forest, BiomeGenBase.extremeHills, BiomeGenBase.swampland, BiomeGenBase.plains, BiomeGenBase.taiga};
+			desertBiomes.add(new BiomeEntry(BiomeGenBase.desert, 10));
+			desertBiomes.add(new BiomeEntry(BiomeGenBase.forest, 10));
+			desertBiomes.add(new BiomeEntry(BiomeGenBase.extremeHills, 10));
+			desertBiomes.add(new BiomeEntry(BiomeGenBase.swampland, 10));
+			desertBiomes.add(new BiomeEntry(BiomeGenBase.plains, 10));
+			desertBiomes.add(new BiomeEntry(BiomeGenBase.taiga, 10));
+		}
+		else
+		{
+			desertBiomes.add(new BiomeEntry(BiomeGenBase.desert, 30));
+			desertBiomes.add(new BiomeEntry(BiomeGenBase.savanna, 20));
+			desertBiomes.add(new BiomeEntry(BiomeGenBase.plains, 10));
 		}
 	}
 
@@ -63,7 +83,7 @@ public class GenLayerBiome extends GenLayer
 					}
 					else
 					{
-						aint1[j1 + i1 * par3] = this.field_151623_c[this.nextInt(this.field_151623_c.length)].biomeID;
+						aint1[j1 + i1 * par3] = ((BiomeEntry)WeightedRandom.getItem(this.desertBiomes, (int)(this.nextLong(WeightedRandom.getTotalWeight(this.desertBiomes) / 10) * 10))).biome.biomeID;
 					}
 				}
 				else if (k1 == 2)
@@ -74,7 +94,7 @@ public class GenLayerBiome extends GenLayer
 					}
 					else
 					{
-						aint1[j1 + i1 * par3] = this.field_151621_d[this.nextInt(this.field_151621_d.length)].biomeID;
+						aint1[j1 + i1 * par3] = ((BiomeEntry)WeightedRandom.getItem(this.warmBiomes, (int)(this.nextLong(WeightedRandom.getTotalWeight(this.warmBiomes) / 10) * 10))).biome.biomeID;
 					}
 				}
 				else if (k1 == 3)
@@ -85,12 +105,12 @@ public class GenLayerBiome extends GenLayer
 					}
 					else
 					{
-						aint1[j1 + i1 * par3] = this.field_151622_e[this.nextInt(this.field_151622_e.length)].biomeID;
+						aint1[j1 + i1 * par3] = ((BiomeEntry)WeightedRandom.getItem(this.coolBiomes, (int)(this.nextLong(WeightedRandom.getTotalWeight(this.coolBiomes) / 10) * 10))).biome.biomeID;
 					}
 				}
 				else if (k1 == 4)
 				{
-					aint1[j1 + i1 * par3] = this.field_151620_f[this.nextInt(this.field_151620_f.length)].biomeID;
+					aint1[j1 + i1 * par3] = ((BiomeEntry)WeightedRandom.getItem(this.icyBiomes, (int)(this.nextLong(WeightedRandom.getTotalWeight(this.icyBiomes) / 10) * 10))).biome.biomeID;
 				}
 				else
 				{

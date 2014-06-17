@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +20,7 @@ import net.minecraftforge.classloading.FMLForgePlugin;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.common.network.ForgeNetworkHandler;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.server.command.ForgeCommand;
 
@@ -179,7 +181,7 @@ public class ForgeModContainer extends DummyModContainer implements WorldAccessC
 	@Subscribe
 	public void modConstruction(FMLConstructionEvent evt)
 	{
-		NetworkRegistry.INSTANCE.register(this, this.getClass(), null, evt.getASMHarvestedData());
+		NetworkRegistry.INSTANCE.register(this, this.getClass(), "*", evt.getASMHarvestedData());
 		ForgeNetworkHandler.registerChannel(this, evt.getSide());
 	}
 
@@ -223,16 +225,14 @@ public class ForgeModContainer extends DummyModContainer implements WorldAccessC
 	@Override
 	public void readData(SaveHandler handler, WorldInfo info, Map<String, NBTBase> propertyMap, NBTTagCompound tag)
 	{
-		if (tag.hasKey("DimensionData"))
-		{
-			DimensionManager.loadDimensionDataMap(tag.hasKey("DimensionData") ? tag.getCompoundTag("DimensionData") : null);
-		}
+		DimensionManager.loadDimensionDataMap(tag.hasKey("DimensionData") ? tag.getCompoundTag("DimensionData") : null);
 	}
 
 	@Subscribe
 	public void mappingChanged(FMLModIdMappingEvent evt)
 	{
 		Blocks.fire.rebuildFireInfo();
+		OreDictionary.rebakeMap();
 	}
 
 

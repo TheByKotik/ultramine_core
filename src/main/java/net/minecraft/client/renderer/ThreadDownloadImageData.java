@@ -86,23 +86,23 @@ public class ThreadDownloadImageData extends SimpleTexture
 						httpurlconnection.setDoOutput(false);
 						httpurlconnection.connect();
 
-						if (httpurlconnection.getResponseCode() / 100 == 2)
+						if (httpurlconnection.getResponseCode() / 100 != 2)
 						{
-							BufferedImage bufferedimage = ImageIO.read(httpurlconnection.getInputStream());
-
-							if (ThreadDownloadImageData.this.imageBuffer != null)
-							{
-								bufferedimage = ThreadDownloadImageData.this.imageBuffer.parseUserSkin(bufferedimage);
-							}
-
-							ThreadDownloadImageData.this.setBufferedImage(bufferedimage);
 							return;
 						}
+
+						BufferedImage bufferedimage = ImageIO.read(httpurlconnection.getInputStream());
+
+						if (ThreadDownloadImageData.this.imageBuffer != null)
+						{
+							bufferedimage = ThreadDownloadImageData.this.imageBuffer.parseUserSkin(bufferedimage);
+						}
+
+						ThreadDownloadImageData.this.setBufferedImage(bufferedimage);
 					}
 					catch (Exception exception)
 					{
 						ThreadDownloadImageData.logger.error("Couldn\'t download http texture", exception);
-						return;
 					}
 					finally
 					{

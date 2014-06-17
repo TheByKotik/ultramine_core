@@ -132,6 +132,7 @@ public class WorldRenderer
 			{
 				++chunksUpdated;
 				RenderBlocks renderblocks = new RenderBlocks(chunkcache);
+				net.minecraftforge.client.ForgeHooksClient.setWorldRendererRB(renderblocks);
 				this.bytesDrawn = 0;
 				this.vertexState = null;
 
@@ -212,6 +213,7 @@ public class WorldRenderer
 						break;
 					}
 				}
+				net.minecraftforge.client.ForgeHooksClient.setWorldRendererRB(null);
 			}
 
 			HashSet hashset1 = new HashSet();
@@ -234,6 +236,7 @@ public class WorldRenderer
 		GL11.glTranslatef(-8.0F, -8.0F, -8.0F);
 		GL11.glScalef(f, f, f);
 		GL11.glTranslatef(8.0F, 8.0F, 8.0F);
+		net.minecraftforge.client.ForgeHooksClient.onPreRenderWorld(this, p_147890_1_);
 		Tessellator.instance.startDrawingQuads();
 		Tessellator.instance.setTranslation((double)(-this.posX), (double)(-this.posY), (double)(-this.posZ));
 	}
@@ -245,8 +248,8 @@ public class WorldRenderer
 			this.vertexState = Tessellator.instance.getVertexState((float)p_147891_2_.posX, (float)p_147891_2_.posY, (float)p_147891_2_.posZ);
 		}
 
-		//ForgeHooksClient.afterRenderPass(l1); Noop fo now, TODO: Event if anyone needs
 		this.bytesDrawn += Tessellator.instance.draw();
+		net.minecraftforge.client.ForgeHooksClient.onPostRenderWorld(this, p_147891_1_);
 		GL11.glPopMatrix();
 		GL11.glEndList();
 		Tessellator.instance.setTranslation(0.0D, 0.0D, 0.0D);

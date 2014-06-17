@@ -143,6 +143,22 @@ public abstract class GenLayer
 		return j;
 	}
 
+	/* ======================================== FORGE START =====================================*/
+	protected long nextLong(long par1)
+	{
+		long j = (this.chunkSeed >> 24) % par1;
+
+		if (j < 0)
+		{
+			j += par1;
+		}
+
+		this.chunkSeed *= this.chunkSeed * 6364136223846793005L + 1442695040888963407L;
+		this.chunkSeed += this.worldGenSeed;
+		return j;
+	}
+	/* ========================================= FORGE END ======================================*/
+	
 	public abstract int[] getInts(int var1, int var2, int var3, int var4);
 
 	protected static boolean compareBiomesById(final int p_151616_0_, final int p_151616_1_)
@@ -190,7 +206,7 @@ public abstract class GenLayer
 
 	protected static boolean isBiomeOceanic(int p_151618_0_)
 	{
-		return p_151618_0_ == BiomeGenBase.ocean.biomeID || p_151618_0_ == BiomeGenBase.deepOcean.biomeID || p_151618_0_ == BiomeGenBase.frozenOcean.biomeID;
+		return BiomeManager.oceanBiomes.contains(BiomeGenBase.getBiome(p_151618_0_));
 	}
 
 	protected int selectRandom(int ... p_151619_1_)

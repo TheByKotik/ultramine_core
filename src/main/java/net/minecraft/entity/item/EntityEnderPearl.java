@@ -60,9 +60,9 @@ public class EntityEnderPearl extends EntityThrowable
 						this.getThrower().mountEntity((Entity)null);
 					}
 
-					this.getThrower().setPositionAndUpdate(this.posX, this.posY, this.posZ);
+					this.getThrower().setPositionAndUpdate(event.targetX, event.targetY, event.targetZ);
 					this.getThrower().fallDistance = 0.0F;
-					this.getThrower().attackEntityFrom(DamageSource.fall, 5.0F);
+					this.getThrower().attackEntityFrom(DamageSource.fall, event.attackDamage);
 					}
 				}
 			}

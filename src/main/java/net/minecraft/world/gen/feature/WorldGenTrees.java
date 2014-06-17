@@ -231,7 +231,7 @@ public class WorldGenTrees extends WorldGenAbstractTree
 		{
 			--par3;
 
-			if (par1World.getBlock(par2, par3, par4).isAir(par1World, par2, par3, par4) || i1 <= 0)
+			if (!par1World.getBlock(par2, par3, par4).isAir(par1World, par2, par3, par4) || i1 <= 0)
 			{
 				return;
 			}
