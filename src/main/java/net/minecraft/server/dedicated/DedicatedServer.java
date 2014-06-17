@@ -26,7 +26,6 @@ import net.minecraft.network.rcon.RConThreadQuery;
 import net.minecraft.profiler.PlayerUsageSnooper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
-import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.CryptManager;
 import net.minecraft.util.MathHelper;
@@ -38,11 +37,11 @@ import net.minecraft.world.WorldType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.permission.PermissionRepository;
 import org.ultramine.permission.internal.ServerPermissionManager;
 import org.ultramine.server.ConfigurationHandler;
-import org.ultramine.server.MultiWorld;
-import org.ultramine.server.UltramineServerConfig;
+import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.UltramineServerConfig.VanillaConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.util.BasicTypeParser;
@@ -448,7 +447,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		{
 			return false;
 		}
-		else if (this.getConfigurationManager().isPlayerOpped(par5EntityPlayer.getCommandSenderName()))
+		else if (PermissionHandler.getInstance().has(par5EntityPlayer, MinecraftPermissions.IGNORE_SPAWN_PROTECTION))
 		{
 			return false;
 		}
@@ -468,7 +467,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public int getOpPermissionLevel()
 	{
-		return settings.opPermissionLevel;
+		return 4;
 	}
 
 	public void func_143006_e(int par1)

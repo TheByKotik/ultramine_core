@@ -10,11 +10,11 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.PermissionHandler;
 
@@ -176,7 +176,9 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 	public boolean isAllowedToLogin(String par1Str)
 	{
 		par1Str = par1Str.trim().toLowerCase();
-		return !this.isWhiteListEnabled() || this.isPlayerOpped(par1Str) || this.getWhiteListedPlayers().contains(par1Str);
+		return !this.isWhiteListEnabled()
+				|| this.getWhiteListedPlayers().contains(par1Str)
+				|| PermissionHandler.getInstance().hasGlobally(par1Str, MinecraftPermissions.IGNORE_WHITE_LIST);
 	}
 
 	public DedicatedServer getServerInstance()

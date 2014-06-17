@@ -1,6 +1,5 @@
-package org.ultramine.server.util;
+package org.ultramine.permission.internal;
 
-import org.ultramine.permission.internal.ServerPermissionManager;
 import org.ultramine.server.PermissionHandler;
 
 import java.util.Collection;
@@ -13,7 +12,12 @@ import java.util.Set;
 @Deprecated
 public class OpPermissionProxySet implements Set<String>
 {
-	public static final String OP_PERMISSION = "minecraft.op";
+	public static final OpPermissionProxySet INSTANCE = new OpPermissionProxySet();
+	public static final String OP_GROUP = "minecraft.op_group";
+
+	private OpPermissionProxySet()
+	{
+	}
 
 	@Override
 	public int size()
@@ -30,7 +34,7 @@ public class OpPermissionProxySet implements Set<String>
 	@Override
 	public boolean contains(Object o)
 	{
-		return ops().contains(o);
+		return PermissionHandler.getInstance().hasGlobally((String)o, OP_GROUP);
 	}
 
 	@Override
@@ -54,14 +58,14 @@ public class OpPermissionProxySet implements Set<String>
 	@Override
 	public boolean add(String s)
 	{
-		PermissionHandler.getInstance().add("global", s, OP_PERMISSION);
+		PermissionHandler.getInstance().add(ServerPermissionManager.GLOBAL_WORLD, s, OP_GROUP);
 		return true;
 	}
 
 	@Override
 	public boolean remove(Object o)
 	{
-		PermissionHandler.getInstance().remove("global", o.toString(), OP_PERMISSION);
+		PermissionHandler.getInstance().remove(ServerPermissionManager.GLOBAL_WORLD, o.toString(), OP_GROUP);
 		return true;
 	}
 
@@ -110,6 +114,6 @@ public class OpPermissionProxySet implements Set<String>
 	private Set<String> ops()
 	{
 		return PermissionHandler.getInstance()
-				.getWorldContainer(ServerPermissionManager.GLOBAL_WORLD).getAllWithPermission(OP_PERMISSION);
+				.getWorldContainer(ServerPermissionManager.GLOBAL_WORLD).getAllWithPermission(OP_GROUP);
 	}
 }

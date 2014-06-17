@@ -67,9 +67,9 @@ import net.minecraft.world.storage.IPlayerFileData;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.server.PermissionHandler;
-import org.ultramine.server.util.OpPermissionProxySet;
+import org.ultramine.permission.internal.OpPermissionProxySet;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 
 public abstract class ServerConfigurationManager
@@ -673,23 +673,25 @@ public abstract class ServerConfigurationManager
 
 	public void addOp(String par1Str)
 	{
-		PermissionHandler.getInstance().add("global", par1Str, OpPermissionProxySet.OP_PERMISSION);
+		getOps().add(par1Str);
 	}
 
 	public void removeOp(String par1Str)
 	{
-		PermissionHandler.getInstance().remove("global", par1Str, OpPermissionProxySet.OP_PERMISSION);
+		getOps().remove(par1Str);
 	}
 
 	public boolean isAllowedToLogin(String par1Str)
 	{
 		par1Str = par1Str.trim().toLowerCase();
-		return !this.whiteListEnforced || PermissionHandler.getInstance().has("global", par1Str, OpPermissionProxySet.OP_PERMISSION) || this.whiteListedPlayers.contains(par1Str);
+		return !this.whiteListEnforced
+				|| this.whiteListedPlayers.contains(par1Str)
+				|| PermissionHandler.getInstance().hasGlobally(par1Str, MinecraftPermissions.IGNORE_WHITE_LIST);
 	}
 
 	public boolean isPlayerOpped(String par1Str)
 	{
-		return PermissionHandler.getInstance().has("global", par1Str, OpPermissionProxySet.OP_PERMISSION) || this.mcServer.isSinglePlayer() && this.mcServer.worldServers[0].getWorldInfo().areCommandsAllowed() && this.mcServer.getServerOwner().equalsIgnoreCase(par1Str) || this.commandsAllowedForAll;
+		return PermissionHandler.getInstance().hasGlobally(par1Str, MinecraftPermissions.OP) || this.mcServer.isSinglePlayer() && this.mcServer.worldServers[0].getWorldInfo().areCommandsAllowed() && this.mcServer.getServerOwner().equalsIgnoreCase(par1Str) || this.commandsAllowedForAll;
 	}
 
 	public EntityPlayerMP getPlayerForUsername(String par1Str)
@@ -893,7 +895,7 @@ public abstract class ServerConfigurationManager
 	@Deprecated
 	public Set getOps()
 	{
-		return new OpPermissionProxySet();
+		return OpPermissionProxySet.INSTANCE;
 	}
 
 	public void loadWhiteList() {}

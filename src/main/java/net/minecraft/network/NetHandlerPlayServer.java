@@ -86,12 +86,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import org.ultramine.permission.MinecraftPermissions;
+import org.ultramine.server.PermissionHandler;
 
 public class NetHandlerPlayServer implements INetHandlerPlayServer
 {
@@ -721,7 +720,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 
 			this.chatSpamThresholdCount += 20;
 
-			if (this.chatSpamThresholdCount > 200 && !this.serverController.getConfigurationManager().isPlayerOpped(this.playerEntity.getCommandSenderName()))
+			if (this.chatSpamThresholdCount > 200 && !PermissionHandler.getInstance().has(playerEntity, MinecraftPermissions.ALLOW_SPAM))
 			{
 				this.kickPlayerFromServer("disconnect.spam");
 			}

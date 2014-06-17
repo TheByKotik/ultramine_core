@@ -51,7 +51,11 @@ public class World extends UserContainer<User>
 		data.users = new HashMap<String, HolderData>(users.size());
 
 		for (User user : users.values())
-			data.users.put(user.getName(), new HolderData(user));
+		{
+			HolderData holderData = new HolderData(user);
+			if (!holderData.isEmpty())
+				data.users.put(user.getName(), new HolderData(user));
+		}
 
 		return data;
 	}
@@ -98,6 +102,11 @@ public class World extends UserContainer<User>
 		{
 			permissions = holder.getInnerPermissions();
 			meta = holder.getInnerMeta();
+		}
+
+		public boolean isEmpty()
+		{
+			return permissions.isEmpty() && meta.isEmpty();
 		}
 	}
 }

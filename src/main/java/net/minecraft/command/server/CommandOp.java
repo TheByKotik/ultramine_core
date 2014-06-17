@@ -2,6 +2,8 @@ package net.minecraft.command.server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -47,12 +49,13 @@ public class CommandOp extends CommandBase
 			ArrayList arraylist = new ArrayList();
 			String[] astring1 = MinecraftServer.getServer().getAllUsernames();
 			int i = astring1.length;
+			Set ops = MinecraftServer.getServer().getConfigurationManager().getOps();
 
 			for (int j = 0; j < i; ++j)
 			{
 				String s1 = astring1[j];
 
-				if (!MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(s1) && doesStringStartWith(s, s1))
+				if (!ops.contains(s1) && doesStringStartWith(s, s1))
 				{
 					arraylist.add(s1);
 				}

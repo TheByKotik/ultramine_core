@@ -14,6 +14,10 @@ import java.util.Map;
 @SideOnly(Side.CLIENT)
 public class ClientPermissionManager implements IPermissionManager
 {
+	private static final String[] DEFAULT_PERMISSIONS = new String[] {
+		"command.vanilla.seed", "command.vanilla.tell", "command.vanilla.help", "command.vanilla.me"
+	};
+
 	private World global;
 	private PermissionRepository permissionRepository;
 	private Map<String, GroupPermission> groups;
@@ -25,6 +29,9 @@ public class ClientPermissionManager implements IPermissionManager
 		this.global = new World();
 		this.groups = new HashMap<String, GroupPermission>();
 		this.owner = owner;
+
+		for (String permission : DEFAULT_PERMISSIONS)
+			global.getDefaultPermissions().addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import cpw.mods.fml.relauncher.Side;
 import org.ultramine.commands.basic.VanillaCommands;
 import org.ultramine.commands.syntax.DefaultCompleters;
 import org.ultramine.permission.commands.BasicPermissionCommands;
+import org.ultramine.permission.internal.OpPermissionProxySet;
 
 public class UltramineServerModContainer extends DummyModContainer
 {
@@ -103,6 +104,8 @@ public class UltramineServerModContainer extends DummyModContainer
 		e.registerArgumentHandlers(DefaultCompleters.class);
 		e.registerCommands(BasicPermissionCommands.class);
 		e.registerCommands(VanillaCommands.class);
+
+		e.getPermissionHandler().createGroup(OpPermissionProxySet.OP_GROUP, "*");
 	}
 
 	@Subscribe

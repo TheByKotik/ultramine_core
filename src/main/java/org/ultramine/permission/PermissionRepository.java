@@ -63,6 +63,12 @@ public class PermissionRepository
 		}
 	}
 
+	public void lockPermissions(String... permissions)
+	{
+		for (String permission : permissions)
+			getPermission(permission).lock();
+	}
+
 	public static class ProxyPermission implements IPermission
 	{
 		private IPermission wrappedPermission;
@@ -140,6 +146,12 @@ public class PermissionRepository
 				wrappedPermission.unsubscribe(listener);
 		}
 
+		private void lock()
+		{
+			listeners = null;
+			isDummy = false;
+		}
+
 		private void link(IPermission permission)
 		{
 			wrappedPermission = permission;
@@ -148,8 +160,7 @@ public class PermissionRepository
 				permission.subscribe(listener);
 				listener.makeDirty();
 			}
-			listeners = null;
-			isDummy = false;
+			lock();
 		}
 
 		@Override

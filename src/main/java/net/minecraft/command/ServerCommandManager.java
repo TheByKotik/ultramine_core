@@ -32,6 +32,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
+import org.ultramine.permission.MinecraftPermissions;
+import org.ultramine.server.PermissionHandler;
 
 public class ServerCommandManager extends CommandHandler implements IAdminCommand
 {
@@ -118,7 +120,7 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
 			{
 				EntityPlayerMP entityplayermp = (EntityPlayerMP)iterator.next();
 
-				if (entityplayermp != par1ICommandSender && MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(entityplayermp.getCommandSenderName()))
+				if (entityplayermp != par1ICommandSender && PermissionHandler.getInstance().hasGlobally(entityplayermp, MinecraftPermissions.COMMAND_NOTIFICATION))
 				{
 					entityplayermp.addChatMessage(chatcomponenttranslation);
 				}
