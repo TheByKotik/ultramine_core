@@ -1,11 +1,12 @@
 package cpw.mods.fml.common.eventhandler;
 
 import java.util.*;
+import com.google.common.collect.ImmutableList;
 
 
 public class ListenerList
 {
-	private static ArrayList<ListenerList> allLists = new ArrayList<ListenerList>();
+	private static ImmutableList<ListenerList> allLists = ImmutableList.of();
 	private static int maxSize = 0;
 
 	private ListenerList parent;
@@ -13,15 +14,23 @@ public class ListenerList
 
 	public ListenerList()
 	{
-		allLists.add(this);
-		resizeLists(maxSize);
+		this(null);
 	}
 
 	public ListenerList(ListenerList parent)
 	{
-		allLists.add(this);
+		// parent needs to be set before resize !
 		this.parent = parent;
+		extendMasterList(this);
 		resizeLists(maxSize);
+	}
+
+	private synchronized static void extendMasterList(ListenerList inst)
+	{
+		ImmutableList.Builder<ListenerList> builder = ImmutableList.builder();
+		builder.addAll(allLists);
+		builder.add(inst);
+		allLists = builder.build();
 	}
 
 	public static void resize(int max)

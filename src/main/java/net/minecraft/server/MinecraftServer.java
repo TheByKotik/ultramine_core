@@ -577,6 +577,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	public void updateTimeLightAndEntities()
 	{
 		this.theProfiler.startSection("levels");
+		net.minecraftforge.common.chunkio.ChunkIOExecutor.tick();
 		int i;
 
 		Integer[] ids = DimensionManager.getIDs(this.tickCounter % 200 == 0);

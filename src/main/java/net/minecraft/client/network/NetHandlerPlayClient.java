@@ -1,7 +1,6 @@
 package net.minecraft.client.network;
 
 import com.google.common.base.Charsets;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -218,7 +217,6 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 		this.gameController = p_i45061_1_;
 		this.guiScreenServer = p_i45061_2_;
 		this.netManager = p_i45061_3_;
-		FMLClientHandler.instance().setPlayClient(this);
 	}
 
 	public void cleanup()

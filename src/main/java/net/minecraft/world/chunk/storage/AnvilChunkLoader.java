@@ -48,7 +48,45 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		this.chunkSaveLocation = par1File;
 	}
 
+	public boolean chunkExists(World world, int i, int j)
+	{
+		ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
+
+		synchronized (this.syncLockObject)
+		{
+			if (this.pendingAnvilChunksCoordinates.contains(chunkcoordintpair))
+			{
+				Iterator iter = this.chunksToRemove.iterator();
+				while (iter.hasNext())
+				{
+					PendingChunk pendingChunk = (PendingChunk)iter.next();
+					if (pendingChunk.chunkCoordinate.equals(chunkcoordintpair))
+					{
+						return true;
+					}
+				}
+			}
+		}
+
+		return RegionFileCache.createOrLoadRegionFile(this.chunkSaveLocation, i, j).chunkExists(i & 31, j & 31);
+	}
+
 	public Chunk loadChunk(World par1World, int par2, int par3) throws IOException
+	{
+		Object[] data = this.loadChunk__Async(par1World, par2, par3);
+
+		if (data != null)
+		{
+			Chunk chunk = (Chunk) data[0];
+			NBTTagCompound nbttagcompound = (NBTTagCompound) data[1];
+			this.loadEntities(par1World, nbttagcompound.getCompoundTag("Level"), chunk);
+			return chunk;
+		}
+
+		return null;
+	}
+
+	public Object[] loadChunk__Async(World par1World, int par2, int par3) throws IOException
 	{
 		NBTTagCompound nbttagcompound = null;
 		ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(par2, par3);
@@ -58,11 +96,13 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		{
 			if (this.pendingAnvilChunksCoordinates.contains(chunkcoordintpair))
 			{
-				for (int k = 0; k < this.chunksToRemove.size(); ++k)
+				Iterator iter = this.chunksToRemove.iterator();
+				while (iter.hasNext())
 				{
-					if (((AnvilChunkLoader.PendingChunk)this.chunksToRemove.get(k)).chunkCoordinate.equals(chunkcoordintpair))
+					PendingChunk pendingChunk = (PendingChunk)iter.next();
+					if (pendingChunk.chunkCoordinate.equals(chunkcoordintpair))
 					{
-						nbttagcompound = ((AnvilChunkLoader.PendingChunk)this.chunksToRemove.get(k)).nbtTags;
+						nbttagcompound = pendingChunk.nbtTags;
 						break;
 					}
 				}
@@ -81,10 +121,23 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			nbttagcompound = CompressedStreamTools.read(datainputstream);
 		}
 
-		return this.checkedReadChunkFromNBT(par1World, par2, par3, nbttagcompound);
+		return this.checkedReadChunkFromNBT__Async(par1World, par2, par3, nbttagcompound);
 	}
 
 	protected Chunk checkedReadChunkFromNBT(World par1World, int par2, int par3, NBTTagCompound par4NBTTagCompound)
+	{
+		Object[] data = this.checkedReadChunkFromNBT__Async(par1World, par2, par3, par4NBTTagCompound);
+
+		if (data != null)
+		{
+			Chunk chunk = (Chunk) data[0];
+			return chunk;
+		}
+
+		return null;
+	}
+
+	protected Object[] checkedReadChunkFromNBT__Async(World par1World, int par2, int par3, NBTTagCompound par4NBTTagCompound)
 	{
 		if (!par4NBTTagCompound.hasKey("Level", 10))
 		{
@@ -105,11 +158,30 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 				logger.error("Chunk file at " + par2 + "," + par3 + " is in the wrong location; relocating. (Expected " + par2 + ", " + par3 + ", got " + chunk.xPosition + ", " + chunk.zPosition + ")");
 				par4NBTTagCompound.setInteger("xPos", par2);
 				par4NBTTagCompound.setInteger("zPos", par3);
+				// Have to move tile entities since we don't load them at this stage
+				NBTTagList tileEntities = par4NBTTagCompound.getCompoundTag("Level").getTagList("TileEntities", 10);
+
+				if (tileEntities != null)
+				{
+					for (int te = 0; te < tileEntities.tagCount(); te++)
+					{
+						NBTTagCompound tileEntity = (NBTTagCompound) tileEntities.getCompoundTagAt(te);
+						int x = tileEntity.getInteger("x") - chunk.xPosition * 16;
+						int z = tileEntity.getInteger("z") - chunk.zPosition * 16;
+						tileEntity.setInteger("x", par2 * 16 + x);
+						tileEntity.setInteger("z", par3 * 16 + z);
+					}
+				}
+
 				chunk = this.readChunkFromNBT(par1World, par4NBTTagCompound.getCompoundTag("Level"));
 			}
 
-			MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Load(chunk, par4NBTTagCompound));
-			return chunk;
+			Object[] data = new Object[2];
+			data[0] = chunk;
+			data[1] = par4NBTTagCompound;
+			// event is fired in ChunkIOProvider.callStage2 since it must be fired after TE's load.
+			// MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Load(chunk, par4NBTTagCompound));
+			return data;
 		}
 	}
 
@@ -377,6 +449,12 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			chunk.setBiomeArray(par2NBTTagCompound.getByteArray("Biomes"));
 		}
 
+		// End this method here and split off entity loading to another method
+		return chunk;
+	}
+
+	public void loadEntities(World par1World, NBTTagCompound par2NBTTagCompound, Chunk chunk)
+	{
 		NBTTagList nbttaglist1 = par2NBTTagCompound.getTagList("Entities", 10);
 
 		if (nbttaglist1 != null)
@@ -438,7 +516,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			}
 		}
 
-		return chunk;
+		// return chunk;
 	}
 
 	static class PendingChunk

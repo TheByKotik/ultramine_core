@@ -106,8 +106,8 @@ public class FMLOutboundHandler extends ChannelOutboundHandlerAdapter {
 			public List<NetworkDispatcher> selectNetworks(Object args, ChannelHandlerContext context, FMLProxyPacket packet)
 			{
 				EntityPlayerMP player = (EntityPlayerMP) args;
-				NetworkDispatcher dispatcher = player.playerNetServerHandler.netManager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
-				return ImmutableList.of(dispatcher);
+				NetworkDispatcher dispatcher = player == null ? null : player.playerNetServerHandler.netManager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
+				return dispatcher == null ? ImmutableList.<NetworkDispatcher>of() : ImmutableList.of(dispatcher);
 			}
 		},
 		/**
@@ -129,7 +129,7 @@ public class FMLOutboundHandler extends ChannelOutboundHandlerAdapter {
 				for (EntityPlayerMP player : (List<EntityPlayerMP>)FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList)
 				{
 					NetworkDispatcher dispatcher = player.playerNetServerHandler.netManager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
-					builder.add(dispatcher);
+					if (dispatcher != null) builder.add(dispatcher);
 				}
 				return builder.build();
 			}
@@ -160,7 +160,8 @@ public class FMLOutboundHandler extends ChannelOutboundHandlerAdapter {
 					if (dimension == player.dimension)
 					{
 						NetworkDispatcher dispatcher = player.playerNetServerHandler.netManager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
-						builder.add(dispatcher);
+						// Null dispatchers may exist for fake players - skip them
+						if (dispatcher != null) builder.add(dispatcher);
 					}
 				}
 				return builder.build();
@@ -200,7 +201,7 @@ public class FMLOutboundHandler extends ChannelOutboundHandlerAdapter {
 						if (d4 * d4 + d5 * d5 + d6 * d6 < tp.range * tp.range)
 						{
 							NetworkDispatcher dispatcher = player.playerNetServerHandler.netManager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
-							builder.add(dispatcher);
+							if (dispatcher != null) builder.add(dispatcher);
 						}
 					}
 				}
@@ -222,7 +223,7 @@ public class FMLOutboundHandler extends ChannelOutboundHandlerAdapter {
 			public List<NetworkDispatcher> selectNetworks(Object args, ChannelHandlerContext context, FMLProxyPacket packet)
 			{
 				NetworkManager clientConnection = FMLCommonHandler.instance().getClientToServerNetworkManager();
-				return clientConnection == null ? ImmutableList.<NetworkDispatcher>of() : ImmutableList.of(clientConnection.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
+				return clientConnection == null || clientConnection.channel().attr(NetworkDispatcher.FML_DISPATCHER).get() == null ? ImmutableList.<NetworkDispatcher>of() : ImmutableList.of(clientConnection.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
 			}
 		};
 

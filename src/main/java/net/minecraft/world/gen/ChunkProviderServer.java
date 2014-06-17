@@ -23,9 +23,12 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.chunk.storage.IChunkLoader;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.chunkio.ChunkIOExecutor;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,12 +37,13 @@ public class ChunkProviderServer implements IChunkProvider
 	private static final Logger logger = LogManager.getLogger();
 	private Set chunksToUnload = new HashSet();
 	private Chunk defaultEmptyChunk;
-	private IChunkProvider currentChunkProvider;
+	public IChunkProvider currentChunkProvider;
 	public IChunkLoader currentChunkLoader;
 	public boolean loadChunkOnProvideRequest = true;
-	private LongHashMap loadedChunkHashMap = new LongHashMap();
-	private List loadedChunks = new ArrayList();
-	private WorldServer worldObj;
+	public LongHashMap loadedChunkHashMap = new LongHashMap();
+	public List loadedChunks = new ArrayList();
+	public WorldServer worldObj;
+	private Set<Long> loadingChunks = com.google.common.collect.Sets.newHashSet();
 	private static final String __OBFID = "CL_00001436";
 
 	public ChunkProviderServer(WorldServer par1WorldServer, IChunkLoader par2IChunkLoader, IChunkProvider par3IChunkProvider)
@@ -88,12 +92,61 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public Chunk loadChunk(int par1, int par2)
 	{
+		return loadChunk(par1, par2, null);
+	}
+
+	public Chunk loadChunk(int par1, int par2, Runnable runnable)
+	{
+		long k = ChunkCoordIntPair.chunkXZ2Int(par1, par2);
+		this.chunksToUnload.remove(Long.valueOf(k));
+		Chunk chunk = (Chunk)this.loadedChunkHashMap.getValueByKey(k);
+		AnvilChunkLoader loader = null;
+
+		if (this.currentChunkLoader instanceof AnvilChunkLoader)
+		{
+			loader = (AnvilChunkLoader) this.currentChunkLoader;
+		}
+
+		// We can only use the queue for already generated chunks
+		if (chunk == null && loader != null && loader.chunkExists(this.worldObj, par1, par2))
+		{
+			if (runnable != null)
+			{
+				ChunkIOExecutor.queueChunkLoad(this.worldObj, loader, this, par1, par2, runnable);
+				return null;
+			}
+			else
+			{
+				chunk = ChunkIOExecutor.syncChunkLoad(this.worldObj, loader, this, par1, par2);
+			}
+		}
+		else if (chunk == null)
+		{
+			chunk = this.originalLoadChunk(par1, par2);
+		}
+
+		// If we didn't load the chunk async and have a callback run it now
+		if (runnable != null)
+		{
+			runnable.run();
+		}
+
+		return chunk;
+	}
+
+	public Chunk originalLoadChunk(int par1, int par2)
+	{
 		long k = ChunkCoordIntPair.chunkXZ2Int(par1, par2);
 		this.chunksToUnload.remove(Long.valueOf(k));
 		Chunk chunk = (Chunk)this.loadedChunkHashMap.getValueByKey(k);
 
 		if (chunk == null)
 		{
+			boolean added = loadingChunks.add(k);
+			if (!added)
+			{
+				cpw.mods.fml.common.FMLLog.bigWarning("There is an attempt to load a chunk (%d,%d) in dimension %d that is already being loaded. This will cause weird chunk breakages.", par1, par2, worldObj.provider.dimensionId);
+			}
 			chunk = ForgeChunkManager.fetchDormantChunk(k, this.worldObj);
 			if (chunk == null)
 			{
@@ -126,6 +179,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 			this.loadedChunkHashMap.add(k, chunk);
 			this.loadedChunks.add(chunk);
+			loadingChunks.remove(k);
 			chunk.onChunkLoad();
 			chunk.populateChunk(this, this, par1, par2);
 		}

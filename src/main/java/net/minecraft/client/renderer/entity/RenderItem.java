@@ -755,5 +755,17 @@ public class RenderItem extends Render
 	{
 		return original;
 	}
+
+	private static RenderItem instance;
+	/**
+	 * Returns a single lazy loaded instance of RenderItem, for use in mods who 
+	 * don't care about the interaction of other objects on the current state of the RenderItem they are using.
+	 * @return A global instance of RenderItem
+	 */
+	public static RenderItem getInstance()
+	{
+		if (instance == null) instance = new RenderItem();
+		return instance;
+	}
 	/*==================================== FORGE END =============================================*/
 }

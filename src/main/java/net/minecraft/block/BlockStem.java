@@ -213,6 +213,7 @@ public class BlockStem extends BlockBush implements IGrowable
 		return l < 7 ? -1 : (p_149873_1_.getBlock(p_149873_2_ - 1, p_149873_3_, p_149873_4_) == this.field_149877_a ? 0 : (p_149873_1_.getBlock(p_149873_2_ + 1, p_149873_3_, p_149873_4_) == this.field_149877_a ? 1 : (p_149873_1_.getBlock(p_149873_2_, p_149873_3_, p_149873_4_ - 1) == this.field_149877_a ? 2 : (p_149873_1_.getBlock(p_149873_2_, p_149873_3_, p_149873_4_ + 1) == this.field_149877_a ? 3 : -1))));
 	}
 
+	@SuppressWarnings("unused")
 	public void dropBlockAsItemWithChance(World p_149690_1_, int p_149690_2_, int p_149690_3_, int p_149690_4_, int p_149690_5_, float p_149690_6_, int p_149690_7_)
 	{
 		super.dropBlockAsItemWithChance(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, p_149690_5_, p_149690_6_, p_149690_7_);
@@ -297,7 +298,8 @@ public class BlockStem extends BlockBush implements IGrowable
 
 		for (int i = 0; item != null && i < 3; i++)
 		{
-			ret.add(new ItemStack(item));
+			if (world.rand.nextInt(15) <= meta)
+				ret.add(new ItemStack(item));
 		}
 
 		return ret;

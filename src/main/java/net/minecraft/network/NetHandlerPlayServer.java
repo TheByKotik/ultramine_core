@@ -529,7 +529,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 				return;
 			}
 
-			PlayerInteractEvent event = ForgeEventFactory.onPlayerInteract(playerEntity, PlayerInteractEvent.Action.RIGHT_CLICK_AIR, 0, 0, 0, -1);
+			PlayerInteractEvent event = ForgeEventFactory.onPlayerInteract(playerEntity, PlayerInteractEvent.Action.RIGHT_CLICK_AIR, 0, 0, 0, -1, worldserver);
 			if (event.useItem != Event.Result.DENY)
 			{
 				this.playerEntity.theItemInWorldManager.tryUseItem(this.playerEntity, worldserver, itemstack);

@@ -2,7 +2,10 @@ package net.minecraft.server.management;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S21PacketChunkData;
@@ -16,6 +19,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.chunkio.ChunkIOExecutor;
+import net.minecraftforge.common.util.ChunkCoordComparator;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 
 public class PlayerManager
@@ -124,13 +129,22 @@ public class PlayerManager
 		int j = (int)par1EntityPlayerMP.posZ >> 4;
 		par1EntityPlayerMP.managedPosX = par1EntityPlayerMP.posX;
 		par1EntityPlayerMP.managedPosZ = par1EntityPlayerMP.posZ;
+		// Load nearby chunks first
+		List<ChunkCoordIntPair> chunkList = new ArrayList<ChunkCoordIntPair>();
 
 		for (int k = i - this.playerViewRadius; k <= i + this.playerViewRadius; ++k)
 		{
 			for (int l = j - this.playerViewRadius; l <= j + this.playerViewRadius; ++l)
 			{
-				this.getOrCreateChunkWatcher(k, l, true).addPlayer(par1EntityPlayerMP);
+				chunkList.add(new ChunkCoordIntPair(k, l));
 			}
+		}
+
+		Collections.sort(chunkList, new ChunkCoordComparator(par1EntityPlayerMP));
+
+		for (ChunkCoordIntPair pair : chunkList)
+		{
+			this.getOrCreateChunkWatcher(pair.chunkXPos, pair.chunkZPos, true).addPlayer(par1EntityPlayerMP);
 		}
 
 		this.players.add(par1EntityPlayerMP);
@@ -234,6 +248,7 @@ public class PlayerManager
 			int i1 = this.playerViewRadius;
 			int j1 = i - k;
 			int k1 = j - l;
+			List<ChunkCoordIntPair> chunksToLoad = new ArrayList<ChunkCoordIntPair>();
 
 			if (j1 != 0 || k1 != 0)
 			{
@@ -243,7 +258,7 @@ public class PlayerManager
 					{
 						if (!this.overlaps(l1, i2, k, l, i1))
 						{
-							this.getOrCreateChunkWatcher(l1, i2, true).addPlayer(par1EntityPlayerMP);
+							chunksToLoad.add(new ChunkCoordIntPair(l1, i2));
 						}
 
 						if (!this.overlaps(l1 - j1, i2 - k1, i, j, i1))
@@ -261,6 +276,18 @@ public class PlayerManager
 				this.filterChunkLoadQueue(par1EntityPlayerMP);
 				par1EntityPlayerMP.managedPosX = par1EntityPlayerMP.posX;
 				par1EntityPlayerMP.managedPosZ = par1EntityPlayerMP.posZ;
+				// send nearest chunks first
+				Collections.sort(chunksToLoad, new ChunkCoordComparator(par1EntityPlayerMP));
+
+				for (ChunkCoordIntPair pair : chunksToLoad)
+				{
+					this.getOrCreateChunkWatcher(pair.chunkXPos, pair.chunkZPos, true).addPlayer(par1EntityPlayerMP);
+				}
+
+				if (i1 > 1 || i1 < -1 || j1 > 1 || j1 < -1)
+				{
+					Collections.sort(par1EntityPlayerMP.loadedChunks, new ChunkCoordComparator(par1EntityPlayerMP));
+				}
 			}
 		}
 	}
@@ -284,15 +311,24 @@ public class PlayerManager
 		private int numberOfTilesToUpdate;
 		private int flagsYAreasToUpdate;
 		private long previousWorldTime;
+		private final HashMap<EntityPlayerMP, Runnable> players = new HashMap<EntityPlayerMP, Runnable>();
+		private boolean loaded = false;
+		private Runnable loadedRunnable = new Runnable()
+		{
+			public void run()
+			{
+				PlayerInstance.this.loaded = true;
+			}
+		};
 		private static final String __OBFID = "CL_00001435";
 
 		public PlayerInstance(int par2, int par3)
 		{
 			this.chunkLocation = new ChunkCoordIntPair(par2, par3);
-			PlayerManager.this.getWorldServer().theChunkProviderServer.loadChunk(par2, par3);
+			PlayerManager.this.theWorldServer.theChunkProviderServer.loadChunk(par2, par3, this.loadedRunnable);
 		}
 
-		public void addPlayer(EntityPlayerMP par1EntityPlayerMP)
+		public void addPlayer(final EntityPlayerMP par1EntityPlayerMP)
 		{
 			if (this.playersWatchingChunk.contains(par1EntityPlayerMP))
 			{
@@ -306,7 +342,26 @@ public class PlayerManager
 				}
 
 				this.playersWatchingChunk.add(par1EntityPlayerMP);
-				par1EntityPlayerMP.loadedChunks.add(this.chunkLocation);
+				Runnable playerRunnable;
+
+				if (this.loaded)
+				{
+					playerRunnable = null;
+					par1EntityPlayerMP.loadedChunks.add(this.chunkLocation);
+				}
+				else
+				{
+					playerRunnable = new Runnable()
+					{
+						public void run()
+						{
+							par1EntityPlayerMP.loadedChunks.add(PlayerInstance.this.chunkLocation);
+						}
+					};
+					PlayerManager.this.getWorldServer().theChunkProviderServer.loadChunk(this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos, playerRunnable);
+				}
+
+				this.players.put(par1EntityPlayerMP, playerRunnable);
 			}
 		}
 
@@ -314,6 +369,24 @@ public class PlayerManager
 		{
 			if (this.playersWatchingChunk.contains(par1EntityPlayerMP))
 			{
+				// If we haven't loaded yet don't load the chunk just so we can clean it up
+				if (!this.loaded)
+				{
+					ChunkIOExecutor.dropQueuedChunkLoad(PlayerManager.this.getWorldServer(), this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos, this.players.get(par1EntityPlayerMP));
+					this.playersWatchingChunk.remove(par1EntityPlayerMP);
+					this.players.remove(par1EntityPlayerMP);
+
+					if (this.playersWatchingChunk.isEmpty())
+					{
+						ChunkIOExecutor.dropQueuedChunkLoad(PlayerManager.this.getWorldServer(), this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos, this.loadedRunnable);
+						long i = (long) this.chunkLocation.chunkXPos + 2147483647L | (long) this.chunkLocation.chunkZPos + 2147483647L << 32;
+						PlayerManager.this.playerInstances.remove(i);
+						PlayerManager.this.playerInstanceList.remove(this);
+					}
+
+					return;
+				}
+
 				Chunk chunk = PlayerManager.this.theWorldServer.getChunkFromChunkCoords(this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos);
 
 				if (chunk.func_150802_k())
@@ -321,6 +394,7 @@ public class PlayerManager
 					par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S21PacketChunkData(chunk, true, 0));
 				}
 
+				this.players.remove(par1EntityPlayerMP);
 				this.playersWatchingChunk.remove(par1EntityPlayerMP);
 				par1EntityPlayerMP.loadedChunks.remove(this.chunkLocation);
 

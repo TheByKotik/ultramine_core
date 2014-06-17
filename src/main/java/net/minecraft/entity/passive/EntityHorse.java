@@ -1227,6 +1227,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic
 				}
 
 				this.jumpPower = 0.0F;
+				net.minecraftforge.common.ForgeHooks.onLivingJump(this);
 			}
 
 			this.stepHeight = 1.0F;

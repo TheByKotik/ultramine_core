@@ -1396,7 +1396,7 @@ public class Minecraft implements IPlayerUsage
 					{
 						int l = itemstack != null ? itemstack.stackSize : 0;
 
-						boolean result = !ForgeEventFactory.onPlayerInteract(thePlayer, Action.RIGHT_CLICK_BLOCK, i, j, k, this.objectMouseOver.sideHit).isCanceled();
+						boolean result = !ForgeEventFactory.onPlayerInteract(thePlayer, Action.RIGHT_CLICK_BLOCK, i, j, k, this.objectMouseOver.sideHit, this.theWorld).isCanceled();
 						if (result && this.playerController.onPlayerRightClick(this.thePlayer, this.theWorld, itemstack, i, j, k, this.objectMouseOver.sideHit, this.objectMouseOver.hitVec))
 						{
 							flag = false;
@@ -1424,7 +1424,7 @@ public class Minecraft implements IPlayerUsage
 		{
 			ItemStack itemstack1 = this.thePlayer.inventory.getCurrentItem();
 
-			boolean result = !ForgeEventFactory.onPlayerInteract(thePlayer, Action.RIGHT_CLICK_AIR, 0, 0, 0, -1).isCanceled();
+			boolean result = !ForgeEventFactory.onPlayerInteract(thePlayer, Action.RIGHT_CLICK_AIR, 0, 0, 0, -1, this.theWorld).isCanceled();
 			if (result && itemstack1 != null && this.playerController.sendUseItem(this.thePlayer, this.theWorld, itemstack1))
 			{
 				this.entityRenderer.itemRenderer.resetEquippedProgress2();
@@ -2118,7 +2118,7 @@ public class Minecraft implements IPlayerUsage
 				this.theIntegratedServer.initiateShutdown();
 				if (loadingScreen != null)
 				{
-					this.loadingScreen.resetProgresAndWorkingMessage("Shutting down internal server...");
+					this.loadingScreen.resetProgresAndWorkingMessage(I18n.format("forge.client.shutdown.internal"));
 				}
 				while (!theIntegratedServer.isServerStopped())
 				{

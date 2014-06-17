@@ -45,7 +45,9 @@ public class BlockNote extends BlockContainer
 
 			if (tileentitynote != null)
 			{
+				int old = tileentitynote.note;
 				tileentitynote.changePitch();
+				if (old == tileentitynote.note) return false;
 				tileentitynote.triggerNote(p_149727_1_, p_149727_2_, p_149727_3_, p_149727_4_);
 			}
 
@@ -73,6 +75,11 @@ public class BlockNote extends BlockContainer
 
 	public boolean onBlockEventReceived(World p_149696_1_, int p_149696_2_, int p_149696_3_, int p_149696_4_, int p_149696_5_, int p_149696_6_)
 	{
+		int meta = p_149696_1_.getBlockMetadata(p_149696_2_, p_149696_3_, p_149696_4_);
+		net.minecraftforge.event.world.NoteBlockEvent.Play e = new net.minecraftforge.event.world.NoteBlockEvent.Play(p_149696_1_, p_149696_2_, p_149696_3_, p_149696_4_, meta, p_149696_6_, p_149696_5_);
+		if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(e)) return false;
+		p_149696_5_ = e.instrument.ordinal();
+		p_149696_6_ = e.getVanillaNoteId(); 
 		float f = (float)Math.pow(2.0D, (double)(p_149696_6_ - 12) / 12.0D);
 		String s = "harp";
 

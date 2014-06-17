@@ -8222,4 +8222,18 @@ public class RenderBlocks
 
 		return (IIcon)p_147758_1_;
 	}
+
+	/*==================================== FORGE START ===========================================*/
+	private static RenderBlocks instance;
+	/**
+	 * Returns a single lazy loaded instance of RenderBlocks, for use in mods who 
+	 * don't care about the interaction of other objects on the current state of the RenderBlocks they are using.
+	 * @return A global instance of RenderBlocks
+	 */
+	public static RenderBlocks getInstance()
+	{
+		if (instance == null) instance = new RenderBlocks();
+		return instance;
+	}
+	/*==================================== FORGE END =============================================*/
 }

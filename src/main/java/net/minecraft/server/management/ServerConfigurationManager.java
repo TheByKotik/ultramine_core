@@ -7,6 +7,7 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.File;
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -61,6 +63,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.demo.DemoWorldManager;
 import net.minecraft.world.storage.IPlayerFileData;
+import net.minecraftforge.common.chunkio.ChunkIOExecutor;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -246,6 +250,7 @@ public abstract class ServerConfigurationManager
 		this.sendPacketToAllPlayers(new S38PacketPlayerListItem(par1EntityPlayerMP.getCommandSenderName(), true, 1000));
 		this.playerEntityList.add(par1EntityPlayerMP);
 		WorldServer worldserver = this.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
+		ChunkIOExecutor.adjustPoolSize(this.getCurrentPlayerCount());
 		worldserver.spawnEntityInWorld(par1EntityPlayerMP);
 		this.func_72375_a(par1EntityPlayerMP, (WorldServer)null);
 
@@ -278,6 +283,7 @@ public abstract class ServerConfigurationManager
 		worldserver.getPlayerManager().removePlayer(par1EntityPlayerMP);
 		this.playerEntityList.remove(par1EntityPlayerMP);
 		this.field_148547_k.remove(par1EntityPlayerMP.getCommandSenderName());
+		ChunkIOExecutor.adjustPoolSize(this.getCurrentPlayerCount());
 		this.sendPacketToAllPlayers(new S38PacketPlayerListItem(par1EntityPlayerMP.getCommandSenderName(), false, 9999));
 	}
 

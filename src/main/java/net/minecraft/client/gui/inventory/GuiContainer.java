@@ -466,6 +466,7 @@ public abstract class GuiContainer extends GuiScreen
 
 	protected void mouseMovedOrUp(int p_146286_1_, int p_146286_2_, int p_146286_3_)
 	{
+		super.mouseMovedOrUp(p_146286_1_, p_146286_2_, p_146286_3_); //Forge, Call parent to release buttons
 		Slot slot = this.getSlotAtPosition(p_146286_1_, p_146286_2_);
 		int l = this.guiLeft;
 		int i1 = this.guiTop;

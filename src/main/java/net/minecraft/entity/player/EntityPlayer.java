@@ -2035,6 +2035,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 		{
 			getEntityData().setTag(PERSISTED_NBT_TAG, old.getCompoundTag(PERSISTED_NBT_TAG));
 		}
+		MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.PlayerEvent.Clone(this, par1EntityPlayer, !par2));
 	}
 
 	protected boolean canTriggerWalking()

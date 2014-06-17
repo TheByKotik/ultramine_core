@@ -23,6 +23,7 @@ public class AxisAlignedBB
 		return new AxisAlignedBB(par0, par2, par4, par6, par8, par10);
 	}
 
+	@Deprecated /* This method has been deprecated as it no longer exists in 1.7.10. Use getBoundingBox directly. */
 	public static AABBPool getAABBPool()
 	{
 		return (AABBPool)theAABBLocalPool.get();

@@ -11,6 +11,11 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.helpers.Integers;
+import com.google.common.collect.ConcurrentHashMultiset;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.Multiset.Entry;
+import com.google.common.collect.Multisets;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.network.FMLNetworkException;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -23,7 +28,8 @@ public class FMLProxyPacket extends Packet {
 	private final ByteBuf payload;
 	private INetHandler netHandler;
 	private NetworkDispatcher dispatcher;
-
+	private static Multiset<String> badPackets = ConcurrentHashMultiset.create();
+	private static int packetCountWarning = Integers.parseInt(System.getProperty("fml.badPacketCounter", "100"), 100);
 	private FMLProxyPacket(byte[] payload, String channel)
 	{
 		this(Unpooled.wrappedBuffer(payload), channel);
@@ -68,7 +74,21 @@ public class FMLProxyPacket extends Packet {
 			internalChannel.attr(NetworkRegistry.NET_HANDLER).set(this.netHandler);
 			try
 			{
-				internalChannel.writeInbound(this);
+				if (internalChannel.writeInbound(this))
+				{
+					badPackets.add(this.channel);
+					if (badPackets.size() % packetCountWarning == 0)
+					{
+						FMLLog.severe("Detected ongoing potential memory leak. %d packets have leaked. Top offenders", badPackets.size());
+						int i = 0;
+						for (Entry<String> s  : Multisets.copyHighestCountFirst(badPackets).entrySet())
+						{
+							if (i++ > 10) break;
+							FMLLog.severe("\t %s : %d", s.getElement(), s.getCount());
+						}
+					}
+				}
+				internalChannel.inboundMessages().clear();
 			}
 			catch (FMLNetworkException ne)
 			{

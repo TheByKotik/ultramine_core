@@ -59,7 +59,9 @@ public class BiomeGenJungle extends BiomeGenBase
 		super.decorate(par1World, par2Random, par3, par4);
 		int k = par3 + par2Random.nextInt(16) + 8;
 		int l = par4 + par2Random.nextInt(16) + 8;
-		int i1 = par2Random.nextInt(par1World.getHeightValue(k, l) * 2);
+		int height = par1World.getHeightValue(k, l) * 2; //This was the original input for the nextInt below.  But it could == 0, which crashes nextInt
+		if (height < 1) height = 1;
+		int i1 = par2Random.nextInt(height);
 		(new WorldGenMelon()).generate(par1World, par2Random, k, i1, l);
 		WorldGenVines worldgenvines = new WorldGenVines();
 

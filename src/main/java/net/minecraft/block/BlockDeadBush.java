@@ -1,5 +1,7 @@
 package net.minecraft.block;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,9 +10,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IShearable;
 
-public class BlockDeadBush extends BlockBush
+public class BlockDeadBush extends BlockBush implements IShearable
 {
 	private static final String __OBFID = "CL_00000224";
 
@@ -33,14 +37,15 @@ public class BlockDeadBush extends BlockBush
 
 	public void harvestBlock(World p_149636_1_, EntityPlayer p_149636_2_, int p_149636_3_, int p_149636_4_, int p_149636_5_, int p_149636_6_)
 	{
-		if (!p_149636_1_.isRemote && p_149636_2_.getCurrentEquippedItem() != null && p_149636_2_.getCurrentEquippedItem().getItem() == Items.shears)
-		{
-			p_149636_2_.addStat(StatList.mineBlockStatArray[Block.getIdFromBlock(this)], 1);
-			this.dropBlockAsItem(p_149636_1_, p_149636_3_, p_149636_4_, p_149636_5_, new ItemStack(Blocks.deadbush, 1, p_149636_6_));
-		}
-		else
 		{
 			super.harvestBlock(p_149636_1_, p_149636_2_, p_149636_3_, p_149636_4_, p_149636_5_, p_149636_6_);
 		}
+	}
+
+	@Override public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) { return true; }
+	@Override
+	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune)
+	{
+		return new ArrayList<ItemStack>(Arrays.asList(new ItemStack(Blocks.deadbush, 1, world.getBlockMetadata(x, y, z))));
 	}
 }
