@@ -107,9 +107,12 @@ task reobf(type: ReobfTask) {
 
     mustRunAfter("test")
 }
-
 assemble.dependsOn("reobf")
 
+task dumpLibs(type: Copy) {
+    into "$buildDir/libs/libs"
+    from configurations.compile
+}
 
 def delayedFile(String path) {
     new DelayedFile(project, path) {
