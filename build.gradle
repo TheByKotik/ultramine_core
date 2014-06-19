@@ -1,3 +1,33 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+
+        }
+    }
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+
+    }
+}
+
+import net.minecraftforge.gradle.common.Constants
+import net.minecraftforge.gradle.delayed.DelayedFile
+import net.minecraftforge.gradle.tasks.user.reobf.ArtifactSpec
+import net.minecraftforge.gradle.tasks.user.reobf.ReobfTask
+import net.minecraftforge.gradle.user.UserBasePlugin
+import net.minecraftforge.gradle.user.UserExtension
+
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
@@ -5,28 +35,23 @@ apply plugin: 'eclipse'
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
-repositories
-{
-	maven
-	{
+repositories {
+	maven {
 		name 'forge'
 		url 'http://files.minecraftforge.net/maven'
 	}
 	mavenCentral()
-	maven
-	{
+	maven {
 		name 'sonatypeSnapshot'
 		url 'https://oss.sonatype.org/content/repositories/snapshots/'
 	}
-	maven
-	{
+	maven {
 		name 'minecraft'
 		url 'https://libraries.minecraft.net/'
 	}
 }
 
-dependencies
-{
+dependencies {
 	compile 'net.minecraft:launchwrapper:1.9'
 	compile 'org.ow2.asm:asm-debug-all:4.1'
 	compile 'org.scala-lang:scala-library:2.10.2'
@@ -62,4 +87,35 @@ dependencies
 
     testRuntime "cglib:cglib-nodep:2.2.2"
     testRuntime "org.objenesis:objenesis:1.2"
+}
+
+project.getExtensions().create(Constants.EXT_NAME_MC, UserExtension, { return project } as UserBasePlugin)
+
+task reobf(type: ReobfTask) {
+    setExceptorCfg(delayedFile('conf/srg.exc'))
+    setSrg(delayedFile('conf/mcp2srg.srg'))
+    setFieldCsv(delayedFile('conf/fields.csv'))
+    setFieldCsv(delayedFile('conf/methods.csv'))
+    reobf(tasks.getByName('jar'), new Action<ArtifactSpec>() {
+        @Override
+        public void execute(ArtifactSpec arg0)
+        {
+            JavaPluginConvention javaConv = (JavaPluginConvention) getConvention().getPlugins().get("java")
+            arg0.setClasspath(javaConv.getSourceSets().getByName("main").getCompileClasspath())
+        }
+    })
+
+    mustRunAfter("test")
+}
+
+assemble.dependsOn("reobf")
+
+
+def delayedFile(String path) {
+    new DelayedFile(project, path) {
+        @Override
+        File call() {
+            return file(path)
+        }
+    }
 }
