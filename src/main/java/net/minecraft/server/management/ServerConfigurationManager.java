@@ -99,7 +99,17 @@ public abstract class ServerConfigurationManager
 	public void initializeConnectionToPlayer(NetworkManager par1INetworkManager, EntityPlayerMP par2EntityPlayerMP, NetHandlerPlayServer nethandlerplayserver)
 	{
 		NBTTagCompound nbttagcompound = this.readPlayerDataFromFile(par2EntityPlayerMP);
-		par2EntityPlayerMP.setWorld(this.mcServer.worldServerForDimension(par2EntityPlayerMP.dimension));
+		
+		World playerWorld = this.mcServer.worldServerForDimension(par2EntityPlayerMP.dimension);
+		if (playerWorld==null)
+		{
+			par2EntityPlayerMP.dimension=0;
+			playerWorld=this.mcServer.worldServerForDimension(0);
+			ChunkCoordinates spawnPoint = playerWorld.provider.getRandomizedSpawnPoint();
+			par2EntityPlayerMP.setPosition(spawnPoint.posX, spawnPoint.posY, spawnPoint.posZ);
+		}
+		
+		par2EntityPlayerMP.setWorld(playerWorld);
 		par2EntityPlayerMP.theItemInWorldManager.setWorld((WorldServer)par2EntityPlayerMP.worldObj);
 		String s = "local";
 
