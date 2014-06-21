@@ -3765,6 +3765,7 @@ public abstract class World implements IBlockAccess
 		}
 	}
 
+	@Deprecated /* gone in 1.7.10, use direct access to Vec3.createVectorHelper instead */
 	public Vec3Pool getWorldVec3Pool()
 	{
 		return this.vecPool;
