@@ -1996,7 +1996,7 @@ public abstract class World implements IBlockAccess
 		//boolean isForced = getPersistentChunks().containsKey(new ChunkCoordIntPair(i >> 4, j >> 4));
 		//byte b0 = isForced ? (byte)0 : 32;
 		//boolean canUpdate = !par2 || this.checkChunksExist(i - b0, 0, j - b0, i + b0, 0, j + b0);
-		boolean canUpdate = par1Entity.isEntityPlayerMP() || activeChunkSet.containsKey(ChunkHash.chunkToKey(i >> 4, j >> 4)) && this.chunkRoundExists(i >> 4, j >> 4, 3);
+		boolean canUpdate = par1Entity.isEntityPlayerMP() || activeChunkSet.containsKey(ChunkHash.chunkToKey(i >> 4, j >> 4)) && this.chunkRoundExists(i >> 4, j >> 4, 2);
 		
 		//if (!canUpdate)
 		//{
@@ -3982,8 +3982,8 @@ public abstract class World implements IBlockAccess
 	
 	public boolean chunkRoundExists(int cx, int cz, int radius)
 	{
-		for(int x = cx - radius; x < cx + radius; x++)
-			for(int z = cz - radius; z < cz + radius; z++)
+		for(int x = cx - radius; x <= cx + radius; x++)
+			for(int z = cz - radius; z <= cz + radius; z++)
 				if(!chunkExists(x, z)) return false;
 		return true;
 	}
