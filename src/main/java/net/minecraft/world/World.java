@@ -31,6 +31,7 @@ import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -2026,6 +2027,11 @@ public abstract class World implements IBlockAccess
 					par1Entity.onUpdate();
 				}
 			}
+			else if(par1Entity.isEntityPlayerMP())
+			{
+				((EntityPlayerMP)par1Entity).getChunkMgr().updatePlayerPertinentChunks();
+				((EntityPlayerMP)par1Entity).getChunkMgr().update();
+			}
 
 			this.theProfiler.startSection("chunkCheck");
 
@@ -2739,14 +2745,13 @@ public abstract class World implements IBlockAccess
 			k = MathHelper.floor_double(entityplayer.posZ / 16.0D);
 			int b0 = getChunkUpdateRadius();
 
-			activeChunkSet.put(ChunkHash.chunkToKey(j, k), (byte)0);
 			for (int l = -b0; l <= b0; ++l)
 			{
 				for (int i1 = -b0; i1 <= b0; ++i1)
 				{
 					int cx = l + j;
 					int cz = i1 + k;
-					if(chunkExists(cx, cz) && chunkExists(cx-1, cz) && chunkExists(cx, cz-1) && chunkExists(cx+1, cz) && chunkExists(cx, cz+1))
+					if(chunkRoundExists(cx, cz, 1))
 					{
 						int key = ChunkHash.chunkToKey(cx, cz);
 						int priority = Math.max(Math.abs(l), Math.abs(i1));
