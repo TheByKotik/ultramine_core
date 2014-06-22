@@ -1601,6 +1601,11 @@ public class Chunk
 	{
 		if(bindState.canChangeState())
 			bindState = ChunkBindState.NONE;
+		updateUnbindTime();
+	}
+	
+	public void updateUnbindTime()
+	{
 		unbindTime = ((WorldServer)worldObj).func_73046_m().getTickCounter();
 	}
 	

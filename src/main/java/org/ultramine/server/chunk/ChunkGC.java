@@ -5,9 +5,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
@@ -48,18 +50,29 @@ public class ChunkGC
 		
 		if(chunkCount > chunkLimit && timePassed > MIN_GC_INTERVAL && unloadQueueSize < MAX_UNLOAD_QUEUE_SIZE && (minChunkDiff == 0 || chunkDiff > minChunkDiff))
 		{
+			Set<ChunkCoordIntPair> persistentChunks = world.getPersistentChunks().keySet();
 			Collection<Chunk> all = provider.loadedChunkHashMap.valueCollection();
 			List<Chunk> unbound = new ArrayList<Chunk>(all.size() - boundChunks);
 			for(Chunk chunk : all)
 			{
-				if(chunk.getBindState().canUnload())
+				ChunkBindState state = chunk.getBindState();
+				if(state.canUnload())
 				{
 					unbound.add(chunk);
 				}
-				else if(chunk.getBindState().isLeak() && curTime - chunk.getUnbindTime() > _10_MINUTES)
+				else if(state.isLeak() && curTime - chunk.getUnbindTime() > _10_MINUTES)
 				{
-					chunk.unbind();
-					unbound.add(chunk);
+					if(persistentChunks.contains(chunk.getChunkCoordIntPair()))
+					{
+						if(state != ChunkBindState.FORGE)
+							chunk.setBindState(ChunkBindState.FORGE);
+						chunk.updateUnbindTime();
+					}
+					else
+					{
+						chunk.unbind();
+						unbound.add(chunk);
+					}
 				}
 			}
 			

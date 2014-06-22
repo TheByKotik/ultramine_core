@@ -21,6 +21,12 @@ public enum ChunkBindState
 	 */
 	LEAK,
 	/**
+	 * Чанк обнаружен в списке PersistentChunks, созданного форжей для всяких
+	 * чанклоадеров. Не будет выгружен до тех пор, пока не исчезнет из этого
+	 * списка.
+	 */
+	FORGE,
+	/**
 	 * Чанку запрещено выгружаться или изменять состояние бинда. Чанк не будет
 	 * выгружен никогда.
 	 */
@@ -33,11 +39,11 @@ public enum ChunkBindState
 
 	public boolean canChangeState()
 	{
-		return this != ETERNAL;
+		return this != ETERNAL && this != FORGE;
 	}
-	
+
 	public boolean isLeak()
 	{
-		return this == LEAK;
+		return this == LEAK || this == FORGE;
 	}
 }
