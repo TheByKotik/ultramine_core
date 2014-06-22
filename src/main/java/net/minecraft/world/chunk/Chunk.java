@@ -929,7 +929,7 @@ public class Chunk
 		MinecraftForge.EVENT_BUS.post(new ChunkEvent.Load(this));
 
 		loadTime = unbindTime = ((WorldServer)worldObj).func_73046_m().getTickCounter();
-		lastsavePendingCount = pendingUpdatesSet.size();
+		lastsavePendingCount = pendingUpdatesSet == null ? 0 : pendingUpdatesSet.size();
 	}
 
 	public void onChunkUnload()
@@ -1627,11 +1627,11 @@ public class Chunk
 	public void postSave()
 	{
 		wasActive = false;
-		lastsavePendingCount = pendingUpdatesSet.size();
+		lastsavePendingCount = pendingUpdatesSet == null ? 0 : pendingUpdatesSet.size();
 	}
 	
 	public boolean shouldSaveOnUnload()
 	{
-		return isModified || lastsavePendingCount != pendingUpdatesSet.size() || wasActive && hasEntities;
+		return isModified || pendingUpdatesSet != null && lastsavePendingCount != pendingUpdatesSet.size() || wasActive && hasEntities;
 	}
 }
