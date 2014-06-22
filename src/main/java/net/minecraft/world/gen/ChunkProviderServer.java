@@ -76,22 +76,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public void unloadChunksIfNotNearSpawn(int par1, int par2)
 	{
-		if (this.worldObj.provider.canRespawnHere() && DimensionManager.shouldLoadSpawn(this.worldObj.provider.dimensionId))
-		{
-			ChunkCoordinates chunkcoordinates = this.worldObj.getSpawnPoint();
-			int k = par1 * 16 + 8 - chunkcoordinates.posX;
-			int l = par2 * 16 + 8 - chunkcoordinates.posZ;
-			short short1 = 128;
-
-			if (k < -short1 || k > short1 || l < -short1 || l > short1)
-			{
-				this.chunksToUnload.add(ChunkHash.chunkToKey(par1, par2));
-			}
-		}
-		else
-		{
-			this.chunksToUnload.add(ChunkHash.chunkToKey(par1, par2));
-		}
+		this.chunksToUnload.add(ChunkHash.chunkToKey(par1, par2));
 	}
 
 	public void unloadAllChunks()

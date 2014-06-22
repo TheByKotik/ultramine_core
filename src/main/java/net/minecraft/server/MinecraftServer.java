@@ -243,6 +243,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	protected void initialWorldChunkLoad()
 	{
+		/*
 		boolean flag = true;
 		boolean flag1 = true;
 		boolean flag2 = true;
@@ -271,7 +272,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				worldserver.theChunkProviderServer.loadChunk(chunkcoordinates.posX + k >> 4, chunkcoordinates.posZ + l >> 4);
 			}
 		}
-
+		*/
 		this.clearCurrentTask();
 	}
 
