@@ -37,7 +37,7 @@ public class ChunkCache implements IBlockAccess
 		{
 			for (k2 = this.chunkZ; k2 <= i2; ++k2)
 			{
-				chunk = par1World.getChunkFromChunkCoords(j2, k2);
+				chunk = par1World.getChunkIfExists(j2, k2);
 
 				if (chunk != null)
 				{
