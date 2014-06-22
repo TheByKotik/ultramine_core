@@ -270,7 +270,7 @@ public class PlayerManager
 						PlayerManager.this.chunkWatcherWithPlayers.remove(this);
 					}
 
-					PlayerManager.this.getWorldServer().theChunkProviderServer.unloadChunksIfNotNearSpawn(this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos);
+					PlayerManager.this.getWorldServer().theChunkProviderServer.unbindChunk(this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos);
 				}
 			}
 		}

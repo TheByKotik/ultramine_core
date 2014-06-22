@@ -13,7 +13,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.EnumCreatureType;
@@ -37,6 +40,8 @@ import net.minecraftforge.common.chunkio.ChunkIOExecutor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.chunk.ChunkBindState;
+import org.ultramine.server.chunk.ChunkGC;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.ChunkMap;
 import org.ultramine.server.chunk.IChunkLoadCallback;
@@ -59,6 +64,9 @@ public class ChunkProviderServer implements IChunkProvider
 		this.worldObj = par1WorldServer;
 		this.currentChunkLoader = par2IChunkLoader;
 		this.currentChunkProvider = par3IChunkProvider;
+		
+		if(isServer)
+			chunkGC = new ChunkGC(this);
 	}
 
 	public boolean chunkExists(int par1, int par2)
@@ -124,6 +132,8 @@ public class ChunkProviderServer implements IChunkProvider
 			else
 			{
 				chunk = ChunkIOExecutor.syncChunkLoad(this.worldObj, loader, this, par1, par2);
+				chunk.setBindState(ChunkBindState.LEAK);
+				logger.warn("The chunk("+par1+", "+par2+") was loaded sync", new Throwable());
 			}
 		}
 		else if (chunk == null)
@@ -314,8 +324,11 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public boolean unloadQueuedChunks()
 	{
-		if (!this.worldObj.levelSaving)
+//		if (!this.worldObj.levelSaving)
 		{
+			if(isServer)
+				chunkGC.onTick();
+			
 			for (ChunkCoordIntPair forced : this.worldObj.getPersistentChunks().keySet())
 			{
 				this.chunksToUnload.remove(ChunkHash.chunkToKey(forced.chunkXPos, forced.chunkZPos));
@@ -351,7 +364,7 @@ public class ChunkProviderServer implements IChunkProvider
 				Chunk chunk = loadedChunkHashMap.get(hash);
 				if(chunk != null)
 				{
-					if(true/*chunk.getBindReason().canUnload()*/)
+					if(chunk.getBindState().canUnload())
 					{
 						chunk.onChunkUnload();
 						if(true/*chunk.shouldSaveOnUnload()*/)
@@ -411,6 +424,11 @@ public class ChunkProviderServer implements IChunkProvider
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
+	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
+	
+	@SideOnly(Side.SERVER)
+	private ChunkGC chunkGC;
+	
 	public void loadAsync(int x, int z, IChunkLoadCallback callback)
 	{
 		Chunk chunk = loadedChunkHashMap.get(x, z);
@@ -428,5 +446,19 @@ public class ChunkProviderServer implements IChunkProvider
 	public Chunk getChunkIfExists(int cx, int cz)
 	{
 		return loadedChunkHashMap.get(cx, cz);
+	}
+	
+	public void unbindChunk(int cx, int cz)
+	{
+		Chunk chunk = loadedChunkHashMap.get(cx, cz);
+		if(chunk != null)
+			unbindChunk(chunk);
+	}
+	
+	public void unbindChunk(Chunk chunk)
+	{
+		chunk.unbind();
+		if(!isServer)
+			unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
 	}
 }
