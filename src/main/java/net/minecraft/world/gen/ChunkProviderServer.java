@@ -421,6 +421,13 @@ public class ChunkProviderServer implements IChunkProvider
 		}
 	}
 	
+	public void loadAsyncRadius(int cx, int cz, int radius, IChunkLoadCallback callback)
+	{
+		for(int x = cx - radius; x <= cx + radius; x++)
+			for(int z = cz - radius; z <= cz + radius; z++)
+				loadAsync(x, z, callback);
+	}
+	
 	public Chunk getChunkIfExists(int cx, int cz)
 	{
 		return loadedChunkHashMap.get(cx, cz);

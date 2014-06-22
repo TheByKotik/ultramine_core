@@ -276,6 +276,7 @@ public abstract class ServerConfigurationManager
 					func_72375_a(par1EntityPlayerMP, (WorldServer)null);
 				}
 			});
+			worldserver.theChunkProviderServer.loadAsyncRadius(cx, cz, 1, IChunkLoadCallback.EMPTY);
 		}
 
 		for (int i = 0; i < this.playerEntityList.size(); ++i)
