@@ -233,6 +233,7 @@ public abstract class ServerConfigurationManager
 			par1EntityPlayerMP.readFromNBT(nbttagcompound);
 			nbttagcompound1 = nbttagcompound;
 			logger.debug("loading single player");
+			net.minecraftforge.event.ForgeEventFactory.firePlayerLoadingEvent(par1EntityPlayerMP, this.playerNBTManagerObj, par1EntityPlayerMP.getUniqueID().toString());
 		}
 		else
 		{
