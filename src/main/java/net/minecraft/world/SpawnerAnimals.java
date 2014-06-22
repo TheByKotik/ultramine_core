@@ -64,7 +64,7 @@ public final class SpawnerAnimals
 						int cx = l + j;
 						int cz = i1 + k;
 						
-						if(par1WorldServer.chunkExists(cx, cz))
+						if(par1WorldServer.chunkRoundExists(cx, cz, 1))
 						{
 							boolean flag3 = l == -b0 || l == b0 || i1 == -b0 || i1 == b0;
 							ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(cx, cz);

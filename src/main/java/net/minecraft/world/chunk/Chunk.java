@@ -33,6 +33,7 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -42,6 +43,7 @@ import net.minecraftforge.event.world.ChunkEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.chunk.ChunkBindState;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.PendingBlockUpdate;
 
@@ -925,6 +927,9 @@ public class Chunk
 			this.worldObj.addLoadedEntities(this.entityLists[i]);
 		}
 		MinecraftForge.EVENT_BUS.post(new ChunkEvent.Load(this));
+
+		loadTime = unbindTime = ((WorldServer)worldObj).func_73046_m().getTickCounter();
+		lastsavePendingCount = pendingUpdatesSet == null ? 0 : pendingUpdatesSet.size();
 	}
 
 	public void onChunkUnload()
@@ -1014,12 +1019,9 @@ public class Chunk
 	{
 		if (par1)
 		{
-			if (this.hasEntities && this.worldObj.getTotalWorldTime() != this.lastSaveTime || this.isModified)
-			{
-				return true;
-			}
+			return shouldSaveOnUnload();
 		}
-		else if (this.hasEntities && this.worldObj.getTotalWorldTime() >= this.lastSaveTime + 600L)
+		else if (wasActive && this.hasEntities && this.worldObj.getTotalWorldTime() >= this.lastSaveTime + 600L)
 		{
 			return true;
 		}
@@ -1537,6 +1539,12 @@ public class Chunk
 	private Set<PendingBlockUpdate> pendingUpdatesSet;
 	private TreeSet<PendingBlockUpdate> pendingUpdatesQueue;
 	
+	private ChunkBindState bindState = ChunkBindState.NONE;
+	private int loadTime;
+	private int unbindTime;
+	private boolean wasActive;
+	private int lastsavePendingCount;
+	
 	public PendingBlockUpdate pollPending(long time)
 	{
 		if(pendingUpdatesQueue == null || pendingUpdatesQueue.size() == 0) return null;
@@ -1577,5 +1585,53 @@ public class Chunk
 	public Set<PendingBlockUpdate> getPendingUpdatesForSave()
 	{
 		return pendingUpdatesQueue;
+	}
+	
+	public ChunkBindState getBindState()
+	{
+		return bindState;
+	}
+	
+	public void setBindState(ChunkBindState bindState)
+	{
+		this.bindState = bindState;
+	}
+	
+	public void unbind()
+	{
+		if(bindState.canChangeState())
+			bindState = ChunkBindState.NONE;
+		updateUnbindTime();
+	}
+	
+	public void updateUnbindTime()
+	{
+		unbindTime = ((WorldServer)worldObj).func_73046_m().getTickCounter();
+	}
+	
+	public int getLoadTime()
+	{
+		return loadTime;
+	}
+	
+	public int getUnbindTime()
+	{
+		return unbindTime;
+	}
+	
+	public void setActive()
+	{
+		wasActive = true;
+	}
+	
+	public void postSave()
+	{
+		wasActive = false;
+		lastsavePendingCount = pendingUpdatesSet == null ? 0 : pendingUpdatesSet.size();
+	}
+	
+	public boolean shouldSaveOnUnload()
+	{
+		return isModified || pendingUpdatesSet != null && lastsavePendingCount != pendingUpdatesSet.size() || wasActive && hasEntities;
 	}
 }

@@ -1,5 +1,7 @@
 package net.minecraft.world;
 
+import org.ultramine.server.chunk.ChunkHash;
+
 public class ChunkCoordIntPair
 {
 	public final int chunkXPos;
@@ -19,10 +21,7 @@ public class ChunkCoordIntPair
 
 	public int hashCode()
 	{
-		long i = chunkXZ2Int(this.chunkXPos, this.chunkZPos);
-		int j = (int)i;
-		int k = (int)(i >> 32);
-		return j ^ k;
+		return ChunkHash.chunkToKey(chunkXPos, chunkZPos);
 	}
 
 	public boolean equals(Object par1Obj)

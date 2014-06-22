@@ -16,10 +16,12 @@ global: &global
         pvp: true
         time: NORMAL
         weather: NORMAL
-    chunkLoading:
+    chunkLoading: &global_cl
         viewDistance: 10
         chunkUpdateRadius: 7
+        chunkCacheSize: 1024
         enableChunkLoaders: true
+        
 worlds:
     world:
         <<: *global
@@ -27,6 +29,9 @@ worlds:
         generation:
             <<: *global_gen
             providerID: 0
+        chunkLoading:
+            <<: *global_cl
+            chunkCacheSize: 4096
     world_nether:
         <<: *global
         dimension: -1

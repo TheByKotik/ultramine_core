@@ -55,6 +55,7 @@ public class WorldsConfig
 		{
 			public int viewDistance  = 10;
 			public int chunkUpdateRadius = 7;
+			public int chunkCacheSize;
 			public boolean enableChunkLoaders = true;
 		}
 	}

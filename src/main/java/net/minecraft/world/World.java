@@ -31,6 +31,7 @@ import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -1996,7 +1997,7 @@ public abstract class World implements IBlockAccess
 		//boolean isForced = getPersistentChunks().containsKey(new ChunkCoordIntPair(i >> 4, j >> 4));
 		//byte b0 = isForced ? (byte)0 : 32;
 		//boolean canUpdate = !par2 || this.checkChunksExist(i - b0, 0, j - b0, i + b0, 0, j + b0);
-		boolean canUpdate = par1Entity.isEntityPlayerMP() || activeChunkSet.containsKey(ChunkHash.chunkToKey(i >> 4, j >> 4)) && this.chunkRoundExists(i >> 4, j >> 4, 3);
+		boolean canUpdate = par1Entity.isEntityPlayerMP() || activeChunkSet.containsKey(ChunkHash.chunkToKey(i >> 4, j >> 4));
 		
 		//if (!canUpdate)
 		//{
@@ -2025,6 +2026,11 @@ public abstract class World implements IBlockAccess
 				{
 					par1Entity.onUpdate();
 				}
+			}
+			else if(par1Entity.isEntityPlayerMP())
+			{
+				((EntityPlayerMP)par1Entity).getChunkMgr().updatePlayerPertinentChunks();
+				((EntityPlayerMP)par1Entity).getChunkMgr().update();
 			}
 
 			this.theProfiler.startSection("chunkCheck");
@@ -2739,14 +2745,13 @@ public abstract class World implements IBlockAccess
 			k = MathHelper.floor_double(entityplayer.posZ / 16.0D);
 			int b0 = getChunkUpdateRadius();
 
-			activeChunkSet.put(ChunkHash.chunkToKey(j, k), (byte)0);
 			for (int l = -b0; l <= b0; ++l)
 			{
 				for (int i1 = -b0; i1 <= b0; ++i1)
 				{
 					int cx = l + j;
 					int cz = i1 + k;
-					if(chunkExists(cx, cz) && chunkExists(cx-1, cz) && chunkExists(cx, cz-1) && chunkExists(cx+1, cz) && chunkExists(cx, cz+1))
+					if(chunkRoundExists(cx, cz, 1))
 					{
 						int key = ChunkHash.chunkToKey(cx, cz);
 						int priority = Math.max(Math.abs(l), Math.abs(i1));
@@ -3980,10 +3985,22 @@ public abstract class World implements IBlockAccess
 	
 	public static final int MAX_BLOCK_COORD = 500000;//524288;
 	
+	public Chunk getChunkIfExists(int cx, int cz)
+	{
+		return getChunkFromChunkCoords(cx, cz);
+	}
+	
+	public Block getBlockIfExists(int x, int y, int z)
+	{
+		if(blockExists(x, y, z))
+			return getBlock(x, y, z);
+		return Blocks.air;
+	}
+	
 	public boolean chunkRoundExists(int cx, int cz, int radius)
 	{
-		for(int x = cx - radius; x < cx + radius; x++)
-			for(int z = cz - radius; z < cz + radius; z++)
+		for(int x = cx - radius; x <= cx + radius; x++)
+			for(int z = cz - radius; z <= cz + radius; z++)
 				if(!chunkExists(x, z)) return false;
 		return true;
 	}

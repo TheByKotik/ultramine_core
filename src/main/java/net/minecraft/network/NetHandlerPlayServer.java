@@ -2,9 +2,11 @@ package net.minecraft.network;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
+
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.Callable;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.crash.CrashReport;
@@ -79,8 +82,10 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.IntHashMap;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.WorldServer;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -89,6 +94,7 @@ import net.minecraftforge.common.ForgeHooks;
 import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+
 import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.server.PermissionHandler;
 
@@ -197,6 +203,9 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 
 			if (this.hasMoved)
 			{
+				if(!playerEntity.worldObj.blockExists(MathHelper.floor_double(playerEntity.posX), 64, MathHelper.floor_double(playerEntity.posZ)))
+					return;
+				
 				double d1;
 				double d2;
 				double d3;

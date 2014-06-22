@@ -248,7 +248,7 @@ public class ChunkSendManager
 				
 				PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, false);
 				if (pi == null)
-					((WorldServer)chunk.worldObj).theChunkProviderServer.unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
+					((WorldServer)chunk.worldObj).theChunkProviderServer.unbindChunk(chunk);
 			}
 		}
 		
@@ -258,7 +258,7 @@ public class ChunkSendManager
 			
 			PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, false);
 			if (pi == null)
-				((WorldServer)chunk.worldObj).theChunkProviderServer.unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
+				((WorldServer)chunk.worldObj).theChunkProviderServer.unbindChunk(chunk);
 		}
 	}
 	
@@ -360,6 +360,7 @@ public class ChunkSendManager
 		@Override
 		public void onChunkLoaded(Chunk chunk)
 		{
+			chunk.setBindState(ChunkBindState.PLAYER);
 			executor.execute(new CompressAndSendChunkTask(chunk));
 		}
 	};

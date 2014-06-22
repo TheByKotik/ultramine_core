@@ -262,7 +262,7 @@ public class PathFinder
 			{
 				for (int j1 = par3; j1 < par3 + par4PathPoint.zCoord; ++j1)
 				{
-					Block block = par0Entity.worldObj.getBlock(l, i1, j1);
+					Block block = par0Entity.worldObj.getBlockIfExists(l, i1, j1);
 
 					if (block.getMaterial() != Material.air)
 					{
