@@ -287,6 +287,7 @@ public class ChunkProviderServer implements IChunkProvider
 			{
 				this.safeSaveChunk(chunk);
 				chunk.isModified = false;
+				chunk.postSave();
 				++i;
 
 				if (i == 24 && !par1)
@@ -313,11 +314,6 @@ public class ChunkProviderServer implements IChunkProvider
 		{
 			if(isServer)
 				chunkGC.onTick();
-			
-			for (ChunkCoordIntPair forced : this.worldObj.getPersistentChunks().keySet())
-			{
-				this.chunksToUnload.remove(ChunkHash.chunkToKey(forced.chunkXPos, forced.chunkZPos));
-			}
 
 			/*
 			for (int i = 0; i < 100; ++i)
@@ -341,30 +337,26 @@ public class ChunkProviderServer implements IChunkProvider
 			}
 			*/
 			
-			int processed = 0;
-			for(TIntIterator it = chunksToUnload.iterator(); it.hasNext();)
+			Set<ChunkCoordIntPair> persistentChunks = worldObj.getPersistentChunks().keySet();
+			int savequeueSize = ((AnvilChunkLoader)currentChunkLoader).getSaveQueueSize();
+			
+			for(TIntIterator it = chunksToUnload.iterator(); it.hasNext() && savequeueSize < MAX_SAVE_QUEUE_SIZE;)
 			{
-				if(processed >= 20) break;
 				int hash = it.next();
 				Chunk chunk = loadedChunkHashMap.get(hash);
 				if(chunk != null)
 				{
-					if(chunk.getBindState().canUnload())
+					if(chunk.getBindState().canUnload() && !persistentChunks.contains(chunk.getChunkCoordIntPair()))
 					{
 						chunk.onChunkUnload();
-						if(true/*chunk.shouldSaveOnUnload()*/)
+						if(chunk.shouldSaveOnUnload())
 						{
-							processed++;
+							savequeueSize++;
 							safeSaveChunk(chunk);
 						}
 						this.safeSaveExtraChunkData(chunk);
 						this.loadedChunkHashMap.remove(hash);
-						//chunk.postChunkUnload();
 					}
-				}
-				else
-				{
-					logger.warn("Not existing chunk was queued for unload (" + ChunkHash.keyToX(hash) + ", " + ChunkHash.keyToZ(hash) + ")");
 				}
 				
 				it.remove();
@@ -409,6 +401,7 @@ public class ChunkProviderServer implements IChunkProvider
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
+	private static final int MAX_SAVE_QUEUE_SIZE = 20;
 	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
 	
 	@SideOnly(Side.SERVER)

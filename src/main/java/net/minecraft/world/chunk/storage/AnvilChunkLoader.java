@@ -254,10 +254,11 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
 	public void saveExtraData()
 	{
-		while (this.writeNextIO())
-		{
-			;
-		}
+		//Async only
+//		while (this.writeNextIO())
+//		{
+//			;
+//		}
 	}
 
 	private void writeChunkToNBT(Chunk par1Chunk, World par2World, NBTTagCompound par3NBTTagCompound)
@@ -499,6 +500,14 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 							Block.getBlockById(nbttagcompound5.getInteger("i")), (long)nbttagcompound5.getInteger("t") + time, nbttagcompound5.getInteger("p")), false);
 				}
 			}
+		}
+	}
+	
+	public int getSaveQueueSize()
+	{
+		synchronized(syncLockObject)
+		{
+			return pendingSaves.size();
 		}
 	}
 	

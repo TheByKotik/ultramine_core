@@ -336,6 +336,7 @@ public class WorldServer extends World
 			
 			this.theProfiler.startSection("getChunk");
 			Chunk chunk = this.getChunkFromChunkCoords(chunkX, chunkZ);
+			chunk.setActive();
 			this.theProfiler.startSection("updatePending");
 			this.updatePendingOf(chunk);
 			this.func_147467_a(k, l, chunk);

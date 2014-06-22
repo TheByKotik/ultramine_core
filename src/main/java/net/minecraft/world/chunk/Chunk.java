@@ -929,6 +929,7 @@ public class Chunk
 		MinecraftForge.EVENT_BUS.post(new ChunkEvent.Load(this));
 
 		loadTime = unbindTime = ((WorldServer)worldObj).func_73046_m().getTickCounter();
+		lastsavePendingCount = pendingUpdatesSet.size();
 	}
 
 	public void onChunkUnload()
@@ -1018,12 +1019,9 @@ public class Chunk
 	{
 		if (par1)
 		{
-			if (this.hasEntities && this.worldObj.getTotalWorldTime() != this.lastSaveTime || this.isModified)
-			{
-				return true;
-			}
+			return shouldSaveOnUnload();
 		}
-		else if (this.hasEntities && this.worldObj.getTotalWorldTime() >= this.lastSaveTime + 600L)
+		else if (wasActive && this.hasEntities && this.worldObj.getTotalWorldTime() >= this.lastSaveTime + 600L)
 		{
 			return true;
 		}
@@ -1544,6 +1542,8 @@ public class Chunk
 	private ChunkBindState bindState = ChunkBindState.NONE;
 	private int loadTime;
 	private int unbindTime;
+	private boolean wasActive;
+	private int lastsavePendingCount;
 	
 	public PendingBlockUpdate pollPending(long time)
 	{
@@ -1612,5 +1612,21 @@ public class Chunk
 	public int getUnbindTime()
 	{
 		return unbindTime;
+	}
+	
+	public void setActive()
+	{
+		wasActive = true;
+	}
+	
+	public void postSave()
+	{
+		wasActive = false;
+		lastsavePendingCount = pendingUpdatesSet.size();
+	}
+	
+	public boolean shouldSaveOnUnload()
+	{
+		return isModified || lastsavePendingCount != pendingUpdatesSet.size() || wasActive && hasEntities;
 	}
 }
