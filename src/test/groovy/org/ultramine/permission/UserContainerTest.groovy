@@ -33,8 +33,8 @@ class UserContainerTest extends Specification {
         when: "Override parent user in child container"
         child.add(stubUser("parent", [parent: false, child: true]))
 
-        then: "Parent container permissions have higher priority"
-        child.checkUserPermission("parent", "parent")
+        then: "Parent container permissions have lower priority"
+        !child.checkUserPermission("parent", "parent")
         child.checkUserPermission("parent", "child")
 
         and: "Parent container permissions is not modified"

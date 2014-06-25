@@ -11,11 +11,11 @@ import java.util.Map;
 
 public class World extends UserContainer<User>
 {
-	private GroupPermission defaultPermissions;
+	private GroupPermission defaultGroup;
 
 	public World()
 	{
-		this.defaultPermissions = new GroupPermission("");
+		this.defaultGroup = new GroupPermission("");
 	}
 
 	public void load(PermissionRepository repository, WorldData data)
@@ -23,11 +23,17 @@ public class World extends UserContainer<User>
 		if (data == null)
 			return;
 
-		defaultPermissions.clearPermissions();
-		if (data.default_permissions != null)
+		defaultGroup = new GroupPermission("");
+		if (data.default_group != null)
 		{
-			for (String permission : data.default_permissions)
-				defaultPermissions.addPermission(repository.getPermission(permission));
+			if (data.default_group.meta != null)
+				defaultGroup.setInnerMeta(data.default_group.meta);
+
+			if (data.default_group.permissions != null)
+			{
+				for (String permission : data.default_group.permissions)
+					defaultGroup.addPermission(repository.getPermission(permission));
+			}
 		}
 
 		clear();
@@ -47,7 +53,7 @@ public class World extends UserContainer<User>
 	{
 		WorldData data = new WorldData();
 
-		data.default_permissions = defaultPermissions.getInnerPermissions();
+		data.default_group = new HolderData(defaultGroup);
 		data.users = new HashMap<String, HolderData>(users.size());
 
 		for (User user : users.values())
@@ -60,9 +66,9 @@ public class World extends UserContainer<User>
 		return data;
 	}
 
-	public GroupPermission getDefaultPermissions()
+	public GroupPermission getDefaultGroup()
 	{
-		return defaultPermissions;
+		return defaultGroup;
 	}
 
 	public void setParentContainer(UserContainer container)
@@ -71,19 +77,22 @@ public class World extends UserContainer<User>
 	}
 
 	@Override
+	public String getUserMeta(String userName, String metaKey)
+	{
+		String result = super.getUserMeta(userName, metaKey);
+		return result.isEmpty() ? defaultGroup.getMeta(metaKey) : result;
+	}
+
+	@Override
 	protected CheckResult check(String userName, String permissionKey)
 	{
 		CheckResult result = super.check(userName, permissionKey);
-
-		if (result == CheckResult.UNRESOLVED)
-			result = defaultPermissions.check(permissionKey);
-
-		return result;
+		return result == CheckResult.UNRESOLVED ? defaultGroup.check(permissionKey) : result;
 	}
 
 	public static class WorldData
 	{
-		public List<String> default_permissions = new ArrayList<String>();
+		public HolderData default_group = new HolderData();
 		public Map<String, HolderData> users = new HashMap<String, HolderData>();
 	}
 

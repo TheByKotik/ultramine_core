@@ -80,14 +80,14 @@ class WorldTest extends Specification {
 
         when: "Add data to container"
         container.add(user)
-        container.getDefaultPermissions().addPermission(repository.getPermission("d1"))
+        container.getDefaultGroup().addPermission(repository.getPermission("d1"))
 
         and: "Save data"
         def data = container.save()
 
         then: "Output data is correct"
-        data.default_permissions.contains('d1')
-        data.default_permissions.size() == 1
+        data.default_group.permissions.contains('d1')
+        data.default_group.permissions.size() == 1
         data.users.size() == 1
         data.users['test'].permissions.containsAll(['p1', '^p2'])
         data.users['test'].permissions.size() == 2
@@ -109,7 +109,9 @@ class WorldTest extends Specification {
 
 
     def testWorldData = new  World.WorldData(
-            default_permissions: ['d'],
+            default_group: new World.HolderData(
+                    permissions: ['d']
+            ),
             users: [
                     user1: new World.HolderData(
                             permissions: ['p.1', '^p.2'],

@@ -69,7 +69,7 @@ public class ServerPermissionManager implements IPermissionManager
 	@Override
 	public void addToWorld(String world, String permission)
 	{
-		getOrCreateWorld(world).getDefaultPermissions()
+		getOrCreateWorld(world).getDefaultGroup()
 				.addPermission(permissionRepository.getPermission(permission));
 	}
 
@@ -96,7 +96,7 @@ public class ServerPermissionManager implements IPermissionManager
 		if (worldObj == null)
 			return;
 
-		worldObj.getDefaultPermissions().removePermission(permission);
+		worldObj.getDefaultGroup().removePermission(permission);
 	}
 
 	@Override
@@ -112,11 +112,11 @@ public class ServerPermissionManager implements IPermissionManager
 	@Override
 	public String getMeta(String world, String player, String key)
 	{
-		User user = getUser(world, player);
-		if (user == null)
-			return "";
-		else
-			return user.getMeta(key);
+		World worldObj  = worlds.get(world);
+		if (worldObj == null)
+			worldObj = worlds.get(GLOBAL_WORLD);
+
+		return worldObj.getUserMeta(player, key);
 	}
 
 	@Override

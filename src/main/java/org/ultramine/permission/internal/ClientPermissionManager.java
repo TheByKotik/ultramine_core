@@ -31,7 +31,7 @@ public class ClientPermissionManager implements IPermissionManager
 		this.owner = owner;
 
 		for (String permission : DEFAULT_PERMISSIONS)
-			global.getDefaultPermissions().addPermission(permissionRepository.getPermission(permission));
+			global.getDefaultGroup().addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class ClientPermissionManager implements IPermissionManager
 	@Override
 	public void addToWorld(String world, String permission)
 	{
-		global.getDefaultPermissions().addPermission(permissionRepository.getPermission(permission));
+		global.getDefaultGroup().addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ClientPermissionManager implements IPermissionManager
 	@Override
 	public void removeFromWorld(String world, String permission)
 	{
-		global.getDefaultPermissions().removePermission(permission);
+		global.getDefaultGroup().removePermission(permission);
 	}
 
 	@Override

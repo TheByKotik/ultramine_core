@@ -28,16 +28,32 @@ public class UserContainer<T extends User>
 		return check(userName, permissionKey).asBoolean();
 	}
 
+	public String getUserMeta(String userName, String metaKey)
+	{
+		userName = userName.toLowerCase();
+		String result = "";
+
+		User user = get(userName);
+		if (user != null)
+			result = user.getMeta(metaKey);
+
+		if (result.isEmpty() && parentContainer != null)
+			result = parentContainer.getUserMeta(userName, metaKey);
+
+		return result;
+	}
+
 	protected CheckResult check(String userName, String permissionKey)
 	{
 		userName = userName.toLowerCase();
 		CheckResult result = CheckResult.UNRESOLVED;
 
-		if (parentContainer != null)
-			result = parentContainer.check(userName, permissionKey);
+		User user = get(userName);
+		if (user != null)
+			result = user.check(permissionKey);
 
-		if (result == CheckResult.UNRESOLVED && contains(userName))
-			result = get(userName).check(permissionKey);
+		if (result == CheckResult.UNRESOLVED && parentContainer != null)
+			result = parentContainer.check(userName, permissionKey);
 
 		return result;
 	}
