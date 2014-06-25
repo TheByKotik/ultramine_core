@@ -22,6 +22,8 @@ public interface IPermissionManager
 
 	public void setMeta(String world, String player, String key, String value);
 
+	public void setWorldMeta(String world, String key, String value);
+
 	public void setGroupMeta(String group, String key, String value);
 
 	public void save();

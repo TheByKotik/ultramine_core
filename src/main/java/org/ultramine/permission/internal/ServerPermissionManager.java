@@ -126,6 +126,12 @@ public class ServerPermissionManager implements IPermissionManager
 	}
 
 	@Override
+	public void setWorldMeta(String world, String key, String value)
+	{
+		getOrCreateWorld(world).getDefaultGroup().setMeta(key, value);
+	}
+
+	@Override
 	public void setGroupMeta(String group, String key, String value)
 	{
 		getOrCreateGroup(group).setMeta(key, value);

@@ -21,6 +21,7 @@ command.pworld.usage=/pworld [world] <add|remove> <permissions ...>
 command.pworld.description=Add or remove permissions to all user in world (current is default)
 command.pworld.success.add=Add permission <%s> to world <%s>
 command.pworld.success.remove=Remove permission <%s> from world <%s>
+command.pworld.success.meta=Set meta <%s> to <%s> in world <%s>
 
 command.puser.usage=/puser [world] <player> <add|remove> <permissions ...> OR /puser [world] <player> meta <key> <value>
 command.puser.description=Add/remove permissions OR set meta for user in world (current is default)

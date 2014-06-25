@@ -98,6 +98,12 @@ public class ClientPermissionManager implements IPermissionManager
 	}
 
 	@Override
+	public void setWorldMeta(String world, String key, String value)
+	{
+		global.getDefaultGroup().setMeta(key, value);
+	}
+
+	@Override
 	public void setGroupMeta(String group, String key, String value)
 	{
 		getOrCreateGroup(group).setMeta(key, value);

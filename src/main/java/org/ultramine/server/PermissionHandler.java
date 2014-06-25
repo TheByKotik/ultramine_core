@@ -127,6 +127,12 @@ public class PermissionHandler implements IPermissionManager
 	}
 
 	@Override
+	public void setWorldMeta(String world, String key, String value)
+	{
+		getHandler().setWorldMeta(world, key, value);
+	}
+
+	@Override
 	public void setGroupMeta(String group, String key, String value)
 	{
 		getHandler().setGroupMeta(group, key, value);

@@ -36,7 +36,9 @@ public class BasicPermissionCommands
 			permissions = {"permissions.admin.world"},
 			syntax = {
 					"[add remove] <permission>...",
-					"<world> [add remove] <permission>..."
+					"[meta] <pmeta> <%value>",
+					"<world> [add remove] <permission>...",
+					"<world> [meta] <pmeta> <%value>",
 			}
 	)
 	public static void pworld(CommandContext context)
@@ -55,13 +57,21 @@ public class BasicPermissionCommands
 				context.notifyAdmins("command.pworld.success.add", arg.asString(), world);
 			}
 		}
-		else
+		else if (context.actionIs("remove"))
 		{
 			for (CommandContext.Argument arg : context.get("permission").asArray())
 			{
 				PermissionHandler.getInstance().removeFromWorld(world, arg.asString());
 				context.notifyAdmins("command.pworld.success.remove", arg.asString(), world);
 			}
+		}
+		else
+		{
+			String key = context.get("pmeta").asString();
+			String value = context.get("value").asString();
+
+			PermissionHandler.getInstance().setWorldMeta(world, key, value);
+			context.notifyAdmins("command.pworld.success.meta", key, value, world);
 		}
 	}
 
