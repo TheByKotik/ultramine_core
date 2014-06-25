@@ -32,7 +32,7 @@ public interface IChatComponent extends Iterable
 
 	String getUnformattedText();
 
-	@SideOnly(Side.CLIENT)
+//	@SideOnly(Side.CLIENT)
 	String getFormattedText();
 
 	List getSiblings();

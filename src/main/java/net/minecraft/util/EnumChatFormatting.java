@@ -120,4 +120,9 @@ public enum EnumChatFormatting
 			nameMapping.put(var3.getFriendlyName(), var3);
 		}
 	}
+	
+	public static EnumChatFormatting getByColorCode(char code)
+	{
+		return (EnumChatFormatting)formattingCodeMapping.get(code);
+	}
 }

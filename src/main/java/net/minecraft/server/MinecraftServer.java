@@ -390,6 +390,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			if (normalStarted = startServer())
 			{
 				FMLCommonHandler.instance().handleServerStarted();
+				logger.info((useUMConsole ? "\u00a7e" : "") + "Server loading totally finished");
 				long i = getSystemTimeMillis();
 				long l = 0L;
 				this.field_147147_p.func_151315_a(new ChatComponentText(this.motd));
@@ -838,7 +839,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	public void addChatMessage(IChatComponent p_145747_1_)
 	{
-		logger.info(p_145747_1_.getUnformattedText());
+		logger.info(useUMConsole ? p_145747_1_.getFormattedText() : p_145747_1_.getUnformattedText());
 	}
 
 	public boolean canCommandSenderUseCommand(int par1, String par2Str)
@@ -1444,6 +1445,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	/* ========================================= ULTRAMINE START ======================================*/
 
+	private static final boolean useUMConsole = Boolean.parseBoolean(System.getProperty("org.ultramine.server.umconsole"));
 	private final MultiWorld multiworld = new MultiWorld(this);
 	
 	public MultiWorld getMultiWorld()

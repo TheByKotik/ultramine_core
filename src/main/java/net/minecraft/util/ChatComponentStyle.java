@@ -81,7 +81,7 @@ public abstract class ChatComponentStyle implements IChatComponent
 		return stringbuilder.toString();
 	}
 
-	@SideOnly(Side.CLIENT)
+//	@SideOnly(Side.CLIENT)
 	public final String getFormattedText()
 	{
 		StringBuilder stringbuilder = new StringBuilder();

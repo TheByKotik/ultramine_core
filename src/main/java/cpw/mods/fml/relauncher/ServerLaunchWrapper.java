@@ -19,6 +19,10 @@ public class ServerLaunchWrapper {
 
 	private void run(String[] args)
 	{
+		boolean useUMConsole = Boolean.parseBoolean(System.getProperty("org.ultramine.server.umconsole"));
+		System.out.println((useUMConsole ? "\u00A7e" : "") + "================[ Starting UltraMine server ]================");
+		System.setProperty("Log4jContextSelector", "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector"); //always async logging
+		
 		Class<?> launchwrapper = null;
 		try
 		{

@@ -106,7 +106,7 @@ public class ChatStyle
 		{
 			return this;
 		}
-		@SideOnly(Side.CLIENT)
+//		@SideOnly(Side.CLIENT)
 		public String getFormattingCode()
 		{
 			return "";
@@ -213,7 +213,7 @@ public class ChatStyle
 		return this;
 	}
 
-	@SideOnly(Side.CLIENT)
+//	@SideOnly(Side.CLIENT)
 	public String getFormattingCode()
 	{
 		if (this.isEmpty())
