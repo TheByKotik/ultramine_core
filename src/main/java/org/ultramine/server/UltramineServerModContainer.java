@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.MinecraftForge;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
@@ -14,6 +15,7 @@ import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.event.FMLConstructionEvent;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
@@ -58,6 +60,12 @@ public class UltramineServerModContainer extends DummyModContainer
 		if(e.getSide().isServer())
 			ConfigurationHandler.load();
 	}
+	
+	@Subscribe
+	public void init(FMLInitializationEvent e)
+	{
+		MinecraftForge.EVENT_BUS.register(new UMEventHandler());
+	}
 
 	@Subscribe
 	public void postInit(FMLPostInitializationEvent e)
@@ -70,6 +78,16 @@ public class UltramineServerModContainer extends DummyModContainer
 	public void serverAboutToStart(FMLServerAboutToStartEvent e)
 	{
 		e.getServer().getMultiWorld().register();
+	}
+	
+	@Subscribe
+	public void serverStarting(FMLServerStartingEvent e)
+	{
+		e.registerArgumentHandlers(DefaultCompleters.class);
+		e.registerCommands(BasicPermissionCommands.class);
+		e.registerCommands(VanillaCommands.class);
+
+		e.getPermissionHandler().createGroup(OpPermissionProxySet.OP_GROUP, "*");
 	}
 	
 	@Subscribe
@@ -96,21 +114,6 @@ public class UltramineServerModContainer extends DummyModContainer
 		return ImmutableList.of(
 			"org.ultramine.server"
 		);
-	}
-
-	@Subscribe
-	public void serverStarting(FMLServerStartingEvent e)
-	{
-		e.registerArgumentHandlers(DefaultCompleters.class);
-		e.registerCommands(BasicPermissionCommands.class);
-		e.registerCommands(VanillaCommands.class);
-
-		e.getPermissionHandler().createGroup(OpPermissionProxySet.OP_GROUP, "*");
-	}
-
-	@Subscribe
-	public void stopServer(FMLServerStoppedEvent e)
-	{
 	}
 
 	@Override
