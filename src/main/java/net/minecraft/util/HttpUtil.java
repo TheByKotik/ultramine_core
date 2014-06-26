@@ -143,104 +143,108 @@ public class HttpUtil
 
 				try
 				{
-					byte[] abyte = new byte[4096];
-					URL url = new URL(p_151223_1_);
-					urlconnection = url.openConnection(p_151223_6_);
-					float f = 0.0F;
-					float f1 = (float)p_151223_3_.entrySet().size();
-					Iterator iterator = p_151223_3_.entrySet().iterator();
-
-					while (iterator.hasNext())
+					try
 					{
-						Entry entry = (Entry)iterator.next();
-						urlconnection.setRequestProperty((String)entry.getKey(), (String)entry.getValue());
+						byte[] abyte = new byte[4096];
+						URL url = new URL(p_151223_1_);
+						urlconnection = url.openConnection(p_151223_6_);
+						float f = 0.0F;
+						float f1 = (float)p_151223_3_.entrySet().size();
+						Iterator iterator = p_151223_3_.entrySet().iterator();
+
+						while (iterator.hasNext())
+						{
+							Entry entry = (Entry)iterator.next();
+							urlconnection.setRequestProperty((String)entry.getKey(), (String)entry.getValue());
+
+							if (p_151223_5_ != null)
+							{
+								p_151223_5_.setLoadingProgress((int)(++f / f1 * 100.0F));
+							}
+						}
+
+						inputstream = urlconnection.getInputStream();
+						f1 = (float)urlconnection.getContentLength();
+						int i = urlconnection.getContentLength();
 
 						if (p_151223_5_ != null)
 						{
-							p_151223_5_.setLoadingProgress((int)(++f / f1 * 100.0F));
+							p_151223_5_.resetProgresAndWorkingMessage(String.format("Downloading file (%.2f MB)...", new Object[] {Float.valueOf(f1 / 1000.0F / 1000.0F)}));
 						}
-					}
 
-					inputstream = urlconnection.getInputStream();
-					f1 = (float)urlconnection.getContentLength();
-					int i = urlconnection.getContentLength();
-
-					if (p_151223_5_ != null)
-					{
-						p_151223_5_.resetProgresAndWorkingMessage(String.format("Downloading file (%.2f MB)...", new Object[] {Float.valueOf(f1 / 1000.0F / 1000.0F)}));
-					}
-
-					if (p_151223_0_.exists())
-					{
-						long j = p_151223_0_.length();
-
-						if (j == (long)i)
+						if (p_151223_0_.exists())
 						{
-							p_151223_2_.func_148522_a(p_151223_0_);
+							long j = p_151223_0_.length();
 
+							if (j == (long)i)
+							{
+								p_151223_2_.func_148522_a(p_151223_0_);
+
+								if (p_151223_5_ != null)
+								{
+									p_151223_5_.func_146586_a();
+								}
+
+								return;
+							}
+
+							HttpUtil.logger.warn("Deleting " + p_151223_0_ + " as it does not match what we currently have (" + i + " vs our " + j + ").");
+							p_151223_0_.delete();
+						}
+						else if (p_151223_0_.getParentFile() != null)
+						{
+							p_151223_0_.getParentFile().mkdirs();
+						}
+
+						dataoutputstream = new DataOutputStream(new FileOutputStream(p_151223_0_));
+
+						if (p_151223_4_ > 0 && f1 > (float)p_151223_4_)
+						{
 							if (p_151223_5_ != null)
 							{
 								p_151223_5_.func_146586_a();
 							}
 
-							return;
+							throw new IOException("Filesize is bigger than maximum allowed (file is " + f + ", limit is " + p_151223_4_ + ")");
 						}
 
-						HttpUtil.logger.warn("Deleting " + p_151223_0_ + " as it does not match what we currently have (" + i + " vs our " + j + ").");
-						p_151223_0_.delete();
-					}
-					else if (p_151223_0_.getParentFile() != null)
-					{
-						p_151223_0_.getParentFile().mkdirs();
-					}
+						boolean flag = false;
+						int k;
 
-					dataoutputstream = new DataOutputStream(new FileOutputStream(p_151223_0_));
+						while ((k = inputstream.read(abyte)) >= 0)
+						{
+							f += (float)k;
 
-					if (p_151223_4_ > 0 && f1 > (float)p_151223_4_)
-					{
+							if (p_151223_5_ != null)
+							{
+								p_151223_5_.setLoadingProgress((int)(f / f1 * 100.0F));
+							}
+
+							if (p_151223_4_ > 0 && f > (float)p_151223_4_)
+							{
+								if (p_151223_5_ != null)
+								{
+									p_151223_5_.func_146586_a();
+								}
+
+								throw new IOException("Filesize was bigger than maximum allowed (got >= " + f + ", limit was " + p_151223_4_ + ")");
+							}
+
+							dataoutputstream.write(abyte, 0, k);
+						}
+
+						p_151223_2_.func_148522_a(p_151223_0_);
+
 						if (p_151223_5_ != null)
 						{
 							p_151223_5_.func_146586_a();
+							return;
 						}
-
-						throw new IOException("Filesize is bigger than maximum allowed (file is " + f + ", limit is " + p_151223_4_ + ")");
 					}
-
-					boolean flag = false;
-					int k;
-
-					while ((k = inputstream.read(abyte)) >= 0)
+					catch (Throwable throwable)
 					{
-						f += (float)k;
-
-						if (p_151223_5_ != null)
-						{
-							p_151223_5_.setLoadingProgress((int)(f / f1 * 100.0F));
-						}
-
-						if (p_151223_4_ > 0 && f > (float)p_151223_4_)
-						{
-							if (p_151223_5_ != null)
-							{
-								p_151223_5_.func_146586_a();
-							}
-
-							throw new IOException("Filesize was bigger than maximum allowed (got >= " + f + ", limit was " + p_151223_4_ + ")");
-						}
-
-						dataoutputstream.write(abyte, 0, k);
+						throwable.printStackTrace();
 					}
-
-					p_151223_2_.func_148522_a(p_151223_0_);
-
-					if (p_151223_5_ != null)
-					{
-						p_151223_5_.func_146586_a();
-					}
-				}
-				catch (Throwable throwable)
-				{
-					throwable.printStackTrace();
 				}
 				finally
 				{

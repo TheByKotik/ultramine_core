@@ -53,16 +53,16 @@ public class RConThreadClient extends RConThreadBase
 				BufferedInputStream bufferedinputstream = new BufferedInputStream(this.clientSocket.getInputStream());
 				int i = bufferedinputstream.read(this.buffer, 0, 1460);
 
-				if (10 <= i)
+				if (10 > i)
 				{
-					byte b0 = 0;
-					int j = RConUtils.getBytesAsLEInt(this.buffer, 0, i);
+					return;
+				}
 
-					if (j != i - 4)
-					{
-						return;
-					}
+				byte b0 = 0;
+				int j = RConUtils.getBytesAsLEInt(this.buffer, 0, i);
 
+				if (j == i - 4)
+				{
 					int i1 = b0 + 4;
 					int k = RConUtils.getBytesAsLEInt(this.buffer, i1, i);
 					i1 += 4;
