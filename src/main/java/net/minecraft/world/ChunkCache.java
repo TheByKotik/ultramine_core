@@ -138,6 +138,7 @@ public class ChunkCache implements IBlockAccess
 		return this.worldObj.getBiomeGenForCoords(par1, par2);
 	}
 
+	@Deprecated /* gone in 1.7.10, use direct access to Vec3.createVectorHelper instead */
 	public Vec3Pool getWorldVec3Pool()
 	{
 		return this.worldObj.getWorldVec3Pool();

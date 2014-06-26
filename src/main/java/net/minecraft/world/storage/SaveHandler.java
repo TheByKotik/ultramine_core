@@ -254,6 +254,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 			}
 
 			file1.renameTo(file2);
+			net.minecraftforge.event.ForgeEventFactory.firePlayerSavingEvent(par1EntityPlayer, this.playersDirectory, par1EntityPlayer.getUniqueID().toString());
 		}
 		catch (Exception exception)
 		{
@@ -270,6 +271,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 			par1EntityPlayer.readFromNBT(nbttagcompound);
 		}
 
+		net.minecraftforge.event.ForgeEventFactory.firePlayerLoadingEvent(par1EntityPlayer, playersDirectory, par1EntityPlayer.getUniqueID().toString());
 		return nbttagcompound;
 	}
 

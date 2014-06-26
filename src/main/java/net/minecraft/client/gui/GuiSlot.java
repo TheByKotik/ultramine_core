@@ -12,13 +12,13 @@ import org.lwjgl.opengl.GL11;
 public abstract class GuiSlot
 {
 	private final Minecraft mc;
-	protected int width;
-	private int height;
-	protected int top;
-	protected int bottom;
-	protected int right;
-	protected int left;
-	protected final int slotHeight;
+	public int width;
+	public int height;
+	public int top;
+	public int bottom;
+	public int right;
+	public int left;
+	public final int slotHeight;
 	private int scrollUpButtonID;
 	private int scrollDownButtonID;
 	protected int mouseX;
@@ -31,7 +31,7 @@ public abstract class GuiSlot
 	private long lastClicked;
 	private boolean showSelectionBox = true;
 	private boolean hasListHeader;
-	protected int headerPadding;
+	public int headerPadding;
 	private boolean field_148164_v = true;
 	private static final String __OBFID = "CL_00000679";
 

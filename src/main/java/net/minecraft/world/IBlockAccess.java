@@ -30,6 +30,7 @@ public interface IBlockAccess
 	@SideOnly(Side.CLIENT)
 	boolean extendedLevelsInChunkCache();
 
+	@Deprecated /* gone in 1.7.10, use direct access to Vec3.createVectorHelper instead */
 	Vec3Pool getWorldVec3Pool();
 
 	int isBlockProvidingPowerTo(int var1, int var2, int var3, int var4);

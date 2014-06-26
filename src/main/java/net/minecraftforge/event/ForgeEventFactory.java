@@ -1,7 +1,9 @@
 package net.minecraftforge.event;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -11,10 +13,13 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.storage.IPlayerFileData;
+import net.minecraft.world.storage.SaveHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.living.LivingPackSizeEvent;
@@ -86,7 +91,7 @@ public class ForgeEventFactory
 		MinecraftForge.EVENT_BUS.post(event);
 		return event.getResult();
 	}
-	
+
 	public static List<BiomeGenBase.SpawnListEntry> getPotentialSpawns(WorldServer world, EnumCreatureType type, int x, int y, int z, List<BiomeGenBase.SpawnListEntry> oldList)
 	{
 		WorldEvent.PotentialSpawns event = new WorldEvent.PotentialSpawns(world, type, x, y, z, oldList);
@@ -96,7 +101,7 @@ public class ForgeEventFactory
 		}
 		return event.list;
 	}
-	
+
 	public static int getMaxSpawnPackSize(EntityLiving entity)
 	{
 		LivingPackSizeEvent maxCanSpawnEvent = new LivingPackSizeEvent(entity);
@@ -117,7 +122,7 @@ public class ForgeEventFactory
 		MinecraftForge.EVENT_BUS.post(event);
 		return event.dropChance;
 	}
-	
+
 	public static ItemTooltipEvent onItemTooltip(ItemStack itemStack, EntityPlayer entityPlayer, List<String> toolTip, boolean showAdvancedItemTooltips)
 	{
 		ItemTooltipEvent event = new ItemTooltipEvent(itemStack, entityPlayer, toolTip, showAdvancedItemTooltips);
@@ -160,14 +165,31 @@ public class ForgeEventFactory
 		MinecraftForge.EVENT_BUS.post(event);
 		return event.result;
 	}
-	
+
 	public static void onStartEntityTracking(Entity entity, EntityPlayer player)
 	{
 		MinecraftForge.EVENT_BUS.post(new PlayerEvent.StartTracking(player, entity));
 	}
-	
+
 	public static void onStopEntityTracking(Entity entity, EntityPlayer player)
 	{
 		MinecraftForge.EVENT_BUS.post(new PlayerEvent.StopTracking(player, entity));
+	}
+
+	public static void firePlayerLoadingEvent(EntityPlayer player, File playerDirectory, String uuidString)
+	{
+		MinecraftForge.EVENT_BUS.post(new PlayerEvent.LoadFromFile(player, playerDirectory, uuidString));
+	}
+
+	public static void firePlayerSavingEvent(EntityPlayer player, File playerDirectory, String uuidString)
+	{
+		MinecraftForge.EVENT_BUS.post(new PlayerEvent.SaveToFile(player, playerDirectory, uuidString));
+	}
+
+	public static void firePlayerLoadingEvent(EntityPlayer player, IPlayerFileData playerFileData, String uuidString)
+	{
+		SaveHandler sh = (SaveHandler) playerFileData;
+		File dir = ObfuscationReflectionHelper.getPrivateValue(SaveHandler.class, sh, "playersDirectory", "field_"+"75771_c");
+		MinecraftForge.EVENT_BUS.post(new PlayerEvent.LoadFromFile(player, dir, uuidString));
 	}
 }
