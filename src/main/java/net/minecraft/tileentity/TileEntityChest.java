@@ -37,9 +37,9 @@ public class TileEntityChest extends TileEntity implements IInventory
 	}
 
 	@SideOnly(Side.CLIENT)
-	public TileEntityChest(int par1)
+	public TileEntityChest(int p_i2350_1_)
 	{
-		this.cachedChestType = par1;
+		this.cachedChestType = p_i2350_1_;
 	}
 
 	public int getSizeInventory()
@@ -47,31 +47,31 @@ public class TileEntityChest extends TileEntity implements IInventory
 		return 27;
 	}
 
-	public ItemStack getStackInSlot(int par1)
+	public ItemStack getStackInSlot(int p_70301_1_)
 	{
-		return this.chestContents[par1];
+		return this.chestContents[p_70301_1_];
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
 	{
-		if (this.chestContents[par1] != null)
+		if (this.chestContents[p_70298_1_] != null)
 		{
 			ItemStack itemstack;
 
-			if (this.chestContents[par1].stackSize <= par2)
+			if (this.chestContents[p_70298_1_].stackSize <= p_70298_2_)
 			{
-				itemstack = this.chestContents[par1];
-				this.chestContents[par1] = null;
+				itemstack = this.chestContents[p_70298_1_];
+				this.chestContents[p_70298_1_] = null;
 				this.markDirty();
 				return itemstack;
 			}
 			else
 			{
-				itemstack = this.chestContents[par1].splitStack(par2);
+				itemstack = this.chestContents[p_70298_1_].splitStack(p_70298_2_);
 
-				if (this.chestContents[par1].stackSize == 0)
+				if (this.chestContents[p_70298_1_].stackSize == 0)
 				{
-					this.chestContents[par1] = null;
+					this.chestContents[p_70298_1_] = null;
 				}
 
 				this.markDirty();
@@ -84,12 +84,12 @@ public class TileEntityChest extends TileEntity implements IInventory
 		}
 	}
 
-	public ItemStack getStackInSlotOnClosing(int par1)
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_)
 	{
-		if (this.chestContents[par1] != null)
+		if (this.chestContents[p_70304_1_] != null)
 		{
-			ItemStack itemstack = this.chestContents[par1];
-			this.chestContents[par1] = null;
+			ItemStack itemstack = this.chestContents[p_70304_1_];
+			this.chestContents[p_70304_1_] = null;
 			return itemstack;
 		}
 		else
@@ -98,13 +98,13 @@ public class TileEntityChest extends TileEntity implements IInventory
 		}
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
-		this.chestContents[par1] = par2ItemStack;
+		this.chestContents[p_70299_1_] = p_70299_2_;
 
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		if (p_70299_2_ != null && p_70299_2_.stackSize > this.getInventoryStackLimit())
 		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
+			p_70299_2_.stackSize = this.getInventoryStackLimit();
 		}
 
 		this.markDirty();
@@ -177,9 +177,9 @@ public class TileEntityChest extends TileEntity implements IInventory
 		return 64;
 	}
 
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
 	{
-		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : p_70300_1_.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	public void updateContainingBlockInfo()
@@ -282,8 +282,15 @@ public class TileEntityChest extends TileEntity implements IInventory
 
 	private boolean func_145977_a(int p_145977_1_, int p_145977_2_, int p_145977_3_)
 	{
-		Block block = this.worldObj.getBlock(p_145977_1_, p_145977_2_, p_145977_3_);
-		return block instanceof BlockChest && ((BlockChest)block).field_149956_a == this.func_145980_j();
+		if (this.worldObj == null)
+		{
+			return false;
+		}
+		else
+		{
+			Block block = this.worldObj.getBlock(p_145977_1_, p_145977_2_, p_145977_3_);
+			return block instanceof BlockChest && ((BlockChest)block).field_149956_a == this.func_145980_j();
+		}
 	}
 
 	public void updateEntity()
@@ -297,7 +304,7 @@ public class TileEntityChest extends TileEntity implements IInventory
 		{
 			this.numPlayersUsing = 0;
 			f = 5.0F;
-			List list = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB((double)((float)this.xCoord - f), (double)((float)this.yCoord - f), (double)((float)this.zCoord - f), (double)((float)(this.xCoord + 1) + f), (double)((float)(this.yCoord + 1) + f), (double)((float)(this.zCoord + 1) + f)));
+			List list = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double)((float)this.xCoord - f), (double)((float)this.yCoord - f), (double)((float)this.zCoord - f), (double)((float)(this.xCoord + 1) + f), (double)((float)(this.yCoord + 1) + f), (double)((float)(this.zCoord + 1) + f)));
 			Iterator iterator = list.iterator();
 
 			while (iterator.hasNext())
@@ -420,7 +427,7 @@ public class TileEntityChest extends TileEntity implements IInventory
 		}
 	}
 
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
 		return true;
 	}

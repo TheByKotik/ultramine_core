@@ -26,9 +26,9 @@ public abstract class StructureComponent
 
 	public StructureComponent() {}
 
-	protected StructureComponent(int par1)
+	protected StructureComponent(int p_i2091_1_)
 	{
-		this.componentType = par1;
+		this.componentType = p_i2091_1_;
 		this.coordBaseMode = -1;
 	}
 
@@ -47,25 +47,25 @@ public abstract class StructureComponent
 		return nbttagcompound;
 	}
 
-	protected abstract void func_143012_a(NBTTagCompound var1);
+	protected abstract void func_143012_a(NBTTagCompound p_143012_1_);
 
-	public void func_143009_a(World par1World, NBTTagCompound par2NBTTagCompound)
+	public void func_143009_a(World p_143009_1_, NBTTagCompound p_143009_2_)
 	{
-		if (par2NBTTagCompound.hasKey("BB"))
+		if (p_143009_2_.hasKey("BB"))
 		{
-			this.boundingBox = new StructureBoundingBox(par2NBTTagCompound.getIntArray("BB"));
+			this.boundingBox = new StructureBoundingBox(p_143009_2_.getIntArray("BB"));
 		}
 
-		this.coordBaseMode = par2NBTTagCompound.getInteger("O");
-		this.componentType = par2NBTTagCompound.getInteger("GD");
-		this.func_143011_b(par2NBTTagCompound);
+		this.coordBaseMode = p_143009_2_.getInteger("O");
+		this.componentType = p_143009_2_.getInteger("GD");
+		this.func_143011_b(p_143009_2_);
 	}
 
-	protected abstract void func_143011_b(NBTTagCompound var1);
+	protected abstract void func_143011_b(NBTTagCompound p_143011_1_);
 
-	public void buildComponent(StructureComponent par1StructureComponent, List par2List, Random par3Random) {}
+	public void buildComponent(StructureComponent p_74861_1_, List p_74861_2_, Random p_74861_3_) {}
 
-	public abstract boolean addComponentParts(World var1, Random var2, StructureBoundingBox var3);
+	public abstract boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_);
 
 	public StructureBoundingBox getBoundingBox()
 	{
@@ -77,9 +77,9 @@ public abstract class StructureComponent
 		return this.componentType;
 	}
 
-	public static StructureComponent findIntersecting(List par0List, StructureBoundingBox par1StructureBoundingBox)
+	public static StructureComponent findIntersecting(List p_74883_0_, StructureBoundingBox p_74883_1_)
 	{
-		Iterator iterator = par0List.iterator();
+		Iterator iterator = p_74883_0_.iterator();
 		StructureComponent structurecomponent;
 
 		do
@@ -91,7 +91,7 @@ public abstract class StructureComponent
 
 			structurecomponent = (StructureComponent)iterator.next();
 		}
-		while (structurecomponent.getBoundingBox() == null || !structurecomponent.getBoundingBox().intersectsWith(par1StructureBoundingBox));
+		while (structurecomponent.getBoundingBox() == null || !structurecomponent.getBoundingBox().intersectsWith(p_74883_1_));
 
 		return structurecomponent;
 	}
@@ -101,14 +101,14 @@ public abstract class StructureComponent
 		return new ChunkPosition(this.boundingBox.getCenterX(), this.boundingBox.getCenterY(), this.boundingBox.getCenterZ());
 	}
 
-	protected boolean isLiquidInStructureBoundingBox(World par1World, StructureBoundingBox par2StructureBoundingBox)
+	protected boolean isLiquidInStructureBoundingBox(World p_74860_1_, StructureBoundingBox p_74860_2_)
 	{
-		int i = Math.max(this.boundingBox.minX - 1, par2StructureBoundingBox.minX);
-		int j = Math.max(this.boundingBox.minY - 1, par2StructureBoundingBox.minY);
-		int k = Math.max(this.boundingBox.minZ - 1, par2StructureBoundingBox.minZ);
-		int l = Math.min(this.boundingBox.maxX + 1, par2StructureBoundingBox.maxX);
-		int i1 = Math.min(this.boundingBox.maxY + 1, par2StructureBoundingBox.maxY);
-		int j1 = Math.min(this.boundingBox.maxZ + 1, par2StructureBoundingBox.maxZ);
+		int i = Math.max(this.boundingBox.minX - 1, p_74860_2_.minX);
+		int j = Math.max(this.boundingBox.minY - 1, p_74860_2_.minY);
+		int k = Math.max(this.boundingBox.minZ - 1, p_74860_2_.minZ);
+		int l = Math.min(this.boundingBox.maxX + 1, p_74860_2_.maxX);
+		int i1 = Math.min(this.boundingBox.maxY + 1, p_74860_2_.maxY);
+		int j1 = Math.min(this.boundingBox.maxZ + 1, p_74860_2_.maxZ);
 		int k1;
 		int l1;
 
@@ -116,12 +116,12 @@ public abstract class StructureComponent
 		{
 			for (l1 = k; l1 <= j1; ++l1)
 			{
-				if (par1World.getBlock(k1, j, l1).getMaterial().isLiquid())
+				if (p_74860_1_.getBlock(k1, j, l1).getMaterial().isLiquid())
 				{
 					return true;
 				}
 
-				if (par1World.getBlock(k1, i1, l1).getMaterial().isLiquid())
+				if (p_74860_1_.getBlock(k1, i1, l1).getMaterial().isLiquid())
 				{
 					return true;
 				}
@@ -132,12 +132,12 @@ public abstract class StructureComponent
 		{
 			for (l1 = j; l1 <= i1; ++l1)
 			{
-				if (par1World.getBlock(k1, l1, k).getMaterial().isLiquid())
+				if (p_74860_1_.getBlock(k1, l1, k).getMaterial().isLiquid())
 				{
 					return true;
 				}
 
-				if (par1World.getBlock(k1, l1, j1).getMaterial().isLiquid())
+				if (p_74860_1_.getBlock(k1, l1, j1).getMaterial().isLiquid())
 				{
 					return true;
 				}
@@ -148,12 +148,12 @@ public abstract class StructureComponent
 		{
 			for (l1 = j; l1 <= i1; ++l1)
 			{
-				if (par1World.getBlock(i, l1, k1).getMaterial().isLiquid())
+				if (p_74860_1_.getBlock(i, l1, k1).getMaterial().isLiquid())
 				{
 					return true;
 				}
 
-				if (par1World.getBlock(l, l1, k1).getMaterial().isLiquid())
+				if (p_74860_1_.getBlock(l, l1, k1).getMaterial().isLiquid())
 				{
 					return true;
 				}
@@ -163,40 +163,40 @@ public abstract class StructureComponent
 		return false;
 	}
 
-	protected int getXWithOffset(int par1, int par2)
+	protected int getXWithOffset(int p_74865_1_, int p_74865_2_)
 	{
 		switch (this.coordBaseMode)
 		{
 			case 0:
 			case 2:
-				return this.boundingBox.minX + par1;
+				return this.boundingBox.minX + p_74865_1_;
 			case 1:
-				return this.boundingBox.maxX - par2;
+				return this.boundingBox.maxX - p_74865_2_;
 			case 3:
-				return this.boundingBox.minX + par2;
+				return this.boundingBox.minX + p_74865_2_;
 			default:
-				return par1;
+				return p_74865_1_;
 		}
 	}
 
-	protected int getYWithOffset(int par1)
+	protected int getYWithOffset(int p_74862_1_)
 	{
-		return this.coordBaseMode == -1 ? par1 : par1 + this.boundingBox.minY;
+		return this.coordBaseMode == -1 ? p_74862_1_ : p_74862_1_ + this.boundingBox.minY;
 	}
 
-	protected int getZWithOffset(int par1, int par2)
+	protected int getZWithOffset(int p_74873_1_, int p_74873_2_)
 	{
 		switch (this.coordBaseMode)
 		{
 			case 0:
-				return this.boundingBox.minZ + par2;
+				return this.boundingBox.minZ + p_74873_2_;
 			case 1:
 			case 3:
-				return this.boundingBox.minZ + par1;
+				return this.boundingBox.minZ + p_74873_1_;
 			case 2:
-				return this.boundingBox.maxZ - par2;
+				return this.boundingBox.maxZ - p_74873_2_;
 			default:
-				return par2;
+				return p_74873_2_;
 		}
 	}
 
@@ -550,15 +550,15 @@ public abstract class StructureComponent
 		return !p_151548_5_.isVecInside(l, i1, j1) ? Blocks.air : p_151548_1_.getBlock(l, i1, j1);
 	}
 
-	protected void fillWithAir(World par1World, StructureBoundingBox par2StructureBoundingBox, int par3, int par4, int par5, int par6, int par7, int par8)
+	protected void fillWithAir(World p_74878_1_, StructureBoundingBox p_74878_2_, int p_74878_3_, int p_74878_4_, int p_74878_5_, int p_74878_6_, int p_74878_7_, int p_74878_8_)
 	{
-		for (int k1 = par4; k1 <= par7; ++k1)
+		for (int k1 = p_74878_4_; k1 <= p_74878_7_; ++k1)
 		{
-			for (int l1 = par3; l1 <= par6; ++l1)
+			for (int l1 = p_74878_3_; l1 <= p_74878_6_; ++l1)
 			{
-				for (int i2 = par5; i2 <= par8; ++i2)
+				for (int i2 = p_74878_5_; i2 <= p_74878_8_; ++i2)
 				{
-					this.placeBlockAtCurrentPosition(par1World, Blocks.air, 0, l1, k1, i2, par2StructureBoundingBox);
+					this.placeBlockAtCurrentPosition(p_74878_1_, Blocks.air, 0, l1, k1, i2, p_74878_2_);
 				}
 			}
 		}
@@ -612,18 +612,18 @@ public abstract class StructureComponent
 		}
 	}
 
-	protected void fillWithRandomizedBlocks(World par1World, StructureBoundingBox par2StructureBoundingBox, int par3, int par4, int par5, int par6, int par7, int par8, boolean par9, Random par10Random, StructureComponent.BlockSelector par11StructurePieceBlockSelector)
+	protected void fillWithRandomizedBlocks(World p_74882_1_, StructureBoundingBox p_74882_2_, int p_74882_3_, int p_74882_4_, int p_74882_5_, int p_74882_6_, int p_74882_7_, int p_74882_8_, boolean p_74882_9_, Random p_74882_10_, StructureComponent.BlockSelector p_74882_11_)
 	{
-		for (int k1 = par4; k1 <= par7; ++k1)
+		for (int k1 = p_74882_4_; k1 <= p_74882_7_; ++k1)
 		{
-			for (int l1 = par3; l1 <= par6; ++l1)
+			for (int l1 = p_74882_3_; l1 <= p_74882_6_; ++l1)
 			{
-				for (int i2 = par5; i2 <= par8; ++i2)
+				for (int i2 = p_74882_5_; i2 <= p_74882_8_; ++i2)
 				{
-					if (!par9 || this.getBlockAtCurrentPosition(par1World, l1, k1, i2, par2StructureBoundingBox).getMaterial() != Material.air)
+					if (!p_74882_9_ || this.getBlockAtCurrentPosition(p_74882_1_, l1, k1, i2, p_74882_2_).getMaterial() != Material.air)
 					{
-						par11StructurePieceBlockSelector.selectBlocks(par10Random, l1, k1, i2, k1 == par4 || k1 == par7 || l1 == par3 || l1 == par6 || i2 == par5 || i2 == par8);
-						this.placeBlockAtCurrentPosition(par1World, par11StructurePieceBlockSelector.func_151561_a(), par11StructurePieceBlockSelector.getSelectedBlockMetaData(), l1, k1, i2, par2StructureBoundingBox);
+						p_74882_11_.selectBlocks(p_74882_10_, l1, k1, i2, k1 == p_74882_4_ || k1 == p_74882_7_ || l1 == p_74882_3_ || l1 == p_74882_6_ || i2 == p_74882_5_ || i2 == p_74882_8_);
+						this.placeBlockAtCurrentPosition(p_74882_1_, p_74882_11_.func_151561_a(), p_74882_11_.getSelectedBlockMetaData(), l1, k1, i2, p_74882_2_);
 					}
 				}
 			}
@@ -696,17 +696,17 @@ public abstract class StructureComponent
 		}
 	}
 
-	protected void clearCurrentPositionBlocksUpwards(World par1World, int par2, int par3, int par4, StructureBoundingBox par5StructureBoundingBox)
+	protected void clearCurrentPositionBlocksUpwards(World p_74871_1_, int p_74871_2_, int p_74871_3_, int p_74871_4_, StructureBoundingBox p_74871_5_)
 	{
-		int l = this.getXWithOffset(par2, par4);
-		int i1 = this.getYWithOffset(par3);
-		int j1 = this.getZWithOffset(par2, par4);
+		int l = this.getXWithOffset(p_74871_2_, p_74871_4_);
+		int i1 = this.getYWithOffset(p_74871_3_);
+		int j1 = this.getZWithOffset(p_74871_2_, p_74871_4_);
 
-		if (par5StructureBoundingBox.isVecInside(l, i1, j1))
+		if (p_74871_5_.isVecInside(l, i1, j1))
 		{
-			while (!par1World.isAirBlock(l, i1, j1) && i1 < 255)
+			while (!p_74871_1_.isAirBlock(l, i1, j1) && i1 < 255)
 			{
-				par1World.setBlock(l, i1, j1, Blocks.air, 0, 2);
+				p_74871_1_.setBlock(l, i1, j1, Blocks.air, 0, 2);
 				++i1;
 			}
 		}
@@ -728,20 +728,20 @@ public abstract class StructureComponent
 		}
 	}
 
-	protected boolean generateStructureChestContents(World par1World, StructureBoundingBox par2StructureBoundingBox, Random par3Random, int par4, int par5, int par6, WeightedRandomChestContent[] par7ArrayOfWeightedRandomChestContent, int par8)
+	protected boolean generateStructureChestContents(World p_74879_1_, StructureBoundingBox p_74879_2_, Random p_74879_3_, int p_74879_4_, int p_74879_5_, int p_74879_6_, WeightedRandomChestContent[] p_74879_7_, int p_74879_8_)
 	{
-		int i1 = this.getXWithOffset(par4, par6);
-		int j1 = this.getYWithOffset(par5);
-		int k1 = this.getZWithOffset(par4, par6);
+		int i1 = this.getXWithOffset(p_74879_4_, p_74879_6_);
+		int j1 = this.getYWithOffset(p_74879_5_);
+		int k1 = this.getZWithOffset(p_74879_4_, p_74879_6_);
 
-		if (par2StructureBoundingBox.isVecInside(i1, j1, k1) && par1World.getBlock(i1, j1, k1) != Blocks.chest)
+		if (p_74879_2_.isVecInside(i1, j1, k1) && p_74879_1_.getBlock(i1, j1, k1) != Blocks.chest)
 		{
-			par1World.setBlock(i1, j1, k1, Blocks.chest, 0, 2);
-			TileEntityChest tileentitychest = (TileEntityChest)par1World.getTileEntity(i1, j1, k1);
+			p_74879_1_.setBlock(i1, j1, k1, Blocks.chest, 0, 2);
+			TileEntityChest tileentitychest = (TileEntityChest)p_74879_1_.getTileEntity(i1, j1, k1);
 
 			if (tileentitychest != null)
 			{
-				WeightedRandomChestContent.generateChestContents(par3Random, par7ArrayOfWeightedRandomChestContent, tileentitychest, par8);
+				WeightedRandomChestContent.generateChestContents(p_74879_3_, p_74879_7_, tileentitychest, p_74879_8_);
 			}
 
 			return true;
@@ -752,20 +752,20 @@ public abstract class StructureComponent
 		}
 	}
 
-	protected boolean generateStructureDispenserContents(World par1World, StructureBoundingBox par2StructureBoundingBox, Random par3Random, int par4, int par5, int par6, int par7, WeightedRandomChestContent[] par8ArrayOfWeightedRandomChestContent, int par9)
+	protected boolean generateStructureDispenserContents(World p_74869_1_, StructureBoundingBox p_74869_2_, Random p_74869_3_, int p_74869_4_, int p_74869_5_, int p_74869_6_, int p_74869_7_, WeightedRandomChestContent[] p_74869_8_, int p_74869_9_)
 	{
-		int j1 = this.getXWithOffset(par4, par6);
-		int k1 = this.getYWithOffset(par5);
-		int l1 = this.getZWithOffset(par4, par6);
+		int j1 = this.getXWithOffset(p_74869_4_, p_74869_6_);
+		int k1 = this.getYWithOffset(p_74869_5_);
+		int l1 = this.getZWithOffset(p_74869_4_, p_74869_6_);
 
-		if (par2StructureBoundingBox.isVecInside(j1, k1, l1) && par1World.getBlock(j1, k1, l1) != Blocks.dispenser)
+		if (p_74869_2_.isVecInside(j1, k1, l1) && p_74869_1_.getBlock(j1, k1, l1) != Blocks.dispenser)
 		{
-			par1World.setBlock(j1, k1, l1, Blocks.dispenser, this.getMetadataWithOffset(Blocks.dispenser, par7), 2);
-			TileEntityDispenser tileentitydispenser = (TileEntityDispenser)par1World.getTileEntity(j1, k1, l1);
+			p_74869_1_.setBlock(j1, k1, l1, Blocks.dispenser, this.getMetadataWithOffset(Blocks.dispenser, p_74869_7_), 2);
+			TileEntityDispenser tileentitydispenser = (TileEntityDispenser)p_74869_1_.getTileEntity(j1, k1, l1);
 
 			if (tileentitydispenser != null)
 			{
-				WeightedRandomChestContent.generateDispenserContents(par3Random, par8ArrayOfWeightedRandomChestContent, tileentitydispenser, par9);
+				WeightedRandomChestContent.generateDispenserContents(p_74869_3_, p_74869_8_, tileentitydispenser, p_74869_9_);
 			}
 
 			return true;
@@ -776,15 +776,15 @@ public abstract class StructureComponent
 		}
 	}
 
-	protected void placeDoorAtCurrentPosition(World par1World, StructureBoundingBox par2StructureBoundingBox, Random par3Random, int par4, int par5, int par6, int par7)
+	protected void placeDoorAtCurrentPosition(World p_74881_1_, StructureBoundingBox p_74881_2_, Random p_74881_3_, int p_74881_4_, int p_74881_5_, int p_74881_6_, int p_74881_7_)
 	{
-		int i1 = this.getXWithOffset(par4, par6);
-		int j1 = this.getYWithOffset(par5);
-		int k1 = this.getZWithOffset(par4, par6);
+		int i1 = this.getXWithOffset(p_74881_4_, p_74881_6_);
+		int j1 = this.getYWithOffset(p_74881_5_);
+		int k1 = this.getZWithOffset(p_74881_4_, p_74881_6_);
 
-		if (par2StructureBoundingBox.isVecInside(i1, j1, k1))
+		if (p_74881_2_.isVecInside(i1, j1, k1))
 		{
-			ItemDoor.placeDoorBlock(par1World, i1, j1, k1, par7, Blocks.wooden_door);
+			ItemDoor.placeDoorBlock(p_74881_1_, i1, j1, k1, p_74881_7_, Blocks.wooden_door);
 		}
 	}
 
@@ -799,7 +799,7 @@ public abstract class StructureComponent
 				this.field_151562_a = Blocks.air;
 			}
 
-			public abstract void selectBlocks(Random var1, int var2, int var3, int var4, boolean var5);
+			public abstract void selectBlocks(Random p_75062_1_, int p_75062_2_, int p_75062_3_, int p_75062_4_, boolean p_75062_5_);
 
 			public Block func_151561_a()
 			{

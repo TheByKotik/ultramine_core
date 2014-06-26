@@ -16,44 +16,44 @@ public class PathPoint
 	public boolean isFirst;
 	private static final String __OBFID = "CL_00000574";
 
-	public PathPoint(int par1, int par2, int par3)
+	public PathPoint(int p_i2135_1_, int p_i2135_2_, int p_i2135_3_)
 	{
-		this.xCoord = par1;
-		this.yCoord = par2;
-		this.zCoord = par3;
-		this.hash = makeHash(par1, par2, par3);
+		this.xCoord = p_i2135_1_;
+		this.yCoord = p_i2135_2_;
+		this.zCoord = p_i2135_3_;
+		this.hash = makeHash(p_i2135_1_, p_i2135_2_, p_i2135_3_);
 	}
 
-	public static int makeHash(int par0, int par1, int par2)
+	public static int makeHash(int p_75830_0_, int p_75830_1_, int p_75830_2_)
 	{
-		return par1 & 255 | (par0 & 32767) << 8 | (par2 & 32767) << 24 | (par0 < 0 ? Integer.MIN_VALUE : 0) | (par2 < 0 ? 32768 : 0);
+		return p_75830_1_ & 255 | (p_75830_0_ & 32767) << 8 | (p_75830_2_ & 32767) << 24 | (p_75830_0_ < 0 ? Integer.MIN_VALUE : 0) | (p_75830_2_ < 0 ? 32768 : 0);
 	}
 
-	public float distanceTo(PathPoint par1PathPoint)
+	public float distanceTo(PathPoint p_75829_1_)
 	{
-		float f = (float)(par1PathPoint.xCoord - this.xCoord);
-		float f1 = (float)(par1PathPoint.yCoord - this.yCoord);
-		float f2 = (float)(par1PathPoint.zCoord - this.zCoord);
+		float f = (float)(p_75829_1_.xCoord - this.xCoord);
+		float f1 = (float)(p_75829_1_.yCoord - this.yCoord);
+		float f2 = (float)(p_75829_1_.zCoord - this.zCoord);
 		return MathHelper.sqrt_float(f * f + f1 * f1 + f2 * f2);
 	}
 
-	public float distanceToSquared(PathPoint par1PathPoint)
+	public float distanceToSquared(PathPoint p_75832_1_)
 	{
-		float f = (float)(par1PathPoint.xCoord - this.xCoord);
-		float f1 = (float)(par1PathPoint.yCoord - this.yCoord);
-		float f2 = (float)(par1PathPoint.zCoord - this.zCoord);
+		float f = (float)(p_75832_1_.xCoord - this.xCoord);
+		float f1 = (float)(p_75832_1_.yCoord - this.yCoord);
+		float f2 = (float)(p_75832_1_.zCoord - this.zCoord);
 		return f * f + f1 * f1 + f2 * f2;
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (!(par1Obj instanceof PathPoint))
+		if (!(p_equals_1_ instanceof PathPoint))
 		{
 			return false;
 		}
 		else
 		{
-			PathPoint pathpoint = (PathPoint)par1Obj;
+			PathPoint pathpoint = (PathPoint)p_equals_1_;
 			return this.hash == pathpoint.hash && this.xCoord == pathpoint.xCoord && this.yCoord == pathpoint.yCoord && this.zCoord == pathpoint.zCoord;
 		}
 	}

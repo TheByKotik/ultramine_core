@@ -39,9 +39,9 @@ public class GuiWinGame extends GuiScreen
 		}
 	}
 
-	protected void keyTyped(char par1, int par2)
+	protected void keyTyped(char p_73869_1_, int p_73869_2_)
 	{
-		if (par2 == 1)
+		if (p_73869_2_ == 1)
 		{
 			this.func_146574_g();
 		}
@@ -147,14 +147,14 @@ public class GuiWinGame extends GuiScreen
 		tessellator.draw();
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
-		this.func_146575_b(par1, par2, par3);
+		this.func_146575_b(p_73863_1_, p_73863_2_, p_73863_3_);
 		Tessellator tessellator = Tessellator.instance;
 		short short1 = 274;
 		int k = this.width / 2 - short1 / 2;
 		int l = this.height + 50;
-		float f1 = -((float)this.field_146581_h + par3) * this.field_146578_s;
+		float f1 = -((float)this.field_146581_h + p_73863_3_) * this.field_146578_s;
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.0F, f1, 0.0F);
 		this.mc.getTextureManager().bindTexture(field_146576_f);
@@ -209,6 +209,6 @@ public class GuiWinGame extends GuiScreen
 		tessellator.addVertexWithUV(0.0D, 0.0D, (double)this.zLevel, 0.0D, 0.0D);
 		tessellator.draw();
 		GL11.glDisable(GL11.GL_BLEND);
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 }

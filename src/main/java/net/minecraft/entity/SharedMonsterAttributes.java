@@ -23,10 +23,10 @@ public class SharedMonsterAttributes
 	public static final IAttribute attackDamage = new RangedAttribute("generic.attackDamage", 2.0D, 0.0D, Double.MAX_VALUE);
 	private static final String __OBFID = "CL_00001695";
 
-	public static NBTTagList writeBaseAttributeMapToNBT(BaseAttributeMap par0BaseAttributeMap)
+	public static NBTTagList writeBaseAttributeMapToNBT(BaseAttributeMap p_111257_0_)
 	{
 		NBTTagList nbttaglist = new NBTTagList();
-		Iterator iterator = par0BaseAttributeMap.getAllAttributes().iterator();
+		Iterator iterator = p_111257_0_.getAllAttributes().iterator();
 
 		while (iterator.hasNext())
 		{
@@ -37,13 +37,13 @@ public class SharedMonsterAttributes
 		return nbttaglist;
 	}
 
-	private static NBTTagCompound writeAttributeInstanceToNBT(IAttributeInstance par0AttributeInstance)
+	private static NBTTagCompound writeAttributeInstanceToNBT(IAttributeInstance p_111261_0_)
 	{
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		IAttribute iattribute = par0AttributeInstance.getAttribute();
+		IAttribute iattribute = p_111261_0_.getAttribute();
 		nbttagcompound.setString("Name", iattribute.getAttributeUnlocalizedName());
-		nbttagcompound.setDouble("Base", par0AttributeInstance.getBaseValue());
-		Collection collection = par0AttributeInstance.func_111122_c();
+		nbttagcompound.setDouble("Base", p_111261_0_.getBaseValue());
+		Collection collection = p_111261_0_.func_111122_c();
 
 		if (collection != null && !collection.isEmpty())
 		{
@@ -66,14 +66,14 @@ public class SharedMonsterAttributes
 		return nbttagcompound;
 	}
 
-	private static NBTTagCompound writeAttributeModifierToNBT(AttributeModifier par0AttributeModifier)
+	private static NBTTagCompound writeAttributeModifierToNBT(AttributeModifier p_111262_0_)
 	{
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		nbttagcompound.setString("Name", par0AttributeModifier.getName());
-		nbttagcompound.setDouble("Amount", par0AttributeModifier.getAmount());
-		nbttagcompound.setInteger("Operation", par0AttributeModifier.getOperation());
-		nbttagcompound.setLong("UUIDMost", par0AttributeModifier.getID().getMostSignificantBits());
-		nbttagcompound.setLong("UUIDLeast", par0AttributeModifier.getID().getLeastSignificantBits());
+		nbttagcompound.setString("Name", p_111262_0_.getName());
+		nbttagcompound.setDouble("Amount", p_111262_0_.getAmount());
+		nbttagcompound.setInteger("Operation", p_111262_0_.getOperation());
+		nbttagcompound.setLong("UUIDMost", p_111262_0_.getID().getMostSignificantBits());
+		nbttagcompound.setLong("UUIDLeast", p_111262_0_.getID().getLeastSignificantBits());
 		return nbttagcompound;
 	}
 
@@ -95,32 +95,32 @@ public class SharedMonsterAttributes
 		}
 	}
 
-	private static void applyModifiersToAttributeInstance(IAttributeInstance par0AttributeInstance, NBTTagCompound par1NBTTagCompound)
+	private static void applyModifiersToAttributeInstance(IAttributeInstance p_111258_0_, NBTTagCompound p_111258_1_)
 	{
-		par0AttributeInstance.setBaseValue(par1NBTTagCompound.getDouble("Base"));
+		p_111258_0_.setBaseValue(p_111258_1_.getDouble("Base"));
 
-		if (par1NBTTagCompound.hasKey("Modifiers", 9))
+		if (p_111258_1_.hasKey("Modifiers", 9))
 		{
-			NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Modifiers", 10);
+			NBTTagList nbttaglist = p_111258_1_.getTagList("Modifiers", 10);
 
 			for (int i = 0; i < nbttaglist.tagCount(); ++i)
 			{
 				AttributeModifier attributemodifier = readAttributeModifierFromNBT(nbttaglist.getCompoundTagAt(i));
-				AttributeModifier attributemodifier1 = par0AttributeInstance.getModifier(attributemodifier.getID());
+				AttributeModifier attributemodifier1 = p_111258_0_.getModifier(attributemodifier.getID());
 
 				if (attributemodifier1 != null)
 				{
-					par0AttributeInstance.removeModifier(attributemodifier1);
+					p_111258_0_.removeModifier(attributemodifier1);
 				}
 
-				par0AttributeInstance.applyModifier(attributemodifier);
+				p_111258_0_.applyModifier(attributemodifier);
 			}
 		}
 	}
 
-	public static AttributeModifier readAttributeModifierFromNBT(NBTTagCompound par0NBTTagCompound)
+	public static AttributeModifier readAttributeModifierFromNBT(NBTTagCompound p_111259_0_)
 	{
-		UUID uuid = new UUID(par0NBTTagCompound.getLong("UUIDMost"), par0NBTTagCompound.getLong("UUIDLeast"));
-		return new AttributeModifier(uuid, par0NBTTagCompound.getString("Name"), par0NBTTagCompound.getDouble("Amount"), par0NBTTagCompound.getInteger("Operation"));
+		UUID uuid = new UUID(p_111259_0_.getLong("UUIDMost"), p_111259_0_.getLong("UUIDLeast"));
+		return new AttributeModifier(uuid, p_111259_0_.getString("Name"), p_111259_0_.getDouble("Amount"), p_111259_0_.getInteger("Operation"));
 	}
 }

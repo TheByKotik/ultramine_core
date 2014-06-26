@@ -45,9 +45,9 @@ public class Stitcher
 		return this.currentHeight;
 	}
 
-	public void addSprite(TextureAtlasSprite par1TextureAtlasSprite)
+	public void addSprite(TextureAtlasSprite p_110934_1_)
 	{
-		Stitcher.Holder holder = new Stitcher.Holder(par1TextureAtlasSprite, this.mipmapLevelStitcher);
+		Stitcher.Holder holder = new Stitcher.Holder(p_110934_1_, this.mipmapLevelStitcher);
 
 		if (this.maxTileDimension > 0)
 		{
@@ -70,7 +70,7 @@ public class Stitcher
 
 			if (!this.allocateSlot(holder))
 			{
-				String s = String.format("Unable to fit: %s - size: %dx%d - Maybe try a lowerresolution texturepack?", new Object[] {holder.getAtlasSprite().getIconName(), Integer.valueOf(holder.getAtlasSprite().getIconWidth()), Integer.valueOf(holder.getAtlasSprite().getIconHeight())});
+				String s = String.format("Unable to fit: %s - size: %dx%d - Maybe try a lowerresolution resourcepack?", new Object[] {holder.getAtlasSprite().getIconName(), Integer.valueOf(holder.getAtlasSprite().getIconWidth()), Integer.valueOf(holder.getAtlasSprite().getIconHeight())});
 				throw new StitcherException(holder, s);
 			}
 		}
@@ -113,31 +113,31 @@ public class Stitcher
 		return (p_147969_0_ >> p_147969_1_) + ((p_147969_0_ & (1 << p_147969_1_) - 1) == 0 ? 0 : 1) << p_147969_1_;
 	}
 
-	private boolean allocateSlot(Stitcher.Holder par1StitchHolder)
+	private boolean allocateSlot(Stitcher.Holder p_94310_1_)
 	{
 		for (int i = 0; i < this.stitchSlots.size(); ++i)
 		{
-			if (((Stitcher.Slot)this.stitchSlots.get(i)).addSlot(par1StitchHolder))
+			if (((Stitcher.Slot)this.stitchSlots.get(i)).addSlot(p_94310_1_))
 			{
 				return true;
 			}
 
-			par1StitchHolder.rotate();
+			p_94310_1_.rotate();
 
-			if (((Stitcher.Slot)this.stitchSlots.get(i)).addSlot(par1StitchHolder))
+			if (((Stitcher.Slot)this.stitchSlots.get(i)).addSlot(p_94310_1_))
 			{
 				return true;
 			}
 
-			par1StitchHolder.rotate();
+			p_94310_1_.rotate();
 		}
 
-		return this.expandAndAllocateSlot(par1StitchHolder);
+		return this.expandAndAllocateSlot(p_94310_1_);
 	}
 
-	private boolean expandAndAllocateSlot(Stitcher.Holder par1StitchHolder)
+	private boolean expandAndAllocateSlot(Stitcher.Holder p_94311_1_)
 	{
-		int i = Math.min(par1StitchHolder.getWidth(), par1StitchHolder.getHeight());
+		int i = Math.min(p_94311_1_.getWidth(), p_94311_1_.getHeight());
 		boolean flag = this.currentWidth == 0 && this.currentHeight == 0;
 		boolean flag1;
 		int j;
@@ -181,7 +181,7 @@ public class Stitcher
 			flag1 = flag6 && (flag || this.currentWidth <= this.currentHeight);
 		}
 
-		j = Math.max(par1StitchHolder.getWidth(), par1StitchHolder.getHeight());
+		j = Math.max(p_94311_1_.getWidth(), p_94311_1_.getHeight());
 
 		if (MathHelper.roundUpToPowerOfTwo((flag1 ? this.currentHeight : this.currentWidth) + j) > (flag1 ? this.maxHeight : this.maxWidth))
 		{
@@ -193,26 +193,26 @@ public class Stitcher
 
 			if (flag1)
 			{
-				if (par1StitchHolder.getWidth() > par1StitchHolder.getHeight())
+				if (p_94311_1_.getWidth() > p_94311_1_.getHeight())
 				{
-					par1StitchHolder.rotate();
+					p_94311_1_.rotate();
 				}
 
 				if (this.currentHeight == 0)
 				{
-					this.currentHeight = par1StitchHolder.getHeight();
+					this.currentHeight = p_94311_1_.getHeight();
 				}
 
-				slot = new Stitcher.Slot(this.currentWidth, 0, par1StitchHolder.getWidth(), this.currentHeight);
-				this.currentWidth += par1StitchHolder.getWidth();
+				slot = new Stitcher.Slot(this.currentWidth, 0, p_94311_1_.getWidth(), this.currentHeight);
+				this.currentWidth += p_94311_1_.getWidth();
 			}
 			else
 			{
-				slot = new Stitcher.Slot(0, this.currentHeight, this.currentWidth, par1StitchHolder.getHeight());
-				this.currentHeight += par1StitchHolder.getHeight();
+				slot = new Stitcher.Slot(0, this.currentHeight, this.currentWidth, p_94311_1_.getHeight());
+				this.currentHeight += p_94311_1_.getHeight();
 			}
 
-			slot.addSlot(par1StitchHolder);
+			slot.addSlot(p_94311_1_);
 			this.stitchSlots.add(slot);
 			return true;
 		}
@@ -263,11 +263,11 @@ public class Stitcher
 				return this.rotated;
 			}
 
-			public void setNewDimension(int par1)
+			public void setNewDimension(int p_94196_1_)
 			{
-				if (this.width > par1 && this.height > par1)
+				if (this.width > p_94196_1_ && this.height > p_94196_1_)
 				{
-					this.scaleFactor = (float)par1 / (float)Math.min(this.width, this.height);
+					this.scaleFactor = (float)p_94196_1_ / (float)Math.min(this.width, this.height);
 				}
 			}
 
@@ -276,35 +276,35 @@ public class Stitcher
 				return "Holder{width=" + this.width + ", height=" + this.height + '}';
 			}
 
-			public int compareTo(Stitcher.Holder par1StitchHolder)
+			public int compareTo(Stitcher.Holder p_compareTo_1_)
 			{
 				int i;
 
-				if (this.getHeight() == par1StitchHolder.getHeight())
+				if (this.getHeight() == p_compareTo_1_.getHeight())
 				{
-					if (this.getWidth() == par1StitchHolder.getWidth())
+					if (this.getWidth() == p_compareTo_1_.getWidth())
 					{
 						if (this.theTexture.getIconName() == null)
 						{
-							return par1StitchHolder.theTexture.getIconName() == null ? 0 : -1;
+							return p_compareTo_1_.theTexture.getIconName() == null ? 0 : -1;
 						}
 
-						return this.theTexture.getIconName().compareTo(par1StitchHolder.theTexture.getIconName());
+						return this.theTexture.getIconName().compareTo(p_compareTo_1_.theTexture.getIconName());
 					}
 
-					i = this.getWidth() < par1StitchHolder.getWidth() ? 1 : -1;
+					i = this.getWidth() < p_compareTo_1_.getWidth() ? 1 : -1;
 				}
 				else
 				{
-					i = this.getHeight() < par1StitchHolder.getHeight() ? 1 : -1;
+					i = this.getHeight() < p_compareTo_1_.getHeight() ? 1 : -1;
 				}
 
 				return i;
 			}
 
-			public int compareTo(Object par1Obj)
+			public int compareTo(Object p_compareTo_1_)
 			{
-				return this.compareTo((Stitcher.Holder)par1Obj);
+				return this.compareTo((Stitcher.Holder)p_compareTo_1_);
 			}
 		}
 
@@ -319,12 +319,12 @@ public class Stitcher
 			private Stitcher.Holder holder;
 			private static final String __OBFID = "CL_00001056";
 
-			public Slot(int par1, int par2, int par3, int par4)
+			public Slot(int p_i1277_1_, int p_i1277_2_, int p_i1277_3_, int p_i1277_4_)
 			{
-				this.originX = par1;
-				this.originY = par2;
-				this.width = par3;
-				this.height = par4;
+				this.originX = p_i1277_1_;
+				this.originY = p_i1277_2_;
+				this.width = p_i1277_3_;
+				this.height = p_i1277_4_;
 			}
 
 			public Stitcher.Holder getStitchHolder()
@@ -342,7 +342,7 @@ public class Stitcher
 				return this.originY;
 			}
 
-			public boolean addSlot(Stitcher.Holder par1StitchHolder)
+			public boolean addSlot(Stitcher.Holder p_94182_1_)
 			{
 				if (this.holder != null)
 				{
@@ -350,14 +350,14 @@ public class Stitcher
 				}
 				else
 				{
-					int i = par1StitchHolder.getWidth();
-					int j = par1StitchHolder.getHeight();
+					int i = p_94182_1_.getWidth();
+					int j = p_94182_1_.getHeight();
 
 					if (i <= this.width && j <= this.height)
 					{
 						if (i == this.width && j == this.height)
 						{
-							this.holder = par1StitchHolder;
+							this.holder = p_94182_1_;
 							return true;
 						}
 						else
@@ -407,7 +407,7 @@ public class Stitcher
 
 								slot = (Stitcher.Slot)iterator.next();
 							}
-							while (!slot.addSlot(par1StitchHolder));
+							while (!slot.addSlot(p_94182_1_));
 
 							return true;
 						}
@@ -419,11 +419,11 @@ public class Stitcher
 				}
 			}
 
-			public void getAllStitchSlots(List par1List)
+			public void getAllStitchSlots(List p_94184_1_)
 			{
 				if (this.holder != null)
 				{
-					par1List.add(this);
+					p_94184_1_.add(this);
 				}
 				else if (this.subSlots != null)
 				{
@@ -432,7 +432,7 @@ public class Stitcher
 					while (iterator.hasNext())
 					{
 						Stitcher.Slot slot = (Stitcher.Slot)iterator.next();
-						slot.getAllStitchSlots(par1List);
+						slot.getAllStitchSlots(p_94184_1_);
 					}
 				}
 			}

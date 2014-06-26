@@ -2,21 +2,20 @@ package net.minecraft.util;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class ObjectIntIdentityMap implements IObjectIntIterable
 {
-	protected Map<Object, Integer> field_148749_a = new IdentityHashMap<Object, Integer>(512);
-	protected List field_148748_b = new ArrayList();
+	protected IdentityHashMap field_148749_a = new IdentityHashMap(512);
+	protected List field_148748_b = Lists.newArrayList();
 	private static final String __OBFID = "CL_00001203";
 
 	public void func_148746_a(Object p_148746_1_, int p_148746_2_)
 	{
-		this.field_148749_a.put(p_148746_1_, p_148746_2_);
+		this.field_148749_a.put(p_148746_1_, Integer.valueOf(p_148746_2_));
 
 		while (this.field_148748_b.size() <= p_148746_2_)
 		{
@@ -28,8 +27,8 @@ public class ObjectIntIdentityMap implements IObjectIntIterable
 
 	public int func_148747_b(Object p_148747_1_)
 	{
-		Integer ret = this.field_148749_a.get(p_148747_1_);
-		return ret != null ? ret : -1;
+		Integer integer = (Integer)this.field_148749_a.get(p_148747_1_);
+		return integer == null ? -1 : integer.intValue();
 	}
 
 	public Object func_148745_a(int p_148745_1_)

@@ -13,18 +13,18 @@ public class RenderCow extends RenderLiving
 	private static final ResourceLocation cowTextures = new ResourceLocation("textures/entity/cow/cow.png");
 	private static final String __OBFID = "CL_00000984";
 
-	public RenderCow(ModelBase par1ModelBase, float par2)
+	public RenderCow(ModelBase p_i1253_1_, float p_i1253_2_)
 	{
-		super(par1ModelBase, par2);
+		super(p_i1253_1_, p_i1253_2_);
 	}
 
-	protected ResourceLocation getEntityTexture(EntityCow par1EntityCow)
+	protected ResourceLocation getEntityTexture(EntityCow p_110775_1_)
 	{
 		return cowTextures;
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityCow)par1Entity);
+		return this.getEntityTexture((EntityCow)p_110775_1_);
 	}
 }

@@ -30,10 +30,10 @@ public class HttpUtil
 	private static final Logger logger = LogManager.getLogger();
 	private static final String __OBFID = "CL_00001485";
 
-	public static String buildPostString(Map par0Map)
+	public static String buildPostString(Map p_76179_0_)
 	{
 		StringBuilder stringbuilder = new StringBuilder();
-		Iterator iterator = par0Map.entrySet().iterator();
+		Iterator iterator = p_76179_0_.entrySet().iterator();
 
 		while (iterator.hasNext())
 		{
@@ -309,8 +309,27 @@ public class HttpUtil
 	}
 
 	@SideOnly(Side.CLIENT)
+	public static String func_152755_a(URL p_152755_0_) throws IOException
+	{
+		HttpURLConnection httpurlconnection = (HttpURLConnection)p_152755_0_.openConnection();
+		httpurlconnection.setRequestMethod("GET");
+		BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(httpurlconnection.getInputStream()));
+		StringBuilder stringbuilder = new StringBuilder();
+		String s;
+
+		while ((s = bufferedreader.readLine()) != null)
+		{
+			stringbuilder.append(s);
+			stringbuilder.append('\r');
+		}
+
+		bufferedreader.close();
+		return stringbuilder.toString();
+	}
+
+	@SideOnly(Side.CLIENT)
 	public interface DownloadListener
 	{
-		void func_148522_a(File var1);
+		void func_148522_a(File p_148522_1_);
 	}
 }

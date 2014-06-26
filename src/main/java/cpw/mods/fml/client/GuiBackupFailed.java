@@ -35,21 +35,21 @@ public class GuiBackupFailed extends GuiScreen
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton par1GuiButton)
+	protected void actionPerformed(GuiButton p_73875_1_)
 	{
-		if (par1GuiButton.enabled && par1GuiButton.id == 1)
+		if (p_73875_1_.enabled && p_73875_1_.id == 1)
 		{
 			FMLClientHandler.instance().showGuiScreen(parent);
 		}
 	}
 	@Override
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		this.drawDefaultBackground();
 		int offset = Math.max(85 - 2 * 10, 10);
 		this.drawCenteredString(this.fontRendererObj, String.format("There was an error saving the archive %s", zipName.getName()), this.width / 2, offset, 0xFFFFFF);
 		offset += 10;
 		this.drawCenteredString(this.fontRendererObj, String.format("Please fix the problem and try again"), this.width / 2, offset, 0xFFFFFF);
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 }

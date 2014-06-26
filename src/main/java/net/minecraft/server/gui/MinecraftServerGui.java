@@ -41,7 +41,7 @@ public class MinecraftServerGui extends JComponent
 	private DedicatedServer field_120021_b;
 	private static final String __OBFID = "CL_00001789";
 
-	public static void createServerGui(final DedicatedServer par0DedicatedServer)
+	public static void createServerGui(final DedicatedServer p_120016_0_)
 	{
 		try
 		{
@@ -52,7 +52,7 @@ public class MinecraftServerGui extends JComponent
 			;
 		}
 
-		MinecraftServerGui minecraftservergui = new MinecraftServerGui(par0DedicatedServer);
+		MinecraftServerGui minecraftservergui = new MinecraftServerGui(p_120016_0_);
 		JFrame jframe = new JFrame("Minecraft server");
 		jframe.add(minecraftservergui);
 		jframe.pack();
@@ -61,11 +61,11 @@ public class MinecraftServerGui extends JComponent
 		jframe.addWindowListener(new WindowAdapter()
 		{
 			private static final String __OBFID = "CL_00001791";
-			public void windowClosing(WindowEvent windowevent)
+			public void windowClosing(WindowEvent p_windowClosing_1_)
 			{
-				par0DedicatedServer.initiateShutdown();
+				p_120016_0_.initiateShutdown();
 
-				while (!par0DedicatedServer.isServerStopped())
+				while (!p_120016_0_.isServerStopped())
 				{
 					try
 					{
@@ -83,9 +83,9 @@ public class MinecraftServerGui extends JComponent
 		minecraftservergui.latch.countDown();
 	}
 
-	public MinecraftServerGui(DedicatedServer par1DedicatedServer)
+	public MinecraftServerGui(DedicatedServer p_i2362_1_)
 	{
-		this.field_120021_b = par1DedicatedServer;
+		this.field_120021_b = p_i2362_1_;
 		this.setPreferredSize(new Dimension(854, 480));
 		this.setLayout(new BorderLayout());
 
@@ -128,7 +128,7 @@ public class MinecraftServerGui extends JComponent
 		jtextfield.addActionListener(new ActionListener()
 		{
 			private static final String __OBFID = "CL_00001790";
-			public void actionPerformed(ActionEvent actionevent)
+			public void actionPerformed(ActionEvent p_actionPerformed_1_)
 			{
 				String s = jtextfield.getText().trim();
 
@@ -143,7 +143,7 @@ public class MinecraftServerGui extends JComponent
 		jtextarea.addFocusListener(new FocusAdapter()
 		{
 			private static final String __OBFID = "CL_00001794";
-			public void focusGained(FocusEvent focusevent) {}
+			public void focusGained(FocusEvent p_focusGained_1_) {}
 		});
 		jpanel.add(jscrollpane, "Center");
 		jpanel.add(jtextfield, "South");

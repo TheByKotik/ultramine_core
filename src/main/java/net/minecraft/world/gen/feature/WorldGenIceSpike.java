@@ -11,26 +11,26 @@ public class WorldGenIceSpike extends WorldGenerator
 {
 	private static final String __OBFID = "CL_00000417";
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		while (par1World.isAirBlock(par3, par4, par5) && par4 > 2)
+		while (p_76484_1_.isAirBlock(p_76484_3_, p_76484_4_, p_76484_5_) && p_76484_4_ > 2)
 		{
-			--par4;
+			--p_76484_4_;
 		}
 
-		if (par1World.getBlock(par3, par4, par5) != Blocks.snow)
+		if (p_76484_1_.getBlock(p_76484_3_, p_76484_4_, p_76484_5_) != Blocks.snow)
 		{
 			return false;
 		}
 		else
 		{
-			par4 += par2Random.nextInt(4);
-			int l = par2Random.nextInt(4) + 7;
-			int i1 = l / 4 + par2Random.nextInt(2);
+			p_76484_4_ += p_76484_2_.nextInt(4);
+			int l = p_76484_2_.nextInt(4) + 7;
+			int i1 = l / 4 + p_76484_2_.nextInt(2);
 
-			if (i1 > 1 && par2Random.nextInt(60) == 0)
+			if (i1 > 1 && p_76484_2_.nextInt(60) == 0)
 			{
-				par4 += 10 + par2Random.nextInt(30);
+				p_76484_4_ += 10 + p_76484_2_.nextInt(30);
 			}
 
 			int j1;
@@ -50,22 +50,22 @@ public class WorldGenIceSpike extends WorldGenerator
 					{
 						float f2 = (float)MathHelper.abs_int(i2) - 0.25F;
 
-						if ((l1 == 0 && i2 == 0 || f1 * f1 + f2 * f2 <= f * f) && (l1 != -k1 && l1 != k1 && i2 != -k1 && i2 != k1 || par2Random.nextFloat() <= 0.75F))
+						if ((l1 == 0 && i2 == 0 || f1 * f1 + f2 * f2 <= f * f) && (l1 != -k1 && l1 != k1 && i2 != -k1 && i2 != k1 || p_76484_2_.nextFloat() <= 0.75F))
 						{
-							Block block = par1World.getBlock(par3 + l1, par4 + j1, par5 + i2);
+							Block block = p_76484_1_.getBlock(p_76484_3_ + l1, p_76484_4_ + j1, p_76484_5_ + i2);
 
 							if (block.getMaterial() == Material.air || block == Blocks.dirt || block == Blocks.snow || block == Blocks.ice)
 							{
-								this.func_150515_a(par1World, par3 + l1, par4 + j1, par5 + i2, Blocks.packed_ice);
+								this.func_150515_a(p_76484_1_, p_76484_3_ + l1, p_76484_4_ + j1, p_76484_5_ + i2, Blocks.packed_ice);
 							}
 
 							if (j1 != 0 && k1 > 1)
 							{
-								block = par1World.getBlock(par3 + l1, par4 - j1, par5 + i2);
+								block = p_76484_1_.getBlock(p_76484_3_ + l1, p_76484_4_ - j1, p_76484_5_ + i2);
 
 								if (block.getMaterial() == Material.air || block == Blocks.dirt || block == Blocks.snow || block == Blocks.ice)
 								{
-									this.func_150515_a(par1World, par3 + l1, par4 - j1, par5 + i2, Blocks.packed_ice);
+									this.func_150515_a(p_76484_1_, p_76484_3_ + l1, p_76484_4_ - j1, p_76484_5_ + i2, Blocks.packed_ice);
 								}
 							}
 						}
@@ -90,30 +90,30 @@ public class WorldGenIceSpike extends WorldGenerator
 
 				while (k1 <= j1)
 				{
-					l1 = par4 - 1;
+					l1 = p_76484_4_ - 1;
 					int k2 = 50;
 
 					if (Math.abs(j2) == 1 && Math.abs(k1) == 1)
 					{
-						k2 = par2Random.nextInt(5);
+						k2 = p_76484_2_.nextInt(5);
 					}
 
 					while (true)
 					{
 						if (l1 > 50)
 						{
-							Block block1 = par1World.getBlock(par3 + j2, l1, par5 + k1);
+							Block block1 = p_76484_1_.getBlock(p_76484_3_ + j2, l1, p_76484_5_ + k1);
 
 							if (block1.getMaterial() == Material.air || block1 == Blocks.dirt || block1 == Blocks.snow || block1 == Blocks.ice || block1 == Blocks.packed_ice)
 							{
-								this.func_150515_a(par1World, par3 + j2, l1, par5 + k1, Blocks.packed_ice);
+								this.func_150515_a(p_76484_1_, p_76484_3_ + j2, l1, p_76484_5_ + k1, Blocks.packed_ice);
 								--l1;
 								--k2;
 
 								if (k2 <= 0)
 								{
-									l1 -= par2Random.nextInt(5) + 1;
-									k2 = par2Random.nextInt(5);
+									l1 -= p_76484_2_.nextInt(5) + 1;
+									k2 = p_76484_2_.nextInt(5);
 								}
 
 								continue;

@@ -43,9 +43,9 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 	public final File chunkSaveLocation;
 	private static final String __OBFID = "CL_00000384";
 
-	public AnvilChunkLoader(File par1File)
+	public AnvilChunkLoader(File p_i2003_1_)
 	{
-		this.chunkSaveLocation = par1File;
+		this.chunkSaveLocation = p_i2003_1_;
 	}
 
 	public boolean chunkExists(World world, int i, int j)
@@ -71,25 +71,25 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		return RegionFileCache.createOrLoadRegionFile(this.chunkSaveLocation, i, j).chunkExists(i & 31, j & 31);
 	}
 
-	public Chunk loadChunk(World par1World, int par2, int par3) throws IOException
+	public Chunk loadChunk(World p_75815_1_, int p_75815_2_, int p_75815_3_) throws IOException
 	{
-		Object[] data = this.loadChunk__Async(par1World, par2, par3);
+		Object[] data = this.loadChunk__Async(p_75815_1_, p_75815_2_, p_75815_3_);
 
 		if (data != null)
 		{
 			Chunk chunk = (Chunk) data[0];
 			NBTTagCompound nbttagcompound = (NBTTagCompound) data[1];
-			this.loadEntities(par1World, nbttagcompound.getCompoundTag("Level"), chunk);
+			this.loadEntities(p_75815_1_, nbttagcompound.getCompoundTag("Level"), chunk);
 			return chunk;
 		}
 
 		return null;
 	}
 
-	public Object[] loadChunk__Async(World par1World, int par2, int par3) throws IOException
+	public Object[] loadChunk__Async(World p_75815_1_, int p_75815_2_, int p_75815_3_) throws IOException
 	{
 		NBTTagCompound nbttagcompound = null;
-		ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(par2, par3);
+		ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(p_75815_2_, p_75815_3_);
 		Object object = this.syncLockObject;
 
 		synchronized (this.syncLockObject)
@@ -111,7 +111,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
 		if (nbttagcompound == null)
 		{
-			DataInputStream datainputstream = RegionFileCache.getChunkInputStream(this.chunkSaveLocation, par2, par3);
+			DataInputStream datainputstream = RegionFileCache.getChunkInputStream(this.chunkSaveLocation, p_75815_2_, p_75815_3_);
 
 			if (datainputstream == null)
 			{
@@ -121,12 +121,12 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			nbttagcompound = CompressedStreamTools.read(datainputstream);
 		}
 
-		return this.checkedReadChunkFromNBT__Async(par1World, par2, par3, nbttagcompound);
+		return this.checkedReadChunkFromNBT__Async(p_75815_1_, p_75815_2_, p_75815_3_, nbttagcompound);
 	}
 
-	protected Chunk checkedReadChunkFromNBT(World par1World, int par2, int par3, NBTTagCompound par4NBTTagCompound)
+	protected Chunk checkedReadChunkFromNBT(World p_75822_1_, int p_75822_2_, int p_75822_3_, NBTTagCompound p_75822_4_)
 	{
-		Object[] data = this.checkedReadChunkFromNBT__Async(par1World, par2, par3, par4NBTTagCompound);
+		Object[] data = this.checkedReadChunkFromNBT__Async(p_75822_1_, p_75822_2_, p_75822_3_, p_75822_4_);
 
 		if (data != null)
 		{
@@ -137,29 +137,29 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		return null;
 	}
 
-	protected Object[] checkedReadChunkFromNBT__Async(World par1World, int par2, int par3, NBTTagCompound par4NBTTagCompound)
+	protected Object[] checkedReadChunkFromNBT__Async(World p_75822_1_, int p_75822_2_, int p_75822_3_, NBTTagCompound p_75822_4_)
 	{
-		if (!par4NBTTagCompound.hasKey("Level", 10))
+		if (!p_75822_4_.hasKey("Level", 10))
 		{
-			logger.error("Chunk file at " + par2 + "," + par3 + " is missing level data, skipping");
+			logger.error("Chunk file at " + p_75822_2_ + "," + p_75822_3_ + " is missing level data, skipping");
 			return null;
 		}
-		else if (!par4NBTTagCompound.getCompoundTag("Level").hasKey("Sections", 9))
+		else if (!p_75822_4_.getCompoundTag("Level").hasKey("Sections", 9))
 		{
-			logger.error("Chunk file at " + par2 + "," + par3 + " is missing block data, skipping");
+			logger.error("Chunk file at " + p_75822_2_ + "," + p_75822_3_ + " is missing block data, skipping");
 			return null;
 		}
 		else
 		{
-			Chunk chunk = this.readChunkFromNBT(par1World, par4NBTTagCompound.getCompoundTag("Level"));
+			Chunk chunk = this.readChunkFromNBT(p_75822_1_, p_75822_4_.getCompoundTag("Level"));
 
-			if (!chunk.isAtLocation(par2, par3))
+			if (!chunk.isAtLocation(p_75822_2_, p_75822_3_))
 			{
-				logger.error("Chunk file at " + par2 + "," + par3 + " is in the wrong location; relocating. (Expected " + par2 + ", " + par3 + ", got " + chunk.xPosition + ", " + chunk.zPosition + ")");
-				par4NBTTagCompound.setInteger("xPos", par2);
-				par4NBTTagCompound.setInteger("zPos", par3);
+				logger.error("Chunk file at " + p_75822_2_ + "," + p_75822_3_ + " is in the wrong location; relocating. (Expected " + p_75822_2_ + ", " + p_75822_3_ + ", got " + chunk.xPosition + ", " + chunk.zPosition + ")");
+				p_75822_4_.setInteger("xPos", p_75822_2_);
+				p_75822_4_.setInteger("zPos", p_75822_3_);
 				// Have to move tile entities since we don't load them at this stage
-				NBTTagList tileEntities = par4NBTTagCompound.getCompoundTag("Level").getTagList("TileEntities", 10);
+				NBTTagList tileEntities = p_75822_4_.getCompoundTag("Level").getTagList("TileEntities", 10);
 
 				if (tileEntities != null)
 				{
@@ -168,35 +168,35 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 						NBTTagCompound tileEntity = (NBTTagCompound) tileEntities.getCompoundTagAt(te);
 						int x = tileEntity.getInteger("x") - chunk.xPosition * 16;
 						int z = tileEntity.getInteger("z") - chunk.zPosition * 16;
-						tileEntity.setInteger("x", par2 * 16 + x);
-						tileEntity.setInteger("z", par3 * 16 + z);
+						tileEntity.setInteger("x", p_75822_2_ * 16 + x);
+						tileEntity.setInteger("z", p_75822_3_ * 16 + z);
 					}
 				}
 
-				chunk = this.readChunkFromNBT(par1World, par4NBTTagCompound.getCompoundTag("Level"));
+				chunk = this.readChunkFromNBT(p_75822_1_, p_75822_4_.getCompoundTag("Level"));
 			}
 
 			Object[] data = new Object[2];
 			data[0] = chunk;
-			data[1] = par4NBTTagCompound;
+			data[1] = p_75822_4_;
 			// event is fired in ChunkIOProvider.callStage2 since it must be fired after TE's load.
 			// MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Load(chunk, par4NBTTagCompound));
 			return data;
 		}
 	}
 
-	public void saveChunk(World par1World, Chunk par2Chunk) throws MinecraftException, IOException
+	public void saveChunk(World p_75816_1_, Chunk p_75816_2_) throws MinecraftException, IOException
 	{
-		par1World.checkSessionLock();
+		p_75816_1_.checkSessionLock();
 
 		try
 		{
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 			nbttagcompound.setTag("Level", nbttagcompound1);
-			this.writeChunkToNBT(par2Chunk, par1World, nbttagcompound1);
-			MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Save(par2Chunk, nbttagcompound));
-			this.addChunkToPending(par2Chunk.getChunkCoordIntPair(), nbttagcompound);
+			this.writeChunkToNBT(p_75816_2_, p_75816_1_, nbttagcompound1);
+			MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Save(p_75816_2_, nbttagcompound));
+			this.addChunkToPending(p_75816_2_.getChunkCoordIntPair(), nbttagcompound);
 		}
 		catch (Exception exception)
 		{
@@ -204,26 +204,26 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		}
 	}
 
-	protected void addChunkToPending(ChunkCoordIntPair par1ChunkCoordIntPair, NBTTagCompound par2NBTTagCompound)
+	protected void addChunkToPending(ChunkCoordIntPair p_75824_1_, NBTTagCompound p_75824_2_)
 	{
 		Object object = this.syncLockObject;
 
 		synchronized (this.syncLockObject)
 		{
-			if (this.pendingAnvilChunksCoordinates.contains(par1ChunkCoordIntPair))
+			if (this.pendingAnvilChunksCoordinates.contains(p_75824_1_))
 			{
 				for (int i = 0; i < this.chunksToRemove.size(); ++i)
 				{
-					if (((AnvilChunkLoader.PendingChunk)this.chunksToRemove.get(i)).chunkCoordinate.equals(par1ChunkCoordIntPair))
+					if (((AnvilChunkLoader.PendingChunk)this.chunksToRemove.get(i)).chunkCoordinate.equals(p_75824_1_))
 					{
-						this.chunksToRemove.set(i, new AnvilChunkLoader.PendingChunk(par1ChunkCoordIntPair, par2NBTTagCompound));
+						this.chunksToRemove.set(i, new AnvilChunkLoader.PendingChunk(p_75824_1_, p_75824_2_));
 						return;
 					}
 				}
 			}
 
-			this.chunksToRemove.add(new AnvilChunkLoader.PendingChunk(par1ChunkCoordIntPair, par2NBTTagCompound));
-			this.pendingAnvilChunksCoordinates.add(par1ChunkCoordIntPair);
+			this.chunksToRemove.add(new AnvilChunkLoader.PendingChunk(p_75824_1_, p_75824_2_));
+			this.pendingAnvilChunksCoordinates.add(p_75824_1_);
 			ThreadedFileIOBase.threadedIOInstance.queueIO(this);
 		}
 	}
@@ -259,14 +259,14 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		return true;
 	}
 
-	private void writeChunkNBTTags(AnvilChunkLoader.PendingChunk par1AnvilChunkLoaderPending) throws IOException
+	private void writeChunkNBTTags(AnvilChunkLoader.PendingChunk p_75821_1_) throws IOException
 	{
-		DataOutputStream dataoutputstream = RegionFileCache.getChunkOutputStream(this.chunkSaveLocation, par1AnvilChunkLoaderPending.chunkCoordinate.chunkXPos, par1AnvilChunkLoaderPending.chunkCoordinate.chunkZPos);
-		CompressedStreamTools.write(par1AnvilChunkLoaderPending.nbtTags, dataoutputstream);
+		DataOutputStream dataoutputstream = RegionFileCache.getChunkOutputStream(this.chunkSaveLocation, p_75821_1_.chunkCoordinate.chunkXPos, p_75821_1_.chunkCoordinate.chunkZPos);
+		CompressedStreamTools.write(p_75821_1_.nbtTags, dataoutputstream);
 		dataoutputstream.close();
 	}
 
-	public void saveExtraChunkData(World par1World, Chunk par2Chunk) {}
+	public void saveExtraChunkData(World p_75819_1_, Chunk p_75819_2_) {}
 
 	public void chunkTick() {}
 
@@ -278,19 +278,19 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		}
 	}
 
-	private void writeChunkToNBT(Chunk par1Chunk, World par2World, NBTTagCompound par3NBTTagCompound)
+	private void writeChunkToNBT(Chunk p_75820_1_, World p_75820_2_, NBTTagCompound p_75820_3_)
 	{
-		par3NBTTagCompound.setByte("V", (byte)1);
-		par3NBTTagCompound.setInteger("xPos", par1Chunk.xPosition);
-		par3NBTTagCompound.setInteger("zPos", par1Chunk.zPosition);
-		par3NBTTagCompound.setLong("LastUpdate", par2World.getTotalWorldTime());
-		par3NBTTagCompound.setIntArray("HeightMap", par1Chunk.heightMap);
-		par3NBTTagCompound.setBoolean("TerrainPopulated", par1Chunk.isTerrainPopulated);
-		par3NBTTagCompound.setBoolean("LightPopulated", par1Chunk.isLightPopulated);
-		par3NBTTagCompound.setLong("InhabitedTime", par1Chunk.inhabitedTime);
-		ExtendedBlockStorage[] aextendedblockstorage = par1Chunk.getBlockStorageArray();
+		p_75820_3_.setByte("V", (byte)1);
+		p_75820_3_.setInteger("xPos", p_75820_1_.xPosition);
+		p_75820_3_.setInteger("zPos", p_75820_1_.zPosition);
+		p_75820_3_.setLong("LastUpdate", p_75820_2_.getTotalWorldTime());
+		p_75820_3_.setIntArray("HeightMap", p_75820_1_.heightMap);
+		p_75820_3_.setBoolean("TerrainPopulated", p_75820_1_.isTerrainPopulated);
+		p_75820_3_.setBoolean("LightPopulated", p_75820_1_.isLightPopulated);
+		p_75820_3_.setLong("InhabitedTime", p_75820_1_.inhabitedTime);
+		ExtendedBlockStorage[] aextendedblockstorage = p_75820_1_.getBlockStorageArray();
 		NBTTagList nbttaglist = new NBTTagList();
-		boolean flag = !par2World.provider.hasNoSky;
+		boolean flag = !p_75820_2_.provider.hasNoSky;
 		ExtendedBlockStorage[] aextendedblockstorage1 = aextendedblockstorage;
 		int i = aextendedblockstorage.length;
 		NBTTagCompound nbttagcompound1;
@@ -326,15 +326,15 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			}
 		}
 
-		par3NBTTagCompound.setTag("Sections", nbttaglist);
-		par3NBTTagCompound.setByteArray("Biomes", par1Chunk.getBiomeArray());
-		par1Chunk.hasEntities = false;
+		p_75820_3_.setTag("Sections", nbttaglist);
+		p_75820_3_.setByteArray("Biomes", p_75820_1_.getBiomeArray());
+		p_75820_1_.hasEntities = false;
 		NBTTagList nbttaglist2 = new NBTTagList();
 		Iterator iterator1;
 
-		for (i = 0; i < par1Chunk.entityLists.length; ++i)
+		for (i = 0; i < p_75820_1_.entityLists.length; ++i)
 		{
-			iterator1 = par1Chunk.entityLists[i].iterator();
+			iterator1 = p_75820_1_.entityLists[i].iterator();
 
 			while (iterator1.hasNext())
 			{
@@ -345,7 +345,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 				{
 					if (entity.writeToNBTOptional(nbttagcompound1))
 					{
-						par1Chunk.hasEntities = true;
+						p_75820_1_.hasEntities = true;
 						nbttaglist2.appendTag(nbttagcompound1);
 					}
 				}
@@ -358,9 +358,9 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			}
 		}
 
-		par3NBTTagCompound.setTag("Entities", nbttaglist2);
+		p_75820_3_.setTag("Entities", nbttaglist2);
 		NBTTagList nbttaglist3 = new NBTTagList();
-		iterator1 = par1Chunk.chunkTileEntityMap.values().iterator();
+		iterator1 = p_75820_1_.chunkTileEntityMap.values().iterator();
 
 		while (iterator1.hasNext())
 		{
@@ -378,12 +378,12 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			}
 		}
 
-		par3NBTTagCompound.setTag("TileEntities", nbttaglist3);
-		List list = par2World.getPendingBlockUpdates(par1Chunk, false);
+		p_75820_3_.setTag("TileEntities", nbttaglist3);
+		List list = p_75820_2_.getPendingBlockUpdates(p_75820_1_, false);
 
 		if (list != null)
 		{
-			long k = par2World.getTotalWorldTime();
+			long k = p_75820_2_.getTotalWorldTime();
 			NBTTagList nbttaglist1 = new NBTTagList();
 			Iterator iterator = list.iterator();
 
@@ -400,23 +400,23 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 				nbttaglist1.appendTag(nbttagcompound2);
 			}
 
-			par3NBTTagCompound.setTag("TileTicks", nbttaglist1);
+			p_75820_3_.setTag("TileTicks", nbttaglist1);
 		}
 	}
 
-	private Chunk readChunkFromNBT(World par1World, NBTTagCompound par2NBTTagCompound)
+	private Chunk readChunkFromNBT(World p_75823_1_, NBTTagCompound p_75823_2_)
 	{
-		int i = par2NBTTagCompound.getInteger("xPos");
-		int j = par2NBTTagCompound.getInteger("zPos");
-		Chunk chunk = new Chunk(par1World, i, j);
-		chunk.heightMap = par2NBTTagCompound.getIntArray("HeightMap");
-		chunk.isTerrainPopulated = par2NBTTagCompound.getBoolean("TerrainPopulated");
-		chunk.isLightPopulated = par2NBTTagCompound.getBoolean("LightPopulated");
-		chunk.inhabitedTime = par2NBTTagCompound.getLong("InhabitedTime");
-		NBTTagList nbttaglist = par2NBTTagCompound.getTagList("Sections", 10);
+		int i = p_75823_2_.getInteger("xPos");
+		int j = p_75823_2_.getInteger("zPos");
+		Chunk chunk = new Chunk(p_75823_1_, i, j);
+		chunk.heightMap = p_75823_2_.getIntArray("HeightMap");
+		chunk.isTerrainPopulated = p_75823_2_.getBoolean("TerrainPopulated");
+		chunk.isLightPopulated = p_75823_2_.getBoolean("LightPopulated");
+		chunk.inhabitedTime = p_75823_2_.getLong("InhabitedTime");
+		NBTTagList nbttaglist = p_75823_2_.getTagList("Sections", 10);
 		byte b0 = 16;
 		ExtendedBlockStorage[] aextendedblockstorage = new ExtendedBlockStorage[b0];
-		boolean flag = !par1World.provider.hasNoSky;
+		boolean flag = !p_75823_1_.provider.hasNoSky;
 
 		for (int k = 0; k < nbttaglist.tagCount(); ++k)
 		{
@@ -444,25 +444,25 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
 		chunk.setStorageArrays(aextendedblockstorage);
 
-		if (par2NBTTagCompound.hasKey("Biomes", 7))
+		if (p_75823_2_.hasKey("Biomes", 7))
 		{
-			chunk.setBiomeArray(par2NBTTagCompound.getByteArray("Biomes"));
+			chunk.setBiomeArray(p_75823_2_.getByteArray("Biomes"));
 		}
 
 		// End this method here and split off entity loading to another method
 		return chunk;
 	}
 
-	public void loadEntities(World par1World, NBTTagCompound par2NBTTagCompound, Chunk chunk)
+	public void loadEntities(World p_75823_1_, NBTTagCompound p_75823_2_, Chunk chunk)
 	{
-		NBTTagList nbttaglist1 = par2NBTTagCompound.getTagList("Entities", 10);
+		NBTTagList nbttaglist1 = p_75823_2_.getTagList("Entities", 10);
 
 		if (nbttaglist1 != null)
 		{
 			for (int l = 0; l < nbttaglist1.tagCount(); ++l)
 			{
 				NBTTagCompound nbttagcompound3 = nbttaglist1.getCompoundTagAt(l);
-				Entity entity2 = EntityList.createEntityFromNBT(nbttagcompound3, par1World);
+				Entity entity2 = EntityList.createEntityFromNBT(nbttagcompound3, p_75823_1_);
 				chunk.hasEntities = true;
 
 				if (entity2 != null)
@@ -472,7 +472,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
 					for (NBTTagCompound nbttagcompound2 = nbttagcompound3; nbttagcompound2.hasKey("Riding", 10); nbttagcompound2 = nbttagcompound2.getCompoundTag("Riding"))
 					{
-						Entity entity1 = EntityList.createEntityFromNBT(nbttagcompound2.getCompoundTag("Riding"), par1World);
+						Entity entity1 = EntityList.createEntityFromNBT(nbttagcompound2.getCompoundTag("Riding"), p_75823_1_);
 
 						if (entity1 != null)
 						{
@@ -486,7 +486,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			}
 		}
 
-		NBTTagList nbttaglist2 = par2NBTTagCompound.getTagList("TileEntities", 10);
+		NBTTagList nbttaglist2 = p_75823_2_.getTagList("TileEntities", 10);
 
 		if (nbttaglist2 != null)
 		{
@@ -502,16 +502,16 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			}
 		}
 
-		if (par2NBTTagCompound.hasKey("TileTicks", 9))
+		if (p_75823_2_.hasKey("TileTicks", 9))
 		{
-			NBTTagList nbttaglist3 = par2NBTTagCompound.getTagList("TileTicks", 10);
+			NBTTagList nbttaglist3 = p_75823_2_.getTagList("TileTicks", 10);
 
 			if (nbttaglist3 != null)
 			{
 				for (int j1 = 0; j1 < nbttaglist3.tagCount(); ++j1)
 				{
 					NBTTagCompound nbttagcompound5 = nbttaglist3.getCompoundTagAt(j1);
-					par1World.func_147446_b(nbttagcompound5.getInteger("x"), nbttagcompound5.getInteger("y"), nbttagcompound5.getInteger("z"), Block.getBlockById(nbttagcompound5.getInteger("i")), nbttagcompound5.getInteger("t"), nbttagcompound5.getInteger("p"));
+					p_75823_1_.func_147446_b(nbttagcompound5.getInteger("x"), nbttagcompound5.getInteger("y"), nbttagcompound5.getInteger("z"), Block.getBlockById(nbttagcompound5.getInteger("i")), nbttagcompound5.getInteger("t"), nbttagcompound5.getInteger("p"));
 				}
 			}
 		}
@@ -525,10 +525,10 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			public final NBTTagCompound nbtTags;
 			private static final String __OBFID = "CL_00000385";
 
-			public PendingChunk(ChunkCoordIntPair par1ChunkCoordIntPair, NBTTagCompound par2NBTTagCompound)
+			public PendingChunk(ChunkCoordIntPair p_i2002_1_, NBTTagCompound p_i2002_2_)
 			{
-				this.chunkCoordinate = par1ChunkCoordIntPair;
-				this.nbtTags = par2NBTTagCompound;
+				this.chunkCoordinate = p_i2002_1_;
+				this.nbtTags = p_i2002_2_;
 			}
 		}
 }

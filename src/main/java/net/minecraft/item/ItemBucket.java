@@ -24,41 +24,41 @@ public class ItemBucket extends Item
 		this.setCreativeTab(CreativeTabs.tabMisc);
 	}
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
 	{
 		boolean flag = this.isFull == Blocks.air;
-		MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(par2World, par3EntityPlayer, flag);
+		MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(p_77659_2_, p_77659_3_, flag);
 
 		if (movingobjectposition == null)
 		{
-			return par1ItemStack;
+			return p_77659_1_;
 		}
 		else
 		{
-			FillBucketEvent event = new FillBucketEvent(par3EntityPlayer, par1ItemStack, par2World, movingobjectposition);
+			FillBucketEvent event = new FillBucketEvent(p_77659_3_, p_77659_1_, p_77659_2_, movingobjectposition);
 			if (MinecraftForge.EVENT_BUS.post(event))
 			{
-				return par1ItemStack;
+				return p_77659_1_;
 			}
 
 			if (event.getResult() == Event.Result.ALLOW)
 			{
-				if (par3EntityPlayer.capabilities.isCreativeMode)
+				if (p_77659_3_.capabilities.isCreativeMode)
 				{
-					return par1ItemStack;
+					return p_77659_1_;
 				}
 
-				if (--par1ItemStack.stackSize <= 0)
+				if (--p_77659_1_.stackSize <= 0)
 				{
 					return event.result;
 				}
 
-				if (!par3EntityPlayer.inventory.addItemStackToInventory(event.result))
+				if (!p_77659_3_.inventory.addItemStackToInventory(event.result))
 				{
-					par3EntityPlayer.dropPlayerItemWithRandomChoice(event.result, false);
+					p_77659_3_.dropPlayerItemWithRandomChoice(event.result, false);
 				}
 
-				return par1ItemStack;
+				return p_77659_1_;
 			}
 			if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
 			{
@@ -66,31 +66,31 @@ public class ItemBucket extends Item
 				int j = movingobjectposition.blockY;
 				int k = movingobjectposition.blockZ;
 
-				if (!par2World.canMineBlock(par3EntityPlayer, i, j, k))
+				if (!p_77659_2_.canMineBlock(p_77659_3_, i, j, k))
 				{
-					return par1ItemStack;
+					return p_77659_1_;
 				}
 
 				if (flag)
 				{
-					if (!par3EntityPlayer.canPlayerEdit(i, j, k, movingobjectposition.sideHit, par1ItemStack))
+					if (!p_77659_3_.canPlayerEdit(i, j, k, movingobjectposition.sideHit, p_77659_1_))
 					{
-						return par1ItemStack;
+						return p_77659_1_;
 					}
 
-					Material material = par2World.getBlock(i, j, k).getMaterial();
-					int l = par2World.getBlockMetadata(i, j, k);
+					Material material = p_77659_2_.getBlock(i, j, k).getMaterial();
+					int l = p_77659_2_.getBlockMetadata(i, j, k);
 
 					if (material == Material.water && l == 0)
 					{
-						par2World.setBlockToAir(i, j, k);
-						return this.func_150910_a(par1ItemStack, par3EntityPlayer, Items.water_bucket);
+						p_77659_2_.setBlockToAir(i, j, k);
+						return this.func_150910_a(p_77659_1_, p_77659_3_, Items.water_bucket);
 					}
 
 					if (material == Material.lava && l == 0)
 					{
-						par2World.setBlockToAir(i, j, k);
-						return this.func_150910_a(par1ItemStack, par3EntityPlayer, Items.lava_bucket);
+						p_77659_2_.setBlockToAir(i, j, k);
+						return this.func_150910_a(p_77659_1_, p_77659_3_, Items.lava_bucket);
 					}
 				}
 				else
@@ -130,19 +130,19 @@ public class ItemBucket extends Item
 						++i;
 					}
 
-					if (!par3EntityPlayer.canPlayerEdit(i, j, k, movingobjectposition.sideHit, par1ItemStack))
+					if (!p_77659_3_.canPlayerEdit(i, j, k, movingobjectposition.sideHit, p_77659_1_))
 					{
-						return par1ItemStack;
+						return p_77659_1_;
 					}
 
-					if (this.tryPlaceContainedLiquid(par2World, i, j, k) && !par3EntityPlayer.capabilities.isCreativeMode)
+					if (this.tryPlaceContainedLiquid(p_77659_2_, i, j, k) && !p_77659_3_.capabilities.isCreativeMode)
 					{
 						return new ItemStack(Items.bucket);
 					}
 				}
 			}
 
-			return par1ItemStack;
+			return p_77659_1_;
 		}
 	}
 
@@ -167,7 +167,7 @@ public class ItemBucket extends Item
 		}
 	}
 
-	public boolean tryPlaceContainedLiquid(World par1World, int par2, int par3, int par4)
+	public boolean tryPlaceContainedLiquid(World p_77875_1_, int p_77875_2_, int p_77875_3_, int p_77875_4_)
 	{
 		if (this.isFull == Blocks.air)
 		{
@@ -175,32 +175,32 @@ public class ItemBucket extends Item
 		}
 		else
 		{
-			Material material = par1World.getBlock(par2, par3, par4).getMaterial();
+			Material material = p_77875_1_.getBlock(p_77875_2_, p_77875_3_, p_77875_4_).getMaterial();
 			boolean flag = !material.isSolid();
 
-			if (!par1World.isAirBlock(par2, par3, par4) && !flag)
+			if (!p_77875_1_.isAirBlock(p_77875_2_, p_77875_3_, p_77875_4_) && !flag)
 			{
 				return false;
 			}
 			else
 			{
-				if (par1World.provider.isHellWorld && this.isFull == Blocks.flowing_water)
+				if (p_77875_1_.provider.isHellWorld && this.isFull == Blocks.flowing_water)
 				{
-					par1World.playSoundEffect((double)((float)par2 + 0.5F), (double)((float)par3 + 0.5F), (double)((float)par4 + 0.5F), "random.fizz", 0.5F, 2.6F + (par1World.rand.nextFloat() - par1World.rand.nextFloat()) * 0.8F);
+					p_77875_1_.playSoundEffect((double)((float)p_77875_2_ + 0.5F), (double)((float)p_77875_3_ + 0.5F), (double)((float)p_77875_4_ + 0.5F), "random.fizz", 0.5F, 2.6F + (p_77875_1_.rand.nextFloat() - p_77875_1_.rand.nextFloat()) * 0.8F);
 
 					for (int l = 0; l < 8; ++l)
 					{
-						par1World.spawnParticle("largesmoke", (double)par2 + Math.random(), (double)par3 + Math.random(), (double)par4 + Math.random(), 0.0D, 0.0D, 0.0D);
+						p_77875_1_.spawnParticle("largesmoke", (double)p_77875_2_ + Math.random(), (double)p_77875_3_ + Math.random(), (double)p_77875_4_ + Math.random(), 0.0D, 0.0D, 0.0D);
 					}
 				}
 				else
 				{
-					if (!par1World.isRemote && flag && !material.isLiquid())
+					if (!p_77875_1_.isRemote && flag && !material.isLiquid())
 					{
-						par1World.func_147480_a(par2, par3, par4, true);
+						p_77875_1_.func_147480_a(p_77875_2_, p_77875_3_, p_77875_4_, true);
 					}
 
-					par1World.setBlock(par2, par3, par4, this.isFull, 0, 3);
+					p_77875_1_.setBlock(p_77875_2_, p_77875_3_, p_77875_4_, this.isFull, 0, 3);
 				}
 
 				return true;

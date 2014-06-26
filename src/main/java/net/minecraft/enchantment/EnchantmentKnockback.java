@@ -4,20 +4,20 @@ public class EnchantmentKnockback extends Enchantment
 {
 	private static final String __OBFID = "CL_00000118";
 
-	protected EnchantmentKnockback(int par1, int par2)
+	protected EnchantmentKnockback(int p_i1933_1_, int p_i1933_2_)
 	{
-		super(par1, par2, EnumEnchantmentType.weapon);
+		super(p_i1933_1_, p_i1933_2_, EnumEnchantmentType.weapon);
 		this.setName("knockback");
 	}
 
-	public int getMinEnchantability(int par1)
+	public int getMinEnchantability(int p_77321_1_)
 	{
-		return 5 + 20 * (par1 - 1);
+		return 5 + 20 * (p_77321_1_ - 1);
 	}
 
-	public int getMaxEnchantability(int par1)
+	public int getMaxEnchantability(int p_77317_1_)
 	{
-		return super.getMinEnchantability(par1) + 50;
+		return super.getMinEnchantability(p_77317_1_) + 50;
 	}
 
 	public int getMaxLevel()

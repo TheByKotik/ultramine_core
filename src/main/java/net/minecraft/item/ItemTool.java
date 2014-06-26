@@ -49,9 +49,9 @@ public class ItemTool extends Item
 		return this.field_150914_c.contains(p_150893_2_) ? this.efficiencyOnProperMaterial : 1.0F;
 	}
 
-	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase)
+	public boolean hitEntity(ItemStack p_77644_1_, EntityLivingBase p_77644_2_, EntityLivingBase p_77644_3_)
 	{
-		par1ItemStack.damageItem(2, par3EntityLivingBase);
+		p_77644_1_.damageItem(2, p_77644_3_);
 		return true;
 	}
 
@@ -86,9 +86,9 @@ public class ItemTool extends Item
 		return this.toolMaterial.toString();
 	}
 
-	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack)
+	public boolean getIsRepairable(ItemStack p_82789_1_, ItemStack p_82789_2_)
 	{
-		return this.toolMaterial.func_150995_f() == par2ItemStack.getItem() ? true : super.getIsRepairable(par1ItemStack, par2ItemStack);
+		return this.toolMaterial.func_150995_f() == p_82789_2_.getItem() ? true : super.getIsRepairable(p_82789_1_, p_82789_2_);
 	}
 
 	public Multimap getItemAttributeModifiers()

@@ -13,27 +13,27 @@ public class EntityTNTPrimed extends Entity
 	private EntityLivingBase tntPlacedBy;
 	private static final String __OBFID = "CL_00001681";
 
-	public EntityTNTPrimed(World par1World)
+	public EntityTNTPrimed(World p_i1729_1_)
 	{
-		super(par1World);
+		super(p_i1729_1_);
 		this.preventEntitySpawning = true;
 		this.setSize(0.98F, 0.98F);
 		this.yOffset = this.height / 2.0F;
 	}
 
-	public EntityTNTPrimed(World par1World, double par2, double par4, double par6, EntityLivingBase par8EntityLivingBase)
+	public EntityTNTPrimed(World p_i1730_1_, double p_i1730_2_, double p_i1730_4_, double p_i1730_6_, EntityLivingBase p_i1730_8_)
 	{
-		this(par1World);
-		this.setPosition(par2, par4, par6);
+		this(p_i1730_1_);
+		this.setPosition(p_i1730_2_, p_i1730_4_, p_i1730_6_);
 		float f = (float)(Math.random() * Math.PI * 2.0D);
 		this.motionX = (double)(-((float)Math.sin((double)f)) * 0.02F);
 		this.motionY = 0.20000000298023224D;
 		this.motionZ = (double)(-((float)Math.cos((double)f)) * 0.02F);
 		this.fuse = 80;
-		this.prevPosX = par2;
-		this.prevPosY = par4;
-		this.prevPosZ = par6;
-		this.tntPlacedBy = par8EntityLivingBase;
+		this.prevPosX = p_i1730_2_;
+		this.prevPosY = p_i1730_4_;
+		this.prevPosZ = p_i1730_6_;
+		this.tntPlacedBy = p_i1730_8_;
 	}
 
 	protected void entityInit() {}
@@ -87,14 +87,14 @@ public class EntityTNTPrimed extends Entity
 		this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f, true);
 	}
 
-	protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	protected void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		par1NBTTagCompound.setByte("Fuse", (byte)this.fuse);
+		p_70014_1_.setByte("Fuse", (byte)this.fuse);
 	}
 
-	protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	protected void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		this.fuse = par1NBTTagCompound.getByte("Fuse");
+		this.fuse = p_70037_1_.getByte("Fuse");
 	}
 
 	@SideOnly(Side.CLIENT)

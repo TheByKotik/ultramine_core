@@ -94,9 +94,9 @@ public class Achievement extends StatBase
 		return ichatcomponent;
 	}
 
-	public Achievement func_150953_b(Class p_150958_1_)
+	public Achievement func_150953_b(Class p_150953_1_)
 	{
-		return (Achievement)super.func_150953_b(p_150958_1_);
+		return (Achievement)super.func_150953_b(p_150953_1_);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -106,9 +106,9 @@ public class Achievement extends StatBase
 	}
 
 	@SideOnly(Side.CLIENT)
-	public Achievement setStatStringFormatter(IStatStringFormat par1IStatStringFormat)
+	public Achievement setStatStringFormatter(IStatStringFormat p_75988_1_)
 	{
-		this.statStringFormatter = par1IStatStringFormat;
+		this.statStringFormatter = p_75988_1_;
 		return this;
 	}
 

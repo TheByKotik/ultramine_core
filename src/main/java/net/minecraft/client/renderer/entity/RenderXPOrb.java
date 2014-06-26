@@ -23,12 +23,12 @@ public class RenderXPOrb extends Render
 		this.shadowOpaque = 0.75F;
 	}
 
-	public void doRender(EntityXPOrb par1EntityXPOrb, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityXPOrb p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
-		this.bindEntityTexture(par1EntityXPOrb);
-		int i = par1EntityXPOrb.getTextureByXP();
+		GL11.glTranslatef((float)p_76986_2_, (float)p_76986_4_, (float)p_76986_6_);
+		this.bindEntityTexture(p_76986_1_);
+		int i = p_76986_1_.getTextureByXP();
 		float f2 = (float)(i % 4 * 16 + 0) / 64.0F;
 		float f3 = (float)(i % 4 * 16 + 16) / 64.0F;
 		float f4 = (float)(i / 4 * 16 + 0) / 64.0F;
@@ -36,13 +36,13 @@ public class RenderXPOrb extends Render
 		float f6 = 1.0F;
 		float f7 = 0.5F;
 		float f8 = 0.25F;
-		int j = par1EntityXPOrb.getBrightnessForRender(par9);
+		int j = p_76986_1_.getBrightnessForRender(p_76986_9_);
 		int k = j % 65536;
 		int l = j / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)k / 1.0F, (float)l / 1.0F);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		float f10 = 255.0F;
-		float f11 = ((float)par1EntityXPOrb.xpColor + par9) / 2.0F;
+		float f11 = ((float)p_76986_1_.xpColor + p_76986_9_) / 2.0F;
 		l = (int)((MathHelper.sin(f11 + 0.0F) + 1.0F) * 0.5F * f10);
 		int i1 = (int)f10;
 		int j1 = (int)((MathHelper.sin(f11 + 4.1887903F) + 1.0F) * 0.1F * f10);
@@ -65,18 +65,18 @@ public class RenderXPOrb extends Render
 		GL11.glPopMatrix();
 	}
 
-	protected ResourceLocation getEntityTexture(EntityXPOrb par1EntityXPOrb)
+	protected ResourceLocation getEntityTexture(EntityXPOrb p_110775_1_)
 	{
 		return experienceOrbTextures;
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityXPOrb)par1Entity);
+		return this.getEntityTexture((EntityXPOrb)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityXPOrb)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityXPOrb)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

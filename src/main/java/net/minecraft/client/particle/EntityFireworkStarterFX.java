@@ -18,18 +18,18 @@ public class EntityFireworkStarterFX extends EntityFX
 	boolean twinkle;
 	private static final String __OBFID = "CL_00000906";
 
-	public EntityFireworkStarterFX(World par1World, double par2, double par4, double par6, double par8, double par10, double par12, EffectRenderer par14EffectRenderer, NBTTagCompound par15NBTTagCompound)
+	public EntityFireworkStarterFX(World p_i1208_1_, double p_i1208_2_, double p_i1208_4_, double p_i1208_6_, double p_i1208_8_, double p_i1208_10_, double p_i1208_12_, EffectRenderer p_i1208_14_, NBTTagCompound p_i1208_15_)
 	{
-		super(par1World, par2, par4, par6, 0.0D, 0.0D, 0.0D);
-		this.motionX = par8;
-		this.motionY = par10;
-		this.motionZ = par12;
-		this.theEffectRenderer = par14EffectRenderer;
+		super(p_i1208_1_, p_i1208_2_, p_i1208_4_, p_i1208_6_, 0.0D, 0.0D, 0.0D);
+		this.motionX = p_i1208_8_;
+		this.motionY = p_i1208_10_;
+		this.motionZ = p_i1208_12_;
+		this.theEffectRenderer = p_i1208_14_;
 		this.particleMaxAge = 8;
 
-		if (par15NBTTagCompound != null)
+		if (p_i1208_15_ != null)
 		{
-			this.fireworkExplosions = par15NBTTagCompound.getTagList("Explosions", 10);
+			this.fireworkExplosions = p_i1208_15_.getTagList("Explosions", 10);
 
 			if (this.fireworkExplosions.tagCount() == 0)
 			{
@@ -54,7 +54,7 @@ public class EntityFireworkStarterFX extends EntityFX
 		}
 	}
 
-	public void renderParticle(Tessellator par1Tessellator, float par2, float par3, float par4, float par5, float par6, float par7) {}
+	public void renderParticle(Tessellator p_70539_1_, float p_70539_2_, float p_70539_3_, float p_70539_4_, float p_70539_5_, float p_70539_6_, float p_70539_7_) {}
 
 	public void onUpdate()
 	{
@@ -148,56 +148,56 @@ public class EntityFireworkStarterFX extends EntityFX
 		return minecraft == null || minecraft.renderViewEntity == null || minecraft.renderViewEntity.getDistanceSq(this.posX, this.posY, this.posZ) >= 256.0D;
 	}
 
-	private void createParticle(double par1, double par3, double par5, double par7, double par9, double par11, int[] par13ArrayOfInteger, int[] par14ArrayOfInteger, boolean par15, boolean par16)
+	private void createParticle(double p_92034_1_, double p_92034_3_, double p_92034_5_, double p_92034_7_, double p_92034_9_, double p_92034_11_, int[] p_92034_13_, int[] p_92034_14_, boolean p_92034_15_, boolean p_92034_16_)
 	{
-		EntityFireworkSparkFX entityfireworksparkfx = new EntityFireworkSparkFX(this.worldObj, par1, par3, par5, par7, par9, par11, this.theEffectRenderer);
-		entityfireworksparkfx.setTrail(par15);
-		entityfireworksparkfx.setTwinkle(par16);
-		int i = this.rand.nextInt(par13ArrayOfInteger.length);
-		entityfireworksparkfx.setColour(par13ArrayOfInteger[i]);
+		EntityFireworkSparkFX entityfireworksparkfx = new EntityFireworkSparkFX(this.worldObj, p_92034_1_, p_92034_3_, p_92034_5_, p_92034_7_, p_92034_9_, p_92034_11_, this.theEffectRenderer);
+		entityfireworksparkfx.setTrail(p_92034_15_);
+		entityfireworksparkfx.setTwinkle(p_92034_16_);
+		int i = this.rand.nextInt(p_92034_13_.length);
+		entityfireworksparkfx.setColour(p_92034_13_[i]);
 
-		if (par14ArrayOfInteger != null && par14ArrayOfInteger.length > 0)
+		if (p_92034_14_ != null && p_92034_14_.length > 0)
 		{
-			entityfireworksparkfx.setFadeColour(par14ArrayOfInteger[this.rand.nextInt(par14ArrayOfInteger.length)]);
+			entityfireworksparkfx.setFadeColour(p_92034_14_[this.rand.nextInt(p_92034_14_.length)]);
 		}
 
 		this.theEffectRenderer.addEffect(entityfireworksparkfx);
 	}
 
-	private void createBall(double par1, int par3, int[] par4ArrayOfInteger, int[] par5ArrayOfInteger, boolean par6, boolean par7)
+	private void createBall(double p_92035_1_, int p_92035_3_, int[] p_92035_4_, int[] p_92035_5_, boolean p_92035_6_, boolean p_92035_7_)
 	{
 		double d1 = this.posX;
 		double d2 = this.posY;
 		double d3 = this.posZ;
 
-		for (int j = -par3; j <= par3; ++j)
+		for (int j = -p_92035_3_; j <= p_92035_3_; ++j)
 		{
-			for (int k = -par3; k <= par3; ++k)
+			for (int k = -p_92035_3_; k <= p_92035_3_; ++k)
 			{
-				for (int l = -par3; l <= par3; ++l)
+				for (int l = -p_92035_3_; l <= p_92035_3_; ++l)
 				{
 					double d4 = (double)k + (this.rand.nextDouble() - this.rand.nextDouble()) * 0.5D;
 					double d5 = (double)j + (this.rand.nextDouble() - this.rand.nextDouble()) * 0.5D;
 					double d6 = (double)l + (this.rand.nextDouble() - this.rand.nextDouble()) * 0.5D;
-					double d7 = (double)MathHelper.sqrt_double(d4 * d4 + d5 * d5 + d6 * d6) / par1 + this.rand.nextGaussian() * 0.05D;
-					this.createParticle(d1, d2, d3, d4 / d7, d5 / d7, d6 / d7, par4ArrayOfInteger, par5ArrayOfInteger, par6, par7);
+					double d7 = (double)MathHelper.sqrt_double(d4 * d4 + d5 * d5 + d6 * d6) / p_92035_1_ + this.rand.nextGaussian() * 0.05D;
+					this.createParticle(d1, d2, d3, d4 / d7, d5 / d7, d6 / d7, p_92035_4_, p_92035_5_, p_92035_6_, p_92035_7_);
 
-					if (j != -par3 && j != par3 && k != -par3 && k != par3)
+					if (j != -p_92035_3_ && j != p_92035_3_ && k != -p_92035_3_ && k != p_92035_3_)
 					{
-						l += par3 * 2 - 1;
+						l += p_92035_3_ * 2 - 1;
 					}
 				}
 			}
 		}
 	}
 
-	private void createShaped(double par1, double[][] par3ArrayOfDouble, int[] par4ArrayOfInteger, int[] par5ArrayOfInteger, boolean par6, boolean par7, boolean par8)
+	private void createShaped(double p_92038_1_, double[][] p_92038_3_, int[] p_92038_4_, int[] p_92038_5_, boolean p_92038_6_, boolean p_92038_7_, boolean p_92038_8_)
 	{
-		double d1 = par3ArrayOfDouble[0][0];
-		double d2 = par3ArrayOfDouble[0][1];
-		this.createParticle(this.posX, this.posY, this.posZ, d1 * par1, d2 * par1, 0.0D, par4ArrayOfInteger, par5ArrayOfInteger, par6, par7);
+		double d1 = p_92038_3_[0][0];
+		double d2 = p_92038_3_[0][1];
+		this.createParticle(this.posX, this.posY, this.posZ, d1 * p_92038_1_, d2 * p_92038_1_, 0.0D, p_92038_4_, p_92038_5_, p_92038_6_, p_92038_7_);
 		float f = this.rand.nextFloat() * (float)Math.PI;
-		double d3 = par8 ? 0.034D : 0.34D;
+		double d3 = p_92038_8_ ? 0.034D : 0.34D;
 
 		for (int i = 0; i < 3; ++i)
 		{
@@ -205,21 +205,21 @@ public class EntityFireworkStarterFX extends EntityFX
 			double d5 = d1;
 			double d6 = d2;
 
-			for (int j = 1; j < par3ArrayOfDouble.length; ++j)
+			for (int j = 1; j < p_92038_3_.length; ++j)
 			{
-				double d7 = par3ArrayOfDouble[j][0];
-				double d8 = par3ArrayOfDouble[j][1];
+				double d7 = p_92038_3_[j][0];
+				double d8 = p_92038_3_[j][1];
 
 				for (double d9 = 0.25D; d9 <= 1.0D; d9 += 0.25D)
 				{
-					double d10 = (d5 + (d7 - d5) * d9) * par1;
-					double d11 = (d6 + (d8 - d6) * d9) * par1;
+					double d10 = (d5 + (d7 - d5) * d9) * p_92038_1_;
+					double d11 = (d6 + (d8 - d6) * d9) * p_92038_1_;
 					double d12 = d10 * Math.sin(d4);
 					d10 *= Math.cos(d4);
 
 					for (double d13 = -1.0D; d13 <= 1.0D; d13 += 2.0D)
 					{
-						this.createParticle(this.posX, this.posY, this.posZ, d10 * d13, d11, d12 * d13, par4ArrayOfInteger, par5ArrayOfInteger, par6, par7);
+						this.createParticle(this.posX, this.posY, this.posZ, d10 * d13, d11, d12 * d13, p_92038_4_, p_92038_5_, p_92038_6_, p_92038_7_);
 					}
 				}
 
@@ -229,7 +229,7 @@ public class EntityFireworkStarterFX extends EntityFX
 		}
 	}
 
-	private void createBurst(int[] par1ArrayOfInteger, int[] par2ArrayOfInteger, boolean par3, boolean par4)
+	private void createBurst(int[] p_92036_1_, int[] p_92036_2_, boolean p_92036_3_, boolean p_92036_4_)
 	{
 		double d0 = this.rand.nextGaussian() * 0.05D;
 		double d1 = this.rand.nextGaussian() * 0.05D;
@@ -239,7 +239,7 @@ public class EntityFireworkStarterFX extends EntityFX
 			double d2 = this.motionX * 0.5D + this.rand.nextGaussian() * 0.15D + d0;
 			double d3 = this.motionZ * 0.5D + this.rand.nextGaussian() * 0.15D + d1;
 			double d4 = this.motionY * 0.5D + this.rand.nextDouble() * 0.5D;
-			this.createParticle(this.posX, this.posY, this.posZ, d2, d4, d3, par1ArrayOfInteger, par2ArrayOfInteger, par3, par4);
+			this.createParticle(this.posX, this.posY, this.posZ, d2, d4, d3, p_92036_1_, p_92036_2_, p_92036_3_, p_92036_4_);
 		}
 	}
 

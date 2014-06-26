@@ -12,17 +12,17 @@ public class GenLayerEdge extends GenLayer
 		this.field_151627_c = p_i45474_4_;
 	}
 
-	public int[] getInts(int par1, int par2, int par3, int par4)
+	public int[] getInts(int p_75904_1_, int p_75904_2_, int p_75904_3_, int p_75904_4_)
 	{
 		switch (GenLayerEdge.SwitchMode.field_151642_a[this.field_151627_c.ordinal()])
 		{
 			case 1:
 			default:
-				return this.getIntsCoolWarm(par1, par2, par3, par4);
+				return this.getIntsCoolWarm(p_75904_1_, p_75904_2_, p_75904_3_, p_75904_4_);
 			case 2:
-				return this.getIntsHeatIce(par1, par2, par3, par4);
+				return this.getIntsHeatIce(p_75904_1_, p_75904_2_, p_75904_3_, p_75904_4_);
 			case 3:
-				return this.getIntsSpecial(par1, par2, par3, par4);
+				return this.getIntsSpecial(p_75904_1_, p_75904_2_, p_75904_3_, p_75904_4_);
 		}
 	}
 

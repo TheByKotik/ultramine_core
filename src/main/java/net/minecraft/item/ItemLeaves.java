@@ -18,14 +18,14 @@ public class ItemLeaves extends ItemBlock
 		this.setHasSubtypes(true);
 	}
 
-	public int getMetadata(int par1)
+	public int getMetadata(int p_77647_1_)
 	{
-		return par1 | 4;
+		return p_77647_1_ | 4;
 	}
 
-	public String getUnlocalizedName(ItemStack par1ItemStack)
+	public String getUnlocalizedName(ItemStack p_77667_1_)
 	{
-		int i = par1ItemStack.getItemDamage();
+		int i = p_77667_1_.getItemDamage();
 
 		if (i < 0 || i >= this.field_150940_b.func_150125_e().length)
 		{
@@ -36,14 +36,14 @@ public class ItemLeaves extends ItemBlock
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int par1)
+	public IIcon getIconFromDamage(int p_77617_1_)
 	{
-		return this.field_150940_b.getIcon(0, par1);
+		return this.field_150940_b.getIcon(0, p_77617_1_);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	public int getColorFromItemStack(ItemStack p_82790_1_, int p_82790_2_)
 	{
-		return this.field_150940_b.getRenderColor(par1ItemStack.getItemDamage());
+		return this.field_150940_b.getRenderColor(p_82790_1_.getItemDamage());
 	}
 }

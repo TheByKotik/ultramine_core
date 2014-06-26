@@ -6,5 +6,5 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IResourceManagerReloadListener
 {
-	void onResourceManagerReload(IResourceManager var1);
+	void onResourceManagerReload(IResourceManager p_110549_1_);
 }

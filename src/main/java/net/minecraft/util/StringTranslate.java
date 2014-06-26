@@ -84,25 +84,25 @@ public class StringTranslate
 
 	@SideOnly(Side.CLIENT)
 
-	public static synchronized void replaceWith(Map par0Map)
+	public static synchronized void replaceWith(Map p_135063_0_)
 	{
 		instance.languageList.clear();
-		instance.languageList.putAll(par0Map);
+		instance.languageList.putAll(p_135063_0_);
 		instance.lastUpdateTimeInMilliseconds = System.currentTimeMillis();
 	}
 
-	public synchronized String translateKey(String par1Str)
+	public synchronized String translateKey(String p_74805_1_)
 	{
-		return this.tryTranslateKey(par1Str);
+		return this.tryTranslateKey(p_74805_1_);
 	}
 
-	public synchronized String translateKeyFormat(String par1Str, Object ... par2ArrayOfObj)
+	public synchronized String translateKeyFormat(String p_74803_1_, Object ... p_74803_2_)
 	{
-		String s1 = this.tryTranslateKey(par1Str);
+		String s1 = this.tryTranslateKey(p_74803_1_);
 
 		try
 		{
-			return String.format(s1, par2ArrayOfObj);
+			return String.format(s1, p_74803_2_);
 		}
 		catch (IllegalFormatException illegalformatexception)
 		{
@@ -110,15 +110,15 @@ public class StringTranslate
 		}
 	}
 
-	private String tryTranslateKey(String par1Str)
+	private String tryTranslateKey(String p_135064_1_)
 	{
-		String s1 = (String)this.languageList.get(par1Str);
-		return s1 == null ? par1Str : s1;
+		String s1 = (String)this.languageList.get(p_135064_1_);
+		return s1 == null ? p_135064_1_ : s1;
 	}
 
-	public synchronized boolean containsTranslateKey(String par1Str)
+	public synchronized boolean containsTranslateKey(String p_94520_1_)
 	{
-		return this.languageList.containsKey(par1Str);
+		return this.languageList.containsKey(p_94520_1_);
 	}
 
 	public long getLastUpdateTimeInMilliseconds()

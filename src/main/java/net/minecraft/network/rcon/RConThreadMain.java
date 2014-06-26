@@ -23,26 +23,26 @@ public class RConThreadMain extends RConThreadBase
 	private Map clientThreads;
 	private static final String __OBFID = "CL_00001805";
 
-	public RConThreadMain(IServer par1IServer)
+	public RConThreadMain(IServer p_i1538_1_)
 	{
-		super(par1IServer, "RCON Listener");
-		this.rconPort = par1IServer.getIntProperty("rcon.port", 0);
-		this.rconPassword = par1IServer.getStringProperty("rcon.password", "");
-		this.hostname = par1IServer.getHostname();
-		this.serverPort = par1IServer.getPort();
+		super(p_i1538_1_, "RCON Listener");
+		this.rconPort = p_i1538_1_.getIntProperty("rcon.port", 0);
+		this.rconPassword = p_i1538_1_.getStringProperty("rcon.password", "");
+		this.hostname = p_i1538_1_.getHostname();
+		this.serverPort = p_i1538_1_.getPort();
 
 		if (0 == this.rconPort)
 		{
 			this.rconPort = this.serverPort + 10;
 			this.logInfo("Setting default rcon port to " + this.rconPort);
-			par1IServer.setProperty("rcon.port", Integer.valueOf(this.rconPort));
+			p_i1538_1_.setProperty("rcon.port", Integer.valueOf(this.rconPort));
 
 			if (0 == this.rconPassword.length())
 			{
-				par1IServer.setProperty("rcon.password", "");
+				p_i1538_1_.setProperty("rcon.password", "");
 			}
 
-			par1IServer.saveProperties();
+			p_i1538_1_.saveProperties();
 		}
 
 		if (0 == this.hostname.length())

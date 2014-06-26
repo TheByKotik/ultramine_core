@@ -10,27 +10,27 @@ public class WorldGenVines extends WorldGenerator
 {
 	private static final String __OBFID = "CL_00000439";
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		int l = par3;
+		int l = p_76484_3_;
 
-		for (int i1 = par5; par4 < 128; ++par4)
+		for (int i1 = p_76484_5_; p_76484_4_ < 128; ++p_76484_4_)
 		{
-			if (par1World.isAirBlock(par3, par4, par5))
+			if (p_76484_1_.isAirBlock(p_76484_3_, p_76484_4_, p_76484_5_))
 			{
 				for (int j1 = 2; j1 <= 5; ++j1)
 				{
-					if (Blocks.vine.canPlaceBlockOnSide(par1World, par3, par4, par5, j1))
+					if (Blocks.vine.canPlaceBlockOnSide(p_76484_1_, p_76484_3_, p_76484_4_, p_76484_5_, j1))
 					{
-						par1World.setBlock(par3, par4, par5, Blocks.vine, 1 << Direction.facingToDirection[Facing.oppositeSide[j1]], 2);
+						p_76484_1_.setBlock(p_76484_3_, p_76484_4_, p_76484_5_, Blocks.vine, 1 << Direction.facingToDirection[Facing.oppositeSide[j1]], 2);
 						break;
 					}
 				}
 			}
 			else
 			{
-				par3 = l + par2Random.nextInt(4) - par2Random.nextInt(4);
-				par5 = i1 + par2Random.nextInt(4) - par2Random.nextInt(4);
+				p_76484_3_ = l + p_76484_2_.nextInt(4) - p_76484_2_.nextInt(4);
+				p_76484_5_ = i1 + p_76484_2_.nextInt(4) - p_76484_2_.nextInt(4);
 			}
 		}
 

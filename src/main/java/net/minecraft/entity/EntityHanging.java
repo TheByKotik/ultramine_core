@@ -19,39 +19,39 @@ public abstract class EntityHanging extends Entity
 	public int field_146062_d;
 	private static final String __OBFID = "CL_00001546";
 
-	public EntityHanging(World par1World)
+	public EntityHanging(World p_i1588_1_)
 	{
-		super(par1World);
+		super(p_i1588_1_);
 		this.yOffset = 0.0F;
 		this.setSize(0.5F, 0.5F);
 	}
 
-	public EntityHanging(World par1World, int par2, int par3, int par4, int par5)
+	public EntityHanging(World p_i1589_1_, int p_i1589_2_, int p_i1589_3_, int p_i1589_4_, int p_i1589_5_)
 	{
-		this(par1World);
-		this.field_146063_b = par2;
-		this.field_146064_c = par3;
-		this.field_146062_d = par4;
+		this(p_i1589_1_);
+		this.field_146063_b = p_i1589_2_;
+		this.field_146064_c = p_i1589_3_;
+		this.field_146062_d = p_i1589_4_;
 	}
 
 	protected void entityInit() {}
 
-	public void setDirection(int par1)
+	public void setDirection(int p_82328_1_)
 	{
-		this.hangingDirection = par1;
-		this.prevRotationYaw = this.rotationYaw = (float)(par1 * 90);
+		this.hangingDirection = p_82328_1_;
+		this.prevRotationYaw = this.rotationYaw = (float)(p_82328_1_ * 90);
 		float f = (float)this.getWidthPixels();
 		float f1 = (float)this.getHeightPixels();
 		float f2 = (float)this.getWidthPixels();
 
-		if (par1 != 2 && par1 != 0)
+		if (p_82328_1_ != 2 && p_82328_1_ != 0)
 		{
 			f = 0.5F;
 		}
 		else
 		{
 			f2 = 0.5F;
-			this.rotationYaw = this.prevRotationYaw = (float)(Direction.rotateOpposite[par1] * 90);
+			this.rotationYaw = this.prevRotationYaw = (float)(Direction.rotateOpposite[p_82328_1_] * 90);
 		}
 
 		f /= 32.0F;
@@ -62,42 +62,42 @@ public abstract class EntityHanging extends Entity
 		float f5 = (float)this.field_146062_d + 0.5F;
 		float f6 = 0.5625F;
 
-		if (par1 == 2)
+		if (p_82328_1_ == 2)
 		{
 			f5 -= f6;
 		}
 
-		if (par1 == 1)
+		if (p_82328_1_ == 1)
 		{
 			f3 -= f6;
 		}
 
-		if (par1 == 0)
+		if (p_82328_1_ == 0)
 		{
 			f5 += f6;
 		}
 
-		if (par1 == 3)
+		if (p_82328_1_ == 3)
 		{
 			f3 += f6;
 		}
 
-		if (par1 == 2)
+		if (p_82328_1_ == 2)
 		{
 			f3 -= this.func_70517_b(this.getWidthPixels());
 		}
 
-		if (par1 == 1)
+		if (p_82328_1_ == 1)
 		{
 			f5 += this.func_70517_b(this.getWidthPixels());
 		}
 
-		if (par1 == 0)
+		if (p_82328_1_ == 0)
 		{
 			f3 += this.func_70517_b(this.getWidthPixels());
 		}
 
-		if (par1 == 3)
+		if (p_82328_1_ == 3)
 		{
 			f5 -= this.func_70517_b(this.getWidthPixels());
 		}
@@ -108,9 +108,9 @@ public abstract class EntityHanging extends Entity
 		this.boundingBox.setBounds((double)(f3 - f - f7), (double)(f4 - f1 - f7), (double)(f5 - f2 - f7), (double)(f3 + f + f7), (double)(f4 + f1 + f7), (double)(f5 + f2 + f7));
 	}
 
-	private float func_70517_b(int par1)
+	private float func_70517_b(int p_70517_1_)
 	{
-		return par1 == 32 ? 0.5F : (par1 == 64 ? 0.5F : 0.0F);
+		return p_70517_1_ == 32 ? 0.5F : (p_70517_1_ == 64 ? 0.5F : 0.0F);
 	}
 
 	public void onUpdate()
@@ -213,9 +213,9 @@ public abstract class EntityHanging extends Entity
 		return true;
 	}
 
-	public boolean hitByEntity(Entity par1Entity)
+	public boolean hitByEntity(Entity p_85031_1_)
 	{
-		return par1Entity instanceof EntityPlayer ? this.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)par1Entity), 0.0F) : false;
+		return p_85031_1_ instanceof EntityPlayer ? this.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)p_85031_1_), 0.0F) : false;
 	}
 
 	public void func_145781_i(int p_145781_1_)
@@ -223,7 +223,7 @@ public abstract class EntityHanging extends Entity
 		this.worldObj.func_147450_X();
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		if (this.isEntityInvulnerable())
 		{
@@ -235,63 +235,63 @@ public abstract class EntityHanging extends Entity
 			{
 				this.setDead();
 				this.setBeenAttacked();
-				this.onBroken(par1DamageSource.getEntity());
+				this.onBroken(p_70097_1_.getEntity());
 			}
 
 			return true;
 		}
 	}
 
-	public void moveEntity(double par1, double par3, double par5)
+	public void moveEntity(double p_70091_1_, double p_70091_3_, double p_70091_5_)
 	{
-		if (!this.worldObj.isRemote && !this.isDead && par1 * par1 + par3 * par3 + par5 * par5 > 0.0D)
+		if (!this.worldObj.isRemote && !this.isDead && p_70091_1_ * p_70091_1_ + p_70091_3_ * p_70091_3_ + p_70091_5_ * p_70091_5_ > 0.0D)
 		{
 			this.setDead();
 			this.onBroken((Entity)null);
 		}
 	}
 
-	public void addVelocity(double par1, double par3, double par5)
+	public void addVelocity(double p_70024_1_, double p_70024_3_, double p_70024_5_)
 	{
-		if (!this.worldObj.isRemote && !this.isDead && par1 * par1 + par3 * par3 + par5 * par5 > 0.0D)
+		if (!this.worldObj.isRemote && !this.isDead && p_70024_1_ * p_70024_1_ + p_70024_3_ * p_70024_3_ + p_70024_5_ * p_70024_5_ > 0.0D)
 		{
 			this.setDead();
 			this.onBroken((Entity)null);
 		}
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		par1NBTTagCompound.setByte("Direction", (byte)this.hangingDirection);
-		par1NBTTagCompound.setInteger("TileX", this.field_146063_b);
-		par1NBTTagCompound.setInteger("TileY", this.field_146064_c);
-		par1NBTTagCompound.setInteger("TileZ", this.field_146062_d);
+		p_70014_1_.setByte("Direction", (byte)this.hangingDirection);
+		p_70014_1_.setInteger("TileX", this.field_146063_b);
+		p_70014_1_.setInteger("TileY", this.field_146064_c);
+		p_70014_1_.setInteger("TileZ", this.field_146062_d);
 
 		switch (this.hangingDirection)
 		{
 			case 0:
-				par1NBTTagCompound.setByte("Dir", (byte)2);
+				p_70014_1_.setByte("Dir", (byte)2);
 				break;
 			case 1:
-				par1NBTTagCompound.setByte("Dir", (byte)1);
+				p_70014_1_.setByte("Dir", (byte)1);
 				break;
 			case 2:
-				par1NBTTagCompound.setByte("Dir", (byte)0);
+				p_70014_1_.setByte("Dir", (byte)0);
 				break;
 			case 3:
-				par1NBTTagCompound.setByte("Dir", (byte)3);
+				p_70014_1_.setByte("Dir", (byte)3);
 		}
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		if (par1NBTTagCompound.hasKey("Direction", 99))
+		if (p_70037_1_.hasKey("Direction", 99))
 		{
-			this.hangingDirection = par1NBTTagCompound.getByte("Direction");
+			this.hangingDirection = p_70037_1_.getByte("Direction");
 		}
 		else
 		{
-			switch (par1NBTTagCompound.getByte("Dir"))
+			switch (p_70037_1_.getByte("Dir"))
 			{
 				case 0:
 					this.hangingDirection = 2;
@@ -307,9 +307,9 @@ public abstract class EntityHanging extends Entity
 			}
 		}
 
-		this.field_146063_b = par1NBTTagCompound.getInteger("TileX");
-		this.field_146064_c = par1NBTTagCompound.getInteger("TileY");
-		this.field_146062_d = par1NBTTagCompound.getInteger("TileZ");
+		this.field_146063_b = p_70037_1_.getInteger("TileX");
+		this.field_146064_c = p_70037_1_.getInteger("TileY");
+		this.field_146062_d = p_70037_1_.getInteger("TileZ");
 		this.setDirection(this.hangingDirection);
 	}
 
@@ -317,7 +317,7 @@ public abstract class EntityHanging extends Entity
 
 	public abstract int getHeightPixels();
 
-	public abstract void onBroken(Entity var1);
+	public abstract void onBroken(Entity p_110128_1_);
 
 	protected boolean shouldSetPosAfterLoading()
 	{

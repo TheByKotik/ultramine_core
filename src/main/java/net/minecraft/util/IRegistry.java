@@ -2,7 +2,7 @@ package net.minecraft.util;
 
 public interface IRegistry
 {
-	Object getObject(Object var1);
+	Object getObject(Object p_82594_1_);
 
-	void putObject(Object var1, Object var2);
+	void putObject(Object p_82595_1_, Object p_82595_2_);
 }

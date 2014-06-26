@@ -17,25 +17,25 @@ public class WorldGenTaiga1 extends WorldGenAbstractTree
 		super(false);
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		int l = par2Random.nextInt(5) + 7;
-		int i1 = l - par2Random.nextInt(2) - 3;
+		int l = p_76484_2_.nextInt(5) + 7;
+		int i1 = l - p_76484_2_.nextInt(2) - 3;
 		int j1 = l - i1;
-		int k1 = 1 + par2Random.nextInt(j1 + 1);
+		int k1 = 1 + p_76484_2_.nextInt(j1 + 1);
 		boolean flag = true;
 
-		if (par4 >= 1 && par4 + l + 1 <= 256)
+		if (p_76484_4_ >= 1 && p_76484_4_ + l + 1 <= 256)
 		{
 			int i2;
 			int j2;
 			int i3;
 
-			for (int l1 = par4; l1 <= par4 + 1 + l && flag; ++l1)
+			for (int l1 = p_76484_4_; l1 <= p_76484_4_ + 1 + l && flag; ++l1)
 			{
 				boolean flag1 = true;
 
-				if (l1 - par4 < i1)
+				if (l1 - p_76484_4_ < i1)
 				{
 					i3 = 0;
 				}
@@ -44,15 +44,15 @@ public class WorldGenTaiga1 extends WorldGenAbstractTree
 					i3 = k1;
 				}
 
-				for (i2 = par3 - i3; i2 <= par3 + i3 && flag; ++i2)
+				for (i2 = p_76484_3_ - i3; i2 <= p_76484_3_ + i3 && flag; ++i2)
 				{
-					for (j2 = par5 - i3; j2 <= par5 + i3 && flag; ++j2)
+					for (j2 = p_76484_5_ - i3; j2 <= p_76484_5_ + i3 && flag; ++j2)
 					{
 						if (l1 >= 0 && l1 < 256)
 						{
-							Block block = par1World.getBlock(i2, l1, j2);
+							Block block = p_76484_1_.getBlock(i2, l1, j2);
 
-							if (!this.isReplaceable(par1World, i2, l1, j2))
+							if (!this.isReplaceable(p_76484_1_, i2, l1, j2))
 							{
 								flag = false;
 							}
@@ -71,32 +71,32 @@ public class WorldGenTaiga1 extends WorldGenAbstractTree
 			}
 			else
 			{
-				Block block1 = par1World.getBlock(par3, par4 - 1, par5);
+				Block block1 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ - 1, p_76484_5_);
 
-				boolean isSoil = block1.canSustainPlant(par1World, par3, par4 - 1, par5, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
-				if (isSoil && par4 < 256 - l - 1)
+				boolean isSoil = block1.canSustainPlant(p_76484_1_, p_76484_3_, p_76484_4_ - 1, p_76484_5_, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
+				if (isSoil && p_76484_4_ < 256 - l - 1)
 				{
-					block1.onPlantGrow(par1World, par3, par4 - 1, par5, par3, par4, par5);
+					block1.onPlantGrow(p_76484_1_, p_76484_3_, p_76484_4_ - 1, p_76484_5_, p_76484_3_, p_76484_4_, p_76484_5_);
 					i3 = 0;
 
-					for (i2 = par4 + l; i2 >= par4 + i1; --i2)
+					for (i2 = p_76484_4_ + l; i2 >= p_76484_4_ + i1; --i2)
 					{
-						for (j2 = par3 - i3; j2 <= par3 + i3; ++j2)
+						for (j2 = p_76484_3_ - i3; j2 <= p_76484_3_ + i3; ++j2)
 						{
-							int j3 = j2 - par3;
+							int j3 = j2 - p_76484_3_;
 
-							for (int k2 = par5 - i3; k2 <= par5 + i3; ++k2)
+							for (int k2 = p_76484_5_ - i3; k2 <= p_76484_5_ + i3; ++k2)
 							{
-								int l2 = k2 - par5;
+								int l2 = k2 - p_76484_5_;
 
-								if ((Math.abs(j3) != i3 || Math.abs(l2) != i3 || i3 <= 0) && par1World.getBlock(j2, i2, k2).canBeReplacedByLeaves(par1World, j2, i2, k2))
+								if ((Math.abs(j3) != i3 || Math.abs(l2) != i3 || i3 <= 0) && p_76484_1_.getBlock(j2, i2, k2).canBeReplacedByLeaves(p_76484_1_, j2, i2, k2))
 								{
-									this.setBlockAndNotifyAdequately(par1World, j2, i2, k2, Blocks.leaves, 1);
+									this.setBlockAndNotifyAdequately(p_76484_1_, j2, i2, k2, Blocks.leaves, 1);
 								}
 							}
 						}
 
-						if (i3 >= 1 && i2 == par4 + i1 + 1)
+						if (i3 >= 1 && i2 == p_76484_4_ + i1 + 1)
 						{
 							--i3;
 						}
@@ -108,11 +108,11 @@ public class WorldGenTaiga1 extends WorldGenAbstractTree
 
 					for (i2 = 0; i2 < l - 1; ++i2)
 					{
-						Block block2 = par1World.getBlock(par3, par4 + i2, par5);
+						Block block2 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + i2, p_76484_5_);
 
-						if (block2.isAir(par1World, par3, par4 + i2, par5) || block2.isLeaves(par1World, par3, par4 + i2, par5))
+						if (block2.isAir(p_76484_1_, p_76484_3_, p_76484_4_ + i2, p_76484_5_) || block2.isLeaves(p_76484_1_, p_76484_3_, p_76484_4_ + i2, p_76484_5_))
 						{
-							this.setBlockAndNotifyAdequately(par1World, par3, par4 + i2, par5, Blocks.log, 1);
+							this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + i2, p_76484_5_, Blocks.log, 1);
 						}
 					}
 

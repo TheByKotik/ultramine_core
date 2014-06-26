@@ -9,9 +9,9 @@ public abstract class EntityWaterMob extends EntityCreature implements IAnimals
 {
 	private static final String __OBFID = "CL_00001653";
 
-	public EntityWaterMob(World par1World)
+	public EntityWaterMob(World p_i1695_1_)
 	{
-		super(par1World);
+		super(p_i1695_1_);
 	}
 
 	public boolean canBreatheUnderwater()
@@ -34,7 +34,7 @@ public abstract class EntityWaterMob extends EntityCreature implements IAnimals
 		return true;
 	}
 
-	protected int getExperiencePoints(EntityPlayer par1EntityPlayer)
+	protected int getExperiencePoints(EntityPlayer p_70693_1_)
 	{
 		return 1 + this.worldObj.rand.nextInt(3);
 	}

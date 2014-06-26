@@ -8,35 +8,35 @@ public class ResourceLocation
 	private final String resourcePath;
 	private static final String __OBFID = "CL_00001082";
 
-	public ResourceLocation(String par1Str, String par2Str)
+	public ResourceLocation(String p_i1292_1_, String p_i1292_2_)
 	{
-		Validate.notNull(par2Str);
+		Validate.notNull(p_i1292_2_);
 
-		if (par1Str != null && par1Str.length() != 0)
+		if (p_i1292_1_ != null && p_i1292_1_.length() != 0)
 		{
-			this.resourceDomain = par1Str;
+			this.resourceDomain = p_i1292_1_;
 		}
 		else
 		{
 			this.resourceDomain = "minecraft";
 		}
 
-		this.resourcePath = par2Str;
+		this.resourcePath = p_i1292_2_;
 	}
 
-	public ResourceLocation(String par1Str)
+	public ResourceLocation(String p_i1293_1_)
 	{
 		String s1 = "minecraft";
-		String s2 = par1Str;
-		int i = par1Str.indexOf(58);
+		String s2 = p_i1293_1_;
+		int i = p_i1293_1_.indexOf(58);
 
 		if (i >= 0)
 		{
-			s2 = par1Str.substring(i + 1, par1Str.length());
+			s2 = p_i1293_1_.substring(i + 1, p_i1293_1_.length());
 
 			if (i > 1)
 			{
-				s1 = par1Str.substring(0, i);
+				s1 = p_i1293_1_.substring(0, i);
 			}
 		}
 
@@ -59,19 +59,19 @@ public class ResourceLocation
 		return this.resourceDomain + ":" + this.resourcePath;
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (this == par1Obj)
+		if (this == p_equals_1_)
 		{
 			return true;
 		}
-		else if (!(par1Obj instanceof ResourceLocation))
+		else if (!(p_equals_1_ instanceof ResourceLocation))
 		{
 			return false;
 		}
 		else
 		{
-			ResourceLocation resourcelocation = (ResourceLocation)par1Obj;
+			ResourceLocation resourcelocation = (ResourceLocation)p_equals_1_;
 			return this.resourceDomain.equals(resourcelocation.resourceDomain) && this.resourcePath.equals(resourcelocation.resourcePath);
 		}
 	}

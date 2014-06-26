@@ -18,13 +18,13 @@ public class RenderFish extends Render
 	private static final ResourceLocation field_110792_a = new ResourceLocation("textures/particle/particles.png");
 	private static final String __OBFID = "CL_00000996";
 
-	public void doRender(EntityFishHook p_147922_1_, double p_147922_2_, double p_147922_4_, double p_147922_6_, float p_147922_8_, float p_147922_9_)
+	public void doRender(EntityFishHook p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float)p_147922_2_, (float)p_147922_4_, (float)p_147922_6_);
+		GL11.glTranslatef((float)p_76986_2_, (float)p_76986_4_, (float)p_76986_6_);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glScalef(0.5F, 0.5F, 0.5F);
-		this.bindEntityTexture(p_147922_1_);
+		this.bindEntityTexture(p_76986_1_);
 		Tessellator tessellator = Tessellator.instance;
 		byte b0 = 1;
 		byte b1 = 2;
@@ -47,33 +47,33 @@ public class RenderFish extends Render
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 
-		if (p_147922_1_.field_146042_b != null)
+		if (p_76986_1_.field_146042_b != null)
 		{
-			float f9 = p_147922_1_.field_146042_b.getSwingProgress(p_147922_9_);
+			float f9 = p_76986_1_.field_146042_b.getSwingProgress(p_76986_9_);
 			float f10 = MathHelper.sin(MathHelper.sqrt_float(f9) * (float)Math.PI);
-			Vec3 vec3 = p_147922_1_.worldObj.getWorldVec3Pool().getVecFromPool(-0.5D, 0.03D, 0.8D);
-			vec3.rotateAroundX(-(p_147922_1_.field_146042_b.prevRotationPitch + (p_147922_1_.field_146042_b.rotationPitch - p_147922_1_.field_146042_b.prevRotationPitch) * p_147922_9_) * (float)Math.PI / 180.0F);
-			vec3.rotateAroundY(-(p_147922_1_.field_146042_b.prevRotationYaw + (p_147922_1_.field_146042_b.rotationYaw - p_147922_1_.field_146042_b.prevRotationYaw) * p_147922_9_) * (float)Math.PI / 180.0F);
+			Vec3 vec3 = Vec3.createVectorHelper(-0.5D, 0.03D, 0.8D);
+			vec3.rotateAroundX(-(p_76986_1_.field_146042_b.prevRotationPitch + (p_76986_1_.field_146042_b.rotationPitch - p_76986_1_.field_146042_b.prevRotationPitch) * p_76986_9_) * (float)Math.PI / 180.0F);
+			vec3.rotateAroundY(-(p_76986_1_.field_146042_b.prevRotationYaw + (p_76986_1_.field_146042_b.rotationYaw - p_76986_1_.field_146042_b.prevRotationYaw) * p_76986_9_) * (float)Math.PI / 180.0F);
 			vec3.rotateAroundY(f10 * 0.5F);
 			vec3.rotateAroundX(-f10 * 0.7F);
-			double d3 = p_147922_1_.field_146042_b.prevPosX + (p_147922_1_.field_146042_b.posX - p_147922_1_.field_146042_b.prevPosX) * (double)p_147922_9_ + vec3.xCoord;
-			double d4 = p_147922_1_.field_146042_b.prevPosY + (p_147922_1_.field_146042_b.posY - p_147922_1_.field_146042_b.prevPosY) * (double)p_147922_9_ + vec3.yCoord;
-			double d5 = p_147922_1_.field_146042_b.prevPosZ + (p_147922_1_.field_146042_b.posZ - p_147922_1_.field_146042_b.prevPosZ) * (double)p_147922_9_ + vec3.zCoord;
-			double d6 = p_147922_1_.field_146042_b == Minecraft.getMinecraft().thePlayer ? 0.0D : (double)p_147922_1_.field_146042_b.getEyeHeight();
+			double d3 = p_76986_1_.field_146042_b.prevPosX + (p_76986_1_.field_146042_b.posX - p_76986_1_.field_146042_b.prevPosX) * (double)p_76986_9_ + vec3.xCoord;
+			double d4 = p_76986_1_.field_146042_b.prevPosY + (p_76986_1_.field_146042_b.posY - p_76986_1_.field_146042_b.prevPosY) * (double)p_76986_9_ + vec3.yCoord;
+			double d5 = p_76986_1_.field_146042_b.prevPosZ + (p_76986_1_.field_146042_b.posZ - p_76986_1_.field_146042_b.prevPosZ) * (double)p_76986_9_ + vec3.zCoord;
+			double d6 = p_76986_1_.field_146042_b == Minecraft.getMinecraft().thePlayer ? 0.0D : (double)p_76986_1_.field_146042_b.getEyeHeight();
 
-			if (this.renderManager.options.thirdPersonView > 0 || p_147922_1_.field_146042_b != Minecraft.getMinecraft().thePlayer)
+			if (this.renderManager.options.thirdPersonView > 0 || p_76986_1_.field_146042_b != Minecraft.getMinecraft().thePlayer)
 			{
-				float f11 = (p_147922_1_.field_146042_b.prevRenderYawOffset + (p_147922_1_.field_146042_b.renderYawOffset - p_147922_1_.field_146042_b.prevRenderYawOffset) * p_147922_9_) * (float)Math.PI / 180.0F;
+				float f11 = (p_76986_1_.field_146042_b.prevRenderYawOffset + (p_76986_1_.field_146042_b.renderYawOffset - p_76986_1_.field_146042_b.prevRenderYawOffset) * p_76986_9_) * (float)Math.PI / 180.0F;
 				double d7 = (double)MathHelper.sin(f11);
 				double d9 = (double)MathHelper.cos(f11);
-				d3 = p_147922_1_.field_146042_b.prevPosX + (p_147922_1_.field_146042_b.posX - p_147922_1_.field_146042_b.prevPosX) * (double)p_147922_9_ - d9 * 0.35D - d7 * 0.85D;
-				d4 = p_147922_1_.field_146042_b.prevPosY + d6 + (p_147922_1_.field_146042_b.posY - p_147922_1_.field_146042_b.prevPosY) * (double)p_147922_9_ - 0.45D;
-				d5 = p_147922_1_.field_146042_b.prevPosZ + (p_147922_1_.field_146042_b.posZ - p_147922_1_.field_146042_b.prevPosZ) * (double)p_147922_9_ - d7 * 0.35D + d9 * 0.85D;
+				d3 = p_76986_1_.field_146042_b.prevPosX + (p_76986_1_.field_146042_b.posX - p_76986_1_.field_146042_b.prevPosX) * (double)p_76986_9_ - d9 * 0.35D - d7 * 0.85D;
+				d4 = p_76986_1_.field_146042_b.prevPosY + d6 + (p_76986_1_.field_146042_b.posY - p_76986_1_.field_146042_b.prevPosY) * (double)p_76986_9_ - 0.45D;
+				d5 = p_76986_1_.field_146042_b.prevPosZ + (p_76986_1_.field_146042_b.posZ - p_76986_1_.field_146042_b.prevPosZ) * (double)p_76986_9_ - d7 * 0.35D + d9 * 0.85D;
 			}
 
-			double d14 = p_147922_1_.prevPosX + (p_147922_1_.posX - p_147922_1_.prevPosX) * (double)p_147922_9_;
-			double d8 = p_147922_1_.prevPosY + (p_147922_1_.posY - p_147922_1_.prevPosY) * (double)p_147922_9_ + 0.25D;
-			double d10 = p_147922_1_.prevPosZ + (p_147922_1_.posZ - p_147922_1_.prevPosZ) * (double)p_147922_9_;
+			double d14 = p_76986_1_.prevPosX + (p_76986_1_.posX - p_76986_1_.prevPosX) * (double)p_76986_9_;
+			double d8 = p_76986_1_.prevPosY + (p_76986_1_.posY - p_76986_1_.prevPosY) * (double)p_76986_9_ + 0.25D;
+			double d10 = p_76986_1_.prevPosZ + (p_76986_1_.posZ - p_76986_1_.prevPosZ) * (double)p_76986_9_;
 			double d11 = (double)((float)(d3 - d14));
 			double d12 = (double)((float)(d4 - d8));
 			double d13 = (double)((float)(d5 - d10));
@@ -86,7 +86,7 @@ public class RenderFish extends Render
 			for (int i = 0; i <= b2; ++i)
 			{
 				float f12 = (float)i / (float)b2;
-				tessellator.addVertex(p_147922_2_ + d11 * (double)f12, p_147922_4_ + d12 * (double)(f12 * f12 + f12) * 0.5D + 0.25D, p_147922_6_ + d13 * (double)f12);
+				tessellator.addVertex(p_76986_2_ + d11 * (double)f12, p_76986_4_ + d12 * (double)(f12 * f12 + f12) * 0.5D + 0.25D, p_76986_6_ + d13 * (double)f12);
 			}
 
 			tessellator.draw();
@@ -95,18 +95,18 @@ public class RenderFish extends Render
 		}
 	}
 
-	protected ResourceLocation getEntityTexture(EntityFishHook p_147921_1_)
+	protected ResourceLocation getEntityTexture(EntityFishHook p_110775_1_)
 	{
 		return field_110792_a;
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityFishHook)par1Entity);
+		return this.getEntityTexture((EntityFishHook)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityFishHook)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityFishHook)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

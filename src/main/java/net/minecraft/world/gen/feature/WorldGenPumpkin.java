@@ -8,17 +8,17 @@ public class WorldGenPumpkin extends WorldGenerator
 {
 	private static final String __OBFID = "CL_00000428";
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
 		for (int l = 0; l < 64; ++l)
 		{
-			int i1 = par3 + par2Random.nextInt(8) - par2Random.nextInt(8);
-			int j1 = par4 + par2Random.nextInt(4) - par2Random.nextInt(4);
-			int k1 = par5 + par2Random.nextInt(8) - par2Random.nextInt(8);
+			int i1 = p_76484_3_ + p_76484_2_.nextInt(8) - p_76484_2_.nextInt(8);
+			int j1 = p_76484_4_ + p_76484_2_.nextInt(4) - p_76484_2_.nextInt(4);
+			int k1 = p_76484_5_ + p_76484_2_.nextInt(8) - p_76484_2_.nextInt(8);
 
-			if (par1World.isAirBlock(i1, j1, k1) && par1World.getBlock(i1, j1 - 1, k1) == Blocks.grass && Blocks.pumpkin.canPlaceBlockAt(par1World, i1, j1, k1))
+			if (p_76484_1_.isAirBlock(i1, j1, k1) && p_76484_1_.getBlock(i1, j1 - 1, k1) == Blocks.grass && Blocks.pumpkin.canPlaceBlockAt(p_76484_1_, i1, j1, k1))
 			{
-				par1World.setBlock(i1, j1, k1, Blocks.pumpkin, par2Random.nextInt(4), 2);
+				p_76484_1_.setBlock(i1, j1, k1, Blocks.pumpkin, p_76484_2_.nextInt(4), 2);
 			}
 		}
 

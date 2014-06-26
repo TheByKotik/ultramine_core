@@ -15,9 +15,9 @@ public class ImageBufferDownload implements IImageBuffer
 	private int imageHeight;
 	private static final String __OBFID = "CL_00000956";
 
-	public BufferedImage parseUserSkin(BufferedImage par1BufferedImage)
+	public BufferedImage parseUserSkin(BufferedImage p_78432_1_)
 	{
-		if (par1BufferedImage == null)
+		if (p_78432_1_ == null)
 		{
 			return null;
 		}
@@ -27,7 +27,7 @@ public class ImageBufferDownload implements IImageBuffer
 			this.imageHeight = 32;
 			BufferedImage bufferedimage1 = new BufferedImage(this.imageWidth, this.imageHeight, 2);
 			Graphics graphics = bufferedimage1.getGraphics();
-			graphics.drawImage(par1BufferedImage, 0, 0, (ImageObserver)null);
+			graphics.drawImage(p_78432_1_, 0, 0, (ImageObserver)null);
 			graphics.dispose();
 			this.imageData = ((DataBufferInt)bufferedimage1.getRaster().getDataBuffer()).getData();
 			this.setAreaOpaque(0, 0, 32, 16);
@@ -37,13 +37,15 @@ public class ImageBufferDownload implements IImageBuffer
 		}
 	}
 
-	private void setAreaTransparent(int par1, int par2, int par3, int par4)
+	public void func_152634_a() {}
+
+	private void setAreaTransparent(int p_78434_1_, int p_78434_2_, int p_78434_3_, int p_78434_4_)
 	{
-		if (!this.hasTransparency(par1, par2, par3, par4))
+		if (!this.hasTransparency(p_78434_1_, p_78434_2_, p_78434_3_, p_78434_4_))
 		{
-			for (int i1 = par1; i1 < par3; ++i1)
+			for (int i1 = p_78434_1_; i1 < p_78434_3_; ++i1)
 			{
-				for (int j1 = par2; j1 < par4; ++j1)
+				for (int j1 = p_78434_2_; j1 < p_78434_4_; ++j1)
 				{
 					this.imageData[i1 + j1 * this.imageWidth] &= 16777215;
 				}
@@ -51,22 +53,22 @@ public class ImageBufferDownload implements IImageBuffer
 		}
 	}
 
-	private void setAreaOpaque(int par1, int par2, int par3, int par4)
+	private void setAreaOpaque(int p_78433_1_, int p_78433_2_, int p_78433_3_, int p_78433_4_)
 	{
-		for (int i1 = par1; i1 < par3; ++i1)
+		for (int i1 = p_78433_1_; i1 < p_78433_3_; ++i1)
 		{
-			for (int j1 = par2; j1 < par4; ++j1)
+			for (int j1 = p_78433_2_; j1 < p_78433_4_; ++j1)
 			{
 				this.imageData[i1 + j1 * this.imageWidth] |= -16777216;
 			}
 		}
 	}
 
-	private boolean hasTransparency(int par1, int par2, int par3, int par4)
+	private boolean hasTransparency(int p_78435_1_, int p_78435_2_, int p_78435_3_, int p_78435_4_)
 	{
-		for (int i1 = par1; i1 < par3; ++i1)
+		for (int i1 = p_78435_1_; i1 < p_78435_3_; ++i1)
 		{
-			for (int j1 = par2; j1 < par4; ++j1)
+			for (int j1 = p_78435_2_; j1 < p_78435_4_; ++j1)
 			{
 				int k1 = this.imageData[i1 + j1 * this.imageWidth];
 

@@ -60,11 +60,11 @@ public class SoundHandler implements IResourceManagerReloadListener, IUpdatePlay
 		this.sndManager = new SoundManager(this, p_i45122_2_);
 	}
 
-	public void onResourceManagerReload(IResourceManager par1ResourceManager)
+	public void onResourceManagerReload(IResourceManager p_110549_1_)
 	{
 		this.sndManager.reloadSoundSystem();
 		this.sndRegistry.func_148763_c();
-		Iterator iterator = par1ResourceManager.getResourceDomains().iterator();
+		Iterator iterator = p_110549_1_.getResourceDomains().iterator();
 
 		while (iterator.hasNext())
 		{
@@ -72,20 +72,21 @@ public class SoundHandler implements IResourceManagerReloadListener, IUpdatePlay
 
 			try
 			{
-				List list = par1ResourceManager.getAllResources(new ResourceLocation(s, "sounds.json"));
+				List list = p_110549_1_.getAllResources(new ResourceLocation(s, "sounds.json"));
+				Iterator iterator1 = list.iterator();
 
-				for (int i = list.size() - 1; i >= 0; --i)
+				while (iterator1.hasNext())
 				{
-					IResource iresource = (IResource)list.get(i);
+					IResource iresource = (IResource)iterator1.next();
 
 					try
 					{
 						Map map = (Map)field_147699_c.fromJson(new InputStreamReader(iresource.getInputStream()), field_147696_d);
-						Iterator iterator1 = map.entrySet().iterator();
+						Iterator iterator2 = map.entrySet().iterator();
 
-						while (iterator1.hasNext())
+						while (iterator2.hasNext())
 						{
-							Entry entry = (Entry)iterator1.next();
+							Entry entry = (Entry)iterator2.next();
 							this.loadSoundResource(new ResourceLocation(s, (String)entry.getKey()), (SoundList)entry.getValue());
 						}
 					}
@@ -112,6 +113,7 @@ public class SoundHandler implements IResourceManagerReloadListener, IUpdatePlay
 		}
 		else
 		{
+			logger.debug("Registered/replaced new sound event location {}", new Object[] {p_147693_1_});
 			soundeventaccessorcomposite = new SoundEventAccessorComposite(p_147693_1_, 1.0D, 1.0D, p_147693_2_.getSoundCategory());
 			this.sndRegistry.registerSound(soundeventaccessorcomposite);
 		}

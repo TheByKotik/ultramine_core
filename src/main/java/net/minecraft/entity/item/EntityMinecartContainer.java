@@ -15,19 +15,19 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 	private boolean dropContentsWhenDead = true;
 	private static final String __OBFID = "CL_00001674";
 
-	public EntityMinecartContainer(World par1World)
+	public EntityMinecartContainer(World p_i1716_1_)
 	{
-		super(par1World);
+		super(p_i1716_1_);
 	}
 
-	public EntityMinecartContainer(World par1World, double par2, double par4, double par6)
+	public EntityMinecartContainer(World p_i1717_1_, double p_i1717_2_, double p_i1717_4_, double p_i1717_6_)
 	{
-		super(par1World, par2, par4, par6);
+		super(p_i1717_1_, p_i1717_2_, p_i1717_4_, p_i1717_6_);
 	}
 
-	public void killMinecart(DamageSource par1DamageSource)
+	public void killMinecart(DamageSource p_94095_1_)
 	{
-		super.killMinecart(par1DamageSource);
+		super.killMinecart(p_94095_1_);
 
 		for (int i = 0; i < this.getSizeInventory(); ++i)
 		{
@@ -60,30 +60,30 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 		}
 	}
 
-	public ItemStack getStackInSlot(int par1)
+	public ItemStack getStackInSlot(int p_70301_1_)
 	{
-		return this.minecartContainerItems[par1];
+		return this.minecartContainerItems[p_70301_1_];
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
 	{
-		if (this.minecartContainerItems[par1] != null)
+		if (this.minecartContainerItems[p_70298_1_] != null)
 		{
 			ItemStack itemstack;
 
-			if (this.minecartContainerItems[par1].stackSize <= par2)
+			if (this.minecartContainerItems[p_70298_1_].stackSize <= p_70298_2_)
 			{
-				itemstack = this.minecartContainerItems[par1];
-				this.minecartContainerItems[par1] = null;
+				itemstack = this.minecartContainerItems[p_70298_1_];
+				this.minecartContainerItems[p_70298_1_] = null;
 				return itemstack;
 			}
 			else
 			{
-				itemstack = this.minecartContainerItems[par1].splitStack(par2);
+				itemstack = this.minecartContainerItems[p_70298_1_].splitStack(p_70298_2_);
 
-				if (this.minecartContainerItems[par1].stackSize == 0)
+				if (this.minecartContainerItems[p_70298_1_].stackSize == 0)
 				{
-					this.minecartContainerItems[par1] = null;
+					this.minecartContainerItems[p_70298_1_] = null;
 				}
 
 				return itemstack;
@@ -95,12 +95,12 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 		}
 	}
 
-	public ItemStack getStackInSlotOnClosing(int par1)
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_)
 	{
-		if (this.minecartContainerItems[par1] != null)
+		if (this.minecartContainerItems[p_70304_1_] != null)
 		{
-			ItemStack itemstack = this.minecartContainerItems[par1];
-			this.minecartContainerItems[par1] = null;
+			ItemStack itemstack = this.minecartContainerItems[p_70304_1_];
+			this.minecartContainerItems[p_70304_1_] = null;
 			return itemstack;
 		}
 		else
@@ -109,28 +109,28 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 		}
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
-		this.minecartContainerItems[par1] = par2ItemStack;
+		this.minecartContainerItems[p_70299_1_] = p_70299_2_;
 
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		if (p_70299_2_ != null && p_70299_2_.stackSize > this.getInventoryStackLimit())
 		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
+			p_70299_2_.stackSize = this.getInventoryStackLimit();
 		}
 	}
 
 	public void markDirty() {}
 
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
 	{
-		return this.isDead ? false : par1EntityPlayer.getDistanceSqToEntity(this) <= 64.0D;
+		return this.isDead ? false : p_70300_1_.getDistanceSqToEntity(this) <= 64.0D;
 	}
 
 	public void openInventory() {}
 
 	public void closeInventory() {}
 
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
 		return true;
 	}
@@ -145,10 +145,10 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 		return 64;
 	}
 
-	public void travelToDimension(int par1)
+	public void travelToDimension(int p_71027_1_)
 	{
 		this.dropContentsWhenDead = false;
-		super.travelToDimension(par1);
+		super.travelToDimension(p_71027_1_);
 	}
 
 	public void setDead()
@@ -195,9 +195,9 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 		super.setDead();
 	}
 
-	protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	protected void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
+		super.writeEntityToNBT(p_70014_1_);
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < this.minecartContainerItems.length; ++i)
@@ -211,13 +211,13 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 			}
 		}
 
-		par1NBTTagCompound.setTag("Items", nbttaglist);
+		p_70014_1_.setTag("Items", nbttaglist);
 	}
 
-	protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	protected void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
-		NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Items", 10);
+		super.readEntityFromNBT(p_70037_1_);
+		NBTTagList nbttaglist = p_70037_1_.getTagList("Items", 10);
 		this.minecartContainerItems = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i)
@@ -232,12 +232,12 @@ public abstract class EntityMinecartContainer extends EntityMinecart implements 
 		}
 	}
 
-	public boolean interactFirst(EntityPlayer par1EntityPlayer)
+	public boolean interactFirst(EntityPlayer p_130002_1_)
 	{
-		if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, par1EntityPlayer))) return true;
+		if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, p_130002_1_))) return true;
 		if (!this.worldObj.isRemote)
 		{
-			par1EntityPlayer.displayGUIChest(this);
+			p_130002_1_.displayGUIChest(this);
 		}
 
 		return true;

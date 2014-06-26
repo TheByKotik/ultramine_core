@@ -12,9 +12,9 @@ public class DerivedWorldInfo extends WorldInfo
 	private final WorldInfo theWorldInfo;
 	private static final String __OBFID = "CL_00000584";
 
-	public DerivedWorldInfo(WorldInfo par1WorldInfo)
+	public DerivedWorldInfo(WorldInfo p_i2145_1_)
 	{
-		this.theWorldInfo = par1WorldInfo;
+		this.theWorldInfo = p_i2145_1_;
 	}
 
 	public NBTTagCompound getNBTTagCompound()
@@ -22,9 +22,9 @@ public class DerivedWorldInfo extends WorldInfo
 		return this.theWorldInfo.getNBTTagCompound();
 	}
 
-	public NBTTagCompound cloneNBTCompound(NBTTagCompound par1NBTTagCompound)
+	public NBTTagCompound cloneNBTCompound(NBTTagCompound p_76082_1_)
 	{
-		return this.theWorldInfo.cloneNBTCompound(par1NBTTagCompound);
+		return this.theWorldInfo.cloneNBTCompound(p_76082_1_);
 	}
 
 	public long getSeed()
@@ -115,31 +115,31 @@ public class DerivedWorldInfo extends WorldInfo
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void setSpawnX(int par1) {}
+	public void setSpawnX(int p_76058_1_) {}
 
 	@SideOnly(Side.CLIENT)
-	public void setSpawnY(int par1) {}
+	public void setSpawnY(int p_76056_1_) {}
 
-	public void incrementTotalWorldTime(long par1) {}
+	public void incrementTotalWorldTime(long p_82572_1_) {}
 
 	@SideOnly(Side.CLIENT)
-	public void setSpawnZ(int par1) {}
+	public void setSpawnZ(int p_76087_1_) {}
 
-	public void setWorldTime(long par1) {}
+	public void setWorldTime(long p_76068_1_) {}
 
-	public void setSpawnPosition(int par1, int par2, int par3) {}
+	public void setSpawnPosition(int p_76081_1_, int p_76081_2_, int p_76081_3_) {}
 
-	public void setWorldName(String par1Str) {}
+	public void setWorldName(String p_76062_1_) {}
 
-	public void setSaveVersion(int par1) {}
+	public void setSaveVersion(int p_76078_1_) {}
 
-	public void setThundering(boolean par1) {}
+	public void setThundering(boolean p_76069_1_) {}
 
-	public void setThunderTime(int par1) {}
+	public void setThunderTime(int p_76090_1_) {}
 
-	public void setRaining(boolean par1) {}
+	public void setRaining(boolean p_76084_1_) {}
 
-	public void setRainTime(int par1) {}
+	public void setRainTime(int p_76080_1_) {}
 
 	public boolean isMapFeaturesEnabled()
 	{
@@ -156,7 +156,7 @@ public class DerivedWorldInfo extends WorldInfo
 		return this.theWorldInfo.getTerrainType();
 	}
 
-	public void setTerrainType(WorldType par1WorldType) {}
+	public void setTerrainType(WorldType p_76085_1_) {}
 
 	public boolean areCommandsAllowed()
 	{
@@ -168,7 +168,7 @@ public class DerivedWorldInfo extends WorldInfo
 		return this.theWorldInfo.isInitialized();
 	}
 
-	public void setServerInitialized(boolean par1) {}
+	public void setServerInitialized(boolean p_76091_1_) {}
 
 	public GameRules getGameRulesInstance()
 	{

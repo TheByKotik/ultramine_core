@@ -21,22 +21,22 @@ public class CommandEffect extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.effect.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length < 2)
+		if (p_71515_2_.length < 2)
 		{
 			throw new WrongUsageException("commands.effect.usage", new Object[0]);
 		}
 		else
 		{
-			EntityPlayerMP entityplayermp = getPlayer(par1ICommandSender, par2ArrayOfStr[0]);
+			EntityPlayerMP entityplayermp = getPlayer(p_71515_1_, p_71515_2_[0]);
 
-			if (par2ArrayOfStr[1].equals("clear"))
+			if (p_71515_2_[1].equals("clear"))
 			{
 				if (entityplayermp.getActivePotionEffects().isEmpty())
 				{
@@ -44,11 +44,11 @@ public class CommandEffect extends CommandBase
 				}
 
 				entityplayermp.clearActivePotions();
-				notifyAdmins(par1ICommandSender, "commands.effect.success.removed.all", new Object[] {entityplayermp.getCommandSenderName()});
+				func_152373_a(p_71515_1_, this, "commands.effect.success.removed.all", new Object[] {entityplayermp.getCommandSenderName()});
 			}
 			else
 			{
-				int i = parseIntWithMin(par1ICommandSender, par2ArrayOfStr[1], 1);
+				int i = parseIntWithMin(p_71515_1_, p_71515_2_[1], 1);
 				int j = 600;
 				int k = 30;
 				int l = 0;
@@ -58,9 +58,9 @@ public class CommandEffect extends CommandBase
 					throw new NumberInvalidException("commands.effect.notFound", new Object[] {Integer.valueOf(i)});
 				}
 
-				if (par2ArrayOfStr.length >= 3)
+				if (p_71515_2_.length >= 3)
 				{
-					k = parseIntBounded(par1ICommandSender, par2ArrayOfStr[2], 0, 1000000);
+					k = parseIntBounded(p_71515_1_, p_71515_2_[2], 0, 1000000);
 
 					if (Potion.potionTypes[i].isInstant())
 					{
@@ -76,9 +76,9 @@ public class CommandEffect extends CommandBase
 					j = 1;
 				}
 
-				if (par2ArrayOfStr.length >= 4)
+				if (p_71515_2_.length >= 4)
 				{
-					l = parseIntBounded(par1ICommandSender, par2ArrayOfStr[3], 0, 255);
+					l = parseIntBounded(p_71515_1_, p_71515_2_[3], 0, 255);
 				}
 
 				if (k == 0)
@@ -89,21 +89,21 @@ public class CommandEffect extends CommandBase
 					}
 
 					entityplayermp.removePotionEffect(i);
-					notifyAdmins(par1ICommandSender, "commands.effect.success.removed", new Object[] {new ChatComponentTranslation(Potion.potionTypes[i].getName(), new Object[0]), entityplayermp.getCommandSenderName()});
+					func_152373_a(p_71515_1_, this, "commands.effect.success.removed", new Object[] {new ChatComponentTranslation(Potion.potionTypes[i].getName(), new Object[0]), entityplayermp.getCommandSenderName()});
 				}
 				else
 				{
 					PotionEffect potioneffect = new PotionEffect(i, j, l);
 					entityplayermp.addPotionEffect(potioneffect);
-					notifyAdmins(par1ICommandSender, "commands.effect.success", new Object[] {new ChatComponentTranslation(potioneffect.getEffectName(), new Object[0]), Integer.valueOf(i), Integer.valueOf(l), entityplayermp.getCommandSenderName(), Integer.valueOf(k)});
+					func_152373_a(p_71515_1_, this, "commands.effect.success", new Object[] {new ChatComponentTranslation(potioneffect.getEffectName(), new Object[0]), Integer.valueOf(i), Integer.valueOf(l), entityplayermp.getCommandSenderName(), Integer.valueOf(k)});
 				}
 			}
 		}
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, this.getAllUsernames()) : null;
+		return p_71516_2_.length == 1 ? getListOfStringsMatchingLastWord(p_71516_2_, this.getAllUsernames()) : null;
 	}
 
 	protected String[] getAllUsernames()
@@ -111,8 +111,8 @@ public class CommandEffect extends CommandBase
 		return MinecraftServer.getServer().getAllUsernames();
 	}
 
-	public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2)
+	public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_)
 	{
-		return par2 == 0;
+		return p_82358_2_ == 0;
 	}
 }

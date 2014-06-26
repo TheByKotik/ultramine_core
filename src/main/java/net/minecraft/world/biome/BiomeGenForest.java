@@ -110,7 +110,7 @@ public class BiomeGenForest extends BiomeGenBase
 		}
 	}
 
-	public void decorate(World par1World, Random par2Random, int par3, int par4)
+	public void decorate(World p_76728_1_, Random p_76728_2_, int p_76728_3_, int p_76728_4_)
 	{
 		int k;
 		int l;
@@ -124,30 +124,30 @@ public class BiomeGenForest extends BiomeGenBase
 			{
 				for (l = 0; l < 4; ++l)
 				{
-					i1 = par3 + k * 4 + 1 + 8 + par2Random.nextInt(3);
-					j1 = par4 + l * 4 + 1 + 8 + par2Random.nextInt(3);
-					k1 = par1World.getHeightValue(i1, j1);
+					i1 = p_76728_3_ + k * 4 + 1 + 8 + p_76728_2_.nextInt(3);
+					j1 = p_76728_4_ + l * 4 + 1 + 8 + p_76728_2_.nextInt(3);
+					k1 = p_76728_1_.getHeightValue(i1, j1);
 
-					if (par2Random.nextInt(20) == 0)
+					if (p_76728_2_.nextInt(20) == 0)
 					{
 						WorldGenBigMushroom worldgenbigmushroom = new WorldGenBigMushroom();
-						worldgenbigmushroom.generate(par1World, par2Random, i1, k1, j1);
+						worldgenbigmushroom.generate(p_76728_1_, p_76728_2_, i1, k1, j1);
 					}
 					else
 					{
-						WorldGenAbstractTree worldgenabstracttree = this.func_150567_a(par2Random);
+						WorldGenAbstractTree worldgenabstracttree = this.func_150567_a(p_76728_2_);
 						worldgenabstracttree.setScale(1.0D, 1.0D, 1.0D);
 
-						if (worldgenabstracttree.generate(par1World, par2Random, i1, k1, j1))
+						if (worldgenabstracttree.generate(p_76728_1_, p_76728_2_, i1, k1, j1))
 						{
-							worldgenabstracttree.func_150524_b(par1World, par2Random, i1, k1, j1);
+							worldgenabstracttree.func_150524_b(p_76728_1_, p_76728_2_, i1, k1, j1);
 						}
 					}
 				}
 			}
 		}
 
-		k = par2Random.nextInt(5) - 3;
+		k = p_76728_2_.nextInt(5) - 3;
 
 		if (this.field_150632_aF == 1)
 		{
@@ -158,7 +158,7 @@ public class BiomeGenForest extends BiomeGenBase
 
 		while (l < k)
 		{
-			i1 = par2Random.nextInt(3);
+			i1 = p_76728_2_.nextInt(3);
 
 			if (i1 == 0)
 			{
@@ -179,11 +179,11 @@ public class BiomeGenForest extends BiomeGenBase
 			{
 				if (j1 < 5)
 				{
-					k1 = par3 + par2Random.nextInt(16) + 8;
-					int i2 = par4 + par2Random.nextInt(16) + 8;
-					int l1 = par2Random.nextInt(par1World.getHeightValue(k1, i2) + 32);
+					k1 = p_76728_3_ + p_76728_2_.nextInt(16) + 8;
+					int i2 = p_76728_4_ + p_76728_2_.nextInt(16) + 8;
+					int l1 = p_76728_2_.nextInt(p_76728_1_.getHeightValue(k1, i2) + 32);
 
-					if (!genTallFlowers.generate(par1World, par2Random, k1, l1, i2))
+					if (!genTallFlowers.generate(p_76728_1_, p_76728_2_, k1, l1, i2))
 					{
 						++j1;
 						continue;
@@ -195,7 +195,7 @@ public class BiomeGenForest extends BiomeGenBase
 			}
 		}
 
-		super.decorate(par1World, par2Random, par3, par4);
+		super.decorate(p_76728_1_, p_76728_2_, p_76728_3_, p_76728_4_);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -220,17 +220,17 @@ public class BiomeGenForest extends BiomeGenBase
 		{
 			return this.biomeID != BiomeGenBase.birchForest.biomeID && this.biomeID != BiomeGenBase.birchForestHills.biomeID ? new BiomeGenMutated(this.biomeID + 128, this)
 			{
-				private static final String __OBFID = "CL_00000171";
-				public void decorate(World world, Random random, int i, int j)
+				private static final String __OBFID = "CL_00000172";
+				public void decorate(World p_76728_1_, Random p_76728_2_, int p_76728_3_, int p_76728_4_)
 				{
-					this.baseBiome.decorate(world, random, i, j);
+					this.baseBiome.decorate(p_76728_1_, p_76728_2_, p_76728_3_, p_76728_4_);
 				}
 			}: new BiomeGenMutated(this.biomeID + 128, this)
 			{
-				private static final String __OBFID = "CL_00000172";
-				public WorldGenAbstractTree func_150567_a(Random random)
+				private static final String __OBFID = "CL_00001861";
+				public WorldGenAbstractTree func_150567_a(Random p_150567_1_)
 				{
-					return random.nextBoolean() ? BiomeGenForest.field_150629_aC : BiomeGenForest.field_150630_aD;
+					return p_150567_1_.nextBoolean() ? BiomeGenForest.field_150629_aC : BiomeGenForest.field_150630_aD;
 				}
 			};
 		}

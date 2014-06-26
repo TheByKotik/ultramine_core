@@ -24,27 +24,27 @@ public class ModelBook extends ModelBase
 		this.bookSpine.rotateAngleY = ((float)Math.PI / 2F);
 	}
 
-	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(Entity p_78088_1_, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_)
 	{
-		this.setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
-		this.coverRight.render(par7);
-		this.coverLeft.render(par7);
-		this.bookSpine.render(par7);
-		this.pagesRight.render(par7);
-		this.pagesLeft.render(par7);
-		this.flippingPageRight.render(par7);
-		this.flippingPageLeft.render(par7);
+		this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, p_78088_7_, p_78088_1_);
+		this.coverRight.render(p_78088_7_);
+		this.coverLeft.render(p_78088_7_);
+		this.bookSpine.render(p_78088_7_);
+		this.pagesRight.render(p_78088_7_);
+		this.pagesLeft.render(p_78088_7_);
+		this.flippingPageRight.render(p_78088_7_);
+		this.flippingPageLeft.render(p_78088_7_);
 	}
 
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity)
+	public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity p_78087_7_)
 	{
-		float f6 = (MathHelper.sin(par1 * 0.02F) * 0.1F + 1.25F) * par4;
+		float f6 = (MathHelper.sin(p_78087_1_ * 0.02F) * 0.1F + 1.25F) * p_78087_4_;
 		this.coverRight.rotateAngleY = (float)Math.PI + f6;
 		this.coverLeft.rotateAngleY = -f6;
 		this.pagesRight.rotateAngleY = f6;
 		this.pagesLeft.rotateAngleY = -f6;
-		this.flippingPageRight.rotateAngleY = f6 - f6 * 2.0F * par2;
-		this.flippingPageLeft.rotateAngleY = f6 - f6 * 2.0F * par3;
+		this.flippingPageRight.rotateAngleY = f6 - f6 * 2.0F * p_78087_2_;
+		this.flippingPageLeft.rotateAngleY = f6 - f6 * 2.0F * p_78087_3_;
 		this.pagesRight.rotationPointX = MathHelper.sin(f6);
 		this.pagesLeft.rotationPointX = MathHelper.sin(f6);
 		this.flippingPageRight.rotationPointX = MathHelper.sin(f6);

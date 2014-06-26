@@ -15,37 +15,37 @@ public abstract class RenderLiving extends RendererLivingEntity
 {
 	private static final String __OBFID = "CL_00001015";
 
-	public RenderLiving(ModelBase par1ModelBase, float par2)
+	public RenderLiving(ModelBase p_i1262_1_, float p_i1262_2_)
 	{
-		super(par1ModelBase, par2);
+		super(p_i1262_1_, p_i1262_2_);
 	}
 
-	protected boolean func_110813_b(EntityLiving par1EntityLiving)
+	protected boolean func_110813_b(EntityLiving p_110813_1_)
 	{
-		return super.func_110813_b(par1EntityLiving) && (par1EntityLiving.getAlwaysRenderNameTagForRender() || par1EntityLiving.hasCustomNameTag() && par1EntityLiving == this.renderManager.field_147941_i);
+		return super.func_110813_b(p_110813_1_) && (p_110813_1_.getAlwaysRenderNameTagForRender() || p_110813_1_.hasCustomNameTag() && p_110813_1_ == this.renderManager.field_147941_i);
 	}
 
-	public void doRender(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLiving p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		super.doRender((EntityLivingBase)par1EntityLiving, par2, par4, par6, par8, par9);
-		this.func_110827_b(par1EntityLiving, par2, par4, par6, par8, par9);
+		super.doRender((EntityLivingBase)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
+		this.func_110827_b(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	private double func_110828_a(double par1, double par3, double par5)
+	private double func_110828_a(double p_110828_1_, double p_110828_3_, double p_110828_5_)
 	{
-		return par1 + (par3 - par1) * par5;
+		return p_110828_1_ + (p_110828_3_ - p_110828_1_) * p_110828_5_;
 	}
 
-	protected void func_110827_b(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)
+	protected void func_110827_b(EntityLiving p_110827_1_, double p_110827_2_, double p_110827_4_, double p_110827_6_, float p_110827_8_, float p_110827_9_)
 	{
-		Entity entity = par1EntityLiving.getLeashedToEntity();
+		Entity entity = p_110827_1_.getLeashedToEntity();
 
 		if (entity != null)
 		{
-			par4 -= (1.6D - (double)par1EntityLiving.height) * 0.5D;
+			p_110827_4_ -= (1.6D - (double)p_110827_1_.height) * 0.5D;
 			Tessellator tessellator = Tessellator.instance;
-			double d3 = this.func_110828_a((double)entity.prevRotationYaw, (double)entity.rotationYaw, (double)(par9 * 0.5F)) * 0.01745329238474369D;
-			double d4 = this.func_110828_a((double)entity.prevRotationPitch, (double)entity.rotationPitch, (double)(par9 * 0.5F)) * 0.01745329238474369D;
+			double d3 = this.func_110828_a((double)entity.prevRotationYaw, (double)entity.rotationYaw, (double)(p_110827_9_ * 0.5F)) * 0.01745329238474369D;
+			double d4 = this.func_110828_a((double)entity.prevRotationPitch, (double)entity.rotationPitch, (double)(p_110827_9_ * 0.5F)) * 0.01745329238474369D;
 			double d5 = Math.cos(d3);
 			double d6 = Math.sin(d3);
 			double d7 = Math.sin(d4);
@@ -58,17 +58,17 @@ public abstract class RenderLiving extends RendererLivingEntity
 			}
 
 			double d8 = Math.cos(d4);
-			double d9 = this.func_110828_a(entity.prevPosX, entity.posX, (double)par9) - d5 * 0.7D - d6 * 0.5D * d8;
-			double d10 = this.func_110828_a(entity.prevPosY + (double)entity.getEyeHeight() * 0.7D, entity.posY + (double)entity.getEyeHeight() * 0.7D, (double)par9) - d7 * 0.5D - 0.25D;
-			double d11 = this.func_110828_a(entity.prevPosZ, entity.posZ, (double)par9) - d6 * 0.7D + d5 * 0.5D * d8;
-			double d12 = this.func_110828_a((double)par1EntityLiving.prevRenderYawOffset, (double)par1EntityLiving.renderYawOffset, (double)par9) * 0.01745329238474369D + (Math.PI / 2D);
-			d5 = Math.cos(d12) * (double)par1EntityLiving.width * 0.4D;
-			d6 = Math.sin(d12) * (double)par1EntityLiving.width * 0.4D;
-			double d13 = this.func_110828_a(par1EntityLiving.prevPosX, par1EntityLiving.posX, (double)par9) + d5;
-			double d14 = this.func_110828_a(par1EntityLiving.prevPosY, par1EntityLiving.posY, (double)par9);
-			double d15 = this.func_110828_a(par1EntityLiving.prevPosZ, par1EntityLiving.posZ, (double)par9) + d6;
-			par2 += d5;
-			par6 += d6;
+			double d9 = this.func_110828_a(entity.prevPosX, entity.posX, (double)p_110827_9_) - d5 * 0.7D - d6 * 0.5D * d8;
+			double d10 = this.func_110828_a(entity.prevPosY + (double)entity.getEyeHeight() * 0.7D, entity.posY + (double)entity.getEyeHeight() * 0.7D, (double)p_110827_9_) - d7 * 0.5D - 0.25D;
+			double d11 = this.func_110828_a(entity.prevPosZ, entity.posZ, (double)p_110827_9_) - d6 * 0.7D + d5 * 0.5D * d8;
+			double d12 = this.func_110828_a((double)p_110827_1_.prevRenderYawOffset, (double)p_110827_1_.renderYawOffset, (double)p_110827_9_) * 0.01745329238474369D + (Math.PI / 2D);
+			d5 = Math.cos(d12) * (double)p_110827_1_.width * 0.4D;
+			d6 = Math.sin(d12) * (double)p_110827_1_.width * 0.4D;
+			double d13 = this.func_110828_a(p_110827_1_.prevPosX, p_110827_1_.posX, (double)p_110827_9_) + d5;
+			double d14 = this.func_110828_a(p_110827_1_.prevPosY, p_110827_1_.posY, (double)p_110827_9_);
+			double d15 = this.func_110828_a(p_110827_1_.prevPosZ, p_110827_1_.posZ, (double)p_110827_9_) + d6;
+			p_110827_2_ += d5;
+			p_110827_6_ += d6;
 			double d16 = (double)((float)(d9 - d13));
 			double d17 = (double)((float)(d10 - d14));
 			double d18 = (double)((float)(d11 - d15));
@@ -93,8 +93,8 @@ public abstract class RenderLiving extends RendererLivingEntity
 				}
 
 				f2 = (float)i / 24.0F;
-				tessellator.addVertex(par2 + d16 * (double)f2 + 0.0D, par4 + d17 * (double)(f2 * f2 + f2) * 0.5D + (double)((24.0F - (float)i) / 18.0F + 0.125F), par6 + d18 * (double)f2);
-				tessellator.addVertex(par2 + d16 * (double)f2 + 0.025D, par4 + d17 * (double)(f2 * f2 + f2) * 0.5D + (double)((24.0F - (float)i) / 18.0F + 0.125F) + 0.025D, par6 + d18 * (double)f2);
+				tessellator.addVertex(p_110827_2_ + d16 * (double)f2 + 0.0D, p_110827_4_ + d17 * (double)(f2 * f2 + f2) * 0.5D + (double)((24.0F - (float)i) / 18.0F + 0.125F), p_110827_6_ + d18 * (double)f2);
+				tessellator.addVertex(p_110827_2_ + d16 * (double)f2 + 0.025D, p_110827_4_ + d17 * (double)(f2 * f2 + f2) * 0.5D + (double)((24.0F - (float)i) / 18.0F + 0.125F) + 0.025D, p_110827_6_ + d18 * (double)f2);
 			}
 
 			tessellator.draw();
@@ -112,8 +112,8 @@ public abstract class RenderLiving extends RendererLivingEntity
 				}
 
 				f2 = (float)i / 24.0F;
-				tessellator.addVertex(par2 + d16 * (double)f2 + 0.0D, par4 + d17 * (double)(f2 * f2 + f2) * 0.5D + (double)((24.0F - (float)i) / 18.0F + 0.125F) + 0.025D, par6 + d18 * (double)f2);
-				tessellator.addVertex(par2 + d16 * (double)f2 + 0.025D, par4 + d17 * (double)(f2 * f2 + f2) * 0.5D + (double)((24.0F - (float)i) / 18.0F + 0.125F), par6 + d18 * (double)f2 + 0.025D);
+				tessellator.addVertex(p_110827_2_ + d16 * (double)f2 + 0.0D, p_110827_4_ + d17 * (double)(f2 * f2 + f2) * 0.5D + (double)((24.0F - (float)i) / 18.0F + 0.125F) + 0.025D, p_110827_6_ + d18 * (double)f2);
+				tessellator.addVertex(p_110827_2_ + d16 * (double)f2 + 0.025D, p_110827_4_ + d17 * (double)(f2 * f2 + f2) * 0.5D + (double)((24.0F - (float)i) / 18.0F + 0.125F), p_110827_6_ + d18 * (double)f2 + 0.025D);
 			}
 
 			tessellator.draw();
@@ -123,18 +123,18 @@ public abstract class RenderLiving extends RendererLivingEntity
 		}
 	}
 
-	protected boolean func_110813_b(EntityLivingBase par1EntityLivingBase)
+	protected boolean func_110813_b(EntityLivingBase p_110813_1_)
 	{
-		return this.func_110813_b((EntityLiving)par1EntityLivingBase);
+		return this.func_110813_b((EntityLiving)p_110813_1_);
 	}
 
-	public void doRender(EntityLivingBase par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLivingBase p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityLiving)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityLiving)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityLiving)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityLiving)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

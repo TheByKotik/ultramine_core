@@ -59,11 +59,11 @@ public class CryptManager
 		}
 	}
 
-	public static byte[] getServerIdHash(String par0Str, PublicKey par1PublicKey, SecretKey par2SecretKey)
+	public static byte[] getServerIdHash(String p_75895_0_, PublicKey p_75895_1_, SecretKey p_75895_2_)
 	{
 		try
 		{
-			return digestOperation("SHA-1", new byte[][] {par0Str.getBytes("ISO_8859_1"), par2SecretKey.getEncoded(), par1PublicKey.getEncoded()});
+			return digestOperation("SHA-1", new byte[][] {p_75895_0_.getBytes("ISO_8859_1"), p_75895_2_.getEncoded(), p_75895_1_.getEncoded()});
 		}
 		catch (UnsupportedEncodingException unsupportedencodingexception)
 		{
@@ -72,13 +72,13 @@ public class CryptManager
 		}
 	}
 
-	private static byte[] digestOperation(String par0Str, byte[] ... par1ArrayOfByte)
+	private static byte[] digestOperation(String p_75893_0_, byte[] ... p_75893_1_)
 	{
 		try
 		{
-			MessageDigest messagedigest = MessageDigest.getInstance(par0Str);
-			byte[][] abyte1 = par1ArrayOfByte;
-			int i = par1ArrayOfByte.length;
+			MessageDigest messagedigest = MessageDigest.getInstance(p_75893_0_);
+			byte[][] abyte1 = p_75893_1_;
+			int i = p_75893_1_.length;
 
 			for (int j = 0; j < i; ++j)
 			{
@@ -95,11 +95,11 @@ public class CryptManager
 		}
 	}
 
-	public static PublicKey decodePublicKey(byte[] par0ArrayOfByte)
+	public static PublicKey decodePublicKey(byte[] p_75896_0_)
 	{
 		try
 		{
-			X509EncodedKeySpec x509encodedkeyspec = new X509EncodedKeySpec(par0ArrayOfByte);
+			X509EncodedKeySpec x509encodedkeyspec = new X509EncodedKeySpec(p_75896_0_);
 			KeyFactory keyfactory = KeyFactory.getInstance("RSA");
 			return keyfactory.generatePublic(x509encodedkeyspec);
 		}
@@ -116,27 +116,27 @@ public class CryptManager
 		return null;
 	}
 
-	public static SecretKey decryptSharedKey(PrivateKey par0PrivateKey, byte[] par1ArrayOfByte)
+	public static SecretKey decryptSharedKey(PrivateKey p_75887_0_, byte[] p_75887_1_)
 	{
-		return new SecretKeySpec(decryptData(par0PrivateKey, par1ArrayOfByte), "AES");
+		return new SecretKeySpec(decryptData(p_75887_0_, p_75887_1_), "AES");
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static byte[] encryptData(Key par0Key, byte[] par1ArrayOfByte)
+	public static byte[] encryptData(Key p_75894_0_, byte[] p_75894_1_)
 	{
-		return cipherOperation(1, par0Key, par1ArrayOfByte);
+		return cipherOperation(1, p_75894_0_, p_75894_1_);
 	}
 
-	public static byte[] decryptData(Key par0Key, byte[] par1ArrayOfByte)
+	public static byte[] decryptData(Key p_75889_0_, byte[] p_75889_1_)
 	{
-		return cipherOperation(2, par0Key, par1ArrayOfByte);
+		return cipherOperation(2, p_75889_0_, p_75889_1_);
 	}
 
-	private static byte[] cipherOperation(int par0, Key par1Key, byte[] par2ArrayOfByte)
+	private static byte[] cipherOperation(int p_75885_0_, Key p_75885_1_, byte[] p_75885_2_)
 	{
 		try
 		{
-			return createTheCipherInstance(par0, par1Key.getAlgorithm(), par1Key).doFinal(par2ArrayOfByte);
+			return createTheCipherInstance(p_75885_0_, p_75885_1_.getAlgorithm(), p_75885_1_).doFinal(p_75885_2_);
 		}
 		catch (IllegalBlockSizeException illegalblocksizeexception)
 		{
@@ -151,12 +151,12 @@ public class CryptManager
 		return null;
 	}
 
-	private static Cipher createTheCipherInstance(int par0, String par1Str, Key par2Key)
+	private static Cipher createTheCipherInstance(int p_75886_0_, String p_75886_1_, Key p_75886_2_)
 	{
 		try
 		{
-			Cipher cipher = Cipher.getInstance(par1Str);
-			cipher.init(par0, par2Key);
+			Cipher cipher = Cipher.getInstance(p_75886_1_);
+			cipher.init(p_75886_0_, p_75886_2_);
 			return cipher;
 		}
 		catch (InvalidKeyException invalidkeyexception)

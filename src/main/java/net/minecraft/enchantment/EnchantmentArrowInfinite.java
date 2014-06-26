@@ -4,18 +4,18 @@ public class EnchantmentArrowInfinite extends Enchantment
 {
 	private static final String __OBFID = "CL_00000100";
 
-	public EnchantmentArrowInfinite(int par1, int par2)
+	public EnchantmentArrowInfinite(int p_i1921_1_, int p_i1921_2_)
 	{
-		super(par1, par2, EnumEnchantmentType.bow);
+		super(p_i1921_1_, p_i1921_2_, EnumEnchantmentType.bow);
 		this.setName("arrowInfinite");
 	}
 
-	public int getMinEnchantability(int par1)
+	public int getMinEnchantability(int p_77321_1_)
 	{
 		return 20;
 	}
 
-	public int getMaxEnchantability(int par1)
+	public int getMaxEnchantability(int p_77317_1_)
 	{
 		return 50;
 	}

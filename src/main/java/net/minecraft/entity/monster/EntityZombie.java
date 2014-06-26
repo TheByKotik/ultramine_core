@@ -3,9 +3,12 @@ package net.minecraft.entity.monster;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 import net.minecraft.block.Block;
+import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
@@ -24,6 +27,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -54,9 +58,9 @@ public class EntityZombie extends EntityMob
 	private float field_146073_bw;
 	private static final String __OBFID = "CL_00001702";
 
-	public EntityZombie(World par1World)
+	public EntityZombie(World p_i1745_1_)
 	{
-		super(par1World);
+		super(p_i1745_1_);
 		this.getNavigator().setBreakDoors(true);
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
@@ -133,32 +137,32 @@ public class EntityZombie extends EntityMob
 		return this.getDataWatcher().getWatchableObjectByte(12) == 1;
 	}
 
-	protected int getExperiencePoints(EntityPlayer par1EntityPlayer)
+	protected int getExperiencePoints(EntityPlayer p_70693_1_)
 	{
 		if (this.isChild())
 		{
 			this.experienceValue = (int)((float)this.experienceValue * 2.5F);
 		}
 
-		return super.getExperiencePoints(par1EntityPlayer);
+		return super.getExperiencePoints(p_70693_1_);
 	}
 
-	public void setChild(boolean par1)
+	public void setChild(boolean p_82227_1_)
 	{
-		this.getDataWatcher().updateObject(12, Byte.valueOf((byte)(par1 ? 1 : 0)));
+		this.getDataWatcher().updateObject(12, Byte.valueOf((byte)(p_82227_1_ ? 1 : 0)));
 
 		if (this.worldObj != null && !this.worldObj.isRemote)
 		{
 			IAttributeInstance iattributeinstance = this.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 			iattributeinstance.removeModifier(babySpeedBoostModifier);
 
-			if (par1)
+			if (p_82227_1_)
 			{
 				iattributeinstance.applyModifier(babySpeedBoostModifier);
 			}
 		}
 
-		this.func_146071_k(par1);
+		this.func_146071_k(p_82227_1_);
 	}
 
 	public boolean isVillager()
@@ -166,9 +170,9 @@ public class EntityZombie extends EntityMob
 		return this.getDataWatcher().getWatchableObjectByte(13) == 1;
 	}
 
-	public void setVillager(boolean par1)
+	public void setVillager(boolean p_82229_1_)
 	{
-		this.getDataWatcher().updateObject(13, Byte.valueOf((byte)(par1 ? 1 : 0)));
+		this.getDataWatcher().updateObject(13, Byte.valueOf((byte)(p_82229_1_ ? 1 : 0)));
 	}
 
 	public void onLivingUpdate()
@@ -205,12 +209,17 @@ public class EntityZombie extends EntityMob
 			}
 		}
 
+		if (this.isRiding() && this.getAttackTarget() != null && this.ridingEntity instanceof EntityChicken)
+		{
+			((EntityLiving)this.ridingEntity).getNavigator().setPath(this.getNavigator().getPath(), 1.5D);
+		}
+
 		super.onLivingUpdate();
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
-		if (!super.attackEntityFrom(par1DamageSource, par2))
+		if (!super.attackEntityFrom(p_70097_1_, p_70097_2_))
 		{
 			return false;
 		}
@@ -223,9 +232,9 @@ public class EntityZombie extends EntityMob
 				entitylivingbase = (EntityLivingBase)this.getEntityToAttack();
 			}
 
-			if (entitylivingbase == null && par1DamageSource.getEntity() instanceof EntityLivingBase)
+			if (entitylivingbase == null && p_70097_1_.getEntity() instanceof EntityLivingBase)
 			{
-				entitylivingbase = (EntityLivingBase)par1DamageSource.getEntity();
+				entitylivingbase = (EntityLivingBase)p_70097_1_.getEntity();
 			}
 
 
@@ -294,9 +303,9 @@ public class EntityZombie extends EntityMob
 		super.onUpdate();
 	}
 
-	public boolean attackEntityAsMob(Entity par1Entity)
+	public boolean attackEntityAsMob(Entity p_70652_1_)
 	{
-		boolean flag = super.attackEntityAsMob(par1Entity);
+		boolean flag = super.attackEntityAsMob(p_70652_1_);
 
 		if (flag)
 		{
@@ -304,7 +313,7 @@ public class EntityZombie extends EntityMob
 
 			if (this.getHeldItem() == null && this.isBurning() && this.rand.nextFloat() < (float)i * 0.3F)
 			{
-				par1Entity.setFire(2 * i);
+				p_70652_1_.setFire(2 * i);
 			}
 		}
 
@@ -341,7 +350,7 @@ public class EntityZombie extends EntityMob
 		return EnumCreatureAttribute.UNDEAD;
 	}
 
-	protected void dropRareDrop(int par1)
+	protected void dropRareDrop(int p_70600_1_)
 	{
 		switch (this.rand.nextInt(3))
 		{
@@ -375,64 +384,64 @@ public class EntityZombie extends EntityMob
 		}
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
+		super.writeEntityToNBT(p_70014_1_);
 
 		if (this.isChild())
 		{
-			par1NBTTagCompound.setBoolean("IsBaby", true);
+			p_70014_1_.setBoolean("IsBaby", true);
 		}
 
 		if (this.isVillager())
 		{
-			par1NBTTagCompound.setBoolean("IsVillager", true);
+			p_70014_1_.setBoolean("IsVillager", true);
 		}
 
-		par1NBTTagCompound.setInteger("ConversionTime", this.isConverting() ? this.conversionTime : -1);
-		par1NBTTagCompound.setBoolean("CanBreakDoors", this.func_146072_bX());
+		p_70014_1_.setInteger("ConversionTime", this.isConverting() ? this.conversionTime : -1);
+		p_70014_1_.setBoolean("CanBreakDoors", this.func_146072_bX());
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
+		super.readEntityFromNBT(p_70037_1_);
 
-		if (par1NBTTagCompound.getBoolean("IsBaby"))
+		if (p_70037_1_.getBoolean("IsBaby"))
 		{
 			this.setChild(true);
 		}
 
-		if (par1NBTTagCompound.getBoolean("IsVillager"))
+		if (p_70037_1_.getBoolean("IsVillager"))
 		{
 			this.setVillager(true);
 		}
 
-		if (par1NBTTagCompound.hasKey("ConversionTime", 99) && par1NBTTagCompound.getInteger("ConversionTime") > -1)
+		if (p_70037_1_.hasKey("ConversionTime", 99) && p_70037_1_.getInteger("ConversionTime") > -1)
 		{
-			this.startConversion(par1NBTTagCompound.getInteger("ConversionTime"));
+			this.startConversion(p_70037_1_.getInteger("ConversionTime"));
 		}
 
-		this.func_146070_a(par1NBTTagCompound.getBoolean("CanBreakDoors"));
+		this.func_146070_a(p_70037_1_.getBoolean("CanBreakDoors"));
 	}
 
-	public void onKillEntity(EntityLivingBase par1EntityLivingBase)
+	public void onKillEntity(EntityLivingBase p_70074_1_)
 	{
-		super.onKillEntity(par1EntityLivingBase);
+		super.onKillEntity(p_70074_1_);
 
-		if ((this.worldObj.difficultySetting == EnumDifficulty.NORMAL || this.worldObj.difficultySetting == EnumDifficulty.HARD) && par1EntityLivingBase instanceof EntityVillager)
+		if ((this.worldObj.difficultySetting == EnumDifficulty.NORMAL || this.worldObj.difficultySetting == EnumDifficulty.HARD) && p_70074_1_ instanceof EntityVillager)
 		{
-			if (this.rand.nextBoolean())
+			if (this.worldObj.difficultySetting != EnumDifficulty.HARD && this.rand.nextBoolean())
 			{
 				return;
 			}
 
 			EntityZombie entityzombie = new EntityZombie(this.worldObj);
-			entityzombie.copyLocationAndAnglesFrom(par1EntityLivingBase);
-			this.worldObj.removeEntity(par1EntityLivingBase);
+			entityzombie.copyLocationAndAnglesFrom(p_70074_1_);
+			this.worldObj.removeEntity(p_70074_1_);
 			entityzombie.onSpawnWithEgg((IEntityLivingData)null);
 			entityzombie.setVillager(true);
 
-			if (par1EntityLivingBase.isChild())
+			if (p_70074_1_.isChild())
 			{
 				entityzombie.setChild(true);
 			}
@@ -442,9 +451,9 @@ public class EntityZombie extends EntityMob
 		}
 	}
 
-	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
+	public IEntityLivingData onSpawnWithEgg(IEntityLivingData p_110161_1_)
 	{
-		Object p_110161_1_1 = super.onSpawnWithEgg(par1EntityLivingData);
+		Object p_110161_1_1 = super.onSpawnWithEgg(p_110161_1_);
 		float f = this.worldObj.func_147462_b(this.posX, this.posY, this.posZ);
 		this.setCanPickUpLoot(this.rand.nextFloat() < 0.55F * f);
 
@@ -465,6 +474,27 @@ public class EntityZombie extends EntityMob
 			if (groupdata.field_142048_a)
 			{
 				this.setChild(true);
+
+				if ((double)this.worldObj.rand.nextFloat() < 0.05D)
+				{
+					List list = this.worldObj.selectEntitiesWithinAABB(EntityChicken.class, this.boundingBox.expand(5.0D, 3.0D, 5.0D), IEntitySelector.field_152785_b);
+
+					if (!list.isEmpty())
+					{
+						EntityChicken entitychicken = (EntityChicken)list.get(0);
+						entitychicken.func_152117_i(true);
+						this.mountEntity(entitychicken);
+					}
+				}
+				else if ((double)this.worldObj.rand.nextFloat() < 0.05D)
+				{
+					EntityChicken entitychicken1 = new EntityChicken(this.worldObj);
+					entitychicken1.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+					entitychicken1.onSpawnWithEgg((IEntityLivingData)null);
+					entitychicken1.func_152117_i(true);
+					this.worldObj.spawnEntityInWorld(entitychicken1);
+					this.mountEntity(entitychicken1);
+				}
 			}
 		}
 
@@ -501,20 +531,20 @@ public class EntityZombie extends EntityMob
 		return (IEntityLivingData)p_110161_1_1;
 	}
 
-	public boolean interact(EntityPlayer par1EntityPlayer)
+	public boolean interact(EntityPlayer p_70085_1_)
 	{
-		ItemStack itemstack = par1EntityPlayer.getCurrentEquippedItem();
+		ItemStack itemstack = p_70085_1_.getCurrentEquippedItem();
 
 		if (itemstack != null && itemstack.getItem() == Items.golden_apple && itemstack.getItemDamage() == 0 && this.isVillager() && this.isPotionActive(Potion.weakness))
 		{
-			if (!par1EntityPlayer.capabilities.isCreativeMode)
+			if (!p_70085_1_.capabilities.isCreativeMode)
 			{
 				--itemstack.stackSize;
 			}
 
 			if (itemstack.stackSize <= 0)
 			{
-				par1EntityPlayer.inventory.setInventorySlotContents(par1EntityPlayer.inventory.currentItem, (ItemStack)null);
+				p_70085_1_.inventory.setInventorySlotContents(p_70085_1_.inventory.currentItem, (ItemStack)null);
 			}
 
 			if (!this.worldObj.isRemote)
@@ -530,25 +560,25 @@ public class EntityZombie extends EntityMob
 		}
 	}
 
-	protected void startConversion(int par1)
+	protected void startConversion(int p_82228_1_)
 	{
-		this.conversionTime = par1;
+		this.conversionTime = p_82228_1_;
 		this.getDataWatcher().updateObject(14, Byte.valueOf((byte)1));
 		this.removePotionEffect(Potion.weakness.id);
-		this.addPotionEffect(new PotionEffect(Potion.damageBoost.id, par1, Math.min(this.worldObj.difficultySetting.getDifficultyId() - 1, 0)));
+		this.addPotionEffect(new PotionEffect(Potion.damageBoost.id, p_82228_1_, Math.min(this.worldObj.difficultySetting.getDifficultyId() - 1, 0)));
 		this.worldObj.setEntityState(this, (byte)16);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void handleHealthUpdate(byte par1)
+	public void handleHealthUpdate(byte p_70103_1_)
 	{
-		if (par1 == 16)
+		if (p_70103_1_ == 16)
 		{
 			this.worldObj.playSound(this.posX + 0.5D, this.posY + 0.5D, this.posZ + 0.5D, "mob.zombie.remedy", 1.0F + this.rand.nextFloat(), this.rand.nextFloat() * 0.7F + 0.3F, false);
 		}
 		else
 		{
-			super.handleHealthUpdate(par1);
+			super.handleHealthUpdate(p_70103_1_);
 		}
 	}
 
@@ -618,11 +648,11 @@ public class EntityZombie extends EntityMob
 		this.func_146069_a(p_146071_1_ ? 0.5F : 1.0F);
 	}
 
-	protected final void setSize(float par1, float par2)
+	protected final void setSize(float p_70105_1_, float p_70105_2_)
 	{
 		boolean flag = this.field_146074_bv > 0.0F && this.field_146073_bw > 0.0F;
-		this.field_146074_bv = par1;
-		this.field_146073_bw = par2;
+		this.field_146074_bv = p_70105_1_;
+		this.field_146073_bw = p_70105_2_;
 
 		if (!flag)
 		{
@@ -641,17 +671,17 @@ public class EntityZombie extends EntityMob
 		public boolean field_142046_b;
 		private static final String __OBFID = "CL_00001704";
 
-		private GroupData(boolean par2, boolean par3)
+		private GroupData(boolean p_i2348_2_, boolean p_i2348_3_)
 		{
 			this.field_142048_a = false;
 			this.field_142046_b = false;
-			this.field_142048_a = par2;
-			this.field_142046_b = par3;
+			this.field_142048_a = p_i2348_2_;
+			this.field_142046_b = p_i2348_3_;
 		}
 
-		GroupData(boolean par2, boolean par3, Object par4EntityZombieINNER1)
+		GroupData(boolean p_i2349_2_, boolean p_i2349_3_, Object p_i2349_4_)
 		{
-			this(par2, par3);
+			this(p_i2349_2_, p_i2349_3_);
 		}
 	}
 }

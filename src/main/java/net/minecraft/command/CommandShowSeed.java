@@ -9,9 +9,9 @@ public class CommandShowSeed extends CommandBase
 {
 	private static final String __OBFID = "CL_00001053";
 
-	public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender)
+	public boolean canCommandSenderUseCommand(ICommandSender p_71519_1_)
 	{
-		return MinecraftServer.getServer().isSinglePlayer() || super.canCommandSenderUseCommand(par1ICommandSender);
+		return MinecraftServer.getServer().isSinglePlayer() || super.canCommandSenderUseCommand(p_71519_1_);
 	}
 
 	public String getCommandName()
@@ -24,14 +24,14 @@ public class CommandShowSeed extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.seed.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		Object object = par1ICommandSender instanceof EntityPlayer ? ((EntityPlayer)par1ICommandSender).worldObj : MinecraftServer.getServer().worldServerForDimension(0);
-		par1ICommandSender.addChatMessage(new ChatComponentTranslation("commands.seed.success", new Object[] {Long.valueOf(((World)object).getSeed())}));
+		Object object = p_71515_1_ instanceof EntityPlayer ? ((EntityPlayer)p_71515_1_).worldObj : MinecraftServer.getServer().worldServerForDimension(0);
+		p_71515_1_.addChatMessage(new ChatComponentTranslation("commands.seed.success", new Object[] {Long.valueOf(((World)object).getSeed())}));
 	}
 }

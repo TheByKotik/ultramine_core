@@ -74,11 +74,11 @@ public class EntityPlayerSP extends AbstractClientPlayer
 	public float prevTimeInPortal;
 	private static final String __OBFID = "CL_00000938";
 
-	public EntityPlayerSP(Minecraft par1Minecraft, World par2World, Session par3Session, int par4)
+	public EntityPlayerSP(Minecraft p_i1238_1_, World p_i1238_2_, Session p_i1238_3_, int p_i1238_4_)
 	{
-		super(par2World, par3Session.func_148256_e());
-		this.mc = par1Minecraft;
-		this.dimension = par4;
+		super(p_i1238_2_, p_i1238_3_.func_148256_e());
+		this.mc = p_i1238_1_;
+		this.dimension = p_i1238_4_;
 	}
 
 	public void updateEntityActionState()
@@ -354,23 +354,23 @@ public class EntityPlayerSP extends AbstractClientPlayer
 		this.mc.displayGuiScreen(new GuiCommandBlock(p_146095_1_));
 	}
 
-	public void displayGUIBook(ItemStack par1ItemStack)
+	public void displayGUIBook(ItemStack p_71048_1_)
 	{
-		Item item = par1ItemStack.getItem();
+		Item item = p_71048_1_.getItem();
 
 		if (item == Items.written_book)
 		{
-			this.mc.displayGuiScreen(new GuiScreenBook(this, par1ItemStack, false));
+			this.mc.displayGuiScreen(new GuiScreenBook(this, p_71048_1_, false));
 		}
 		else if (item == Items.writable_book)
 		{
-			this.mc.displayGuiScreen(new GuiScreenBook(this, par1ItemStack, true));
+			this.mc.displayGuiScreen(new GuiScreenBook(this, p_71048_1_, true));
 		}
 	}
 
-	public void displayGUIChest(IInventory par1IInventory)
+	public void displayGUIChest(IInventory p_71007_1_)
 	{
-		this.mc.displayGuiScreen(new GuiChest(this.inventory, par1IInventory));
+		this.mc.displayGuiScreen(new GuiChest(this.inventory, p_71007_1_));
 	}
 
 	public void func_146093_a(TileEntityHopper p_146093_1_)
@@ -378,29 +378,29 @@ public class EntityPlayerSP extends AbstractClientPlayer
 		this.mc.displayGuiScreen(new GuiHopper(this.inventory, p_146093_1_));
 	}
 
-	public void displayGUIHopperMinecart(EntityMinecartHopper par1EntityMinecartHopper)
+	public void displayGUIHopperMinecart(EntityMinecartHopper p_96125_1_)
 	{
-		this.mc.displayGuiScreen(new GuiHopper(this.inventory, par1EntityMinecartHopper));
+		this.mc.displayGuiScreen(new GuiHopper(this.inventory, p_96125_1_));
 	}
 
-	public void displayGUIHorse(EntityHorse par1EntityHorse, IInventory par2IInventory)
+	public void displayGUIHorse(EntityHorse p_110298_1_, IInventory p_110298_2_)
 	{
-		this.mc.displayGuiScreen(new GuiScreenHorseInventory(this.inventory, par2IInventory, par1EntityHorse));
+		this.mc.displayGuiScreen(new GuiScreenHorseInventory(this.inventory, p_110298_2_, p_110298_1_));
 	}
 
-	public void displayGUIWorkbench(int par1, int par2, int par3)
+	public void displayGUIWorkbench(int p_71058_1_, int p_71058_2_, int p_71058_3_)
 	{
-		this.mc.displayGuiScreen(new GuiCrafting(this.inventory, this.worldObj, par1, par2, par3));
+		this.mc.displayGuiScreen(new GuiCrafting(this.inventory, this.worldObj, p_71058_1_, p_71058_2_, p_71058_3_));
 	}
 
-	public void displayGUIEnchantment(int par1, int par2, int par3, String par4Str)
+	public void displayGUIEnchantment(int p_71002_1_, int p_71002_2_, int p_71002_3_, String p_71002_4_)
 	{
-		this.mc.displayGuiScreen(new GuiEnchantment(this.inventory, this.worldObj, par1, par2, par3, par4Str));
+		this.mc.displayGuiScreen(new GuiEnchantment(this.inventory, this.worldObj, p_71002_1_, p_71002_2_, p_71002_3_, p_71002_4_));
 	}
 
-	public void displayGUIAnvil(int par1, int par2, int par3)
+	public void displayGUIAnvil(int p_82244_1_, int p_82244_2_, int p_82244_3_)
 	{
-		this.mc.displayGuiScreen(new GuiRepair(this.inventory, this.worldObj, par1, par2, par3));
+		this.mc.displayGuiScreen(new GuiRepair(this.inventory, this.worldObj, p_82244_1_, p_82244_2_, p_82244_3_));
 	}
 
 	public void func_146101_a(TileEntityFurnace p_146101_1_)
@@ -423,25 +423,25 @@ public class EntityPlayerSP extends AbstractClientPlayer
 		this.mc.displayGuiScreen(new GuiDispenser(this.inventory, p_146102_1_));
 	}
 
-	public void displayGUIMerchant(IMerchant par1IMerchant, String par2Str)
+	public void displayGUIMerchant(IMerchant p_71030_1_, String p_71030_2_)
 	{
-		this.mc.displayGuiScreen(new GuiMerchant(this.inventory, par1IMerchant, this.worldObj, par2Str));
+		this.mc.displayGuiScreen(new GuiMerchant(this.inventory, p_71030_1_, this.worldObj, p_71030_2_));
 	}
 
-	public void onCriticalHit(Entity par1Entity)
+	public void onCriticalHit(Entity p_71009_1_)
 	{
-		this.mc.effectRenderer.addEffect(new EntityCrit2FX(this.mc.theWorld, par1Entity));
+		this.mc.effectRenderer.addEffect(new EntityCrit2FX(this.mc.theWorld, p_71009_1_));
 	}
 
-	public void onEnchantmentCritical(Entity par1Entity)
+	public void onEnchantmentCritical(Entity p_71047_1_)
 	{
-		EntityCrit2FX entitycrit2fx = new EntityCrit2FX(this.mc.theWorld, par1Entity, "magicCrit");
+		EntityCrit2FX entitycrit2fx = new EntityCrit2FX(this.mc.theWorld, p_71047_1_, "magicCrit");
 		this.mc.effectRenderer.addEffect(entitycrit2fx);
 	}
 
-	public void onItemPickup(Entity par1Entity, int par2)
+	public void onItemPickup(Entity p_71001_1_, int p_71001_2_)
 	{
-		this.mc.effectRenderer.addEffect(new EntityPickupFX(this.mc.theWorld, par1Entity, this, -0.5F));
+		this.mc.effectRenderer.addEffect(new EntityPickupFX(this.mc.theWorld, p_71001_1_, this, -0.5F));
 	}
 
 	public boolean isSneaking()
@@ -449,13 +449,13 @@ public class EntityPlayerSP extends AbstractClientPlayer
 		return this.movementInput.sneak && !this.sleeping;
 	}
 
-	public void setPlayerSPHealth(float par1)
+	public void setPlayerSPHealth(float p_71150_1_)
 	{
-		float f1 = this.getHealth() - par1;
+		float f1 = this.getHealth() - p_71150_1_;
 
 		if (f1 <= 0.0F)
 		{
-			this.setHealth(par1);
+			this.setHealth(p_71150_1_);
 
 			if (f1 < 0.0F)
 			{
@@ -477,9 +477,9 @@ public class EntityPlayerSP extends AbstractClientPlayer
 		this.mc.ingameGUI.getChatGUI().printChatMessage(p_146105_1_);
 	}
 
-	private boolean isBlockTranslucent(int par1, int par2, int par3)
+	private boolean isBlockTranslucent(int p_71153_1_, int p_71153_2_, int p_71153_3_)
 	{
-		return this.worldObj.getBlock(par1, par2, par3).isNormalCube();
+		return this.worldObj.getBlock(p_71153_1_, p_71153_2_, p_71153_3_).isNormalCube();
 	}
 
 	private boolean isHeadspaceFree(int x, int y, int z, int height)
@@ -574,17 +574,17 @@ public class EntityPlayerSP extends AbstractClientPlayer
 		return false;
 	}
 
-	public void setSprinting(boolean par1)
+	public void setSprinting(boolean p_70031_1_)
 	{
-		super.setSprinting(par1);
-		this.sprintingTicksLeft = par1 ? 600 : 0;
+		super.setSprinting(p_70031_1_);
+		this.sprintingTicksLeft = p_70031_1_ ? 600 : 0;
 	}
 
-	public void setXPStats(float par1, int par2, int par3)
+	public void setXPStats(float p_71152_1_, int p_71152_2_, int p_71152_3_)
 	{
-		this.experience = par1;
-		this.experienceTotal = par2;
-		this.experienceLevel = par3;
+		this.experience = p_71152_1_;
+		this.experienceTotal = p_71152_2_;
+		this.experienceLevel = p_71152_3_;
 	}
 
 	public void addChatMessage(IChatComponent p_145747_1_)
@@ -592,9 +592,9 @@ public class EntityPlayerSP extends AbstractClientPlayer
 		this.mc.ingameGUI.getChatGUI().printChatMessage(p_145747_1_);
 	}
 
-	public boolean canCommandSenderUseCommand(int par1, String par2Str)
+	public boolean canCommandSenderUseCommand(int p_70003_1_, String p_70003_2_)
 	{
-		return par1 <= 0;
+		return p_70003_1_ <= 0;
 	}
 
 	public ChunkCoordinates getPlayerCoordinates()
@@ -602,15 +602,15 @@ public class EntityPlayerSP extends AbstractClientPlayer
 		return new ChunkCoordinates(MathHelper.floor_double(this.posX + 0.5D), MathHelper.floor_double(this.posY + 0.5D), MathHelper.floor_double(this.posZ + 0.5D));
 	}
 
-	public void playSound(String par1Str, float par2, float par3)
+	public void playSound(String p_85030_1_, float p_85030_2_, float p_85030_3_)
 	{
-		PlaySoundAtEntityEvent event = new PlaySoundAtEntityEvent(this, par1Str, par2, par3);
+		PlaySoundAtEntityEvent event = new PlaySoundAtEntityEvent(this, p_85030_1_, p_85030_2_, p_85030_3_);
 		if (MinecraftForge.EVENT_BUS.post(event))
 		{
 			return;
 		}
-		par1Str = event.name;
-		this.worldObj.playSound(this.posX, this.posY - (double)this.yOffset, this.posZ, par1Str, par2, par3, false);
+		p_85030_1_ = event.name;
+		this.worldObj.playSound(this.posX, this.posY - (double)this.yOffset, this.posZ, p_85030_1_, p_85030_2_, p_85030_3_, false);
 	}
 
 	public boolean isClientWorld()

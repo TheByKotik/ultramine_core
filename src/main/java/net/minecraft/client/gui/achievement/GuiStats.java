@@ -45,10 +45,10 @@ public class GuiStats extends GuiScreen implements IProgressMeter
 	private boolean doesGuiPauseGame = true;
 	private static final String __OBFID = "CL_00000723";
 
-	public GuiStats(GuiScreen par1GuiScreen, StatFileWriter par2StatFileWriter)
+	public GuiStats(GuiScreen p_i1071_1_, StatFileWriter p_i1071_2_)
 	{
-		this.field_146549_a = par1GuiScreen;
-		this.field_146546_t = par2StatFileWriter;
+		this.field_146549_a = p_i1071_1_;
+		this.field_146546_t = p_i1071_2_;
 	}
 
 	public void initGui()
@@ -115,7 +115,7 @@ public class GuiStats extends GuiScreen implements IProgressMeter
 		}
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		if (this.doesGuiPauseGame)
 		{
@@ -125,9 +125,9 @@ public class GuiStats extends GuiScreen implements IProgressMeter
 		}
 		else
 		{
-			this.field_146545_u.drawScreen(par1, par2, par3);
+			this.field_146545_u.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 			this.drawCenteredString(this.fontRendererObj, this.field_146542_f, this.width / 2, 20, 16777215);
-			super.drawScreen(par1, par2, par3);
+			super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 		}
 	}
 
@@ -306,7 +306,7 @@ public class GuiStats extends GuiScreen implements IProgressMeter
 			return (StatCrafting)this.field_148219_m.get(p_148211_1_);
 		}
 
-		protected abstract String func_148210_b(int var1);
+		protected abstract String func_148210_b(int p_148210_1_);
 
 		protected void func_148209_a(StatBase p_148209_1_, int p_148209_2_, int p_148209_3_, boolean p_148209_4_)
 		{
@@ -454,10 +454,10 @@ public class GuiStats extends GuiScreen implements IProgressMeter
 			this.field_148216_n = new Comparator()
 			{
 				private static final String __OBFID = "CL_00000725";
-				public int compare(StatCrafting p_148339_1_, StatCrafting p_148339_2_)
+				public int compare(StatCrafting p_compare_1_, StatCrafting p_compare_2_)
 				{
-					int j = Item.getIdFromItem(p_148339_1_.func_150959_a());
-					int k = Item.getIdFromItem(p_148339_2_.func_150959_a());
+					int j = Item.getIdFromItem(p_compare_1_.func_150959_a());
+					int k = Item.getIdFromItem(p_compare_2_.func_150959_a());
 					StatBase statbase = null;
 					StatBase statbase1 = null;
 
@@ -500,9 +500,9 @@ public class GuiStats extends GuiScreen implements IProgressMeter
 
 					return j - k;
 				}
-				public int compare(Object par1Obj, Object par2Obj)
+				public int compare(Object p_compare_1_, Object p_compare_2_)
 				{
-					return this.compare((StatCrafting)par1Obj, (StatCrafting)par2Obj);
+					return this.compare((StatCrafting)p_compare_1_, (StatCrafting)p_compare_2_);
 				}
 			};
 		}
@@ -636,10 +636,10 @@ public class GuiStats extends GuiScreen implements IProgressMeter
 			this.field_148216_n = new Comparator()
 			{
 				private static final String __OBFID = "CL_00000728";
-				public int compare(StatCrafting p_148342_1_, StatCrafting p_148342_2_)
+				public int compare(StatCrafting p_compare_1_, StatCrafting p_compare_2_)
 				{
-					int j = Item.getIdFromItem(p_148342_1_.func_150959_a());
-					int k = Item.getIdFromItem(p_148342_2_.func_150959_a());
+					int j = Item.getIdFromItem(p_compare_1_.func_150959_a());
+					int k = Item.getIdFromItem(p_compare_2_.func_150959_a());
 					StatBase statbase = null;
 					StatBase statbase1 = null;
 
@@ -682,9 +682,9 @@ public class GuiStats extends GuiScreen implements IProgressMeter
 
 					return j - k;
 				}
-				public int compare(Object par1Obj, Object par2Obj)
+				public int compare(Object p_compare_1_, Object p_compare_2_)
 				{
-					return this.compare((StatCrafting)par1Obj, (StatCrafting)par2Obj);
+					return this.compare((StatCrafting)p_compare_1_, (StatCrafting)p_compare_2_);
 				}
 			};
 		}

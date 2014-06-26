@@ -22,13 +22,13 @@ public class ClippingHelperImpl extends ClippingHelper
 		return instance;
 	}
 
-	private void normalize(float[][] par1ArrayOfFloat, int par2)
+	private void normalize(float[][] p_78559_1_, int p_78559_2_)
 	{
-		float f = MathHelper.sqrt_float(par1ArrayOfFloat[par2][0] * par1ArrayOfFloat[par2][0] + par1ArrayOfFloat[par2][1] * par1ArrayOfFloat[par2][1] + par1ArrayOfFloat[par2][2] * par1ArrayOfFloat[par2][2]);
-		par1ArrayOfFloat[par2][0] /= f;
-		par1ArrayOfFloat[par2][1] /= f;
-		par1ArrayOfFloat[par2][2] /= f;
-		par1ArrayOfFloat[par2][3] /= f;
+		float f = MathHelper.sqrt_float(p_78559_1_[p_78559_2_][0] * p_78559_1_[p_78559_2_][0] + p_78559_1_[p_78559_2_][1] * p_78559_1_[p_78559_2_][1] + p_78559_1_[p_78559_2_][2] * p_78559_1_[p_78559_2_][2]);
+		p_78559_1_[p_78559_2_][0] /= f;
+		p_78559_1_[p_78559_2_][1] /= f;
+		p_78559_1_[p_78559_2_][2] /= f;
+		p_78559_1_[p_78559_2_][3] /= f;
 	}
 
 	private void init()

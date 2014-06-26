@@ -47,9 +47,9 @@ public class ModelWither extends ModelBase
 		return 32;
 	}
 
-	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(Entity p_78088_1_, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_)
 	{
-		this.setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
+		this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, p_78088_7_, p_78088_1_);
 		ModelRenderer[] amodelrenderer = this.field_82904_b;
 		int i = amodelrenderer.length;
 		int j;
@@ -58,7 +58,7 @@ public class ModelWither extends ModelBase
 		for (j = 0; j < i; ++j)
 		{
 			modelrenderer = amodelrenderer[j];
-			modelrenderer.render(par7);
+			modelrenderer.render(p_78088_7_);
 		}
 
 		amodelrenderer = this.field_82905_a;
@@ -67,27 +67,27 @@ public class ModelWither extends ModelBase
 		for (j = 0; j < i; ++j)
 		{
 			modelrenderer = amodelrenderer[j];
-			modelrenderer.render(par7);
+			modelrenderer.render(p_78088_7_);
 		}
 	}
 
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity)
+	public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity p_78087_7_)
 	{
-		float f6 = MathHelper.cos(par3 * 0.1F);
+		float f6 = MathHelper.cos(p_78087_3_ * 0.1F);
 		this.field_82905_a[1].rotateAngleX = (0.065F + 0.05F * f6) * (float)Math.PI;
 		this.field_82905_a[2].setRotationPoint(-2.0F, 6.9F + MathHelper.cos(this.field_82905_a[1].rotateAngleX) * 10.0F, -0.5F + MathHelper.sin(this.field_82905_a[1].rotateAngleX) * 10.0F);
 		this.field_82905_a[2].rotateAngleX = (0.265F + 0.1F * f6) * (float)Math.PI;
-		this.field_82904_b[0].rotateAngleY = par4 / (180F / (float)Math.PI);
-		this.field_82904_b[0].rotateAngleX = par5 / (180F / (float)Math.PI);
+		this.field_82904_b[0].rotateAngleY = p_78087_4_ / (180F / (float)Math.PI);
+		this.field_82904_b[0].rotateAngleX = p_78087_5_ / (180F / (float)Math.PI);
 	}
 
-	public void setLivingAnimations(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4)
+	public void setLivingAnimations(EntityLivingBase p_78086_1_, float p_78086_2_, float p_78086_3_, float p_78086_4_)
 	{
-		EntityWither entitywither = (EntityWither)par1EntityLivingBase;
+		EntityWither entitywither = (EntityWither)p_78086_1_;
 
 		for (int i = 1; i < 3; ++i)
 		{
-			this.field_82904_b[i].rotateAngleY = (entitywither.func_82207_a(i - 1) - par1EntityLivingBase.renderYawOffset) / (180F / (float)Math.PI);
+			this.field_82904_b[i].rotateAngleY = (entitywither.func_82207_a(i - 1) - p_78086_1_.renderYawOffset) / (180F / (float)Math.PI);
 			this.field_82904_b[i].rotateAngleX = entitywither.func_82210_r(i - 1) / (180F / (float)Math.PI);
 		}
 	}

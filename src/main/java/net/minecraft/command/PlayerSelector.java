@@ -22,9 +22,9 @@ public class PlayerSelector
 	private static final Pattern keyValueListPattern = Pattern.compile("\\G(\\w+)=([-!]?[\\w-]*)(?:$|,)");
 	private static final String __OBFID = "CL_00000086";
 
-	public static EntityPlayerMP matchOnePlayer(ICommandSender par0ICommandSender, String par1Str)
+	public static EntityPlayerMP matchOnePlayer(ICommandSender p_82386_0_, String p_82386_1_)
 	{
-		EntityPlayerMP[] aentityplayermp = matchPlayers(par0ICommandSender, par1Str);
+		EntityPlayerMP[] aentityplayermp = matchPlayers(p_82386_0_, p_82386_1_);
 		return aentityplayermp != null && aentityplayermp.length == 1 ? aentityplayermp[0] : null;
 	}
 
@@ -49,15 +49,11 @@ public class PlayerSelector
 		}
 	}
 
-	public static EntityPlayerMP[] matchPlayers(ICommandSender par0ICommandSender, String par1Str)
+	public static EntityPlayerMP[] matchPlayers(ICommandSender p_82380_0_, String p_82380_1_)
 	{
-		Matcher matcher = tokenPattern.matcher(par1Str);
+		Matcher matcher = tokenPattern.matcher(p_82380_1_);
 
-		if (!matcher.matches())
-		{
-			return null;
-		}
-		else
+		if (matcher.matches())
 		{
 			Map map = getArgumentMap(matcher.group(2));
 			String s1 = matcher.group(1);
@@ -67,7 +63,7 @@ public class PlayerSelector
 			int l = getDefaultMaximumLevel(s1);
 			int i1 = getDefaultCount(s1);
 			int j1 = WorldSettings.GameType.NOT_SET.getID();
-			ChunkCoordinates chunkcoordinates = par0ICommandSender.getPlayerCoordinates();
+			ChunkCoordinates chunkcoordinates = p_82380_0_.getPlayerCoordinates();
 			Map map1 = func_96560_a(map);
 			String s2 = null;
 			String s3 = null;
@@ -133,35 +129,39 @@ public class PlayerSelector
 				s2 = (String)map.get("name");
 			}
 
-			World world = flag ? par0ICommandSender.getEntityWorld() : null;
+			World world = flag ? p_82380_0_.getEntityWorld() : null;
 			List list;
 
 			if (!s1.equals("p") && !s1.equals("a"))
 			{
-				if (!s1.equals("r"))
-				{
-					return null;
-				}
-				else
+				if (s1.equals("r"))
 				{
 					list = MinecraftServer.getServer().getConfigurationManager().findPlayers(chunkcoordinates, i, j, 0, j1, k, l, map1, s2, s3, world);
 					Collections.shuffle(list);
 					list = list.subList(0, Math.min(i1, list.size()));
-					return list != null && !list.isEmpty() ? (EntityPlayerMP[])list.toArray(new EntityPlayerMP[0]) : new EntityPlayerMP[0];
+					return list.isEmpty() ? new EntityPlayerMP[0] : (EntityPlayerMP[])list.toArray(new EntityPlayerMP[list.size()]);
+				}
+				else
+				{
+					return null;
 				}
 			}
 			else
 			{
 				list = MinecraftServer.getServer().getConfigurationManager().findPlayers(chunkcoordinates, i, j, i1, j1, k, l, map1, s2, s3, world);
-				return list != null && !list.isEmpty() ? (EntityPlayerMP[])list.toArray(new EntityPlayerMP[0]) : new EntityPlayerMP[0];
+				return list.isEmpty() ? new EntityPlayerMP[0] : (EntityPlayerMP[])list.toArray(new EntityPlayerMP[list.size()]);
 			}
+		}
+		else
+		{
+			return null;
 		}
 	}
 
-	public static Map func_96560_a(Map par0Map)
+	public static Map func_96560_a(Map p_96560_0_)
 	{
 		HashMap hashmap = new HashMap();
-		Iterator iterator = par0Map.keySet().iterator();
+		Iterator iterator = p_96560_0_.keySet().iterator();
 
 		while (iterator.hasNext())
 		{
@@ -170,16 +170,16 @@ public class PlayerSelector
 			if (s.startsWith("score_") && s.length() > "score_".length())
 			{
 				String s1 = s.substring("score_".length());
-				hashmap.put(s1, Integer.valueOf(MathHelper.parseIntWithDefault((String)par0Map.get(s), 1)));
+				hashmap.put(s1, Integer.valueOf(MathHelper.parseIntWithDefault((String)p_96560_0_.get(s), 1)));
 			}
 		}
 
 		return hashmap;
 	}
 
-	public static boolean matchesMultiplePlayers(String par0Str)
+	public static boolean matchesMultiplePlayers(String p_82377_0_)
 	{
-		Matcher matcher = tokenPattern.matcher(par0Str);
+		Matcher matcher = tokenPattern.matcher(p_82377_0_);
 
 		if (matcher.matches())
 		{
@@ -200,14 +200,14 @@ public class PlayerSelector
 		}
 	}
 
-	public static boolean hasTheseArguments(String par0Str, String par1Str)
+	public static boolean hasTheseArguments(String p_82383_0_, String p_82383_1_)
 	{
-		Matcher matcher = tokenPattern.matcher(par0Str);
+		Matcher matcher = tokenPattern.matcher(p_82383_0_);
 
 		if (matcher.matches())
 		{
 			String s2 = matcher.group(1);
-			return par1Str == null || par1Str.equals(s2);
+			return p_82383_1_ == null || p_82383_1_.equals(s2);
 		}
 		else
 		{
@@ -215,47 +215,47 @@ public class PlayerSelector
 		}
 	}
 
-	public static boolean hasArguments(String par0Str)
+	public static boolean hasArguments(String p_82378_0_)
 	{
-		return hasTheseArguments(par0Str, (String)null);
+		return hasTheseArguments(p_82378_0_, (String)null);
 	}
 
-	private static final int getDefaultMinimumRange(String par0Str)
-	{
-		return 0;
-	}
-
-	private static final int getDefaultMaximumRange(String par0Str)
+	private static final int getDefaultMinimumRange(String p_82384_0_)
 	{
 		return 0;
 	}
 
-	private static final int getDefaultMaximumLevel(String par0Str)
+	private static final int getDefaultMaximumRange(String p_82379_0_)
+	{
+		return 0;
+	}
+
+	private static final int getDefaultMaximumLevel(String p_82376_0_)
 	{
 		return Integer.MAX_VALUE;
 	}
 
-	private static final int getDefaultMinimumLevel(String par0Str)
+	private static final int getDefaultMinimumLevel(String p_82375_0_)
 	{
 		return 0;
 	}
 
-	private static final int getDefaultCount(String par0Str)
+	private static final int getDefaultCount(String p_82382_0_)
 	{
-		return par0Str.equals("a") ? 0 : 1;
+		return p_82382_0_.equals("a") ? 0 : 1;
 	}
 
-	private static Map getArgumentMap(String par0Str)
+	private static Map getArgumentMap(String p_82381_0_)
 	{
 		HashMap hashmap = new HashMap();
 
-		if (par0Str == null)
+		if (p_82381_0_ == null)
 		{
 			return hashmap;
 		}
 		else
 		{
-			Matcher matcher = intListPattern.matcher(par0Str);
+			Matcher matcher = intListPattern.matcher(p_82381_0_);
 			int i = 0;
 			int j;
 
@@ -284,9 +284,9 @@ public class PlayerSelector
 				}
 			}
 
-			if (j < par0Str.length())
+			if (j < p_82381_0_.length())
 			{
-				matcher = keyValueListPattern.matcher(j == -1 ? par0Str : par0Str.substring(j));
+				matcher = keyValueListPattern.matcher(j == -1 ? p_82381_0_ : p_82381_0_.substring(j));
 
 				while (matcher.find())
 				{

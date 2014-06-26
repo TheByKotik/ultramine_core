@@ -21,10 +21,10 @@ public class RConThreadClient extends RConThreadBase
 	private String rconPassword;
 	private static final String __OBFID = "CL_00001804";
 
-	RConThreadClient(IServer par1IServer, Socket par2Socket)
+	RConThreadClient(IServer p_i1537_1_, Socket p_i1537_2_)
 	{
-		super(par1IServer, "RCON Client");
-		this.clientSocket = par2Socket;
+		super(p_i1537_1_, "RCON Client");
+		this.clientSocket = p_i1537_2_;
 
 		try
 		{
@@ -35,8 +35,8 @@ public class RConThreadClient extends RConThreadBase
 			this.running = false;
 		}
 
-		this.rconPassword = par1IServer.getStringProperty("rcon.password", "");
-		this.logInfo("Rcon connection from: " + par2Socket.getInetAddress());
+		this.rconPassword = p_i1537_1_.getStringProperty("rcon.password", "");
+		this.logInfo("Rcon connection from: " + p_i1537_2_.getInetAddress());
 	}
 
 	public void run()
@@ -53,16 +53,16 @@ public class RConThreadClient extends RConThreadBase
 				BufferedInputStream bufferedinputstream = new BufferedInputStream(this.clientSocket.getInputStream());
 				int i = bufferedinputstream.read(this.buffer, 0, 1460);
 
-				if (10 > i)
+				if (10 <= i)
 				{
-					return;
-				}
+					byte b0 = 0;
+					int j = RConUtils.getBytesAsLEInt(this.buffer, 0, i);
 
-				byte b0 = 0;
-				int j = RConUtils.getBytesAsLEInt(this.buffer, 0, i);
+					if (j != i - 4)
+					{
+						return;
+					}
 
-				if (j == i - 4)
-				{
 					int i1 = b0 + 4;
 					int k = RConUtils.getBytesAsLEInt(this.buffer, i1, i);
 					i1 += 4;
@@ -132,14 +132,14 @@ public class RConThreadClient extends RConThreadBase
 		}
 	}
 
-	private void sendResponse(int par1, int par2, String par3Str) throws IOException
+	private void sendResponse(int p_72654_1_, int p_72654_2_, String p_72654_3_) throws IOException
 	{
 		ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream(1248);
 		DataOutputStream dataoutputstream = new DataOutputStream(bytearrayoutputstream);
-		byte[] abyte = par3Str.getBytes("UTF-8");
+		byte[] abyte = p_72654_3_.getBytes("UTF-8");
 		dataoutputstream.writeInt(Integer.reverseBytes(abyte.length + 10));
-		dataoutputstream.writeInt(Integer.reverseBytes(par1));
-		dataoutputstream.writeInt(Integer.reverseBytes(par2));
+		dataoutputstream.writeInt(Integer.reverseBytes(p_72654_1_));
+		dataoutputstream.writeInt(Integer.reverseBytes(p_72654_2_));
 		dataoutputstream.write(abyte);
 		dataoutputstream.write(0);
 		dataoutputstream.write(0);
@@ -151,16 +151,16 @@ public class RConThreadClient extends RConThreadBase
 		this.sendResponse(-1, 2, "");
 	}
 
-	private void sendMultipacketResponse(int par1, String par2Str) throws IOException
+	private void sendMultipacketResponse(int p_72655_1_, String p_72655_2_) throws IOException
 	{
-		int j = par2Str.length();
+		int j = p_72655_2_.length();
 
 		do
 		{
 			int k = 4096 <= j ? 4096 : j;
-			this.sendResponse(par1, 0, par2Str.substring(0, k));
-			par2Str = par2Str.substring(k);
-			j = par2Str.length();
+			this.sendResponse(p_72655_1_, 0, p_72655_2_.substring(0, k));
+			p_72655_2_ = p_72655_2_.substring(k);
+			j = p_72655_2_.length();
 		}
 		while (0 != j);
 	}

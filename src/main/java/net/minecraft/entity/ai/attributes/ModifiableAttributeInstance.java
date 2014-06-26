@@ -23,11 +23,11 @@ public class ModifiableAttributeInstance implements IAttributeInstance
 	private double cachedValue;
 	private static final String __OBFID = "CL_00001567";
 
-	public ModifiableAttributeInstance(BaseAttributeMap par1BaseAttributeMap, IAttribute par2Attribute)
+	public ModifiableAttributeInstance(BaseAttributeMap p_i1608_1_, IAttribute p_i1608_2_)
 	{
-		this.attributeMap = par1BaseAttributeMap;
-		this.genericAttribute = par2Attribute;
-		this.baseValue = par2Attribute.getDefaultValue();
+		this.attributeMap = p_i1608_1_;
+		this.genericAttribute = p_i1608_2_;
+		this.baseValue = p_i1608_2_.getDefaultValue();
 
 		for (int i = 0; i < 3; ++i)
 		{
@@ -45,18 +45,18 @@ public class ModifiableAttributeInstance implements IAttributeInstance
 		return this.baseValue;
 	}
 
-	public void setBaseValue(double par1)
+	public void setBaseValue(double p_111128_1_)
 	{
-		if (par1 != this.getBaseValue())
+		if (p_111128_1_ != this.getBaseValue())
 		{
-			this.baseValue = par1;
+			this.baseValue = p_111128_1_;
 			this.flagForUpdate();
 		}
 	}
 
-	public Collection getModifiersByOperation(int par1)
+	public Collection getModifiersByOperation(int p_111130_1_)
 	{
-		return (Collection)this.mapByOperation.get(Integer.valueOf(par1));
+		return (Collection)this.mapByOperation.get(Integer.valueOf(p_111130_1_));
 	}
 
 	public Collection func_111122_c()
@@ -71,30 +71,30 @@ public class ModifiableAttributeInstance implements IAttributeInstance
 		return hashset;
 	}
 
-	public AttributeModifier getModifier(UUID par1UUID)
+	public AttributeModifier getModifier(UUID p_111127_1_)
 	{
-		return (AttributeModifier)this.mapByUUID.get(par1UUID);
+		return (AttributeModifier)this.mapByUUID.get(p_111127_1_);
 	}
 
-	public void applyModifier(AttributeModifier par1AttributeModifier)
+	public void applyModifier(AttributeModifier p_111121_1_)
 	{
-		if (this.getModifier(par1AttributeModifier.getID()) != null)
+		if (this.getModifier(p_111121_1_.getID()) != null)
 		{
 			throw new IllegalArgumentException("Modifier is already applied on this attribute!");
 		}
 		else
 		{
-			Object object = (Set)this.mapByName.get(par1AttributeModifier.getName());
+			Object object = (Set)this.mapByName.get(p_111121_1_.getName());
 
 			if (object == null)
 			{
 				object = new HashSet();
-				this.mapByName.put(par1AttributeModifier.getName(), object);
+				this.mapByName.put(p_111121_1_.getName(), object);
 			}
 
-			((Set)this.mapByOperation.get(Integer.valueOf(par1AttributeModifier.getOperation()))).add(par1AttributeModifier);
-			((Set)object).add(par1AttributeModifier);
-			this.mapByUUID.put(par1AttributeModifier.getID(), par1AttributeModifier);
+			((Set)this.mapByOperation.get(Integer.valueOf(p_111121_1_.getOperation()))).add(p_111121_1_);
+			((Set)object).add(p_111121_1_);
+			this.mapByUUID.put(p_111121_1_.getID(), p_111121_1_);
 			this.flagForUpdate();
 		}
 	}
@@ -105,27 +105,27 @@ public class ModifiableAttributeInstance implements IAttributeInstance
 		this.attributeMap.addAttributeInstance(this);
 	}
 
-	public void removeModifier(AttributeModifier par1AttributeModifier)
+	public void removeModifier(AttributeModifier p_111124_1_)
 	{
 		for (int i = 0; i < 3; ++i)
 		{
 			Set set = (Set)this.mapByOperation.get(Integer.valueOf(i));
-			set.remove(par1AttributeModifier);
+			set.remove(p_111124_1_);
 		}
 
-		Set set1 = (Set)this.mapByName.get(par1AttributeModifier.getName());
+		Set set1 = (Set)this.mapByName.get(p_111124_1_.getName());
 
 		if (set1 != null)
 		{
-			set1.remove(par1AttributeModifier);
+			set1.remove(p_111124_1_);
 
 			if (set1.isEmpty())
 			{
-				this.mapByName.remove(par1AttributeModifier.getName());
+				this.mapByName.remove(p_111124_1_.getName());
 			}
 		}
 
-		this.mapByUUID.remove(par1AttributeModifier.getID());
+		this.mapByUUID.remove(p_111124_1_.getID());
 		this.flagForUpdate();
 	}
 

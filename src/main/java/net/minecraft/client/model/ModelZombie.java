@@ -15,19 +15,19 @@ public class ModelZombie extends ModelBiped
 		this(0.0F, false);
 	}
 
-	protected ModelZombie(float par1, float par2, int par3, int par4)
+	protected ModelZombie(float p_i1167_1_, float p_i1167_2_, int p_i1167_3_, int p_i1167_4_)
 	{
-		super(par1, par2, par3, par4);
+		super(p_i1167_1_, p_i1167_2_, p_i1167_3_, p_i1167_4_);
 	}
 
-	public ModelZombie(float par1, boolean par2)
+	public ModelZombie(float p_i1168_1_, boolean p_i1168_2_)
 	{
-		super(par1, 0.0F, 64, par2 ? 32 : 64);
+		super(p_i1168_1_, 0.0F, 64, p_i1168_2_ ? 32 : 64);
 	}
 
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity)
+	public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity p_78087_7_)
 	{
-		super.setRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
+		super.setRotationAngles(p_78087_1_, p_78087_2_, p_78087_3_, p_78087_4_, p_78087_5_, p_78087_6_, p_78087_7_);
 		float f6 = MathHelper.sin(this.onGround * (float)Math.PI);
 		float f7 = MathHelper.sin((1.0F - (1.0F - this.onGround) * (1.0F - this.onGround)) * (float)Math.PI);
 		this.bipedRightArm.rotateAngleZ = 0.0F;
@@ -38,9 +38,9 @@ public class ModelZombie extends ModelBiped
 		this.bipedLeftArm.rotateAngleX = -((float)Math.PI / 2F);
 		this.bipedRightArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
 		this.bipedLeftArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
-		this.bipedRightArm.rotateAngleZ += MathHelper.cos(par3 * 0.09F) * 0.05F + 0.05F;
-		this.bipedLeftArm.rotateAngleZ -= MathHelper.cos(par3 * 0.09F) * 0.05F + 0.05F;
-		this.bipedRightArm.rotateAngleX += MathHelper.sin(par3 * 0.067F) * 0.05F;
-		this.bipedLeftArm.rotateAngleX -= MathHelper.sin(par3 * 0.067F) * 0.05F;
+		this.bipedRightArm.rotateAngleZ += MathHelper.cos(p_78087_3_ * 0.09F) * 0.05F + 0.05F;
+		this.bipedLeftArm.rotateAngleZ -= MathHelper.cos(p_78087_3_ * 0.09F) * 0.05F + 0.05F;
+		this.bipedRightArm.rotateAngleX += MathHelper.sin(p_78087_3_ * 0.067F) * 0.05F;
+		this.bipedLeftArm.rotateAngleX -= MathHelper.sin(p_78087_3_ * 0.067F) * 0.05F;
 	}
 }

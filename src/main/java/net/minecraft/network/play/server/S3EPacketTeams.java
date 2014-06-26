@@ -81,7 +81,7 @@ public class S3EPacketTeams extends Packet
 
 			for (int i = 0; i < short1; ++i)
 			{
-				this.field_149317_e.add(p_148837_1_.readStringFromBuffer(16));
+				this.field_149317_e.add(p_148837_1_.readStringFromBuffer(40));
 			}
 		}
 	}
@@ -112,9 +112,9 @@ public class S3EPacketTeams extends Packet
 		}
 	}
 
-	public void processPacket(INetHandlerPlayClient p_149313_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_149313_1_.handleTeams(this);
+		p_148833_1_.handleTeams(this);
 	}
 
 	public void processPacket(INetHandler p_148833_1_)

@@ -18,13 +18,13 @@ public class ItemLilyPad extends ItemColored
 		super(p_i45357_1_, false);
 	}
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
 	{
-		MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(par2World, par3EntityPlayer, true);
+		MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(p_77659_2_, p_77659_3_, true);
 
 		if (movingobjectposition == null)
 		{
-			return par1ItemStack;
+			return p_77659_1_;
 		}
 		else
 		{
@@ -34,34 +34,34 @@ public class ItemLilyPad extends ItemColored
 				int j = movingobjectposition.blockY;
 				int k = movingobjectposition.blockZ;
 
-				if (!par2World.canMineBlock(par3EntityPlayer, i, j, k))
+				if (!p_77659_2_.canMineBlock(p_77659_3_, i, j, k))
 				{
-					return par1ItemStack;
+					return p_77659_1_;
 				}
 
-				if (!par3EntityPlayer.canPlayerEdit(i, j, k, movingobjectposition.sideHit, par1ItemStack))
+				if (!p_77659_3_.canPlayerEdit(i, j, k, movingobjectposition.sideHit, p_77659_1_))
 				{
-					return par1ItemStack;
+					return p_77659_1_;
 				}
 
-				if (par2World.getBlock(i, j, k).getMaterial() == Material.water && par2World.getBlockMetadata(i, j, k) == 0 && par2World.isAirBlock(i, j + 1, k))
+				if (p_77659_2_.getBlock(i, j, k).getMaterial() == Material.water && p_77659_2_.getBlockMetadata(i, j, k) == 0 && p_77659_2_.isAirBlock(i, j + 1, k))
 				{
-					par2World.setBlock(i, j + 1, k, Blocks.waterlily);
+					p_77659_2_.setBlock(i, j + 1, k, Blocks.waterlily);
 
-					if (!par3EntityPlayer.capabilities.isCreativeMode)
+					if (!p_77659_3_.capabilities.isCreativeMode)
 					{
-						--par1ItemStack.stackSize;
+						--p_77659_1_.stackSize;
 					}
 				}
 			}
 
-			return par1ItemStack;
+			return p_77659_1_;
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	public int getColorFromItemStack(ItemStack p_82790_1_, int p_82790_2_)
 	{
-		return Blocks.waterlily.getRenderColor(par1ItemStack.getItemDamage());
+		return Blocks.waterlily.getRenderColor(p_82790_1_.getItemDamage());
 	}
 }

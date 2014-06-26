@@ -37,11 +37,11 @@ public class ModelBoat extends ModelBase
 		this.boatSides[3].rotateAngleY = (float)Math.PI;
 	}
 
-	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(Entity p_78088_1_, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_)
 	{
 		for (int i = 0; i < 5; ++i)
 		{
-			this.boatSides[i].render(par7);
+			this.boatSides[i].render(p_78088_7_);
 		}
 	}
 }

@@ -30,7 +30,7 @@ public class GuiNotification extends GuiScreen
 	}
 
 	@Override
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		this.drawDefaultBackground();
 
@@ -55,7 +55,7 @@ public class GuiNotification extends GuiScreen
 			}
 		}
 
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 
 	protected final StartupQuery query;

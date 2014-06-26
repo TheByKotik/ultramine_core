@@ -35,9 +35,9 @@ public class S2BPacketChangeGameState extends Packet
 		p_148840_1_.writeFloat(this.field_149141_c);
 	}
 
-	public void processPacket(INetHandlerPlayClient p_149139_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_149139_1_.handleChangeGameState(this);
+		p_148833_1_.handleChangeGameState(this);
 	}
 
 	public void processPacket(INetHandler p_148833_1_)

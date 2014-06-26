@@ -49,10 +49,10 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 	private final TextureAtlasSprite missingImage = new TextureAtlasSprite("missingno");
 	private static final String __OBFID = "CL_00001058";
 
-	public TextureMap(int par1, String par2Str)
+	public TextureMap(int p_i1281_1_, String p_i1281_2_)
 	{
-		this.textureType = par1;
-		this.basePath = par2Str;
+		this.textureType = p_i1281_1_;
+		this.basePath = p_i1281_2_;
 		this.registerIcons();
 	}
 
@@ -83,14 +83,14 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 		this.missingImage.setFramesTextureData(Lists.newArrayList(new int[][][] {aint1}));
 	}
 
-	public void loadTexture(IResourceManager par1ResourceManager) throws IOException
+	public void loadTexture(IResourceManager p_110551_1_) throws IOException
 	{
 		this.initMissingImage();
 		this.deleteGlTexture();
-		this.loadTextureAtlas(par1ResourceManager);
+		this.loadTextureAtlas(p_110551_1_);
 	}
 
-	public void loadTextureAtlas(IResourceManager par1ResourceManager)
+	public void loadTextureAtlas(IResourceManager p_110571_1_)
 	{
 		registerIcons(); //Re-gather list of Icons, allows for addition/removal of blocks/items after this map was initially constructed.
 
@@ -110,9 +110,9 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 			textureatlassprite = (TextureAtlasSprite)entry.getValue();
 			ResourceLocation resourcelocation1 = this.completeResourceLocation(resourcelocation, 0);
 
-			if (textureatlassprite.hasCustomLoader(par1ResourceManager, resourcelocation))
+			if (textureatlassprite.hasCustomLoader(p_110571_1_, resourcelocation))
 			{
-				if (!textureatlassprite.load(par1ResourceManager, resourcelocation))
+				if (!textureatlassprite.load(p_110571_1_, resourcelocation))
 				{
 					j = Math.min(j, Math.min(textureatlassprite.getIconWidth(), textureatlassprite.getIconHeight()));
 					stitcher.addSprite(textureatlassprite);
@@ -122,7 +122,7 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 
 			try
 			{
-				IResource iresource = par1ResourceManager.getResource(resourcelocation1);
+				IResource iresource = p_110571_1_.getResource(resourcelocation1);
 				BufferedImage[] abufferedimage = new BufferedImage[1 + this.mipmapLevels];
 				abufferedimage[0] = ImageIO.read(iresource.getInputStream());
 				TextureMetadataSection texturemetadatasection = (TextureMetadataSection)iresource.getMetadata("texture");
@@ -155,7 +155,7 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 
 							try
 							{
-								abufferedimage[l] = ImageIO.read(par1ResourceManager.getResource(resourcelocation2).getInputStream());
+								abufferedimage[l] = ImageIO.read(p_110571_1_.getResource(resourcelocation2).getInputStream());
 							}
 							catch (IOException ioexception)
 							{
@@ -332,9 +332,9 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 		}
 	}
 
-	public TextureAtlasSprite getAtlasSprite(String par1Str)
+	public TextureAtlasSprite getAtlasSprite(String p_110572_1_)
 	{
-		TextureAtlasSprite textureatlassprite = (TextureAtlasSprite)this.mapUploadedSprites.get(par1Str);
+		TextureAtlasSprite textureatlassprite = (TextureAtlasSprite)this.mapUploadedSprites.get(p_110572_1_);
 
 		if (textureatlassprite == null)
 		{
@@ -356,39 +356,39 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 		}
 	}
 
-	public IIcon registerIcon(String par1Str)
+	public IIcon registerIcon(String p_94245_1_)
 	{
-		if (par1Str == null)
+		if (p_94245_1_ == null)
 		{
 			throw new IllegalArgumentException("Name cannot be null!");
 		}
-		else if (par1Str.indexOf(92) == -1) // Disable backslashes (\) in texture asset paths.
+		else if (p_94245_1_.indexOf(92) == -1) // Disable backslashes (\) in texture asset paths.
 		{
-			Object object = (TextureAtlasSprite)this.mapRegisteredSprites.get(par1Str);
+			Object object = (TextureAtlasSprite)this.mapRegisteredSprites.get(p_94245_1_);
 
 			if (object == null)
 			{
 				if (this.textureType == 1)
 				{
-					if ("clock".equals(par1Str))
+					if ("clock".equals(p_94245_1_))
 					{
-						object = new TextureClock(par1Str);
+						object = new TextureClock(p_94245_1_);
 					}
-					else if ("compass".equals(par1Str))
+					else if ("compass".equals(p_94245_1_))
 					{
-						object = new TextureCompass(par1Str);
+						object = new TextureCompass(p_94245_1_);
 					}
 					else
 					{
-						object = new TextureAtlasSprite(par1Str);
+						object = new TextureAtlasSprite(p_94245_1_);
 					}
 				}
 				else
 				{
-					object = new TextureAtlasSprite(par1Str);
+					object = new TextureAtlasSprite(p_94245_1_);
 				}
 
-				this.mapRegisteredSprites.put(par1Str, object);
+				this.mapRegisteredSprites.put(p_94245_1_, object);
 			}
 
 			return (IIcon)object;

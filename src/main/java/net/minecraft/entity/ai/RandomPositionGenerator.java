@@ -10,30 +10,30 @@ public class RandomPositionGenerator
 	private static Vec3 staticVector = Vec3.createVectorHelper(0.0D, 0.0D, 0.0D);
 	private static final String __OBFID = "CL_00001629";
 
-	public static Vec3 findRandomTarget(EntityCreature par0EntityCreature, int par1, int par2)
+	public static Vec3 findRandomTarget(EntityCreature p_75463_0_, int p_75463_1_, int p_75463_2_)
 	{
-		return findRandomTargetBlock(par0EntityCreature, par1, par2, (Vec3)null);
+		return findRandomTargetBlock(p_75463_0_, p_75463_1_, p_75463_2_, (Vec3)null);
 	}
 
-	public static Vec3 findRandomTargetBlockTowards(EntityCreature par0EntityCreature, int par1, int par2, Vec3 par3Vec3)
+	public static Vec3 findRandomTargetBlockTowards(EntityCreature p_75464_0_, int p_75464_1_, int p_75464_2_, Vec3 p_75464_3_)
 	{
-		staticVector.xCoord = par3Vec3.xCoord - par0EntityCreature.posX;
-		staticVector.yCoord = par3Vec3.yCoord - par0EntityCreature.posY;
-		staticVector.zCoord = par3Vec3.zCoord - par0EntityCreature.posZ;
-		return findRandomTargetBlock(par0EntityCreature, par1, par2, staticVector);
+		staticVector.xCoord = p_75464_3_.xCoord - p_75464_0_.posX;
+		staticVector.yCoord = p_75464_3_.yCoord - p_75464_0_.posY;
+		staticVector.zCoord = p_75464_3_.zCoord - p_75464_0_.posZ;
+		return findRandomTargetBlock(p_75464_0_, p_75464_1_, p_75464_2_, staticVector);
 	}
 
-	public static Vec3 findRandomTargetBlockAwayFrom(EntityCreature par0EntityCreature, int par1, int par2, Vec3 par3Vec3)
+	public static Vec3 findRandomTargetBlockAwayFrom(EntityCreature p_75461_0_, int p_75461_1_, int p_75461_2_, Vec3 p_75461_3_)
 	{
-		staticVector.xCoord = par0EntityCreature.posX - par3Vec3.xCoord;
-		staticVector.yCoord = par0EntityCreature.posY - par3Vec3.yCoord;
-		staticVector.zCoord = par0EntityCreature.posZ - par3Vec3.zCoord;
-		return findRandomTargetBlock(par0EntityCreature, par1, par2, staticVector);
+		staticVector.xCoord = p_75461_0_.posX - p_75461_3_.xCoord;
+		staticVector.yCoord = p_75461_0_.posY - p_75461_3_.yCoord;
+		staticVector.zCoord = p_75461_0_.posZ - p_75461_3_.zCoord;
+		return findRandomTargetBlock(p_75461_0_, p_75461_1_, p_75461_2_, staticVector);
 	}
 
-	private static Vec3 findRandomTargetBlock(EntityCreature par0EntityCreature, int par1, int par2, Vec3 par3Vec3)
+	private static Vec3 findRandomTargetBlock(EntityCreature p_75462_0_, int p_75462_1_, int p_75462_2_, Vec3 p_75462_3_)
 	{
-		Random random = par0EntityCreature.getRNG();
+		Random random = p_75462_0_.getRNG();
 		boolean flag = false;
 		int k = 0;
 		int l = 0;
@@ -41,10 +41,10 @@ public class RandomPositionGenerator
 		float f = -99999.0F;
 		boolean flag1;
 
-		if (par0EntityCreature.hasHome())
+		if (p_75462_0_.hasHome())
 		{
-			double d0 = (double)(par0EntityCreature.getHomePosition().getDistanceSquared(MathHelper.floor_double(par0EntityCreature.posX), MathHelper.floor_double(par0EntityCreature.posY), MathHelper.floor_double(par0EntityCreature.posZ)) + 4.0F);
-			double d1 = (double)(par0EntityCreature.func_110174_bM() + (float)par1);
+			double d0 = (double)(p_75462_0_.getHomePosition().getDistanceSquared(MathHelper.floor_double(p_75462_0_.posX), MathHelper.floor_double(p_75462_0_.posY), MathHelper.floor_double(p_75462_0_.posZ)) + 4.0F);
+			double d1 = (double)(p_75462_0_.func_110174_bM() + (float)p_75462_1_);
 			flag1 = d0 < d1 * d1;
 		}
 		else
@@ -54,19 +54,19 @@ public class RandomPositionGenerator
 
 		for (int l1 = 0; l1 < 10; ++l1)
 		{
-			int j1 = random.nextInt(2 * par1) - par1;
-			int i2 = random.nextInt(2 * par2) - par2;
-			int k1 = random.nextInt(2 * par1) - par1;
+			int j1 = random.nextInt(2 * p_75462_1_) - p_75462_1_;
+			int i2 = random.nextInt(2 * p_75462_2_) - p_75462_2_;
+			int k1 = random.nextInt(2 * p_75462_1_) - p_75462_1_;
 
-			if (par3Vec3 == null || (double)j1 * par3Vec3.xCoord + (double)k1 * par3Vec3.zCoord >= 0.0D)
+			if (p_75462_3_ == null || (double)j1 * p_75462_3_.xCoord + (double)k1 * p_75462_3_.zCoord >= 0.0D)
 			{
-				j1 += MathHelper.floor_double(par0EntityCreature.posX);
-				i2 += MathHelper.floor_double(par0EntityCreature.posY);
-				k1 += MathHelper.floor_double(par0EntityCreature.posZ);
+				j1 += MathHelper.floor_double(p_75462_0_.posX);
+				i2 += MathHelper.floor_double(p_75462_0_.posY);
+				k1 += MathHelper.floor_double(p_75462_0_.posZ);
 
-				if (!flag1 || par0EntityCreature.isWithinHomeDistance(j1, i2, k1))
+				if (!flag1 || p_75462_0_.isWithinHomeDistance(j1, i2, k1))
 				{
-					float f1 = par0EntityCreature.getBlockPathWeight(j1, i2, k1);
+					float f1 = p_75462_0_.getBlockPathWeight(j1, i2, k1);
 
 					if (f1 > f)
 					{
@@ -82,7 +82,7 @@ public class RandomPositionGenerator
 
 		if (flag)
 		{
-			return par0EntityCreature.worldObj.getWorldVec3Pool().getVecFromPool((double)k, (double)l, (double)i1);
+			return Vec3.createVectorHelper((double)k, (double)l, (double)i1);
 		}
 		else
 		{

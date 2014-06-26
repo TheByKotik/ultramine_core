@@ -29,19 +29,19 @@ public class RenderVillager extends RenderLiving
 		this.villagerModel = (ModelVillager)this.mainModel;
 	}
 
-	protected int shouldRenderPass(EntityVillager par1EntityVillager, int par2, float par3)
+	protected int shouldRenderPass(EntityVillager p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
 		return -1;
 	}
 
-	public void doRender(EntityVillager par1EntityVillager, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityVillager p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		super.doRender((EntityLiving)par1EntityVillager, par2, par4, par6, par8, par9);
+		super.doRender((EntityLiving)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected ResourceLocation getEntityTexture(EntityVillager par1EntityVillager)
+	protected ResourceLocation getEntityTexture(EntityVillager p_110775_1_)
 	{
-		switch (par1EntityVillager.getProfession())
+		switch (p_110775_1_.getProfession())
 		{
 			case 0:
 				return farmerVillagerTextures;
@@ -54,20 +54,20 @@ public class RenderVillager extends RenderLiving
 			case 4:
 				return butcherVillagerTextures;
 			default:
-				return VillagerRegistry.getVillagerSkin(par1EntityVillager.getProfession(), villagerTextures);
+				return VillagerRegistry.getVillagerSkin(p_110775_1_.getProfession(), villagerTextures);
 		}
 	}
 
-	protected void renderEquippedItems(EntityVillager par1EntityVillager, float par2)
+	protected void renderEquippedItems(EntityVillager p_77029_1_, float p_77029_2_)
 	{
-		super.renderEquippedItems(par1EntityVillager, par2);
+		super.renderEquippedItems(p_77029_1_, p_77029_2_);
 	}
 
-	protected void preRenderCallback(EntityVillager par1EntityVillager, float par2)
+	protected void preRenderCallback(EntityVillager p_77041_1_, float p_77041_2_)
 	{
 		float f1 = 0.9375F;
 
-		if (par1EntityVillager.getGrowingAge() < 0)
+		if (p_77041_1_.getGrowingAge() < 0)
 		{
 			f1 = (float)((double)f1 * 0.5D);
 			this.shadowSize = 0.25F;
@@ -80,38 +80,38 @@ public class RenderVillager extends RenderLiving
 		GL11.glScalef(f1, f1, f1);
 	}
 
-	public void doRender(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLiving p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityVillager)par1EntityLiving, par2, par4, par6, par8, par9);
+		this.doRender((EntityVillager)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2)
+	protected void preRenderCallback(EntityLivingBase p_77041_1_, float p_77041_2_)
 	{
-		this.preRenderCallback((EntityVillager)par1EntityLivingBase, par2);
+		this.preRenderCallback((EntityVillager)p_77041_1_, p_77041_2_);
 	}
 
-	protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+	protected int shouldRenderPass(EntityLivingBase p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
-		return this.shouldRenderPass((EntityVillager)par1EntityLivingBase, par2, par3);
+		return this.shouldRenderPass((EntityVillager)p_77032_1_, p_77032_2_, p_77032_3_);
 	}
 
-	protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float par2)
+	protected void renderEquippedItems(EntityLivingBase p_77029_1_, float p_77029_2_)
 	{
-		this.renderEquippedItems((EntityVillager)par1EntityLivingBase, par2);
+		this.renderEquippedItems((EntityVillager)p_77029_1_, p_77029_2_);
 	}
 
-	public void doRender(EntityLivingBase par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLivingBase p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityVillager)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityVillager)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityVillager)par1Entity);
+		return this.getEntityTexture((EntityVillager)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityVillager)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityVillager)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

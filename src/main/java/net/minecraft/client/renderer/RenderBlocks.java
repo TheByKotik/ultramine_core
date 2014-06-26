@@ -60,6 +60,7 @@ public class RenderBlocks
 	public IBlockAccess blockAccess;
 	public IIcon overrideBlockTexture;
 	public boolean flipTexture;
+	public boolean field_152631_f;
 	public boolean renderAllFaces;
 	public static boolean fancyGrass = true;
 	public boolean useInventoryTint = true;
@@ -138,9 +139,11 @@ public class RenderBlocks
 	public float colorBlueTopRight;
 	private static final String __OBFID = "CL_00000940";
 
-	public RenderBlocks(IBlockAccess par1IBlockAccess)
+	public RenderBlocks(IBlockAccess p_i1251_1_)
 	{
-		this.blockAccess = par1IBlockAccess;
+		this.blockAccess = p_i1251_1_;
+		this.field_152631_f = false;
+		this.flipTexture = false;
 		this.minecraftRB = Minecraft.getMinecraft();
 	}
 
@@ -1362,14 +1365,14 @@ public class RenderBlocks
 		float f3 = 0.0625F;
 		float f4 = 0.0625F;
 		float f5 = 0.625F;
-		avec3[0] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f3), 0.0D, (double)(-f4));
-		avec3[1] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f3, 0.0D, (double)(-f4));
-		avec3[2] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f3, 0.0D, (double)f4);
-		avec3[3] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f3), 0.0D, (double)f4);
-		avec3[4] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f3), (double)f5, (double)(-f4));
-		avec3[5] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f3, (double)f5, (double)(-f4));
-		avec3[6] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f3, (double)f5, (double)f4);
-		avec3[7] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f3), (double)f5, (double)f4);
+		avec3[0] = Vec3.createVectorHelper((double)(-f3), 0.0D, (double)(-f4));
+		avec3[1] = Vec3.createVectorHelper((double)f3, 0.0D, (double)(-f4));
+		avec3[2] = Vec3.createVectorHelper((double)f3, 0.0D, (double)f4);
+		avec3[3] = Vec3.createVectorHelper((double)(-f3), 0.0D, (double)f4);
+		avec3[4] = Vec3.createVectorHelper((double)(-f3), (double)f5, (double)(-f4));
+		avec3[5] = Vec3.createVectorHelper((double)f3, (double)f5, (double)(-f4));
+		avec3[6] = Vec3.createVectorHelper((double)f3, (double)f5, (double)f4);
+		avec3[7] = Vec3.createVectorHelper((double)(-f3), (double)f5, (double)f4);
 
 		for (int j1 = 0; j1 < 8; ++j1)
 		{
@@ -1573,14 +1576,14 @@ public class RenderBlocks
 		float f5 = 0.046875F;
 		float f6 = 0.046875F;
 		float f7 = 0.3125F;
-		avec3[0] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f5), 0.0D, (double)(-f6));
-		avec3[1] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f5, 0.0D, (double)(-f6));
-		avec3[2] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f5, 0.0D, (double)f6);
-		avec3[3] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f5), 0.0D, (double)f6);
-		avec3[4] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f5), (double)f7, (double)(-f6));
-		avec3[5] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f5, (double)f7, (double)(-f6));
-		avec3[6] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f5, (double)f7, (double)f6);
-		avec3[7] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f5), (double)f7, (double)f6);
+		avec3[0] = Vec3.createVectorHelper((double)(-f5), 0.0D, (double)(-f6));
+		avec3[1] = Vec3.createVectorHelper((double)f5, 0.0D, (double)(-f6));
+		avec3[2] = Vec3.createVectorHelper((double)f5, 0.0D, (double)f6);
+		avec3[3] = Vec3.createVectorHelper((double)(-f5), 0.0D, (double)f6);
+		avec3[4] = Vec3.createVectorHelper((double)(-f5), (double)f7, (double)(-f6));
+		avec3[5] = Vec3.createVectorHelper((double)f5, (double)f7, (double)(-f6));
+		avec3[6] = Vec3.createVectorHelper((double)f5, (double)f7, (double)f6);
+		avec3[7] = Vec3.createVectorHelper((double)(-f5), (double)f7, (double)f6);
 
 		for (int j1 = 0; j1 < 8; ++j1)
 		{
@@ -1700,14 +1703,14 @@ public class RenderBlocks
 		float f13 = 0.09375F;
 		float f8 = 0.09375F;
 		float f9 = 0.03125F;
-		avec3[0] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f13), 0.0D, (double)(-f8));
-		avec3[1] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f13, 0.0D, (double)(-f8));
-		avec3[2] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f13, 0.0D, (double)f8);
-		avec3[3] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f13), 0.0D, (double)f8);
-		avec3[4] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f13), (double)f9, (double)(-f8));
-		avec3[5] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f13, (double)f9, (double)(-f8));
-		avec3[6] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)f13, (double)f9, (double)f8);
-		avec3[7] = this.blockAccess.getWorldVec3Pool().getVecFromPool((double)(-f13), (double)f9, (double)f8);
+		avec3[0] = Vec3.createVectorHelper((double)(-f13), 0.0D, (double)(-f8));
+		avec3[1] = Vec3.createVectorHelper((double)f13, 0.0D, (double)(-f8));
+		avec3[2] = Vec3.createVectorHelper((double)f13, 0.0D, (double)f8);
+		avec3[3] = Vec3.createVectorHelper((double)(-f13), 0.0D, (double)f8);
+		avec3[4] = Vec3.createVectorHelper((double)(-f13), (double)f9, (double)(-f8));
+		avec3[5] = Vec3.createVectorHelper((double)f13, (double)f9, (double)(-f8));
+		avec3[6] = Vec3.createVectorHelper((double)f13, (double)f9, (double)f8);
+		avec3[7] = Vec3.createVectorHelper((double)(-f13), (double)f9, (double)f8);
 
 		for (int l1 = 0; l1 < 8; ++l1)
 		{
@@ -4046,6 +4049,10 @@ public class RenderBlocks
 				tessellator.addVertexWithUV((double)(p_147721_2_ + 0), (double)p_147721_3_ + d3, (double)(p_147721_4_ + 1), d8, d16);
 				tessellator.addVertexWithUV((double)(p_147721_2_ + 1), (double)p_147721_3_ + d4, (double)(p_147721_4_ + 1), d10, d18);
 				tessellator.addVertexWithUV((double)(p_147721_2_ + 1), (double)p_147721_3_ + d5, (double)(p_147721_4_ + 0), d12, d20);
+				tessellator.addVertexWithUV((double)(p_147721_2_ + 0), (double)p_147721_3_ + d2, (double)(p_147721_4_ + 0), d7, d14);
+				tessellator.addVertexWithUV((double)(p_147721_2_ + 1), (double)p_147721_3_ + d5, (double)(p_147721_4_ + 0), d12, d20);
+				tessellator.addVertexWithUV((double)(p_147721_2_ + 1), (double)p_147721_3_ + d4, (double)(p_147721_4_ + 1), d10, d18);
+				tessellator.addVertexWithUV((double)(p_147721_2_ + 0), (double)p_147721_3_ + d3, (double)(p_147721_4_ + 1), d8, d16);
 			}
 
 			if (this.renderAllFaces || flag1)
@@ -4143,6 +4150,10 @@ public class RenderBlocks
 					tessellator.addVertexWithUV(d17, (double)p_147721_3_ + d11, d19, (double)f9, (double)f11);
 					tessellator.addVertexWithUV(d17, (double)(p_147721_3_ + 0), d19, (double)f9, (double)f12);
 					tessellator.addVertexWithUV(d13, (double)(p_147721_3_ + 0), d15, (double)f8, (double)f12);
+					tessellator.addVertexWithUV(d13, (double)(p_147721_3_ + 0), d15, (double)f8, (double)f12);
+					tessellator.addVertexWithUV(d17, (double)(p_147721_3_ + 0), d19, (double)f9, (double)f12);
+					tessellator.addVertexWithUV(d17, (double)p_147721_3_ + d11, d19, (double)f9, (double)f11);
+					tessellator.addVertexWithUV(d13, (double)p_147721_3_ + d9, d15, (double)f8, (double)f10);
 				}
 			}
 
@@ -6343,6 +6354,7 @@ public class RenderBlocks
 		float f5 = flag4 ? 1.0F : f1;
 		float f6 = flag5 ? 0.0F : f;
 		float f7 = flag6 ? 1.0F : f1;
+		this.field_152631_f = true;
 
 		if (flag1)
 		{
@@ -6375,6 +6387,7 @@ public class RenderBlocks
 			flag = true;
 		}
 
+		this.field_152631_f = false;
 		p_147735_1_.setBlockBoundsBasedOnState(this.blockAccess, p_147735_2_, p_147735_3_, p_147735_4_);
 		return flag;
 	}
@@ -6923,6 +6936,7 @@ public class RenderBlocks
 		p_147722_1_.func_150147_e(this.blockAccess, p_147722_2_, p_147722_3_, p_147722_4_);
 		this.setRenderBoundsFromBlock(p_147722_1_);
 		this.renderStandardBlock(p_147722_1_, p_147722_2_, p_147722_3_, p_147722_4_);
+		this.field_152631_f = true;
 		boolean flag = p_147722_1_.func_150145_f(this.blockAccess, p_147722_2_, p_147722_3_, p_147722_4_);
 		this.setRenderBoundsFromBlock(p_147722_1_);
 		this.renderStandardBlock(p_147722_1_, p_147722_2_, p_147722_3_, p_147722_4_);
@@ -6933,6 +6947,7 @@ public class RenderBlocks
 			this.renderStandardBlock(p_147722_1_, p_147722_2_, p_147722_3_, p_147722_4_);
 		}
 
+		this.field_152631_f = false;
 		return true;
 	}
 
@@ -7213,8 +7228,15 @@ public class RenderBlocks
 			p_147761_8_ = this.overrideBlockTexture;
 		}
 
-		double d3 = (double)p_147761_8_.getInterpolatedU(this.renderMaxX * 16.0D);
-		double d4 = (double)p_147761_8_.getInterpolatedU(this.renderMinX * 16.0D);
+		double d3 = (double)p_147761_8_.getInterpolatedU(this.renderMinX * 16.0D);
+		double d4 = (double)p_147761_8_.getInterpolatedU(this.renderMaxX * 16.0D);
+
+		if (this.field_152631_f)
+		{
+			d4 = (double)p_147761_8_.getInterpolatedU((1.0D - this.renderMinX) * 16.0D);
+			d3 = (double)p_147761_8_.getInterpolatedU((1.0D - this.renderMaxX) * 16.0D);
+		}
+
 		double d5 = (double)p_147761_8_.getInterpolatedV(16.0D - this.renderMaxY * 16.0D);
 		double d6 = (double)p_147761_8_.getInterpolatedV(16.0D - this.renderMinY * 16.0D);
 		double d7;
@@ -7246,8 +7268,8 @@ public class RenderBlocks
 		if (this.uvRotateEast == 2)
 		{
 			d3 = (double)p_147761_8_.getInterpolatedU(this.renderMinY * 16.0D);
-			d5 = (double)p_147761_8_.getInterpolatedV(16.0D - this.renderMinX * 16.0D);
 			d4 = (double)p_147761_8_.getInterpolatedU(this.renderMaxY * 16.0D);
+			d5 = (double)p_147761_8_.getInterpolatedV(16.0D - this.renderMinX * 16.0D);
 			d6 = (double)p_147761_8_.getInterpolatedV(16.0D - this.renderMaxX * 16.0D);
 			d9 = d5;
 			d10 = d6;
@@ -7259,8 +7281,8 @@ public class RenderBlocks
 		else if (this.uvRotateEast == 1)
 		{
 			d3 = (double)p_147761_8_.getInterpolatedU(16.0D - this.renderMaxY * 16.0D);
-			d5 = (double)p_147761_8_.getInterpolatedV(this.renderMaxX * 16.0D);
 			d4 = (double)p_147761_8_.getInterpolatedU(16.0D - this.renderMinY * 16.0D);
+			d5 = (double)p_147761_8_.getInterpolatedV(this.renderMaxX * 16.0D);
 			d6 = (double)p_147761_8_.getInterpolatedV(this.renderMinX * 16.0D);
 			d7 = d4;
 			d8 = d3;
@@ -7552,8 +7574,15 @@ public class RenderBlocks
 			p_147764_8_ = this.overrideBlockTexture;
 		}
 
-		double d3 = (double)p_147764_8_.getInterpolatedU(this.renderMaxZ * 16.0D);
-		double d4 = (double)p_147764_8_.getInterpolatedU(this.renderMinZ * 16.0D);
+		double d3 = (double)p_147764_8_.getInterpolatedU(this.renderMinZ * 16.0D);
+		double d4 = (double)p_147764_8_.getInterpolatedU(this.renderMaxZ * 16.0D);
+
+		if (this.field_152631_f)
+		{
+			d4 = (double)p_147764_8_.getInterpolatedU((1.0D - this.renderMinZ) * 16.0D);
+			d3 = (double)p_147764_8_.getInterpolatedU((1.0D - this.renderMaxZ) * 16.0D);
+		}
+
 		double d5 = (double)p_147764_8_.getInterpolatedV(16.0D - this.renderMaxY * 16.0D);
 		double d6 = (double)p_147764_8_.getInterpolatedV(16.0D - this.renderMinY * 16.0D);
 		double d7;

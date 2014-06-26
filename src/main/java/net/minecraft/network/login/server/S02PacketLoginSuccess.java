@@ -2,6 +2,7 @@ package net.minecraft.network.login.server;
 
 import com.mojang.authlib.GameProfile;
 import java.io.IOException;
+import java.util.UUID;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
@@ -23,18 +24,20 @@ public class S02PacketLoginSuccess extends Packet
 	{
 		String s = p_148837_1_.readStringFromBuffer(36);
 		String s1 = p_148837_1_.readStringFromBuffer(16);
-		this.field_149602_a = new GameProfile(s, s1);
+		UUID uuid = UUID.fromString(s);
+		this.field_149602_a = new GameProfile(uuid, s1);
 	}
 
 	public void writePacketData(PacketBuffer p_148840_1_) throws IOException
 	{
-		p_148840_1_.writeStringToBuffer(this.field_149602_a.getId());
+		UUID uuid = this.field_149602_a.getId();
+		p_148840_1_.writeStringToBuffer(uuid == null ? "" : uuid.toString());
 		p_148840_1_.writeStringToBuffer(this.field_149602_a.getName());
 	}
 
-	public void processPacket(INetHandlerLoginClient p_149601_1_)
+	public void processPacket(INetHandlerLoginClient p_148833_1_)
 	{
-		p_149601_1_.handleLoginSuccess(this);
+		p_148833_1_.handleLoginSuccess(this);
 	}
 
 	public boolean hasPriority()

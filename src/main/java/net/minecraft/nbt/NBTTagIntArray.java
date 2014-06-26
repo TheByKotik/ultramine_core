@@ -17,24 +17,25 @@ public class NBTTagIntArray extends NBTBase
 		this.intArray = p_i45132_1_;
 	}
 
-	void write(DataOutput par1DataOutput) throws IOException
+	void write(DataOutput p_74734_1_) throws IOException
 	{
-		par1DataOutput.writeInt(this.intArray.length);
+		p_74734_1_.writeInt(this.intArray.length);
 
 		for (int i = 0; i < this.intArray.length; ++i)
 		{
-			par1DataOutput.writeInt(this.intArray[i]);
+			p_74734_1_.writeInt(this.intArray[i]);
 		}
 	}
 
-	void load(DataInput par1DataInput, int par2) throws IOException
+	void func_152446_a(DataInput p_152446_1_, int p_152446_2_, NBTSizeTracker p_152446_3_) throws IOException
 	{
-		int j = par1DataInput.readInt();
+		int j = p_152446_1_.readInt();
+		p_152446_3_.func_152450_a((long)(32 * j));
 		this.intArray = new int[j];
 
 		for (int k = 0; k < j; ++k)
 		{
-			this.intArray[k] = par1DataInput.readInt();
+			this.intArray[k] = p_152446_1_.readInt();
 		}
 	}
 
@@ -65,9 +66,9 @@ public class NBTTagIntArray extends NBTBase
 		return new NBTTagIntArray(aint);
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		return super.equals(par1Obj) ? Arrays.equals(this.intArray, ((NBTTagIntArray)par1Obj).intArray) : false;
+		return super.equals(p_equals_1_) ? Arrays.equals(this.intArray, ((NBTTagIntArray)p_equals_1_).intArray) : false;
 	}
 
 	public int hashCode()

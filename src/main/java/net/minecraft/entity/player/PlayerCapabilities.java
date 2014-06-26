@@ -15,7 +15,7 @@ public class PlayerCapabilities
 	private float walkSpeed = 0.1F;
 	private static final String __OBFID = "CL_00001708";
 
-	public void writeCapabilitiesToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeCapabilitiesToNBT(NBTTagCompound p_75091_1_)
 	{
 		NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 		nbttagcompound1.setBoolean("invulnerable", this.disableDamage);
@@ -25,14 +25,14 @@ public class PlayerCapabilities
 		nbttagcompound1.setBoolean("mayBuild", this.allowEdit);
 		nbttagcompound1.setFloat("flySpeed", this.flySpeed);
 		nbttagcompound1.setFloat("walkSpeed", this.walkSpeed);
-		par1NBTTagCompound.setTag("abilities", nbttagcompound1);
+		p_75091_1_.setTag("abilities", nbttagcompound1);
 	}
 
-	public void readCapabilitiesFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readCapabilitiesFromNBT(NBTTagCompound p_75095_1_)
 	{
-		if (par1NBTTagCompound.hasKey("abilities", 10))
+		if (p_75095_1_.hasKey("abilities", 10))
 		{
-			NBTTagCompound nbttagcompound1 = par1NBTTagCompound.getCompoundTag("abilities");
+			NBTTagCompound nbttagcompound1 = p_75095_1_.getCompoundTag("abilities");
 			this.disableDamage = nbttagcompound1.getBoolean("invulnerable");
 			this.isFlying = nbttagcompound1.getBoolean("flying");
 			this.allowFlying = nbttagcompound1.getBoolean("mayfly");
@@ -57,9 +57,9 @@ public class PlayerCapabilities
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void setFlySpeed(float par1)
+	public void setFlySpeed(float p_75092_1_)
 	{
-		this.flySpeed = par1;
+		this.flySpeed = p_75092_1_;
 	}
 
 	public float getWalkSpeed()
@@ -68,8 +68,8 @@ public class PlayerCapabilities
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void setPlayerWalkSpeed(float par1)
+	public void setPlayerWalkSpeed(float p_82877_1_)
 	{
-		this.walkSpeed = par1;
+		this.walkSpeed = p_82877_1_;
 	}
 }

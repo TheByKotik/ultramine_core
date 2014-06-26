@@ -25,26 +25,26 @@ public class GuiButton extends Gui
 	private static final String __OBFID = "CL_00000668";
 	public int packedFGColour;
 
-	public GuiButton(int par1, int par2, int par3, String par4Str)
+	public GuiButton(int p_i1020_1_, int p_i1020_2_, int p_i1020_3_, String p_i1020_4_)
 	{
-		this(par1, par2, par3, 200, 20, par4Str);
+		this(p_i1020_1_, p_i1020_2_, p_i1020_3_, 200, 20, p_i1020_4_);
 	}
 
-	public GuiButton(int par1, int par2, int par3, int par4, int par5, String par6Str)
+	public GuiButton(int p_i1021_1_, int p_i1021_2_, int p_i1021_3_, int p_i1021_4_, int p_i1021_5_, String p_i1021_6_)
 	{
 		this.width = 200;
 		this.height = 20;
 		this.enabled = true;
 		this.visible = true;
-		this.id = par1;
-		this.xPosition = par2;
-		this.yPosition = par3;
-		this.width = par4;
-		this.height = par5;
-		this.displayString = par6Str;
+		this.id = p_i1021_1_;
+		this.xPosition = p_i1021_2_;
+		this.yPosition = p_i1021_3_;
+		this.width = p_i1021_4_;
+		this.height = p_i1021_5_;
+		this.displayString = p_i1021_6_;
 	}
 
-	protected int getHoverState(boolean p_146114_1_)
+	public int getHoverState(boolean p_146114_1_)
 	{
 		byte b0 = 1;
 
@@ -118,5 +118,10 @@ public class GuiButton extends Gui
 	public int getButtonWidth()
 	{
 		return this.width;
+	}
+
+	public int func_154310_c()
+	{
+		return this.height;
 	}
 }

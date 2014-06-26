@@ -13,14 +13,14 @@ public class RecipesArmorDyes implements IRecipe
 {
 	private static final String __OBFID = "CL_00000079";
 
-	public boolean matches(InventoryCrafting par1InventoryCrafting, World par2World)
+	public boolean matches(InventoryCrafting p_77569_1_, World p_77569_2_)
 	{
 		ItemStack itemstack = null;
 		ArrayList arraylist = new ArrayList();
 
-		for (int i = 0; i < par1InventoryCrafting.getSizeInventory(); ++i)
+		for (int i = 0; i < p_77569_1_.getSizeInventory(); ++i)
 		{
-			ItemStack itemstack1 = par1InventoryCrafting.getStackInSlot(i);
+			ItemStack itemstack1 = p_77569_1_.getStackInSlot(i);
 
 			if (itemstack1 != null)
 			{
@@ -50,7 +50,7 @@ public class RecipesArmorDyes implements IRecipe
 		return itemstack != null && !arraylist.isEmpty();
 	}
 
-	public ItemStack getCraftingResult(InventoryCrafting par1InventoryCrafting)
+	public ItemStack getCraftingResult(InventoryCrafting p_77572_1_)
 	{
 		ItemStack itemstack = null;
 		int[] aint = new int[3];
@@ -63,9 +63,9 @@ public class RecipesArmorDyes implements IRecipe
 		float f1;
 		int l1;
 
-		for (k = 0; k < par1InventoryCrafting.getSizeInventory(); ++k)
+		for (k = 0; k < p_77572_1_.getSizeInventory(); ++k)
 		{
-			ItemStack itemstack1 = par1InventoryCrafting.getStackInSlot(k);
+			ItemStack itemstack1 = p_77572_1_.getStackInSlot(k);
 
 			if (itemstack1 != null)
 			{

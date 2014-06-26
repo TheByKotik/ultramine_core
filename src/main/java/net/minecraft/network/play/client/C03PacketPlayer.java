@@ -29,9 +29,9 @@ public class C03PacketPlayer extends Packet
 		this.field_149474_g = p_i45256_1_;
 	}
 
-	public void processPacket(INetHandlerPlayServer p_149468_1_)
+	public void processPacket(INetHandlerPlayServer p_148833_1_)
 	{
-		p_149468_1_.processPlayer(this);
+		p_148833_1_.processPlayer(this);
 	}
 
 	public void readPacketData(PacketBuffer p_148837_1_) throws IOException

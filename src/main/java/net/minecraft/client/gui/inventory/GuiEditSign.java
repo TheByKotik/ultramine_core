@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.C12PacketUpdateSign;
 import net.minecraft.tileentity.TileEntitySign;
@@ -17,23 +18,22 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class GuiEditSign extends GuiScreen
 {
-	protected String screenTitle = "Edit sign message:";
 	private TileEntitySign tileSign;
 	private int updateCounter;
 	private int editLine;
 	private GuiButton doneBtn;
 	private static final String __OBFID = "CL_00000764";
 
-	public GuiEditSign(TileEntitySign par1TileEntitySign)
+	public GuiEditSign(TileEntitySign p_i1097_1_)
 	{
-		this.tileSign = par1TileEntitySign;
+		this.tileSign = p_i1097_1_;
 	}
 
 	public void initGui()
 	{
 		this.buttonList.clear();
 		Keyboard.enableRepeatEvents(true);
-		this.buttonList.add(this.doneBtn = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120, "Done"));
+		this.buttonList.add(this.doneBtn = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120, I18n.format("gui.done", new Object[0])));
 		this.tileSign.setEditable(false);
 	}
 
@@ -67,38 +67,38 @@ public class GuiEditSign extends GuiScreen
 		}
 	}
 
-	protected void keyTyped(char par1, int par2)
+	protected void keyTyped(char p_73869_1_, int p_73869_2_)
 	{
-		if (par2 == 200)
+		if (p_73869_2_ == 200)
 		{
 			this.editLine = this.editLine - 1 & 3;
 		}
 
-		if (par2 == 208 || par2 == 28 || par2 == 156)
+		if (p_73869_2_ == 208 || p_73869_2_ == 28 || p_73869_2_ == 156)
 		{
 			this.editLine = this.editLine + 1 & 3;
 		}
 
-		if (par2 == 14 && this.tileSign.signText[this.editLine].length() > 0)
+		if (p_73869_2_ == 14 && this.tileSign.signText[this.editLine].length() > 0)
 		{
 			this.tileSign.signText[this.editLine] = this.tileSign.signText[this.editLine].substring(0, this.tileSign.signText[this.editLine].length() - 1);
 		}
 
-		if (ChatAllowedCharacters.isAllowedCharacter(par1) && this.tileSign.signText[this.editLine].length() < 15)
+		if (ChatAllowedCharacters.isAllowedCharacter(p_73869_1_) && this.tileSign.signText[this.editLine].length() < 15)
 		{
-			this.tileSign.signText[this.editLine] = this.tileSign.signText[this.editLine] + par1;
+			this.tileSign.signText[this.editLine] = this.tileSign.signText[this.editLine] + p_73869_1_;
 		}
 
-		if (par2 == 1)
+		if (p_73869_2_ == 1)
 		{
 			this.actionPerformed(this.doneBtn);
 		}
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRendererObj, this.screenTitle, this.width / 2, 40, 16777215);
+		this.drawCenteredString(this.fontRendererObj, I18n.format("sign.edit", new Object[0]), this.width / 2, 40, 16777215);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)(this.width / 2), 0.0F, 50.0F);
 		float f1 = 93.75F;
@@ -144,6 +144,6 @@ public class GuiEditSign extends GuiScreen
 		TileEntityRendererDispatcher.instance.renderTileEntityAt(this.tileSign, -0.5D, -0.75D, -0.5D, 0.0F);
 		this.tileSign.lineBeingEdited = -1;
 		GL11.glPopMatrix();
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 }

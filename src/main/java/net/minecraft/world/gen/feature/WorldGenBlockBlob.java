@@ -18,17 +18,17 @@ public class WorldGenBlockBlob extends WorldGenerator
 		this.field_150544_b = p_i45450_2_;
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
 		while (true)
 		{
-			if (par4 > 3)
+			if (p_76484_4_ > 3)
 			{
 				label63:
 				{
-					if (!par1World.isAirBlock(par3, par4 - 1, par5))
+					if (!p_76484_1_.isAirBlock(p_76484_3_, p_76484_4_ - 1, p_76484_5_))
 					{
-						Block block = par1World.getBlock(par3, par4 - 1, par5);
+						Block block = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ - 1, p_76484_5_);
 
 						if (block == Blocks.grass || block == Blocks.dirt || block == Blocks.stone)
 						{
@@ -36,12 +36,12 @@ public class WorldGenBlockBlob extends WorldGenerator
 						}
 					}
 
-					--par4;
+					--p_76484_4_;
 					continue;
 				}
 			}
 
-			if (par4 <= 3)
+			if (p_76484_4_ <= 3)
 			{
 				return false;
 			}
@@ -50,32 +50,32 @@ public class WorldGenBlockBlob extends WorldGenerator
 
 			for (int l = 0; k2 >= 0 && l < 3; ++l)
 			{
-				int i1 = k2 + par2Random.nextInt(2);
-				int j1 = k2 + par2Random.nextInt(2);
-				int k1 = k2 + par2Random.nextInt(2);
+				int i1 = k2 + p_76484_2_.nextInt(2);
+				int j1 = k2 + p_76484_2_.nextInt(2);
+				int k1 = k2 + p_76484_2_.nextInt(2);
 				float f = (float)(i1 + j1 + k1) * 0.333F + 0.5F;
 
-				for (int l1 = par3 - i1; l1 <= par3 + i1; ++l1)
+				for (int l1 = p_76484_3_ - i1; l1 <= p_76484_3_ + i1; ++l1)
 				{
-					for (int i2 = par5 - k1; i2 <= par5 + k1; ++i2)
+					for (int i2 = p_76484_5_ - k1; i2 <= p_76484_5_ + k1; ++i2)
 					{
-						for (int j2 = par4 - j1; j2 <= par4 + j1; ++j2)
+						for (int j2 = p_76484_4_ - j1; j2 <= p_76484_4_ + j1; ++j2)
 						{
-							float f1 = (float)(l1 - par3);
-							float f2 = (float)(i2 - par5);
-							float f3 = (float)(j2 - par4);
+							float f1 = (float)(l1 - p_76484_3_);
+							float f2 = (float)(i2 - p_76484_5_);
+							float f3 = (float)(j2 - p_76484_4_);
 
 							if (f1 * f1 + f2 * f2 + f3 * f3 <= f * f)
 							{
-								par1World.setBlock(l1, j2, i2, this.field_150545_a, 0, 4);
+								p_76484_1_.setBlock(l1, j2, i2, this.field_150545_a, 0, 4);
 							}
 						}
 					}
 				}
 
-				par3 += -(k2 + 1) + par2Random.nextInt(2 + k2 * 2);
-				par5 += -(k2 + 1) + par2Random.nextInt(2 + k2 * 2);
-				par4 += 0 - par2Random.nextInt(2);
+				p_76484_3_ += -(k2 + 1) + p_76484_2_.nextInt(2 + k2 * 2);
+				p_76484_5_ += -(k2 + 1) + p_76484_2_.nextInt(2 + k2 * 2);
+				p_76484_4_ += 0 - p_76484_2_.nextInt(2);
 			}
 
 			return true;

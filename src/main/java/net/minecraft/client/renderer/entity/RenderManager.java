@@ -182,22 +182,22 @@ public class RenderManager
 		}
 	}
 
-	public Render getEntityClassRenderObject(Class par1Class)
+	public Render getEntityClassRenderObject(Class p_78715_1_)
 	{
-		Render render = (Render)this.entityRenderMap.get(par1Class);
+		Render render = (Render)this.entityRenderMap.get(p_78715_1_);
 
-		if (render == null && par1Class != Entity.class)
+		if (render == null && p_78715_1_ != Entity.class)
 		{
-			render = this.getEntityClassRenderObject(par1Class.getSuperclass());
-			this.entityRenderMap.put(par1Class, render);
+			render = this.getEntityClassRenderObject(p_78715_1_.getSuperclass());
+			this.entityRenderMap.put(p_78715_1_, render);
 		}
 
 		return render;
 	}
 
-	public Render getEntityRenderObject(Entity par1Entity)
+	public Render getEntityRenderObject(Entity p_78713_1_)
 	{
-		return this.getEntityClassRenderObject(par1Entity.getClass());
+		return this.getEntityClassRenderObject(p_78713_1_.getClass());
 	}
 
 	public void cacheActiveRenderInfo(World p_147938_1_, TextureManager p_147938_2_, FontRenderer p_147938_3_, EntityLivingBase p_147938_4_, Entity p_147938_5_, GameSettings p_147938_6_, float p_147938_7_)
@@ -340,15 +340,15 @@ public class RenderManager
 		}
 	}
 
-	private void renderDebugBoundingBox(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	private void renderDebugBoundingBox(Entity p_85094_1_, double p_85094_2_, double p_85094_4_, double p_85094_6_, float p_85094_8_, float p_85094_9_)
 	{
 		GL11.glDepthMask(false);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_BLEND);
-		float f2 = par1Entity.width / 2.0F;
-		AxisAlignedBB axisalignedbb = AxisAlignedBB.getAABBPool().getAABB(par2 - (double)f2, par4, par6 - (double)f2, par2 + (double)f2, par4 + (double)par1Entity.height, par6 + (double)f2);
+		float f2 = p_85094_1_.width / 2.0F;
+		AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(p_85094_2_ - (double)f2, p_85094_4_, p_85094_6_ - (double)f2, p_85094_2_ + (double)f2, p_85094_4_ + (double)p_85094_1_.height, p_85094_6_ + (double)f2);
 		RenderGlobal.drawOutlinedBoundingBox(axisalignedbb, 16777215);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -357,16 +357,16 @@ public class RenderManager
 		GL11.glDepthMask(true);
 	}
 
-	public void set(World par1World)
+	public void set(World p_78717_1_)
 	{
-		this.worldObj = par1World;
+		this.worldObj = p_78717_1_;
 	}
 
-	public double getDistanceToCamera(double par1, double par3, double par5)
+	public double getDistanceToCamera(double p_78714_1_, double p_78714_3_, double p_78714_5_)
 	{
-		double d3 = par1 - this.viewerPosX;
-		double d4 = par3 - this.viewerPosY;
-		double d5 = par5 - this.viewerPosZ;
+		double d3 = p_78714_1_ - this.viewerPosX;
+		double d4 = p_78714_3_ - this.viewerPosY;
+		double d5 = p_78714_5_ - this.viewerPosZ;
 		return d3 * d3 + d4 * d4 + d5 * d5;
 	}
 
@@ -375,14 +375,14 @@ public class RenderManager
 		return this.fontRenderer;
 	}
 
-	public void updateIcons(IIconRegister par1IconRegister)
+	public void updateIcons(IIconRegister p_94178_1_)
 	{
 		Iterator iterator = this.entityRenderMap.values().iterator();
 
 		while (iterator.hasNext())
 		{
 			Render render = (Render)iterator.next();
-			render.updateIcons(par1IconRegister);
+			render.updateIcons(p_94178_1_);
 		}
 	}
 }

@@ -20,14 +20,14 @@ public class SaveHandlerMP implements ISaveHandler
 
 	public void checkSessionLock() throws MinecraftException {}
 
-	public IChunkLoader getChunkLoader(WorldProvider par1WorldProvider)
+	public IChunkLoader getChunkLoader(WorldProvider p_75763_1_)
 	{
 		return null;
 	}
 
-	public void saveWorldInfoWithPlayer(WorldInfo par1WorldInfo, NBTTagCompound par2NBTTagCompound) {}
+	public void saveWorldInfoWithPlayer(WorldInfo p_75755_1_, NBTTagCompound p_75755_2_) {}
 
-	public void saveWorldInfo(WorldInfo par1WorldInfo) {}
+	public void saveWorldInfo(WorldInfo p_75761_1_) {}
 
 	public IPlayerFileData getSaveHandler()
 	{
@@ -36,7 +36,7 @@ public class SaveHandlerMP implements ISaveHandler
 
 	public void flush() {}
 
-	public File getMapFileFromName(String par1Str)
+	public File getMapFileFromName(String p_75758_1_)
 	{
 		return null;
 	}

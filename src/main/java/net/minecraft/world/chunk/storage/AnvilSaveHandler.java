@@ -13,19 +13,19 @@ public class AnvilSaveHandler extends SaveHandler
 {
 	private static final String __OBFID = "CL_00000581";
 
-	public AnvilSaveHandler(File par1File, String par2Str, boolean par3)
+	public AnvilSaveHandler(File p_i2142_1_, String p_i2142_2_, boolean p_i2142_3_)
 	{
-		super(par1File, par2Str, par3);
+		super(p_i2142_1_, p_i2142_2_, p_i2142_3_);
 	}
 
-	public IChunkLoader getChunkLoader(WorldProvider par1WorldProvider)
+	public IChunkLoader getChunkLoader(WorldProvider p_75763_1_)
 	{
 		File file1 = this.getWorldDirectory();
 		File file2;
 
-		if (par1WorldProvider.getSaveFolder() != null)
+		if (p_75763_1_.getSaveFolder() != null)
 		{
-			file2 = new File(file1, par1WorldProvider.getSaveFolder());
+			file2 = new File(file1, p_75763_1_.getSaveFolder());
 			file2.mkdirs();
 			return new AnvilChunkLoader(file2);
 		}
@@ -35,10 +35,10 @@ public class AnvilSaveHandler extends SaveHandler
 		}
 	}
 
-	public void saveWorldInfoWithPlayer(WorldInfo par1WorldInfo, NBTTagCompound par2NBTTagCompound)
+	public void saveWorldInfoWithPlayer(WorldInfo p_75755_1_, NBTTagCompound p_75755_2_)
 	{
-		par1WorldInfo.setSaveVersion(19133);
-		super.saveWorldInfoWithPlayer(par1WorldInfo, par2NBTTagCompound);
+		p_75755_1_.setSaveVersion(19133);
+		super.saveWorldInfoWithPlayer(p_75755_1_, p_75755_2_);
 	}
 
 	public void flush()

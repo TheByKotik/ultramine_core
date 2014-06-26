@@ -30,7 +30,7 @@ public class GuiWrongMinecraft extends GuiErrorScreen
 		super.initGui();
 	}
 	@Override
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		this.drawDefaultBackground();
 		int offset = 75;

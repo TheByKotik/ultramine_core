@@ -14,12 +14,12 @@ public class EntityMoveHelper
 	private boolean update;
 	private static final String __OBFID = "CL_00001573";
 
-	public EntityMoveHelper(EntityLiving par1EntityLiving)
+	public EntityMoveHelper(EntityLiving p_i1614_1_)
 	{
-		this.entity = par1EntityLiving;
-		this.posX = par1EntityLiving.posX;
-		this.posY = par1EntityLiving.posY;
-		this.posZ = par1EntityLiving.posZ;
+		this.entity = p_i1614_1_;
+		this.posX = p_i1614_1_.posX;
+		this.posY = p_i1614_1_.posY;
+		this.posZ = p_i1614_1_.posZ;
 	}
 
 	public boolean isUpdating()
@@ -32,12 +32,12 @@ public class EntityMoveHelper
 		return this.speed;
 	}
 
-	public void setMoveTo(double par1, double par3, double par5, double par7)
+	public void setMoveTo(double p_75642_1_, double p_75642_3_, double p_75642_5_, double p_75642_7_)
 	{
-		this.posX = par1;
-		this.posY = par3;
-		this.posZ = par5;
-		this.speed = par7;
+		this.posX = p_75642_1_;
+		this.posY = p_75642_3_;
+		this.posZ = p_75642_5_;
+		this.speed = p_75642_7_;
 		this.update = true;
 	}
 
@@ -68,20 +68,20 @@ public class EntityMoveHelper
 		}
 	}
 
-	private float limitAngle(float par1, float par2, float par3)
+	private float limitAngle(float p_75639_1_, float p_75639_2_, float p_75639_3_)
 	{
-		float f3 = MathHelper.wrapAngleTo180_float(par2 - par1);
+		float f3 = MathHelper.wrapAngleTo180_float(p_75639_2_ - p_75639_1_);
 
-		if (f3 > par3)
+		if (f3 > p_75639_3_)
 		{
-			f3 = par3;
+			f3 = p_75639_3_;
 		}
 
-		if (f3 < -par3)
+		if (f3 < -p_75639_3_)
 		{
-			f3 = -par3;
+			f3 = -p_75639_3_;
 		}
 
-		return par1 + f3;
+		return p_75639_1_ + f3;
 	}
 }

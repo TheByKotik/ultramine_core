@@ -21,15 +21,15 @@ public class RenderTNTPrimed extends Render
 		this.shadowSize = 0.5F;
 	}
 
-	public void doRender(EntityTNTPrimed par1EntityTNTPrimed, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityTNTPrimed p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
+		GL11.glTranslatef((float)p_76986_2_, (float)p_76986_4_, (float)p_76986_6_);
 		float f2;
 
-		if ((float)par1EntityTNTPrimed.fuse - par9 + 1.0F < 10.0F)
+		if ((float)p_76986_1_.fuse - p_76986_9_ + 1.0F < 10.0F)
 		{
-			f2 = 1.0F - ((float)par1EntityTNTPrimed.fuse - par9 + 1.0F) / 10.0F;
+			f2 = 1.0F - ((float)p_76986_1_.fuse - p_76986_9_ + 1.0F) / 10.0F;
 
 			if (f2 < 0.0F)
 			{
@@ -47,11 +47,11 @@ public class RenderTNTPrimed extends Render
 			GL11.glScalef(f3, f3, f3);
 		}
 
-		f2 = (1.0F - ((float)par1EntityTNTPrimed.fuse - par9 + 1.0F) / 100.0F) * 0.8F;
-		this.bindEntityTexture(par1EntityTNTPrimed);
-		this.blockRenderer.renderBlockAsItem(Blocks.tnt, 0, par1EntityTNTPrimed.getBrightness(par9));
+		f2 = (1.0F - ((float)p_76986_1_.fuse - p_76986_9_ + 1.0F) / 100.0F) * 0.8F;
+		this.bindEntityTexture(p_76986_1_);
+		this.blockRenderer.renderBlockAsItem(Blocks.tnt, 0, p_76986_1_.getBrightness(p_76986_9_));
 
-		if (par1EntityTNTPrimed.fuse / 5 % 2 == 0)
+		if (p_76986_1_.fuse / 5 % 2 == 0)
 		{
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glDisable(GL11.GL_LIGHTING);
@@ -68,18 +68,18 @@ public class RenderTNTPrimed extends Render
 		GL11.glPopMatrix();
 	}
 
-	protected ResourceLocation getEntityTexture(EntityTNTPrimed par1EntityTNTPrimed)
+	protected ResourceLocation getEntityTexture(EntityTNTPrimed p_110775_1_)
 	{
 		return TextureMap.locationBlocksTexture;
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityTNTPrimed)par1Entity);
+		return this.getEntityTexture((EntityTNTPrimed)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityTNTPrimed)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityTNTPrimed)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

@@ -39,15 +39,15 @@ public class NetHandlerHandshakeTCP implements INetHandlerHandshakeServer
 				this.field_147386_b.setConnectionState(EnumConnectionState.LOGIN);
 				ChatComponentText chatcomponenttext;
 
-				if (p_147383_1_.func_149595_d() > 4)
+				if (p_147383_1_.func_149595_d() > 5)
 				{
-					chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.7.2");
+					chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.7.10");
 					this.field_147386_b.scheduleOutboundPacket(new S00PacketDisconnect(chatcomponenttext), new GenericFutureListener[0]);
 					this.field_147386_b.closeChannel(chatcomponenttext);
 				}
-				else if (p_147383_1_.func_149595_d() < 4)
+				else if (p_147383_1_.func_149595_d() < 5)
 				{
-					chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.7.2");
+					chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.7.10");
 					this.field_147386_b.scheduleOutboundPacket(new S00PacketDisconnect(chatcomponenttext), new GenericFutureListener[0]);
 					this.field_147386_b.closeChannel(chatcomponenttext);
 				}

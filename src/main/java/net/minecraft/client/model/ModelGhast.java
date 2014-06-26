@@ -35,27 +35,27 @@ public class ModelGhast extends ModelBase
 		}
 	}
 
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity)
+	public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity p_78087_7_)
 	{
 		for (int i = 0; i < this.tentacles.length; ++i)
 		{
-			this.tentacles[i].rotateAngleX = 0.2F * MathHelper.sin(par3 * 0.3F + (float)i) + 0.4F;
+			this.tentacles[i].rotateAngleX = 0.2F * MathHelper.sin(p_78087_3_ * 0.3F + (float)i) + 0.4F;
 		}
 	}
 
-	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(Entity p_78088_1_, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_)
 	{
-		this.setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
+		this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, p_78088_7_, p_78088_1_);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.0F, 0.6F, 0.0F);
-		this.body.render(par7);
+		this.body.render(p_78088_7_);
 		ModelRenderer[] amodelrenderer = this.tentacles;
 		int i = amodelrenderer.length;
 
 		for (int j = 0; j < i; ++j)
 		{
 			ModelRenderer modelrenderer = amodelrenderer[j];
-			modelrenderer.render(par7);
+			modelrenderer.render(p_78088_7_);
 		}
 
 		GL11.glPopMatrix();

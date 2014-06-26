@@ -16,14 +16,14 @@ public class EntityPainting extends EntityHanging
 	public EntityPainting.EnumArt art;
 	private static final String __OBFID = "CL_00001556";
 
-	public EntityPainting(World par1World)
+	public EntityPainting(World p_i1599_1_)
 	{
-		super(par1World);
+		super(p_i1599_1_);
 	}
 
-	public EntityPainting(World par1World, int par2, int par3, int par4, int par5)
+	public EntityPainting(World p_i1600_1_, int p_i1600_2_, int p_i1600_3_, int p_i1600_4_, int p_i1600_5_)
 	{
-		super(par1World, par2, par3, par4, par5);
+		super(p_i1600_1_, p_i1600_2_, p_i1600_3_, p_i1600_4_, p_i1600_5_);
 		ArrayList arraylist = new ArrayList();
 		EntityPainting.EnumArt[] aenumart = EntityPainting.EnumArt.values();
 		int i1 = aenumart.length;
@@ -32,7 +32,7 @@ public class EntityPainting extends EntityHanging
 		{
 			EntityPainting.EnumArt enumart = aenumart[j1];
 			this.art = enumart;
-			this.setDirection(par5);
+			this.setDirection(p_i1600_5_);
 
 			if (this.onValidSurface())
 			{
@@ -45,13 +45,13 @@ public class EntityPainting extends EntityHanging
 			this.art = (EntityPainting.EnumArt)arraylist.get(this.rand.nextInt(arraylist.size()));
 		}
 
-		this.setDirection(par5);
+		this.setDirection(p_i1600_5_);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public EntityPainting(World par1World, int par2, int par3, int par4, int par5, String par6Str)
+	public EntityPainting(World p_i1601_1_, int p_i1601_2_, int p_i1601_3_, int p_i1601_4_, int p_i1601_5_, String p_i1601_6_)
 	{
-		this(par1World, par2, par3, par4, par5);
+		this(p_i1601_1_, p_i1601_2_, p_i1601_3_, p_i1601_4_, p_i1601_5_);
 		EntityPainting.EnumArt[] aenumart = EntityPainting.EnumArt.values();
 		int i1 = aenumart.length;
 
@@ -59,25 +59,25 @@ public class EntityPainting extends EntityHanging
 		{
 			EntityPainting.EnumArt enumart = aenumart[j1];
 
-			if (enumart.title.equals(par6Str))
+			if (enumart.title.equals(p_i1601_6_))
 			{
 				this.art = enumart;
 				break;
 			}
 		}
 
-		this.setDirection(par5);
+		this.setDirection(p_i1601_5_);
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		par1NBTTagCompound.setString("Motive", this.art.title);
-		super.writeEntityToNBT(par1NBTTagCompound);
+		p_70014_1_.setString("Motive", this.art.title);
+		super.writeEntityToNBT(p_70014_1_);
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		String s = par1NBTTagCompound.getString("Motive");
+		String s = p_70037_1_.getString("Motive");
 		EntityPainting.EnumArt[] aenumart = EntityPainting.EnumArt.values();
 		int i = aenumart.length;
 
@@ -96,7 +96,7 @@ public class EntityPainting extends EntityHanging
 			this.art = EntityPainting.EnumArt.Kebab;
 		}
 
-		super.readEntityFromNBT(par1NBTTagCompound);
+		super.readEntityFromNBT(p_70037_1_);
 	}
 
 	public int getWidthPixels()
@@ -109,11 +109,11 @@ public class EntityPainting extends EntityHanging
 		return this.art.sizeY;
 	}
 
-	public void onBroken(Entity par1Entity)
+	public void onBroken(Entity p_110128_1_)
 	{
-		if (par1Entity instanceof EntityPlayer)
+		if (p_110128_1_ instanceof EntityPlayer)
 		{
-			EntityPlayer entityplayer = (EntityPlayer)par1Entity;
+			EntityPlayer entityplayer = (EntityPlayer)p_110128_1_;
 
 			if (entityplayer.capabilities.isCreativeMode)
 			{
@@ -161,13 +161,13 @@ public class EntityPainting extends EntityHanging
 
 		private static final String __OBFID = "CL_00001557";
 
-		private EnumArt(String par3Str, int par4, int par5, int par6, int par7)
+		private EnumArt(String p_i1598_3_, int p_i1598_4_, int p_i1598_5_, int p_i1598_6_, int p_i1598_7_)
 		{
-			this.title = par3Str;
-			this.sizeX = par4;
-			this.sizeY = par5;
-			this.offsetX = par6;
-			this.offsetY = par7;
+			this.title = p_i1598_3_;
+			this.sizeX = p_i1598_4_;
+			this.sizeY = p_i1598_5_;
+			this.offsetX = p_i1598_6_;
+			this.offsetY = p_i1598_7_;
 		}
 	}
 }

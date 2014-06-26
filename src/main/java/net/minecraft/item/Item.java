@@ -414,9 +414,9 @@ public class Item
 		}
 	}
 
-	public Item setMaxStackSize(int par1)
+	public Item setMaxStackSize(int p_77625_1_)
 	{
-		this.maxStackSize = par1;
+		this.maxStackSize = p_77625_1_;
 		return this;
 	}
 
@@ -427,18 +427,18 @@ public class Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int par1)
+	public IIcon getIconFromDamage(int p_77617_1_)
 	{
 		return this.itemIcon;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconIndex(ItemStack par1ItemStack)
+	public IIcon getIconIndex(ItemStack p_77650_1_)
 	{
-		return this.getIconFromDamage(par1ItemStack.getItemDamage());
+		return this.getIconFromDamage(p_77650_1_.getItemDamage());
 	}
 
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
 		return false;
 	}
@@ -448,14 +448,14 @@ public class Item
 		return 1.0F;
 	}
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
 	{
-		return par1ItemStack;
+		return p_77659_1_;
 	}
 
-	public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onEaten(ItemStack p_77654_1_, World p_77654_2_, EntityPlayer p_77654_3_)
 	{
-		return par1ItemStack;
+		return p_77654_1_;
 	}
 
 	@Deprecated
@@ -464,7 +464,7 @@ public class Item
 		return this.maxStackSize;
 	}
 
-	public int getMetadata(int par1)
+	public int getMetadata(int p_77647_1_)
 	{
 		return 0;
 	}
@@ -474,9 +474,9 @@ public class Item
 		return this.hasSubtypes;
 	}
 
-	public Item setHasSubtypes(boolean par1)
+	public Item setHasSubtypes(boolean p_77627_1_)
 	{
-		this.hasSubtypes = par1;
+		this.hasSubtypes = p_77627_1_;
 		return this;
 	}
 
@@ -485,9 +485,9 @@ public class Item
 		return this.maxDamage;
 	}
 
-	public Item setMaxDamage(int par1)
+	public Item setMaxDamage(int p_77656_1_)
 	{
-		this.maxDamage = par1;
+		this.maxDamage = p_77656_1_;
 		return this;
 	}
 
@@ -496,7 +496,7 @@ public class Item
 		return this.maxDamage > 0 && !this.hasSubtypes;
 	}
 
-	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase)
+	public boolean hitEntity(ItemStack p_77644_1_, EntityLivingBase p_77644_2_, EntityLivingBase p_77644_3_)
 	{
 		return false;
 	}
@@ -511,7 +511,7 @@ public class Item
 		return false;
 	}
 
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase)
+	public boolean itemInteractionForEntity(ItemStack p_111207_1_, EntityPlayer p_111207_2_, EntityLivingBase p_111207_3_)
 	{
 		return false;
 	}
@@ -534,15 +534,15 @@ public class Item
 		return false;
 	}
 
-	public Item setUnlocalizedName(String par1Str)
+	public Item setUnlocalizedName(String p_77655_1_)
 	{
-		this.unlocalizedName = par1Str;
+		this.unlocalizedName = p_77655_1_;
 		return this;
 	}
 
-	public String getUnlocalizedNameInefficiently(ItemStack par1ItemStack)
+	public String getUnlocalizedNameInefficiently(ItemStack p_77657_1_)
 	{
-		String s = this.getUnlocalizedName(par1ItemStack);
+		String s = this.getUnlocalizedName(p_77657_1_);
 		return s == null ? "" : StatCollector.translateToLocal(s);
 	}
 
@@ -551,18 +551,18 @@ public class Item
 		return "item." + this.unlocalizedName;
 	}
 
-	public String getUnlocalizedName(ItemStack par1ItemStack)
+	public String getUnlocalizedName(ItemStack p_77667_1_)
 	{
 		return "item." + this.unlocalizedName;
 	}
 
-	public Item setContainerItem(Item par1Item)
+	public Item setContainerItem(Item p_77642_1_)
 	{
-		this.containerItem = par1Item;
+		this.containerItem = p_77642_1_;
 		return this;
 	}
 
-	public boolean doesContainerItemLeaveCraftingGrid(ItemStack par1ItemStack)
+	public boolean doesContainerItemLeaveCraftingGrid(ItemStack p_77630_1_)
 	{
 		return true;
 	}
@@ -584,35 +584,35 @@ public class Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	public int getColorFromItemStack(ItemStack p_82790_1_, int p_82790_2_)
 	{
 		return 16777215;
 	}
 
-	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {}
+	public void onUpdate(ItemStack p_77663_1_, World p_77663_2_, Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {}
 
-	public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {}
+	public void onCreated(ItemStack p_77622_1_, World p_77622_2_, EntityPlayer p_77622_3_) {}
 
 	public boolean isMap()
 	{
 		return false;
 	}
 
-	public EnumAction getItemUseAction(ItemStack par1ItemStack)
+	public EnumAction getItemUseAction(ItemStack p_77661_1_)
 	{
 		return EnumAction.none;
 	}
 
-	public int getMaxItemUseDuration(ItemStack par1ItemStack)
+	public int getMaxItemUseDuration(ItemStack p_77626_1_)
 	{
 		return 0;
 	}
 
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {}
+	public void onPlayerStoppedUsing(ItemStack p_77615_1_, World p_77615_2_, EntityPlayer p_77615_3_, int p_77615_4_) {}
 
-	public Item setPotionEffect(String par1Str)
+	public Item setPotionEffect(String p_77631_1_)
 	{
-		this.potionEffect = par1Str;
+		this.potionEffect = p_77631_1_;
 		return this;
 	}
 
@@ -627,39 +627,39 @@ public class Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {}
+	public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {}
 
-	public String getItemStackDisplayName(ItemStack par1ItemStack)
+	public String getItemStackDisplayName(ItemStack p_77653_1_)
 	{
-		return ("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(par1ItemStack) + ".name")).trim();
+		return ("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(p_77653_1_) + ".name")).trim();
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Deprecated
-	public boolean hasEffect(ItemStack par1ItemStack)
+	public boolean hasEffect(ItemStack p_77636_1_)
 	{
-		return par1ItemStack.isItemEnchanted();
+		return p_77636_1_.isItemEnchanted();
 	}
 
-	public EnumRarity getRarity(ItemStack par1ItemStack)
+	public EnumRarity getRarity(ItemStack p_77613_1_)
 	{
-		return par1ItemStack.isItemEnchanted() ? EnumRarity.rare : EnumRarity.common;
+		return p_77613_1_.isItemEnchanted() ? EnumRarity.rare : EnumRarity.common;
 	}
 
-	public boolean isItemTool(ItemStack par1ItemStack)
+	public boolean isItemTool(ItemStack p_77616_1_)
 	{
-		return this.getItemStackLimit(par1ItemStack) == 1 && this.isDamageable();
+		return this.getItemStackLimit(p_77616_1_) == 1 && this.isDamageable();
 	}
 
-	protected MovingObjectPosition getMovingObjectPositionFromPlayer(World par1World, EntityPlayer par2EntityPlayer, boolean par3)
+	protected MovingObjectPosition getMovingObjectPositionFromPlayer(World p_77621_1_, EntityPlayer p_77621_2_, boolean p_77621_3_)
 	{
 		float f = 1.0F;
-		float f1 = par2EntityPlayer.prevRotationPitch + (par2EntityPlayer.rotationPitch - par2EntityPlayer.prevRotationPitch) * f;
-		float f2 = par2EntityPlayer.prevRotationYaw + (par2EntityPlayer.rotationYaw - par2EntityPlayer.prevRotationYaw) * f;
-		double d0 = par2EntityPlayer.prevPosX + (par2EntityPlayer.posX - par2EntityPlayer.prevPosX) * (double)f;
-		double d1 = par2EntityPlayer.prevPosY + (par2EntityPlayer.posY - par2EntityPlayer.prevPosY) * (double)f + (double)(par1World.isRemote ? par2EntityPlayer.getEyeHeight() - par2EntityPlayer.getDefaultEyeHeight() : par2EntityPlayer.getEyeHeight()); // isRemote check to revert changes to ray trace position due to adding the eye height clientside and player yOffset differences
-		double d2 = par2EntityPlayer.prevPosZ + (par2EntityPlayer.posZ - par2EntityPlayer.prevPosZ) * (double)f;
-		Vec3 vec3 = par1World.getWorldVec3Pool().getVecFromPool(d0, d1, d2);
+		float f1 = p_77621_2_.prevRotationPitch + (p_77621_2_.rotationPitch - p_77621_2_.prevRotationPitch) * f;
+		float f2 = p_77621_2_.prevRotationYaw + (p_77621_2_.rotationYaw - p_77621_2_.prevRotationYaw) * f;
+		double d0 = p_77621_2_.prevPosX + (p_77621_2_.posX - p_77621_2_.prevPosX) * (double)f;
+		double d1 = p_77621_2_.prevPosY + (p_77621_2_.posY - p_77621_2_.prevPosY) * (double)f + (double)(p_77621_1_.isRemote ? p_77621_2_.getEyeHeight() - p_77621_2_.getDefaultEyeHeight() : p_77621_2_.getEyeHeight()); // isRemote check to revert changes to ray trace position due to adding the eye height clientside and player yOffset differences
+		double d2 = p_77621_2_.prevPosZ + (p_77621_2_.posZ - p_77621_2_.prevPosZ) * (double)f;
+		Vec3 vec3 = Vec3.createVectorHelper(d0, d1, d2);
 		float f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
 		float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
 		float f5 = -MathHelper.cos(-f1 * 0.017453292F);
@@ -667,12 +667,12 @@ public class Item
 		float f7 = f4 * f5;
 		float f8 = f3 * f5;
 		double d3 = 5.0D;
-		if (par2EntityPlayer instanceof EntityPlayerMP)
+		if (p_77621_2_ instanceof EntityPlayerMP)
 		{
-			d3 = ((EntityPlayerMP)par2EntityPlayer).theItemInWorldManager.getBlockReachDistance();
+			d3 = ((EntityPlayerMP)p_77621_2_).theItemInWorldManager.getBlockReachDistance();
 		}
 		Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
-		return par1World.func_147447_a(vec3, vec31, par3, !par3, false);
+		return p_77621_1_.func_147447_a(vec3, vec31, p_77621_3_, !p_77621_3_, false);
 	}
 
 	public int getItemEnchantability()
@@ -687,9 +687,9 @@ public class Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int par1, int par2)
+	public IIcon getIconFromDamageForRenderPass(int p_77618_1_, int p_77618_2_)
 	{
-		return this.getIconFromDamage(par1);
+		return this.getIconFromDamage(p_77618_1_);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -698,9 +698,9 @@ public class Item
 		p_150895_3_.add(new ItemStack(p_150895_1_, 1, 0));
 	}
 
-	public Item setCreativeTab(CreativeTabs par1CreativeTabs)
+	public Item setCreativeTab(CreativeTabs p_77637_1_)
 	{
-		this.tabToDisplayOn = par1CreativeTabs;
+		this.tabToDisplayOn = p_77637_1_;
 		return this;
 	}
 
@@ -715,15 +715,15 @@ public class Item
 		return true;
 	}
 
-	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack)
+	public boolean getIsRepairable(ItemStack p_82789_1_, ItemStack p_82789_2_)
 	{
 		return false;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister)
+	public void registerIcons(IIconRegister p_94581_1_)
 	{
-		this.itemIcon = par1IconRegister.registerIcon(this.getIconString());
+		this.itemIcon = p_94581_1_.registerIcon(this.getIconString());
 	}
 
 	@Deprecated
@@ -732,9 +732,9 @@ public class Item
 		return HashMultimap.create();
 	}
 
-	public Item setTextureName(String par1Str)
+	public Item setTextureName(String p_111206_1_)
 	{
-		this.iconString = par1Str;
+		this.iconString = p_111206_1_;
 		return this;
 	}
 
@@ -1326,13 +1326,13 @@ public class Item
 		//Added by forge for custom Tool materials.
 		public Item customCraftingMaterial = null;
 
-		private ToolMaterial(int par3, int par4, float par5, float par6, int par7)
+		private ToolMaterial(int p_i1874_3_, int p_i1874_4_, float p_i1874_5_, float p_i1874_6_, int p_i1874_7_)
 		{
-			this.harvestLevel = par3;
-			this.maxUses = par4;
-			this.efficiencyOnProperMaterial = par5;
-			this.damageVsEntity = par6;
-			this.enchantability = par7;
+			this.harvestLevel = p_i1874_3_;
+			this.maxUses = p_i1874_4_;
+			this.efficiencyOnProperMaterial = p_i1874_5_;
+			this.damageVsEntity = p_i1874_6_;
+			this.enchantability = p_i1874_7_;
 		}
 
 		public int getMaxUses()

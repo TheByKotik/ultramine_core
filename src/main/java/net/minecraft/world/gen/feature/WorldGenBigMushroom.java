@@ -11,10 +11,10 @@ public class WorldGenBigMushroom extends WorldGenerator
 	private int mushroomType = -1;
 	private static final String __OBFID = "CL_00000415";
 
-	public WorldGenBigMushroom(int par1)
+	public WorldGenBigMushroom(int p_i2017_1_)
 	{
 		super(true);
-		this.mushroomType = par1;
+		this.mushroomType = p_i2017_1_;
 	}
 
 	public WorldGenBigMushroom()
@@ -22,41 +22,41 @@ public class WorldGenBigMushroom extends WorldGenerator
 		super(false);
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		int l = par2Random.nextInt(2);
+		int l = p_76484_2_.nextInt(2);
 
 		if (this.mushroomType >= 0)
 		{
 			l = this.mushroomType;
 		}
 
-		int i1 = par2Random.nextInt(3) + 4;
+		int i1 = p_76484_2_.nextInt(3) + 4;
 		boolean flag = true;
 
-		if (par4 >= 1 && par4 + i1 + 1 < 256)
+		if (p_76484_4_ >= 1 && p_76484_4_ + i1 + 1 < 256)
 		{
 			int k1;
 			int l1;
 
-			for (int j1 = par4; j1 <= par4 + 1 + i1; ++j1)
+			for (int j1 = p_76484_4_; j1 <= p_76484_4_ + 1 + i1; ++j1)
 			{
 				byte b0 = 3;
 
-				if (j1 <= par4 + 3)
+				if (j1 <= p_76484_4_ + 3)
 				{
 					b0 = 0;
 				}
 
-				for (k1 = par3 - b0; k1 <= par3 + b0 && flag; ++k1)
+				for (k1 = p_76484_3_ - b0; k1 <= p_76484_3_ + b0 && flag; ++k1)
 				{
-					for (l1 = par5 - b0; l1 <= par5 + b0 && flag; ++l1)
+					for (l1 = p_76484_5_ - b0; l1 <= p_76484_5_ + b0 && flag; ++l1)
 					{
 						if (j1 >= 0 && j1 < 256)
 						{
-							Block block = par1World.getBlock(k1, j1, l1);
+							Block block = p_76484_1_.getBlock(k1, j1, l1);
 
-							if (!block.isAir(par1World, k1, j1, l1) && !block.isLeaves(par1World, k1, j1, l1))
+							if (!block.isAir(p_76484_1_, k1, j1, l1) && !block.isLeaves(p_76484_1_, k1, j1, l1))
 							{
 								flag = false;
 							}
@@ -75,7 +75,7 @@ public class WorldGenBigMushroom extends WorldGenerator
 			}
 			else
 			{
-				Block block1 = par1World.getBlock(par3, par4 - 1, par5);
+				Block block1 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ - 1, p_76484_5_);
 
 				if (block1 != Blocks.dirt && block1 != Blocks.grass && block1 != Blocks.mycelium)
 				{
@@ -83,18 +83,18 @@ public class WorldGenBigMushroom extends WorldGenerator
 				}
 				else
 				{
-					int k2 = par4 + i1;
+					int k2 = p_76484_4_ + i1;
 
 					if (l == 1)
 					{
-						k2 = par4 + i1 - 3;
+						k2 = p_76484_4_ + i1 - 3;
 					}
 
-					for (k1 = k2; k1 <= par4 + i1; ++k1)
+					for (k1 = k2; k1 <= p_76484_4_ + i1; ++k1)
 					{
 						l1 = 1;
 
-						if (k1 < par4 + i1)
+						if (k1 < p_76484_4_ + i1)
 						{
 							++l1;
 						}
@@ -104,88 +104,88 @@ public class WorldGenBigMushroom extends WorldGenerator
 							l1 = 3;
 						}
 
-						for (int l2 = par3 - l1; l2 <= par3 + l1; ++l2)
+						for (int l2 = p_76484_3_ - l1; l2 <= p_76484_3_ + l1; ++l2)
 						{
-							for (int i2 = par5 - l1; i2 <= par5 + l1; ++i2)
+							for (int i2 = p_76484_5_ - l1; i2 <= p_76484_5_ + l1; ++i2)
 							{
 								int j2 = 5;
 
-								if (l2 == par3 - l1)
+								if (l2 == p_76484_3_ - l1)
 								{
 									--j2;
 								}
 
-								if (l2 == par3 + l1)
+								if (l2 == p_76484_3_ + l1)
 								{
 									++j2;
 								}
 
-								if (i2 == par5 - l1)
+								if (i2 == p_76484_5_ - l1)
 								{
 									j2 -= 3;
 								}
 
-								if (i2 == par5 + l1)
+								if (i2 == p_76484_5_ + l1)
 								{
 									j2 += 3;
 								}
 
-								if (l == 0 || k1 < par4 + i1)
+								if (l == 0 || k1 < p_76484_4_ + i1)
 								{
-									if ((l2 == par3 - l1 || l2 == par3 + l1) && (i2 == par5 - l1 || i2 == par5 + l1))
+									if ((l2 == p_76484_3_ - l1 || l2 == p_76484_3_ + l1) && (i2 == p_76484_5_ - l1 || i2 == p_76484_5_ + l1))
 									{
 										continue;
 									}
 
-									if (l2 == par3 - (l1 - 1) && i2 == par5 - l1)
+									if (l2 == p_76484_3_ - (l1 - 1) && i2 == p_76484_5_ - l1)
 									{
 										j2 = 1;
 									}
 
-									if (l2 == par3 - l1 && i2 == par5 - (l1 - 1))
+									if (l2 == p_76484_3_ - l1 && i2 == p_76484_5_ - (l1 - 1))
 									{
 										j2 = 1;
 									}
 
-									if (l2 == par3 + (l1 - 1) && i2 == par5 - l1)
+									if (l2 == p_76484_3_ + (l1 - 1) && i2 == p_76484_5_ - l1)
 									{
 										j2 = 3;
 									}
 
-									if (l2 == par3 + l1 && i2 == par5 - (l1 - 1))
+									if (l2 == p_76484_3_ + l1 && i2 == p_76484_5_ - (l1 - 1))
 									{
 										j2 = 3;
 									}
 
-									if (l2 == par3 - (l1 - 1) && i2 == par5 + l1)
+									if (l2 == p_76484_3_ - (l1 - 1) && i2 == p_76484_5_ + l1)
 									{
 										j2 = 7;
 									}
 
-									if (l2 == par3 - l1 && i2 == par5 + (l1 - 1))
+									if (l2 == p_76484_3_ - l1 && i2 == p_76484_5_ + (l1 - 1))
 									{
 										j2 = 7;
 									}
 
-									if (l2 == par3 + (l1 - 1) && i2 == par5 + l1)
+									if (l2 == p_76484_3_ + (l1 - 1) && i2 == p_76484_5_ + l1)
 									{
 										j2 = 9;
 									}
 
-									if (l2 == par3 + l1 && i2 == par5 + (l1 - 1))
+									if (l2 == p_76484_3_ + l1 && i2 == p_76484_5_ + (l1 - 1))
 									{
 										j2 = 9;
 									}
 								}
 
-								if (j2 == 5 && k1 < par4 + i1)
+								if (j2 == 5 && k1 < p_76484_4_ + i1)
 								{
 									j2 = 0;
 								}
 
-								if ((j2 != 0 || par4 >= par4 + i1 - 1) && par1World.getBlock(l2, k1, i2).canBeReplacedByLeaves(par1World, l2, k1, i2))
+								if ((j2 != 0 || p_76484_4_ >= p_76484_4_ + i1 - 1) && p_76484_1_.getBlock(l2, k1, i2).canBeReplacedByLeaves(p_76484_1_, l2, k1, i2))
 								{
-									this.setBlockAndNotifyAdequately(par1World, l2, k1, i2, Block.getBlockById(Block.getIdFromBlock(Blocks.brown_mushroom_block) + l), j2);
+									this.setBlockAndNotifyAdequately(p_76484_1_, l2, k1, i2, Block.getBlockById(Block.getIdFromBlock(Blocks.brown_mushroom_block) + l), j2);
 								}
 							}
 						}
@@ -193,11 +193,11 @@ public class WorldGenBigMushroom extends WorldGenerator
 
 					for (k1 = 0; k1 < i1; ++k1)
 					{
-						Block block2 = par1World.getBlock(par3, par4 + k1, par5);
+						Block block2 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + k1, p_76484_5_);
 
-						if (block2.canBeReplacedByLeaves(par1World, par3, par4 + k1, par5))
+						if (block2.canBeReplacedByLeaves(p_76484_1_, p_76484_3_, p_76484_4_ + k1, p_76484_5_))
 						{
-							this.setBlockAndNotifyAdequately(par1World, par3, par4 + k1, par5, Block.getBlockById(Block.getIdFromBlock(Blocks.brown_mushroom_block) + l), 10);
+							this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + k1, p_76484_5_, Block.getBlockById(Block.getIdFromBlock(Blocks.brown_mushroom_block) + l), 10);
 						}
 					}
 

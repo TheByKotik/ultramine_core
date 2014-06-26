@@ -6,10 +6,6 @@ import java.nio.ByteBuffer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraftforge.client.MinecraftForgeClient;
-import static org.lwjgl.opengl.EXTPackedDepthStencil.*;
-import static org.lwjgl.opengl.EXTFramebufferObject.*;
-import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -59,7 +55,7 @@ public class Framebuffer
 
 			this.createFramebuffer(p_147613_1_, p_147613_2_);
 			this.checkFramebufferComplete();
-			EXTFramebufferObject.glBindFramebufferEXT(36160, 0);
+			OpenGlHelper.func_153171_g(OpenGlHelper.field_153198_e, 0);
 		}
 	}
 
@@ -72,7 +68,7 @@ public class Framebuffer
 
 			if (this.depthBuffer > -1)
 			{
-				EXTFramebufferObject.glDeleteRenderbuffersEXT(this.depthBuffer);
+				OpenGlHelper.func_153184_g(this.depthBuffer);
 				this.depthBuffer = -1;
 			}
 
@@ -84,8 +80,8 @@ public class Framebuffer
 
 			if (this.framebufferObject > -1)
 			{
-				EXTFramebufferObject.glBindFramebufferEXT(36160, 0);
-				EXTFramebufferObject.glDeleteFramebuffersEXT(this.framebufferObject);
+				OpenGlHelper.func_153171_g(OpenGlHelper.field_153198_e, 0);
+				OpenGlHelper.func_153174_h(this.framebufferObject);
 				this.framebufferObject = -1;
 			}
 		}
@@ -104,33 +100,33 @@ public class Framebuffer
 		}
 		else
 		{
-			this.framebufferObject = EXTFramebufferObject.glGenFramebuffersEXT();
+			this.framebufferObject = OpenGlHelper.func_153165_e();
 			this.framebufferTexture = TextureUtil.glGenTextures();
 
 			if (this.useDepth)
 			{
-				this.depthBuffer = EXTFramebufferObject.glGenRenderbuffersEXT();
+				this.depthBuffer = OpenGlHelper.func_153185_f();
 			}
 
-			this.setFramebufferFilter(9729);
+			this.setFramebufferFilter(9728);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.framebufferTexture);
 			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, this.framebufferTextureWidth, this.framebufferTextureHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer)null);
-			EXTFramebufferObject.glBindFramebufferEXT(36160, this.framebufferObject);
-			EXTFramebufferObject.glFramebufferTexture2DEXT(36160, 36064, 3553, this.framebufferTexture, 0);
+			OpenGlHelper.func_153171_g(OpenGlHelper.field_153198_e, this.framebufferObject);
+			OpenGlHelper.func_153188_a(OpenGlHelper.field_153198_e, OpenGlHelper.field_153200_g, 3553, this.framebufferTexture, 0);
 
 			if (this.useDepth)
 			{
-				EXTFramebufferObject.glBindRenderbufferEXT(36161, this.depthBuffer);
-				if (MinecraftForgeClient.getStencilBits() == 0)
+				OpenGlHelper.func_153176_h(OpenGlHelper.field_153199_f, this.depthBuffer);
+				if (net.minecraftforge.client.MinecraftForgeClient.getStencilBits() == 0)
 				{
-				EXTFramebufferObject.glRenderbufferStorageEXT(36161, 33190, this.framebufferTextureWidth, this.framebufferTextureHeight);
-				EXTFramebufferObject.glFramebufferRenderbufferEXT(36160, 36096, 36161, this.depthBuffer);
+				OpenGlHelper.func_153186_a(OpenGlHelper.field_153199_f, 33190, this.framebufferTextureWidth, this.framebufferTextureHeight);
+				OpenGlHelper.func_153190_b(OpenGlHelper.field_153198_e, OpenGlHelper.field_153201_h, OpenGlHelper.field_153199_f, this.depthBuffer);
 				}
 				else
 				{
-					EXTFramebufferObject.glRenderbufferStorageEXT(36161, GL_DEPTH24_STENCIL8_EXT, this.framebufferTextureWidth, this.framebufferTextureHeight);
-					EXTFramebufferObject.glFramebufferRenderbufferEXT(36160, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, this.depthBuffer);
-					EXTFramebufferObject.glFramebufferRenderbufferEXT(36160, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, this.depthBuffer);
+					OpenGlHelper.func_153186_a(OpenGlHelper.field_153199_f, org.lwjgl.opengl.EXTPackedDepthStencil.GL_DEPTH24_STENCIL8_EXT, this.framebufferTextureWidth, this.framebufferTextureHeight);
+					OpenGlHelper.func_153190_b(OpenGlHelper.field_153198_e, org.lwjgl.opengl.EXTFramebufferObject.GL_DEPTH_ATTACHMENT_EXT, OpenGlHelper.field_153199_f, this.depthBuffer);
+					OpenGlHelper.func_153190_b(OpenGlHelper.field_153198_e, org.lwjgl.opengl.EXTFramebufferObject.GL_DEPTH_ATTACHMENT_EXT, OpenGlHelper.field_153199_f, this.depthBuffer);
 				}
 			}
 
@@ -155,27 +151,30 @@ public class Framebuffer
 
 	public void checkFramebufferComplete()
 	{
-		int i = EXTFramebufferObject.glCheckFramebufferStatusEXT(36160);
+		int i = OpenGlHelper.func_153167_i(OpenGlHelper.field_153198_e);
 
-		switch (i)
+		if (i != OpenGlHelper.field_153202_i)
 		{
-			case 36053:
-				return;
-			case 36054:
-				throw new RuntimeException("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
-			case 36055:
-				throw new RuntimeException("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT");
-			case 36056:
-			default:
-				throw new RuntimeException("glCheckFramebufferStatusEXT returned unknown status:" + i);
-			case 36057:
-				throw new RuntimeException("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT");
-			case 36058:
-				throw new RuntimeException("GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT");
-			case 36059:
-				throw new RuntimeException("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT");
-			case 36060:
-				throw new RuntimeException("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT");
+			if (i == OpenGlHelper.field_153203_j)
+			{
+				throw new RuntimeException("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
+			}
+			else if (i == OpenGlHelper.field_153204_k)
+			{
+				throw new RuntimeException("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT");
+			}
+			else if (i == OpenGlHelper.field_153205_l)
+			{
+				throw new RuntimeException("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER");
+			}
+			else if (i == OpenGlHelper.field_153206_m)
+			{
+				throw new RuntimeException("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER");
+			}
+			else
+			{
+				throw new RuntimeException("glCheckFramebufferStatus returned unknown status:" + i);
+			}
 		}
 	}
 
@@ -199,7 +198,7 @@ public class Framebuffer
 	{
 		if (OpenGlHelper.isFramebufferEnabled())
 		{
-			EXTFramebufferObject.glBindFramebufferEXT(36160, this.framebufferObject);
+			OpenGlHelper.func_153171_g(OpenGlHelper.field_153198_e, this.framebufferObject);
 
 			if (p_147610_1_)
 			{
@@ -212,7 +211,7 @@ public class Framebuffer
 	{
 		if (OpenGlHelper.isFramebufferEnabled())
 		{
-			EXTFramebufferObject.glBindFramebufferEXT(36160, 0);
+			OpenGlHelper.func_153171_g(OpenGlHelper.field_153198_e, 0);
 		}
 	}
 

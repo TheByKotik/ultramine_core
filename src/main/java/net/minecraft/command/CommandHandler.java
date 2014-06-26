@@ -24,16 +24,16 @@ public class CommandHandler implements ICommandManager
 	private final Set commandSet = new HashSet();
 	private static final String __OBFID = "CL_00001765";
 
-	public int executeCommand(ICommandSender par1ICommandSender, String par2Str)
+	public int executeCommand(ICommandSender p_71556_1_, String p_71556_2_)
 	{
-		par2Str = par2Str.trim();
+		p_71556_2_ = p_71556_2_.trim();
 
-		if (par2Str.startsWith("/"))
+		if (p_71556_2_.startsWith("/"))
 		{
-			par2Str = par2Str.substring(1);
+			p_71556_2_ = p_71556_2_.substring(1);
 		}
 
-		String[] astring = par2Str.split(" ");
+		String[] astring = p_71556_2_.split(" ");
 		String s1 = astring[0];
 		astring = dropFirstString(astring);
 		ICommand icommand = (ICommand)this.commandMap.get(s1);
@@ -48,9 +48,9 @@ public class CommandHandler implements ICommandManager
 				throw new CommandNotFoundException();
 			}
 
-			if (icommand.canCommandSenderUseCommand(par1ICommandSender))
+			if (icommand.canCommandSenderUseCommand(p_71556_1_))
 			{
-				CommandEvent event = new CommandEvent(icommand, par1ICommandSender, astring);
+				CommandEvent event = new CommandEvent(icommand, p_71556_1_, astring);
 				if (MinecraftForge.EVENT_BUS.post(event))
 				{
 					if (event.exception != null)
@@ -62,7 +62,7 @@ public class CommandHandler implements ICommandManager
 
 				if (i > -1)
 				{
-					EntityPlayerMP[] aentityplayermp = PlayerSelector.matchPlayers(par1ICommandSender, astring[i]);
+					EntityPlayerMP[] aentityplayermp = PlayerSelector.matchPlayers(p_71556_1_, astring[i]);
 					String s2 = astring[i];
 					EntityPlayerMP[] aentityplayermp1 = aentityplayermp;
 					int k = aentityplayermp.length;
@@ -74,14 +74,14 @@ public class CommandHandler implements ICommandManager
 
 						try
 						{
-							icommand.processCommand(par1ICommandSender, astring);
+							icommand.processCommand(p_71556_1_, astring);
 							++j;
 						}
-						catch (CommandException commandexception)
+						catch (CommandException commandexception1)
 						{
-							ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation(commandexception.getMessage(), commandexception.getErrorOjbects());
+							ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation(commandexception1.getMessage(), commandexception1.getErrorOjbects());
 							chatcomponenttranslation1.getChatStyle().setColor(EnumChatFormatting.RED);
-							par1ICommandSender.addChatMessage(chatcomponenttranslation1);
+							p_71556_1_.addChatMessage(chatcomponenttranslation1);
 						}
 					}
 
@@ -89,45 +89,54 @@ public class CommandHandler implements ICommandManager
 				}
 				else
 				{
-					icommand.processCommand(par1ICommandSender, astring);
-					++j;
+					try
+					{
+						icommand.processCommand(p_71556_1_, astring);
+						++j;
+					}
+					catch (CommandException commandexception)
+					{
+						chatcomponenttranslation = new ChatComponentTranslation(commandexception.getMessage(), commandexception.getErrorOjbects());
+						chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
+						p_71556_1_.addChatMessage(chatcomponenttranslation);
+					}
 				}
 			}
 			else
 			{
 				ChatComponentTranslation chatcomponenttranslation2 = new ChatComponentTranslation("commands.generic.permission", new Object[0]);
 				chatcomponenttranslation2.getChatStyle().setColor(EnumChatFormatting.RED);
-				par1ICommandSender.addChatMessage(chatcomponenttranslation2);
+				p_71556_1_.addChatMessage(chatcomponenttranslation2);
 			}
 		}
 		catch (WrongUsageException wrongusageexception)
 		{
 			chatcomponenttranslation = new ChatComponentTranslation("commands.generic.usage", new Object[] {new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.getErrorOjbects())});
 			chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
-			par1ICommandSender.addChatMessage(chatcomponenttranslation);
+			p_71556_1_.addChatMessage(chatcomponenttranslation);
 		}
-		catch (CommandException commandexception1)
+		catch (CommandException commandexception2)
 		{
-			chatcomponenttranslation = new ChatComponentTranslation(commandexception1.getMessage(), commandexception1.getErrorOjbects());
+			chatcomponenttranslation = new ChatComponentTranslation(commandexception2.getMessage(), commandexception2.getErrorOjbects());
 			chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
-			par1ICommandSender.addChatMessage(chatcomponenttranslation);
+			p_71556_1_.addChatMessage(chatcomponenttranslation);
 		}
 		catch (Throwable throwable)
 		{
 			chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception", new Object[0]);
 			chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
-			par1ICommandSender.addChatMessage(chatcomponenttranslation);
-			logger.error("Couldn\'t process command", throwable);
+			p_71556_1_.addChatMessage(chatcomponenttranslation);
+			logger.error("Couldn\'t process command: \'" + p_71556_2_ + "\'", throwable);
 		}
 
 		return j;
 	}
 
-	public ICommand registerCommand(ICommand par1ICommand)
+	public ICommand registerCommand(ICommand p_71560_1_)
 	{
-		List list = par1ICommand.getCommandAliases();
-		this.commandMap.put(par1ICommand.getCommandName(), par1ICommand);
-		this.commandSet.add(par1ICommand);
+		List list = p_71560_1_.getCommandAliases();
+		this.commandMap.put(p_71560_1_.getCommandName(), p_71560_1_);
+		this.commandSet.add(p_71560_1_);
 
 		if (list != null)
 		{
@@ -140,29 +149,29 @@ public class CommandHandler implements ICommandManager
 
 				if (icommand1 == null || !icommand1.getCommandName().equals(s))
 				{
-					this.commandMap.put(s, par1ICommand);
+					this.commandMap.put(s, p_71560_1_);
 				}
 			}
 		}
 
-		return par1ICommand;
+		return p_71560_1_;
 	}
 
-	private static String[] dropFirstString(String[] par0ArrayOfStr)
+	private static String[] dropFirstString(String[] p_71559_0_)
 	{
-		String[] astring1 = new String[par0ArrayOfStr.length - 1];
+		String[] astring1 = new String[p_71559_0_.length - 1];
 
-		for (int i = 1; i < par0ArrayOfStr.length; ++i)
+		for (int i = 1; i < p_71559_0_.length; ++i)
 		{
-			astring1[i - 1] = par0ArrayOfStr[i];
+			astring1[i - 1] = p_71559_0_[i];
 		}
 
 		return astring1;
 	}
 
-	public List getPossibleCommands(ICommandSender par1ICommandSender, String par2Str)
+	public List getPossibleCommands(ICommandSender p_71558_1_, String p_71558_2_)
 	{
-		String[] astring = par2Str.split(" ", -1);
+		String[] astring = p_71558_2_.split(" ", -1);
 		String s1 = astring[0];
 
 		if (astring.length == 1)
@@ -174,7 +183,7 @@ public class CommandHandler implements ICommandManager
 			{
 				Entry entry = (Entry)iterator.next();
 
-				if (CommandBase.doesStringStartWith(s1, (String)entry.getKey()) && ((ICommand)entry.getValue()).canCommandSenderUseCommand(par1ICommandSender))
+				if (CommandBase.doesStringStartWith(s1, (String)entry.getKey()) && ((ICommand)entry.getValue()).canCommandSenderUseCommand(p_71558_1_))
 				{
 					arraylist.add(entry.getKey());
 				}
@@ -190,7 +199,7 @@ public class CommandHandler implements ICommandManager
 
 				if (icommand != null)
 				{
-					return icommand.addTabCompletionOptions(par1ICommandSender, dropFirstString(astring));
+					return icommand.addTabCompletionOptions(p_71558_1_, dropFirstString(astring));
 				}
 			}
 
@@ -198,7 +207,7 @@ public class CommandHandler implements ICommandManager
 		}
 	}
 
-	public List getPossibleCommands(ICommandSender par1ICommandSender)
+	public List getPossibleCommands(ICommandSender p_71557_1_)
 	{
 		ArrayList arraylist = new ArrayList();
 		Iterator iterator = this.commandSet.iterator();
@@ -207,7 +216,7 @@ public class CommandHandler implements ICommandManager
 		{
 			ICommand icommand = (ICommand)iterator.next();
 
-			if (icommand.canCommandSenderUseCommand(par1ICommandSender))
+			if (icommand.canCommandSenderUseCommand(p_71557_1_))
 			{
 				arraylist.add(icommand);
 			}
@@ -221,17 +230,17 @@ public class CommandHandler implements ICommandManager
 		return this.commandMap;
 	}
 
-	private int getUsernameIndex(ICommand par1ICommand, String[] par2ArrayOfStr)
+	private int getUsernameIndex(ICommand p_82370_1_, String[] p_82370_2_)
 	{
-		if (par1ICommand == null)
+		if (p_82370_1_ == null)
 		{
 			return -1;
 		}
 		else
 		{
-			for (int i = 0; i < par2ArrayOfStr.length; ++i)
+			for (int i = 0; i < p_82370_2_.length; ++i)
 			{
-				if (par1ICommand.isUsernameIndex(par2ArrayOfStr, i) && PlayerSelector.matchesMultiplePlayers(par2ArrayOfStr[i]))
+				if (p_82370_1_.isUsernameIndex(p_82370_2_, i) && PlayerSelector.matchesMultiplePlayers(p_82370_2_[i]))
 				{
 					return i;
 				}

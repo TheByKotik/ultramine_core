@@ -23,13 +23,13 @@ public class RenderBoat extends Render
 		this.modelBoat = new ModelBoat();
 	}
 
-	public void doRender(EntityBoat par1EntityBoat, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityBoat p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
-		GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
-		float f2 = (float)par1EntityBoat.getTimeSinceHit() - par9;
-		float f3 = par1EntityBoat.getDamageTaken() - par9;
+		GL11.glTranslatef((float)p_76986_2_, (float)p_76986_4_, (float)p_76986_6_);
+		GL11.glRotatef(180.0F - p_76986_8_, 0.0F, 1.0F, 0.0F);
+		float f2 = (float)p_76986_1_.getTimeSinceHit() - p_76986_9_;
+		float f3 = p_76986_1_.getDamageTaken() - p_76986_9_;
 
 		if (f3 < 0.0F)
 		{
@@ -38,30 +38,30 @@ public class RenderBoat extends Render
 
 		if (f2 > 0.0F)
 		{
-			GL11.glRotatef(MathHelper.sin(f2) * f2 * f3 / 10.0F * (float)par1EntityBoat.getForwardDirection(), 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef(MathHelper.sin(f2) * f2 * f3 / 10.0F * (float)p_76986_1_.getForwardDirection(), 1.0F, 0.0F, 0.0F);
 		}
 
 		float f4 = 0.75F;
 		GL11.glScalef(f4, f4, f4);
 		GL11.glScalef(1.0F / f4, 1.0F / f4, 1.0F / f4);
-		this.bindEntityTexture(par1EntityBoat);
+		this.bindEntityTexture(p_76986_1_);
 		GL11.glScalef(-1.0F, -1.0F, 1.0F);
-		this.modelBoat.render(par1EntityBoat, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		this.modelBoat.render(p_76986_1_, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GL11.glPopMatrix();
 	}
 
-	protected ResourceLocation getEntityTexture(EntityBoat par1EntityBoat)
+	protected ResourceLocation getEntityTexture(EntityBoat p_110775_1_)
 	{
 		return boatTextures;
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityBoat)par1Entity);
+		return this.getEntityTexture((EntityBoat)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityBoat)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityBoat)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

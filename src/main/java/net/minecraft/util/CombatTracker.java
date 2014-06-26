@@ -15,14 +15,16 @@ public class CombatTracker
 	private final List combatEntries = new ArrayList();
 	private final EntityLivingBase fighter;
 	private int field_94555_c;
+	private int field_152775_d;
+	private int field_152776_e;
 	private boolean field_94552_d;
 	private boolean field_94553_e;
 	private String field_94551_f;
 	private static final String __OBFID = "CL_00001520";
 
-	public CombatTracker(EntityLivingBase par1EntityLivingBase)
+	public CombatTracker(EntityLivingBase p_i1565_1_)
 	{
-		this.fighter = par1EntityLivingBase;
+		this.fighter = p_i1565_1_;
 	}
 
 	public void func_94545_a()
@@ -48,15 +50,22 @@ public class CombatTracker
 		}
 	}
 
-	public void func_94547_a(DamageSource par1DamageSource, float par2, float par3)
+	public void func_94547_a(DamageSource p_94547_1_, float p_94547_2_, float p_94547_3_)
 	{
 		this.func_94549_h();
 		this.func_94545_a();
-		CombatEntry combatentry = new CombatEntry(par1DamageSource, this.fighter.ticksExisted, par2, par3, this.field_94551_f, this.fighter.fallDistance);
+		CombatEntry combatentry = new CombatEntry(p_94547_1_, this.fighter.ticksExisted, p_94547_2_, p_94547_3_, this.field_94551_f, this.fighter.fallDistance);
 		this.combatEntries.add(combatentry);
 		this.field_94555_c = this.fighter.ticksExisted;
 		this.field_94553_e = true;
-		this.field_94552_d |= combatentry.func_94559_f();
+
+		if (combatentry.func_94559_f() && !this.field_94552_d && this.fighter.isEntityAlive())
+		{
+			this.field_94552_d = true;
+			this.field_152775_d = this.fighter.ticksExisted;
+			this.field_152776_e = this.field_152775_d;
+			this.fighter.func_152111_bt();
+		}
 	}
 
 	public IChatComponent func_151521_b()
@@ -206,9 +215,9 @@ public class CombatTracker
 		}
 	}
 
-	private String func_94548_b(CombatEntry par1CombatEntry)
+	private String func_94548_b(CombatEntry p_94548_1_)
 	{
-		return par1CombatEntry.func_94562_g() == null ? "generic" : par1CombatEntry.func_94562_g();
+		return p_94548_1_.func_94562_g() == null ? "generic" : p_94548_1_.func_94562_g();
 	}
 
 	private void func_94542_g()
@@ -216,15 +225,23 @@ public class CombatTracker
 		this.field_94551_f = null;
 	}
 
-	private void func_94549_h()
+	public void func_94549_h()
 	{
 		int i = this.field_94552_d ? 300 : 100;
 
-		if (this.field_94553_e && this.fighter.ticksExisted - this.field_94555_c > i)
+		if (this.field_94553_e && (!this.fighter.isEntityAlive() || this.fighter.ticksExisted - this.field_94555_c > i))
 		{
-			this.combatEntries.clear();
+			boolean flag = this.field_94552_d;
 			this.field_94553_e = false;
 			this.field_94552_d = false;
+			this.field_152776_e = this.fighter.ticksExisted;
+
+			if (flag)
+			{
+				this.fighter.func_152112_bu();
+			}
+
+			this.combatEntries.clear();
 		}
 	}
 }

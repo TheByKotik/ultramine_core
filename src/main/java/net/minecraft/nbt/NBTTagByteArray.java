@@ -17,17 +17,18 @@ public class NBTTagByteArray extends NBTBase
 		this.byteArray = p_i45128_1_;
 	}
 
-	void write(DataOutput par1DataOutput) throws IOException
+	void write(DataOutput p_74734_1_) throws IOException
 	{
-		par1DataOutput.writeInt(this.byteArray.length);
-		par1DataOutput.write(this.byteArray);
+		p_74734_1_.writeInt(this.byteArray.length);
+		p_74734_1_.write(this.byteArray);
 	}
 
-	void load(DataInput par1DataInput, int par2) throws IOException
+	void func_152446_a(DataInput p_152446_1_, int p_152446_2_, NBTSizeTracker p_152446_3_) throws IOException
 	{
-		int j = par1DataInput.readInt();
+		int j = p_152446_1_.readInt();
+		p_152446_3_.func_152450_a((long)(8 * j));
 		this.byteArray = new byte[j];
-		par1DataInput.readFully(this.byteArray);
+		p_152446_1_.readFully(this.byteArray);
 	}
 
 	public byte getId()
@@ -47,9 +48,9 @@ public class NBTTagByteArray extends NBTBase
 		return new NBTTagByteArray(abyte);
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		return super.equals(par1Obj) ? Arrays.equals(this.byteArray, ((NBTTagByteArray)par1Obj).byteArray) : false;
+		return super.equals(p_equals_1_) ? Arrays.equals(this.byteArray, ((NBTTagByteArray)p_equals_1_).byteArray) : false;
 	}
 
 	public int hashCode()

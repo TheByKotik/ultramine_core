@@ -2,6 +2,7 @@ package net.minecraft.network.login.client;
 
 import com.mojang.authlib.GameProfile;
 import java.io.IOException;
+import java.util.UUID;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
@@ -21,7 +22,7 @@ public class C00PacketLoginStart extends Packet
 
 	public void readPacketData(PacketBuffer p_148837_1_) throws IOException
 	{
-		this.field_149305_a = new GameProfile((String)null, p_148837_1_.readStringFromBuffer(16));
+		this.field_149305_a = new GameProfile((UUID)null, p_148837_1_.readStringFromBuffer(16));
 	}
 
 	public void writePacketData(PacketBuffer p_148840_1_) throws IOException
@@ -29,9 +30,9 @@ public class C00PacketLoginStart extends Packet
 		p_148840_1_.writeStringToBuffer(this.field_149305_a.getName());
 	}
 
-	public void processPacket(INetHandlerLoginServer p_149303_1_)
+	public void processPacket(INetHandlerLoginServer p_148833_1_)
 	{
-		p_149303_1_.processLoginStart(this);
+		p_148833_1_.processLoginStart(this);
 	}
 
 	public GameProfile func_149304_c()

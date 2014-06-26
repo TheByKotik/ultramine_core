@@ -18,39 +18,39 @@ public class WorldGenCanopyTree extends WorldGenAbstractTree
 		super(p_i45461_1_);
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		int l = par2Random.nextInt(3) + par2Random.nextInt(2) + 6;
+		int l = p_76484_2_.nextInt(3) + p_76484_2_.nextInt(2) + 6;
 		boolean flag = true;
 
-		if (par4 >= 1 && par4 + l + 1 <= 256)
+		if (p_76484_4_ >= 1 && p_76484_4_ + l + 1 <= 256)
 		{
 			int j1;
 			int k1;
 
-			for (int i1 = par4; i1 <= par4 + 1 + l; ++i1)
+			for (int i1 = p_76484_4_; i1 <= p_76484_4_ + 1 + l; ++i1)
 			{
 				byte b0 = 1;
 
-				if (i1 == par4)
+				if (i1 == p_76484_4_)
 				{
 					b0 = 0;
 				}
 
-				if (i1 >= par4 + 1 + l - 2)
+				if (i1 >= p_76484_4_ + 1 + l - 2)
 				{
 					b0 = 2;
 				}
 
-				for (j1 = par3 - b0; j1 <= par3 + b0 && flag; ++j1)
+				for (j1 = p_76484_3_ - b0; j1 <= p_76484_3_ + b0 && flag; ++j1)
 				{
-					for (k1 = par5 - b0; k1 <= par5 + b0 && flag; ++k1)
+					for (k1 = p_76484_5_ - b0; k1 <= p_76484_5_ + b0 && flag; ++k1)
 					{
 						if (i1 >= 0 && i1 < 256)
 						{
-							Block block = par1World.getBlock(j1, i1, k1);
+							Block block = p_76484_1_.getBlock(j1, i1, k1);
 
-							if (!this.isReplaceable(par1World, j1, i1, k1))
+							if (!this.isReplaceable(p_76484_1_, j1, i1, k1))
 							{
 								flag = false;
 							}
@@ -69,27 +69,27 @@ public class WorldGenCanopyTree extends WorldGenAbstractTree
 			}
 			else
 			{
-				Block block2 = par1World.getBlock(par3, par4 - 1, par5);
+				Block block2 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ - 1, p_76484_5_);
 
-				boolean isSoil = block2.canSustainPlant(par1World, par3, par4 - 1, par5, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
-				if (isSoil && par4 < 256 - l - 1)
+				boolean isSoil = block2.canSustainPlant(p_76484_1_, p_76484_3_, p_76484_4_ - 1, p_76484_5_, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
+				if (isSoil && p_76484_4_ < 256 - l - 1)
 				{
-					onPlantGrow(par1World, par3,     par4 - 1, par5,     par3, par4, par5);
-					onPlantGrow(par1World, par3 + 1, par4 - 1, par5,     par3, par4, par5);
-					onPlantGrow(par1World, par3 + 1, par4 - 1, par5 + 1, par3, par4, par5);
-					onPlantGrow(par1World, par3,     par4 - 1, par5 + 1, par3, par4, par5);
-					int j3 = par2Random.nextInt(4);
-					j1 = l - par2Random.nextInt(4);
-					k1 = 2 - par2Random.nextInt(3);
-					int k3 = par3;
-					int l1 = par5;
+					onPlantGrow(p_76484_1_, p_76484_3_,     p_76484_4_ - 1, p_76484_5_,     p_76484_3_, p_76484_4_, p_76484_5_);
+					onPlantGrow(p_76484_1_, p_76484_3_ + 1, p_76484_4_ - 1, p_76484_5_,     p_76484_3_, p_76484_4_, p_76484_5_);
+					onPlantGrow(p_76484_1_, p_76484_3_ + 1, p_76484_4_ - 1, p_76484_5_ + 1, p_76484_3_, p_76484_4_, p_76484_5_);
+					onPlantGrow(p_76484_1_, p_76484_3_,     p_76484_4_ - 1, p_76484_5_ + 1, p_76484_3_, p_76484_4_, p_76484_5_);
+					int j3 = p_76484_2_.nextInt(4);
+					j1 = l - p_76484_2_.nextInt(4);
+					k1 = 2 - p_76484_2_.nextInt(3);
+					int k3 = p_76484_3_;
+					int l1 = p_76484_5_;
 					int i2 = 0;
 					int j2;
 					int k2;
 
 					for (j2 = 0; j2 < l; ++j2)
 					{
-						k2 = par4 + j2;
+						k2 = p_76484_4_ + j2;
 
 						if (j2 >= j1 && k1 > 0)
 						{
@@ -98,14 +98,14 @@ public class WorldGenCanopyTree extends WorldGenAbstractTree
 							--k1;
 						}
 
-						Block block1 = par1World.getBlock(k3, k2, l1);
+						Block block1 = p_76484_1_.getBlock(k3, k2, l1);
 
-						if (block1.isAir(par1World, k3, k2, l1) || block1.isLeaves(par1World, k3, k2, l1))
+						if (block1.isAir(p_76484_1_, k3, k2, l1) || block1.isLeaves(p_76484_1_, k3, k2, l1))
 						{
-							this.setBlockAndNotifyAdequately(par1World, k3, k2, l1, Blocks.log2, 1);
-							this.setBlockAndNotifyAdequately(par1World, k3 + 1, k2, l1, Blocks.log2, 1);
-							this.setBlockAndNotifyAdequately(par1World, k3, k2, l1 + 1, Blocks.log2, 1);
-							this.setBlockAndNotifyAdequately(par1World, k3 + 1, k2, l1 + 1, Blocks.log2, 1);
+							this.setBlockAndNotifyAdequately(p_76484_1_, k3, k2, l1, Blocks.log2, 1);
+							this.setBlockAndNotifyAdequately(p_76484_1_, k3 + 1, k2, l1, Blocks.log2, 1);
+							this.setBlockAndNotifyAdequately(p_76484_1_, k3, k2, l1 + 1, Blocks.log2, 1);
+							this.setBlockAndNotifyAdequately(p_76484_1_, k3 + 1, k2, l1 + 1, Blocks.log2, 1);
 							i2 = k2;
 						}
 					}
@@ -115,28 +115,28 @@ public class WorldGenCanopyTree extends WorldGenAbstractTree
 						for (k2 = -2; k2 <= 0; ++k2)
 						{
 							byte b1 = -1;
-							this.func_150526_a(par1World, k3 + j2, i2 + b1, l1 + k2);
-							this.func_150526_a(par1World, 1 + k3 - j2, i2 + b1, l1 + k2);
-							this.func_150526_a(par1World, k3 + j2, i2 + b1, 1 + l1 - k2);
-							this.func_150526_a(par1World, 1 + k3 - j2, i2 + b1, 1 + l1 - k2);
+							this.func_150526_a(p_76484_1_, k3 + j2, i2 + b1, l1 + k2);
+							this.func_150526_a(p_76484_1_, 1 + k3 - j2, i2 + b1, l1 + k2);
+							this.func_150526_a(p_76484_1_, k3 + j2, i2 + b1, 1 + l1 - k2);
+							this.func_150526_a(p_76484_1_, 1 + k3 - j2, i2 + b1, 1 + l1 - k2);
 
 							if ((j2 > -2 || k2 > -1) && (j2 != -1 || k2 != -2))
 							{
 								byte b2 = 1;
-								this.func_150526_a(par1World, k3 + j2, i2 + b2, l1 + k2);
-								this.func_150526_a(par1World, 1 + k3 - j2, i2 + b2, l1 + k2);
-								this.func_150526_a(par1World, k3 + j2, i2 + b2, 1 + l1 - k2);
-								this.func_150526_a(par1World, 1 + k3 - j2, i2 + b2, 1 + l1 - k2);
+								this.func_150526_a(p_76484_1_, k3 + j2, i2 + b2, l1 + k2);
+								this.func_150526_a(p_76484_1_, 1 + k3 - j2, i2 + b2, l1 + k2);
+								this.func_150526_a(p_76484_1_, k3 + j2, i2 + b2, 1 + l1 - k2);
+								this.func_150526_a(p_76484_1_, 1 + k3 - j2, i2 + b2, 1 + l1 - k2);
 							}
 						}
 					}
 
-					if (par2Random.nextBoolean())
+					if (p_76484_2_.nextBoolean())
 					{
-						this.func_150526_a(par1World, k3, i2 + 2, l1);
-						this.func_150526_a(par1World, k3 + 1, i2 + 2, l1);
-						this.func_150526_a(par1World, k3 + 1, i2 + 2, l1 + 1);
-						this.func_150526_a(par1World, k3, i2 + 2, l1 + 1);
+						this.func_150526_a(p_76484_1_, k3, i2 + 2, l1);
+						this.func_150526_a(p_76484_1_, k3 + 1, i2 + 2, l1);
+						this.func_150526_a(p_76484_1_, k3 + 1, i2 + 2, l1 + 1);
+						this.func_150526_a(p_76484_1_, k3, i2 + 2, l1 + 1);
 					}
 
 					for (j2 = -3; j2 <= 4; ++j2)
@@ -145,7 +145,7 @@ public class WorldGenCanopyTree extends WorldGenAbstractTree
 						{
 							if ((j2 != -3 || k2 != -3) && (j2 != -3 || k2 != 4) && (j2 != 4 || k2 != -3) && (j2 != 4 || k2 != 4) && (Math.abs(j2) < 3 || Math.abs(k2) < 3))
 							{
-								this.func_150526_a(par1World, k3 + j2, i2, l1 + k2);
+								this.func_150526_a(p_76484_1_, k3 + j2, i2, l1 + k2);
 							}
 						}
 					}
@@ -154,14 +154,14 @@ public class WorldGenCanopyTree extends WorldGenAbstractTree
 					{
 						for (k2 = -1; k2 <= 2; ++k2)
 						{
-							if ((j2 < 0 || j2 > 1 || k2 < 0 || k2 > 1) && par2Random.nextInt(3) <= 0)
+							if ((j2 < 0 || j2 > 1 || k2 < 0 || k2 > 1) && p_76484_2_.nextInt(3) <= 0)
 							{
-								int l3 = par2Random.nextInt(3) + 2;
+								int l3 = p_76484_2_.nextInt(3) + 2;
 								int l2;
 
 								for (l2 = 0; l2 < l3; ++l2)
 								{
-									this.setBlockAndNotifyAdequately(par1World, par3 + j2, i2 - l2 - 1, par5 + k2, Blocks.log2, 1);
+									this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + j2, i2 - l2 - 1, p_76484_5_ + k2, Blocks.log2, 1);
 								}
 
 								int i3;
@@ -170,7 +170,7 @@ public class WorldGenCanopyTree extends WorldGenAbstractTree
 								{
 									for (i3 = -1; i3 <= 1; ++i3)
 									{
-										this.func_150526_a(par1World, k3 + j2 + l2, i2 - 0, l1 + k2 + i3);
+										this.func_150526_a(p_76484_1_, k3 + j2 + l2, i2 - 0, l1 + k2 + i3);
 									}
 								}
 
@@ -180,7 +180,7 @@ public class WorldGenCanopyTree extends WorldGenAbstractTree
 									{
 										if (Math.abs(l2) != 2 || Math.abs(i3) != 2)
 										{
-											this.func_150526_a(par1World, k3 + j2 + l2, i2 - 1, l1 + k2 + i3);
+											this.func_150526_a(p_76484_1_, k3 + j2 + l2, i2 - 1, l1 + k2 + i3);
 										}
 									}
 								}

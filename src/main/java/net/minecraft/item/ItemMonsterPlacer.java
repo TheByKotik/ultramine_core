@@ -33,10 +33,10 @@ public class ItemMonsterPlacer extends Item
 		this.setCreativeTab(CreativeTabs.tabMisc);
 	}
 
-	public String getItemStackDisplayName(ItemStack par1ItemStack)
+	public String getItemStackDisplayName(ItemStack p_77653_1_)
 	{
 		String s = ("" + StatCollector.translateToLocal(this.getUnlocalizedName() + ".name")).trim();
-		String s1 = EntityList.getStringFromID(par1ItemStack.getItemDamage());
+		String s1 = EntityList.getStringFromID(p_77653_1_.getItemDamage());
 
 		if (s1 != null)
 		{
@@ -47,43 +47,43 @@ public class ItemMonsterPlacer extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	public int getColorFromItemStack(ItemStack p_82790_1_, int p_82790_2_)
 	{
-		EntityList.EntityEggInfo entityegginfo = (EntityList.EntityEggInfo)EntityList.entityEggs.get(Integer.valueOf(par1ItemStack.getItemDamage()));
-		return entityegginfo != null ? (par2 == 0 ? entityegginfo.primaryColor : entityegginfo.secondaryColor) : 16777215;
+		EntityList.EntityEggInfo entityegginfo = (EntityList.EntityEggInfo)EntityList.entityEggs.get(Integer.valueOf(p_82790_1_.getItemDamage()));
+		return entityegginfo != null ? (p_82790_2_ == 0 ? entityegginfo.primaryColor : entityegginfo.secondaryColor) : 16777215;
 	}
 
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
-		if (par3World.isRemote)
+		if (p_77648_3_.isRemote)
 		{
 			return true;
 		}
 		else
 		{
-			Block block = par3World.getBlock(par4, par5, par6);
-			par4 += Facing.offsetsXForSide[par7];
-			par5 += Facing.offsetsYForSide[par7];
-			par6 += Facing.offsetsZForSide[par7];
+			Block block = p_77648_3_.getBlock(p_77648_4_, p_77648_5_, p_77648_6_);
+			p_77648_4_ += Facing.offsetsXForSide[p_77648_7_];
+			p_77648_5_ += Facing.offsetsYForSide[p_77648_7_];
+			p_77648_6_ += Facing.offsetsZForSide[p_77648_7_];
 			double d0 = 0.0D;
 
-			if (par7 == 1 && block.getRenderType() == 11)
+			if (p_77648_7_ == 1 && block.getRenderType() == 11)
 			{
 				d0 = 0.5D;
 			}
 
-			Entity entity = spawnCreature(par3World, par1ItemStack.getItemDamage(), (double)par4 + 0.5D, (double)par5 + d0, (double)par6 + 0.5D);
+			Entity entity = spawnCreature(p_77648_3_, p_77648_1_.getItemDamage(), (double)p_77648_4_ + 0.5D, (double)p_77648_5_ + d0, (double)p_77648_6_ + 0.5D);
 
 			if (entity != null)
 			{
-				if (entity instanceof EntityLivingBase && par1ItemStack.hasDisplayName())
+				if (entity instanceof EntityLivingBase && p_77648_1_.hasDisplayName())
 				{
-					((EntityLiving)entity).setCustomNameTag(par1ItemStack.getDisplayName());
+					((EntityLiving)entity).setCustomNameTag(p_77648_1_.getDisplayName());
 				}
 
-				if (!par2EntityPlayer.capabilities.isCreativeMode)
+				if (!p_77648_2_.capabilities.isCreativeMode)
 				{
-					--par1ItemStack.stackSize;
+					--p_77648_1_.stackSize;
 				}
 			}
 
@@ -91,19 +91,19 @@ public class ItemMonsterPlacer extends Item
 		}
 	}
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
 	{
-		if (par2World.isRemote)
+		if (p_77659_2_.isRemote)
 		{
-			return par1ItemStack;
+			return p_77659_1_;
 		}
 		else
 		{
-			MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(par2World, par3EntityPlayer, true);
+			MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(p_77659_2_, p_77659_3_, true);
 
 			if (movingobjectposition == null)
 			{
-				return par1ItemStack;
+				return p_77659_1_;
 			}
 			else
 			{
@@ -113,43 +113,43 @@ public class ItemMonsterPlacer extends Item
 					int j = movingobjectposition.blockY;
 					int k = movingobjectposition.blockZ;
 
-					if (!par2World.canMineBlock(par3EntityPlayer, i, j, k))
+					if (!p_77659_2_.canMineBlock(p_77659_3_, i, j, k))
 					{
-						return par1ItemStack;
+						return p_77659_1_;
 					}
 
-					if (!par3EntityPlayer.canPlayerEdit(i, j, k, movingobjectposition.sideHit, par1ItemStack))
+					if (!p_77659_3_.canPlayerEdit(i, j, k, movingobjectposition.sideHit, p_77659_1_))
 					{
-						return par1ItemStack;
+						return p_77659_1_;
 					}
 
-					if (par2World.getBlock(i, j, k) instanceof BlockLiquid)
+					if (p_77659_2_.getBlock(i, j, k) instanceof BlockLiquid)
 					{
-						Entity entity = spawnCreature(par2World, par1ItemStack.getItemDamage(), (double)i, (double)j, (double)k);
+						Entity entity = spawnCreature(p_77659_2_, p_77659_1_.getItemDamage(), (double)i, (double)j, (double)k);
 
 						if (entity != null)
 						{
-							if (entity instanceof EntityLivingBase && par1ItemStack.hasDisplayName())
+							if (entity instanceof EntityLivingBase && p_77659_1_.hasDisplayName())
 							{
-								((EntityLiving)entity).setCustomNameTag(par1ItemStack.getDisplayName());
+								((EntityLiving)entity).setCustomNameTag(p_77659_1_.getDisplayName());
 							}
 
-							if (!par3EntityPlayer.capabilities.isCreativeMode)
+							if (!p_77659_3_.capabilities.isCreativeMode)
 							{
-								--par1ItemStack.stackSize;
+								--p_77659_1_.stackSize;
 							}
 						}
 					}
 				}
 
-				return par1ItemStack;
+				return p_77659_1_;
 			}
 		}
 	}
 
-	public static Entity spawnCreature(World par0World, int par1, double par2, double par4, double par6)
+	public static Entity spawnCreature(World p_77840_0_, int p_77840_1_, double p_77840_2_, double p_77840_4_, double p_77840_6_)
 	{
-		if (!EntityList.entityEggs.containsKey(Integer.valueOf(par1)))
+		if (!EntityList.entityEggs.containsKey(Integer.valueOf(p_77840_1_)))
 		{
 			return null;
 		}
@@ -159,16 +159,16 @@ public class ItemMonsterPlacer extends Item
 
 			for (int j = 0; j < 1; ++j)
 			{
-				entity = EntityList.createEntityByID(par1, par0World);
+				entity = EntityList.createEntityByID(p_77840_1_, p_77840_0_);
 
 				if (entity != null && entity instanceof EntityLivingBase)
 				{
 					EntityLiving entityliving = (EntityLiving)entity;
-					entity.setLocationAndAngles(par2, par4, par6, MathHelper.wrapAngleTo180_float(par0World.rand.nextFloat() * 360.0F), 0.0F);
+					entity.setLocationAndAngles(p_77840_2_, p_77840_4_, p_77840_6_, MathHelper.wrapAngleTo180_float(p_77840_0_.rand.nextFloat() * 360.0F), 0.0F);
 					entityliving.rotationYawHead = entityliving.rotationYaw;
 					entityliving.renderYawOffset = entityliving.rotationYaw;
 					entityliving.onSpawnWithEgg((IEntityLivingData)null);
-					par0World.spawnEntityInWorld(entity);
+					p_77840_0_.spawnEntityInWorld(entity);
 					entityliving.playLivingSound();
 				}
 			}
@@ -184,9 +184,9 @@ public class ItemMonsterPlacer extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int par1, int par2)
+	public IIcon getIconFromDamageForRenderPass(int p_77618_1_, int p_77618_2_)
 	{
-		return par2 > 0 ? this.theIcon : super.getIconFromDamageForRenderPass(par1, par2);
+		return p_77618_2_ > 0 ? this.theIcon : super.getIconFromDamageForRenderPass(p_77618_1_, p_77618_2_);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -202,9 +202,9 @@ public class ItemMonsterPlacer extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister)
+	public void registerIcons(IIconRegister p_94581_1_)
 	{
-		super.registerIcons(par1IconRegister);
-		this.theIcon = par1IconRegister.registerIcon(this.getIconString() + "_overlay");
+		super.registerIcons(p_94581_1_);
+		this.theIcon = p_94581_1_.registerIcon(this.getIconString() + "_overlay");
 	}
 }

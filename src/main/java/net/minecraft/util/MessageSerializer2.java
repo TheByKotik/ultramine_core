@@ -9,9 +9,9 @@ public class MessageSerializer2 extends MessageToByteEncoder
 {
 	private static final String __OBFID = "CL_00001256";
 
-	protected void encode(ChannelHandlerContext p_150667_1_, ByteBuf p_150667_2_, ByteBuf p_150667_3_)
+	protected void encode(ChannelHandlerContext p_encode_1_, ByteBuf p_encode_2_, ByteBuf p_encode_3_)
 	{
-		int i = p_150667_2_.readableBytes();
+		int i = p_encode_2_.readableBytes();
 		int j = PacketBuffer.getVarIntSize(i);
 
 		if (j > 3)
@@ -20,10 +20,10 @@ public class MessageSerializer2 extends MessageToByteEncoder
 		}
 		else
 		{
-			PacketBuffer packetbuffer = new PacketBuffer(p_150667_3_);
+			PacketBuffer packetbuffer = new PacketBuffer(p_encode_3_);
 			packetbuffer.ensureWritable(j + i);
 			packetbuffer.writeVarIntToBuffer(i);
-			packetbuffer.writeBytes(p_150667_2_, p_150667_2_.readerIndex(), i);
+			packetbuffer.writeBytes(p_encode_2_, p_encode_2_.readerIndex(), i);
 		}
 	}
 

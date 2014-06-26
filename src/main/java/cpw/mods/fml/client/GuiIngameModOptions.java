@@ -39,13 +39,13 @@ public class GuiIngameModOptions extends GuiScreen
 	}
 
 	@Override
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		// force a non-transparent background
 		this.drawDefaultBackground();
-		this.optionList.drawScreen(par1, par2, par3);
+		this.optionList.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 		this.drawCenteredString(this.fontRendererObj, this.title, this.width / 2, 15, 0xFFFFFF);
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 
 	FontRenderer getFontRenderer() {

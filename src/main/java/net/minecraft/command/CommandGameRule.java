@@ -19,50 +19,50 @@ public class CommandGameRule extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.gamerule.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
 		String s1;
 
-		if (par2ArrayOfStr.length == 2)
+		if (p_71515_2_.length == 2)
 		{
-			s1 = par2ArrayOfStr[0];
-			String s2 = par2ArrayOfStr[1];
+			s1 = p_71515_2_[0];
+			String s2 = p_71515_2_[1];
 			GameRules gamerules2 = this.getGameRules();
 
 			if (gamerules2.hasRule(s1))
 			{
 				gamerules2.setOrCreateGameRule(s1, s2);
-				notifyAdmins(par1ICommandSender, "commands.gamerule.success", new Object[0]);
+				func_152373_a(p_71515_1_, this, "commands.gamerule.success", new Object[0]);
 			}
 			else
 			{
-				notifyAdmins(par1ICommandSender, "commands.gamerule.norule", new Object[] {s1});
+				func_152373_a(p_71515_1_, this, "commands.gamerule.norule", new Object[] {s1});
 			}
 		}
-		else if (par2ArrayOfStr.length == 1)
+		else if (p_71515_2_.length == 1)
 		{
-			s1 = par2ArrayOfStr[0];
+			s1 = p_71515_2_[0];
 			GameRules gamerules1 = this.getGameRules();
 
 			if (gamerules1.hasRule(s1))
 			{
 				String s = gamerules1.getGameRuleStringValue(s1);
-				par1ICommandSender.addChatMessage((new ChatComponentText(s1)).appendText(" = ").appendText(s));
+				p_71515_1_.addChatMessage((new ChatComponentText(s1)).appendText(" = ").appendText(s));
 			}
 			else
 			{
-				notifyAdmins(par1ICommandSender, "commands.gamerule.norule", new Object[] {s1});
+				func_152373_a(p_71515_1_, this, "commands.gamerule.norule", new Object[] {s1});
 			}
 		}
-		else if (par2ArrayOfStr.length == 0)
+		else if (p_71515_2_.length == 0)
 		{
 			GameRules gamerules = this.getGameRules();
-			par1ICommandSender.addChatMessage(new ChatComponentText(joinNiceString(gamerules.getRules())));
+			p_71515_1_.addChatMessage(new ChatComponentText(joinNiceString(gamerules.getRules())));
 		}
 		else
 		{
@@ -70,9 +70,9 @@ public class CommandGameRule extends CommandBase
 		}
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, this.getGameRules().getRules()) : (par2ArrayOfStr.length == 2 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"true", "false"}): null);
+		return p_71516_2_.length == 1 ? getListOfStringsMatchingLastWord(p_71516_2_, this.getGameRules().getRules()) : (p_71516_2_.length == 2 ? getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"true", "false"}): null);
 	}
 
 	private GameRules getGameRules()

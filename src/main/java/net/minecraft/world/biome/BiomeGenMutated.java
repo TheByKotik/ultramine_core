@@ -39,9 +39,9 @@ public class BiomeGenMutated extends BiomeGenBase
 		this.heightVariation = p_i45381_2_.heightVariation + 0.2F;
 	}
 
-	public void decorate(World par1World, Random par2Random, int par3, int par4)
+	public void decorate(World p_76728_1_, Random p_76728_2_, int p_76728_3_, int p_76728_4_)
 	{
-		this.baseBiome.theBiomeDecorator.decorateChunk(par1World, par2Random, this, par3, par4);
+		this.baseBiome.theBiomeDecorator.decorateChunk(p_76728_1_, p_76728_2_, this, p_76728_3_, p_76728_4_);
 	}
 
 	public void genTerrainBlocks(World p_150573_1_, Random p_150573_2_, Block[] p_150573_3_, byte[] p_150573_4_, int p_150573_5_, int p_150573_6_, double p_150573_7_)

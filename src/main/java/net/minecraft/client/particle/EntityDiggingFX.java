@@ -14,23 +14,23 @@ public class EntityDiggingFX extends EntityFX
 	private static final String __OBFID = "CL_00000932";
 	private int side;
 
-	public EntityDiggingFX(World par1World, double par2, double par4, double par6, double par8, double par10, double par12, Block par14Block, int par15)
+	public EntityDiggingFX(World p_i1234_1_, double p_i1234_2_, double p_i1234_4_, double p_i1234_6_, double p_i1234_8_, double p_i1234_10_, double p_i1234_12_, Block p_i1234_14_, int p_i1234_15_)
 	{
-		this(par1World, par2, par4, par6, par8, par10, par12, par14Block, par15, par1World.rand.nextInt(6));
+		this(p_i1234_1_, p_i1234_2_, p_i1234_4_, p_i1234_6_, p_i1234_8_, p_i1234_10_, p_i1234_12_, p_i1234_14_, p_i1234_15_, p_i1234_1_.rand.nextInt(6));
 	}
 
-	public EntityDiggingFX(World par1World, double par2, double par4, double par6, double par8, double par10, double par12, Block par14Block, int par15, int side)
+	public EntityDiggingFX(World p_i1234_1_, double p_i1234_2_, double p_i1234_4_, double p_i1234_6_, double p_i1234_8_, double p_i1234_10_, double p_i1234_12_, Block p_i1234_14_, int p_i1234_15_, int side)
 	{
-		super(par1World, par2, par4, par6, par8, par10, par12);
-		this.field_145784_a = par14Block;
-		this.setParticleIcon(par14Block.getIcon(side, par15));
-		this.particleGravity = par14Block.blockParticleGravity;
+		super(p_i1234_1_, p_i1234_2_, p_i1234_4_, p_i1234_6_, p_i1234_8_, p_i1234_10_, p_i1234_12_);
+		this.field_145784_a = p_i1234_14_;
+		this.setParticleIcon(p_i1234_14_.getIcon(side, p_i1234_15_));
+		this.particleGravity = p_i1234_14_.blockParticleGravity;
 		this.particleRed = this.particleGreen = this.particleBlue = 0.6F;
 		this.particleScale /= 2.0F;
 		this.side = side;
 	}
 
-	public EntityDiggingFX applyColourMultiplier(int par1, int par2, int par3)
+	public EntityDiggingFX applyColourMultiplier(int p_70596_1_, int p_70596_2_, int p_70596_3_)
 	{
 		if (this.field_145784_a == Blocks.grass && this.side != 1)
 		{
@@ -38,7 +38,7 @@ public class EntityDiggingFX extends EntityFX
 		}
 		else
 		{
-			int l = this.field_145784_a.colorMultiplier(this.worldObj, par1, par2, par3);
+			int l = this.field_145784_a.colorMultiplier(this.worldObj, p_70596_1_, p_70596_2_, p_70596_3_);
 			this.particleRed *= (float)(l >> 16 & 255) / 255.0F;
 			this.particleGreen *= (float)(l >> 8 & 255) / 255.0F;
 			this.particleBlue *= (float)(l & 255) / 255.0F;
@@ -46,7 +46,7 @@ public class EntityDiggingFX extends EntityFX
 		}
 	}
 
-	public EntityDiggingFX applyRenderColor(int par1)
+	public EntityDiggingFX applyRenderColor(int p_90019_1_)
 	{
 		if (this.field_145784_a == Blocks.grass)
 		{
@@ -54,7 +54,7 @@ public class EntityDiggingFX extends EntityFX
 		}
 		else
 		{
-			int j = this.field_145784_a.getRenderColor(par1);
+			int j = this.field_145784_a.getRenderColor(p_90019_1_);
 			this.particleRed *= (float)(j >> 16 & 255) / 255.0F;
 			this.particleGreen *= (float)(j >> 8 & 255) / 255.0F;
 			this.particleBlue *= (float)(j & 255) / 255.0F;
@@ -67,7 +67,7 @@ public class EntityDiggingFX extends EntityFX
 		return 1;
 	}
 
-	public void renderParticle(Tessellator par1Tessellator, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void renderParticle(Tessellator p_70539_1_, float p_70539_2_, float p_70539_3_, float p_70539_4_, float p_70539_5_, float p_70539_6_, float p_70539_7_)
 	{
 		float f6 = ((float)this.particleTextureIndexX + this.particleTextureJitterX / 4.0F) / 16.0F;
 		float f7 = f6 + 0.015609375F;
@@ -83,13 +83,13 @@ public class EntityDiggingFX extends EntityFX
 			f9 = this.particleIcon.getInterpolatedV((double)((this.particleTextureJitterY + 1.0F) / 4.0F * 16.0F));
 		}
 
-		float f11 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)par2 - interpPosX);
-		float f12 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)par2 - interpPosY);
-		float f13 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)par2 - interpPosZ);
-		par1Tessellator.setColorOpaque_F(this.particleRed, this.particleGreen, this.particleBlue);
-		par1Tessellator.addVertexWithUV((double)(f11 - par3 * f10 - par6 * f10), (double)(f12 - par4 * f10), (double)(f13 - par5 * f10 - par7 * f10), (double)f6, (double)f9);
-		par1Tessellator.addVertexWithUV((double)(f11 - par3 * f10 + par6 * f10), (double)(f12 + par4 * f10), (double)(f13 - par5 * f10 + par7 * f10), (double)f6, (double)f8);
-		par1Tessellator.addVertexWithUV((double)(f11 + par3 * f10 + par6 * f10), (double)(f12 + par4 * f10), (double)(f13 + par5 * f10 + par7 * f10), (double)f7, (double)f8);
-		par1Tessellator.addVertexWithUV((double)(f11 + par3 * f10 - par6 * f10), (double)(f12 - par4 * f10), (double)(f13 + par5 * f10 - par7 * f10), (double)f7, (double)f9);
+		float f11 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)p_70539_2_ - interpPosX);
+		float f12 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)p_70539_2_ - interpPosY);
+		float f13 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)p_70539_2_ - interpPosZ);
+		p_70539_1_.setColorOpaque_F(this.particleRed, this.particleGreen, this.particleBlue);
+		p_70539_1_.addVertexWithUV((double)(f11 - p_70539_3_ * f10 - p_70539_6_ * f10), (double)(f12 - p_70539_4_ * f10), (double)(f13 - p_70539_5_ * f10 - p_70539_7_ * f10), (double)f6, (double)f9);
+		p_70539_1_.addVertexWithUV((double)(f11 - p_70539_3_ * f10 + p_70539_6_ * f10), (double)(f12 + p_70539_4_ * f10), (double)(f13 - p_70539_5_ * f10 + p_70539_7_ * f10), (double)f6, (double)f8);
+		p_70539_1_.addVertexWithUV((double)(f11 + p_70539_3_ * f10 + p_70539_6_ * f10), (double)(f12 + p_70539_4_ * f10), (double)(f13 + p_70539_5_ * f10 + p_70539_7_ * f10), (double)f7, (double)f8);
+		p_70539_1_.addVertexWithUV((double)(f11 + p_70539_3_ * f10 - p_70539_6_ * f10), (double)(f12 - p_70539_4_ * f10), (double)(f13 + p_70539_5_ * f10 - p_70539_7_ * f10), (double)f7, (double)f9);
 	}
 }

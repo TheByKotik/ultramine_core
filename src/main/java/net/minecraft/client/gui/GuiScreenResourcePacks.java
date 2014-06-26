@@ -101,7 +101,7 @@ public class GuiScreenResourcePacks extends GuiScreen
 				File file1 = this.mc.getResourcePackRepository().getDirResourcepacks();
 				String s = file1.getAbsolutePath();
 
-				if (Util.getOSType() == Util.EnumOS.MACOS)
+				if (Util.getOSType() == Util.EnumOS.OSX)
 				{
 					try
 					{
@@ -182,11 +182,11 @@ public class GuiScreenResourcePacks extends GuiScreen
 		}
 	}
 
-	protected void mouseClicked(int par1, int par2, int par3)
+	protected void mouseClicked(int p_73864_1_, int p_73864_2_, int p_73864_3_)
 	{
-		super.mouseClicked(par1, par2, par3);
-		this.field_146970_i.func_148179_a(par1, par2, par3);
-		this.field_146967_r.func_148179_a(par1, par2, par3);
+		super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+		this.field_146970_i.func_148179_a(p_73864_1_, p_73864_2_, p_73864_3_);
+		this.field_146967_r.func_148179_a(p_73864_1_, p_73864_2_, p_73864_3_);
 	}
 
 	protected void mouseMovedOrUp(int p_146286_1_, int p_146286_2_, int p_146286_3_)
@@ -194,13 +194,13 @@ public class GuiScreenResourcePacks extends GuiScreen
 		super.mouseMovedOrUp(p_146286_1_, p_146286_2_, p_146286_3_);
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		this.drawBackground(0);
-		this.field_146970_i.drawScreen(par1, par2, par3);
-		this.field_146967_r.drawScreen(par1, par2, par3);
+		this.field_146970_i.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
+		this.field_146967_r.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 		this.drawCenteredString(this.fontRendererObj, I18n.format("resourcePack.title", new Object[0]), this.width / 2, 16, 16777215);
 		this.drawCenteredString(this.fontRendererObj, I18n.format("resourcePack.folderInfo", new Object[0]), this.width / 2 - 77, this.height - 26, 8421504);
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 }

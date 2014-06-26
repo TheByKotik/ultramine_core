@@ -35,9 +35,9 @@ public class S1EPacketRemoveEntityEffect extends Packet
 		p_148840_1_.writeByte(this.field_149078_b);
 	}
 
-	public void processPacket(INetHandlerPlayClient p_149077_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_149077_1_.handleRemoveEntityEffect(this);
+		p_148833_1_.handleRemoveEntityEffect(this);
 	}
 
 	public void processPacket(INetHandler p_148833_1_)

@@ -3,6 +3,7 @@ package net.minecraft.client.renderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +23,7 @@ public class ThreadDownloadImageData extends SimpleTexture
 {
 	private static final Logger logger = LogManager.getLogger();
 	private static final AtomicInteger threadDownloadCounter = new AtomicInteger(0);
+	private final File field_152434_e;
 	private final String imageUrl;
 	private final IImageBuffer imageBuffer;
 	private BufferedImage bufferedImage;
@@ -28,11 +31,12 @@ public class ThreadDownloadImageData extends SimpleTexture
 	private boolean textureUploaded;
 	private static final String __OBFID = "CL_00001049";
 
-	public ThreadDownloadImageData(String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
+	public ThreadDownloadImageData(File p_i1049_1_, String p_i1049_2_, ResourceLocation p_i1049_3_, IImageBuffer p_i1049_4_)
 	{
-		super(par2ResourceLocation);
-		this.imageUrl = par1Str;
-		this.imageBuffer = par3IImageBuffer;
+		super(p_i1049_3_);
+		this.field_152434_e = p_i1049_1_;
+		this.imageUrl = p_i1049_2_;
+		this.imageBuffer = p_i1049_4_;
 	}
 
 	private void checkTextureUploaded()
@@ -61,67 +65,103 @@ public class ThreadDownloadImageData extends SimpleTexture
 	public void setBufferedImage(BufferedImage p_147641_1_)
 	{
 		this.bufferedImage = p_147641_1_;
+
+		if (this.imageBuffer != null)
+		{
+			this.imageBuffer.func_152634_a();
+		}
 	}
 
-	public void loadTexture(IResourceManager par1ResourceManager) throws IOException
+	public void loadTexture(IResourceManager p_110551_1_) throws IOException
 	{
 		if (this.bufferedImage == null && this.textureLocation != null)
 		{
-			super.loadTexture(par1ResourceManager);
+			super.loadTexture(p_110551_1_);
 		}
 
 		if (this.imageThread == null)
 		{
-			this.imageThread = new Thread("Texture Downloader #" + threadDownloadCounter.incrementAndGet())
+			if (this.field_152434_e != null && this.field_152434_e.isFile())
 			{
-				private static final String __OBFID = "CL_00001050";
-				public void run()
+				logger.debug("Loading http texture from local cache ({})", new Object[] {this.field_152434_e});
+
+				try
 				{
-					HttpURLConnection httpurlconnection = null;
+					this.bufferedImage = ImageIO.read(this.field_152434_e);
 
-					try
+					if (this.imageBuffer != null)
 					{
-						httpurlconnection = (HttpURLConnection)(new URL(ThreadDownloadImageData.this.imageUrl)).openConnection(Minecraft.getMinecraft().getProxy());
-						httpurlconnection.setDoInput(true);
-						httpurlconnection.setDoOutput(false);
-						httpurlconnection.connect();
-
-						if (httpurlconnection.getResponseCode() / 100 != 2)
-						{
-							return;
-						}
-
-						BufferedImage bufferedimage = ImageIO.read(httpurlconnection.getInputStream());
-
-						if (ThreadDownloadImageData.this.imageBuffer != null)
-						{
-							bufferedimage = ThreadDownloadImageData.this.imageBuffer.parseUserSkin(bufferedimage);
-						}
-
-						ThreadDownloadImageData.this.setBufferedImage(bufferedimage);
-					}
-					catch (Exception exception)
-					{
-						ThreadDownloadImageData.logger.error("Couldn\'t download http texture", exception);
-					}
-					finally
-					{
-						if (httpurlconnection != null)
-						{
-							httpurlconnection.disconnect();
-						}
+						this.setBufferedImage(this.imageBuffer.parseUserSkin(this.bufferedImage));
 					}
 				}
-			};
-			this.imageThread.setDaemon(true);
-			this.imageThread.setName("Skin downloader: " + this.imageUrl);
-			this.imageThread.start();
+				catch (IOException ioexception)
+				{
+					logger.error("Couldn\'t load skin " + this.field_152434_e, ioexception);
+					this.func_152433_a();
+				}
+			}
+			else
+			{
+				this.func_152433_a();
+			}
 		}
 	}
 
-	public boolean isTextureUploaded()
+	protected void func_152433_a()
 	{
-		this.checkTextureUploaded();
-		return this.textureUploaded;
+		this.imageThread = new Thread("Texture Downloader #" + threadDownloadCounter.incrementAndGet())
+		{
+			private static final String __OBFID = "CL_00001050";
+			public void run()
+			{
+				HttpURLConnection httpurlconnection = null;
+				ThreadDownloadImageData.logger.debug("Downloading http texture from {} to {}", new Object[] {ThreadDownloadImageData.this.imageUrl, ThreadDownloadImageData.this.field_152434_e});
+
+				try
+				{
+					httpurlconnection = (HttpURLConnection)(new URL(ThreadDownloadImageData.this.imageUrl)).openConnection(Minecraft.getMinecraft().getProxy());
+					httpurlconnection.setDoInput(true);
+					httpurlconnection.setDoOutput(false);
+					httpurlconnection.connect();
+
+					if (httpurlconnection.getResponseCode() / 100 != 2)
+					{
+						return;
+					}
+
+					BufferedImage bufferedimage;
+
+					if (ThreadDownloadImageData.this.field_152434_e != null)
+					{
+						FileUtils.copyInputStreamToFile(httpurlconnection.getInputStream(), ThreadDownloadImageData.this.field_152434_e);
+						bufferedimage = ImageIO.read(ThreadDownloadImageData.this.field_152434_e);
+					}
+					else
+					{
+						bufferedimage = ImageIO.read(httpurlconnection.getInputStream());
+					}
+
+					if (ThreadDownloadImageData.this.imageBuffer != null)
+					{
+						bufferedimage = ThreadDownloadImageData.this.imageBuffer.parseUserSkin(bufferedimage);
+					}
+
+					ThreadDownloadImageData.this.setBufferedImage(bufferedimage);
+				}
+				catch (Exception exception)
+				{
+					ThreadDownloadImageData.logger.error("Couldn\'t download http texture", exception);
+				}
+				finally
+				{
+					if (httpurlconnection != null)
+					{
+						httpurlconnection.disconnect();
+					}
+				}
+			}
+		};
+		this.imageThread.setDaemon(true);
+		this.imageThread.start();
 	}
 }

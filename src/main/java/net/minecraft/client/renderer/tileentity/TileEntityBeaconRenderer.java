@@ -16,9 +16,9 @@ public class TileEntityBeaconRenderer extends TileEntitySpecialRenderer
 	private static final ResourceLocation field_147523_b = new ResourceLocation("textures/entity/beacon_beam.png");
 	private static final String __OBFID = "CL_00000962";
 
-	public void renderTileEntityAt(TileEntityBeacon p_147522_1_, double p_147522_2_, double p_147522_4_, double p_147522_6_, float p_147522_8_)
+	public void renderTileEntityAt(TileEntityBeacon p_147500_1_, double p_147500_2_, double p_147500_4_, double p_147500_6_, float p_147500_8_)
 	{
-		float f1 = p_147522_1_.func_146002_i();
+		float f1 = p_147500_1_.func_146002_i();
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 
 		if (f1 > 0.0F)
@@ -32,7 +32,7 @@ public class TileEntityBeaconRenderer extends TileEntitySpecialRenderer
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glDepthMask(true);
 			OpenGlHelper.glBlendFunc(770, 1, 1, 0);
-			float f2 = (float)p_147522_1_.getWorldObj().getTotalWorldTime() + p_147522_8_;
+			float f2 = (float)p_147500_1_.getWorldObj().getTotalWorldTime() + p_147500_8_;
 			float f3 = -f2 * 0.2F - (float)MathHelper.floor_float(-f2 * 0.1F);
 			byte b0 = 1;
 			double d3 = (double)f2 * 0.025D * (1.0D - (double)(b0 & 1) * 2.5D);
@@ -52,22 +52,22 @@ public class TileEntityBeaconRenderer extends TileEntitySpecialRenderer
 			double d27 = 1.0D;
 			double d28 = (double)(-1.0F + f3);
 			double d29 = (double)(256.0F * f1) * (0.5D / d5) + d28;
-			tessellator.addVertexWithUV(p_147522_2_ + d7, p_147522_4_ + d23, p_147522_6_ + d9, d27, d29);
-			tessellator.addVertexWithUV(p_147522_2_ + d7, p_147522_4_, p_147522_6_ + d9, d27, d28);
-			tessellator.addVertexWithUV(p_147522_2_ + d11, p_147522_4_, p_147522_6_ + d13, d25, d28);
-			tessellator.addVertexWithUV(p_147522_2_ + d11, p_147522_4_ + d23, p_147522_6_ + d13, d25, d29);
-			tessellator.addVertexWithUV(p_147522_2_ + d19, p_147522_4_ + d23, p_147522_6_ + d21, d27, d29);
-			tessellator.addVertexWithUV(p_147522_2_ + d19, p_147522_4_, p_147522_6_ + d21, d27, d28);
-			tessellator.addVertexWithUV(p_147522_2_ + d15, p_147522_4_, p_147522_6_ + d17, d25, d28);
-			tessellator.addVertexWithUV(p_147522_2_ + d15, p_147522_4_ + d23, p_147522_6_ + d17, d25, d29);
-			tessellator.addVertexWithUV(p_147522_2_ + d11, p_147522_4_ + d23, p_147522_6_ + d13, d27, d29);
-			tessellator.addVertexWithUV(p_147522_2_ + d11, p_147522_4_, p_147522_6_ + d13, d27, d28);
-			tessellator.addVertexWithUV(p_147522_2_ + d19, p_147522_4_, p_147522_6_ + d21, d25, d28);
-			tessellator.addVertexWithUV(p_147522_2_ + d19, p_147522_4_ + d23, p_147522_6_ + d21, d25, d29);
-			tessellator.addVertexWithUV(p_147522_2_ + d15, p_147522_4_ + d23, p_147522_6_ + d17, d27, d29);
-			tessellator.addVertexWithUV(p_147522_2_ + d15, p_147522_4_, p_147522_6_ + d17, d27, d28);
-			tessellator.addVertexWithUV(p_147522_2_ + d7, p_147522_4_, p_147522_6_ + d9, d25, d28);
-			tessellator.addVertexWithUV(p_147522_2_ + d7, p_147522_4_ + d23, p_147522_6_ + d9, d25, d29);
+			tessellator.addVertexWithUV(p_147500_2_ + d7, p_147500_4_ + d23, p_147500_6_ + d9, d27, d29);
+			tessellator.addVertexWithUV(p_147500_2_ + d7, p_147500_4_, p_147500_6_ + d9, d27, d28);
+			tessellator.addVertexWithUV(p_147500_2_ + d11, p_147500_4_, p_147500_6_ + d13, d25, d28);
+			tessellator.addVertexWithUV(p_147500_2_ + d11, p_147500_4_ + d23, p_147500_6_ + d13, d25, d29);
+			tessellator.addVertexWithUV(p_147500_2_ + d19, p_147500_4_ + d23, p_147500_6_ + d21, d27, d29);
+			tessellator.addVertexWithUV(p_147500_2_ + d19, p_147500_4_, p_147500_6_ + d21, d27, d28);
+			tessellator.addVertexWithUV(p_147500_2_ + d15, p_147500_4_, p_147500_6_ + d17, d25, d28);
+			tessellator.addVertexWithUV(p_147500_2_ + d15, p_147500_4_ + d23, p_147500_6_ + d17, d25, d29);
+			tessellator.addVertexWithUV(p_147500_2_ + d11, p_147500_4_ + d23, p_147500_6_ + d13, d27, d29);
+			tessellator.addVertexWithUV(p_147500_2_ + d11, p_147500_4_, p_147500_6_ + d13, d27, d28);
+			tessellator.addVertexWithUV(p_147500_2_ + d19, p_147500_4_, p_147500_6_ + d21, d25, d28);
+			tessellator.addVertexWithUV(p_147500_2_ + d19, p_147500_4_ + d23, p_147500_6_ + d21, d25, d29);
+			tessellator.addVertexWithUV(p_147500_2_ + d15, p_147500_4_ + d23, p_147500_6_ + d17, d27, d29);
+			tessellator.addVertexWithUV(p_147500_2_ + d15, p_147500_4_, p_147500_6_ + d17, d27, d28);
+			tessellator.addVertexWithUV(p_147500_2_ + d7, p_147500_4_, p_147500_6_ + d9, d25, d28);
+			tessellator.addVertexWithUV(p_147500_2_ + d7, p_147500_4_ + d23, p_147500_6_ + d9, d25, d29);
 			tessellator.draw();
 			GL11.glEnable(GL11.GL_BLEND);
 			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
@@ -87,29 +87,27 @@ public class TileEntityBeaconRenderer extends TileEntitySpecialRenderer
 			double d22 = 1.0D;
 			double d24 = (double)(-1.0F + f3);
 			double d26 = (double)(256.0F * f1) + d24;
-			tessellator.addVertexWithUV(p_147522_2_ + d30, p_147522_4_ + d18, p_147522_6_ + d4, d22, d26);
-			tessellator.addVertexWithUV(p_147522_2_ + d30, p_147522_4_, p_147522_6_ + d4, d22, d24);
-			tessellator.addVertexWithUV(p_147522_2_ + d6, p_147522_4_, p_147522_6_ + d8, d20, d24);
-			tessellator.addVertexWithUV(p_147522_2_ + d6, p_147522_4_ + d18, p_147522_6_ + d8, d20, d26);
-			tessellator.addVertexWithUV(p_147522_2_ + d14, p_147522_4_ + d18, p_147522_6_ + d16, d22, d26);
-			tessellator.addVertexWithUV(p_147522_2_ + d14, p_147522_4_, p_147522_6_ + d16, d22, d24);
-			tessellator.addVertexWithUV(p_147522_2_ + d10, p_147522_4_, p_147522_6_ + d12, d20, d24);
-			tessellator.addVertexWithUV(p_147522_2_ + d10, p_147522_4_ + d18, p_147522_6_ + d12, d20, d26);
-			tessellator.addVertexWithUV(p_147522_2_ + d6, p_147522_4_ + d18, p_147522_6_ + d8, d22, d26);
-			tessellator.addVertexWithUV(p_147522_2_ + d6, p_147522_4_, p_147522_6_ + d8, d22, d24);
-			tessellator.addVertexWithUV(p_147522_2_ + d14, p_147522_4_, p_147522_6_ + d16, d20, d24);
-			tessellator.addVertexWithUV(p_147522_2_ + d14, p_147522_4_ + d18, p_147522_6_ + d16, d20, d26);
-			tessellator.addVertexWithUV(p_147522_2_ + d10, p_147522_4_ + d18, p_147522_6_ + d12, d22, d26);
-			tessellator.addVertexWithUV(p_147522_2_ + d10, p_147522_4_, p_147522_6_ + d12, d22, d24);
-			tessellator.addVertexWithUV(p_147522_2_ + d30, p_147522_4_, p_147522_6_ + d4, d20, d24);
-			tessellator.addVertexWithUV(p_147522_2_ + d30, p_147522_4_ + d18, p_147522_6_ + d4, d20, d26);
+			tessellator.addVertexWithUV(p_147500_2_ + d30, p_147500_4_ + d18, p_147500_6_ + d4, d22, d26);
+			tessellator.addVertexWithUV(p_147500_2_ + d30, p_147500_4_, p_147500_6_ + d4, d22, d24);
+			tessellator.addVertexWithUV(p_147500_2_ + d6, p_147500_4_, p_147500_6_ + d8, d20, d24);
+			tessellator.addVertexWithUV(p_147500_2_ + d6, p_147500_4_ + d18, p_147500_6_ + d8, d20, d26);
+			tessellator.addVertexWithUV(p_147500_2_ + d14, p_147500_4_ + d18, p_147500_6_ + d16, d22, d26);
+			tessellator.addVertexWithUV(p_147500_2_ + d14, p_147500_4_, p_147500_6_ + d16, d22, d24);
+			tessellator.addVertexWithUV(p_147500_2_ + d10, p_147500_4_, p_147500_6_ + d12, d20, d24);
+			tessellator.addVertexWithUV(p_147500_2_ + d10, p_147500_4_ + d18, p_147500_6_ + d12, d20, d26);
+			tessellator.addVertexWithUV(p_147500_2_ + d6, p_147500_4_ + d18, p_147500_6_ + d8, d22, d26);
+			tessellator.addVertexWithUV(p_147500_2_ + d6, p_147500_4_, p_147500_6_ + d8, d22, d24);
+			tessellator.addVertexWithUV(p_147500_2_ + d14, p_147500_4_, p_147500_6_ + d16, d20, d24);
+			tessellator.addVertexWithUV(p_147500_2_ + d14, p_147500_4_ + d18, p_147500_6_ + d16, d20, d26);
+			tessellator.addVertexWithUV(p_147500_2_ + d10, p_147500_4_ + d18, p_147500_6_ + d12, d22, d26);
+			tessellator.addVertexWithUV(p_147500_2_ + d10, p_147500_4_, p_147500_6_ + d12, d22, d24);
+			tessellator.addVertexWithUV(p_147500_2_ + d30, p_147500_4_, p_147500_6_ + d4, d20, d24);
+			tessellator.addVertexWithUV(p_147500_2_ + d30, p_147500_4_ + d18, p_147500_6_ + d4, d20, d26);
 			tessellator.draw();
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glDepthMask(true);
 		}
-
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.5F);
 	}
 
 	public void renderTileEntityAt(TileEntity p_147500_1_, double p_147500_2_, double p_147500_4_, double p_147500_6_, float p_147500_8_)

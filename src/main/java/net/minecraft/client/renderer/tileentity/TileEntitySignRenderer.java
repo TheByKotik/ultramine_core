@@ -18,23 +18,23 @@ public class TileEntitySignRenderer extends TileEntitySpecialRenderer
 	private final ModelSign field_147514_c = new ModelSign();
 	private static final String __OBFID = "CL_00000970";
 
-	public void renderTileEntityAt(TileEntitySign p_147512_1_, double p_147512_2_, double p_147512_4_, double p_147512_6_, float p_147512_8_)
+	public void renderTileEntityAt(TileEntitySign p_147500_1_, double p_147500_2_, double p_147500_4_, double p_147500_6_, float p_147500_8_)
 	{
-		Block block = p_147512_1_.getBlockType();
+		Block block = p_147500_1_.getBlockType();
 		GL11.glPushMatrix();
 		float f1 = 0.6666667F;
 		float f3;
 
 		if (block == Blocks.standing_sign)
 		{
-			GL11.glTranslatef((float)p_147512_2_ + 0.5F, (float)p_147512_4_ + 0.75F * f1, (float)p_147512_6_ + 0.5F);
-			float f2 = (float)(p_147512_1_.getBlockMetadata() * 360) / 16.0F;
+			GL11.glTranslatef((float)p_147500_2_ + 0.5F, (float)p_147500_4_ + 0.75F * f1, (float)p_147500_6_ + 0.5F);
+			float f2 = (float)(p_147500_1_.getBlockMetadata() * 360) / 16.0F;
 			GL11.glRotatef(-f2, 0.0F, 1.0F, 0.0F);
 			this.field_147514_c.signStick.showModel = true;
 		}
 		else
 		{
-			int j = p_147512_1_.getBlockMetadata();
+			int j = p_147500_1_.getBlockMetadata();
 			f3 = 0.0F;
 
 			if (j == 2)
@@ -52,7 +52,7 @@ public class TileEntitySignRenderer extends TileEntitySpecialRenderer
 				f3 = -90.0F;
 			}
 
-			GL11.glTranslatef((float)p_147512_2_ + 0.5F, (float)p_147512_4_ + 0.75F * f1, (float)p_147512_6_ + 0.5F);
+			GL11.glTranslatef((float)p_147500_2_ + 0.5F, (float)p_147500_4_ + 0.75F * f1, (float)p_147500_6_ + 0.5F);
 			GL11.glRotatef(-f3, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(0.0F, -0.3125F, -0.4375F);
 			this.field_147514_c.signStick.showModel = false;
@@ -71,18 +71,18 @@ public class TileEntitySignRenderer extends TileEntitySpecialRenderer
 		GL11.glDepthMask(false);
 		byte b0 = 0;
 
-		for (int i = 0; i < p_147512_1_.signText.length; ++i)
+		for (int i = 0; i < p_147500_1_.signText.length; ++i)
 		{
-			String s = p_147512_1_.signText[i];
+			String s = p_147500_1_.signText[i];
 
-			if (i == p_147512_1_.lineBeingEdited)
+			if (i == p_147500_1_.lineBeingEdited)
 			{
 				s = "> " + s + " <";
-				fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, i * 10 - p_147512_1_.signText.length * 5, b0);
+				fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, i * 10 - p_147500_1_.signText.length * 5, b0);
 			}
 			else
 			{
-				fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, i * 10 - p_147512_1_.signText.length * 5, b0);
+				fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, i * 10 - p_147500_1_.signText.length * 5, b0);
 			}
 		}
 

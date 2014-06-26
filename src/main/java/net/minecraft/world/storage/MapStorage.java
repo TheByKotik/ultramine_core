@@ -24,15 +24,15 @@ public class MapStorage
 	private Map idCounts = new HashMap();
 	private static final String __OBFID = "CL_00000604";
 
-	public MapStorage(ISaveHandler par1ISaveHandler)
+	public MapStorage(ISaveHandler p_i2162_1_)
 	{
-		this.saveHandler = par1ISaveHandler;
+		this.saveHandler = p_i2162_1_;
 		this.loadIdCounts();
 	}
 
-	public WorldSavedData loadData(Class par1Class, String par2Str)
+	public WorldSavedData loadData(Class p_75742_1_, String p_75742_2_)
 	{
-		WorldSavedData worldsaveddata = (WorldSavedData)this.loadedDataMap.get(par2Str);
+		WorldSavedData worldsaveddata = (WorldSavedData)this.loadedDataMap.get(p_75742_2_);
 
 		if (worldsaveddata != null)
 		{
@@ -44,17 +44,17 @@ public class MapStorage
 			{
 				try
 				{
-					File file1 = this.saveHandler.getMapFileFromName(par2Str);
+					File file1 = this.saveHandler.getMapFileFromName(p_75742_2_);
 
 					if (file1 != null && file1.exists())
 					{
 						try
 						{
-							worldsaveddata = (WorldSavedData)par1Class.getConstructor(new Class[] {String.class}).newInstance(new Object[] {par2Str});
+							worldsaveddata = (WorldSavedData)p_75742_1_.getConstructor(new Class[] {String.class}).newInstance(new Object[] {p_75742_2_});
 						}
 						catch (Exception exception)
 						{
-							throw new RuntimeException("Failed to instantiate " + par1Class.toString(), exception);
+							throw new RuntimeException("Failed to instantiate " + p_75742_1_.toString(), exception);
 						}
 
 						FileInputStream fileinputstream = new FileInputStream(file1);
@@ -71,7 +71,7 @@ public class MapStorage
 
 			if (worldsaveddata != null)
 			{
-				this.loadedDataMap.put(par2Str, worldsaveddata);
+				this.loadedDataMap.put(p_75742_2_, worldsaveddata);
 				this.loadedDataList.add(worldsaveddata);
 			}
 
@@ -79,21 +79,21 @@ public class MapStorage
 		}
 	}
 
-	public void setData(String par1Str, WorldSavedData par2WorldSavedData)
+	public void setData(String p_75745_1_, WorldSavedData p_75745_2_)
 	{
-		if (par2WorldSavedData == null)
+		if (p_75745_2_ == null)
 		{
 			throw new RuntimeException("Can\'t set null data");
 		}
 		else
 		{
-			if (this.loadedDataMap.containsKey(par1Str))
+			if (this.loadedDataMap.containsKey(p_75745_1_))
 			{
-				this.loadedDataList.remove(this.loadedDataMap.remove(par1Str));
+				this.loadedDataList.remove(this.loadedDataMap.remove(p_75745_1_));
 			}
 
-			this.loadedDataMap.put(par1Str, par2WorldSavedData);
-			this.loadedDataList.add(par2WorldSavedData);
+			this.loadedDataMap.put(p_75745_1_, p_75745_2_);
+			this.loadedDataList.add(p_75745_2_);
 		}
 	}
 
@@ -111,18 +111,18 @@ public class MapStorage
 		}
 	}
 
-	private void saveData(WorldSavedData par1WorldSavedData)
+	private void saveData(WorldSavedData p_75747_1_)
 	{
 		if (this.saveHandler != null)
 		{
 			try
 			{
-				File file1 = this.saveHandler.getMapFileFromName(par1WorldSavedData.mapName);
+				File file1 = this.saveHandler.getMapFileFromName(p_75747_1_.mapName);
 
 				if (file1 != null)
 				{
 					NBTTagCompound nbttagcompound = new NBTTagCompound();
-					par1WorldSavedData.writeToNBT(nbttagcompound);
+					p_75747_1_.writeToNBT(nbttagcompound);
 					NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 					nbttagcompound1.setTag("data", nbttagcompound);
 					FileOutputStream fileoutputstream = new FileOutputStream(file1);
@@ -177,9 +177,9 @@ public class MapStorage
 		}
 	}
 
-	public int getUniqueDataId(String par1Str)
+	public int getUniqueDataId(String p_75743_1_)
 	{
-		Short oshort = (Short)this.idCounts.get(par1Str);
+		Short oshort = (Short)this.idCounts.get(p_75743_1_);
 
 		if (oshort == null)
 		{
@@ -190,7 +190,7 @@ public class MapStorage
 			oshort = Short.valueOf((short)(oshort.shortValue() + 1));
 		}
 
-		this.idCounts.put(par1Str, oshort);
+		this.idCounts.put(p_75743_1_, oshort);
 
 		if (this.saveHandler == null)
 		{

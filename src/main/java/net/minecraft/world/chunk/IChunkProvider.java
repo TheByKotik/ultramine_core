@@ -8,15 +8,15 @@ import net.minecraft.world.World;
 
 public interface IChunkProvider
 {
-	boolean chunkExists(int var1, int var2);
+	boolean chunkExists(int p_73149_1_, int p_73149_2_);
 
-	Chunk provideChunk(int var1, int var2);
+	Chunk provideChunk(int p_73154_1_, int p_73154_2_);
 
-	Chunk loadChunk(int var1, int var2);
+	Chunk loadChunk(int p_73158_1_, int p_73158_2_);
 
-	void populate(IChunkProvider var1, int var2, int var3);
+	void populate(IChunkProvider p_73153_1_, int p_73153_2_, int p_73153_3_);
 
-	boolean saveChunks(boolean var1, IProgressUpdate var2);
+	boolean saveChunks(boolean p_73151_1_, IProgressUpdate p_73151_2_);
 
 	boolean unloadQueuedChunks();
 
@@ -24,13 +24,13 @@ public interface IChunkProvider
 
 	String makeString();
 
-	List getPossibleCreatures(EnumCreatureType var1, int var2, int var3, int var4);
+	List getPossibleCreatures(EnumCreatureType p_73155_1_, int p_73155_2_, int p_73155_3_, int p_73155_4_);
 
-	ChunkPosition func_147416_a(World var1, String var2, int var3, int var4, int var5);
+	ChunkPosition func_147416_a(World p_147416_1_, String p_147416_2_, int p_147416_3_, int p_147416_4_, int p_147416_5_);
 
 	int getLoadedChunkCount();
 
-	void recreateStructures(int var1, int var2);
+	void recreateStructures(int p_82695_1_, int p_82695_2_);
 
 	void saveExtraData();
 }

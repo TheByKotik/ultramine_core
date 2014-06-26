@@ -16,34 +16,34 @@ public class ContainerFurnace extends Container
 	private int lastItemBurnTime;
 	private static final String __OBFID = "CL_00001748";
 
-	public ContainerFurnace(InventoryPlayer par1InventoryPlayer, TileEntityFurnace par2TileEntityFurnace)
+	public ContainerFurnace(InventoryPlayer p_i1812_1_, TileEntityFurnace p_i1812_2_)
 	{
-		this.tileFurnace = par2TileEntityFurnace;
-		this.addSlotToContainer(new Slot(par2TileEntityFurnace, 0, 56, 17));
-		this.addSlotToContainer(new Slot(par2TileEntityFurnace, 1, 56, 53));
-		this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, par2TileEntityFurnace, 2, 116, 35));
+		this.tileFurnace = p_i1812_2_;
+		this.addSlotToContainer(new Slot(p_i1812_2_, 0, 56, 17));
+		this.addSlotToContainer(new Slot(p_i1812_2_, 1, 56, 53));
+		this.addSlotToContainer(new SlotFurnace(p_i1812_1_.player, p_i1812_2_, 2, 116, 35));
 		int i;
 
 		for (i = 0; i < 3; ++i)
 		{
 			for (int j = 0; j < 9; ++j)
 			{
-				this.addSlotToContainer(new Slot(par1InventoryPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(p_i1812_1_, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 
 		for (i = 0; i < 9; ++i)
 		{
-			this.addSlotToContainer(new Slot(par1InventoryPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(p_i1812_1_, i, 8 + i * 18, 142));
 		}
 	}
 
-	public void addCraftingToCrafters(ICrafting par1ICrafting)
+	public void addCraftingToCrafters(ICrafting p_75132_1_)
 	{
-		super.addCraftingToCrafters(par1ICrafting);
-		par1ICrafting.sendProgressBarUpdate(this, 0, this.tileFurnace.furnaceCookTime);
-		par1ICrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.furnaceBurnTime);
-		par1ICrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.currentItemBurnTime);
+		super.addCraftingToCrafters(p_75132_1_);
+		p_75132_1_.sendProgressBarUpdate(this, 0, this.tileFurnace.furnaceCookTime);
+		p_75132_1_.sendProgressBarUpdate(this, 1, this.tileFurnace.furnaceBurnTime);
+		p_75132_1_.sendProgressBarUpdate(this, 2, this.tileFurnace.currentItemBurnTime);
 	}
 
 	public void detectAndSendChanges()
@@ -76,40 +76,40 @@ public class ContainerFurnace extends Container
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int par1, int par2)
+	public void updateProgressBar(int p_75137_1_, int p_75137_2_)
 	{
-		if (par1 == 0)
+		if (p_75137_1_ == 0)
 		{
-			this.tileFurnace.furnaceCookTime = par2;
+			this.tileFurnace.furnaceCookTime = p_75137_2_;
 		}
 
-		if (par1 == 1)
+		if (p_75137_1_ == 1)
 		{
-			this.tileFurnace.furnaceBurnTime = par2;
+			this.tileFurnace.furnaceBurnTime = p_75137_2_;
 		}
 
-		if (par1 == 2)
+		if (p_75137_1_ == 2)
 		{
-			this.tileFurnace.currentItemBurnTime = par2;
+			this.tileFurnace.currentItemBurnTime = p_75137_2_;
 		}
 	}
 
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+	public boolean canInteractWith(EntityPlayer p_75145_1_)
 	{
-		return this.tileFurnace.isUseableByPlayer(par1EntityPlayer);
+		return this.tileFurnace.isUseableByPlayer(p_75145_1_);
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
 	{
 		ItemStack itemstack = null;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = (Slot)this.inventorySlots.get(p_82846_2_);
 
 		if (slot != null && slot.getHasStack())
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			if (par2 == 2)
+			if (p_82846_2_ == 2)
 			{
 				if (!this.mergeItemStack(itemstack1, 3, 39, true))
 				{
@@ -118,7 +118,7 @@ public class ContainerFurnace extends Container
 
 				slot.onSlotChange(itemstack1, itemstack);
 			}
-			else if (par2 != 1 && par2 != 0)
+			else if (p_82846_2_ != 1 && p_82846_2_ != 0)
 			{
 				if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null)
 				{
@@ -134,14 +134,14 @@ public class ContainerFurnace extends Container
 						return null;
 					}
 				}
-				else if (par2 >= 3 && par2 < 30)
+				else if (p_82846_2_ >= 3 && p_82846_2_ < 30)
 				{
 					if (!this.mergeItemStack(itemstack1, 30, 39, false))
 					{
 						return null;
 					}
 				}
-				else if (par2 >= 30 && par2 < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
+				else if (p_82846_2_ >= 30 && p_82846_2_ < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
 				{
 					return null;
 				}
@@ -165,7 +165,7 @@ public class ContainerFurnace extends Container
 				return null;
 			}
 
-			slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+			slot.onPickupFromSlot(p_82846_1_, itemstack1);
 		}
 
 		return itemstack;

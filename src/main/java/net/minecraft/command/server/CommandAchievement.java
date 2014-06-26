@@ -29,34 +29,34 @@ public class CommandAchievement extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.achievement.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length >= 2)
+		if (p_71515_2_.length >= 2)
 		{
-			StatBase statbase = StatList.func_151177_a(par2ArrayOfStr[1]);
+			StatBase statbase = StatList.func_151177_a(p_71515_2_[1]);
 
-			if (statbase == null && !par2ArrayOfStr[1].equals("*"))
+			if (statbase == null && !p_71515_2_[1].equals("*"))
 			{
-				throw new CommandException("commands.achievement.unknownAchievement", new Object[] {par2ArrayOfStr[1]});
+				throw new CommandException("commands.achievement.unknownAchievement", new Object[] {p_71515_2_[1]});
 			}
 
 			EntityPlayerMP entityplayermp;
 
-			if (par2ArrayOfStr.length >= 3)
+			if (p_71515_2_.length >= 3)
 			{
-				entityplayermp = getPlayer(par1ICommandSender, par2ArrayOfStr[2]);
+				entityplayermp = getPlayer(p_71515_1_, p_71515_2_[2]);
 			}
 			else
 			{
-				entityplayermp = getCommandSenderAsPlayer(par1ICommandSender);
+				entityplayermp = getCommandSenderAsPlayer(p_71515_1_);
 			}
 
-			if (par2ArrayOfStr[0].equalsIgnoreCase("give"))
+			if (p_71515_2_[0].equalsIgnoreCase("give"))
 			{
 				if (statbase == null)
 				{
@@ -68,7 +68,7 @@ public class CommandAchievement extends CommandBase
 						entityplayermp.triggerAchievement(achievement);
 					}
 
-					notifyAdmins(par1ICommandSender, "commands.achievement.give.success.all", new Object[] {entityplayermp.getCommandSenderName()});
+					func_152373_a(p_71515_1_, this, "commands.achievement.give.success.all", new Object[] {entityplayermp.getCommandSenderName()});
 				}
 				else
 				{
@@ -92,7 +92,7 @@ public class CommandAchievement extends CommandBase
 					}
 
 					entityplayermp.triggerAchievement(statbase);
-					notifyAdmins(par1ICommandSender, "commands.achievement.give.success.one", new Object[] {entityplayermp.getCommandSenderName(), statbase.func_150955_j()});
+					func_152373_a(p_71515_1_, this, "commands.achievement.give.success.one", new Object[] {entityplayermp.getCommandSenderName(), statbase.func_150955_j()});
 				}
 
 				return;
@@ -102,15 +102,15 @@ public class CommandAchievement extends CommandBase
 		throw new WrongUsageException("commands.achievement.usage", new Object[0]);
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		if (par2ArrayOfStr.length == 1)
+		if (p_71516_2_.length == 1)
 		{
-			return getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"give"});
+			return getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"give"});
 		}
-		else if (par2ArrayOfStr.length != 2)
+		else if (p_71516_2_.length != 2)
 		{
-			return par2ArrayOfStr.length == 3 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames()) : null;
+			return p_71516_2_.length == 3 ? getListOfStringsMatchingLastWord(p_71516_2_, MinecraftServer.getServer().getAllUsernames()) : null;
 		}
 		else
 		{
@@ -123,12 +123,12 @@ public class CommandAchievement extends CommandBase
 				arraylist.add(statbase.statId);
 			}
 
-			return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, arraylist);
+			return getListOfStringsFromIterableMatchingLastWord(p_71516_2_, arraylist);
 		}
 	}
 
-	public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2)
+	public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_)
 	{
-		return par2 == 2;
+		return p_82358_2_ == 2;
 	}
 }

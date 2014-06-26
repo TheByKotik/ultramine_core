@@ -14,65 +14,65 @@ public class WorldGeneratorBonusChest extends WorldGenerator
 	private final int itemsToGenerateInBonusChest;
 	private static final String __OBFID = "CL_00000403";
 
-	public WorldGeneratorBonusChest(WeightedRandomChestContent[] par1ArrayOfWeightedRandomChestContent, int par2)
+	public WorldGeneratorBonusChest(WeightedRandomChestContent[] p_i2010_1_, int p_i2010_2_)
 	{
-		this.theBonusChestGenerator = par1ArrayOfWeightedRandomChestContent;
-		this.itemsToGenerateInBonusChest = par2;
+		this.theBonusChestGenerator = p_i2010_1_;
+		this.itemsToGenerateInBonusChest = p_i2010_2_;
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
 		Block block;
 
 		do
 		{
-			block = par1World.getBlock(par3, par4, par5);
-			if (!block.isAir(par1World, par3, par4, par5) && !block.isLeaves(par1World, par3, par4, par5)) break;
-			par4--;
-		} while (par4 > 1);
+			block = p_76484_1_.getBlock(p_76484_3_, p_76484_4_, p_76484_5_);
+			if (!block.isAir(p_76484_1_, p_76484_3_, p_76484_4_, p_76484_5_) && !block.isLeaves(p_76484_1_, p_76484_3_, p_76484_4_, p_76484_5_)) break;
+			p_76484_4_--;
+		} while (p_76484_4_ > 1);
 
-		if (par4 < 1)
+		if (p_76484_4_ < 1)
 		{
 			return false;
 		}
 		else
 		{
-			++par4;
+			++p_76484_4_;
 
 			for (int l = 0; l < 4; ++l)
 			{
-				int i1 = par3 + par2Random.nextInt(4) - par2Random.nextInt(4);
-				int j1 = par4 + par2Random.nextInt(3) - par2Random.nextInt(3);
-				int k1 = par5 + par2Random.nextInt(4) - par2Random.nextInt(4);
+				int i1 = p_76484_3_ + p_76484_2_.nextInt(4) - p_76484_2_.nextInt(4);
+				int j1 = p_76484_4_ + p_76484_2_.nextInt(3) - p_76484_2_.nextInt(3);
+				int k1 = p_76484_5_ + p_76484_2_.nextInt(4) - p_76484_2_.nextInt(4);
 
-				if (par1World.isAirBlock(i1, j1, k1) && World.doesBlockHaveSolidTopSurface(par1World, i1, j1 - 1, k1))
+				if (p_76484_1_.isAirBlock(i1, j1, k1) && World.doesBlockHaveSolidTopSurface(p_76484_1_, i1, j1 - 1, k1))
 				{
-					par1World.setBlock(i1, j1, k1, Blocks.chest, 0, 2);
-					TileEntityChest tileentitychest = (TileEntityChest)par1World.getTileEntity(i1, j1, k1);
+					p_76484_1_.setBlock(i1, j1, k1, Blocks.chest, 0, 2);
+					TileEntityChest tileentitychest = (TileEntityChest)p_76484_1_.getTileEntity(i1, j1, k1);
 
 					if (tileentitychest != null && tileentitychest != null)
 					{
-						WeightedRandomChestContent.generateChestContents(par2Random, this.theBonusChestGenerator, tileentitychest, this.itemsToGenerateInBonusChest);
+						WeightedRandomChestContent.generateChestContents(p_76484_2_, this.theBonusChestGenerator, tileentitychest, this.itemsToGenerateInBonusChest);
 					}
 
-					if (par1World.isAirBlock(i1 - 1, j1, k1) && World.doesBlockHaveSolidTopSurface(par1World, i1 - 1, j1 - 1, k1))
+					if (p_76484_1_.isAirBlock(i1 - 1, j1, k1) && World.doesBlockHaveSolidTopSurface(p_76484_1_, i1 - 1, j1 - 1, k1))
 					{
-						par1World.setBlock(i1 - 1, j1, k1, Blocks.torch, 0, 2);
+						p_76484_1_.setBlock(i1 - 1, j1, k1, Blocks.torch, 0, 2);
 					}
 
-					if (par1World.isAirBlock(i1 + 1, j1, k1) && World.doesBlockHaveSolidTopSurface(par1World, i1 - 1, j1 - 1, k1))
+					if (p_76484_1_.isAirBlock(i1 + 1, j1, k1) && World.doesBlockHaveSolidTopSurface(p_76484_1_, i1 - 1, j1 - 1, k1))
 					{
-						par1World.setBlock(i1 + 1, j1, k1, Blocks.torch, 0, 2);
+						p_76484_1_.setBlock(i1 + 1, j1, k1, Blocks.torch, 0, 2);
 					}
 
-					if (par1World.isAirBlock(i1, j1, k1 - 1) && World.doesBlockHaveSolidTopSurface(par1World, i1 - 1, j1 - 1, k1))
+					if (p_76484_1_.isAirBlock(i1, j1, k1 - 1) && World.doesBlockHaveSolidTopSurface(p_76484_1_, i1 - 1, j1 - 1, k1))
 					{
-						par1World.setBlock(i1, j1, k1 - 1, Blocks.torch, 0, 2);
+						p_76484_1_.setBlock(i1, j1, k1 - 1, Blocks.torch, 0, 2);
 					}
 
-					if (par1World.isAirBlock(i1, j1, k1 + 1) && World.doesBlockHaveSolidTopSurface(par1World, i1 - 1, j1 - 1, k1))
+					if (p_76484_1_.isAirBlock(i1, j1, k1 + 1) && World.doesBlockHaveSolidTopSurface(p_76484_1_, i1 - 1, j1 - 1, k1))
 					{
-						par1World.setBlock(i1, j1, k1 + 1, Blocks.torch, 0, 2);
+						p_76484_1_.setBlock(i1, j1, k1 + 1, Blocks.torch, 0, 2);
 					}
 
 					return true;

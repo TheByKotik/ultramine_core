@@ -316,25 +316,25 @@ public class BiomeDecorator
 		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(currentWorld, randomGenerator, chunk_X, chunk_Z));
 	}
 
-	protected void genStandardOre1(int par1, WorldGenerator par2WorldGenerator, int par3, int par4)
+	protected void genStandardOre1(int p_76795_1_, WorldGenerator p_76795_2_, int p_76795_3_, int p_76795_4_)
 	{
-		for (int l = 0; l < par1; ++l)
+		for (int l = 0; l < p_76795_1_; ++l)
 		{
 			int i1 = this.chunk_X + this.randomGenerator.nextInt(16);
-			int j1 = this.randomGenerator.nextInt(par4 - par3) + par3;
+			int j1 = this.randomGenerator.nextInt(p_76795_4_ - p_76795_3_) + p_76795_3_;
 			int k1 = this.chunk_Z + this.randomGenerator.nextInt(16);
-			par2WorldGenerator.generate(this.currentWorld, this.randomGenerator, i1, j1, k1);
+			p_76795_2_.generate(this.currentWorld, this.randomGenerator, i1, j1, k1);
 		}
 	}
 
-	protected void genStandardOre2(int par1, WorldGenerator par2WorldGenerator, int par3, int par4)
+	protected void genStandardOre2(int p_76793_1_, WorldGenerator p_76793_2_, int p_76793_3_, int p_76793_4_)
 	{
-		for (int l = 0; l < par1; ++l)
+		for (int l = 0; l < p_76793_1_; ++l)
 		{
 			int i1 = this.chunk_X + this.randomGenerator.nextInt(16);
-			int j1 = this.randomGenerator.nextInt(par4) + this.randomGenerator.nextInt(par4) + (par3 - par4);
+			int j1 = this.randomGenerator.nextInt(p_76793_4_) + this.randomGenerator.nextInt(p_76793_4_) + (p_76793_3_ - p_76793_4_);
 			int k1 = this.chunk_Z + this.randomGenerator.nextInt(16);
-			par2WorldGenerator.generate(this.currentWorld, this.randomGenerator, i1, j1, k1);
+			p_76793_2_.generate(this.currentWorld, this.randomGenerator, i1, j1, k1);
 		}
 	}
 

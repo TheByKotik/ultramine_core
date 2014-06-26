@@ -8,23 +8,23 @@ public abstract class WorldSavedData
 	private boolean dirty;
 	private static final String __OBFID = "CL_00000580";
 
-	public WorldSavedData(String par1Str)
+	public WorldSavedData(String p_i2141_1_)
 	{
-		this.mapName = par1Str;
+		this.mapName = p_i2141_1_;
 	}
 
-	public abstract void readFromNBT(NBTTagCompound var1);
+	public abstract void readFromNBT(NBTTagCompound p_76184_1_);
 
-	public abstract void writeToNBT(NBTTagCompound var1);
+	public abstract void writeToNBT(NBTTagCompound p_76187_1_);
 
 	public void markDirty()
 	{
 		this.setDirty(true);
 	}
 
-	public void setDirty(boolean par1)
+	public void setDirty(boolean p_76186_1_)
 	{
-		this.dirty = par1;
+		this.dirty = p_76186_1_;
 	}
 
 	public boolean isDirty()

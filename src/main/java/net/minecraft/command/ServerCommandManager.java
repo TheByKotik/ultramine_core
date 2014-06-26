@@ -12,6 +12,7 @@ import net.minecraft.command.server.CommandListBans;
 import net.minecraft.command.server.CommandListPlayers;
 import net.minecraft.command.server.CommandMessage;
 import net.minecraft.command.server.CommandMessageRaw;
+import net.minecraft.command.server.CommandNetstat;
 import net.minecraft.command.server.CommandOp;
 import net.minecraft.command.server.CommandPardonIp;
 import net.minecraft.command.server.CommandPardonPlayer;
@@ -28,7 +29,8 @@ import net.minecraft.command.server.CommandTeleport;
 import net.minecraft.command.server.CommandTestFor;
 import net.minecraft.command.server.CommandTestForBlock;
 import net.minecraft.command.server.CommandWhitelist;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.rcon.RConConsoleSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
@@ -88,6 +90,7 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
 			this.registerCommand(new CommandListPlayers());
 			this.registerCommand(new CommandWhitelist());
 			this.registerCommand(new CommandSetPlayerTimeout());
+			this.registerCommand(new CommandNetstat());
 		}
 		else
 		{
@@ -97,16 +100,16 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
 		CommandBase.setAdminCommander(this);
 	}
 
-	public void notifyAdmins(ICommandSender par1ICommandSender, int par2, String par3Str, Object ... par4ArrayOfObj)
+	public void func_152372_a(ICommandSender p_152372_1_, ICommand p_152372_2_, int p_152372_3_, String p_152372_4_, Object ... p_152372_5_)
 	{
 		boolean flag = true;
 
-		if (par1ICommandSender instanceof CommandBlockLogic && !MinecraftServer.getServer().worldServers[0].getGameRules().getGameRuleBooleanValue("commandBlockOutput"))
+		if (p_152372_1_ instanceof CommandBlockLogic && !MinecraftServer.getServer().worldServers[0].getGameRules().getGameRuleBooleanValue("commandBlockOutput"))
 		{
 			flag = false;
 		}
 
-		ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.type.admin", new Object[] {par1ICommandSender.getCommandSenderName(), new ChatComponentTranslation(par3Str, par4ArrayOfObj)});
+		ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("chat.type.admin", new Object[] {p_152372_1_.getCommandSenderName(), new ChatComponentTranslation(p_152372_4_, p_152372_5_)});
 		chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.GRAY);
 		chatcomponenttranslation.getChatStyle().setItalic(Boolean.valueOf(true));
 
@@ -116,23 +119,23 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
 
 			while (iterator.hasNext())
 			{
-				EntityPlayerMP entityplayermp = (EntityPlayerMP)iterator.next();
+				EntityPlayer entityplayer = (EntityPlayer)iterator.next();
 
-				if (entityplayermp != par1ICommandSender && MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(entityplayermp.getCommandSenderName()))
+				if (entityplayer != p_152372_1_ && MinecraftServer.getServer().getConfigurationManager().func_152596_g(entityplayer.getGameProfile()) && p_152372_2_.canCommandSenderUseCommand(entityplayer) && (!(p_152372_1_ instanceof RConConsoleSource) || MinecraftServer.getServer().func_152363_m()))
 				{
-					entityplayermp.addChatMessage(chatcomponenttranslation);
+					entityplayer.addChatMessage(chatcomponenttranslation);
 				}
 			}
 		}
 
-		if (par1ICommandSender != MinecraftServer.getServer())
+		if (p_152372_1_ != MinecraftServer.getServer())
 		{
 			MinecraftServer.getServer().addChatMessage(chatcomponenttranslation);
 		}
 
-		if ((par2 & 1) != 1)
+		if ((p_152372_3_ & 1) != 1)
 		{
-			par1ICommandSender.addChatMessage(new ChatComponentTranslation(par3Str, par4ArrayOfObj));
+			p_152372_1_.addChatMessage(new ChatComponentTranslation(p_152372_4_, p_152372_5_));
 		}
 	}
 }

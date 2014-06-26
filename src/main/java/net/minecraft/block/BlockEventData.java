@@ -50,15 +50,15 @@ public class BlockEventData
 		return this.field_151344_d;
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (!(par1Obj instanceof BlockEventData))
+		if (!(p_equals_1_ instanceof BlockEventData))
 		{
 			return false;
 		}
 		else
 		{
-			BlockEventData blockeventdata = (BlockEventData)par1Obj;
+			BlockEventData blockeventdata = (BlockEventData)p_equals_1_;
 			return this.coordX == blockeventdata.coordX && this.coordY == blockeventdata.coordY && this.coordZ == blockeventdata.coordZ && this.eventID == blockeventdata.eventID && this.eventParameter == blockeventdata.eventParameter && this.field_151344_d == blockeventdata.field_151344_d;
 		}
 	}

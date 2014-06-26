@@ -6,9 +6,9 @@ import net.minecraft.world.World;
 
 public interface IRecipe
 {
-	boolean matches(InventoryCrafting var1, World var2);
+	boolean matches(InventoryCrafting p_77569_1_, World p_77569_2_);
 
-	ItemStack getCraftingResult(InventoryCrafting var1);
+	ItemStack getCraftingResult(InventoryCrafting p_77572_1_);
 
 	int getRecipeSize();
 

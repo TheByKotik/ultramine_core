@@ -24,9 +24,9 @@ public class EntityPigZombie extends EntityZombie
 	private Entity field_110191_bu;
 	private static final String __OBFID = "CL_00001693";
 
-	public EntityPigZombie(World par1World)
+	public EntityPigZombie(World p_i1739_1_)
 	{
-		super(par1World);
+		super(p_i1739_1_);
 		this.isImmuneToFire = true;
 	}
 
@@ -71,16 +71,16 @@ public class EntityPigZombie extends EntityZombie
 		return this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL && this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty() && !this.worldObj.isAnyLiquid(this.boundingBox);
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setShort("Anger", (short)this.angerLevel);
+		super.writeEntityToNBT(p_70014_1_);
+		p_70014_1_.setShort("Anger", (short)this.angerLevel);
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
-		this.angerLevel = par1NBTTagCompound.getShort("Anger");
+		super.readEntityFromNBT(p_70037_1_);
+		this.angerLevel = p_70037_1_.getShort("Anger");
 	}
 
 	protected Entity findPlayerToAttack()
@@ -88,7 +88,7 @@ public class EntityPigZombie extends EntityZombie
 		return this.angerLevel == 0 ? null : super.findPlayerToAttack();
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		if (this.isEntityInvulnerable())
 		{
@@ -96,7 +96,7 @@ public class EntityPigZombie extends EntityZombie
 		}
 		else
 		{
-			Entity entity = par1DamageSource.getEntity();
+			Entity entity = p_70097_1_.getEntity();
 
 			if (entity instanceof EntityPlayer)
 			{
@@ -116,13 +116,13 @@ public class EntityPigZombie extends EntityZombie
 				this.becomeAngryAt(entity);
 			}
 
-			return super.attackEntityFrom(par1DamageSource, par2);
+			return super.attackEntityFrom(p_70097_1_, p_70097_2_);
 		}
 	}
 
-	private void becomeAngryAt(Entity par1Entity)
+	private void becomeAngryAt(Entity p_70835_1_)
 	{
-		this.entityToAttack = par1Entity;
+		this.entityToAttack = p_70835_1_;
 		this.angerLevel = 400 + this.rand.nextInt(400);
 		this.randomSoundDelay = this.rand.nextInt(40);
 	}
@@ -142,9 +142,9 @@ public class EntityPigZombie extends EntityZombie
 		return "mob.zombiepig.zpigdeath";
 	}
 
-	protected void dropFewItems(boolean par1, int par2)
+	protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
 	{
-		int j = this.rand.nextInt(2 + par2);
+		int j = this.rand.nextInt(2 + p_70628_2_);
 		int k;
 
 		for (k = 0; k < j; ++k)
@@ -152,7 +152,7 @@ public class EntityPigZombie extends EntityZombie
 			this.dropItem(Items.rotten_flesh, 1);
 		}
 
-		j = this.rand.nextInt(2 + par2);
+		j = this.rand.nextInt(2 + p_70628_2_);
 
 		for (k = 0; k < j; ++k)
 		{
@@ -160,12 +160,12 @@ public class EntityPigZombie extends EntityZombie
 		}
 	}
 
-	public boolean interact(EntityPlayer par1EntityPlayer)
+	public boolean interact(EntityPlayer p_70085_1_)
 	{
 		return false;
 	}
 
-	protected void dropRareDrop(int par1)
+	protected void dropRareDrop(int p_70600_1_)
 	{
 		this.dropItem(Items.gold_ingot, 1);
 	}
@@ -175,10 +175,10 @@ public class EntityPigZombie extends EntityZombie
 		this.setCurrentItemOrArmor(0, new ItemStack(Items.golden_sword));
 	}
 
-	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
+	public IEntityLivingData onSpawnWithEgg(IEntityLivingData p_110161_1_)
 	{
-		super.onSpawnWithEgg(par1EntityLivingData);
+		super.onSpawnWithEgg(p_110161_1_);
 		this.setVillager(false);
-		return par1EntityLivingData;
+		return p_110161_1_;
 	}
 }

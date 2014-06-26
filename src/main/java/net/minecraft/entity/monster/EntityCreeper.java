@@ -31,9 +31,9 @@ public class EntityCreeper extends EntityMob
 	private int explosionRadius = 3;
 	private static final String __OBFID = "CL_00001684";
 
-	public EntityCreeper(World par1World)
+	public EntityCreeper(World p_i1733_1_)
 	{
-		super(par1World);
+		super(p_i1733_1_);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAICreeperSwell(this));
 		this.tasks.addTask(3, new EntityAIAvoidEntity(this, EntityOcelot.class, 6.0F, 1.0D, 1.2D));
@@ -61,10 +61,10 @@ public class EntityCreeper extends EntityMob
 		return this.getAttackTarget() == null ? 3 : 3 + (int)(this.getHealth() - 1.0F);
 	}
 
-	protected void fall(float par1)
+	protected void fall(float p_70069_1_)
 	{
-		super.fall(par1);
-		this.timeSinceIgnited = (int)((float)this.timeSinceIgnited + par1 * 1.5F);
+		super.fall(p_70069_1_);
+		this.timeSinceIgnited = (int)((float)this.timeSinceIgnited + p_70069_1_ * 1.5F);
 
 		if (this.timeSinceIgnited > this.fuseTime - 5)
 		{
@@ -80,36 +80,36 @@ public class EntityCreeper extends EntityMob
 		this.dataWatcher.addObject(18, Byte.valueOf((byte)0));
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
+		super.writeEntityToNBT(p_70014_1_);
 
 		if (this.dataWatcher.getWatchableObjectByte(17) == 1)
 		{
-			par1NBTTagCompound.setBoolean("powered", true);
+			p_70014_1_.setBoolean("powered", true);
 		}
 
-		par1NBTTagCompound.setShort("Fuse", (short)this.fuseTime);
-		par1NBTTagCompound.setByte("ExplosionRadius", (byte)this.explosionRadius);
-		par1NBTTagCompound.setBoolean("ignited", this.func_146078_ca());
+		p_70014_1_.setShort("Fuse", (short)this.fuseTime);
+		p_70014_1_.setByte("ExplosionRadius", (byte)this.explosionRadius);
+		p_70014_1_.setBoolean("ignited", this.func_146078_ca());
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
-		this.dataWatcher.updateObject(17, Byte.valueOf((byte)(par1NBTTagCompound.getBoolean("powered") ? 1 : 0)));
+		super.readEntityFromNBT(p_70037_1_);
+		this.dataWatcher.updateObject(17, Byte.valueOf((byte)(p_70037_1_.getBoolean("powered") ? 1 : 0)));
 
-		if (par1NBTTagCompound.hasKey("Fuse", 99))
+		if (p_70037_1_.hasKey("Fuse", 99))
 		{
-			this.fuseTime = par1NBTTagCompound.getShort("Fuse");
+			this.fuseTime = p_70037_1_.getShort("Fuse");
 		}
 
-		if (par1NBTTagCompound.hasKey("ExplosionRadius", 99))
+		if (p_70037_1_.hasKey("ExplosionRadius", 99))
 		{
-			this.explosionRadius = par1NBTTagCompound.getByte("ExplosionRadius");
+			this.explosionRadius = p_70037_1_.getByte("ExplosionRadius");
 		}
 
-		if (par1NBTTagCompound.getBoolean("ignited"))
+		if (p_70037_1_.getBoolean("ignited"))
 		{
 			this.func_146079_cb();
 		}
@@ -160,11 +160,11 @@ public class EntityCreeper extends EntityMob
 		return "mob.creeper.death";
 	}
 
-	public void onDeath(DamageSource par1DamageSource)
+	public void onDeath(DamageSource p_70645_1_)
 	{
-		super.onDeath(par1DamageSource);
+		super.onDeath(p_70645_1_);
 
-		if (par1DamageSource.getEntity() instanceof EntitySkeleton)
+		if (p_70645_1_.getEntity() instanceof EntitySkeleton)
 		{
 			int i = Item.getIdFromItem(Items.record_13);
 			int j = Item.getIdFromItem(Items.record_wait);
@@ -173,7 +173,7 @@ public class EntityCreeper extends EntityMob
 		}
 	}
 
-	public boolean attackEntityAsMob(Entity par1Entity)
+	public boolean attackEntityAsMob(Entity p_70652_1_)
 	{
 		return true;
 	}
@@ -184,9 +184,9 @@ public class EntityCreeper extends EntityMob
 	}
 
 	@SideOnly(Side.CLIENT)
-	public float getCreeperFlashIntensity(float par1)
+	public float getCreeperFlashIntensity(float p_70831_1_)
 	{
-		return ((float)this.lastActiveTime + (float)(this.timeSinceIgnited - this.lastActiveTime) * par1) / (float)(this.fuseTime - 2);
+		return ((float)this.lastActiveTime + (float)(this.timeSinceIgnited - this.lastActiveTime) * p_70831_1_) / (float)(this.fuseTime - 2);
 	}
 
 	protected Item getDropItem()
@@ -199,35 +199,35 @@ public class EntityCreeper extends EntityMob
 		return this.dataWatcher.getWatchableObjectByte(16);
 	}
 
-	public void setCreeperState(int par1)
+	public void setCreeperState(int p_70829_1_)
 	{
-		this.dataWatcher.updateObject(16, Byte.valueOf((byte)par1));
+		this.dataWatcher.updateObject(16, Byte.valueOf((byte)p_70829_1_));
 	}
 
-	public void onStruckByLightning(EntityLightningBolt par1EntityLightningBolt)
+	public void onStruckByLightning(EntityLightningBolt p_70077_1_)
 	{
-		super.onStruckByLightning(par1EntityLightningBolt);
+		super.onStruckByLightning(p_70077_1_);
 		this.dataWatcher.updateObject(17, Byte.valueOf((byte)1));
 	}
 
-	protected boolean interact(EntityPlayer par1EntityPlayer)
+	protected boolean interact(EntityPlayer p_70085_1_)
 	{
-		ItemStack itemstack = par1EntityPlayer.inventory.getCurrentItem();
+		ItemStack itemstack = p_70085_1_.inventory.getCurrentItem();
 
 		if (itemstack != null && itemstack.getItem() == Items.flint_and_steel)
 		{
 			this.worldObj.playSoundEffect(this.posX + 0.5D, this.posY + 0.5D, this.posZ + 0.5D, "fire.ignite", 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
-			par1EntityPlayer.swingItem();
+			p_70085_1_.swingItem();
 
 			if (!this.worldObj.isRemote)
 			{
 				this.func_146079_cb();
-				itemstack.damageItem(1, par1EntityPlayer);
+				itemstack.damageItem(1, p_70085_1_);
 				return true;
 			}
 		}
 
-		return super.interact(par1EntityPlayer);
+		return super.interact(p_70085_1_);
 	}
 
 	private void func_146077_cc()

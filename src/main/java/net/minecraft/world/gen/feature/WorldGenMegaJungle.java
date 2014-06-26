@@ -16,122 +16,122 @@ public class WorldGenMegaJungle extends WorldGenHugeTrees
 		super(p_i45456_1_, p_i45456_2_, p_i45456_3_, p_i45456_4_, p_i45456_5_);
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		int l = this.func_150533_a(par2Random);
+		int l = this.func_150533_a(p_76484_2_);
 
-		if (!this.func_150537_a(par1World, par2Random, par3, par4, par5, l))
+		if (!this.func_150537_a(p_76484_1_, p_76484_2_, p_76484_3_, p_76484_4_, p_76484_5_, l))
 		{
 			return false;
 		}
 		else
 		{
-			this.func_150543_c(par1World, par3, par5, par4 + l, 2, par2Random);
+			this.func_150543_c(p_76484_1_, p_76484_3_, p_76484_5_, p_76484_4_ + l, 2, p_76484_2_);
 
-			for (int i1 = par4 + l - 2 - par2Random.nextInt(4); i1 > par4 + l / 2; i1 -= 2 + par2Random.nextInt(4))
+			for (int i1 = p_76484_4_ + l - 2 - p_76484_2_.nextInt(4); i1 > p_76484_4_ + l / 2; i1 -= 2 + p_76484_2_.nextInt(4))
 			{
-				float f = par2Random.nextFloat() * (float)Math.PI * 2.0F;
-				int j1 = par3 + (int)(0.5F + MathHelper.cos(f) * 4.0F);
-				int k1 = par5 + (int)(0.5F + MathHelper.sin(f) * 4.0F);
+				float f = p_76484_2_.nextFloat() * (float)Math.PI * 2.0F;
+				int j1 = p_76484_3_ + (int)(0.5F + MathHelper.cos(f) * 4.0F);
+				int k1 = p_76484_5_ + (int)(0.5F + MathHelper.sin(f) * 4.0F);
 				int l1;
 
 				for (l1 = 0; l1 < 5; ++l1)
 				{
-					j1 = par3 + (int)(1.5F + MathHelper.cos(f) * (float)l1);
-					k1 = par5 + (int)(1.5F + MathHelper.sin(f) * (float)l1);
-					this.setBlockAndNotifyAdequately(par1World, j1, i1 - 3 + l1 / 2, k1, Blocks.log, this.woodMetadata);
+					j1 = p_76484_3_ + (int)(1.5F + MathHelper.cos(f) * (float)l1);
+					k1 = p_76484_5_ + (int)(1.5F + MathHelper.sin(f) * (float)l1);
+					this.setBlockAndNotifyAdequately(p_76484_1_, j1, i1 - 3 + l1 / 2, k1, Blocks.log, this.woodMetadata);
 				}
 
-				l1 = 1 + par2Random.nextInt(2);
+				l1 = 1 + p_76484_2_.nextInt(2);
 				int i2 = i1;
 
 				for (int j2 = i1 - l1; j2 <= i2; ++j2)
 				{
 					int k2 = j2 - i2;
-					this.func_150534_b(par1World, j1, j2, k1, 1 - k2, par2Random);
+					this.func_150534_b(p_76484_1_, j1, j2, k1, 1 - k2, p_76484_2_);
 				}
 			}
 
 			for (int l2 = 0; l2 < l; ++l2)
 			{
-				Block block = par1World.getBlock(par3, par4 + l2, par5);
+				Block block = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + l2, p_76484_5_);
 
-				if (block.isAir(par1World, par3, par4 + l2, par5) || block.isLeaves(par1World, par3, par4 + l2, par5))
+				if (block.isAir(p_76484_1_, p_76484_3_, p_76484_4_ + l2, p_76484_5_) || block.isLeaves(p_76484_1_, p_76484_3_, p_76484_4_ + l2, p_76484_5_))
 				{
-					this.setBlockAndNotifyAdequately(par1World, par3, par4 + l2, par5, Blocks.log, this.woodMetadata);
+					this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + l2, p_76484_5_, Blocks.log, this.woodMetadata);
 
 					if (l2 > 0)
 					{
-						if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3 - 1, par4 + l2, par5))
+						if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_ - 1, p_76484_4_ + l2, p_76484_5_))
 						{
-							this.setBlockAndNotifyAdequately(par1World, par3 - 1, par4 + l2, par5, Blocks.vine, 8);
+							this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ - 1, p_76484_4_ + l2, p_76484_5_, Blocks.vine, 8);
 						}
 
-						if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3, par4 + l2, par5 - 1))
+						if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_, p_76484_4_ + l2, p_76484_5_ - 1))
 						{
-							this.setBlockAndNotifyAdequately(par1World, par3, par4 + l2, par5 - 1, Blocks.vine, 1);
+							this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + l2, p_76484_5_ - 1, Blocks.vine, 1);
 						}
 					}
 				}
 
 				if (l2 < l - 1)
 				{
-					block = par1World.getBlock(par3 + 1, par4 + l2, par5);
+					block = p_76484_1_.getBlock(p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_);
 
-					if (block.isAir(par1World, par3 + 1, par4 + l2, par5) || block.isLeaves(par1World, par3 + 1, par4 + l2, par5))
+					if (block.isAir(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_) || block.isLeaves(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_))
 					{
-						this.setBlockAndNotifyAdequately(par1World, par3 + 1, par4 + l2, par5, Blocks.log, this.woodMetadata);
+						this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_, Blocks.log, this.woodMetadata);
 
 						if (l2 > 0)
 						{
-							if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3 + 2, par4 + l2, par5))
+							if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_ + 2, p_76484_4_ + l2, p_76484_5_))
 							{
-								this.setBlockAndNotifyAdequately(par1World, par3 + 2, par4 + l2, par5, Blocks.vine, 2);
+								this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + 2, p_76484_4_ + l2, p_76484_5_, Blocks.vine, 2);
 							}
 
-							if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3 + 1, par4 + l2, par5 - 1))
+							if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_ - 1))
 							{
-								this.setBlockAndNotifyAdequately(par1World, par3 + 1, par4 + l2, par5 - 1, Blocks.vine, 1);
+								this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_ - 1, Blocks.vine, 1);
 							}
 						}
 					}
 
-					block = par1World.getBlock(par3 + 1, par4 + l2, par5 + 1);
+					block = p_76484_1_.getBlock(p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_ + 1);
 
-					if (block.isAir(par1World, par3 + 1, par4 + l2, par5 + 1) || block.isLeaves(par1World, par3 + 1, par4 + l2, par5 + 1))
+					if (block.isAir(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_ + 1) || block.isLeaves(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_ + 1))
 					{
-						this.setBlockAndNotifyAdequately(par1World, par3 + 1, par4 + l2, par5 + 1, Blocks.log, this.woodMetadata);
+						this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_ + 1, Blocks.log, this.woodMetadata);
 
 						if (l2 > 0)
 						{
-							if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3 + 2, par4 + l2, par5 + 1))
+							if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_ + 2, p_76484_4_ + l2, p_76484_5_ + 1))
 							{
-								this.setBlockAndNotifyAdequately(par1World, par3 + 2, par4 + l2, par5 + 1, Blocks.vine, 2);
+								this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + 2, p_76484_4_ + l2, p_76484_5_ + 1, Blocks.vine, 2);
 							}
 
-							if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3 + 1, par4 + l2, par5 + 2))
+							if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_ + 2))
 							{
-								this.setBlockAndNotifyAdequately(par1World, par3 + 1, par4 + l2, par5 + 2, Blocks.vine, 4);
+								this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + l2, p_76484_5_ + 2, Blocks.vine, 4);
 							}
 						}
 					}
 
-					block = par1World.getBlock(par3, par4 + l2, par5 + 1);
+					block = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + l2, p_76484_5_ + 1);
 
-					if (block.isAir(par1World, par3, par4 + l2, par5 + 1) || block.isLeaves(par1World, par3, par4 + l2, par5 + 1))
+					if (block.isAir(p_76484_1_, p_76484_3_, p_76484_4_ + l2, p_76484_5_ + 1) || block.isLeaves(p_76484_1_, p_76484_3_, p_76484_4_ + l2, p_76484_5_ + 1))
 					{
-						this.setBlockAndNotifyAdequately(par1World, par3, par4 + l2, par5 + 1, Blocks.log, this.woodMetadata);
+						this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + l2, p_76484_5_ + 1, Blocks.log, this.woodMetadata);
 
 						if (l2 > 0)
 						{
-							if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3 - 1, par4 + l2, par5 + 1))
+							if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_ - 1, p_76484_4_ + l2, p_76484_5_ + 1))
 							{
-								this.setBlockAndNotifyAdequately(par1World, par3 - 1, par4 + l2, par5 + 1, Blocks.vine, 8);
+								this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ - 1, p_76484_4_ + l2, p_76484_5_ + 1, Blocks.vine, 8);
 							}
 
-							if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3, par4 + l2, par5 + 2))
+							if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_, p_76484_4_ + l2, p_76484_5_ + 2))
 							{
-								this.setBlockAndNotifyAdequately(par1World, par3, par4 + l2, par5 + 2, Blocks.vine, 4);
+								this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + l2, p_76484_5_ + 2, Blocks.vine, 4);
 							}
 						}
 					}

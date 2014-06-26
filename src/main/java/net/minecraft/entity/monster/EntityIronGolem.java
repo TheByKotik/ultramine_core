@@ -38,9 +38,9 @@ public class EntityIronGolem extends EntityGolem
 	private int holdRoseTick;
 	private static final String __OBFID = "CL_00001652";
 
-	public EntityIronGolem(World par1World)
+	public EntityIronGolem(World p_i1694_1_)
 	{
-		super(par1World);
+		super(p_i1694_1_);
 		this.setSize(1.4F, 2.9F);
 		this.getNavigator().setAvoidsWater(true);
 		this.tasks.addTask(1, new EntityAIAttackOnCollide(this, 1.0D, true));
@@ -95,19 +95,19 @@ public class EntityIronGolem extends EntityGolem
 		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
 	}
 
-	protected int decreaseAirSupply(int par1)
+	protected int decreaseAirSupply(int p_70682_1_)
 	{
-		return par1;
+		return p_70682_1_;
 	}
 
-	protected void collideWithEntity(Entity par1Entity)
+	protected void collideWithEntity(Entity p_82167_1_)
 	{
-		if (par1Entity instanceof IMob && this.getRNG().nextInt(20) == 0)
+		if (p_82167_1_ instanceof IMob && this.getRNG().nextInt(20) == 0)
 		{
-			this.setAttackTarget((EntityLivingBase)par1Entity);
+			this.setAttackTarget((EntityLivingBase)p_82167_1_);
 		}
 
-		super.collideWithEntity(par1Entity);
+		super.collideWithEntity(p_82167_1_);
 	}
 
 	public void onLivingUpdate()
@@ -138,32 +138,32 @@ public class EntityIronGolem extends EntityGolem
 		}
 	}
 
-	public boolean canAttackClass(Class par1Class)
+	public boolean canAttackClass(Class p_70686_1_)
 	{
-		return this.isPlayerCreated() && EntityPlayer.class.isAssignableFrom(par1Class) ? false : super.canAttackClass(par1Class);
+		return this.isPlayerCreated() && EntityPlayer.class.isAssignableFrom(p_70686_1_) ? false : super.canAttackClass(p_70686_1_);
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setBoolean("PlayerCreated", this.isPlayerCreated());
+		super.writeEntityToNBT(p_70014_1_);
+		p_70014_1_.setBoolean("PlayerCreated", this.isPlayerCreated());
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
-		this.setPlayerCreated(par1NBTTagCompound.getBoolean("PlayerCreated"));
+		super.readEntityFromNBT(p_70037_1_);
+		this.setPlayerCreated(p_70037_1_.getBoolean("PlayerCreated"));
 	}
 
-	public boolean attackEntityAsMob(Entity par1Entity)
+	public boolean attackEntityAsMob(Entity p_70652_1_)
 	{
 		this.attackTimer = 10;
 		this.worldObj.setEntityState(this, (byte)4);
-		boolean flag = par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float)(7 + this.rand.nextInt(15)));
+		boolean flag = p_70652_1_.attackEntityFrom(DamageSource.causeMobDamage(this), (float)(7 + this.rand.nextInt(15)));
 
 		if (flag)
 		{
-			par1Entity.motionY += 0.4000000059604645D;
+			p_70652_1_.motionY += 0.4000000059604645D;
 		}
 
 		this.playSound("mob.irongolem.throw", 1.0F, 1.0F);
@@ -171,20 +171,20 @@ public class EntityIronGolem extends EntityGolem
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void handleHealthUpdate(byte par1)
+	public void handleHealthUpdate(byte p_70103_1_)
 	{
-		if (par1 == 4)
+		if (p_70103_1_ == 4)
 		{
 			this.attackTimer = 10;
 			this.playSound("mob.irongolem.throw", 1.0F, 1.0F);
 		}
-		else if (par1 == 11)
+		else if (p_70103_1_ == 11)
 		{
 			this.holdRoseTick = 400;
 		}
 		else
 		{
-			super.handleHealthUpdate(par1);
+			super.handleHealthUpdate(p_70103_1_);
 		}
 	}
 
@@ -199,9 +199,9 @@ public class EntityIronGolem extends EntityGolem
 		return this.attackTimer;
 	}
 
-	public void setHoldingRose(boolean par1)
+	public void setHoldingRose(boolean p_70851_1_)
 	{
-		this.holdRoseTick = par1 ? 400 : 0;
+		this.holdRoseTick = p_70851_1_ ? 400 : 0;
 		this.worldObj.setEntityState(this, (byte)11);
 	}
 
@@ -220,7 +220,7 @@ public class EntityIronGolem extends EntityGolem
 		this.playSound("mob.irongolem.walk", 1.0F, 1.0F);
 	}
 
-	protected void dropFewItems(boolean par1, int par2)
+	protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
 	{
 		int j = this.rand.nextInt(3);
 		int k;
@@ -248,11 +248,11 @@ public class EntityIronGolem extends EntityGolem
 		return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
 	}
 
-	public void setPlayerCreated(boolean par1)
+	public void setPlayerCreated(boolean p_70849_1_)
 	{
 		byte b0 = this.dataWatcher.getWatchableObjectByte(16);
 
-		if (par1)
+		if (p_70849_1_)
 		{
 			this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 | 1)));
 		}
@@ -262,13 +262,13 @@ public class EntityIronGolem extends EntityGolem
 		}
 	}
 
-	public void onDeath(DamageSource par1DamageSource)
+	public void onDeath(DamageSource p_70645_1_)
 	{
 		if (!this.isPlayerCreated() && this.attackingPlayer != null && this.villageObj != null)
 		{
 			this.villageObj.setReputationForPlayer(this.attackingPlayer.getCommandSenderName(), -5);
 		}
 
-		super.onDeath(par1DamageSource);
+		super.onDeath(p_70645_1_);
 	}
 }

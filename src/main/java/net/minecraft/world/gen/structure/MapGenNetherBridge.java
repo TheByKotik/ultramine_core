@@ -33,18 +33,18 @@ public class MapGenNetherBridge extends MapGenStructure
 		return this.spawnList;
 	}
 
-	protected boolean canSpawnStructureAtCoords(int par1, int par2)
+	protected boolean canSpawnStructureAtCoords(int p_75047_1_, int p_75047_2_)
 	{
-		int k = par1 >> 4;
-		int l = par2 >> 4;
+		int k = p_75047_1_ >> 4;
+		int l = p_75047_2_ >> 4;
 		this.rand.setSeed((long)(k ^ l << 4) ^ this.worldObj.getSeed());
 		this.rand.nextInt();
-		return this.rand.nextInt(3) != 0 ? false : (par1 != (k << 4) + 4 + this.rand.nextInt(8) ? false : par2 == (l << 4) + 4 + this.rand.nextInt(8));
+		return this.rand.nextInt(3) != 0 ? false : (p_75047_1_ != (k << 4) + 4 + this.rand.nextInt(8) ? false : p_75047_2_ == (l << 4) + 4 + this.rand.nextInt(8));
 	}
 
-	protected StructureStart getStructureStart(int par1, int par2)
+	protected StructureStart getStructureStart(int p_75049_1_, int p_75049_2_)
 	{
-		return new MapGenNetherBridge.Start(this.worldObj, this.rand, par1, par2);
+		return new MapGenNetherBridge.Start(this.worldObj, this.rand, p_75049_1_, p_75049_2_);
 	}
 
 	public static class Start extends StructureStart
@@ -53,23 +53,23 @@ public class MapGenNetherBridge extends MapGenStructure
 
 			public Start() {}
 
-			public Start(World par1World, Random par2Random, int par3, int par4)
+			public Start(World p_i2040_1_, Random p_i2040_2_, int p_i2040_3_, int p_i2040_4_)
 			{
-				super(par3, par4);
-				StructureNetherBridgePieces.Start start = new StructureNetherBridgePieces.Start(par2Random, (par3 << 4) + 2, (par4 << 4) + 2);
+				super(p_i2040_3_, p_i2040_4_);
+				StructureNetherBridgePieces.Start start = new StructureNetherBridgePieces.Start(p_i2040_2_, (p_i2040_3_ << 4) + 2, (p_i2040_4_ << 4) + 2);
 				this.components.add(start);
-				start.buildComponent(start, this.components, par2Random);
+				start.buildComponent(start, this.components, p_i2040_2_);
 				ArrayList arraylist = start.field_74967_d;
 
 				while (!arraylist.isEmpty())
 				{
-					int k = par2Random.nextInt(arraylist.size());
+					int k = p_i2040_2_.nextInt(arraylist.size());
 					StructureComponent structurecomponent = (StructureComponent)arraylist.remove(k);
-					structurecomponent.buildComponent(start, this.components, par2Random);
+					structurecomponent.buildComponent(start, this.components, p_i2040_2_);
 				}
 
 				this.updateBoundingBox();
-				this.setRandomHeight(par1World, par2Random, 48, 70);
+				this.setRandomHeight(p_i2040_1_, p_i2040_2_, 48, 70);
 			}
 		}
 }

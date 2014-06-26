@@ -20,11 +20,11 @@ public class EntityAIMoveThroughVillage extends EntityAIBase
 	private List doorList = new ArrayList();
 	private static final String __OBFID = "CL_00001597";
 
-	public EntityAIMoveThroughVillage(EntityCreature par1EntityCreature, double par2, boolean par4)
+	public EntityAIMoveThroughVillage(EntityCreature p_i1638_1_, double p_i1638_2_, boolean p_i1638_4_)
 	{
-		this.theEntity = par1EntityCreature;
-		this.movementSpeed = par2;
-		this.isNocturnal = par4;
+		this.theEntity = p_i1638_1_;
+		this.movementSpeed = p_i1638_2_;
+		this.isNocturnal = p_i1638_4_;
 		this.setMutexBits(1);
 	}
 
@@ -65,7 +65,7 @@ public class EntityAIMoveThroughVillage extends EntityAIBase
 					}
 					else
 					{
-						Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(this.theEntity, 10, 7, this.theEntity.worldObj.getWorldVec3Pool().getVecFromPool((double)this.doorInfo.posX, (double)this.doorInfo.posY, (double)this.doorInfo.posZ));
+						Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(this.theEntity, 10, 7, Vec3.createVectorHelper((double)this.doorInfo.posX, (double)this.doorInfo.posY, (double)this.doorInfo.posZ));
 
 						if (vec3 == null)
 						{
@@ -110,11 +110,11 @@ public class EntityAIMoveThroughVillage extends EntityAIBase
 		}
 	}
 
-	private VillageDoorInfo func_75412_a(Village par1Village)
+	private VillageDoorInfo func_75412_a(Village p_75412_1_)
 	{
 		VillageDoorInfo villagedoorinfo = null;
 		int i = Integer.MAX_VALUE;
-		List list = par1Village.getVillageDoorInfoList();
+		List list = p_75412_1_.getVillageDoorInfoList();
 		Iterator iterator = list.iterator();
 
 		while (iterator.hasNext())
@@ -132,7 +132,7 @@ public class EntityAIMoveThroughVillage extends EntityAIBase
 		return villagedoorinfo;
 	}
 
-	private boolean func_75413_a(VillageDoorInfo par1VillageDoorInfo)
+	private boolean func_75413_a(VillageDoorInfo p_75413_1_)
 	{
 		Iterator iterator = this.doorList.iterator();
 		VillageDoorInfo villagedoorinfo1;
@@ -146,7 +146,7 @@ public class EntityAIMoveThroughVillage extends EntityAIBase
 
 			villagedoorinfo1 = (VillageDoorInfo)iterator.next();
 		}
-		while (par1VillageDoorInfo.posX != villagedoorinfo1.posX || par1VillageDoorInfo.posY != villagedoorinfo1.posY || par1VillageDoorInfo.posZ != villagedoorinfo1.posZ);
+		while (p_75413_1_.posX != villagedoorinfo1.posX || p_75413_1_.posY != villagedoorinfo1.posY || p_75413_1_.posZ != villagedoorinfo1.posZ);
 
 		return true;
 	}

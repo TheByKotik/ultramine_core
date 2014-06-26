@@ -7,20 +7,20 @@ public abstract class EntityFlying extends EntityLiving
 {
 	private static final String __OBFID = "CL_00001545";
 
-	public EntityFlying(World par1World)
+	public EntityFlying(World p_i1587_1_)
 	{
-		super(par1World);
+		super(p_i1587_1_);
 	}
 
-	protected void fall(float par1) {}
+	protected void fall(float p_70069_1_) {}
 
-	protected void updateFallState(double par1, boolean par3) {}
+	protected void updateFallState(double p_70064_1_, boolean p_70064_3_) {}
 
-	public void moveEntityWithHeading(float par1, float par2)
+	public void moveEntityWithHeading(float p_70612_1_, float p_70612_2_)
 	{
 		if (this.isInWater())
 		{
-			this.moveFlying(par1, par2, 0.02F);
+			this.moveFlying(p_70612_1_, p_70612_2_, 0.02F);
 			this.moveEntity(this.motionX, this.motionY, this.motionZ);
 			this.motionX *= 0.800000011920929D;
 			this.motionY *= 0.800000011920929D;
@@ -28,7 +28,7 @@ public abstract class EntityFlying extends EntityLiving
 		}
 		else if (this.handleLavaMovement())
 		{
-			this.moveFlying(par1, par2, 0.02F);
+			this.moveFlying(p_70612_1_, p_70612_2_, 0.02F);
 			this.moveEntity(this.motionX, this.motionY, this.motionZ);
 			this.motionX *= 0.5D;
 			this.motionY *= 0.5D;
@@ -44,7 +44,7 @@ public abstract class EntityFlying extends EntityLiving
 			}
 
 			float f3 = 0.16277136F / (f2 * f2 * f2);
-			this.moveFlying(par1, par2, this.onGround ? 0.1F * f3 : 0.02F);
+			this.moveFlying(p_70612_1_, p_70612_2_, this.onGround ? 0.1F * f3 : 0.02F);
 			f2 = 0.91F;
 
 			if (this.onGround)

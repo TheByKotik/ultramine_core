@@ -10,27 +10,27 @@ public class WorldGenGlowStone2 extends WorldGenerator
 {
 	private static final String __OBFID = "CL_00000413";
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		if (!par1World.isAirBlock(par3, par4, par5))
+		if (!p_76484_1_.isAirBlock(p_76484_3_, p_76484_4_, p_76484_5_))
 		{
 			return false;
 		}
-		else if (par1World.getBlock(par3, par4 + 1, par5) != Blocks.netherrack)
+		else if (p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + 1, p_76484_5_) != Blocks.netherrack)
 		{
 			return false;
 		}
 		else
 		{
-			par1World.setBlock(par3, par4, par5, Blocks.glowstone, 0, 2);
+			p_76484_1_.setBlock(p_76484_3_, p_76484_4_, p_76484_5_, Blocks.glowstone, 0, 2);
 
 			for (int l = 0; l < 1500; ++l)
 			{
-				int i1 = par3 + par2Random.nextInt(8) - par2Random.nextInt(8);
-				int j1 = par4 - par2Random.nextInt(12);
-				int k1 = par5 + par2Random.nextInt(8) - par2Random.nextInt(8);
+				int i1 = p_76484_3_ + p_76484_2_.nextInt(8) - p_76484_2_.nextInt(8);
+				int j1 = p_76484_4_ - p_76484_2_.nextInt(12);
+				int k1 = p_76484_5_ + p_76484_2_.nextInt(8) - p_76484_2_.nextInt(8);
 
-				if (par1World.getBlock(i1, j1, k1).getMaterial() == Material.air)
+				if (p_76484_1_.getBlock(i1, j1, k1).getMaterial() == Material.air)
 				{
 					int l1 = 0;
 
@@ -40,32 +40,32 @@ public class WorldGenGlowStone2 extends WorldGenerator
 
 						if (i2 == 0)
 						{
-							block = par1World.getBlock(i1 - 1, j1, k1);
+							block = p_76484_1_.getBlock(i1 - 1, j1, k1);
 						}
 
 						if (i2 == 1)
 						{
-							block = par1World.getBlock(i1 + 1, j1, k1);
+							block = p_76484_1_.getBlock(i1 + 1, j1, k1);
 						}
 
 						if (i2 == 2)
 						{
-							block = par1World.getBlock(i1, j1 - 1, k1);
+							block = p_76484_1_.getBlock(i1, j1 - 1, k1);
 						}
 
 						if (i2 == 3)
 						{
-							block = par1World.getBlock(i1, j1 + 1, k1);
+							block = p_76484_1_.getBlock(i1, j1 + 1, k1);
 						}
 
 						if (i2 == 4)
 						{
-							block = par1World.getBlock(i1, j1, k1 - 1);
+							block = p_76484_1_.getBlock(i1, j1, k1 - 1);
 						}
 
 						if (i2 == 5)
 						{
-							block = par1World.getBlock(i1, j1, k1 + 1);
+							block = p_76484_1_.getBlock(i1, j1, k1 + 1);
 						}
 
 						if (block == Blocks.glowstone)
@@ -76,7 +76,7 @@ public class WorldGenGlowStone2 extends WorldGenerator
 
 					if (l1 == 1)
 					{
-						par1World.setBlock(i1, j1, k1, Blocks.glowstone, 0, 2);
+						p_76484_1_.setBlock(i1, j1, k1, Blocks.glowstone, 0, 2);
 					}
 				}
 			}

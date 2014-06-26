@@ -6,5 +6,5 @@ import cpw.mods.fml.relauncher.SideOnly;
 public interface IStatType
 {
 	@SideOnly(Side.CLIENT)
-	String format(int var1);
+	String format(int p_75843_1_);
 }

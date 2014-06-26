@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.util.JsonBlendingMode;
@@ -25,7 +26,6 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
 
 @SideOnly(Side.CLIENT)
 public class ShaderManager
@@ -157,7 +157,7 @@ public class ShaderManager
 				while (iterator1.hasNext())
 				{
 					String s3 = (String)iterator1.next();
-					int l = GL20.glGetAttribLocation(this.field_148006_l, s3);
+					int l = OpenGlHelper.func_153164_b(this.field_148006_l, s3);
 					this.field_148015_q.add(Integer.valueOf(l));
 				}
 			}
@@ -183,7 +183,7 @@ public class ShaderManager
 
 	public void func_147993_b()
 	{
-		GL20.glUseProgram(0);
+		OpenGlHelper.func_153161_d(0);
 		field_147999_d = -1;
 		staticShaderManager = null;
 		field_148000_e = true;
@@ -206,7 +206,7 @@ public class ShaderManager
 
 		if (this.field_148006_l != field_147999_d)
 		{
-			GL20.glUseProgram(this.field_148006_l);
+			OpenGlHelper.func_153161_d(this.field_148006_l);
 			field_147999_d = this.field_148006_l;
 		}
 
@@ -249,7 +249,7 @@ public class ShaderManager
 				if (j != -1)
 				{
 					GL11.glBindTexture(GL11.GL_TEXTURE_2D, j);
-					GL20.glUniform1i(GL20.glGetUniformLocation(this.field_148006_l, (CharSequence)this.field_147998_g.get(i)), i);
+					OpenGlHelper.func_153163_f(OpenGlHelper.func_153194_a(this.field_148006_l, (CharSequence)this.field_147998_g.get(i)), i);
 				}
 			}
 		}
@@ -287,7 +287,7 @@ public class ShaderManager
 		for (int j = 0; i < this.field_147998_g.size(); ++j)
 		{
 			s = (String)this.field_147998_g.get(i);
-			k = GL20.glGetUniformLocation(this.field_148006_l, s);
+			k = OpenGlHelper.func_153194_a(this.field_148006_l, s);
 
 			if (k == -1)
 			{
@@ -310,7 +310,7 @@ public class ShaderManager
 		{
 			ShaderUniform shaderuniform = (ShaderUniform)iterator.next();
 			s = shaderuniform.func_148086_a();
-			k = GL20.glGetUniformLocation(this.field_148006_l, s);
+			k = OpenGlHelper.func_153194_a(this.field_148006_l, s);
 
 			if (k == -1)
 			{

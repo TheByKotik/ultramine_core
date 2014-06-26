@@ -1,8 +1,8 @@
 package net.minecraft.stats;
 
+import com.google.common.collect.Maps;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IJsonSerializable;
@@ -10,17 +10,17 @@ import net.minecraft.util.TupleIntJsonSerializable;
 
 public class StatFileWriter
 {
-	protected final Map field_150875_a = new HashMap();
+	protected final Map field_150875_a = Maps.newConcurrentMap();
 	private static final String __OBFID = "CL_00001481";
 
-	public boolean hasAchievementUnlocked(Achievement par1Achievement)
+	public boolean hasAchievementUnlocked(Achievement p_77443_1_)
 	{
-		return this.writeStat(par1Achievement) > 0;
+		return this.writeStat(p_77443_1_) > 0;
 	}
 
-	public boolean canUnlockAchievement(Achievement par1Achievement)
+	public boolean canUnlockAchievement(Achievement p_77442_1_)
 	{
-		return par1Achievement.parentAchievement == null || this.hasAchievementUnlocked(par1Achievement.parentAchievement);
+		return p_77442_1_.parentAchievement == null || this.hasAchievementUnlocked(p_77442_1_.parentAchievement);
 	}
 
 	public void func_150871_b(EntityPlayer p_150871_1_, StatBase p_150871_2_, int p_150871_3_)
@@ -64,9 +64,9 @@ public class StatFileWriter
 		tupleintjsonserializable.setIntegerValue(p_150873_3_);
 	}
 
-	public int writeStat(StatBase par1StatBase)
+	public int writeStat(StatBase p_77444_1_)
 	{
-		TupleIntJsonSerializable tupleintjsonserializable = (TupleIntJsonSerializable)this.field_150875_a.get(par1StatBase);
+		TupleIntJsonSerializable tupleintjsonserializable = (TupleIntJsonSerializable)this.field_150875_a.get(p_77444_1_);
 		return tupleintjsonserializable == null ? 0 : tupleintjsonserializable.getIntegerValue();
 	}
 

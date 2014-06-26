@@ -16,13 +16,13 @@ public class RenderArrow extends Render
 	private static final ResourceLocation arrowTextures = new ResourceLocation("textures/entity/arrow.png");
 	private static final String __OBFID = "CL_00000978";
 
-	public void doRender(EntityArrow par1EntityArrow, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityArrow p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.bindEntityTexture(par1EntityArrow);
+		this.bindEntityTexture(p_76986_1_);
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
-		GL11.glRotatef(par1EntityArrow.prevRotationYaw + (par1EntityArrow.rotationYaw - par1EntityArrow.prevRotationYaw) * par9 - 90.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(par1EntityArrow.prevRotationPitch + (par1EntityArrow.rotationPitch - par1EntityArrow.prevRotationPitch) * par9, 0.0F, 0.0F, 1.0F);
+		GL11.glTranslatef((float)p_76986_2_, (float)p_76986_4_, (float)p_76986_6_);
+		GL11.glRotatef(p_76986_1_.prevRotationYaw + (p_76986_1_.rotationYaw - p_76986_1_.prevRotationYaw) * p_76986_9_ - 90.0F, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(p_76986_1_.prevRotationPitch + (p_76986_1_.rotationPitch - p_76986_1_.prevRotationPitch) * p_76986_9_, 0.0F, 0.0F, 1.0F);
 		Tessellator tessellator = Tessellator.instance;
 		byte b0 = 0;
 		float f2 = 0.0F;
@@ -35,7 +35,7 @@ public class RenderArrow extends Render
 		float f9 = (float)(10 + b0 * 10) / 32.0F;
 		float f10 = 0.05625F;
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		float f11 = (float)par1EntityArrow.arrowShake - par9;
+		float f11 = (float)p_76986_1_.arrowShake - p_76986_9_;
 
 		if (f11 > 0.0F)
 		{
@@ -77,18 +77,18 @@ public class RenderArrow extends Render
 		GL11.glPopMatrix();
 	}
 
-	protected ResourceLocation getEntityTexture(EntityArrow par1EntityArrow)
+	protected ResourceLocation getEntityTexture(EntityArrow p_110775_1_)
 	{
 		return arrowTextures;
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityArrow)par1Entity);
+		return this.getEntityTexture((EntityArrow)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityArrow)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityArrow)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

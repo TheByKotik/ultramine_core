@@ -5,11 +5,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import javax.vecmath.Matrix4f;
+import net.minecraft.client.renderer.OpenGlHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
 
 @SideOnly(Side.CLIENT)
 public class ShaderUniform
@@ -82,30 +81,6 @@ public class ShaderUniform
 			else if (p_148085_0_.endsWith("4x4"))
 			{
 				b0 = 10;
-			}
-			else if (p_148085_0_.endsWith("2x3"))
-			{
-				b0 = 11;
-			}
-			else if (p_148085_0_.endsWith("2x4"))
-			{
-				b0 = 12;
-			}
-			else if (p_148085_0_.endsWith("3x2"))
-			{
-				b0 = 13;
-			}
-			else if (p_148085_0_.endsWith("3x4"))
-			{
-				b0 = 14;
-			}
-			else if (p_148085_0_.endsWith("4x2"))
-			{
-				b0 = 15;
-			}
-			else if (p_148085_0_.endsWith("4x3"))
-			{
-				b0 = 16;
 			}
 		}
 
@@ -272,7 +247,7 @@ public class ShaderUniform
 		}
 		else
 		{
-			if (this.field_148100_d > 16)
+			if (this.field_148100_d > 10)
 			{
 				logger.warn("Uniform.upload called, but type value (" + this.field_148100_d + ") is not " + "a valid type. Ignoring.");
 				return;
@@ -287,16 +262,16 @@ public class ShaderUniform
 		switch (this.field_148100_d)
 		{
 			case 0:
-				GL20.glUniform1(this.field_148102_b, this.field_148101_e);
+				OpenGlHelper.func_153181_a(this.field_148102_b, this.field_148101_e);
 				break;
 			case 1:
-				GL20.glUniform2(this.field_148102_b, this.field_148101_e);
+				OpenGlHelper.func_153182_b(this.field_148102_b, this.field_148101_e);
 				break;
 			case 2:
-				GL20.glUniform3(this.field_148102_b, this.field_148101_e);
+				OpenGlHelper.func_153192_c(this.field_148102_b, this.field_148101_e);
 				break;
 			case 3:
-				GL20.glUniform4(this.field_148102_b, this.field_148101_e);
+				OpenGlHelper.func_153162_d(this.field_148102_b, this.field_148101_e);
 				break;
 			default:
 				logger.warn("Uniform.upload called, but count value (" + this.field_148103_c + ") is " + " not in the range of 1 to 4. Ignoring.");
@@ -308,16 +283,16 @@ public class ShaderUniform
 		switch (this.field_148100_d)
 		{
 			case 4:
-				GL20.glUniform1(this.field_148102_b, this.field_148098_f);
+				OpenGlHelper.func_153168_a(this.field_148102_b, this.field_148098_f);
 				break;
 			case 5:
-				GL20.glUniform2(this.field_148102_b, this.field_148098_f);
+				OpenGlHelper.func_153177_b(this.field_148102_b, this.field_148098_f);
 				break;
 			case 6:
-				GL20.glUniform3(this.field_148102_b, this.field_148098_f);
+				OpenGlHelper.func_153191_c(this.field_148102_b, this.field_148098_f);
 				break;
 			case 7:
-				GL20.glUniform4(this.field_148102_b, this.field_148098_f);
+				OpenGlHelper.func_153159_d(this.field_148102_b, this.field_148098_f);
 				break;
 			default:
 				logger.warn("Uniform.upload called, but count value (" + this.field_148103_c + ") is " + "not in the range of 1 to 4. Ignoring.");
@@ -329,31 +304,13 @@ public class ShaderUniform
 		switch (this.field_148100_d)
 		{
 			case 8:
-				GL20.glUniformMatrix2(this.field_148102_b, true, this.field_148098_f);
+				OpenGlHelper.func_153173_a(this.field_148102_b, true, this.field_148098_f);
 				break;
 			case 9:
-				GL20.glUniformMatrix3(this.field_148102_b, true, this.field_148098_f);
+				OpenGlHelper.func_153189_b(this.field_148102_b, true, this.field_148098_f);
 				break;
 			case 10:
-				GL20.glUniformMatrix4(this.field_148102_b, true, this.field_148098_f);
-				break;
-			case 11:
-				GL21.glUniformMatrix2x3(this.field_148102_b, true, this.field_148098_f);
-				break;
-			case 12:
-				GL21.glUniformMatrix2x4(this.field_148102_b, true, this.field_148098_f);
-				break;
-			case 13:
-				GL21.glUniformMatrix3x2(this.field_148102_b, true, this.field_148098_f);
-				break;
-			case 14:
-				GL21.glUniformMatrix3x4(this.field_148102_b, true, this.field_148098_f);
-				break;
-			case 15:
-				GL21.glUniformMatrix4x2(this.field_148102_b, true, this.field_148098_f);
-				break;
-			case 16:
-				GL21.glUniformMatrix4x3(this.field_148102_b, true, this.field_148098_f);
+				OpenGlHelper.func_153160_c(this.field_148102_b, true, this.field_148098_f);
 		}
 	}
 }

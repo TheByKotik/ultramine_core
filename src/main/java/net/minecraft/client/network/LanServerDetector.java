@@ -32,10 +32,10 @@ public class LanServerDetector
 			private long timeLastSeen;
 			private static final String __OBFID = "CL_00001134";
 
-			public LanServer(String par1Str, String par2Str)
+			public LanServer(String p_i1319_1_, String p_i1319_2_)
 			{
-				this.lanServerMotd = par1Str;
-				this.lanServerIpPort = par2Str;
+				this.lanServerMotd = p_i1319_1_;
+				this.lanServerIpPort = p_i1319_2_;
 				this.timeLastSeen = Minecraft.getSystemTime();
 			}
 
@@ -77,14 +77,14 @@ public class LanServerDetector
 				return Collections.unmodifiableList(this.listOfLanServers);
 			}
 
-			public synchronized void func_77551_a(String par1Str, InetAddress par2InetAddress)
+			public synchronized void func_77551_a(String p_77551_1_, InetAddress p_77551_2_)
 			{
-				String s1 = ThreadLanServerPing.getMotdFromPingResponse(par1Str);
-				String s2 = ThreadLanServerPing.getAdFromPingResponse(par1Str);
+				String s1 = ThreadLanServerPing.getMotdFromPingResponse(p_77551_1_);
+				String s2 = ThreadLanServerPing.getAdFromPingResponse(p_77551_1_);
 
 				if (s2 != null)
 				{
-					s2 = par2InetAddress.getHostAddress() + ":" + s2;
+					s2 = p_77551_2_.getHostAddress() + ":" + s2;
 					boolean flag = false;
 					Iterator iterator = this.listOfLanServers.iterator();
 
@@ -117,10 +117,10 @@ public class LanServerDetector
 			private final MulticastSocket socket;
 			private static final String __OBFID = "CL_00001135";
 
-			public ThreadLanServerFind(LanServerDetector.LanServerList par1LanServerList) throws IOException
+			public ThreadLanServerFind(LanServerDetector.LanServerList p_i1320_1_) throws IOException
 			{
 				super("LanServerDetector #" + LanServerDetector.field_148551_a.incrementAndGet());
-				this.localServerList = par1LanServerList;
+				this.localServerList = p_i1320_1_;
 				this.setDaemon(true);
 				this.socket = new MulticastSocket(4445);
 				this.broadcastAddress = InetAddress.getByName("224.0.2.60");

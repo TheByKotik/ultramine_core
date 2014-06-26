@@ -18,11 +18,11 @@ public class ScorePlayerTeam extends Team
 	private boolean canSeeFriendlyInvisibles = true;
 	private static final String __OBFID = "CL_00000616";
 
-	public ScorePlayerTeam(Scoreboard par1Scoreboard, String par2Str)
+	public ScorePlayerTeam(Scoreboard p_i2308_1_, String p_i2308_2_)
 	{
-		this.theScoreboard = par1Scoreboard;
-		this.field_96675_b = par2Str;
-		this.teamNameSPT = par2Str;
+		this.theScoreboard = p_i2308_1_;
+		this.field_96675_b = p_i2308_2_;
+		this.teamNameSPT = p_i2308_2_;
 	}
 
 	public String getRegisteredName()
@@ -35,15 +35,15 @@ public class ScorePlayerTeam extends Team
 		return this.teamNameSPT;
 	}
 
-	public void setTeamName(String par1Str)
+	public void setTeamName(String p_96664_1_)
 	{
-		if (par1Str == null)
+		if (p_96664_1_ == null)
 		{
 			throw new IllegalArgumentException("Name cannot be null");
 		}
 		else
 		{
-			this.teamNameSPT = par1Str;
+			this.teamNameSPT = p_96664_1_;
 			this.theScoreboard.broadcastTeamRemoved(this);
 		}
 	}
@@ -58,15 +58,15 @@ public class ScorePlayerTeam extends Team
 		return this.namePrefixSPT;
 	}
 
-	public void setNamePrefix(String par1Str)
+	public void setNamePrefix(String p_96666_1_)
 	{
-		if (par1Str == null)
+		if (p_96666_1_ == null)
 		{
 			throw new IllegalArgumentException("Prefix cannot be null");
 		}
 		else
 		{
-			this.namePrefixSPT = par1Str;
+			this.namePrefixSPT = p_96666_1_;
 			this.theScoreboard.broadcastTeamRemoved(this);
 		}
 	}
@@ -76,27 +76,27 @@ public class ScorePlayerTeam extends Team
 		return this.colorSuffix;
 	}
 
-	public void setNameSuffix(String par1Str)
+	public void setNameSuffix(String p_96662_1_)
 	{
-		if (par1Str == null)
+		if (p_96662_1_ == null)
 		{
 			throw new IllegalArgumentException("Suffix cannot be null");
 		}
 		else
 		{
-			this.colorSuffix = par1Str;
+			this.colorSuffix = p_96662_1_;
 			this.theScoreboard.broadcastTeamRemoved(this);
 		}
 	}
 
-	public String formatString(String par1Str)
+	public String formatString(String p_142053_1_)
 	{
-		return this.getColorPrefix() + par1Str + this.getColorSuffix();
+		return this.getColorPrefix() + p_142053_1_ + this.getColorSuffix();
 	}
 
-	public static String formatPlayerName(Team par0Team, String par1Str)
+	public static String formatPlayerName(Team p_96667_0_, String p_96667_1_)
 	{
-		return par0Team == null ? par1Str : par0Team.formatString(par1Str);
+		return p_96667_0_ == null ? p_96667_1_ : p_96667_0_.formatString(p_96667_1_);
 	}
 
 	public boolean getAllowFriendlyFire()
@@ -104,9 +104,9 @@ public class ScorePlayerTeam extends Team
 		return this.allowFriendlyFire;
 	}
 
-	public void setAllowFriendlyFire(boolean par1)
+	public void setAllowFriendlyFire(boolean p_96660_1_)
 	{
-		this.allowFriendlyFire = par1;
+		this.allowFriendlyFire = p_96660_1_;
 		this.theScoreboard.broadcastTeamRemoved(this);
 	}
 
@@ -115,9 +115,9 @@ public class ScorePlayerTeam extends Team
 		return this.canSeeFriendlyInvisibles;
 	}
 
-	public void setSeeFriendlyInvisiblesEnabled(boolean par1)
+	public void setSeeFriendlyInvisiblesEnabled(boolean p_98300_1_)
 	{
-		this.canSeeFriendlyInvisibles = par1;
+		this.canSeeFriendlyInvisibles = p_98300_1_;
 		this.theScoreboard.broadcastTeamRemoved(this);
 	}
 
@@ -139,9 +139,9 @@ public class ScorePlayerTeam extends Team
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void func_98298_a(int par1)
+	public void func_98298_a(int p_98298_1_)
 	{
-		this.setAllowFriendlyFire((par1 & 1) > 0);
-		this.setSeeFriendlyInvisiblesEnabled((par1 & 2) > 0);
+		this.setAllowFriendlyFire((p_98298_1_ & 1) > 0);
+		this.setSeeFriendlyInvisiblesEnabled((p_98298_1_ & 2) > 0);
 	}
 }

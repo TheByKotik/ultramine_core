@@ -11,24 +11,24 @@ public abstract class BehaviorProjectileDispense extends BehaviorDefaultDispense
 {
 	private static final String __OBFID = "CL_00001394";
 
-	public ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+	public ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 	{
-		World world = par1IBlockSource.getWorld();
-		IPosition iposition = BlockDispenser.func_149939_a(par1IBlockSource);
-		EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
+		World world = p_82487_1_.getWorld();
+		IPosition iposition = BlockDispenser.func_149939_a(p_82487_1_);
+		EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
 		IProjectile iprojectile = this.getProjectileEntity(world, iposition);
 		iprojectile.setThrowableHeading((double)enumfacing.getFrontOffsetX(), (double)((float)enumfacing.getFrontOffsetY() + 0.1F), (double)enumfacing.getFrontOffsetZ(), this.func_82500_b(), this.func_82498_a());
 		world.spawnEntityInWorld((Entity)iprojectile);
-		par2ItemStack.splitStack(1);
-		return par2ItemStack;
+		p_82487_2_.splitStack(1);
+		return p_82487_2_;
 	}
 
-	protected void playDispenseSound(IBlockSource par1IBlockSource)
+	protected void playDispenseSound(IBlockSource p_82485_1_)
 	{
-		par1IBlockSource.getWorld().playAuxSFX(1002, par1IBlockSource.getXInt(), par1IBlockSource.getYInt(), par1IBlockSource.getZInt(), 0);
+		p_82485_1_.getWorld().playAuxSFX(1002, p_82485_1_.getXInt(), p_82485_1_.getYInt(), p_82485_1_.getZInt(), 0);
 	}
 
-	protected abstract IProjectile getProjectileEntity(World var1, IPosition var2);
+	protected abstract IProjectile getProjectileEntity(World p_82499_1_, IPosition p_82499_2_);
 
 	protected float func_82498_a()
 	{

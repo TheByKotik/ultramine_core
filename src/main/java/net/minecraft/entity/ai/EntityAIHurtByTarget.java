@@ -11,10 +11,10 @@ public class EntityAIHurtByTarget extends EntityAITarget
 	private int field_142052_b;
 	private static final String __OBFID = "CL_00001619";
 
-	public EntityAIHurtByTarget(EntityCreature par1EntityCreature, boolean par2)
+	public EntityAIHurtByTarget(EntityCreature p_i1660_1_, boolean p_i1660_2_)
 	{
-		super(par1EntityCreature, false);
-		this.entityCallsForHelp = par2;
+		super(p_i1660_1_, false);
+		this.entityCallsForHelp = p_i1660_2_;
 		this.setMutexBits(1);
 	}
 
@@ -32,7 +32,7 @@ public class EntityAIHurtByTarget extends EntityAITarget
 		if (this.entityCallsForHelp)
 		{
 			double d0 = this.getTargetDistance();
-			List list = this.taskOwner.worldObj.getEntitiesWithinAABB(this.taskOwner.getClass(), AxisAlignedBB.getAABBPool().getAABB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0));
+			List list = this.taskOwner.worldObj.getEntitiesWithinAABB(this.taskOwner.getClass(), AxisAlignedBB.getBoundingBox(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0));
 			Iterator iterator = list.iterator();
 
 			while (iterator.hasNext())

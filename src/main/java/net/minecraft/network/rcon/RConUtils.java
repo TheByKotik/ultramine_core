@@ -10,36 +10,36 @@ public class RConUtils
 	public static char[] hexDigits = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 	private static final String __OBFID = "CL_00001799";
 
-	public static String getBytesAsString(byte[] par0ArrayOfByte, int par1, int par2)
+	public static String getBytesAsString(byte[] p_72661_0_, int p_72661_1_, int p_72661_2_)
 	{
-		int k = par2 - 1;
+		int k = p_72661_2_ - 1;
 		int l;
 
-		for (l = par1 > k ? k : par1; 0 != par0ArrayOfByte[l] && l < k; ++l)
+		for (l = p_72661_1_ > k ? k : p_72661_1_; 0 != p_72661_0_[l] && l < k; ++l)
 		{
 			;
 		}
 
-		return new String(par0ArrayOfByte, par1, l - par1, Charsets.UTF_8);
+		return new String(p_72661_0_, p_72661_1_, l - p_72661_1_, Charsets.UTF_8);
 	}
 
-	public static int getRemainingBytesAsLEInt(byte[] par0ArrayOfByte, int par1)
+	public static int getRemainingBytesAsLEInt(byte[] p_72662_0_, int p_72662_1_)
 	{
-		return getBytesAsLEInt(par0ArrayOfByte, par1, par0ArrayOfByte.length);
+		return getBytesAsLEInt(p_72662_0_, p_72662_1_, p_72662_0_.length);
 	}
 
-	public static int getBytesAsLEInt(byte[] par0ArrayOfByte, int par1, int par2)
+	public static int getBytesAsLEInt(byte[] p_72665_0_, int p_72665_1_, int p_72665_2_)
 	{
-		return 0 > par2 - par1 - 4 ? 0 : par0ArrayOfByte[par1 + 3] << 24 | (par0ArrayOfByte[par1 + 2] & 255) << 16 | (par0ArrayOfByte[par1 + 1] & 255) << 8 | par0ArrayOfByte[par1] & 255;
+		return 0 > p_72665_2_ - p_72665_1_ - 4 ? 0 : p_72665_0_[p_72665_1_ + 3] << 24 | (p_72665_0_[p_72665_1_ + 2] & 255) << 16 | (p_72665_0_[p_72665_1_ + 1] & 255) << 8 | p_72665_0_[p_72665_1_] & 255;
 	}
 
-	public static int getBytesAsBEint(byte[] par0ArrayOfByte, int par1, int par2)
+	public static int getBytesAsBEint(byte[] p_72664_0_, int p_72664_1_, int p_72664_2_)
 	{
-		return 0 > par2 - par1 - 4 ? 0 : par0ArrayOfByte[par1] << 24 | (par0ArrayOfByte[par1 + 1] & 255) << 16 | (par0ArrayOfByte[par1 + 2] & 255) << 8 | par0ArrayOfByte[par1 + 3] & 255;
+		return 0 > p_72664_2_ - p_72664_1_ - 4 ? 0 : p_72664_0_[p_72664_1_] << 24 | (p_72664_0_[p_72664_1_ + 1] & 255) << 16 | (p_72664_0_[p_72664_1_ + 2] & 255) << 8 | p_72664_0_[p_72664_1_ + 3] & 255;
 	}
 
-	public static String getByteAsHexString(byte par0)
+	public static String getByteAsHexString(byte p_72663_0_)
 	{
-		return "" + hexDigits[(par0 & 240) >>> 4] + hexDigits[par0 & 15];
+		return "" + hexDigits[(p_72663_0_ & 240) >>> 4] + hexDigits[p_72663_0_ & 15];
 	}
 }

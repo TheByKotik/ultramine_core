@@ -141,6 +141,7 @@ public class StatisticsFile extends StatFileWriter
 							{
 								Constructor constructor = statbase.func_150954_l().getConstructor(new Class[0]);
 								IJsonSerializable ijsonserializable = (IJsonSerializable)constructor.newInstance(new Object[0]);
+								ijsonserializable.func_152753_a(jsonobject1.get("progress"));
 								tupleintjsonserializable.setJsonSerializableValue(ijsonserializable);
 							}
 							catch (Throwable throwable)

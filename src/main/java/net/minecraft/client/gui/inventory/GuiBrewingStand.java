@@ -16,10 +16,10 @@ public class GuiBrewingStand extends GuiContainer
 	private TileEntityBrewingStand tileBrewingStand;
 	private static final String __OBFID = "CL_00000746";
 
-	public GuiBrewingStand(InventoryPlayer par1InventoryPlayer, TileEntityBrewingStand par2TileEntityBrewingStand)
+	public GuiBrewingStand(InventoryPlayer p_i1081_1_, TileEntityBrewingStand p_i1081_2_)
 	{
-		super(new ContainerBrewingStand(par1InventoryPlayer, par2TileEntityBrewingStand));
-		this.tileBrewingStand = par2TileEntityBrewingStand;
+		super(new ContainerBrewingStand(p_i1081_1_, p_i1081_2_));
+		this.tileBrewingStand = p_i1081_2_;
 	}
 
 	protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_)

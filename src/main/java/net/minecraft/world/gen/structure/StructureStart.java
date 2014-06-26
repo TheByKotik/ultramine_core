@@ -17,10 +17,10 @@ public abstract class StructureStart
 
 	public StructureStart() {}
 
-	public StructureStart(int par1, int par2)
+	public StructureStart(int p_i43002_1_, int p_i43002_2_)
 	{
-		this.field_143024_c = par1;
-		this.field_143023_d = par2;
+		this.field_143024_c = p_i43002_1_;
+		this.field_143023_d = p_i43002_2_;
 	}
 
 	public StructureBoundingBox getBoundingBox()
@@ -33,7 +33,7 @@ public abstract class StructureStart
 		return this.components;
 	}
 
-	public void generateStructure(World par1World, Random par2Random, StructureBoundingBox par3StructureBoundingBox)
+	public void generateStructure(World p_75068_1_, Random p_75068_2_, StructureBoundingBox p_75068_3_)
 	{
 		Iterator iterator = this.components.iterator();
 
@@ -41,7 +41,7 @@ public abstract class StructureStart
 		{
 			StructureComponent structurecomponent = (StructureComponent)iterator.next();
 
-			if (structurecomponent.getBoundingBox().intersectsWith(par3StructureBoundingBox) && !structurecomponent.addComponentParts(par1World, par2Random, par3StructureBoundingBox))
+			if (structurecomponent.getBoundingBox().intersectsWith(p_75068_3_) && !structurecomponent.addComponentParts(p_75068_1_, p_75068_2_, p_75068_3_))
 			{
 				iterator.remove();
 			}
@@ -60,7 +60,7 @@ public abstract class StructureStart
 		}
 	}
 
-	public NBTTagCompound func_143021_a(int par1, int par2)
+	public NBTTagCompound func_143021_a(int p_143021_1_, int p_143021_2_)
 	{
 		if (MapGenStructureIO.func_143033_a(this) == null) // This is just a more friendly error instead of the 'Null String' below
 		{
@@ -68,8 +68,8 @@ public abstract class StructureStart
 		}
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		nbttagcompound.setString("id", MapGenStructureIO.func_143033_a(this));
-		nbttagcompound.setInteger("ChunkX", par1);
-		nbttagcompound.setInteger("ChunkZ", par2);
+		nbttagcompound.setInteger("ChunkX", p_143021_1_);
+		nbttagcompound.setInteger("ChunkZ", p_143021_2_);
 		nbttagcompound.setTag("BB", this.boundingBox.func_151535_h());
 		NBTTagList nbttaglist = new NBTTagList();
 		Iterator iterator = this.components.iterator();
@@ -85,38 +85,38 @@ public abstract class StructureStart
 		return nbttagcompound;
 	}
 
-	public void func_143022_a(NBTTagCompound par1NBTTagCompound) {}
+	public void func_143022_a(NBTTagCompound p_143022_1_) {}
 
-	public void func_143020_a(World par1World, NBTTagCompound par2NBTTagCompound)
+	public void func_143020_a(World p_143020_1_, NBTTagCompound p_143020_2_)
 	{
-		this.field_143024_c = par2NBTTagCompound.getInteger("ChunkX");
-		this.field_143023_d = par2NBTTagCompound.getInteger("ChunkZ");
+		this.field_143024_c = p_143020_2_.getInteger("ChunkX");
+		this.field_143023_d = p_143020_2_.getInteger("ChunkZ");
 
-		if (par2NBTTagCompound.hasKey("BB"))
+		if (p_143020_2_.hasKey("BB"))
 		{
-			this.boundingBox = new StructureBoundingBox(par2NBTTagCompound.getIntArray("BB"));
+			this.boundingBox = new StructureBoundingBox(p_143020_2_.getIntArray("BB"));
 		}
 
-		NBTTagList nbttaglist = par2NBTTagCompound.getTagList("Children", 10);
+		NBTTagList nbttaglist = p_143020_2_.getTagList("Children", 10);
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i)
 		{
-			this.components.add(MapGenStructureIO.func_143032_b(nbttaglist.getCompoundTagAt(i), par1World));
+			this.components.add(MapGenStructureIO.func_143032_b(nbttaglist.getCompoundTagAt(i), p_143020_1_));
 		}
 
-		this.func_143017_b(par2NBTTagCompound);
+		this.func_143017_b(p_143020_2_);
 	}
 
-	public void func_143017_b(NBTTagCompound par1NBTTagCompound) {}
+	public void func_143017_b(NBTTagCompound p_143017_1_) {}
 
-	protected void markAvailableHeight(World par1World, Random par2Random, int par3)
+	protected void markAvailableHeight(World p_75067_1_, Random p_75067_2_, int p_75067_3_)
 	{
-		int j = 63 - par3;
+		int j = 63 - p_75067_3_;
 		int k = this.boundingBox.getYSize() + 1;
 
 		if (k < j)
 		{
-			k += par2Random.nextInt(j - k);
+			k += p_75067_2_.nextInt(j - k);
 		}
 
 		int l = k - this.boundingBox.maxY;
@@ -130,19 +130,19 @@ public abstract class StructureStart
 		}
 	}
 
-	protected void setRandomHeight(World par1World, Random par2Random, int par3, int par4)
+	protected void setRandomHeight(World p_75070_1_, Random p_75070_2_, int p_75070_3_, int p_75070_4_)
 	{
-		int k = par4 - par3 + 1 - this.boundingBox.getYSize();
+		int k = p_75070_4_ - p_75070_3_ + 1 - this.boundingBox.getYSize();
 		boolean flag = true;
 		int i1;
 
 		if (k > 1)
 		{
-			i1 = par3 + par2Random.nextInt(k);
+			i1 = p_75070_3_ + p_75070_2_.nextInt(k);
 		}
 		else
 		{
-			i1 = par3;
+			i1 = p_75070_3_;
 		}
 
 		int l = i1 - this.boundingBox.minY;

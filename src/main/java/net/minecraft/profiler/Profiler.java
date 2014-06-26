@@ -28,7 +28,7 @@ public class Profiler
 		this.sectionList.clear();
 	}
 
-	public void startSection(String par1Str)
+	public void startSection(String p_76320_1_)
 	{
 		if (this.profilingEnabled)
 		{
@@ -37,7 +37,7 @@ public class Profiler
 				this.profilingSection = this.profilingSection + ".";
 			}
 
-			this.profilingSection = this.profilingSection + par1Str;
+			this.profilingSection = this.profilingSection + p_76320_1_;
 			this.sectionList.add(this.profilingSection);
 			this.timestampList.add(Long.valueOf(System.nanoTime()));
 		}
@@ -70,7 +70,7 @@ public class Profiler
 		}
 	}
 
-	public List getProfilingData(String par1Str)
+	public List getProfilingData(String p_76321_1_)
 	{
 		if (!this.profilingEnabled)
 		{
@@ -79,12 +79,12 @@ public class Profiler
 		else
 		{
 			long i = this.profilingMap.containsKey("root") ? ((Long)this.profilingMap.get("root")).longValue() : 0L;
-			long j = this.profilingMap.containsKey(par1Str) ? ((Long)this.profilingMap.get(par1Str)).longValue() : -1L;
+			long j = this.profilingMap.containsKey(p_76321_1_) ? ((Long)this.profilingMap.get(p_76321_1_)).longValue() : -1L;
 			ArrayList arraylist = new ArrayList();
 
-			if (par1Str.length() > 0)
+			if (p_76321_1_.length() > 0)
 			{
-				par1Str = par1Str + ".";
+				p_76321_1_ = p_76321_1_ + ".";
 			}
 
 			long k = 0L;
@@ -94,7 +94,7 @@ public class Profiler
 			{
 				String s1 = (String)iterator.next();
 
-				if (s1.length() > par1Str.length() && s1.startsWith(par1Str) && s1.indexOf(".", par1Str.length() + 1) < 0)
+				if (s1.length() > p_76321_1_.length() && s1.startsWith(p_76321_1_) && s1.indexOf(".", p_76321_1_.length() + 1) < 0)
 				{
 					k += ((Long)this.profilingMap.get(s1)).longValue();
 				}
@@ -119,12 +119,12 @@ public class Profiler
 			{
 				s2 = (String)iterator1.next();
 
-				if (s2.length() > par1Str.length() && s2.startsWith(par1Str) && s2.indexOf(".", par1Str.length() + 1) < 0)
+				if (s2.length() > p_76321_1_.length() && s2.startsWith(p_76321_1_) && s2.indexOf(".", p_76321_1_.length() + 1) < 0)
 				{
 					long l = ((Long)this.profilingMap.get(s2)).longValue();
 					double d0 = (double)l * 100.0D / (double)k;
 					double d1 = (double)l * 100.0D / (double)i;
-					String s3 = s2.substring(par1Str.length());
+					String s3 = s2.substring(p_76321_1_.length());
 					arraylist.add(new Profiler.Result(s3, d0, d1));
 				}
 			}
@@ -143,15 +143,15 @@ public class Profiler
 			}
 
 			Collections.sort(arraylist);
-			arraylist.add(0, new Profiler.Result(par1Str, 100.0D, (double)k * 100.0D / (double)i));
+			arraylist.add(0, new Profiler.Result(p_76321_1_, 100.0D, (double)k * 100.0D / (double)i));
 			return arraylist;
 		}
 	}
 
-	public void endStartSection(String par1Str)
+	public void endStartSection(String p_76318_1_)
 	{
 		this.endSection();
-		this.startSection(par1Str);
+		this.startSection(p_76318_1_);
 	}
 
 	public String getNameOfLastSection()
@@ -166,16 +166,16 @@ public class Profiler
 			public String field_76331_c;
 			private static final String __OBFID = "CL_00001498";
 
-			public Result(String par1Str, double par2, double par4)
+			public Result(String p_i1554_1_, double p_i1554_2_, double p_i1554_4_)
 			{
-				this.field_76331_c = par1Str;
-				this.field_76332_a = par2;
-				this.field_76330_b = par4;
+				this.field_76331_c = p_i1554_1_;
+				this.field_76332_a = p_i1554_2_;
+				this.field_76330_b = p_i1554_4_;
 			}
 
-			public int compareTo(Profiler.Result par1ProfilerResult)
+			public int compareTo(Profiler.Result p_compareTo_1_)
 			{
-				return par1ProfilerResult.field_76332_a < this.field_76332_a ? -1 : (par1ProfilerResult.field_76332_a > this.field_76332_a ? 1 : par1ProfilerResult.field_76331_c.compareTo(this.field_76331_c));
+				return p_compareTo_1_.field_76332_a < this.field_76332_a ? -1 : (p_compareTo_1_.field_76332_a > this.field_76332_a ? 1 : p_compareTo_1_.field_76331_c.compareTo(this.field_76331_c));
 			}
 
 			@SideOnly(Side.CLIENT)
@@ -184,9 +184,9 @@ public class Profiler
 				return (this.field_76331_c.hashCode() & 11184810) + 4473924;
 			}
 
-			public int compareTo(Object par1Obj)
+			public int compareTo(Object p_compareTo_1_)
 			{
-				return this.compareTo((Profiler.Result)par1Obj);
+				return this.compareTo((Profiler.Result)p_compareTo_1_);
 			}
 		}
 }

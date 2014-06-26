@@ -12,29 +12,29 @@ public class WorldGenTaiga2 extends WorldGenAbstractTree
 {
 	private static final String __OBFID = "CL_00000435";
 
-	public WorldGenTaiga2(boolean par1)
+	public WorldGenTaiga2(boolean p_i2025_1_)
 	{
-		super(par1);
+		super(p_i2025_1_);
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		int l = par2Random.nextInt(4) + 6;
-		int i1 = 1 + par2Random.nextInt(2);
+		int l = p_76484_2_.nextInt(4) + 6;
+		int i1 = 1 + p_76484_2_.nextInt(2);
 		int j1 = l - i1;
-		int k1 = 2 + par2Random.nextInt(2);
+		int k1 = 2 + p_76484_2_.nextInt(2);
 		boolean flag = true;
 
-		if (par4 >= 1 && par4 + l + 1 <= 256)
+		if (p_76484_4_ >= 1 && p_76484_4_ + l + 1 <= 256)
 		{
 			int i2;
 			int l3;
 
-			for (int l1 = par4; l1 <= par4 + 1 + l && flag; ++l1)
+			for (int l1 = p_76484_4_; l1 <= p_76484_4_ + 1 + l && flag; ++l1)
 			{
 				boolean flag1 = true;
 
-				if (l1 - par4 < i1)
+				if (l1 - p_76484_4_ < i1)
 				{
 					l3 = 0;
 				}
@@ -43,15 +43,15 @@ public class WorldGenTaiga2 extends WorldGenAbstractTree
 					l3 = k1;
 				}
 
-				for (i2 = par3 - l3; i2 <= par3 + l3 && flag; ++i2)
+				for (i2 = p_76484_3_ - l3; i2 <= p_76484_3_ + l3 && flag; ++i2)
 				{
-					for (int j2 = par5 - l3; j2 <= par5 + l3 && flag; ++j2)
+					for (int j2 = p_76484_5_ - l3; j2 <= p_76484_5_ + l3 && flag; ++j2)
 					{
 						if (l1 >= 0 && l1 < 256)
 						{
-							Block block = par1World.getBlock(i2, l1, j2);
+							Block block = p_76484_1_.getBlock(i2, l1, j2);
 
-							if (!block.isAir(par1World, i2, l1, j2) && !block.isLeaves(par1World, i2, l1, j2))
+							if (!block.isAir(p_76484_1_, i2, l1, j2) && !block.isLeaves(p_76484_1_, i2, l1, j2))
 							{
 								flag = false;
 							}
@@ -70,13 +70,13 @@ public class WorldGenTaiga2 extends WorldGenAbstractTree
 			}
 			else
 			{
-				Block block1 = par1World.getBlock(par3, par4 - 1, par5);
+				Block block1 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ - 1, p_76484_5_);
 
-				boolean isSoil = block1.canSustainPlant(par1World, par3, par4 - 1, par5, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
-				if (isSoil && par4 < 256 - l - 1)
+				boolean isSoil = block1.canSustainPlant(p_76484_1_, p_76484_3_, p_76484_4_ - 1, p_76484_5_, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
+				if (isSoil && p_76484_4_ < 256 - l - 1)
 				{
-					block1.onPlantGrow(par1World, par3, par4 - 1, par5, par3, par4, par5);
-					l3 = par2Random.nextInt(2);
+					block1.onPlantGrow(p_76484_1_, p_76484_3_, p_76484_4_ - 1, p_76484_5_, p_76484_3_, p_76484_4_, p_76484_5_);
+					l3 = p_76484_2_.nextInt(2);
 					i2 = 1;
 					byte b0 = 0;
 					int k2;
@@ -84,19 +84,19 @@ public class WorldGenTaiga2 extends WorldGenAbstractTree
 
 					for (i4 = 0; i4 <= j1; ++i4)
 					{
-						k2 = par4 + l - i4;
+						k2 = p_76484_4_ + l - i4;
 
-						for (int l2 = par3 - l3; l2 <= par3 + l3; ++l2)
+						for (int l2 = p_76484_3_ - l3; l2 <= p_76484_3_ + l3; ++l2)
 						{
-							int i3 = l2 - par3;
+							int i3 = l2 - p_76484_3_;
 
-							for (int j3 = par5 - l3; j3 <= par5 + l3; ++j3)
+							for (int j3 = p_76484_5_ - l3; j3 <= p_76484_5_ + l3; ++j3)
 							{
-								int k3 = j3 - par5;
+								int k3 = j3 - p_76484_5_;
 
-								if ((Math.abs(i3) != l3 || Math.abs(k3) != l3 || l3 <= 0) && par1World.getBlock(l2, k2, j3).canBeReplacedByLeaves(par1World, l2, k2, j3))
+								if ((Math.abs(i3) != l3 || Math.abs(k3) != l3 || l3 <= 0) && p_76484_1_.getBlock(l2, k2, j3).canBeReplacedByLeaves(p_76484_1_, l2, k2, j3))
 								{
-									this.setBlockAndNotifyAdequately(par1World, l2, k2, j3, Blocks.leaves, 1);
+									this.setBlockAndNotifyAdequately(p_76484_1_, l2, k2, j3, Blocks.leaves, 1);
 								}
 							}
 						}
@@ -118,15 +118,15 @@ public class WorldGenTaiga2 extends WorldGenAbstractTree
 						}
 					}
 
-					i4 = par2Random.nextInt(3);
+					i4 = p_76484_2_.nextInt(3);
 
 					for (k2 = 0; k2 < l - i4; ++k2)
 					{
-						Block block2 = par1World.getBlock(par3, par4 + k2, par5);
+						Block block2 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + k2, p_76484_5_);
 
-						if (block2.isAir(par1World, par3, par4 + k2, par5) || block2.isLeaves(par1World, par3, par4 + k2, par5))
+						if (block2.isAir(p_76484_1_, p_76484_3_, p_76484_4_ + k2, p_76484_5_) || block2.isLeaves(p_76484_1_, p_76484_3_, p_76484_4_ + k2, p_76484_5_))
 						{
-							this.setBlockAndNotifyAdequately(par1World, par3, par4 + k2, par5, Blocks.log, 1);
+							this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + k2, p_76484_5_, Blocks.log, 1);
 						}
 					}
 

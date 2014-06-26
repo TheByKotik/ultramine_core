@@ -4,9 +4,9 @@ public class ItemBook extends Item
 {
 	private static final String __OBFID = "CL_00001775";
 
-	public boolean isItemTool(ItemStack par1ItemStack)
+	public boolean isItemTool(ItemStack p_77616_1_)
 	{
-		return par1ItemStack.stackSize == 1;
+		return p_77616_1_.stackSize == 1;
 	}
 
 	public int getItemEnchantability()

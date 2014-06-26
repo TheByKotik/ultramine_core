@@ -8,12 +8,12 @@ public class WeightedRandom
 {
 	private static final String __OBFID = "CL_00001503";
 
-	public static int getTotalWeight(Collection par0Collection)
+	public static int getTotalWeight(Collection p_76272_0_)
 	{
 		int i = 0;
 		WeightedRandom.Item item;
 
-		for (Iterator iterator = par0Collection.iterator(); iterator.hasNext(); i += item.itemWeight)
+		for (Iterator iterator = p_76272_0_.iterator(); iterator.hasNext(); i += item.itemWeight)
 		{
 			item = (WeightedRandom.Item)iterator.next();
 		}
@@ -21,13 +21,13 @@ public class WeightedRandom
 		return i;
 	}
 
-	public static WeightedRandom.Item getRandomItem(Random par0Random, Collection par1Collection, int par2)
+	public static WeightedRandom.Item getRandomItem(Random p_76273_0_, Collection p_76273_1_, int p_76273_2_)
 	{
-		if (par2 <= 0)
+		if (p_76273_2_ <= 0)
 		{
 			throw new IllegalArgumentException();
 		}
-		return getItem(par1Collection, par0Random.nextInt(par2));
+		return getItem(p_76273_1_, p_76273_0_.nextInt(p_76273_2_));
 	}
 
 	//Forge: Added to allow custom random implementations, Modder is responsible for making sure the 
@@ -55,16 +55,16 @@ public class WeightedRandom
 		}
 	}
 
-	public static WeightedRandom.Item getRandomItem(Random par0Random, Collection par1Collection)
+	public static WeightedRandom.Item getRandomItem(Random p_76271_0_, Collection p_76271_1_)
 	{
-		return getRandomItem(par0Random, par1Collection, getTotalWeight(par1Collection));
+		return getRandomItem(p_76271_0_, p_76271_1_, getTotalWeight(p_76271_1_));
 	}
 
-	public static int getTotalWeight(WeightedRandom.Item[] par0ArrayOfWeightedRandomItem)
+	public static int getTotalWeight(WeightedRandom.Item[] p_76270_0_)
 	{
 		int i = 0;
-		WeightedRandom.Item[] aitem = par0ArrayOfWeightedRandomItem;
-		int j = par0ArrayOfWeightedRandomItem.length;
+		WeightedRandom.Item[] aitem = p_76270_0_;
+		int j = p_76270_0_.length;
 
 		for (int k = 0; k < j; ++k)
 		{
@@ -75,13 +75,13 @@ public class WeightedRandom
 		return i;
 	}
 
-	public static WeightedRandom.Item getRandomItem(Random par0Random, WeightedRandom.Item[] par1ArrayOfWeightedRandomItem, int par2)
+	public static WeightedRandom.Item getRandomItem(Random p_76269_0_, WeightedRandom.Item[] p_76269_1_, int p_76269_2_)
 	{
-		if (par2 <= 0)
+		if (p_76269_2_ <= 0)
 		{
 			throw new IllegalArgumentException();
 		}
-		return getItem(par1ArrayOfWeightedRandomItem, par0Random.nextInt(par2));
+		return getItem(p_76269_1_, p_76269_0_.nextInt(p_76269_2_));
 	}
 
 	//Forge: Added to allow custom random implementations, Modder is responsible for making sure the 
@@ -108,9 +108,9 @@ public class WeightedRandom
 		}
 	}
 
-	public static WeightedRandom.Item getRandomItem(Random par0Random, WeightedRandom.Item[] par1ArrayOfWeightedRandomItem)
+	public static WeightedRandom.Item getRandomItem(Random p_76274_0_, WeightedRandom.Item[] p_76274_1_)
 	{
-		return getRandomItem(par0Random, par1ArrayOfWeightedRandomItem, getTotalWeight(par1ArrayOfWeightedRandomItem));
+		return getRandomItem(p_76274_0_, p_76274_1_, getTotalWeight(p_76274_1_));
 	}
 
 	public static class Item
@@ -118,9 +118,9 @@ public class WeightedRandom
 			public int itemWeight;
 			private static final String __OBFID = "CL_00001504";
 
-			public Item(int par1)
+			public Item(int p_i1556_1_)
 			{
-				this.itemWeight = par1;
+				this.itemWeight = p_i1556_1_;
 			}
 		}
 }

@@ -9,13 +9,13 @@ public class StructureMineshaftStart extends StructureStart
 
 	public StructureMineshaftStart() {}
 
-	public StructureMineshaftStart(World par1World, Random par2Random, int par3, int par4)
+	public StructureMineshaftStart(World p_i2039_1_, Random p_i2039_2_, int p_i2039_3_, int p_i2039_4_)
 	{
-		super(par3, par4);
-		StructureMineshaftPieces.Room room = new StructureMineshaftPieces.Room(0, par2Random, (par3 << 4) + 2, (par4 << 4) + 2);
+		super(p_i2039_3_, p_i2039_4_);
+		StructureMineshaftPieces.Room room = new StructureMineshaftPieces.Room(0, p_i2039_2_, (p_i2039_3_ << 4) + 2, (p_i2039_4_ << 4) + 2);
 		this.components.add(room);
-		room.buildComponent(room, this.components, par2Random);
+		room.buildComponent(room, this.components, p_i2039_2_);
 		this.updateBoundingBox();
-		this.markAvailableHeight(par1World, par2Random, 10);
+		this.markAvailableHeight(p_i2039_1_, p_i2039_2_, 10);
 	}
 }

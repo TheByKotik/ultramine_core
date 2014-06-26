@@ -1,8 +1,10 @@
 package net.minecraft.command.server;
 
+import com.mojang.authlib.GameProfile;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
@@ -21,17 +23,27 @@ public class CommandOp extends CommandBase
 		return 3;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.op.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length == 1 && par2ArrayOfStr[0].length() > 0)
+		if (p_71515_2_.length == 1 && p_71515_2_[0].length() > 0)
 		{
-			MinecraftServer.getServer().getConfigurationManager().addOp(par2ArrayOfStr[0]);
-			notifyAdmins(par1ICommandSender, "commands.op.success", new Object[] {par2ArrayOfStr[0]});
+			MinecraftServer minecraftserver = MinecraftServer.getServer();
+			GameProfile gameprofile = minecraftserver.func_152358_ax().func_152655_a(p_71515_2_[0]);
+
+			if (gameprofile == null)
+			{
+				throw new CommandException("commands.op.failed", new Object[] {p_71515_2_[0]});
+			}
+			else
+			{
+				minecraftserver.getConfigurationManager().func_152605_a(gameprofile);
+				func_152373_a(p_71515_1_, this, "commands.op.success", new Object[] {p_71515_2_[0]});
+			}
 		}
 		else
 		{
@@ -39,22 +51,22 @@ public class CommandOp extends CommandBase
 		}
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		if (par2ArrayOfStr.length == 1)
+		if (p_71516_2_.length == 1)
 		{
-			String s = par2ArrayOfStr[par2ArrayOfStr.length - 1];
+			String s = p_71516_2_[p_71516_2_.length - 1];
 			ArrayList arraylist = new ArrayList();
-			String[] astring1 = MinecraftServer.getServer().getAllUsernames();
-			int i = astring1.length;
+			GameProfile[] agameprofile = MinecraftServer.getServer().func_152357_F();
+			int i = agameprofile.length;
 
 			for (int j = 0; j < i; ++j)
 			{
-				String s1 = astring1[j];
+				GameProfile gameprofile = agameprofile[j];
 
-				if (!MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(s1) && doesStringStartWith(s, s1))
+				if (!MinecraftServer.getServer().getConfigurationManager().func_152596_g(gameprofile) && doesStringStartWith(s, gameprofile.getName()))
 				{
-					arraylist.add(s1);
+					arraylist.add(gameprofile.getName());
 				}
 			}
 

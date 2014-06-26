@@ -4,6 +4,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import cpw.mods.fml.relauncher.Side;
@@ -268,19 +269,19 @@ public class ChatStyle
 		return "Style{hasParent=" + (this.parentStyle != null) + ", color=" + this.color + ", bold=" + this.bold + ", italic=" + this.italic + ", underlined=" + this.underlined + ", obfuscated=" + this.obfuscated + ", clickEvent=" + this.getChatClickEvent() + ", hoverEvent=" + this.getChatHoverEvent() + '}';
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (this == par1Obj)
+		if (this == p_equals_1_)
 		{
 			return true;
 		}
-		else if (!(par1Obj instanceof ChatStyle))
+		else if (!(p_equals_1_ instanceof ChatStyle))
 		{
 			return false;
 		}
 		else
 		{
-			ChatStyle chatstyle = (ChatStyle)par1Obj;
+			ChatStyle chatstyle = (ChatStyle)p_equals_1_;
 			boolean flag;
 
 			if (this.getBold() == chatstyle.getBold() && this.getColor() == chatstyle.getColor() && this.getItalic() == chatstyle.getItalic() && this.getObfuscated() == chatstyle.getObfuscated() && this.getStrikethrough() == chatstyle.getStrikethrough() && this.getUnderlined() == chatstyle.getUnderlined())
@@ -367,70 +368,89 @@ public class ChatStyle
 		{
 			private static final String __OBFID = "CL_00001268";
 
-			public ChatStyle deserialize(JsonElement p_150204_1_, Type p_150204_2_, JsonDeserializationContext p_150204_3_)
+			public ChatStyle deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_)
 			{
-				if (p_150204_1_.isJsonObject())
+				if (p_deserialize_1_.isJsonObject())
 				{
 					ChatStyle chatstyle = new ChatStyle();
-					JsonObject jsonobject = p_150204_1_.getAsJsonObject();
+					JsonObject jsonobject = p_deserialize_1_.getAsJsonObject();
 
-					if (jsonobject.has("bold"))
+					if (jsonobject == null)
 					{
-						chatstyle.bold = Boolean.valueOf(jsonobject.get("bold").getAsBoolean());
+						return null;
 					}
-
-					if (jsonobject.has("italic"))
+					else
 					{
-						chatstyle.italic = Boolean.valueOf(jsonobject.get("italic").getAsBoolean());
-					}
-
-					if (jsonobject.has("underlined"))
-					{
-						chatstyle.underlined = Boolean.valueOf(jsonobject.get("underlined").getAsBoolean());
-					}
-
-					if (jsonobject.has("strikethrough"))
-					{
-						chatstyle.strikethrough = Boolean.valueOf(jsonobject.get("strikethrough").getAsBoolean());
-					}
-
-					if (jsonobject.has("obfuscated"))
-					{
-						chatstyle.obfuscated = Boolean.valueOf(jsonobject.get("obfuscated").getAsBoolean());
-					}
-
-					if (jsonobject.has("color"))
-					{
-						chatstyle.color = (EnumChatFormatting)p_150204_3_.deserialize(jsonobject.get("color"), EnumChatFormatting.class);
-					}
-
-					JsonObject jsonobject1;
-
-					if (jsonobject.has("clickEvent"))
-					{
-						jsonobject1 = jsonobject.getAsJsonObject("clickEvent");
-						ClickEvent.Action action = ClickEvent.Action.getValueByCanonicalName(jsonobject1.getAsJsonPrimitive("action").getAsString());
-						String s = jsonobject1.getAsJsonPrimitive("value").getAsString();
-
-						if (action != null && s != null && action.shouldAllowInChat())
+						if (jsonobject.has("bold"))
 						{
-							chatstyle.chatClickEvent = new ClickEvent(action, s);
+							chatstyle.bold = Boolean.valueOf(jsonobject.get("bold").getAsBoolean());
 						}
-					}
 
-					if (jsonobject.has("hoverEvent"))
-					{
-						jsonobject1 = jsonobject.getAsJsonObject("hoverEvent");
-						HoverEvent.Action action1 = HoverEvent.Action.getValueByCanonicalName(jsonobject1.getAsJsonPrimitive("action").getAsString());
-						IChatComponent ichatcomponent = (IChatComponent)p_150204_3_.deserialize(jsonobject1.get("value"), IChatComponent.class);
-
-						if (action1 != null && ichatcomponent != null && action1.shouldAllowInChat())
+						if (jsonobject.has("italic"))
 						{
-							chatstyle.chatHoverEvent = new HoverEvent(action1, ichatcomponent);
+							chatstyle.italic = Boolean.valueOf(jsonobject.get("italic").getAsBoolean());
 						}
-					}
 
-					return chatstyle;
+						if (jsonobject.has("underlined"))
+						{
+							chatstyle.underlined = Boolean.valueOf(jsonobject.get("underlined").getAsBoolean());
+						}
+
+						if (jsonobject.has("strikethrough"))
+						{
+							chatstyle.strikethrough = Boolean.valueOf(jsonobject.get("strikethrough").getAsBoolean());
+						}
+
+						if (jsonobject.has("obfuscated"))
+						{
+							chatstyle.obfuscated = Boolean.valueOf(jsonobject.get("obfuscated").getAsBoolean());
+						}
+
+						if (jsonobject.has("color"))
+						{
+							chatstyle.color = (EnumChatFormatting)p_deserialize_3_.deserialize(jsonobject.get("color"), EnumChatFormatting.class);
+						}
+
+						JsonObject jsonobject1;
+						JsonPrimitive jsonprimitive;
+
+						if (jsonobject.has("clickEvent"))
+						{
+							jsonobject1 = jsonobject.getAsJsonObject("clickEvent");
+
+							if (jsonobject1 != null)
+							{
+								jsonprimitive = jsonobject1.getAsJsonPrimitive("action");
+								ClickEvent.Action action = jsonprimitive == null ? null : ClickEvent.Action.getValueByCanonicalName(jsonprimitive.getAsString());
+								JsonPrimitive jsonprimitive1 = jsonobject1.getAsJsonPrimitive("value");
+								String s = jsonprimitive1 == null ? null : jsonprimitive1.getAsString();
+
+								if (action != null && s != null && action.shouldAllowInChat())
+								{
+									chatstyle.chatClickEvent = new ClickEvent(action, s);
+								}
+							}
+						}
+
+						if (jsonobject.has("hoverEvent"))
+						{
+							jsonobject1 = jsonobject.getAsJsonObject("hoverEvent");
+
+							if (jsonobject1 != null)
+							{
+								jsonprimitive = jsonobject1.getAsJsonPrimitive("action");
+								HoverEvent.Action action1 = jsonprimitive == null ? null : HoverEvent.Action.getValueByCanonicalName(jsonprimitive.getAsString());
+								IChatComponent ichatcomponent = (IChatComponent)p_deserialize_3_.deserialize(jsonobject1.get("value"), IChatComponent.class);
+
+								if (action1 != null && ichatcomponent != null && action1.shouldAllowInChat())
+								{
+									chatstyle.chatHoverEvent = new HoverEvent(action1, ichatcomponent);
+								}
+							}
+						}
+
+						return chatstyle;
+					}
 				}
 				else
 				{
@@ -438,9 +458,9 @@ public class ChatStyle
 				}
 			}
 
-			public JsonElement serialize(ChatStyle p_150203_1_, Type p_150203_2_, JsonSerializationContext p_150203_3_)
+			public JsonElement serialize(ChatStyle p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
 			{
-				if (p_150203_1_.isEmpty())
+				if (p_serialize_1_.isEmpty())
 				{
 					return null;
 				}
@@ -448,51 +468,51 @@ public class ChatStyle
 				{
 					JsonObject jsonobject = new JsonObject();
 
-					if (p_150203_1_.bold != null)
+					if (p_serialize_1_.bold != null)
 					{
-						jsonobject.addProperty("bold", p_150203_1_.bold);
+						jsonobject.addProperty("bold", p_serialize_1_.bold);
 					}
 
-					if (p_150203_1_.italic != null)
+					if (p_serialize_1_.italic != null)
 					{
-						jsonobject.addProperty("italic", p_150203_1_.italic);
+						jsonobject.addProperty("italic", p_serialize_1_.italic);
 					}
 
-					if (p_150203_1_.underlined != null)
+					if (p_serialize_1_.underlined != null)
 					{
-						jsonobject.addProperty("underlined", p_150203_1_.underlined);
+						jsonobject.addProperty("underlined", p_serialize_1_.underlined);
 					}
 
-					if (p_150203_1_.strikethrough != null)
+					if (p_serialize_1_.strikethrough != null)
 					{
-						jsonobject.addProperty("strikethrough", p_150203_1_.strikethrough);
+						jsonobject.addProperty("strikethrough", p_serialize_1_.strikethrough);
 					}
 
-					if (p_150203_1_.obfuscated != null)
+					if (p_serialize_1_.obfuscated != null)
 					{
-						jsonobject.addProperty("obfuscated", p_150203_1_.obfuscated);
+						jsonobject.addProperty("obfuscated", p_serialize_1_.obfuscated);
 					}
 
-					if (p_150203_1_.color != null)
+					if (p_serialize_1_.color != null)
 					{
-						jsonobject.add("color", p_150203_3_.serialize(p_150203_1_.color));
+						jsonobject.add("color", p_serialize_3_.serialize(p_serialize_1_.color));
 					}
 
 					JsonObject jsonobject1;
 
-					if (p_150203_1_.chatClickEvent != null)
+					if (p_serialize_1_.chatClickEvent != null)
 					{
 						jsonobject1 = new JsonObject();
-						jsonobject1.addProperty("action", p_150203_1_.chatClickEvent.getAction().getCanonicalName());
-						jsonobject1.addProperty("value", p_150203_1_.chatClickEvent.getValue());
+						jsonobject1.addProperty("action", p_serialize_1_.chatClickEvent.getAction().getCanonicalName());
+						jsonobject1.addProperty("value", p_serialize_1_.chatClickEvent.getValue());
 						jsonobject.add("clickEvent", jsonobject1);
 					}
 
-					if (p_150203_1_.chatHoverEvent != null)
+					if (p_serialize_1_.chatHoverEvent != null)
 					{
 						jsonobject1 = new JsonObject();
-						jsonobject1.addProperty("action", p_150203_1_.chatHoverEvent.getAction().getCanonicalName());
-						jsonobject1.add("value", p_150203_3_.serialize(p_150203_1_.chatHoverEvent.getValue()));
+						jsonobject1.addProperty("action", p_serialize_1_.chatHoverEvent.getAction().getCanonicalName());
+						jsonobject1.add("value", p_serialize_3_.serialize(p_serialize_1_.chatHoverEvent.getValue()));
 						jsonobject.add("hoverEvent", jsonobject1);
 					}
 
@@ -500,9 +520,9 @@ public class ChatStyle
 				}
 			}
 
-			public JsonElement serialize(Object par1Obj, Type par2Type, JsonSerializationContext par3JsonSerializationContext)
+			public JsonElement serialize(Object p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
 			{
-				return this.serialize((ChatStyle)par1Obj, par2Type, par3JsonSerializationContext);
+				return this.serialize((ChatStyle)p_serialize_1_, p_serialize_2_, p_serialize_3_);
 			}
 		}
 }

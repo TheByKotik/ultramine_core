@@ -18,31 +18,31 @@ public class ItemEnchantedBook extends Item
 	private static final String __OBFID = "CL_00000025";
 
 	@SideOnly(Side.CLIENT)
-	public boolean hasEffect(ItemStack par1ItemStack)
+	public boolean hasEffect(ItemStack p_77636_1_)
 	{
 		return true;
 	}
 
-	public boolean isItemTool(ItemStack par1ItemStack)
+	public boolean isItemTool(ItemStack p_77616_1_)
 	{
 		return false;
 	}
 
-	public EnumRarity getRarity(ItemStack par1ItemStack)
+	public EnumRarity getRarity(ItemStack p_77613_1_)
 	{
-		return this.func_92110_g(par1ItemStack).tagCount() > 0 ? EnumRarity.uncommon : super.getRarity(par1ItemStack);
+		return this.func_92110_g(p_77613_1_).tagCount() > 0 ? EnumRarity.uncommon : super.getRarity(p_77613_1_);
 	}
 
-	public NBTTagList func_92110_g(ItemStack par1ItemStack)
+	public NBTTagList func_92110_g(ItemStack p_92110_1_)
 	{
-		return par1ItemStack.stackTagCompound != null && par1ItemStack.stackTagCompound.hasKey("StoredEnchantments", 9) ? (NBTTagList)par1ItemStack.stackTagCompound.getTag("StoredEnchantments") : new NBTTagList();
+		return p_92110_1_.stackTagCompound != null && p_92110_1_.stackTagCompound.hasKey("StoredEnchantments", 9) ? (NBTTagList)p_92110_1_.stackTagCompound.getTag("StoredEnchantments") : new NBTTagList();
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_)
 	{
-		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
-		NBTTagList nbttaglist = this.func_92110_g(par1ItemStack);
+		super.addInformation(p_77624_1_, p_77624_2_, p_77624_3_, p_77624_4_);
+		NBTTagList nbttaglist = this.func_92110_g(p_77624_1_);
 
 		if (nbttaglist != null)
 		{
@@ -53,26 +53,26 @@ public class ItemEnchantedBook extends Item
 
 				if (Enchantment.enchantmentsList[short1] != null)
 				{
-					par3List.add(Enchantment.enchantmentsList[short1].getTranslatedName(short2));
+					p_77624_3_.add(Enchantment.enchantmentsList[short1].getTranslatedName(short2));
 				}
 			}
 		}
 	}
 
-	public void addEnchantment(ItemStack par1ItemStack, EnchantmentData par2EnchantmentData)
+	public void addEnchantment(ItemStack p_92115_1_, EnchantmentData p_92115_2_)
 	{
-		NBTTagList nbttaglist = this.func_92110_g(par1ItemStack);
+		NBTTagList nbttaglist = this.func_92110_g(p_92115_1_);
 		boolean flag = true;
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i)
 		{
 			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 
-			if (nbttagcompound.getShort("id") == par2EnchantmentData.enchantmentobj.effectId)
+			if (nbttagcompound.getShort("id") == p_92115_2_.enchantmentobj.effectId)
 			{
-				if (nbttagcompound.getShort("lvl") < par2EnchantmentData.enchantmentLevel)
+				if (nbttagcompound.getShort("lvl") < p_92115_2_.enchantmentLevel)
 				{
-					nbttagcompound.setShort("lvl", (short)par2EnchantmentData.enchantmentLevel);
+					nbttagcompound.setShort("lvl", (short)p_92115_2_.enchantmentLevel);
 				}
 
 				flag = false;
@@ -83,44 +83,44 @@ public class ItemEnchantedBook extends Item
 		if (flag)
 		{
 			NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-			nbttagcompound1.setShort("id", (short)par2EnchantmentData.enchantmentobj.effectId);
-			nbttagcompound1.setShort("lvl", (short)par2EnchantmentData.enchantmentLevel);
+			nbttagcompound1.setShort("id", (short)p_92115_2_.enchantmentobj.effectId);
+			nbttagcompound1.setShort("lvl", (short)p_92115_2_.enchantmentLevel);
 			nbttaglist.appendTag(nbttagcompound1);
 		}
 
-		if (!par1ItemStack.hasTagCompound())
+		if (!p_92115_1_.hasTagCompound())
 		{
-			par1ItemStack.setTagCompound(new NBTTagCompound());
+			p_92115_1_.setTagCompound(new NBTTagCompound());
 		}
 
-		par1ItemStack.getTagCompound().setTag("StoredEnchantments", nbttaglist);
+		p_92115_1_.getTagCompound().setTag("StoredEnchantments", nbttaglist);
 	}
 
-	public ItemStack getEnchantedItemStack(EnchantmentData par1EnchantmentData)
+	public ItemStack getEnchantedItemStack(EnchantmentData p_92111_1_)
 	{
 		ItemStack itemstack = new ItemStack(this);
-		this.addEnchantment(itemstack, par1EnchantmentData);
+		this.addEnchantment(itemstack, p_92111_1_);
 		return itemstack;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void func_92113_a(Enchantment par1Enchantment, List par2List)
+	public void func_92113_a(Enchantment p_92113_1_, List p_92113_2_)
 	{
-		for (int i = par1Enchantment.getMinLevel(); i <= par1Enchantment.getMaxLevel(); ++i)
+		for (int i = p_92113_1_.getMinLevel(); i <= p_92113_1_.getMaxLevel(); ++i)
 		{
-			par2List.add(this.getEnchantedItemStack(new EnchantmentData(par1Enchantment, i)));
+			p_92113_2_.add(this.getEnchantedItemStack(new EnchantmentData(p_92113_1_, i)));
 		}
 	}
 
-	public WeightedRandomChestContent func_92114_b(Random par1Random)
+	public WeightedRandomChestContent func_92114_b(Random p_92114_1_)
 	{
-		return this.func_92112_a(par1Random, 1, 1, 1);
+		return this.func_92112_a(p_92114_1_, 1, 1, 1);
 	}
 
-	public WeightedRandomChestContent func_92112_a(Random par1Random, int par2, int par3, int par4)
+	public WeightedRandomChestContent func_92112_a(Random p_92112_1_, int p_92112_2_, int p_92112_3_, int p_92112_4_)
 	{
 		ItemStack itemstack = new ItemStack(Items.book, 1, 0);
-		EnchantmentHelper.addRandomEnchantment(par1Random, itemstack, 30);
-		return new WeightedRandomChestContent(itemstack, par2, par3, par4);
+		EnchantmentHelper.addRandomEnchantment(p_92112_1_, itemstack, 30);
+		return new WeightedRandomChestContent(itemstack, p_92112_2_, p_92112_3_, p_92112_4_);
 	}
 }

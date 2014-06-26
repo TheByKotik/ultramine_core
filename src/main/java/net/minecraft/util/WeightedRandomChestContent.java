@@ -22,24 +22,24 @@ public class WeightedRandomChestContent extends WeightedRandom.Item
 		this.theMaximumChanceToGenerateItem = p_i45311_4_;
 	}
 
-	public WeightedRandomChestContent(ItemStack par1ItemStack, int par2, int par3, int par4)
+	public WeightedRandomChestContent(ItemStack p_i1558_1_, int p_i1558_2_, int p_i1558_3_, int p_i1558_4_)
 	{
-		super(par4);
-		this.theItemId = par1ItemStack;
-		this.theMinimumChanceToGenerateItem = par2;
-		this.theMaximumChanceToGenerateItem = par3;
+		super(p_i1558_4_);
+		this.theItemId = p_i1558_1_;
+		this.theMinimumChanceToGenerateItem = p_i1558_2_;
+		this.theMaximumChanceToGenerateItem = p_i1558_3_;
 	}
 
-	public static void generateChestContents(Random par0Random, WeightedRandomChestContent[] par1ArrayOfWeightedRandomChestContent, IInventory par2IInventory, int par3)
+	public static void generateChestContents(Random p_76293_0_, WeightedRandomChestContent[] p_76293_1_, IInventory p_76293_2_, int p_76293_3_)
 	{
-		for (int j = 0; j < par3; ++j)
+		for (int j = 0; j < p_76293_3_; ++j)
 		{
-			WeightedRandomChestContent weightedrandomchestcontent = (WeightedRandomChestContent)WeightedRandom.getRandomItem(par0Random, par1ArrayOfWeightedRandomChestContent);
-			ItemStack[] stacks = weightedrandomchestcontent.generateChestContent(par0Random, par2IInventory);
+			WeightedRandomChestContent weightedrandomchestcontent = (WeightedRandomChestContent)WeightedRandom.getRandomItem(p_76293_0_, p_76293_1_);
+			ItemStack[] stacks = weightedrandomchestcontent.generateChestContent(p_76293_0_, p_76293_2_);
 
 			for (ItemStack item : stacks)
 			{
-				par2IInventory.setInventorySlotContents(par0Random.nextInt(par2IInventory.getSizeInventory()), item);
+				p_76293_2_.setInventorySlotContents(p_76293_0_.nextInt(p_76293_2_.getSizeInventory()), item);
 			}
 		}
 	}
@@ -58,18 +58,18 @@ public class WeightedRandomChestContent extends WeightedRandom.Item
 		}
 	}
 
-	public static WeightedRandomChestContent[] func_92080_a(WeightedRandomChestContent[] par0ArrayOfWeightedRandomChestContent, WeightedRandomChestContent ... par1ArrayOfWeightedRandomChestContent)
+	public static WeightedRandomChestContent[] func_92080_a(WeightedRandomChestContent[] p_92080_0_, WeightedRandomChestContent ... p_92080_1_)
 	{
-		WeightedRandomChestContent[] aweightedrandomchestcontent1 = new WeightedRandomChestContent[par0ArrayOfWeightedRandomChestContent.length + par1ArrayOfWeightedRandomChestContent.length];
+		WeightedRandomChestContent[] aweightedrandomchestcontent1 = new WeightedRandomChestContent[p_92080_0_.length + p_92080_1_.length];
 		int i = 0;
 
-		for (int j = 0; j < par0ArrayOfWeightedRandomChestContent.length; ++j)
+		for (int j = 0; j < p_92080_0_.length; ++j)
 		{
-			aweightedrandomchestcontent1[i++] = par0ArrayOfWeightedRandomChestContent[j];
+			aweightedrandomchestcontent1[i++] = p_92080_0_[j];
 		}
 
-		WeightedRandomChestContent[] aweightedrandomchestcontent2 = par1ArrayOfWeightedRandomChestContent;
-		int k = par1ArrayOfWeightedRandomChestContent.length;
+		WeightedRandomChestContent[] aweightedrandomchestcontent2 = p_92080_1_;
+		int k = p_92080_1_.length;
 
 		for (int l = 0; l < k; ++l)
 		{

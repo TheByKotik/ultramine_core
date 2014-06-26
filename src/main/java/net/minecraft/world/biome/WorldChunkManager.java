@@ -34,18 +34,18 @@ public class WorldChunkManager
 		this.biomesToSpawnIn.addAll(allowedBiomes);
 	}
 
-	public WorldChunkManager(long par1, WorldType par3WorldType)
+	public WorldChunkManager(long p_i1975_1_, WorldType p_i1975_3_)
 	{
 		this();
-		GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(par1, par3WorldType);
-		agenlayer = getModdedBiomeGenerators(par3WorldType, par1, agenlayer);
+		GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(p_i1975_1_, p_i1975_3_);
+		agenlayer = getModdedBiomeGenerators(p_i1975_3_, p_i1975_1_, agenlayer);
 		this.genBiomes = agenlayer[0];
 		this.biomeIndexLayer = agenlayer[1];
 	}
 
-	public WorldChunkManager(World par1World)
+	public WorldChunkManager(World p_i1976_1_)
 	{
-		this(par1World.getSeed(), par1World.getWorldInfo().getTerrainType());
+		this(p_i1976_1_.getSeed(), p_i1976_1_.getWorldInfo().getTerrainType());
 	}
 
 	public List getBiomesToSpawnIn()
@@ -53,23 +53,23 @@ public class WorldChunkManager
 		return this.biomesToSpawnIn;
 	}
 
-	public BiomeGenBase getBiomeGenAt(int par1, int par2)
+	public BiomeGenBase getBiomeGenAt(int p_76935_1_, int p_76935_2_)
 	{
-		return this.biomeCache.getBiomeGenAt(par1, par2);
+		return this.biomeCache.getBiomeGenAt(p_76935_1_, p_76935_2_);
 	}
 
-	public float[] getRainfall(float[] par1ArrayOfFloat, int par2, int par3, int par4, int par5)
+	public float[] getRainfall(float[] p_76936_1_, int p_76936_2_, int p_76936_3_, int p_76936_4_, int p_76936_5_)
 	{
 		IntCache.resetIntCache();
 
-		if (par1ArrayOfFloat == null || par1ArrayOfFloat.length < par4 * par5)
+		if (p_76936_1_ == null || p_76936_1_.length < p_76936_4_ * p_76936_5_)
 		{
-			par1ArrayOfFloat = new float[par4 * par5];
+			p_76936_1_ = new float[p_76936_4_ * p_76936_5_];
 		}
 
-		int[] aint = this.biomeIndexLayer.getInts(par2, par3, par4, par5);
+		int[] aint = this.biomeIndexLayer.getInts(p_76936_2_, p_76936_3_, p_76936_4_, p_76936_5_);
 
-		for (int i1 = 0; i1 < par4 * par5; ++i1)
+		for (int i1 = 0; i1 < p_76936_4_ * p_76936_5_; ++i1)
 		{
 			try
 			{
@@ -80,104 +80,104 @@ public class WorldChunkManager
 					f = 1.0F;
 				}
 
-				par1ArrayOfFloat[i1] = f;
+				p_76936_1_[i1] = f;
 			}
 			catch (Throwable throwable)
 			{
 				CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Invalid Biome id");
 				CrashReportCategory crashreportcategory = crashreport.makeCategory("DownfallBlock");
 				crashreportcategory.addCrashSection("biome id", Integer.valueOf(i1));
-				crashreportcategory.addCrashSection("downfalls[] size", Integer.valueOf(par1ArrayOfFloat.length));
-				crashreportcategory.addCrashSection("x", Integer.valueOf(par2));
-				crashreportcategory.addCrashSection("z", Integer.valueOf(par3));
-				crashreportcategory.addCrashSection("w", Integer.valueOf(par4));
-				crashreportcategory.addCrashSection("h", Integer.valueOf(par5));
+				crashreportcategory.addCrashSection("downfalls[] size", Integer.valueOf(p_76936_1_.length));
+				crashreportcategory.addCrashSection("x", Integer.valueOf(p_76936_2_));
+				crashreportcategory.addCrashSection("z", Integer.valueOf(p_76936_3_));
+				crashreportcategory.addCrashSection("w", Integer.valueOf(p_76936_4_));
+				crashreportcategory.addCrashSection("h", Integer.valueOf(p_76936_5_));
 				throw new ReportedException(crashreport);
 			}
 		}
 
-		return par1ArrayOfFloat;
+		return p_76936_1_;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public float getTemperatureAtHeight(float par1, int par2)
+	public float getTemperatureAtHeight(float p_76939_1_, int p_76939_2_)
 	{
-		return par1;
+		return p_76939_1_;
 	}
 
-	public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5)
+	public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] p_76937_1_, int p_76937_2_, int p_76937_3_, int p_76937_4_, int p_76937_5_)
 	{
 		IntCache.resetIntCache();
 
-		if (par1ArrayOfBiomeGenBase == null || par1ArrayOfBiomeGenBase.length < par4 * par5)
+		if (p_76937_1_ == null || p_76937_1_.length < p_76937_4_ * p_76937_5_)
 		{
-			par1ArrayOfBiomeGenBase = new BiomeGenBase[par4 * par5];
+			p_76937_1_ = new BiomeGenBase[p_76937_4_ * p_76937_5_];
 		}
 
-		int[] aint = this.genBiomes.getInts(par2, par3, par4, par5);
+		int[] aint = this.genBiomes.getInts(p_76937_2_, p_76937_3_, p_76937_4_, p_76937_5_);
 
 		try
 		{
-			for (int i1 = 0; i1 < par4 * par5; ++i1)
+			for (int i1 = 0; i1 < p_76937_4_ * p_76937_5_; ++i1)
 			{
-				par1ArrayOfBiomeGenBase[i1] = BiomeGenBase.getBiome(aint[i1]);
+				p_76937_1_[i1] = BiomeGenBase.getBiome(aint[i1]);
 			}
 
-			return par1ArrayOfBiomeGenBase;
+			return p_76937_1_;
 		}
 		catch (Throwable throwable)
 		{
 			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Invalid Biome id");
 			CrashReportCategory crashreportcategory = crashreport.makeCategory("RawBiomeBlock");
-			crashreportcategory.addCrashSection("biomes[] size", Integer.valueOf(par1ArrayOfBiomeGenBase.length));
-			crashreportcategory.addCrashSection("x", Integer.valueOf(par2));
-			crashreportcategory.addCrashSection("z", Integer.valueOf(par3));
-			crashreportcategory.addCrashSection("w", Integer.valueOf(par4));
-			crashreportcategory.addCrashSection("h", Integer.valueOf(par5));
+			crashreportcategory.addCrashSection("biomes[] size", Integer.valueOf(p_76937_1_.length));
+			crashreportcategory.addCrashSection("x", Integer.valueOf(p_76937_2_));
+			crashreportcategory.addCrashSection("z", Integer.valueOf(p_76937_3_));
+			crashreportcategory.addCrashSection("w", Integer.valueOf(p_76937_4_));
+			crashreportcategory.addCrashSection("h", Integer.valueOf(p_76937_5_));
 			throw new ReportedException(crashreport);
 		}
 	}
 
-	public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5)
+	public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] p_76933_1_, int p_76933_2_, int p_76933_3_, int p_76933_4_, int p_76933_5_)
 	{
-		return this.getBiomeGenAt(par1ArrayOfBiomeGenBase, par2, par3, par4, par5, true);
+		return this.getBiomeGenAt(p_76933_1_, p_76933_2_, p_76933_3_, p_76933_4_, p_76933_5_, true);
 	}
 
-	public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5, boolean par6)
+	public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] p_76931_1_, int p_76931_2_, int p_76931_3_, int p_76931_4_, int p_76931_5_, boolean p_76931_6_)
 	{
 		IntCache.resetIntCache();
 
-		if (par1ArrayOfBiomeGenBase == null || par1ArrayOfBiomeGenBase.length < par4 * par5)
+		if (p_76931_1_ == null || p_76931_1_.length < p_76931_4_ * p_76931_5_)
 		{
-			par1ArrayOfBiomeGenBase = new BiomeGenBase[par4 * par5];
+			p_76931_1_ = new BiomeGenBase[p_76931_4_ * p_76931_5_];
 		}
 
-		if (par6 && par4 == 16 && par5 == 16 && (par2 & 15) == 0 && (par3 & 15) == 0)
+		if (p_76931_6_ && p_76931_4_ == 16 && p_76931_5_ == 16 && (p_76931_2_ & 15) == 0 && (p_76931_3_ & 15) == 0)
 		{
-			BiomeGenBase[] abiomegenbase1 = this.biomeCache.getCachedBiomes(par2, par3);
-			System.arraycopy(abiomegenbase1, 0, par1ArrayOfBiomeGenBase, 0, par4 * par5);
-			return par1ArrayOfBiomeGenBase;
+			BiomeGenBase[] abiomegenbase1 = this.biomeCache.getCachedBiomes(p_76931_2_, p_76931_3_);
+			System.arraycopy(abiomegenbase1, 0, p_76931_1_, 0, p_76931_4_ * p_76931_5_);
+			return p_76931_1_;
 		}
 		else
 		{
-			int[] aint = this.biomeIndexLayer.getInts(par2, par3, par4, par5);
+			int[] aint = this.biomeIndexLayer.getInts(p_76931_2_, p_76931_3_, p_76931_4_, p_76931_5_);
 
-			for (int i1 = 0; i1 < par4 * par5; ++i1)
+			for (int i1 = 0; i1 < p_76931_4_ * p_76931_5_; ++i1)
 			{
-				par1ArrayOfBiomeGenBase[i1] = BiomeGenBase.getBiome(aint[i1]);
+				p_76931_1_[i1] = BiomeGenBase.getBiome(aint[i1]);
 			}
 
-			return par1ArrayOfBiomeGenBase;
+			return p_76931_1_;
 		}
 	}
 
-	public boolean areBiomesViable(int par1, int par2, int par3, List par4List)
+	public boolean areBiomesViable(int p_76940_1_, int p_76940_2_, int p_76940_3_, List p_76940_4_)
 	{
 		IntCache.resetIntCache();
-		int l = par1 - par3 >> 2;
-		int i1 = par2 - par3 >> 2;
-		int j1 = par1 + par3 >> 2;
-		int k1 = par2 + par3 >> 2;
+		int l = p_76940_1_ - p_76940_3_ >> 2;
+		int i1 = p_76940_2_ - p_76940_3_ >> 2;
+		int j1 = p_76940_1_ + p_76940_3_ >> 2;
+		int k1 = p_76940_2_ + p_76940_3_ >> 2;
 		int l1 = j1 - l + 1;
 		int i2 = k1 - i1 + 1;
 		int[] aint = this.genBiomes.getInts(l, i1, l1, i2);
@@ -188,7 +188,7 @@ public class WorldChunkManager
 			{
 				BiomeGenBase biomegenbase = BiomeGenBase.getBiome(aint[j2]);
 
-				if (!par4List.contains(biomegenbase))
+				if (!p_76940_4_.contains(biomegenbase))
 				{
 					return false;
 				}
@@ -201,10 +201,10 @@ public class WorldChunkManager
 			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Invalid Biome id");
 			CrashReportCategory crashreportcategory = crashreport.makeCategory("Layer");
 			crashreportcategory.addCrashSection("Layer", this.genBiomes.toString());
-			crashreportcategory.addCrashSection("x", Integer.valueOf(par1));
-			crashreportcategory.addCrashSection("z", Integer.valueOf(par2));
-			crashreportcategory.addCrashSection("radius", Integer.valueOf(par3));
-			crashreportcategory.addCrashSection("allowed", par4List);
+			crashreportcategory.addCrashSection("x", Integer.valueOf(p_76940_1_));
+			crashreportcategory.addCrashSection("z", Integer.valueOf(p_76940_2_));
+			crashreportcategory.addCrashSection("radius", Integer.valueOf(p_76940_3_));
+			crashreportcategory.addCrashSection("allowed", p_76940_4_);
 			throw new ReportedException(crashreport);
 		}
 	}

@@ -31,9 +31,9 @@ public class EntityGhast extends EntityFlying implements IMob
 	private int explosionStrength = 1;
 	private static final String __OBFID = "CL_00001689";
 
-	public EntityGhast(World par1World)
+	public EntityGhast(World p_i1735_1_)
 	{
-		super(par1World);
+		super(p_i1735_1_);
 		this.setSize(4.0F, 4.0F);
 		this.isImmuneToFire = true;
 		this.experienceValue = 5;
@@ -45,21 +45,21 @@ public class EntityGhast extends EntityFlying implements IMob
 		return this.dataWatcher.getWatchableObjectByte(16) != 0;
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		if (this.isEntityInvulnerable())
 		{
 			return false;
 		}
-		else if ("fireball".equals(par1DamageSource.getDamageType()) && par1DamageSource.getEntity() instanceof EntityPlayer)
+		else if ("fireball".equals(p_70097_1_.getDamageType()) && p_70097_1_.getEntity() instanceof EntityPlayer)
 		{
-			super.attackEntityFrom(par1DamageSource, 1000.0F);
-			((EntityPlayer)par1DamageSource.getEntity()).triggerAchievement(AchievementList.ghast);
+			super.attackEntityFrom(p_70097_1_, 1000.0F);
+			((EntityPlayer)p_70097_1_.getEntity()).triggerAchievement(AchievementList.ghast);
 			return true;
 		}
 		else
 		{
-			return super.attackEntityFrom(par1DamageSource, par2);
+			return super.attackEntityFrom(p_70097_1_, p_70097_2_);
 		}
 	}
 
@@ -189,14 +189,14 @@ public class EntityGhast extends EntityFlying implements IMob
 		}
 	}
 
-	private boolean isCourseTraversable(double par1, double par3, double par5, double par7)
+	private boolean isCourseTraversable(double p_70790_1_, double p_70790_3_, double p_70790_5_, double p_70790_7_)
 	{
-		double d4 = (this.waypointX - this.posX) / par7;
-		double d5 = (this.waypointY - this.posY) / par7;
-		double d6 = (this.waypointZ - this.posZ) / par7;
+		double d4 = (this.waypointX - this.posX) / p_70790_7_;
+		double d5 = (this.waypointY - this.posY) / p_70790_7_;
+		double d6 = (this.waypointZ - this.posZ) / p_70790_7_;
 		AxisAlignedBB axisalignedbb = this.boundingBox.copy();
 
-		for (int i = 1; (double)i < par7; ++i)
+		for (int i = 1; (double)i < p_70790_7_; ++i)
 		{
 			axisalignedbb.offset(d4, d5, d6);
 
@@ -229,9 +229,9 @@ public class EntityGhast extends EntityFlying implements IMob
 		return Items.gunpowder;
 	}
 
-	protected void dropFewItems(boolean par1, int par2)
+	protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
 	{
-		int j = this.rand.nextInt(2) + this.rand.nextInt(1 + par2);
+		int j = this.rand.nextInt(2) + this.rand.nextInt(1 + p_70628_2_);
 		int k;
 
 		for (k = 0; k < j; ++k)
@@ -239,7 +239,7 @@ public class EntityGhast extends EntityFlying implements IMob
 			this.dropItem(Items.ghast_tear, 1);
 		}
 
-		j = this.rand.nextInt(3) + this.rand.nextInt(1 + par2);
+		j = this.rand.nextInt(3) + this.rand.nextInt(1 + p_70628_2_);
 
 		for (k = 0; k < j; ++k)
 		{
@@ -262,19 +262,19 @@ public class EntityGhast extends EntityFlying implements IMob
 		return 1;
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setInteger("ExplosionPower", this.explosionStrength);
+		super.writeEntityToNBT(p_70014_1_);
+		p_70014_1_.setInteger("ExplosionPower", this.explosionStrength);
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
+		super.readEntityFromNBT(p_70037_1_);
 
-		if (par1NBTTagCompound.hasKey("ExplosionPower", 99))
+		if (p_70037_1_.hasKey("ExplosionPower", 99))
 		{
-			this.explosionStrength = par1NBTTagCompound.getInteger("ExplosionPower");
+			this.explosionStrength = p_70037_1_.getInteger("ExplosionPower");
 		}
 	}
 }

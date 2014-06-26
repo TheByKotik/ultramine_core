@@ -24,9 +24,9 @@ public class C10PacketCreativeInventoryAction extends Packet
 		this.field_149628_b = p_i45263_2_ != null ? p_i45263_2_.copy() : null;
 	}
 
-	public void processPacket(INetHandlerPlayServer p_149626_1_)
+	public void processPacket(INetHandlerPlayServer p_148833_1_)
 	{
-		p_149626_1_.processCreativeInventoryAction(this);
+		p_148833_1_.processCreativeInventoryAction(this);
 	}
 
 	public void readPacketData(PacketBuffer p_148837_1_) throws IOException

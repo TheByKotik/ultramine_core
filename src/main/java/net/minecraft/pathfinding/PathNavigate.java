@@ -6,6 +6,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -28,16 +30,16 @@ public class PathNavigate
 	private boolean canSwim;
 	private static final String __OBFID = "CL_00001627";
 
-	public PathNavigate(EntityLiving par1EntityLiving, World par2World)
+	public PathNavigate(EntityLiving p_i1671_1_, World p_i1671_2_)
 	{
-		this.theEntity = par1EntityLiving;
-		this.worldObj = par2World;
-		this.pathSearchRange = par1EntityLiving.getEntityAttribute(SharedMonsterAttributes.followRange);
+		this.theEntity = p_i1671_1_;
+		this.worldObj = p_i1671_2_;
+		this.pathSearchRange = p_i1671_1_.getEntityAttribute(SharedMonsterAttributes.followRange);
 	}
 
-	public void setAvoidsWater(boolean par1)
+	public void setAvoidsWater(boolean p_75491_1_)
 	{
-		this.avoidsWater = par1;
+		this.avoidsWater = p_75491_1_;
 	}
 
 	public boolean getAvoidsWater()
@@ -45,14 +47,14 @@ public class PathNavigate
 		return this.avoidsWater;
 	}
 
-	public void setBreakDoors(boolean par1)
+	public void setBreakDoors(boolean p_75498_1_)
 	{
-		this.canPassClosedWoodenDoors = par1;
+		this.canPassClosedWoodenDoors = p_75498_1_;
 	}
 
-	public void setEnterDoors(boolean par1)
+	public void setEnterDoors(boolean p_75490_1_)
 	{
-		this.canPassOpenWoodenDoors = par1;
+		this.canPassOpenWoodenDoors = p_75490_1_;
 	}
 
 	public boolean getCanBreakDoors()
@@ -60,19 +62,19 @@ public class PathNavigate
 		return this.canPassClosedWoodenDoors;
 	}
 
-	public void setAvoidSun(boolean par1)
+	public void setAvoidSun(boolean p_75504_1_)
 	{
-		this.noSunPathfind = par1;
+		this.noSunPathfind = p_75504_1_;
 	}
 
-	public void setSpeed(double par1)
+	public void setSpeed(double p_75489_1_)
 	{
-		this.speed = par1;
+		this.speed = p_75489_1_;
 	}
 
-	public void setCanSwim(boolean par1)
+	public void setCanSwim(boolean p_75495_1_)
 	{
-		this.canSwim = par1;
+		this.canSwim = p_75495_1_;
 	}
 
 	public float getPathSearchRange()
@@ -80,40 +82,40 @@ public class PathNavigate
 		return (float)this.pathSearchRange.getAttributeValue();
 	}
 
-	public PathEntity getPathToXYZ(double par1, double par3, double par5)
+	public PathEntity getPathToXYZ(double p_75488_1_, double p_75488_3_, double p_75488_5_)
 	{
-		return !this.canNavigate() ? null : this.worldObj.getEntityPathToXYZ(this.theEntity, MathHelper.floor_double(par1), (int)par3, MathHelper.floor_double(par5), this.getPathSearchRange(), this.canPassOpenWoodenDoors, this.canPassClosedWoodenDoors, this.avoidsWater, this.canSwim);
+		return !this.canNavigate() ? null : this.worldObj.getEntityPathToXYZ(this.theEntity, MathHelper.floor_double(p_75488_1_), (int)p_75488_3_, MathHelper.floor_double(p_75488_5_), this.getPathSearchRange(), this.canPassOpenWoodenDoors, this.canPassClosedWoodenDoors, this.avoidsWater, this.canSwim);
 	}
 
-	public boolean tryMoveToXYZ(double par1, double par3, double par5, double par7)
+	public boolean tryMoveToXYZ(double p_75492_1_, double p_75492_3_, double p_75492_5_, double p_75492_7_)
 	{
-		PathEntity pathentity = this.getPathToXYZ((double)MathHelper.floor_double(par1), (double)((int)par3), (double)MathHelper.floor_double(par5));
-		return this.setPath(pathentity, par7);
+		PathEntity pathentity = this.getPathToXYZ((double)MathHelper.floor_double(p_75492_1_), (double)((int)p_75492_3_), (double)MathHelper.floor_double(p_75492_5_));
+		return this.setPath(pathentity, p_75492_7_);
 	}
 
-	public PathEntity getPathToEntityLiving(Entity par1Entity)
+	public PathEntity getPathToEntityLiving(Entity p_75494_1_)
 	{
-		return !this.canNavigate() ? null : this.worldObj.getPathEntityToEntity(this.theEntity, par1Entity, this.getPathSearchRange(), this.canPassOpenWoodenDoors, this.canPassClosedWoodenDoors, this.avoidsWater, this.canSwim);
+		return !this.canNavigate() ? null : this.worldObj.getPathEntityToEntity(this.theEntity, p_75494_1_, this.getPathSearchRange(), this.canPassOpenWoodenDoors, this.canPassClosedWoodenDoors, this.avoidsWater, this.canSwim);
 	}
 
-	public boolean tryMoveToEntityLiving(Entity par1Entity, double par2)
+	public boolean tryMoveToEntityLiving(Entity p_75497_1_, double p_75497_2_)
 	{
-		PathEntity pathentity = this.getPathToEntityLiving(par1Entity);
-		return pathentity != null ? this.setPath(pathentity, par2) : false;
+		PathEntity pathentity = this.getPathToEntityLiving(p_75497_1_);
+		return pathentity != null ? this.setPath(pathentity, p_75497_2_) : false;
 	}
 
-	public boolean setPath(PathEntity par1PathEntity, double par2)
+	public boolean setPath(PathEntity p_75484_1_, double p_75484_2_)
 	{
-		if (par1PathEntity == null)
+		if (p_75484_1_ == null)
 		{
 			this.currentPath = null;
 			return false;
 		}
 		else
 		{
-			if (!par1PathEntity.isSamePath(this.currentPath))
+			if (!p_75484_1_.isSamePath(this.currentPath))
 			{
-				this.currentPath = par1PathEntity;
+				this.currentPath = p_75484_1_;
 			}
 
 			if (this.noSunPathfind)
@@ -127,7 +129,7 @@ public class PathNavigate
 			}
 			else
 			{
-				this.speed = par2;
+				this.speed = p_75484_2_;
 				Vec3 vec3 = this.getEntityPosition();
 				this.ticksAtLastPos = this.totalTicks;
 				this.lastPosCheck.xCoord = vec3.xCoord;
@@ -230,7 +232,7 @@ public class PathNavigate
 
 	private Vec3 getEntityPosition()
 	{
-		return this.worldObj.getWorldVec3Pool().getVecFromPool(this.theEntity.posX, (double)this.getPathableYPos(), this.theEntity.posZ);
+		return Vec3.createVectorHelper(this.theEntity.posX, (double)this.getPathableYPos(), this.theEntity.posZ);
 	}
 
 	private int getPathableYPos()
@@ -264,7 +266,7 @@ public class PathNavigate
 
 	private boolean canNavigate()
 	{
-		return this.theEntity.onGround || this.canSwim && this.isInLiquid();
+		return this.theEntity.onGround || this.canSwim && this.isInLiquid() || this.theEntity.isRiding() && this.theEntity instanceof EntityZombie && this.theEntity.ridingEntity instanceof EntityChicken;
 	}
 
 	private boolean isInLiquid()
@@ -289,12 +291,12 @@ public class PathNavigate
 		}
 	}
 
-	private boolean isDirectPathBetweenPoints(Vec3 par1Vec3, Vec3 par2Vec3, int par3, int par4, int par5)
+	private boolean isDirectPathBetweenPoints(Vec3 p_75493_1_, Vec3 p_75493_2_, int p_75493_3_, int p_75493_4_, int p_75493_5_)
 	{
-		int l = MathHelper.floor_double(par1Vec3.xCoord);
-		int i1 = MathHelper.floor_double(par1Vec3.zCoord);
-		double d0 = par2Vec3.xCoord - par1Vec3.xCoord;
-		double d1 = par2Vec3.zCoord - par1Vec3.zCoord;
+		int l = MathHelper.floor_double(p_75493_1_.xCoord);
+		int i1 = MathHelper.floor_double(p_75493_1_.zCoord);
+		double d0 = p_75493_2_.xCoord - p_75493_1_.xCoord;
+		double d1 = p_75493_2_.zCoord - p_75493_1_.zCoord;
 		double d2 = d0 * d0 + d1 * d1;
 
 		if (d2 < 1.0E-8D)
@@ -306,21 +308,21 @@ public class PathNavigate
 			double d3 = 1.0D / Math.sqrt(d2);
 			d0 *= d3;
 			d1 *= d3;
-			par3 += 2;
-			par5 += 2;
+			p_75493_3_ += 2;
+			p_75493_5_ += 2;
 
-			if (!this.isSafeToStandAt(l, (int)par1Vec3.yCoord, i1, par3, par4, par5, par1Vec3, d0, d1))
+			if (!this.isSafeToStandAt(l, (int)p_75493_1_.yCoord, i1, p_75493_3_, p_75493_4_, p_75493_5_, p_75493_1_, d0, d1))
 			{
 				return false;
 			}
 			else
 			{
-				par3 -= 2;
-				par5 -= 2;
+				p_75493_3_ -= 2;
+				p_75493_5_ -= 2;
 				double d4 = 1.0D / Math.abs(d0);
 				double d5 = 1.0D / Math.abs(d1);
-				double d6 = (double)(l * 1) - par1Vec3.xCoord;
-				double d7 = (double)(i1 * 1) - par1Vec3.zCoord;
+				double d6 = (double)(l * 1) - p_75493_1_.xCoord;
+				double d7 = (double)(i1 * 1) - p_75493_1_.zCoord;
 
 				if (d0 >= 0.0D)
 				{
@@ -336,8 +338,8 @@ public class PathNavigate
 				d7 /= d1;
 				int j1 = d0 < 0.0D ? -1 : 1;
 				int k1 = d1 < 0.0D ? -1 : 1;
-				int l1 = MathHelper.floor_double(par2Vec3.xCoord);
-				int i2 = MathHelper.floor_double(par2Vec3.zCoord);
+				int l1 = MathHelper.floor_double(p_75493_2_.xCoord);
+				int i2 = MathHelper.floor_double(p_75493_2_.zCoord);
 				int j2 = l1 - l;
 				int k2 = i2 - i1;
 
@@ -361,34 +363,34 @@ public class PathNavigate
 						k2 = i2 - i1;
 					}
 				}
-				while (this.isSafeToStandAt(l, (int)par1Vec3.yCoord, i1, par3, par4, par5, par1Vec3, d0, d1));
+				while (this.isSafeToStandAt(l, (int)p_75493_1_.yCoord, i1, p_75493_3_, p_75493_4_, p_75493_5_, p_75493_1_, d0, d1));
 
 				return false;
 			}
 		}
 	}
 
-	private boolean isSafeToStandAt(int par1, int par2, int par3, int par4, int par5, int par6, Vec3 par7Vec3, double par8, double par10)
+	private boolean isSafeToStandAt(int p_75483_1_, int p_75483_2_, int p_75483_3_, int p_75483_4_, int p_75483_5_, int p_75483_6_, Vec3 p_75483_7_, double p_75483_8_, double p_75483_10_)
 	{
-		int k1 = par1 - par4 / 2;
-		int l1 = par3 - par6 / 2;
+		int k1 = p_75483_1_ - p_75483_4_ / 2;
+		int l1 = p_75483_3_ - p_75483_6_ / 2;
 
-		if (!this.isPositionClear(k1, par2, l1, par4, par5, par6, par7Vec3, par8, par10))
+		if (!this.isPositionClear(k1, p_75483_2_, l1, p_75483_4_, p_75483_5_, p_75483_6_, p_75483_7_, p_75483_8_, p_75483_10_))
 		{
 			return false;
 		}
 		else
 		{
-			for (int i2 = k1; i2 < k1 + par4; ++i2)
+			for (int i2 = k1; i2 < k1 + p_75483_4_; ++i2)
 			{
-				for (int j2 = l1; j2 < l1 + par6; ++j2)
+				for (int j2 = l1; j2 < l1 + p_75483_6_; ++j2)
 				{
-					double d2 = (double)i2 + 0.5D - par7Vec3.xCoord;
-					double d3 = (double)j2 + 0.5D - par7Vec3.zCoord;
+					double d2 = (double)i2 + 0.5D - p_75483_7_.xCoord;
+					double d3 = (double)j2 + 0.5D - p_75483_7_.zCoord;
 
-					if (d2 * par8 + d3 * par10 >= 0.0D)
+					if (d2 * p_75483_8_ + d3 * p_75483_10_ >= 0.0D)
 					{
-						Block block = this.worldObj.getBlock(i2, par2 - 1, j2);
+						Block block = this.worldObj.getBlock(i2, p_75483_2_ - 1, j2);
 						Material material = block.getMaterial();
 
 						if (material == Material.air)
@@ -413,18 +415,18 @@ public class PathNavigate
 		}
 	}
 
-	private boolean isPositionClear(int par1, int par2, int par3, int par4, int par5, int par6, Vec3 par7Vec3, double par8, double par10)
+	private boolean isPositionClear(int p_75496_1_, int p_75496_2_, int p_75496_3_, int p_75496_4_, int p_75496_5_, int p_75496_6_, Vec3 p_75496_7_, double p_75496_8_, double p_75496_10_)
 	{
-		for (int k1 = par1; k1 < par1 + par4; ++k1)
+		for (int k1 = p_75496_1_; k1 < p_75496_1_ + p_75496_4_; ++k1)
 		{
-			for (int l1 = par2; l1 < par2 + par5; ++l1)
+			for (int l1 = p_75496_2_; l1 < p_75496_2_ + p_75496_5_; ++l1)
 			{
-				for (int i2 = par3; i2 < par3 + par6; ++i2)
+				for (int i2 = p_75496_3_; i2 < p_75496_3_ + p_75496_6_; ++i2)
 				{
-					double d2 = (double)k1 + 0.5D - par7Vec3.xCoord;
-					double d3 = (double)i2 + 0.5D - par7Vec3.zCoord;
+					double d2 = (double)k1 + 0.5D - p_75496_7_.xCoord;
+					double d3 = (double)i2 + 0.5D - p_75496_7_.zCoord;
 
-					if (d2 * par8 + d3 * par10 >= 0.0D)
+					if (d2 * p_75496_8_ + d3 * p_75496_10_ >= 0.0D)
 					{
 						Block block = this.worldObj.getBlock(k1, l1, i2);
 

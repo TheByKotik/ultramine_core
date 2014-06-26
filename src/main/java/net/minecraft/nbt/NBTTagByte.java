@@ -16,14 +16,15 @@ public class NBTTagByte extends NBTBase.NBTPrimitive
 		this.data = p_i45129_1_;
 	}
 
-	void write(DataOutput par1DataOutput) throws IOException
+	void write(DataOutput p_74734_1_) throws IOException
 	{
-		par1DataOutput.writeByte(this.data);
+		p_74734_1_.writeByte(this.data);
 	}
 
-	void load(DataInput par1DataInput, int par2) throws IOException
+	void func_152446_a(DataInput p_152446_1_, int p_152446_2_, NBTSizeTracker p_152446_3_) throws IOException
 	{
-		this.data = par1DataInput.readByte();
+		p_152446_3_.func_152450_a(8L);
+		this.data = p_152446_1_.readByte();
 	}
 
 	public byte getId()
@@ -41,11 +42,11 @@ public class NBTTagByte extends NBTBase.NBTPrimitive
 		return new NBTTagByte(this.data);
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (super.equals(par1Obj))
+		if (super.equals(p_equals_1_))
 		{
-			NBTTagByte nbttagbyte = (NBTTagByte)par1Obj;
+			NBTTagByte nbttagbyte = (NBTTagByte)p_equals_1_;
 			return this.data == nbttagbyte.data;
 		}
 		else

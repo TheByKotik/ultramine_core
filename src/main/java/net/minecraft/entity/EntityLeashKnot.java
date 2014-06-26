@@ -15,15 +15,15 @@ public class EntityLeashKnot extends EntityHanging
 {
 	private static final String __OBFID = "CL_00001548";
 
-	public EntityLeashKnot(World par1World)
+	public EntityLeashKnot(World p_i1592_1_)
 	{
-		super(par1World);
+		super(p_i1592_1_);
 	}
 
-	public EntityLeashKnot(World par1World, int par2, int par3, int par4)
+	public EntityLeashKnot(World p_i1593_1_, int p_i1593_2_, int p_i1593_3_, int p_i1593_4_)
 	{
-		super(par1World, par2, par3, par4, 0);
-		this.setPosition((double)par2 + 0.5D, (double)par3 + 0.5D, (double)par4 + 0.5D);
+		super(p_i1593_1_, p_i1593_2_, p_i1593_3_, p_i1593_4_, 0);
+		this.setPosition((double)p_i1593_2_ + 0.5D, (double)p_i1593_3_ + 0.5D, (double)p_i1593_4_ + 0.5D);
 	}
 
 	protected void entityInit()
@@ -31,7 +31,7 @@ public class EntityLeashKnot extends EntityHanging
 		super.entityInit();
 	}
 
-	public void setDirection(int par1) {}
+	public void setDirection(int p_82328_1_) {}
 
 	public int getWidthPixels()
 	{
@@ -44,25 +44,25 @@ public class EntityLeashKnot extends EntityHanging
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean isInRangeToRenderDist(double par1)
+	public boolean isInRangeToRenderDist(double p_70112_1_)
 	{
-		return par1 < 1024.0D;
+		return p_70112_1_ < 1024.0D;
 	}
 
-	public void onBroken(Entity par1Entity) {}
+	public void onBroken(Entity p_110128_1_) {}
 
-	public boolean writeToNBTOptional(NBTTagCompound par1NBTTagCompound)
+	public boolean writeToNBTOptional(NBTTagCompound p_70039_1_)
 	{
 		return false;
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {}
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_) {}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {}
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_) {}
 
-	public boolean interactFirst(EntityPlayer par1EntityPlayer)
+	public boolean interactFirst(EntityPlayer p_130002_1_)
 	{
-		ItemStack itemstack = par1EntityPlayer.getHeldItem();
+		ItemStack itemstack = p_130002_1_.getHeldItem();
 		boolean flag = false;
 		double d0;
 		List list;
@@ -72,7 +72,7 @@ public class EntityLeashKnot extends EntityHanging
 		if (itemstack != null && itemstack.getItem() == Items.lead && !this.worldObj.isRemote)
 		{
 			d0 = 7.0D;
-			list = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().getAABB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
+			list = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
 
 			if (list != null)
 			{
@@ -82,7 +82,7 @@ public class EntityLeashKnot extends EntityHanging
 				{
 					entityliving = (EntityLiving)iterator.next();
 
-					if (entityliving.getLeashed() && entityliving.getLeashedToEntity() == par1EntityPlayer)
+					if (entityliving.getLeashed() && entityliving.getLeashedToEntity() == p_130002_1_)
 					{
 						entityliving.setLeashedToEntity(this, true);
 						flag = true;
@@ -95,10 +95,10 @@ public class EntityLeashKnot extends EntityHanging
 		{
 			this.setDead();
 
-			if (par1EntityPlayer.capabilities.isCreativeMode)
+			if (p_130002_1_.capabilities.isCreativeMode)
 			{
 				d0 = 7.0D;
-				list = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().getAABB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
+				list = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + d0, this.posZ + d0));
 
 				if (list != null)
 				{
@@ -125,17 +125,17 @@ public class EntityLeashKnot extends EntityHanging
 		return this.worldObj.getBlock(this.field_146063_b, this.field_146064_c, this.field_146062_d).getRenderType() == 11;
 	}
 
-	public static EntityLeashKnot func_110129_a(World par0World, int par1, int par2, int par3)
+	public static EntityLeashKnot func_110129_a(World p_110129_0_, int p_110129_1_, int p_110129_2_, int p_110129_3_)
 	{
-		EntityLeashKnot entityleashknot = new EntityLeashKnot(par0World, par1, par2, par3);
+		EntityLeashKnot entityleashknot = new EntityLeashKnot(p_110129_0_, p_110129_1_, p_110129_2_, p_110129_3_);
 		entityleashknot.forceSpawn = true;
-		par0World.spawnEntityInWorld(entityleashknot);
+		p_110129_0_.spawnEntityInWorld(entityleashknot);
 		return entityleashknot;
 	}
 
-	public static EntityLeashKnot getKnotForBlock(World par0World, int par1, int par2, int par3)
+	public static EntityLeashKnot getKnotForBlock(World p_110130_0_, int p_110130_1_, int p_110130_2_, int p_110130_3_)
 	{
-		List list = par0World.getEntitiesWithinAABB(EntityLeashKnot.class, AxisAlignedBB.getAABBPool().getAABB((double)par1 - 1.0D, (double)par2 - 1.0D, (double)par3 - 1.0D, (double)par1 + 1.0D, (double)par2 + 1.0D, (double)par3 + 1.0D));
+		List list = p_110130_0_.getEntitiesWithinAABB(EntityLeashKnot.class, AxisAlignedBB.getBoundingBox((double)p_110130_1_ - 1.0D, (double)p_110130_2_ - 1.0D, (double)p_110130_3_ - 1.0D, (double)p_110130_1_ + 1.0D, (double)p_110130_2_ + 1.0D, (double)p_110130_3_ + 1.0D));
 
 		if (list != null)
 		{
@@ -145,7 +145,7 @@ public class EntityLeashKnot extends EntityHanging
 			{
 				EntityLeashKnot entityleashknot = (EntityLeashKnot)iterator.next();
 
-				if (entityleashknot.field_146063_b == par1 && entityleashknot.field_146064_c == par2 && entityleashknot.field_146062_d == par3)
+				if (entityleashknot.field_146063_b == p_110130_1_ && entityleashknot.field_146064_c == p_110130_2_ && entityleashknot.field_146062_d == p_110130_3_)
 				{
 					return entityleashknot;
 				}

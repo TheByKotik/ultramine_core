@@ -38,19 +38,19 @@ public class EntityOtherPlayerMP extends AbstractClientPlayer
 		this.yOffset = 0.0F;
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		return true;
 	}
 
-	public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)
+	public void setPositionAndRotation2(double p_70056_1_, double p_70056_3_, double p_70056_5_, float p_70056_7_, float p_70056_8_, int p_70056_9_)
 	{
-		this.otherPlayerMPX = par1;
-		this.otherPlayerMPY = par3;
-		this.otherPlayerMPZ = par5;
-		this.otherPlayerMPYaw = (double)par7;
-		this.otherPlayerMPPitch = (double)par8;
-		this.otherPlayerMPPosRotationIncrements = par9;
+		this.otherPlayerMPX = p_70056_1_;
+		this.otherPlayerMPY = p_70056_3_;
+		this.otherPlayerMPZ = p_70056_5_;
+		this.otherPlayerMPYaw = (double)p_70056_7_;
+		this.otherPlayerMPPitch = (double)p_70056_8_;
+		this.otherPlayerMPPosRotationIncrements = p_70056_9_;
 	}
 
 	public void onUpdate()
@@ -139,15 +139,15 @@ public class EntityOtherPlayerMP extends AbstractClientPlayer
 		this.cameraPitch += (f - this.cameraPitch) * 0.8F;
 	}
 
-	public void setCurrentItemOrArmor(int par1, ItemStack par2ItemStack)
+	public void setCurrentItemOrArmor(int p_70062_1_, ItemStack p_70062_2_)
 	{
-		if (par1 == 0)
+		if (p_70062_1_ == 0)
 		{
-			this.inventory.mainInventory[this.inventory.currentItem] = par2ItemStack;
+			this.inventory.mainInventory[this.inventory.currentItem] = p_70062_2_;
 		}
 		else
 		{
-			this.inventory.armorInventory[par1 - 1] = par2ItemStack;
+			this.inventory.armorInventory[p_70062_1_ - 1] = p_70062_2_;
 		}
 	}
 
@@ -162,7 +162,7 @@ public class EntityOtherPlayerMP extends AbstractClientPlayer
 		Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(p_145747_1_);
 	}
 
-	public boolean canCommandSenderUseCommand(int par1, String par2Str)
+	public boolean canCommandSenderUseCommand(int p_70003_1_, String p_70003_2_)
 	{
 		return false;
 	}

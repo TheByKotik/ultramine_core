@@ -49,28 +49,28 @@ public class BiomeGenJungle extends BiomeGenBase
 		return (WorldGenAbstractTree)(p_150567_1_.nextInt(10) == 0 ? this.worldGeneratorBigTree : (p_150567_1_.nextInt(2) == 0 ? new WorldGenShrub(3, 0) : (!this.field_150614_aC && p_150567_1_.nextInt(3) == 0 ? new WorldGenMegaJungle(false, 10, 20, 3, 3) : new WorldGenTrees(false, 4 + p_150567_1_.nextInt(7), 3, 3, true))));
 	}
 
-	public WorldGenerator getRandomWorldGenForGrass(Random par1Random)
+	public WorldGenerator getRandomWorldGenForGrass(Random p_76730_1_)
 	{
-		return par1Random.nextInt(4) == 0 ? new WorldGenTallGrass(Blocks.tallgrass, 2) : new WorldGenTallGrass(Blocks.tallgrass, 1);
+		return p_76730_1_.nextInt(4) == 0 ? new WorldGenTallGrass(Blocks.tallgrass, 2) : new WorldGenTallGrass(Blocks.tallgrass, 1);
 	}
 
-	public void decorate(World par1World, Random par2Random, int par3, int par4)
+	public void decorate(World p_76728_1_, Random p_76728_2_, int p_76728_3_, int p_76728_4_)
 	{
-		super.decorate(par1World, par2Random, par3, par4);
-		int k = par3 + par2Random.nextInt(16) + 8;
-		int l = par4 + par2Random.nextInt(16) + 8;
-		int height = par1World.getHeightValue(k, l) * 2; //This was the original input for the nextInt below.  But it could == 0, which crashes nextInt
+		super.decorate(p_76728_1_, p_76728_2_, p_76728_3_, p_76728_4_);
+		int k = p_76728_3_ + p_76728_2_.nextInt(16) + 8;
+		int l = p_76728_4_ + p_76728_2_.nextInt(16) + 8;
+		int height = p_76728_1_.getHeightValue(k, l) * 2; //This was the original input for the nextInt below.  But it could == 0, which crashes nextInt
 		if (height < 1) height = 1;
-		int i1 = par2Random.nextInt(height);
-		(new WorldGenMelon()).generate(par1World, par2Random, k, i1, l);
+		int i1 = p_76728_2_.nextInt(height);
+		(new WorldGenMelon()).generate(p_76728_1_, p_76728_2_, k, i1, l);
 		WorldGenVines worldgenvines = new WorldGenVines();
 
 		for (l = 0; l < 50; ++l)
 		{
-			i1 = par3 + par2Random.nextInt(16) + 8;
+			i1 = p_76728_3_ + p_76728_2_.nextInt(16) + 8;
 			short short1 = 128;
-			int j1 = par4 + par2Random.nextInt(16) + 8;
-			worldgenvines.generate(par1World, par2Random, i1, short1, j1);
+			int j1 = p_76728_4_ + p_76728_2_.nextInt(16) + 8;
+			worldgenvines.generate(p_76728_1_, p_76728_2_, i1, short1, j1);
 		}
 	}
 }

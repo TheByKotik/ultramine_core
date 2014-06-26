@@ -44,9 +44,9 @@ public class S1CPacketEntityMetadata extends Packet
 		DataWatcher.writeWatchedListToPacketBuffer(this.field_149378_b, p_148840_1_);
 	}
 
-	public void processPacket(INetHandlerPlayClient p_149377_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_149377_1_.handleEntityMetadata(this);
+		p_148833_1_.handleEntityMetadata(this);
 	}
 
 	public void processPacket(INetHandler p_148833_1_)

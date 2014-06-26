@@ -17,13 +17,13 @@ public enum EnumFacing
 
 	private static final String __OBFID = "CL_00001201";
 
-	private EnumFacing(int par3, int par4, int par5, int par6, int par7)
+	private EnumFacing(int p_i1367_3_, int p_i1367_4_, int p_i1367_5_, int p_i1367_6_, int p_i1367_7_)
 	{
-		this.order_a = par3;
-		this.order_b = par4;
-		this.frontOffsetX = par5;
-		this.frontOffsetY = par6;
-		this.frontOffsetZ = par7;
+		this.order_a = p_i1367_3_;
+		this.order_b = p_i1367_4_;
+		this.frontOffsetX = p_i1367_5_;
+		this.frontOffsetY = p_i1367_6_;
+		this.frontOffsetZ = p_i1367_7_;
 	}
 
 	public int getFrontOffsetX()
@@ -41,9 +41,9 @@ public enum EnumFacing
 		return this.frontOffsetZ;
 	}
 
-	public static EnumFacing getFront(int par0)
+	public static EnumFacing getFront(int p_82600_0_)
 	{
-		return faceList[par0 % faceList.length];
+		return faceList[p_82600_0_ % faceList.length];
 	}
 
 	static

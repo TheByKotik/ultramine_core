@@ -20,48 +20,48 @@ public class WorldGenMegaPineTree extends WorldGenHugeTrees
 		this.field_150542_e = p_i45457_2_;
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		int l = this.func_150533_a(par2Random);
+		int l = this.func_150533_a(p_76484_2_);
 
-		if (!this.func_150537_a(par1World, par2Random, par3, par4, par5, l))
+		if (!this.func_150537_a(p_76484_1_, p_76484_2_, p_76484_3_, p_76484_4_, p_76484_5_, l))
 		{
 			return false;
 		}
 		else
 		{
-			this.func_150541_c(par1World, par3, par5, par4 + l, 0, par2Random);
+			this.func_150541_c(p_76484_1_, p_76484_3_, p_76484_5_, p_76484_4_ + l, 0, p_76484_2_);
 
 			for (int i1 = 0; i1 < l; ++i1)
 			{
-				Block block = par1World.getBlock(par3, par4 + i1, par5);
+				Block block = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + i1, p_76484_5_);
 
-				if (block.isAir(par1World, par3, par4 + i1, par5) || block.isLeaves(par1World, par3, par4 + i1, par5))
+				if (block.isAir(p_76484_1_, p_76484_3_, p_76484_4_ + i1, p_76484_5_) || block.isLeaves(p_76484_1_, p_76484_3_, p_76484_4_ + i1, p_76484_5_))
 				{
-					this.setBlockAndNotifyAdequately(par1World, par3, par4 + i1, par5, Blocks.log, this.woodMetadata);
+					this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + i1, p_76484_5_, Blocks.log, this.woodMetadata);
 				}
 
 				if (i1 < l - 1)
 				{
-					block = par1World.getBlock(par3 + 1, par4 + i1, par5);
+					block = p_76484_1_.getBlock(p_76484_3_ + 1, p_76484_4_ + i1, p_76484_5_);
 
-					if (block.isAir(par1World, par3 + 1, par4 + i1, par5) || block.isLeaves(par1World, par3 + 1, par4 + i1, par5))
+					if (block.isAir(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + i1, p_76484_5_) || block.isLeaves(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + i1, p_76484_5_))
 					{
-						this.setBlockAndNotifyAdequately(par1World, par3 + 1, par4 + i1, par5, Blocks.log, this.woodMetadata);
+						this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + i1, p_76484_5_, Blocks.log, this.woodMetadata);
 					}
 
-					block = par1World.getBlock(par3 + 1, par4 + i1, par5 + 1);
+					block = p_76484_1_.getBlock(p_76484_3_ + 1, p_76484_4_ + i1, p_76484_5_ + 1);
 
-					if (block.isAir(par1World, par3 + 1, par4 + i1, par5 + 1) || block.isLeaves(par1World, par3 + 1, par4 + i1, par5 + 1))
+					if (block.isAir(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + i1, p_76484_5_ + 1) || block.isLeaves(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + i1, p_76484_5_ + 1))
 					{
-						this.setBlockAndNotifyAdequately(par1World, par3 + 1, par4 + i1, par5 + 1, Blocks.log, this.woodMetadata);
+						this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + i1, p_76484_5_ + 1, Blocks.log, this.woodMetadata);
 					}
 
-					block = par1World.getBlock(par3, par4 + i1, par5 + 1);
+					block = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + i1, p_76484_5_ + 1);
 
-					if (block.isAir(par1World, par3, par4 + i1, par5 + 1) || block.isLeaves(par1World, par3, par4 + i1, par5 + 1))
+					if (block.isAir(p_76484_1_, p_76484_3_, p_76484_4_ + i1, p_76484_5_ + 1) || block.isLeaves(p_76484_1_, p_76484_3_, p_76484_4_ + i1, p_76484_5_ + 1))
 					{
-						this.setBlockAndNotifyAdequately(par1World, par3, par4 + i1, par5 + 1, Blocks.log, this.woodMetadata);
+						this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + i1, p_76484_5_ + 1, Blocks.log, this.woodMetadata);
 					}
 				}
 			}

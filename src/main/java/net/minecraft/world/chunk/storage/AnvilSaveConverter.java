@@ -33,9 +33,15 @@ public class AnvilSaveConverter extends SaveFormatOld
 	private static final Logger logger = LogManager.getLogger();
 	private static final String __OBFID = "CL_00000582";
 
-	public AnvilSaveConverter(File par1File)
+	public AnvilSaveConverter(File p_i2144_1_)
 	{
-		super(par1File);
+		super(p_i2144_1_);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String func_154333_a()
+	{
+		return "Anvil";
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -91,24 +97,31 @@ public class AnvilSaveConverter extends SaveFormatOld
 		RegionFileCache.clearRegionFileReferences();
 	}
 
-	public ISaveHandler getSaveLoader(String par1Str, boolean par2)
+	public ISaveHandler getSaveLoader(String p_75804_1_, boolean p_75804_2_)
 	{
-		return new AnvilSaveHandler(this.savesDirectory, par1Str, par2);
+		return new AnvilSaveHandler(this.savesDirectory, p_75804_1_, p_75804_2_);
 	}
 
-	public boolean isOldMapFormat(String par1Str)
+	@SideOnly(Side.CLIENT)
+	public boolean func_154334_a(String p_154334_1_)
 	{
-		WorldInfo worldinfo = this.getWorldInfo(par1Str);
+		WorldInfo worldinfo = this.getWorldInfo(p_154334_1_);
+		return worldinfo != null && worldinfo.getSaveVersion() == 19132;
+	}
+
+	public boolean isOldMapFormat(String p_75801_1_)
+	{
+		WorldInfo worldinfo = this.getWorldInfo(p_75801_1_);
 		return worldinfo != null && worldinfo.getSaveVersion() != this.getSaveVersion();
 	}
 
-	public boolean convertMapFormat(String par1Str, IProgressUpdate par2IProgressUpdate)
+	public boolean convertMapFormat(String p_75805_1_, IProgressUpdate p_75805_2_)
 	{
-		par2IProgressUpdate.setLoadingProgress(0);
+		p_75805_2_.setLoadingProgress(0);
 		ArrayList arraylist = new ArrayList();
 		ArrayList arraylist1 = new ArrayList();
 		ArrayList arraylist2 = new ArrayList();
-		File file1 = new File(this.savesDirectory, par1Str);
+		File file1 = new File(this.savesDirectory, p_75805_1_);
 		File file2 = new File(file1, "DIM-1");
 		File file3 = new File(file1, "DIM1");
 		logger.info("Scanning folders...");
@@ -126,7 +139,7 @@ public class AnvilSaveConverter extends SaveFormatOld
 
 		int i = arraylist.size() + arraylist1.size() + arraylist2.size();
 		logger.info("Total conversion count is " + i);
-		WorldInfo worldinfo = this.getWorldInfo(par1Str);
+		WorldInfo worldinfo = this.getWorldInfo(p_75805_1_);
 		Object object = null;
 
 		if (worldinfo.getTerrainType() == WorldType.FLAT)
@@ -138,9 +151,9 @@ public class AnvilSaveConverter extends SaveFormatOld
 			object = new WorldChunkManager(worldinfo.getSeed(), worldinfo.getTerrainType());
 		}
 
-		this.convertFile(new File(file1, "region"), arraylist, (WorldChunkManager)object, 0, i, par2IProgressUpdate);
-		this.convertFile(new File(file2, "region"), arraylist1, new WorldChunkManagerHell(BiomeGenBase.hell, 0.0F), arraylist.size(), i, par2IProgressUpdate);
-		this.convertFile(new File(file3, "region"), arraylist2, new WorldChunkManagerHell(BiomeGenBase.sky, 0.0F), arraylist.size() + arraylist1.size(), i, par2IProgressUpdate);
+		this.convertFile(new File(file1, "region"), arraylist, (WorldChunkManager)object, 0, i, p_75805_2_);
+		this.convertFile(new File(file2, "region"), arraylist1, new WorldChunkManagerHell(BiomeGenBase.hell, 0.0F), arraylist.size(), i, p_75805_2_);
+		this.convertFile(new File(file3, "region"), arraylist2, new WorldChunkManagerHell(BiomeGenBase.sky, 0.0F), arraylist.size() + arraylist1.size(), i, p_75805_2_);
 		worldinfo.setSaveVersion(19133);
 
 		if (worldinfo.getTerrainType() == WorldType.DEFAULT_1_1)
@@ -148,15 +161,15 @@ public class AnvilSaveConverter extends SaveFormatOld
 			worldinfo.setTerrainType(WorldType.DEFAULT);
 		}
 
-		this.createFile(par1Str);
-		ISaveHandler isavehandler = this.getSaveLoader(par1Str, false);
+		this.createFile(p_75805_1_);
+		ISaveHandler isavehandler = this.getSaveLoader(p_75805_1_, false);
 		isavehandler.saveWorldInfo(worldinfo);
 		return true;
 	}
 
-	private void createFile(String par1Str)
+	private void createFile(String p_75809_1_)
 	{
-		File file1 = new File(this.savesDirectory, par1Str);
+		File file1 = new File(this.savesDirectory, p_75809_1_);
 
 		if (!file1.exists())
 		{
@@ -182,27 +195,27 @@ public class AnvilSaveConverter extends SaveFormatOld
 		}
 	}
 
-	private void convertFile(File par1File, Iterable par2Iterable, WorldChunkManager par3WorldChunkManager, int par4, int par5, IProgressUpdate par6IProgressUpdate)
+	private void convertFile(File p_75813_1_, Iterable p_75813_2_, WorldChunkManager p_75813_3_, int p_75813_4_, int p_75813_5_, IProgressUpdate p_75813_6_)
 	{
-		Iterator iterator = par2Iterable.iterator();
+		Iterator iterator = p_75813_2_.iterator();
 
 		while (iterator.hasNext())
 		{
 			File file2 = (File)iterator.next();
-			this.convertChunks(par1File, file2, par3WorldChunkManager, par4, par5, par6IProgressUpdate);
-			++par4;
-			int k = (int)Math.round(100.0D * (double)par4 / (double)par5);
-			par6IProgressUpdate.setLoadingProgress(k);
+			this.convertChunks(p_75813_1_, file2, p_75813_3_, p_75813_4_, p_75813_5_, p_75813_6_);
+			++p_75813_4_;
+			int k = (int)Math.round(100.0D * (double)p_75813_4_ / (double)p_75813_5_);
+			p_75813_6_.setLoadingProgress(k);
 		}
 	}
 
-	private void convertChunks(File par1File, File par2File, WorldChunkManager par3WorldChunkManager, int par4, int par5, IProgressUpdate par6IProgressUpdate)
+	private void convertChunks(File p_75811_1_, File p_75811_2_, WorldChunkManager p_75811_3_, int p_75811_4_, int p_75811_5_, IProgressUpdate p_75811_6_)
 	{
 		try
 		{
-			String s = par2File.getName();
-			RegionFile regionfile = new RegionFile(par2File);
-			RegionFile regionfile1 = new RegionFile(new File(par1File, s.substring(0, s.length() - ".mcr".length()) + ".mca"));
+			String s = p_75811_2_.getName();
+			RegionFile regionfile = new RegionFile(p_75811_2_);
+			RegionFile regionfile1 = new RegionFile(new File(p_75811_1_, s.substring(0, s.length() - ".mcr".length()) + ".mca"));
 
 			for (int k = 0; k < 32; ++k)
 			{
@@ -227,7 +240,7 @@ public class AnvilSaveConverter extends SaveFormatOld
 							NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 							NBTTagCompound nbttagcompound3 = new NBTTagCompound();
 							nbttagcompound2.setTag("Level", nbttagcompound3);
-							ChunkLoader.convertToAnvilFormat(anvilconverterdata, nbttagcompound3, par3WorldChunkManager);
+							ChunkLoader.convertToAnvilFormat(anvilconverterdata, nbttagcompound3, p_75811_3_);
 							DataOutputStream dataoutputstream = regionfile1.getChunkDataOutputStream(k, l);
 							CompressedStreamTools.write(nbttagcompound2, dataoutputstream);
 							dataoutputstream.close();
@@ -235,12 +248,12 @@ public class AnvilSaveConverter extends SaveFormatOld
 					}
 				}
 
-				l = (int)Math.round(100.0D * (double)(par4 * 1024) / (double)(par5 * 1024));
-				int i1 = (int)Math.round(100.0D * (double)((k + 1) * 32 + par4 * 1024) / (double)(par5 * 1024));
+				l = (int)Math.round(100.0D * (double)(p_75811_4_ * 1024) / (double)(p_75811_5_ * 1024));
+				int i1 = (int)Math.round(100.0D * (double)((k + 1) * 32 + p_75811_4_ * 1024) / (double)(p_75811_5_ * 1024));
 
 				if (i1 > l)
 				{
-					par6IProgressUpdate.setLoadingProgress(i1);
+					p_75811_6_.setLoadingProgress(i1);
 				}
 			}
 
@@ -253,21 +266,21 @@ public class AnvilSaveConverter extends SaveFormatOld
 		}
 	}
 
-	private void addRegionFilesToCollection(File par1File, Collection par2Collection)
+	private void addRegionFilesToCollection(File p_75810_1_, Collection p_75810_2_)
 	{
-		File file2 = new File(par1File, "region");
+		File file2 = new File(p_75810_1_, "region");
 		File[] afile = file2.listFiles(new FilenameFilter()
 		{
 			private static final String __OBFID = "CL_00000583";
-			public boolean accept(File par1File, String par2Str)
+			public boolean accept(File p_accept_1_, String p_accept_2_)
 			{
-				return par2Str.endsWith(".mcr");
+				return p_accept_2_.endsWith(".mcr");
 			}
 		});
 
 		if (afile != null)
 		{
-			Collections.addAll(par2Collection, afile);
+			Collections.addAll(p_75810_2_, afile);
 		}
 	}
 }

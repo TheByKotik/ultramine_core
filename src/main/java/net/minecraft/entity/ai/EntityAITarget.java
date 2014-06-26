@@ -22,16 +22,16 @@ public abstract class EntityAITarget extends EntityAIBase
 	private int field_75298_g;
 	private static final String __OBFID = "CL_00001626";
 
-	public EntityAITarget(EntityCreature par1EntityCreature, boolean par2)
+	public EntityAITarget(EntityCreature p_i1669_1_, boolean p_i1669_2_)
 	{
-		this(par1EntityCreature, par2, false);
+		this(p_i1669_1_, p_i1669_2_, false);
 	}
 
-	public EntityAITarget(EntityCreature par1EntityCreature, boolean par2, boolean par3)
+	public EntityAITarget(EntityCreature p_i1670_1_, boolean p_i1670_2_, boolean p_i1670_3_)
 	{
-		this.taskOwner = par1EntityCreature;
-		this.shouldCheckSight = par2;
-		this.nearbyOnly = par3;
+		this.taskOwner = p_i1670_1_;
+		this.shouldCheckSight = p_i1670_2_;
+		this.nearbyOnly = p_i1670_3_;
 	}
 
 	public boolean continueExecuting()
@@ -91,48 +91,48 @@ public abstract class EntityAITarget extends EntityAIBase
 		this.taskOwner.setAttackTarget((EntityLivingBase)null);
 	}
 
-	protected boolean isSuitableTarget(EntityLivingBase par1EntityLivingBase, boolean par2)
+	protected boolean isSuitableTarget(EntityLivingBase p_75296_1_, boolean p_75296_2_)
 	{
-		if (par1EntityLivingBase == null)
+		if (p_75296_1_ == null)
 		{
 			return false;
 		}
-		else if (par1EntityLivingBase == this.taskOwner)
+		else if (p_75296_1_ == this.taskOwner)
 		{
 			return false;
 		}
-		else if (!par1EntityLivingBase.isEntityAlive())
+		else if (!p_75296_1_.isEntityAlive())
 		{
 			return false;
 		}
-		else if (!this.taskOwner.canAttackClass(par1EntityLivingBase.getClass()))
+		else if (!this.taskOwner.canAttackClass(p_75296_1_.getClass()))
 		{
 			return false;
 		}
 		else
 		{
-			if (this.taskOwner instanceof IEntityOwnable && StringUtils.isNotEmpty(((IEntityOwnable)this.taskOwner).getOwnerName()))
+			if (this.taskOwner instanceof IEntityOwnable && StringUtils.isNotEmpty(((IEntityOwnable)this.taskOwner).func_152113_b()))
 			{
-				if (par1EntityLivingBase instanceof IEntityOwnable && ((IEntityOwnable)this.taskOwner).getOwnerName().equals(((IEntityOwnable)par1EntityLivingBase).getOwnerName()))
+				if (p_75296_1_ instanceof IEntityOwnable && ((IEntityOwnable)this.taskOwner).func_152113_b().equals(((IEntityOwnable)p_75296_1_).func_152113_b()))
 				{
 					return false;
 				}
 
-				if (par1EntityLivingBase == ((IEntityOwnable)this.taskOwner).getOwner())
+				if (p_75296_1_ == ((IEntityOwnable)this.taskOwner).getOwner())
 				{
 					return false;
 				}
 			}
-			else if (par1EntityLivingBase instanceof EntityPlayer && !par2 && ((EntityPlayer)par1EntityLivingBase).capabilities.disableDamage)
+			else if (p_75296_1_ instanceof EntityPlayer && !p_75296_2_ && ((EntityPlayer)p_75296_1_).capabilities.disableDamage)
 			{
 				return false;
 			}
 
-			if (!this.taskOwner.isWithinHomeDistance(MathHelper.floor_double(par1EntityLivingBase.posX), MathHelper.floor_double(par1EntityLivingBase.posY), MathHelper.floor_double(par1EntityLivingBase.posZ)))
+			if (!this.taskOwner.isWithinHomeDistance(MathHelper.floor_double(p_75296_1_.posX), MathHelper.floor_double(p_75296_1_.posY), MathHelper.floor_double(p_75296_1_.posZ)))
 			{
 				return false;
 			}
-			else if (this.shouldCheckSight && !this.taskOwner.getEntitySenses().canSee(par1EntityLivingBase))
+			else if (this.shouldCheckSight && !this.taskOwner.getEntitySenses().canSee(p_75296_1_))
 			{
 				return false;
 			}
@@ -147,7 +147,7 @@ public abstract class EntityAITarget extends EntityAIBase
 
 					if (this.targetSearchStatus == 0)
 					{
-						this.targetSearchStatus = this.canEasilyReach(par1EntityLivingBase) ? 1 : 2;
+						this.targetSearchStatus = this.canEasilyReach(p_75296_1_) ? 1 : 2;
 					}
 
 					if (this.targetSearchStatus == 2)
@@ -161,10 +161,10 @@ public abstract class EntityAITarget extends EntityAIBase
 		}
 	}
 
-	private boolean canEasilyReach(EntityLivingBase par1EntityLivingBase)
+	private boolean canEasilyReach(EntityLivingBase p_75295_1_)
 	{
 		this.targetSearchDelay = 10 + this.taskOwner.getRNG().nextInt(5);
-		PathEntity pathentity = this.taskOwner.getNavigator().getPathToEntityLiving(par1EntityLivingBase);
+		PathEntity pathentity = this.taskOwner.getNavigator().getPathToEntityLiving(p_75295_1_);
 
 		if (pathentity == null)
 		{
@@ -180,8 +180,8 @@ public abstract class EntityAITarget extends EntityAIBase
 			}
 			else
 			{
-				int i = pathpoint.xCoord - MathHelper.floor_double(par1EntityLivingBase.posX);
-				int j = pathpoint.zCoord - MathHelper.floor_double(par1EntityLivingBase.posZ);
+				int i = pathpoint.xCoord - MathHelper.floor_double(p_75295_1_.posX);
+				int j = pathpoint.zCoord - MathHelper.floor_double(p_75295_1_.posZ);
 				return (double)(i * i + j * j) <= 2.25D;
 			}
 		}

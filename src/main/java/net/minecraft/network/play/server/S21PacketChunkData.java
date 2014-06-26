@@ -136,9 +136,9 @@ public class S21PacketChunkData extends Packet
 		p_148840_1_.writeBytes(this.field_149281_e, 0, this.field_149285_h);
 	}
 
-	public void processPacket(INetHandlerPlayClient p_149277_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_149277_1_.handleChunkData(this);
+		p_148833_1_.handleChunkData(this);
 	}
 
 	public String serialize()

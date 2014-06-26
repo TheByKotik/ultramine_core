@@ -21,16 +21,16 @@ public class GLAllocation
 	private static final List listDummy = new ArrayList();
 	private static final String __OBFID = "CL_00000630";
 
-	public static synchronized int generateDisplayLists(int par0)
+	public static synchronized int generateDisplayLists(int p_74526_0_)
 	{
-		int j = GL11.glGenLists(par0);
-		mapDisplayLists.put(Integer.valueOf(j), Integer.valueOf(par0));
+		int j = GL11.glGenLists(p_74526_0_);
+		mapDisplayLists.put(Integer.valueOf(j), Integer.valueOf(p_74526_0_));
 		return j;
 	}
 
-	public static synchronized void deleteDisplayLists(int par0)
+	public static synchronized void deleteDisplayLists(int p_74523_0_)
 	{
-		GL11.glDeleteLists(par0, ((Integer)mapDisplayLists.remove(Integer.valueOf(par0))).intValue());
+		GL11.glDeleteLists(p_74523_0_, ((Integer)mapDisplayLists.remove(Integer.valueOf(p_74523_0_))).intValue());
 	}
 
 	public static synchronized void deleteTexturesAndDisplayLists()
@@ -46,18 +46,18 @@ public class GLAllocation
 		mapDisplayLists.clear();
 	}
 
-	public static synchronized ByteBuffer createDirectByteBuffer(int par0)
+	public static synchronized ByteBuffer createDirectByteBuffer(int p_74524_0_)
 	{
-		return ByteBuffer.allocateDirect(par0).order(ByteOrder.nativeOrder());
+		return ByteBuffer.allocateDirect(p_74524_0_).order(ByteOrder.nativeOrder());
 	}
 
-	public static IntBuffer createDirectIntBuffer(int par0)
+	public static IntBuffer createDirectIntBuffer(int p_74527_0_)
 	{
-		return createDirectByteBuffer(par0 << 2).asIntBuffer();
+		return createDirectByteBuffer(p_74527_0_ << 2).asIntBuffer();
 	}
 
-	public static FloatBuffer createDirectFloatBuffer(int par0)
+	public static FloatBuffer createDirectFloatBuffer(int p_74529_0_)
 	{
-		return createDirectByteBuffer(par0 << 2).asFloatBuffer();
+		return createDirectByteBuffer(p_74529_0_ << 2).asFloatBuffer();
 	}
 }

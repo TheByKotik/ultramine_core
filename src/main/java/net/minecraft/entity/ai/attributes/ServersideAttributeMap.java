@@ -14,49 +14,49 @@ public class ServersideAttributeMap extends BaseAttributeMap
 	protected final Map descriptionToAttributeInstanceMap = new LowerStringMap();
 	private static final String __OBFID = "CL_00001569";
 
-	public ModifiableAttributeInstance getAttributeInstance(IAttribute par1Attribute)
+	public ModifiableAttributeInstance getAttributeInstance(IAttribute p_111151_1_)
 	{
-		return (ModifiableAttributeInstance)super.getAttributeInstance(par1Attribute);
+		return (ModifiableAttributeInstance)super.getAttributeInstance(p_111151_1_);
 	}
 
-	public ModifiableAttributeInstance getAttributeInstanceByName(String par1Str)
+	public ModifiableAttributeInstance getAttributeInstanceByName(String p_111152_1_)
 	{
-		IAttributeInstance iattributeinstance = super.getAttributeInstanceByName(par1Str);
+		IAttributeInstance iattributeinstance = super.getAttributeInstanceByName(p_111152_1_);
 
 		if (iattributeinstance == null)
 		{
-			iattributeinstance = (IAttributeInstance)this.descriptionToAttributeInstanceMap.get(par1Str);
+			iattributeinstance = (IAttributeInstance)this.descriptionToAttributeInstanceMap.get(p_111152_1_);
 		}
 
 		return (ModifiableAttributeInstance)iattributeinstance;
 	}
 
-	public IAttributeInstance registerAttribute(IAttribute par1Attribute)
+	public IAttributeInstance registerAttribute(IAttribute p_111150_1_)
 	{
-		if (this.attributesByName.containsKey(par1Attribute.getAttributeUnlocalizedName()))
+		if (this.attributesByName.containsKey(p_111150_1_.getAttributeUnlocalizedName()))
 		{
 			throw new IllegalArgumentException("Attribute is already registered!");
 		}
 		else
 		{
-			ModifiableAttributeInstance modifiableattributeinstance = new ModifiableAttributeInstance(this, par1Attribute);
-			this.attributesByName.put(par1Attribute.getAttributeUnlocalizedName(), modifiableattributeinstance);
+			ModifiableAttributeInstance modifiableattributeinstance = new ModifiableAttributeInstance(this, p_111150_1_);
+			this.attributesByName.put(p_111150_1_.getAttributeUnlocalizedName(), modifiableattributeinstance);
 
-			if (par1Attribute instanceof RangedAttribute && ((RangedAttribute)par1Attribute).getDescription() != null)
+			if (p_111150_1_ instanceof RangedAttribute && ((RangedAttribute)p_111150_1_).getDescription() != null)
 			{
-				this.descriptionToAttributeInstanceMap.put(((RangedAttribute)par1Attribute).getDescription(), modifiableattributeinstance);
+				this.descriptionToAttributeInstanceMap.put(((RangedAttribute)p_111150_1_).getDescription(), modifiableattributeinstance);
 			}
 
-			this.attributes.put(par1Attribute, modifiableattributeinstance);
+			this.attributes.put(p_111150_1_, modifiableattributeinstance);
 			return modifiableattributeinstance;
 		}
 	}
 
-	public void addAttributeInstance(ModifiableAttributeInstance par1ModifiableAttributeInstance)
+	public void addAttributeInstance(ModifiableAttributeInstance p_111149_1_)
 	{
-		if (par1ModifiableAttributeInstance.getAttribute().getShouldWatch())
+		if (p_111149_1_.getAttribute().getShouldWatch())
 		{
-			this.attributeInstanceSet.add(par1ModifiableAttributeInstance);
+			this.attributeInstanceSet.add(p_111149_1_);
 		}
 	}
 

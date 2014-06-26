@@ -41,16 +41,16 @@ public enum EnumChatFormatting
 
 	private static final String __OBFID = "CL_00000342";
 
-	private EnumChatFormatting(char par3)
+	private EnumChatFormatting(char p_i1336_3_)
 	{
-		this(par3, false);
+		this(p_i1336_3_, false);
 	}
 
-	private EnumChatFormatting(char par3, boolean par4)
+	private EnumChatFormatting(char p_i1337_3_, boolean p_i1337_4_)
 	{
-		this.formattingCode = par3;
-		this.fancyStyling = par4;
-		this.controlString = "\u00a7" + par3;
+		this.formattingCode = p_i1337_3_;
+		this.fancyStyling = p_i1337_4_;
+		this.controlString = "\u00a7" + p_i1337_3_;
 	}
 
 	public char getFormattingCode()
@@ -79,17 +79,17 @@ public enum EnumChatFormatting
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static String getTextWithoutFormattingCodes(String par0Str)
+	public static String getTextWithoutFormattingCodes(String p_110646_0_)
 	{
-		return par0Str == null ? null : formattingCodePattern.matcher(par0Str).replaceAll("");
+		return p_110646_0_ == null ? null : formattingCodePattern.matcher(p_110646_0_).replaceAll("");
 	}
 
-	public static EnumChatFormatting getValueByName(String par0Str)
+	public static EnumChatFormatting getValueByName(String p_96300_0_)
 	{
-		return par0Str == null ? null : (EnumChatFormatting)nameMapping.get(par0Str.toLowerCase());
+		return p_96300_0_ == null ? null : (EnumChatFormatting)nameMapping.get(p_96300_0_.toLowerCase());
 	}
 
-	public static Collection getValidValues(boolean par0, boolean par1)
+	public static Collection getValidValues(boolean p_96296_0_, boolean p_96296_1_)
 	{
 		ArrayList arraylist = new ArrayList();
 		EnumChatFormatting[] aenumchatformatting = values();
@@ -99,7 +99,7 @@ public enum EnumChatFormatting
 		{
 			EnumChatFormatting enumchatformatting = aenumchatformatting[j];
 
-			if ((!enumchatformatting.isColor() || par0) && (!enumchatformatting.isFancyStyling() || par1))
+			if ((!enumchatformatting.isColor() || p_96296_0_) && (!enumchatformatting.isFancyStyling() || p_96296_1_))
 			{
 				arraylist.add(enumchatformatting.getFriendlyName());
 			}

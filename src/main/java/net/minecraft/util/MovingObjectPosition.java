@@ -19,9 +19,9 @@ public class MovingObjectPosition
 	/** Used to add extra hit info */
 	public Object hitInfo = null;
 
-	public MovingObjectPosition(int par1, int par2, int par3, int par4, Vec3 par5Vec3)
+	public MovingObjectPosition(int p_i2303_1_, int p_i2303_2_, int p_i2303_3_, int p_i2303_4_, Vec3 p_i2303_5_)
 	{
-		this(par1, par2, par3, par4, par5Vec3, true);
+		this(p_i2303_1_, p_i2303_2_, p_i2303_3_, p_i2303_4_, p_i2303_5_, true);
 	}
 
 	public MovingObjectPosition(int p_i45481_1_, int p_i45481_2_, int p_i45481_3_, int p_i45481_4_, Vec3 p_i45481_5_, boolean p_i45481_6_)
@@ -31,12 +31,12 @@ public class MovingObjectPosition
 		this.blockY = p_i45481_2_;
 		this.blockZ = p_i45481_3_;
 		this.sideHit = p_i45481_4_;
-		this.hitVec = p_i45481_5_.myVec3LocalPool.getVecFromPool(p_i45481_5_.xCoord, p_i45481_5_.yCoord, p_i45481_5_.zCoord);
+		this.hitVec = Vec3.createVectorHelper(p_i45481_5_.xCoord, p_i45481_5_.yCoord, p_i45481_5_.zCoord);
 	}
 
-	public MovingObjectPosition(Entity par1Entity)
+	public MovingObjectPosition(Entity p_i2304_1_)
 	{
-		this(par1Entity, par1Entity.worldObj.getWorldVec3Pool().getVecFromPool(par1Entity.posX, par1Entity.posY, par1Entity.posZ));
+		this(p_i2304_1_, Vec3.createVectorHelper(p_i2304_1_.posX, p_i2304_1_.posY, p_i2304_1_.posZ));
 	}
 
 	public MovingObjectPosition(Entity p_i45482_1_, Vec3 p_i45482_2_)

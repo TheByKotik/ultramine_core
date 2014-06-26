@@ -13,31 +13,31 @@ public class RConOutputStream
 	private DataOutputStream output;
 	private static final String __OBFID = "CL_00001798";
 
-	public RConOutputStream(int par1)
+	public RConOutputStream(int p_i1533_1_)
 	{
-		this.byteArrayOutput = new ByteArrayOutputStream(par1);
+		this.byteArrayOutput = new ByteArrayOutputStream(p_i1533_1_);
 		this.output = new DataOutputStream(this.byteArrayOutput);
 	}
 
-	public void writeByteArray(byte[] par1ArrayOfByte) throws IOException
+	public void writeByteArray(byte[] p_72670_1_) throws IOException
 	{
-		this.output.write(par1ArrayOfByte, 0, par1ArrayOfByte.length);
+		this.output.write(p_72670_1_, 0, p_72670_1_.length);
 	}
 
-	public void writeString(String par1Str) throws IOException
+	public void writeString(String p_72671_1_) throws IOException
 	{
-		this.output.writeBytes(par1Str);
+		this.output.writeBytes(p_72671_1_);
 		this.output.write(0);
 	}
 
-	public void writeInt(int par1) throws IOException
+	public void writeInt(int p_72667_1_) throws IOException
 	{
-		this.output.write(par1);
+		this.output.write(p_72667_1_);
 	}
 
-	public void writeShort(short par1) throws IOException
+	public void writeShort(short p_72668_1_) throws IOException
 	{
-		this.output.writeShort(Short.reverseBytes(par1));
+		this.output.writeShort(Short.reverseBytes(p_72668_1_));
 	}
 
 	public byte[] toByteArray()

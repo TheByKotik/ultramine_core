@@ -181,7 +181,7 @@ public class OldServerPinger
 
 		try
 		{
-			networkmanager.scheduleOutboundPacket(new C00Handshake(4, serveraddress.getIP(), serveraddress.getPort(), EnumConnectionState.STATUS), new GenericFutureListener[0]);
+			networkmanager.scheduleOutboundPacket(new C00Handshake(5, serveraddress.getIP(), serveraddress.getPort(), EnumConnectionState.STATUS), new GenericFutureListener[0]);
 			networkmanager.scheduleOutboundPacket(new C00PacketServerQuery(), new GenericFutureListener[0]);
 		}
 		catch (Throwable throwable)
@@ -223,45 +223,53 @@ public class OldServerPinger
 					{
 						super.channelActive(p_channelActive_1_);
 						ByteBuf bytebuf = Unpooled.buffer();
-						bytebuf.writeByte(254);
-						bytebuf.writeByte(1);
-						bytebuf.writeByte(250);
-						char[] achar = "MC|PingHost".toCharArray();
-						bytebuf.writeShort(achar.length);
-						char[] achar1 = achar;
-						int i = achar.length;
-						int j;
-						char c0;
 
-						for (j = 0; j < i; ++j)
+						try
 						{
-							c0 = achar1[j];
-							bytebuf.writeChar(c0);
+							bytebuf.writeByte(254);
+							bytebuf.writeByte(1);
+							bytebuf.writeByte(250);
+							char[] achar = "MC|PingHost".toCharArray();
+							bytebuf.writeShort(achar.length);
+							char[] achar1 = achar;
+							int i = achar.length;
+							int j;
+							char c0;
+
+							for (j = 0; j < i; ++j)
+							{
+								c0 = achar1[j];
+								bytebuf.writeChar(c0);
+							}
+
+							bytebuf.writeShort(7 + 2 * serveraddress.getIP().length());
+							bytebuf.writeByte(127);
+							achar = serveraddress.getIP().toCharArray();
+							bytebuf.writeShort(achar.length);
+							achar1 = achar;
+							i = achar.length;
+
+							for (j = 0; j < i; ++j)
+							{
+								c0 = achar1[j];
+								bytebuf.writeChar(c0);
+							}
+
+							bytebuf.writeInt(serveraddress.getPort());
+							p_channelActive_1_.channel().writeAndFlush(bytebuf).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
 						}
-
-						bytebuf.writeShort(7 + 2 * serveraddress.getIP().length());
-						bytebuf.writeByte(127);
-						achar = serveraddress.getIP().toCharArray();
-						bytebuf.writeShort(achar.length);
-						achar1 = achar;
-						i = achar.length;
-
-						for (j = 0; j < i; ++j)
+						finally
 						{
-							c0 = achar1[j];
-							bytebuf.writeChar(c0);
+							bytebuf.release();
 						}
-
-						bytebuf.writeInt(serveraddress.getPort());
-						p_channelActive_1_.channel().writeAndFlush(bytebuf).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
 					}
-					protected void channelRead0(ChannelHandlerContext p_147219_1_, ByteBuf p_147219_2_)
+					protected void channelRead0(ChannelHandlerContext p_channelRead0_1_, ByteBuf p_channelRead0_2_)
 					{
-						short short1 = p_147219_2_.readUnsignedByte();
+						short short1 = p_channelRead0_2_.readUnsignedByte();
 
 						if (short1 == 255)
 						{
-							String s = new String(p_147219_2_.readBytes(p_147219_2_.readShort() * 2).array(), Charsets.UTF_16BE);
+							String s = new String(p_channelRead0_2_.readBytes(p_channelRead0_2_.readShort() * 2).array(), Charsets.UTF_16BE);
 							String[] astring = (String[])Iterables.toArray(OldServerPinger.field_147230_a.split(s), String.class);
 
 							if ("\u00a71".equals(astring[0]))
@@ -278,7 +286,7 @@ public class OldServerPinger
 							}
 						}
 
-						p_147219_1_.close();
+						p_channelRead0_1_.close();
 					}
 					public void exceptionCaught(ChannelHandlerContext p_exceptionCaught_1_, Throwable p_exceptionCaught_2_)
 					{

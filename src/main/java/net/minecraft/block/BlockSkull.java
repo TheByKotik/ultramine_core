@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySkull;
@@ -116,7 +117,6 @@ public class BlockSkull extends BlockContainer
 			p_149681_5_ |= 8;
 			p_149681_1_.setBlockMetadataWithNotify(p_149681_2_, p_149681_3_, p_149681_4_, p_149681_5_, 4);
 		}
-
 		this.dropBlockAsItem(p_149681_1_, p_149681_2_, p_149681_3_, p_149681_4_, p_149681_5_, 0);
 
 		super.onBlockHarvested(p_149681_1_, p_149681_2_, p_149681_3_, p_149681_4_, p_149681_5_, p_149681_6_);
@@ -139,10 +139,12 @@ public class BlockSkull extends BlockContainer
 
 				if (tileentityskull == null) return ret;
 
-				if (tileentityskull.func_145904_a() == 3 && tileentityskull.func_145907_c() != null && tileentityskull.func_145907_c().length() > 0)
+				if (tileentityskull.func_145904_a() == 3 && tileentityskull.func_152108_a() != null)
 				{
 					itemstack.setTagCompound(new NBTTagCompound());
-					itemstack.getTagCompound().setString("SkullOwner", tileentityskull.func_145907_c());
+					NBTTagCompound nbttagcompound = new NBTTagCompound();
+					NBTUtil.func_152460_a(nbttagcompound, tileentityskull.func_152108_a());
+					itemstack.getTagCompound().setTag("SkullOwner", nbttagcompound);
 				}
 
 				ret.add(itemstack);

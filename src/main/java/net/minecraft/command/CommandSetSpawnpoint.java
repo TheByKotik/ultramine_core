@@ -19,49 +19,49 @@ public class CommandSetSpawnpoint extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.spawnpoint.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		EntityPlayerMP entityplayermp = par2ArrayOfStr.length == 0 ? getCommandSenderAsPlayer(par1ICommandSender) : getPlayer(par1ICommandSender, par2ArrayOfStr[0]);
+		EntityPlayerMP entityplayermp = p_71515_2_.length == 0 ? getCommandSenderAsPlayer(p_71515_1_) : getPlayer(p_71515_1_, p_71515_2_[0]);
 
-		if (par2ArrayOfStr.length == 4)
+		if (p_71515_2_.length == 4)
 		{
 			if (entityplayermp.worldObj != null)
 			{
 				byte b0 = 1;
 				int i = 30000000;
 				int i1 = b0 + 1;
-				int j = parseIntBounded(par1ICommandSender, par2ArrayOfStr[b0], -i, i);
-				int k = parseIntBounded(par1ICommandSender, par2ArrayOfStr[i1++], 0, 256);
-				int l = parseIntBounded(par1ICommandSender, par2ArrayOfStr[i1++], -i, i);
+				int j = parseIntBounded(p_71515_1_, p_71515_2_[b0], -i, i);
+				int k = parseIntBounded(p_71515_1_, p_71515_2_[i1++], 0, 256);
+				int l = parseIntBounded(p_71515_1_, p_71515_2_[i1++], -i, i);
 				entityplayermp.setSpawnChunk(new ChunkCoordinates(j, k, l), true);
-				notifyAdmins(par1ICommandSender, "commands.spawnpoint.success", new Object[] {entityplayermp.getCommandSenderName(), Integer.valueOf(j), Integer.valueOf(k), Integer.valueOf(l)});
+				func_152373_a(p_71515_1_, this, "commands.spawnpoint.success", new Object[] {entityplayermp.getCommandSenderName(), Integer.valueOf(j), Integer.valueOf(k), Integer.valueOf(l)});
 			}
 		}
 		else
 		{
-			if (par2ArrayOfStr.length > 1)
+			if (p_71515_2_.length > 1)
 			{
 				throw new WrongUsageException("commands.spawnpoint.usage", new Object[0]);
 			}
 
 			ChunkCoordinates chunkcoordinates = entityplayermp.getPlayerCoordinates();
 			entityplayermp.setSpawnChunk(chunkcoordinates, true);
-			notifyAdmins(par1ICommandSender, "commands.spawnpoint.success", new Object[] {entityplayermp.getCommandSenderName(), Integer.valueOf(chunkcoordinates.posX), Integer.valueOf(chunkcoordinates.posY), Integer.valueOf(chunkcoordinates.posZ)});
+			func_152373_a(p_71515_1_, this, "commands.spawnpoint.success", new Object[] {entityplayermp.getCommandSenderName(), Integer.valueOf(chunkcoordinates.posX), Integer.valueOf(chunkcoordinates.posY), Integer.valueOf(chunkcoordinates.posZ)});
 		}
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		return par2ArrayOfStr.length != 1 && par2ArrayOfStr.length != 2 ? null : getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
+		return p_71516_2_.length != 1 && p_71516_2_.length != 2 ? null : getListOfStringsMatchingLastWord(p_71516_2_, MinecraftServer.getServer().getAllUsernames());
 	}
 
-	public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2)
+	public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_)
 	{
-		return par2 == 0;
+		return p_82358_2_ == 0;
 	}
 }

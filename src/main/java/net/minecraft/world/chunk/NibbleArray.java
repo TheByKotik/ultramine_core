@@ -7,41 +7,41 @@ public class NibbleArray
 	private final int depthBitsPlusFour;
 	private static final String __OBFID = "CL_00000371";
 
-	public NibbleArray(int par1, int par2)
+	public NibbleArray(int p_i1992_1_, int p_i1992_2_)
 	{
-		this.data = new byte[par1 >> 1];
-		this.depthBits = par2;
-		this.depthBitsPlusFour = par2 + 4;
+		this.data = new byte[p_i1992_1_ >> 1];
+		this.depthBits = p_i1992_2_;
+		this.depthBitsPlusFour = p_i1992_2_ + 4;
 	}
 
-	public NibbleArray(byte[] par1ArrayOfByte, int par2)
+	public NibbleArray(byte[] p_i1993_1_, int p_i1993_2_)
 	{
-		this.data = par1ArrayOfByte;
-		this.depthBits = par2;
-		this.depthBitsPlusFour = par2 + 4;
+		this.data = p_i1993_1_;
+		this.depthBits = p_i1993_2_;
+		this.depthBitsPlusFour = p_i1993_2_ + 4;
 	}
 
-	public int get(int par1, int par2, int par3)
+	public int get(int p_76582_1_, int p_76582_2_, int p_76582_3_)
 	{
-		int l = par2 << this.depthBitsPlusFour | par3 << this.depthBits | par1;
+		int l = p_76582_2_ << this.depthBitsPlusFour | p_76582_3_ << this.depthBits | p_76582_1_;
 		int i1 = l >> 1;
 		int j1 = l & 1;
 		return j1 == 0 ? this.data[i1] & 15 : this.data[i1] >> 4 & 15;
 	}
 
-	public void set(int par1, int par2, int par3, int par4)
+	public void set(int p_76581_1_, int p_76581_2_, int p_76581_3_, int p_76581_4_)
 	{
-		int i1 = par2 << this.depthBitsPlusFour | par3 << this.depthBits | par1;
+		int i1 = p_76581_2_ << this.depthBitsPlusFour | p_76581_3_ << this.depthBits | p_76581_1_;
 		int j1 = i1 >> 1;
 		int k1 = i1 & 1;
 
 		if (k1 == 0)
 		{
-			this.data[j1] = (byte)(this.data[j1] & 240 | par4 & 15);
+			this.data[j1] = (byte)(this.data[j1] & 240 | p_76581_4_ & 15);
 		}
 		else
 		{
-			this.data[j1] = (byte)(this.data[j1] & 15 | (par4 & 15) << 4);
+			this.data[j1] = (byte)(this.data[j1] & 15 | (p_76581_4_ & 15) << 4);
 		}
 	}
 }

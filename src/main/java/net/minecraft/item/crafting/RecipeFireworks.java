@@ -14,7 +14,7 @@ public class RecipeFireworks implements IRecipe
 	private ItemStack field_92102_a;
 	private static final String __OBFID = "CL_00000083";
 
-	public boolean matches(InventoryCrafting par1InventoryCrafting, World par2World)
+	public boolean matches(InventoryCrafting p_77569_1_, World p_77569_2_)
 	{
 		this.field_92102_a = null;
 		int i = 0;
@@ -24,9 +24,9 @@ public class RecipeFireworks implements IRecipe
 		int i1 = 0;
 		int j1 = 0;
 
-		for (int k1 = 0; k1 < par1InventoryCrafting.getSizeInventory(); ++k1)
+		for (int k1 = 0; k1 < p_77569_1_.getSizeInventory(); ++k1)
 		{
-			ItemStack itemstack = par1InventoryCrafting.getStackInSlot(k1);
+			ItemStack itemstack = p_77569_1_.getStackInSlot(k1);
 
 			if (itemstack != null)
 			{
@@ -95,9 +95,9 @@ public class RecipeFireworks implements IRecipe
 					nbttagcompound1 = new NBTTagCompound();
 					NBTTagList nbttaglist = new NBTTagList();
 
-					for (int k2 = 0; k2 < par1InventoryCrafting.getSizeInventory(); ++k2)
+					for (int k2 = 0; k2 < p_77569_1_.getSizeInventory(); ++k2)
 					{
-						ItemStack itemstack3 = par1InventoryCrafting.getStackInSlot(k2);
+						ItemStack itemstack3 = p_77569_1_.getStackInSlot(k2);
 
 						if (itemstack3 != null && itemstack3.getItem() == Items.firework_charge && itemstack3.hasTagCompound() && itemstack3.getTagCompound().hasKey("Explosion", 10))
 						{
@@ -121,9 +121,9 @@ public class RecipeFireworks implements IRecipe
 				byte b0 = 0;
 				ArrayList arraylist = new ArrayList();
 
-				for (int l1 = 0; l1 < par1InventoryCrafting.getSizeInventory(); ++l1)
+				for (int l1 = 0; l1 < p_77569_1_.getSizeInventory(); ++l1)
 				{
-					ItemStack itemstack2 = par1InventoryCrafting.getStackInSlot(l1);
+					ItemStack itemstack2 = p_77569_1_.getStackInSlot(l1);
 
 					if (itemstack2 != null)
 					{
@@ -175,9 +175,9 @@ public class RecipeFireworks implements IRecipe
 			{
 				ArrayList arraylist1 = new ArrayList();
 
-				for (int i2 = 0; i2 < par1InventoryCrafting.getSizeInventory(); ++i2)
+				for (int i2 = 0; i2 < p_77569_1_.getSizeInventory(); ++i2)
 				{
-					ItemStack itemstack1 = par1InventoryCrafting.getStackInSlot(i2);
+					ItemStack itemstack1 = p_77569_1_.getStackInSlot(i2);
 
 					if (itemstack1 != null)
 					{
@@ -230,7 +230,7 @@ public class RecipeFireworks implements IRecipe
 		}
 	}
 
-	public ItemStack getCraftingResult(InventoryCrafting par1InventoryCrafting)
+	public ItemStack getCraftingResult(InventoryCrafting p_77572_1_)
 	{
 		return this.field_92102_a.copy();
 	}

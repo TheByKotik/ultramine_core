@@ -21,19 +21,19 @@ public class ItemMultiTexture extends ItemBlock
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int par1)
+	public IIcon getIconFromDamage(int p_77617_1_)
 	{
-		return this.field_150941_b.getIcon(2, par1);
+		return this.field_150941_b.getIcon(2, p_77617_1_);
 	}
 
-	public int getMetadata(int par1)
+	public int getMetadata(int p_77647_1_)
 	{
-		return par1;
+		return p_77647_1_;
 	}
 
-	public String getUnlocalizedName(ItemStack par1ItemStack)
+	public String getUnlocalizedName(ItemStack p_77667_1_)
 	{
-		int i = par1ItemStack.getItemDamage();
+		int i = p_77667_1_.getItemDamage();
 
 		if (i < 0 || i >= this.field_150942_c.length)
 		{

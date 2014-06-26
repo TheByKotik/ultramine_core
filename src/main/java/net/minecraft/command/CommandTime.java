@@ -18,42 +18,42 @@ public class CommandTime extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.time.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length > 1)
+		if (p_71515_2_.length > 1)
 		{
 			int i;
 
-			if (par2ArrayOfStr[0].equals("set"))
+			if (p_71515_2_[0].equals("set"))
 			{
-				if (par2ArrayOfStr[1].equals("day"))
+				if (p_71515_2_[1].equals("day"))
 				{
 					i = 1000;
 				}
-				else if (par2ArrayOfStr[1].equals("night"))
+				else if (p_71515_2_[1].equals("night"))
 				{
 					i = 13000;
 				}
 				else
 				{
-					i = parseIntWithMin(par1ICommandSender, par2ArrayOfStr[1], 0);
+					i = parseIntWithMin(p_71515_1_, p_71515_2_[1], 0);
 				}
 
-				this.setTime(par1ICommandSender, i);
-				notifyAdmins(par1ICommandSender, "commands.time.set", new Object[] {Integer.valueOf(i)});
+				this.setTime(p_71515_1_, i);
+				func_152373_a(p_71515_1_, this, "commands.time.set", new Object[] {Integer.valueOf(i)});
 				return;
 			}
 
-			if (par2ArrayOfStr[0].equals("add"))
+			if (p_71515_2_[0].equals("add"))
 			{
-				i = parseIntWithMin(par1ICommandSender, par2ArrayOfStr[1], 0);
-				this.addTime(par1ICommandSender, i);
-				notifyAdmins(par1ICommandSender, "commands.time.added", new Object[] {Integer.valueOf(i)});
+				i = parseIntWithMin(p_71515_1_, p_71515_2_[1], 0);
+				this.addTime(p_71515_1_, i);
+				func_152373_a(p_71515_1_, this, "commands.time.added", new Object[] {Integer.valueOf(i)});
 				return;
 			}
 		}
@@ -61,25 +61,25 @@ public class CommandTime extends CommandBase
 		throw new WrongUsageException("commands.time.usage", new Object[0]);
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"set", "add"}): (par2ArrayOfStr.length == 2 && par2ArrayOfStr[0].equals("set") ? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"day", "night"}): null);
+		return p_71516_2_.length == 1 ? getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"set", "add"}): (p_71516_2_.length == 2 && p_71516_2_[0].equals("set") ? getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"day", "night"}): null);
 	}
 
-	protected void setTime(ICommandSender par1ICommandSender, int par2)
+	protected void setTime(ICommandSender p_71552_1_, int p_71552_2_)
 	{
 		for (int j = 0; j < MinecraftServer.getServer().worldServers.length; ++j)
 		{
-			MinecraftServer.getServer().worldServers[j].setWorldTime((long)par2);
+			MinecraftServer.getServer().worldServers[j].setWorldTime((long)p_71552_2_);
 		}
 	}
 
-	protected void addTime(ICommandSender par1ICommandSender, int par2)
+	protected void addTime(ICommandSender p_71553_1_, int p_71553_2_)
 	{
 		for (int j = 0; j < MinecraftServer.getServer().worldServers.length; ++j)
 		{
 			WorldServer worldserver = MinecraftServer.getServer().worldServers[j];
-			worldserver.setWorldTime(worldserver.getWorldTime() + (long)par2);
+			worldserver.setWorldTime(worldserver.getWorldTime() + (long)p_71553_2_);
 		}
 	}
 }

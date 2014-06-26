@@ -22,15 +22,15 @@ public class ChunkPosition
 		this(MathHelper.floor_double(p_i45364_1_.xCoord), MathHelper.floor_double(p_i45364_1_.yCoord), MathHelper.floor_double(p_i45364_1_.zCoord));
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (!(par1Obj instanceof ChunkPosition))
+		if (!(p_equals_1_ instanceof ChunkPosition))
 		{
 			return false;
 		}
 		else
 		{
-			ChunkPosition chunkposition = (ChunkPosition)par1Obj;
+			ChunkPosition chunkposition = (ChunkPosition)p_equals_1_;
 			return chunkposition.chunkPosX == this.chunkPosX && chunkposition.chunkPosY == this.chunkPosY && chunkposition.chunkPosZ == this.chunkPosZ;
 		}
 	}

@@ -55,6 +55,7 @@ public class NetHandlerLoginClient implements INetHandlerLoginClient
 		String s = p_147389_1_.func_149609_c();
 		PublicKey publickey = p_147389_1_.func_149608_d();
 		String s1 = (new BigInteger(CryptManager.getServerIdHash(s, publickey, secretkey))).toString(16);
+		boolean flag = this.field_147394_b.func_147104_D() == null || !this.field_147394_b.func_147104_D().func_152585_d();
 
 		try
 		{
@@ -62,18 +63,27 @@ public class NetHandlerLoginClient implements INetHandlerLoginClient
 		}
 		catch (AuthenticationUnavailableException authenticationunavailableexception)
 		{
-			this.field_147393_d.closeChannel(new ChatComponentTranslation("disconnect.loginFailedInfo", new Object[] {new ChatComponentTranslation("disconnect.loginFailedInfo.serversUnavailable", new Object[0])}));
-			return;
+			if (flag)
+			{
+				this.field_147393_d.closeChannel(new ChatComponentTranslation("disconnect.loginFailedInfo", new Object[] {new ChatComponentTranslation("disconnect.loginFailedInfo.serversUnavailable", new Object[0])}));
+				return;
+			}
 		}
 		catch (InvalidCredentialsException invalidcredentialsexception)
 		{
-			this.field_147393_d.closeChannel(new ChatComponentTranslation("disconnect.loginFailedInfo", new Object[] {new ChatComponentTranslation("disconnect.loginFailedInfo.invalidSession", new Object[0])}));
-			return;
+			if (flag)
+			{
+				this.field_147393_d.closeChannel(new ChatComponentTranslation("disconnect.loginFailedInfo", new Object[] {new ChatComponentTranslation("disconnect.loginFailedInfo.invalidSession", new Object[0])}));
+				return;
+			}
 		}
 		catch (AuthenticationException authenticationexception)
 		{
-			this.field_147393_d.closeChannel(new ChatComponentTranslation("disconnect.loginFailedInfo", new Object[] {authenticationexception.getMessage()}));
-			return;
+			if (flag)
+			{
+				this.field_147393_d.closeChannel(new ChatComponentTranslation("disconnect.loginFailedInfo", new Object[] {authenticationexception.getMessage()}));
+				return;
+			}
 		}
 
 		this.field_147393_d.scheduleOutboundPacket(new C01PacketEncryptionResponse(secretkey, publickey, p_147389_1_.func_149607_e()), new GenericFutureListener[] {new GenericFutureListener()

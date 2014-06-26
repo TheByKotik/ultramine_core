@@ -17,34 +17,34 @@ public class EntityLightningBolt extends EntityWeatherEffect
 	private int boltLivingTime;
 	private static final String __OBFID = "CL_00001666";
 
-	public EntityLightningBolt(World par1World, double par2, double par4, double par6)
+	public EntityLightningBolt(World p_i1703_1_, double p_i1703_2_, double p_i1703_4_, double p_i1703_6_)
 	{
-		super(par1World);
-		this.setLocationAndAngles(par2, par4, par6, 0.0F, 0.0F);
+		super(p_i1703_1_);
+		this.setLocationAndAngles(p_i1703_2_, p_i1703_4_, p_i1703_6_, 0.0F, 0.0F);
 		this.lightningState = 2;
 		this.boltVertex = this.rand.nextLong();
 		this.boltLivingTime = this.rand.nextInt(3) + 1;
 
-		if (!par1World.isRemote && par1World.getGameRules().getGameRuleBooleanValue("doFireTick") && (par1World.difficultySetting == EnumDifficulty.NORMAL || par1World.difficultySetting == EnumDifficulty.HARD) && par1World.doChunksNearChunkExist(MathHelper.floor_double(par2), MathHelper.floor_double(par4), MathHelper.floor_double(par6), 10))
+		if (!p_i1703_1_.isRemote && p_i1703_1_.getGameRules().getGameRuleBooleanValue("doFireTick") && (p_i1703_1_.difficultySetting == EnumDifficulty.NORMAL || p_i1703_1_.difficultySetting == EnumDifficulty.HARD) && p_i1703_1_.doChunksNearChunkExist(MathHelper.floor_double(p_i1703_2_), MathHelper.floor_double(p_i1703_4_), MathHelper.floor_double(p_i1703_6_), 10))
 		{
-			int i = MathHelper.floor_double(par2);
-			int j = MathHelper.floor_double(par4);
-			int k = MathHelper.floor_double(par6);
+			int i = MathHelper.floor_double(p_i1703_2_);
+			int j = MathHelper.floor_double(p_i1703_4_);
+			int k = MathHelper.floor_double(p_i1703_6_);
 
-			if (par1World.getBlock(i, j, k).getMaterial() == Material.air && Blocks.fire.canPlaceBlockAt(par1World, i, j, k))
+			if (p_i1703_1_.getBlock(i, j, k).getMaterial() == Material.air && Blocks.fire.canPlaceBlockAt(p_i1703_1_, i, j, k))
 			{
-				par1World.setBlock(i, j, k, Blocks.fire);
+				p_i1703_1_.setBlock(i, j, k, Blocks.fire);
 			}
 
 			for (i = 0; i < 4; ++i)
 			{
-				j = MathHelper.floor_double(par2) + this.rand.nextInt(3) - 1;
-				k = MathHelper.floor_double(par4) + this.rand.nextInt(3) - 1;
-				int l = MathHelper.floor_double(par6) + this.rand.nextInt(3) - 1;
+				j = MathHelper.floor_double(p_i1703_2_) + this.rand.nextInt(3) - 1;
+				k = MathHelper.floor_double(p_i1703_4_) + this.rand.nextInt(3) - 1;
+				int l = MathHelper.floor_double(p_i1703_6_) + this.rand.nextInt(3) - 1;
 
-				if (par1World.getBlock(j, k, l).getMaterial() == Material.air && Blocks.fire.canPlaceBlockAt(par1World, j, k, l))
+				if (p_i1703_1_.getBlock(j, k, l).getMaterial() == Material.air && Blocks.fire.canPlaceBlockAt(p_i1703_1_, j, k, l))
 				{
-					par1World.setBlock(j, k, l, Blocks.fire);
+					p_i1703_1_.setBlock(j, k, l, Blocks.fire);
 				}
 			}
 		}
@@ -97,7 +97,7 @@ public class EntityLightningBolt extends EntityWeatherEffect
 			else
 			{
 				double d0 = 3.0D;
-				List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getAABBPool().getAABB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + 6.0D + d0, this.posZ + d0));
+				List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getBoundingBox(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + 6.0D + d0, this.posZ + d0));
 
 				for (int l = 0; l < list.size(); ++l)
 				{
@@ -111,7 +111,7 @@ public class EntityLightningBolt extends EntityWeatherEffect
 
 	protected void entityInit() {}
 
-	protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {}
+	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {}
 
-	protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {}
+	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {}
 }

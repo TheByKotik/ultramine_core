@@ -3,6 +3,7 @@ package net.minecraft.enchantment;
 import java.util.ArrayList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.StatCollector;
@@ -41,19 +42,19 @@ public abstract class Enchantment
 	protected String name;
 	private static final String __OBFID = "CL_00000105";
 
-	protected Enchantment(int par1, int par2, EnumEnchantmentType par3EnumEnchantmentType)
+	protected Enchantment(int p_i1926_1_, int p_i1926_2_, EnumEnchantmentType p_i1926_3_)
 	{
-		this.effectId = par1;
-		this.weight = par2;
-		this.type = par3EnumEnchantmentType;
+		this.effectId = p_i1926_1_;
+		this.weight = p_i1926_2_;
+		this.type = p_i1926_3_;
 
-		if (enchantmentsList[par1] != null)
+		if (enchantmentsList[p_i1926_1_] != null)
 		{
 			throw new IllegalArgumentException("Duplicate enchantment id!");
 		}
 		else
 		{
-			enchantmentsList[par1] = this;
+			enchantmentsList[p_i1926_1_] = this;
 		}
 	}
 
@@ -72,34 +73,34 @@ public abstract class Enchantment
 		return 1;
 	}
 
-	public int getMinEnchantability(int par1)
+	public int getMinEnchantability(int p_77321_1_)
 	{
-		return 1 + par1 * 10;
+		return 1 + p_77321_1_ * 10;
 	}
 
-	public int getMaxEnchantability(int par1)
+	public int getMaxEnchantability(int p_77317_1_)
 	{
-		return this.getMinEnchantability(par1) + 5;
+		return this.getMinEnchantability(p_77317_1_) + 5;
 	}
 
-	public int calcModifierDamage(int par1, DamageSource par2DamageSource)
+	public int calcModifierDamage(int p_77318_1_, DamageSource p_77318_2_)
 	{
 		return 0;
 	}
 
-	public float calcModifierLiving(int par1, EntityLivingBase par2EntityLivingBase)
+	public float func_152376_a(int p_152376_1_, EnumCreatureAttribute p_152376_2_)
 	{
 		return 0.0F;
 	}
 
-	public boolean canApplyTogether(Enchantment par1Enchantment)
+	public boolean canApplyTogether(Enchantment p_77326_1_)
 	{
-		return this != par1Enchantment;
+		return this != p_77326_1_;
 	}
 
-	public Enchantment setName(String par1Str)
+	public Enchantment setName(String p_77322_1_)
 	{
-		this.name = par1Str;
+		this.name = p_77322_1_;
 		return this;
 	}
 
@@ -108,15 +109,15 @@ public abstract class Enchantment
 		return "enchantment." + this.name;
 	}
 
-	public String getTranslatedName(int par1)
+	public String getTranslatedName(int p_77316_1_)
 	{
 		String s = StatCollector.translateToLocal(this.getName());
-		return s + " " + StatCollector.translateToLocal("enchantment.level." + par1);
+		return s + " " + StatCollector.translateToLocal("enchantment.level." + p_77316_1_);
 	}
 
-	public boolean canApply(ItemStack par1ItemStack)
+	public boolean canApply(ItemStack p_92089_1_)
 	{
-		return this.type.canEnchantItem(par1ItemStack.getItem());
+		return this.type.canEnchantItem(p_92089_1_.getItem());
 	}
 
 	public void func_151368_a(EntityLivingBase p_151368_1_, Entity p_151368_2_, int p_151368_3_) {}

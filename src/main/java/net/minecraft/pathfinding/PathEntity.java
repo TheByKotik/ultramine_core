@@ -10,10 +10,10 @@ public class PathEntity
 	private int pathLength;
 	private static final String __OBFID = "CL_00000575";
 
-	public PathEntity(PathPoint[] par1ArrayOfPathPoint)
+	public PathEntity(PathPoint[] p_i2136_1_)
 	{
-		this.points = par1ArrayOfPathPoint;
-		this.pathLength = par1ArrayOfPathPoint.length;
+		this.points = p_i2136_1_;
+		this.pathLength = p_i2136_1_.length;
 	}
 
 	public void incrementPathIndex()
@@ -31,9 +31,9 @@ public class PathEntity
 		return this.pathLength > 0 ? this.points[this.pathLength - 1] : null;
 	}
 
-	public PathPoint getPathPointFromIndex(int par1)
+	public PathPoint getPathPointFromIndex(int p_75877_1_)
 	{
-		return this.points[par1];
+		return this.points[p_75877_1_];
 	}
 
 	public int getCurrentPathLength()
@@ -41,9 +41,9 @@ public class PathEntity
 		return this.pathLength;
 	}
 
-	public void setCurrentPathLength(int par1)
+	public void setCurrentPathLength(int p_75871_1_)
 	{
-		this.pathLength = par1;
+		this.pathLength = p_75871_1_;
 	}
 
 	public int getCurrentPathIndex()
@@ -51,31 +51,31 @@ public class PathEntity
 		return this.currentPathIndex;
 	}
 
-	public void setCurrentPathIndex(int par1)
+	public void setCurrentPathIndex(int p_75872_1_)
 	{
-		this.currentPathIndex = par1;
+		this.currentPathIndex = p_75872_1_;
 	}
 
-	public Vec3 getVectorFromIndex(Entity par1Entity, int par2)
+	public Vec3 getVectorFromIndex(Entity p_75881_1_, int p_75881_2_)
 	{
-		double d0 = (double)this.points[par2].xCoord + (double)((int)(par1Entity.width + 1.0F)) * 0.5D;
-		double d1 = (double)this.points[par2].yCoord;
-		double d2 = (double)this.points[par2].zCoord + (double)((int)(par1Entity.width + 1.0F)) * 0.5D;
-		return par1Entity.worldObj.getWorldVec3Pool().getVecFromPool(d0, d1, d2);
+		double d0 = (double)this.points[p_75881_2_].xCoord + (double)((int)(p_75881_1_.width + 1.0F)) * 0.5D;
+		double d1 = (double)this.points[p_75881_2_].yCoord;
+		double d2 = (double)this.points[p_75881_2_].zCoord + (double)((int)(p_75881_1_.width + 1.0F)) * 0.5D;
+		return Vec3.createVectorHelper(d0, d1, d2);
 	}
 
-	public Vec3 getPosition(Entity par1Entity)
+	public Vec3 getPosition(Entity p_75878_1_)
 	{
-		return this.getVectorFromIndex(par1Entity, this.currentPathIndex);
+		return this.getVectorFromIndex(p_75878_1_, this.currentPathIndex);
 	}
 
-	public boolean isSamePath(PathEntity par1PathEntity)
+	public boolean isSamePath(PathEntity p_75876_1_)
 	{
-		if (par1PathEntity == null)
+		if (p_75876_1_ == null)
 		{
 			return false;
 		}
-		else if (par1PathEntity.points.length != this.points.length)
+		else if (p_75876_1_.points.length != this.points.length)
 		{
 			return false;
 		}
@@ -83,7 +83,7 @@ public class PathEntity
 		{
 			for (int i = 0; i < this.points.length; ++i)
 			{
-				if (this.points[i].xCoord != par1PathEntity.points[i].xCoord || this.points[i].yCoord != par1PathEntity.points[i].yCoord || this.points[i].zCoord != par1PathEntity.points[i].zCoord)
+				if (this.points[i].xCoord != p_75876_1_.points[i].xCoord || this.points[i].yCoord != p_75876_1_.points[i].yCoord || this.points[i].zCoord != p_75876_1_.points[i].zCoord)
 				{
 					return false;
 				}
@@ -93,9 +93,9 @@ public class PathEntity
 		}
 	}
 
-	public boolean isDestinationSame(Vec3 par1Vec3)
+	public boolean isDestinationSame(Vec3 p_75880_1_)
 	{
 		PathPoint pathpoint = this.getFinalPathPoint();
-		return pathpoint == null ? false : pathpoint.xCoord == (int)par1Vec3.xCoord && pathpoint.zCoord == (int)par1Vec3.zCoord;
+		return pathpoint == null ? false : pathpoint.xCoord == (int)p_75880_1_.xCoord && pathpoint.zCoord == (int)p_75880_1_.zCoord;
 	}
 }

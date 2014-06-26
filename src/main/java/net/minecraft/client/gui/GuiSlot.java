@@ -35,16 +35,16 @@ public abstract class GuiSlot
 	private boolean field_148164_v = true;
 	private static final String __OBFID = "CL_00000679";
 
-	public GuiSlot(Minecraft par1Minecraft, int par2, int par3, int par4, int par5, int par6)
+	public GuiSlot(Minecraft p_i1052_1_, int p_i1052_2_, int p_i1052_3_, int p_i1052_4_, int p_i1052_5_, int p_i1052_6_)
 	{
-		this.mc = par1Minecraft;
-		this.width = par2;
-		this.height = par3;
-		this.top = par4;
-		this.bottom = par5;
-		this.slotHeight = par6;
+		this.mc = p_i1052_1_;
+		this.width = p_i1052_2_;
+		this.height = p_i1052_3_;
+		this.top = p_i1052_4_;
+		this.bottom = p_i1052_5_;
+		this.slotHeight = p_i1052_6_;
 		this.left = 0;
-		this.right = par2;
+		this.right = p_i1052_2_;
 	}
 
 	public void func_148122_a(int p_148122_1_, int p_148122_2_, int p_148122_3_, int p_148122_4_)
@@ -75,9 +75,9 @@ public abstract class GuiSlot
 
 	protected abstract int getSize();
 
-	protected abstract void elementClicked(int var1, boolean var2, int var3, int var4);
+	protected abstract void elementClicked(int p_148144_1_, boolean p_148144_2_, int p_148144_3_, int p_148144_4_);
 
-	protected abstract boolean isSelected(int var1);
+	protected abstract boolean isSelected(int p_148131_1_);
 
 	protected int getContentHeight()
 	{
@@ -86,7 +86,7 @@ public abstract class GuiSlot
 
 	protected abstract void drawBackground();
 
-	protected abstract void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5, int var6, int var7);
+	protected abstract void drawSlot(int p_148126_1_, int p_148126_2_, int p_148126_3_, int p_148126_4_, Tessellator p_148126_5_, int p_148126_6_, int p_148126_7_);
 
 	protected void drawListHeader(int p_148129_1_, int p_148129_2_, Tessellator p_148129_3_) {}
 

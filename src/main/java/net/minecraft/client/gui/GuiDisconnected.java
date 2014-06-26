@@ -23,7 +23,7 @@ public class GuiDisconnected extends GuiScreen
 		this.field_146304_f = p_i45020_3_;
 	}
 
-	protected void keyTyped(char par1, int par2) {}
+	protected void keyTyped(char p_73869_1_, int p_73869_2_) {}
 
 	public void initGui()
 	{
@@ -40,7 +40,7 @@ public class GuiDisconnected extends GuiScreen
 		}
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		this.drawDefaultBackground();
 		this.drawCenteredString(this.fontRendererObj, this.field_146306_a, this.width / 2, this.height / 2 - 50, 11184810);
@@ -55,6 +55,6 @@ public class GuiDisconnected extends GuiScreen
 			}
 		}
 
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 }

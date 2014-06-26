@@ -61,7 +61,7 @@ public abstract class BlockRotatedPillar extends Block
 	}
 
 	@SideOnly(Side.CLIENT)
-	protected abstract IIcon getSideIcon(int var1);
+	protected abstract IIcon getSideIcon(int p_150163_1_);
 
 	@SideOnly(Side.CLIENT)
 	protected IIcon getTopIcon(int p_150161_1_)

@@ -25,15 +25,15 @@ public class ClickEvent
 		return this.value;
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (this == par1Obj)
+		if (this == p_equals_1_)
 		{
 			return true;
 		}
-		else if (par1Obj != null && this.getClass() == par1Obj.getClass())
+		else if (p_equals_1_ != null && this.getClass() == p_equals_1_.getClass())
 		{
-			ClickEvent clickevent = (ClickEvent)par1Obj;
+			ClickEvent clickevent = (ClickEvent)p_equals_1_;
 
 			if (this.action != clickevent.action)
 			{
@@ -79,6 +79,7 @@ public class ClickEvent
 		OPEN_URL("open_url", true),
 		OPEN_FILE("open_file", false),
 		RUN_COMMAND("run_command", true),
+		TWITCH_USER_INFO("twitch_user_info", false),
 		SUGGEST_COMMAND("suggest_command", true);
 		private static final Map nameMapping = Maps.newHashMap();
 		private final boolean allowedInChat;

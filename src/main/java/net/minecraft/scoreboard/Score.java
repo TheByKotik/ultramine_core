@@ -8,13 +8,13 @@ public class Score
 	public static final Comparator field_96658_a = new Comparator()
 	{
 		private static final String __OBFID = "CL_00000618";
-		public int compare(Score par1Score, Score par2Score)
+		public int compare(Score p_compare_1_, Score p_compare_2_)
 		{
-			return par1Score.getScorePoints() > par2Score.getScorePoints() ? 1 : (par1Score.getScorePoints() < par2Score.getScorePoints() ? -1 : 0);
+			return p_compare_1_.getScorePoints() > p_compare_2_.getScorePoints() ? 1 : (p_compare_1_.getScorePoints() < p_compare_2_.getScorePoints() ? -1 : 0);
 		}
-		public int compare(Object par1Obj, Object par2Obj)
+		public int compare(Object p_compare_1_, Object p_compare_2_)
 		{
-			return this.compare((Score)par1Obj, (Score)par2Obj);
+			return this.compare((Score)p_compare_1_, (Score)p_compare_2_);
 		}
 	};
 	private final Scoreboard theScoreboard;
@@ -23,14 +23,14 @@ public class Score
 	private int field_96655_e;
 	private static final String __OBFID = "CL_00000617";
 
-	public Score(Scoreboard par1Scoreboard, ScoreObjective par2ScoreObjective, String par3Str)
+	public Score(Scoreboard p_i2309_1_, ScoreObjective p_i2309_2_, String p_i2309_3_)
 	{
-		this.theScoreboard = par1Scoreboard;
-		this.theScoreObjective = par2ScoreObjective;
-		this.scorePlayerName = par3Str;
+		this.theScoreboard = p_i2309_1_;
+		this.theScoreObjective = p_i2309_2_;
+		this.scorePlayerName = p_i2309_3_;
 	}
 
-	public void increseScore(int par1)
+	public void increseScore(int p_96649_1_)
 	{
 		if (this.theScoreObjective.getCriteria().isReadOnly())
 		{
@@ -38,11 +38,11 @@ public class Score
 		}
 		else
 		{
-			this.setScorePoints(this.getScorePoints() + par1);
+			this.setScorePoints(this.getScorePoints() + p_96649_1_);
 		}
 	}
 
-	public void decreaseScore(int par1)
+	public void decreaseScore(int p_96646_1_)
 	{
 		if (this.theScoreObjective.getCriteria().isReadOnly())
 		{
@@ -50,7 +50,7 @@ public class Score
 		}
 		else
 		{
-			this.setScorePoints(this.getScorePoints() - par1);
+			this.setScorePoints(this.getScorePoints() - p_96646_1_);
 		}
 	}
 
@@ -71,12 +71,12 @@ public class Score
 		return this.field_96655_e;
 	}
 
-	public void setScorePoints(int par1)
+	public void setScorePoints(int p_96647_1_)
 	{
 		int j = this.field_96655_e;
-		this.field_96655_e = par1;
+		this.field_96655_e = p_96647_1_;
 
-		if (j != par1)
+		if (j != p_96647_1_)
 		{
 			this.getScoreScoreboard().func_96536_a(this);
 		}
@@ -97,8 +97,8 @@ public class Score
 		return this.theScoreboard;
 	}
 
-	public void func_96651_a(List par1List)
+	public void func_96651_a(List p_96651_1_)
 	{
-		this.setScorePoints(this.theScoreObjective.getCriteria().func_96635_a(par1List));
+		this.setScorePoints(this.theScoreObjective.getCriteria().func_96635_a(p_96651_1_));
 	}
 }

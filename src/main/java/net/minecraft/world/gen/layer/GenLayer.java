@@ -18,7 +18,7 @@ public abstract class GenLayer
 	protected long baseSeed;
 	private static final String __OBFID = "CL_00000559";
 
-	public static GenLayer[] initializeAllBiomeGenerators(long par0, WorldType par2WorldType)
+	public static GenLayer[] initializeAllBiomeGenerators(long p_75901_0_, WorldType p_75901_2_)
 	{
 		boolean flag = false;
 		GenLayerIsland genlayerisland = new GenLayerIsland(1L);
@@ -42,7 +42,7 @@ public abstract class GenLayer
 		GenLayer genlayer2 = GenLayerZoom.magnify(1000L, genlayerdeepocean, 0);
 		byte b0 = 4;
 
-		if (par2WorldType == WorldType.LARGE_BIOMES)
+		if (p_75901_2_ == WorldType.LARGE_BIOMES)
 		{
 			b0 = 6;
 		}
@@ -51,11 +51,11 @@ public abstract class GenLayer
 		{
 			b0 = 4;
 		}
-		b0 = getModdedBiomeSize(par2WorldType, b0);
+		b0 = getModdedBiomeSize(p_75901_2_, b0);
 
 		GenLayer genlayer = GenLayerZoom.magnify(1000L, genlayer2, 0);
 		GenLayerRiverInit genlayerriverinit = new GenLayerRiverInit(100L, genlayer);
-		Object object = par2WorldType.getBiomeLayer(par0, genlayer2);
+		Object object = p_75901_2_.getBiomeLayer(p_75901_0_, genlayer2);
 
 		GenLayer genlayer1 = GenLayerZoom.magnify(1000L, genlayerriverinit, 2);
 		GenLayerHills genlayerhills = new GenLayerHills(1000L, (GenLayer)object, genlayer1);
@@ -83,29 +83,29 @@ public abstract class GenLayer
 		GenLayerSmooth genlayersmooth1 = new GenLayerSmooth(1000L, (GenLayer)object);
 		GenLayerRiverMix genlayerrivermix = new GenLayerRiverMix(100L, genlayersmooth1, genlayersmooth);
 		GenLayerVoronoiZoom genlayervoronoizoom = new GenLayerVoronoiZoom(10L, genlayerrivermix);
-		genlayerrivermix.initWorldGenSeed(par0);
-		genlayervoronoizoom.initWorldGenSeed(par0);
+		genlayerrivermix.initWorldGenSeed(p_75901_0_);
+		genlayervoronoizoom.initWorldGenSeed(p_75901_0_);
 		return new GenLayer[] {genlayerrivermix, genlayervoronoizoom, genlayerrivermix};
 	}
 
-	public GenLayer(long par1)
+	public GenLayer(long p_i2125_1_)
 	{
-		this.baseSeed = par1;
+		this.baseSeed = p_i2125_1_;
 		this.baseSeed *= this.baseSeed * 6364136223846793005L + 1442695040888963407L;
-		this.baseSeed += par1;
+		this.baseSeed += p_i2125_1_;
 		this.baseSeed *= this.baseSeed * 6364136223846793005L + 1442695040888963407L;
-		this.baseSeed += par1;
+		this.baseSeed += p_i2125_1_;
 		this.baseSeed *= this.baseSeed * 6364136223846793005L + 1442695040888963407L;
-		this.baseSeed += par1;
+		this.baseSeed += p_i2125_1_;
 	}
 
-	public void initWorldGenSeed(long par1)
+	public void initWorldGenSeed(long p_75905_1_)
 	{
-		this.worldGenSeed = par1;
+		this.worldGenSeed = p_75905_1_;
 
 		if (this.parent != null)
 		{
-			this.parent.initWorldGenSeed(par1);
+			this.parent.initWorldGenSeed(p_75905_1_);
 		}
 
 		this.worldGenSeed *= this.worldGenSeed * 6364136223846793005L + 1442695040888963407L;
@@ -116,26 +116,26 @@ public abstract class GenLayer
 		this.worldGenSeed += this.baseSeed;
 	}
 
-	public void initChunkSeed(long par1, long par3)
+	public void initChunkSeed(long p_75903_1_, long p_75903_3_)
 	{
 		this.chunkSeed = this.worldGenSeed;
 		this.chunkSeed *= this.chunkSeed * 6364136223846793005L + 1442695040888963407L;
-		this.chunkSeed += par1;
+		this.chunkSeed += p_75903_1_;
 		this.chunkSeed *= this.chunkSeed * 6364136223846793005L + 1442695040888963407L;
-		this.chunkSeed += par3;
+		this.chunkSeed += p_75903_3_;
 		this.chunkSeed *= this.chunkSeed * 6364136223846793005L + 1442695040888963407L;
-		this.chunkSeed += par1;
+		this.chunkSeed += p_75903_1_;
 		this.chunkSeed *= this.chunkSeed * 6364136223846793005L + 1442695040888963407L;
-		this.chunkSeed += par3;
+		this.chunkSeed += p_75903_3_;
 	}
 
-	protected int nextInt(int par1)
+	protected int nextInt(int p_75902_1_)
 	{
-		int j = (int)((this.chunkSeed >> 24) % (long)par1);
+		int j = (int)((this.chunkSeed >> 24) % (long)p_75902_1_);
 
 		if (j < 0)
 		{
-			j += par1;
+			j += p_75902_1_;
 		}
 
 		this.chunkSeed *= this.chunkSeed * 6364136223846793005L + 1442695040888963407L;
@@ -143,23 +143,7 @@ public abstract class GenLayer
 		return j;
 	}
 
-	/* ======================================== FORGE START =====================================*/
-	protected long nextLong(long par1)
-	{
-		long j = (this.chunkSeed >> 24) % par1;
-
-		if (j < 0)
-		{
-			j += par1;
-		}
-
-		this.chunkSeed *= this.chunkSeed * 6364136223846793005L + 1442695040888963407L;
-		this.chunkSeed += this.worldGenSeed;
-		return j;
-	}
-	/* ========================================= FORGE END ======================================*/
-	
-	public abstract int[] getInts(int var1, int var2, int var3, int var4);
+	public abstract int[] getInts(int p_75904_1_, int p_75904_2_, int p_75904_3_, int p_75904_4_);
 
 	protected static boolean compareBiomesById(final int p_151616_0_, final int p_151616_1_)
 	{
@@ -219,10 +203,26 @@ public abstract class GenLayer
 		return p_151617_2_ == p_151617_3_ && p_151617_3_ == p_151617_4_ ? p_151617_2_ : (p_151617_1_ == p_151617_2_ && p_151617_1_ == p_151617_3_ ? p_151617_1_ : (p_151617_1_ == p_151617_2_ && p_151617_1_ == p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_3_ && p_151617_1_ == p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_2_ && p_151617_3_ != p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_3_ && p_151617_2_ != p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_4_ && p_151617_2_ != p_151617_3_ ? p_151617_1_ : (p_151617_2_ == p_151617_3_ && p_151617_1_ != p_151617_4_ ? p_151617_2_ : (p_151617_2_ == p_151617_4_ && p_151617_1_ != p_151617_3_ ? p_151617_2_ : (p_151617_3_ == p_151617_4_ && p_151617_1_ != p_151617_2_ ? p_151617_3_ : this.selectRandom(new int[] {p_151617_1_, p_151617_2_, p_151617_3_, p_151617_4_}))))))))));
 	}
 
+	/* ======================================== FORGE START =====================================*/
+	protected long nextLong(long par1)
+	{
+		long j = (this.chunkSeed >> 24) % par1;
+
+		if (j < 0)
+		{
+			j += par1;
+		}
+
+		this.chunkSeed *= this.chunkSeed * 6364136223846793005L + 1442695040888963407L;
+		this.chunkSeed += this.worldGenSeed;
+		return j;
+	}
+
 	public static byte getModdedBiomeSize(WorldType worldType, byte original)
 	{
 		WorldTypeEvent.BiomeSize event = new WorldTypeEvent.BiomeSize(worldType, original);
 		MinecraftForge.TERRAIN_GEN_BUS.post(event);
 		return event.newSize;
 	}
+	/* ========================================= FORGE END ======================================*/
 }

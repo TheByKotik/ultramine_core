@@ -25,16 +25,16 @@ public class Locale
 	private boolean field_135029_d;
 	private static final String __OBFID = "CL_00001097";
 
-	public synchronized void loadLocaleDataFiles(IResourceManager par1ResourceManager, List par2List)
+	public synchronized void loadLocaleDataFiles(IResourceManager p_135022_1_, List p_135022_2_)
 	{
 		this.field_135032_a.clear();
-		Iterator iterator = par2List.iterator();
+		Iterator iterator = p_135022_2_.iterator();
 
 		while (iterator.hasNext())
 		{
 			String s = (String)iterator.next();
 			String s1 = String.format("lang/%s.lang", new Object[] {s});
-			Iterator iterator1 = par1ResourceManager.getResourceDomains().iterator();
+			Iterator iterator1 = p_135022_1_.getResourceDomains().iterator();
 
 			while (iterator1.hasNext())
 			{
@@ -42,7 +42,7 @@ public class Locale
 
 				try
 				{
-					this.loadLocaleData(par1ResourceManager.getAllResources(new ResourceLocation(s2, s1)));
+					this.loadLocaleData(p_135022_1_.getAllResources(new ResourceLocation(s2, s1)));
 				}
 				catch (IOException ioexception)
 				{
@@ -85,9 +85,9 @@ public class Locale
 		this.field_135029_d = (double)f > 0.1D;
 	}
 
-	private void loadLocaleData(List par1List) throws IOException
+	private void loadLocaleData(List p_135028_1_) throws IOException
 	{
-		Iterator iterator = par1List.iterator();
+		Iterator iterator = p_135028_1_.iterator();
 
 		while (iterator.hasNext())
 		{
@@ -96,9 +96,9 @@ public class Locale
 		}
 	}
 
-	private void loadLocaleData(InputStream par1InputStream) throws IOException
+	private void loadLocaleData(InputStream p_135021_1_) throws IOException
 	{
-		Iterator iterator = IOUtils.readLines(par1InputStream, Charsets.UTF_8).iterator();
+		Iterator iterator = IOUtils.readLines(p_135021_1_, Charsets.UTF_8).iterator();
 
 		while (iterator.hasNext())
 		{
@@ -118,19 +118,19 @@ public class Locale
 		}
 	}
 
-	private String translateKeyPrivate(String par1Str)
+	private String translateKeyPrivate(String p_135026_1_)
 	{
-		String s1 = (String)this.field_135032_a.get(par1Str);
-		return s1 == null ? par1Str : s1;
+		String s1 = (String)this.field_135032_a.get(p_135026_1_);
+		return s1 == null ? p_135026_1_ : s1;
 	}
 
-	public String formatMessage(String par1Str, Object[] par2ArrayOfObj)
+	public String formatMessage(String p_135023_1_, Object[] p_135023_2_)
 	{
-		String s1 = this.translateKeyPrivate(par1Str);
+		String s1 = this.translateKeyPrivate(p_135023_1_);
 
 		try
 		{
-			return String.format(s1, par2ArrayOfObj);
+			return String.format(s1, p_135023_2_);
 		}
 		catch (IllegalFormatException illegalformatexception)
 		{

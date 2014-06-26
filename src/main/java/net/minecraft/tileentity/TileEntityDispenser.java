@@ -19,31 +19,31 @@ public class TileEntityDispenser extends TileEntity implements IInventory
 		return 9;
 	}
 
-	public ItemStack getStackInSlot(int par1)
+	public ItemStack getStackInSlot(int p_70301_1_)
 	{
-		return this.field_146022_i[par1];
+		return this.field_146022_i[p_70301_1_];
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
 	{
-		if (this.field_146022_i[par1] != null)
+		if (this.field_146022_i[p_70298_1_] != null)
 		{
 			ItemStack itemstack;
 
-			if (this.field_146022_i[par1].stackSize <= par2)
+			if (this.field_146022_i[p_70298_1_].stackSize <= p_70298_2_)
 			{
-				itemstack = this.field_146022_i[par1];
-				this.field_146022_i[par1] = null;
+				itemstack = this.field_146022_i[p_70298_1_];
+				this.field_146022_i[p_70298_1_] = null;
 				this.markDirty();
 				return itemstack;
 			}
 			else
 			{
-				itemstack = this.field_146022_i[par1].splitStack(par2);
+				itemstack = this.field_146022_i[p_70298_1_].splitStack(p_70298_2_);
 
-				if (this.field_146022_i[par1].stackSize == 0)
+				if (this.field_146022_i[p_70298_1_].stackSize == 0)
 				{
-					this.field_146022_i[par1] = null;
+					this.field_146022_i[p_70298_1_] = null;
 				}
 
 				this.markDirty();
@@ -56,12 +56,12 @@ public class TileEntityDispenser extends TileEntity implements IInventory
 		}
 	}
 
-	public ItemStack getStackInSlotOnClosing(int par1)
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_)
 	{
-		if (this.field_146022_i[par1] != null)
+		if (this.field_146022_i[p_70304_1_] != null)
 		{
-			ItemStack itemstack = this.field_146022_i[par1];
-			this.field_146022_i[par1] = null;
+			ItemStack itemstack = this.field_146022_i[p_70304_1_];
+			this.field_146022_i[p_70304_1_] = null;
 			return itemstack;
 		}
 		else
@@ -86,13 +86,13 @@ public class TileEntityDispenser extends TileEntity implements IInventory
 		return i;
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
-		this.field_146022_i[par1] = par2ItemStack;
+		this.field_146022_i[p_70299_1_] = p_70299_2_;
 
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		if (p_70299_2_ != null && p_70299_2_.stackSize > this.getInventoryStackLimit())
 		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
+			p_70299_2_.stackSize = this.getInventoryStackLimit();
 		}
 
 		this.markDirty();
@@ -179,16 +179,16 @@ public class TileEntityDispenser extends TileEntity implements IInventory
 		return 64;
 	}
 
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
 	{
-		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : p_70300_1_.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	public void openInventory() {}
 
 	public void closeInventory() {}
 
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
 		return true;
 	}

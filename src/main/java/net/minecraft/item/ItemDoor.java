@@ -20,15 +20,15 @@ public class ItemDoor extends Item
 		this.setCreativeTab(CreativeTabs.tabRedstone);
 	}
 
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
-		if (par7 != 1)
+		if (p_77648_7_ != 1)
 		{
 			return false;
 		}
 		else
 		{
-			++par5;
+			++p_77648_5_;
 			Block block;
 
 			if (this.doorMaterial == Material.wood)
@@ -40,17 +40,17 @@ public class ItemDoor extends Item
 				block = Blocks.iron_door;
 			}
 
-			if (par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack) && par2EntityPlayer.canPlayerEdit(par4, par5 + 1, par6, par7, par1ItemStack))
+			if (p_77648_2_.canPlayerEdit(p_77648_4_, p_77648_5_, p_77648_6_, p_77648_7_, p_77648_1_) && p_77648_2_.canPlayerEdit(p_77648_4_, p_77648_5_ + 1, p_77648_6_, p_77648_7_, p_77648_1_))
 			{
-				if (!block.canPlaceBlockAt(par3World, par4, par5, par6))
+				if (!block.canPlaceBlockAt(p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_))
 				{
 					return false;
 				}
 				else
 				{
-					int i1 = MathHelper.floor_double((double)((par2EntityPlayer.rotationYaw + 180.0F) * 4.0F / 360.0F) - 0.5D) & 3;
-					placeDoorBlock(par3World, par4, par5, par6, i1, block);
-					--par1ItemStack.stackSize;
+					int i1 = MathHelper.floor_double((double)((p_77648_2_.rotationYaw + 180.0F) * 4.0F / 360.0F) - 0.5D) & 3;
+					placeDoorBlock(p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_, i1, block);
+					--p_77648_1_.stackSize;
 					return true;
 				}
 			}

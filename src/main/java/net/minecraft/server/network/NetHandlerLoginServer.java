@@ -85,8 +85,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer
 	{
 		if (!this.field_147337_i.isComplete())
 		{
-			UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + this.field_147337_i.getName()).getBytes(Charsets.UTF_8));
-			this.field_147337_i = new GameProfile(uuid.toString().replaceAll("-", ""), this.field_147337_i.getName());
+			this.field_147337_i = this.func_152506_a(this.field_147337_i);
 		}
 
 		String s = this.field_147327_f.getConfigurationManager().allowUserToConnect(this.field_147333_a.getSocketAddress(), this.field_147337_i);
@@ -154,14 +153,22 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer
 				private static final String __OBFID = "CL_00001459";
 				public void run()
 				{
+					GameProfile gameprofile = NetHandlerLoginServer.this.field_147337_i;
+
 					try
 					{
 						String s = (new BigInteger(CryptManager.getServerIdHash(NetHandlerLoginServer.this.field_147334_j, NetHandlerLoginServer.this.field_147327_f.getKeyPair().getPublic(), NetHandlerLoginServer.this.field_147335_k))).toString(16);
-						NetHandlerLoginServer.this.field_147337_i = NetHandlerLoginServer.this.field_147327_f.func_147130_as().hasJoinedServer(new GameProfile((String)null, NetHandlerLoginServer.this.field_147337_i.getName()), s);
+						NetHandlerLoginServer.this.field_147337_i = NetHandlerLoginServer.this.field_147327_f.func_147130_as().hasJoinedServer(new GameProfile((UUID)null, gameprofile.getName()), s);
 
 						if (NetHandlerLoginServer.this.field_147337_i != null)
 						{
 							NetHandlerLoginServer.logger.info("UUID of player " + NetHandlerLoginServer.this.field_147337_i.getName() + " is " + NetHandlerLoginServer.this.field_147337_i.getId());
+							NetHandlerLoginServer.this.field_147328_g = NetHandlerLoginServer.LoginState.READY_TO_ACCEPT;
+						}
+						else if (NetHandlerLoginServer.this.field_147327_f.isSinglePlayer())
+						{
+							NetHandlerLoginServer.logger.warn("Failed to verify username but will let them in anyway!");
+							NetHandlerLoginServer.this.field_147337_i = NetHandlerLoginServer.this.func_152506_a(gameprofile);
 							NetHandlerLoginServer.this.field_147328_g = NetHandlerLoginServer.LoginState.READY_TO_ACCEPT;
 						}
 						else
@@ -172,12 +179,27 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer
 					}
 					catch (AuthenticationUnavailableException authenticationunavailableexception)
 					{
-						NetHandlerLoginServer.this.func_147322_a("Authentication servers are down. Please try again later, sorry!");
-						NetHandlerLoginServer.logger.error("Couldn\'t verify username because servers are unavailable");
+						if (NetHandlerLoginServer.this.field_147327_f.isSinglePlayer())
+						{
+							NetHandlerLoginServer.logger.warn("Authentication servers are down but will let them in anyway!");
+							NetHandlerLoginServer.this.field_147337_i = NetHandlerLoginServer.this.func_152506_a(gameprofile);
+							NetHandlerLoginServer.this.field_147328_g = NetHandlerLoginServer.LoginState.READY_TO_ACCEPT;
+						}
+						else
+						{
+							NetHandlerLoginServer.this.func_147322_a("Authentication servers are down. Please try again later, sorry!");
+							NetHandlerLoginServer.logger.error("Couldn\'t verify username because servers are unavailable");
+						}
 					}
 				}
 			}).start();
 		}
+	}
+
+	protected GameProfile func_152506_a(GameProfile p_152506_1_)
+	{
+		UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + p_152506_1_.getName()).getBytes(Charsets.UTF_8));
+		return new GameProfile(uuid, p_152506_1_.getName());
 	}
 
 	static enum LoginState

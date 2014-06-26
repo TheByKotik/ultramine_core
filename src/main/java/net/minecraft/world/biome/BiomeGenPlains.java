@@ -11,9 +11,9 @@ public class BiomeGenPlains extends BiomeGenBase
 	protected boolean field_150628_aC;
 	private static final String __OBFID = "CL_00000180";
 
-	public BiomeGenPlains(int par1)
+	public BiomeGenPlains(int p_i1986_1_)
 	{
-		super(par1);
+		super(p_i1986_1_);
 		this.setTemperatureRainfall(0.8F, 0.4F);
 		this.setHeight(height_LowPlains);
 		this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityHorse.class, 5, 2, 6));
@@ -52,9 +52,9 @@ public class BiomeGenPlains extends BiomeGenBase
 		}
 	}
 
-	public void decorate(World par1World, Random par2Random, int par3, int par4)
+	public void decorate(World p_76728_1_, Random p_76728_2_, int p_76728_3_, int p_76728_4_)
 	{
-		double d0 = plantNoise.func_151601_a((double)(par3 + 8) / 200.0D, (double)(par4 + 8) / 200.0D);
+		double d0 = plantNoise.func_151601_a((double)(p_76728_3_ + 8) / 200.0D, (double)(p_76728_4_ + 8) / 200.0D);
 		int k;
 		int l;
 		int i1;
@@ -73,10 +73,10 @@ public class BiomeGenPlains extends BiomeGenBase
 
 			for (k = 0; k < 7; ++k)
 			{
-				l = par3 + par2Random.nextInt(16) + 8;
-				i1 = par4 + par2Random.nextInt(16) + 8;
-				j1 = par2Random.nextInt(par1World.getHeightValue(l, i1) + 32);
-				genTallFlowers.generate(par1World, par2Random, l, j1, i1);
+				l = p_76728_3_ + p_76728_2_.nextInt(16) + 8;
+				i1 = p_76728_4_ + p_76728_2_.nextInt(16) + 8;
+				j1 = p_76728_2_.nextInt(p_76728_1_.getHeightValue(l, i1) + 32);
+				genTallFlowers.generate(p_76728_1_, p_76728_2_, l, j1, i1);
 			}
 		}
 
@@ -86,14 +86,14 @@ public class BiomeGenPlains extends BiomeGenBase
 
 			for (k = 0; k < 10; ++k)
 			{
-				l = par3 + par2Random.nextInt(16) + 8;
-				i1 = par4 + par2Random.nextInt(16) + 8;
-				j1 = par2Random.nextInt(par1World.getHeightValue(l, i1) + 32);
-				genTallFlowers.generate(par1World, par2Random, l, j1, i1);
+				l = p_76728_3_ + p_76728_2_.nextInt(16) + 8;
+				i1 = p_76728_4_ + p_76728_2_.nextInt(16) + 8;
+				j1 = p_76728_2_.nextInt(p_76728_1_.getHeightValue(l, i1) + 32);
+				genTallFlowers.generate(p_76728_1_, p_76728_2_, l, j1, i1);
 			}
 		}
 
-		super.decorate(par1World, par2Random, par3, par4);
+		super.decorate(p_76728_1_, p_76728_2_, p_76728_3_, p_76728_4_);
 	}
 
 	public BiomeGenBase createMutation()

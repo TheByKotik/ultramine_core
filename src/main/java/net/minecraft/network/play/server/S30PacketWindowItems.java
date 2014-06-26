@@ -56,9 +56,9 @@ public class S30PacketWindowItems extends Packet
 		}
 	}
 
-	public void processPacket(INetHandlerPlayClient p_148912_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_148912_1_.handleWindowItems(this);
+		p_148833_1_.handleWindowItems(this);
 	}
 
 	public void processPacket(INetHandler p_148833_1_)

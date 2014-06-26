@@ -20,94 +20,94 @@ public class SlotCrafting extends Slot
 	private int amountCrafted;
 	private static final String __OBFID = "CL_00001761";
 
-	public SlotCrafting(EntityPlayer par1EntityPlayer, IInventory par2IInventory, IInventory par3IInventory, int par4, int par5, int par6)
+	public SlotCrafting(EntityPlayer p_i1823_1_, IInventory p_i1823_2_, IInventory p_i1823_3_, int p_i1823_4_, int p_i1823_5_, int p_i1823_6_)
 	{
-		super(par3IInventory, par4, par5, par6);
-		this.thePlayer = par1EntityPlayer;
-		this.craftMatrix = par2IInventory;
+		super(p_i1823_3_, p_i1823_4_, p_i1823_5_, p_i1823_6_);
+		this.thePlayer = p_i1823_1_;
+		this.craftMatrix = p_i1823_2_;
 	}
 
-	public boolean isItemValid(ItemStack par1ItemStack)
+	public boolean isItemValid(ItemStack p_75214_1_)
 	{
 		return false;
 	}
 
-	public ItemStack decrStackSize(int par1)
+	public ItemStack decrStackSize(int p_75209_1_)
 	{
 		if (this.getHasStack())
 		{
-			this.amountCrafted += Math.min(par1, this.getStack().stackSize);
+			this.amountCrafted += Math.min(p_75209_1_, this.getStack().stackSize);
 		}
 
-		return super.decrStackSize(par1);
+		return super.decrStackSize(p_75209_1_);
 	}
 
-	protected void onCrafting(ItemStack par1ItemStack, int par2)
+	protected void onCrafting(ItemStack p_75210_1_, int p_75210_2_)
 	{
-		this.amountCrafted += par2;
-		this.onCrafting(par1ItemStack);
+		this.amountCrafted += p_75210_2_;
+		this.onCrafting(p_75210_1_);
 	}
 
-	protected void onCrafting(ItemStack par1ItemStack)
+	protected void onCrafting(ItemStack p_75208_1_)
 	{
-		par1ItemStack.onCrafting(this.thePlayer.worldObj, this.thePlayer, this.amountCrafted);
+		p_75208_1_.onCrafting(this.thePlayer.worldObj, this.thePlayer, this.amountCrafted);
 		this.amountCrafted = 0;
 
-		if (par1ItemStack.getItem() == Item.getItemFromBlock(Blocks.crafting_table))
+		if (p_75208_1_.getItem() == Item.getItemFromBlock(Blocks.crafting_table))
 		{
 			this.thePlayer.addStat(AchievementList.buildWorkBench, 1);
 		}
 
-		if (par1ItemStack.getItem() instanceof ItemPickaxe)
+		if (p_75208_1_.getItem() instanceof ItemPickaxe)
 		{
 			this.thePlayer.addStat(AchievementList.buildPickaxe, 1);
 		}
 
-		if (par1ItemStack.getItem() == Item.getItemFromBlock(Blocks.furnace))
+		if (p_75208_1_.getItem() == Item.getItemFromBlock(Blocks.furnace))
 		{
 			this.thePlayer.addStat(AchievementList.buildFurnace, 1);
 		}
 
-		if (par1ItemStack.getItem() instanceof ItemHoe)
+		if (p_75208_1_.getItem() instanceof ItemHoe)
 		{
 			this.thePlayer.addStat(AchievementList.buildHoe, 1);
 		}
 
-		if (par1ItemStack.getItem() == Items.bread)
+		if (p_75208_1_.getItem() == Items.bread)
 		{
 			this.thePlayer.addStat(AchievementList.makeBread, 1);
 		}
 
-		if (par1ItemStack.getItem() == Items.cake)
+		if (p_75208_1_.getItem() == Items.cake)
 		{
 			this.thePlayer.addStat(AchievementList.bakeCake, 1);
 		}
 
-		if (par1ItemStack.getItem() instanceof ItemPickaxe && ((ItemPickaxe)par1ItemStack.getItem()).func_150913_i() != Item.ToolMaterial.WOOD)
+		if (p_75208_1_.getItem() instanceof ItemPickaxe && ((ItemPickaxe)p_75208_1_.getItem()).func_150913_i() != Item.ToolMaterial.WOOD)
 		{
 			this.thePlayer.addStat(AchievementList.buildBetterPickaxe, 1);
 		}
 
-		if (par1ItemStack.getItem() instanceof ItemSword)
+		if (p_75208_1_.getItem() instanceof ItemSword)
 		{
 			this.thePlayer.addStat(AchievementList.buildSword, 1);
 		}
 
-		if (par1ItemStack.getItem() == Item.getItemFromBlock(Blocks.enchanting_table))
+		if (p_75208_1_.getItem() == Item.getItemFromBlock(Blocks.enchanting_table))
 		{
 			this.thePlayer.addStat(AchievementList.enchantments, 1);
 		}
 
-		if (par1ItemStack.getItem() == Item.getItemFromBlock(Blocks.bookshelf))
+		if (p_75208_1_.getItem() == Item.getItemFromBlock(Blocks.bookshelf))
 		{
 			this.thePlayer.addStat(AchievementList.bookcase, 1);
 		}
 	}
 
-	public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
+	public void onPickupFromSlot(EntityPlayer p_82870_1_, ItemStack p_82870_2_)
 	{
-		FMLCommonHandler.instance().firePlayerCraftingEvent(par1EntityPlayer, par2ItemStack, craftMatrix);
-		this.onCrafting(par2ItemStack);
+		FMLCommonHandler.instance().firePlayerCraftingEvent(p_82870_1_, p_82870_2_, craftMatrix);
+		this.onCrafting(p_82870_2_);
 
 		for (int i = 0; i < this.craftMatrix.getSizeInventory(); ++i)
 		{

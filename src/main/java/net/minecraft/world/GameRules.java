@@ -23,34 +23,34 @@ public class GameRules
 		this.addGameRule("doDaylightCycle", "true");
 	}
 
-	public void addGameRule(String par1Str, String par2Str)
+	public void addGameRule(String p_82769_1_, String p_82769_2_)
 	{
-		this.theGameRules.put(par1Str, new GameRules.Value(par2Str));
+		this.theGameRules.put(p_82769_1_, new GameRules.Value(p_82769_2_));
 	}
 
-	public void setOrCreateGameRule(String par1Str, String par2Str)
+	public void setOrCreateGameRule(String p_82764_1_, String p_82764_2_)
 	{
-		GameRules.Value value = (GameRules.Value)this.theGameRules.get(par1Str);
+		GameRules.Value value = (GameRules.Value)this.theGameRules.get(p_82764_1_);
 
 		if (value != null)
 		{
-			value.setValue(par2Str);
+			value.setValue(p_82764_2_);
 		}
 		else
 		{
-			this.addGameRule(par1Str, par2Str);
+			this.addGameRule(p_82764_1_, p_82764_2_);
 		}
 	}
 
-	public String getGameRuleStringValue(String par1Str)
+	public String getGameRuleStringValue(String p_82767_1_)
 	{
-		GameRules.Value value = (GameRules.Value)this.theGameRules.get(par1Str);
+		GameRules.Value value = (GameRules.Value)this.theGameRules.get(p_82767_1_);
 		return value != null ? value.getGameRuleStringValue() : "";
 	}
 
-	public boolean getGameRuleBooleanValue(String par1Str)
+	public boolean getGameRuleBooleanValue(String p_82766_1_)
 	{
-		GameRules.Value value = (GameRules.Value)this.theGameRules.get(par1Str);
+		GameRules.Value value = (GameRules.Value)this.theGameRules.get(p_82766_1_);
 		return value != null ? value.getGameRuleBooleanValue() : false;
 	}
 
@@ -69,15 +69,15 @@ public class GameRules
 		return nbttagcompound;
 	}
 
-	public void readGameRulesFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readGameRulesFromNBT(NBTTagCompound p_82768_1_)
 	{
-		Set set = par1NBTTagCompound.func_150296_c();
+		Set set = p_82768_1_.func_150296_c();
 		Iterator iterator = set.iterator();
 
 		while (iterator.hasNext())
 		{
 			String s = (String)iterator.next();
-			String s1 = par1NBTTagCompound.getString(s);
+			String s1 = p_82768_1_.getString(s);
 			this.setOrCreateGameRule(s, s1);
 		}
 	}
@@ -87,9 +87,9 @@ public class GameRules
 		return (String[])this.theGameRules.keySet().toArray(new String[0]);
 	}
 
-	public boolean hasRule(String par1Str)
+	public boolean hasRule(String p_82765_1_)
 	{
-		return this.theGameRules.containsKey(par1Str);
+		return this.theGameRules.containsKey(p_82765_1_);
 	}
 
 	static class Value
@@ -100,19 +100,19 @@ public class GameRules
 			private double valueDouble;
 			private static final String __OBFID = "CL_00000137";
 
-			public Value(String par1Str)
+			public Value(String p_i1949_1_)
 			{
-				this.setValue(par1Str);
+				this.setValue(p_i1949_1_);
 			}
 
-			public void setValue(String par1Str)
+			public void setValue(String p_82757_1_)
 			{
-				this.valueString = par1Str;
-				this.valueBoolean = Boolean.parseBoolean(par1Str);
+				this.valueString = p_82757_1_;
+				this.valueBoolean = Boolean.parseBoolean(p_82757_1_);
 
 				try
 				{
-					this.valueInteger = Integer.parseInt(par1Str);
+					this.valueInteger = Integer.parseInt(p_82757_1_);
 				}
 				catch (NumberFormatException numberformatexception1)
 				{
@@ -121,7 +121,7 @@ public class GameRules
 
 				try
 				{
-					this.valueDouble = Double.parseDouble(par1Str);
+					this.valueDouble = Double.parseDouble(p_82757_1_);
 				}
 				catch (NumberFormatException numberformatexception)
 				{

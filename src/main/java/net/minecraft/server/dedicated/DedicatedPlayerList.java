@@ -1,13 +1,9 @@
 package net.minecraft.server.dedicated;
 
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.Iterator;
+import java.io.IOException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import org.apache.logging.log4j.LogManager;
@@ -17,67 +13,63 @@ import org.apache.logging.log4j.Logger;
 public class DedicatedPlayerList extends ServerConfigurationManager
 {
 	private static final Logger field_164439_d = LogManager.getLogger();
-	private File opsList;
-	private File whiteList;
 	private static final String __OBFID = "CL_00001783";
 
-	public DedicatedPlayerList(DedicatedServer par1DedicatedServer)
+	public DedicatedPlayerList(DedicatedServer p_i1503_1_)
 	{
-		super(par1DedicatedServer);
-		this.opsList = par1DedicatedServer.getFile("ops.txt");
-		this.whiteList = par1DedicatedServer.getFile("white-list.txt");
-		this.viewDistance = par1DedicatedServer.getIntProperty("view-distance", 10);
-		this.maxPlayers = par1DedicatedServer.getIntProperty("max-players", 20);
-		this.setWhiteListEnabled(par1DedicatedServer.getBooleanProperty("white-list", false));
+		super(p_i1503_1_);
+		this.func_152611_a(p_i1503_1_.getIntProperty("view-distance", 10));
+		this.maxPlayers = p_i1503_1_.getIntProperty("max-players", 20);
+		this.setWhiteListEnabled(p_i1503_1_.getBooleanProperty("white-list", false));
 
-		if (!par1DedicatedServer.isSinglePlayer())
+		if (!p_i1503_1_.isSinglePlayer())
 		{
-			this.getBannedPlayers().setListActive(true);
-			this.getBannedIPs().setListActive(true);
+			this.func_152608_h().func_152686_a(true);
+			this.getBannedIPs().func_152686_a(true);
 		}
 
-		this.getBannedPlayers().loadBanList();
-		this.getBannedPlayers().saveToFileWithHeader();
-		this.getBannedIPs().loadBanList();
-		this.getBannedIPs().saveToFileWithHeader();
+		this.func_152620_y();
+		this.func_152617_w();
+		this.func_152619_x();
+		this.func_152618_v();
 		this.loadOpsList();
 		this.readWhiteList();
 		this.saveOpsList();
 
-		if (!this.whiteList.exists())
+		if (!this.func_152599_k().func_152691_c().exists())
 		{
 			this.saveWhiteList();
 		}
 	}
 
-	public void setWhiteListEnabled(boolean par1)
+	public void setWhiteListEnabled(boolean p_72371_1_)
 	{
-		super.setWhiteListEnabled(par1);
-		this.getServerInstance().setProperty("white-list", Boolean.valueOf(par1));
+		super.setWhiteListEnabled(p_72371_1_);
+		this.getServerInstance().setProperty("white-list", Boolean.valueOf(p_72371_1_));
 		this.getServerInstance().saveProperties();
 	}
 
-	public void addOp(String par1Str)
+	public void func_152605_a(GameProfile p_152605_1_)
 	{
-		super.addOp(par1Str);
+		super.func_152605_a(p_152605_1_);
 		this.saveOpsList();
 	}
 
-	public void removeOp(String par1Str)
+	public void func_152610_b(GameProfile p_152610_1_)
 	{
-		super.removeOp(par1Str);
+		super.func_152610_b(p_152610_1_);
 		this.saveOpsList();
 	}
 
-	public void removeFromWhitelist(String par1Str)
+	public void func_152597_c(GameProfile p_152597_1_)
 	{
-		super.removeFromWhitelist(par1Str);
+		super.func_152597_c(p_152597_1_);
 		this.saveWhiteList();
 	}
 
-	public void addToWhiteList(String par1Str)
+	public void func_152601_d(GameProfile p_152601_1_)
 	{
-		super.addToWhiteList(par1Str);
+		super.func_152601_d(p_152601_1_);
 		this.saveWhiteList();
 	}
 
@@ -86,24 +78,63 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 		this.readWhiteList();
 	}
 
+	private void func_152618_v()
+	{
+		try
+		{
+			this.getBannedIPs().func_152678_f();
+		}
+		catch (IOException ioexception)
+		{
+			field_164439_d.warn("Failed to save ip banlist: ", ioexception);
+		}
+	}
+
+	private void func_152617_w()
+	{
+		try
+		{
+			this.func_152608_h().func_152678_f();
+		}
+		catch (IOException ioexception)
+		{
+			field_164439_d.warn("Failed to save user banlist: ", ioexception);
+		}
+	}
+
+	private void func_152619_x()
+	{
+		try
+		{
+			this.getBannedIPs().func_152679_g();
+		}
+		catch (IOException ioexception)
+		{
+			field_164439_d.warn("Failed to load ip banlist: ", ioexception);
+		}
+	}
+
+	private void func_152620_y()
+	{
+		try
+		{
+			this.func_152608_h().func_152679_g();
+		}
+		catch (IOException ioexception)
+		{
+			field_164439_d.warn("Failed to load user banlist: ", ioexception);
+		}
+	}
+
 	private void loadOpsList()
 	{
 		try
 		{
-			this.getOps().clear();
-			BufferedReader bufferedreader = new BufferedReader(new FileReader(this.opsList));
-			String s = "";
-
-			while ((s = bufferedreader.readLine()) != null)
-			{
-				this.getOps().add(s.trim().toLowerCase());
-			}
-
-			bufferedreader.close();
+			this.func_152603_m().func_152679_g();
 		}
 		catch (Exception exception)
 		{
-			field_164439_d.warn("Failed to load operators list: " + exception);
+			field_164439_d.warn("Failed to load operators list: ", exception);
 		}
 	}
 
@@ -111,20 +142,11 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 	{
 		try
 		{
-			PrintWriter printwriter = new PrintWriter(new FileWriter(this.opsList, false));
-			Iterator iterator = this.getOps().iterator();
-
-			while (iterator.hasNext())
-			{
-				String s = (String)iterator.next();
-				printwriter.println(s);
-			}
-
-			printwriter.close();
+			this.func_152603_m().func_152678_f();
 		}
 		catch (Exception exception)
 		{
-			field_164439_d.warn("Failed to save operators list: " + exception);
+			field_164439_d.warn("Failed to save operators list: ", exception);
 		}
 	}
 
@@ -132,20 +154,11 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 	{
 		try
 		{
-			this.getWhiteListedPlayers().clear();
-			BufferedReader bufferedreader = new BufferedReader(new FileReader(this.whiteList));
-			String s = "";
-
-			while ((s = bufferedreader.readLine()) != null)
-			{
-				this.getWhiteListedPlayers().add(s.trim().toLowerCase());
-			}
-
-			bufferedreader.close();
+			this.func_152599_k().func_152679_g();
 		}
 		catch (Exception exception)
 		{
-			field_164439_d.warn("Failed to load white-list: " + exception);
+			field_164439_d.warn("Failed to load white-list: ", exception);
 		}
 	}
 
@@ -153,27 +166,17 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 	{
 		try
 		{
-			PrintWriter printwriter = new PrintWriter(new FileWriter(this.whiteList, false));
-			Iterator iterator = this.getWhiteListedPlayers().iterator();
-
-			while (iterator.hasNext())
-			{
-				String s = (String)iterator.next();
-				printwriter.println(s);
-			}
-
-			printwriter.close();
+			this.func_152599_k().func_152678_f();
 		}
 		catch (Exception exception)
 		{
-			field_164439_d.warn("Failed to save white-list: " + exception);
+			field_164439_d.warn("Failed to save white-list: ", exception);
 		}
 	}
 
-	public boolean isAllowedToLogin(String par1Str)
+	public boolean func_152607_e(GameProfile p_152607_1_)
 	{
-		par1Str = par1Str.trim().toLowerCase();
-		return !this.isWhiteListEnabled() || this.isPlayerOpped(par1Str) || this.getWhiteListedPlayers().contains(par1Str);
+		return !this.isWhiteListEnabled() || this.func_152596_g(p_152607_1_) || this.func_152599_k().func_152705_a(p_152607_1_);
 	}
 
 	public DedicatedServer getServerInstance()

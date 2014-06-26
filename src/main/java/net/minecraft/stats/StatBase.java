@@ -24,9 +24,9 @@ public class StatBase
 	{
 		private static final String __OBFID = "CL_00001473";
 		@SideOnly(Side.CLIENT)
-		public String format(int par1)
+		public String format(int p_75843_1_)
 		{
-			return StatBase.numberFormat.format((long)par1);
+			return StatBase.numberFormat.format((long)p_75843_1_);
 		}
 	};
 	private static DecimalFormat decimalFormat = new DecimalFormat("########0.00");
@@ -34,9 +34,9 @@ public class StatBase
 	{
 		private static final String __OBFID = "CL_00001474";
 		@SideOnly(Side.CLIENT)
-		public String format(int par1)
+		public String format(int p_75843_1_)
 		{
-			double d0 = (double)par1 / 20.0D;
+			double d0 = (double)p_75843_1_ / 20.0D;
 			double d1 = d0 / 60.0D;
 			double d2 = d1 / 60.0D;
 			double d3 = d2 / 24.0D;
@@ -48,20 +48,20 @@ public class StatBase
 	{
 		private static final String __OBFID = "CL_00001475";
 		@SideOnly(Side.CLIENT)
-		public String format(int par1)
+		public String format(int p_75843_1_)
 		{
-			double d0 = (double)par1 / 100.0D;
+			double d0 = (double)p_75843_1_ / 100.0D;
 			double d1 = d0 / 1000.0D;
-			return d1 > 0.5D ? StatBase.decimalFormat.format(d1) + " km" : (d0 > 0.5D ? StatBase.decimalFormat.format(d0) + " m" : par1 + " cm");
+			return d1 > 0.5D ? StatBase.decimalFormat.format(d1) + " km" : (d0 > 0.5D ? StatBase.decimalFormat.format(d0) + " m" : p_75843_1_ + " cm");
 		}
 	};
 	public static IStatType field_111202_k = new IStatType()
 	{
 		private static final String __OBFID = "CL_00001476";
 		@SideOnly(Side.CLIENT)
-		public String format(int par1)
+		public String format(int p_75843_1_)
 		{
-			return StatBase.decimalFormat.format((double)par1 * 0.1D);
+			return StatBase.decimalFormat.format((double)p_75843_1_ * 0.1D);
 		}
 	};
 	private static final String __OBFID = "CL_00001472";
@@ -106,9 +106,9 @@ public class StatBase
 	}
 
 	@SideOnly(Side.CLIENT)
-	public String func_75968_a(int par1)
+	public String func_75968_a(int p_75968_1_)
 	{
-		return this.type.format(par1);
+		return this.type.format(p_75968_1_);
 	}
 
 	public IChatComponent func_150951_e()
@@ -127,15 +127,15 @@ public class StatBase
 		return ichatcomponent1;
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (this == par1Obj)
+		if (this == p_equals_1_)
 		{
 			return true;
 		}
-		else if (par1Obj != null && this.getClass() == par1Obj.getClass())
+		else if (p_equals_1_ != null && this.getClass() == p_equals_1_.getClass())
 		{
-			StatBase statbase = (StatBase)par1Obj;
+			StatBase statbase = (StatBase)p_equals_1_;
 			return this.statId.equals(statbase.statId);
 		}
 		else

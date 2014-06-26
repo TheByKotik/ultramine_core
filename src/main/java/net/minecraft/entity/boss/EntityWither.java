@@ -46,16 +46,16 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 	private static final IEntitySelector attackEntitySelector = new IEntitySelector()
 	{
 		private static final String __OBFID = "CL_00001662";
-		public boolean isEntityApplicable(Entity par1Entity)
+		public boolean isEntityApplicable(Entity p_82704_1_)
 		{
-			return par1Entity instanceof EntityLivingBase && ((EntityLivingBase)par1Entity).getCreatureAttribute() != EnumCreatureAttribute.UNDEAD;
+			return p_82704_1_ instanceof EntityLivingBase && ((EntityLivingBase)p_82704_1_).getCreatureAttribute() != EnumCreatureAttribute.UNDEAD;
 		}
 	};
 	private static final String __OBFID = "CL_00001661";
 
-	public EntityWither(World par1World)
+	public EntityWither(World p_i1701_1_)
 	{
-		super(par1World);
+		super(p_i1701_1_);
 		this.setHealth(this.getMaxHealth());
 		this.setSize(0.9F, 4.0F);
 		this.isImmuneToFire = true;
@@ -79,16 +79,16 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 		this.dataWatcher.addObject(20, new Integer(0));
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setInteger("Invul", this.func_82212_n());
+		super.writeEntityToNBT(p_70014_1_);
+		p_70014_1_.setInteger("Invul", this.func_82212_n());
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
-		this.func_82215_s(par1NBTTagCompound.getInteger("Invul"));
+		super.readEntityFromNBT(p_70037_1_);
+		this.func_82215_s(p_70037_1_.getInteger("Invul"));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -382,73 +382,73 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 		return 4;
 	}
 
-	private double func_82214_u(int par1)
+	private double func_82214_u(int p_82214_1_)
 	{
-		if (par1 <= 0)
+		if (p_82214_1_ <= 0)
 		{
 			return this.posX;
 		}
 		else
 		{
-			float f = (this.renderYawOffset + (float)(180 * (par1 - 1))) / 180.0F * (float)Math.PI;
+			float f = (this.renderYawOffset + (float)(180 * (p_82214_1_ - 1))) / 180.0F * (float)Math.PI;
 			float f1 = MathHelper.cos(f);
 			return this.posX + (double)f1 * 1.3D;
 		}
 	}
 
-	private double func_82208_v(int par1)
+	private double func_82208_v(int p_82208_1_)
 	{
-		return par1 <= 0 ? this.posY + 3.0D : this.posY + 2.2D;
+		return p_82208_1_ <= 0 ? this.posY + 3.0D : this.posY + 2.2D;
 	}
 
-	private double func_82213_w(int par1)
+	private double func_82213_w(int p_82213_1_)
 	{
-		if (par1 <= 0)
+		if (p_82213_1_ <= 0)
 		{
 			return this.posZ;
 		}
 		else
 		{
-			float f = (this.renderYawOffset + (float)(180 * (par1 - 1))) / 180.0F * (float)Math.PI;
+			float f = (this.renderYawOffset + (float)(180 * (p_82213_1_ - 1))) / 180.0F * (float)Math.PI;
 			float f1 = MathHelper.sin(f);
 			return this.posZ + (double)f1 * 1.3D;
 		}
 	}
 
-	private float func_82204_b(float par1, float par2, float par3)
+	private float func_82204_b(float p_82204_1_, float p_82204_2_, float p_82204_3_)
 	{
-		float f3 = MathHelper.wrapAngleTo180_float(par2 - par1);
+		float f3 = MathHelper.wrapAngleTo180_float(p_82204_2_ - p_82204_1_);
 
-		if (f3 > par3)
+		if (f3 > p_82204_3_)
 		{
-			f3 = par3;
+			f3 = p_82204_3_;
 		}
 
-		if (f3 < -par3)
+		if (f3 < -p_82204_3_)
 		{
-			f3 = -par3;
+			f3 = -p_82204_3_;
 		}
 
-		return par1 + f3;
+		return p_82204_1_ + f3;
 	}
 
-	private void func_82216_a(int par1, EntityLivingBase par2EntityLivingBase)
+	private void func_82216_a(int p_82216_1_, EntityLivingBase p_82216_2_)
 	{
-		this.func_82209_a(par1, par2EntityLivingBase.posX, par2EntityLivingBase.posY + (double)par2EntityLivingBase.getEyeHeight() * 0.5D, par2EntityLivingBase.posZ, par1 == 0 && this.rand.nextFloat() < 0.001F);
+		this.func_82209_a(p_82216_1_, p_82216_2_.posX, p_82216_2_.posY + (double)p_82216_2_.getEyeHeight() * 0.5D, p_82216_2_.posZ, p_82216_1_ == 0 && this.rand.nextFloat() < 0.001F);
 	}
 
-	private void func_82209_a(int par1, double par2, double par4, double par6, boolean par8)
+	private void func_82209_a(int p_82209_1_, double p_82209_2_, double p_82209_4_, double p_82209_6_, boolean p_82209_8_)
 	{
 		this.worldObj.playAuxSFXAtEntity((EntityPlayer)null, 1014, (int)this.posX, (int)this.posY, (int)this.posZ, 0);
-		double d3 = this.func_82214_u(par1);
-		double d4 = this.func_82208_v(par1);
-		double d5 = this.func_82213_w(par1);
-		double d6 = par2 - d3;
-		double d7 = par4 - d4;
-		double d8 = par6 - d5;
+		double d3 = this.func_82214_u(p_82209_1_);
+		double d4 = this.func_82208_v(p_82209_1_);
+		double d5 = this.func_82213_w(p_82209_1_);
+		double d6 = p_82209_2_ - d3;
+		double d7 = p_82209_4_ - d4;
+		double d8 = p_82209_6_ - d5;
 		EntityWitherSkull entitywitherskull = new EntityWitherSkull(this.worldObj, this, d6, d7, d8);
 
-		if (par8)
+		if (p_82209_8_)
 		{
 			entitywitherskull.setInvulnerable(true);
 		}
@@ -459,18 +459,18 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 		this.worldObj.spawnEntityInWorld(entitywitherskull);
 	}
 
-	public void attackEntityWithRangedAttack(EntityLivingBase par1EntityLivingBase, float par2)
+	public void attackEntityWithRangedAttack(EntityLivingBase p_82196_1_, float p_82196_2_)
 	{
-		this.func_82216_a(0, par1EntityLivingBase);
+		this.func_82216_a(0, p_82196_1_);
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		if (this.isEntityInvulnerable())
 		{
 			return false;
 		}
-		else if (par1DamageSource == DamageSource.drown)
+		else if (p_70097_1_ == DamageSource.drown)
 		{
 			return false;
 		}
@@ -484,7 +484,7 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 
 			if (this.isArmored())
 			{
-				entity = par1DamageSource.getSourceOfDamage();
+				entity = p_70097_1_.getSourceOfDamage();
 
 				if (entity instanceof EntityArrow)
 				{
@@ -492,7 +492,7 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 				}
 			}
 
-			entity = par1DamageSource.getEntity();
+			entity = p_70097_1_.getEntity();
 
 			if (entity != null && !(entity instanceof EntityPlayer) && entity instanceof EntityLivingBase && ((EntityLivingBase)entity).getCreatureAttribute() == this.getCreatureAttribute())
 			{
@@ -510,12 +510,12 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 					this.field_82224_i[i] += 3;
 				}
 
-				return super.attackEntityFrom(par1DamageSource, par2);
+				return super.attackEntityFrom(p_70097_1_, p_70097_2_);
 			}
 		}
 	}
 
-	protected void dropFewItems(boolean par1, int par2)
+	protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
 	{
 		this.dropItem(Items.nether_star, 1);
 
@@ -537,14 +537,14 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getBrightnessForRender(float par1)
+	public int getBrightnessForRender(float p_70070_1_)
 	{
 		return 15728880;
 	}
 
-	protected void fall(float par1) {}
+	protected void fall(float p_70069_1_) {}
 
-	public void addPotionEffect(PotionEffect par1PotionEffect) {}
+	public void addPotionEffect(PotionEffect p_70690_1_) {}
 
 	protected boolean isAIEnabled()
 	{
@@ -560,15 +560,15 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 	}
 
 	@SideOnly(Side.CLIENT)
-	public float func_82207_a(int par1)
+	public float func_82207_a(int p_82207_1_)
 	{
-		return this.field_82221_e[par1];
+		return this.field_82221_e[p_82207_1_];
 	}
 
 	@SideOnly(Side.CLIENT)
-	public float func_82210_r(int par1)
+	public float func_82210_r(int p_82210_1_)
 	{
-		return this.field_82220_d[par1];
+		return this.field_82220_d[p_82210_1_];
 	}
 
 	public int func_82212_n()
@@ -576,19 +576,19 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 		return this.dataWatcher.getWatchableObjectInt(20);
 	}
 
-	public void func_82215_s(int par1)
+	public void func_82215_s(int p_82215_1_)
 	{
-		this.dataWatcher.updateObject(20, Integer.valueOf(par1));
+		this.dataWatcher.updateObject(20, Integer.valueOf(p_82215_1_));
 	}
 
-	public int getWatchedTargetId(int par1)
+	public int getWatchedTargetId(int p_82203_1_)
 	{
-		return this.dataWatcher.getWatchableObjectInt(17 + par1);
+		return this.dataWatcher.getWatchableObjectInt(17 + p_82203_1_);
 	}
 
-	public void func_82211_c(int par1, int par2)
+	public void func_82211_c(int p_82211_1_, int p_82211_2_)
 	{
-		this.dataWatcher.updateObject(17 + par1, Integer.valueOf(par2));
+		this.dataWatcher.updateObject(17 + p_82211_1_, Integer.valueOf(p_82211_2_));
 	}
 
 	public boolean isArmored()
@@ -601,7 +601,7 @@ public class EntityWither extends EntityMob implements IBossDisplayData, IRanged
 		return EnumCreatureAttribute.UNDEAD;
 	}
 
-	public void mountEntity(Entity par1Entity)
+	public void mountEntity(Entity p_70078_1_)
 	{
 		this.ridingEntity = null;
 	}

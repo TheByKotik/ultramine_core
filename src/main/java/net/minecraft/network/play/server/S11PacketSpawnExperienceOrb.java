@@ -48,9 +48,9 @@ public class S11PacketSpawnExperienceOrb extends Packet
 		p_148840_1_.writeShort(this.field_148989_e);
 	}
 
-	public void processPacket(INetHandlerPlayClient p_148987_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_148987_1_.handleSpawnExperienceOrb(this);
+		p_148833_1_.handleSpawnExperienceOrb(this);
 	}
 
 	public String serialize()

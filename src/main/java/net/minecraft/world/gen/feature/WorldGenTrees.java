@@ -17,54 +17,54 @@ public class WorldGenTrees extends WorldGenAbstractTree
 	private final int metaLeaves;
 	private static final String __OBFID = "CL_00000438";
 
-	public WorldGenTrees(boolean par1)
+	public WorldGenTrees(boolean p_i2027_1_)
 	{
-		this(par1, 4, 0, 0, false);
+		this(p_i2027_1_, 4, 0, 0, false);
 	}
 
-	public WorldGenTrees(boolean par1, int par2, int par3, int par4, boolean par5)
+	public WorldGenTrees(boolean p_i2028_1_, int p_i2028_2_, int p_i2028_3_, int p_i2028_4_, boolean p_i2028_5_)
 	{
-		super(par1);
-		this.minTreeHeight = par2;
-		this.metaWood = par3;
-		this.metaLeaves = par4;
-		this.vinesGrow = par5;
+		super(p_i2028_1_);
+		this.minTreeHeight = p_i2028_2_;
+		this.metaWood = p_i2028_3_;
+		this.metaLeaves = p_i2028_4_;
+		this.vinesGrow = p_i2028_5_;
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		int l = par2Random.nextInt(3) + this.minTreeHeight;
+		int l = p_76484_2_.nextInt(3) + this.minTreeHeight;
 		boolean flag = true;
 
-		if (par4 >= 1 && par4 + l + 1 <= 256)
+		if (p_76484_4_ >= 1 && p_76484_4_ + l + 1 <= 256)
 		{
 			byte b0;
 			int k1;
 			Block block;
 
-			for (int i1 = par4; i1 <= par4 + 1 + l; ++i1)
+			for (int i1 = p_76484_4_; i1 <= p_76484_4_ + 1 + l; ++i1)
 			{
 				b0 = 1;
 
-				if (i1 == par4)
+				if (i1 == p_76484_4_)
 				{
 					b0 = 0;
 				}
 
-				if (i1 >= par4 + 1 + l - 2)
+				if (i1 >= p_76484_4_ + 1 + l - 2)
 				{
 					b0 = 2;
 				}
 
-				for (int j1 = par3 - b0; j1 <= par3 + b0 && flag; ++j1)
+				for (int j1 = p_76484_3_ - b0; j1 <= p_76484_3_ + b0 && flag; ++j1)
 				{
-					for (k1 = par5 - b0; k1 <= par5 + b0 && flag; ++k1)
+					for (k1 = p_76484_5_ - b0; k1 <= p_76484_5_ + b0 && flag; ++k1)
 					{
 						if (i1 >= 0 && i1 < 256)
 						{
-							block = par1World.getBlock(j1, i1, k1);
+							block = p_76484_1_.getBlock(j1, i1, k1);
 
-							if (!this.isReplaceable(par1World, j1, i1, k1))
+							if (!this.isReplaceable(p_76484_1_, j1, i1, k1))
 							{
 								flag = false;
 							}
@@ -83,12 +83,12 @@ public class WorldGenTrees extends WorldGenAbstractTree
 			}
 			else
 			{
-				Block block2 = par1World.getBlock(par3, par4 - 1, par5);
+				Block block2 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ - 1, p_76484_5_);
 
-				boolean isSoil = block2.canSustainPlant(par1World, par3, par4 - 1, par5, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
-				if (isSoil && par4 < 256 - l - 1)
+				boolean isSoil = block2.canSustainPlant(p_76484_1_, p_76484_3_, p_76484_4_ - 1, p_76484_5_, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
+				if (isSoil && p_76484_4_ < 256 - l - 1)
 				{
-					block2.onPlantGrow(par1World, par3, par4 - 1, par5, par3, par4, par5);
+					block2.onPlantGrow(p_76484_1_, p_76484_3_, p_76484_4_ - 1, p_76484_5_, p_76484_3_, p_76484_4_, p_76484_5_);
 					b0 = 3;
 					byte b1 = 0;
 					int l1;
@@ -96,26 +96,26 @@ public class WorldGenTrees extends WorldGenAbstractTree
 					int j2;
 					int i3;
 
-					for (k1 = par4 - b0 + l; k1 <= par4 + l; ++k1)
+					for (k1 = p_76484_4_ - b0 + l; k1 <= p_76484_4_ + l; ++k1)
 					{
-						i3 = k1 - (par4 + l);
+						i3 = k1 - (p_76484_4_ + l);
 						l1 = b1 + 1 - i3 / 2;
 
-						for (i2 = par3 - l1; i2 <= par3 + l1; ++i2)
+						for (i2 = p_76484_3_ - l1; i2 <= p_76484_3_ + l1; ++i2)
 						{
-							j2 = i2 - par3;
+							j2 = i2 - p_76484_3_;
 
-							for (int k2 = par5 - l1; k2 <= par5 + l1; ++k2)
+							for (int k2 = p_76484_5_ - l1; k2 <= p_76484_5_ + l1; ++k2)
 							{
-								int l2 = k2 - par5;
+								int l2 = k2 - p_76484_5_;
 
-								if (Math.abs(j2) != l1 || Math.abs(l2) != l1 || par2Random.nextInt(2) != 0 && i3 != 0)
+								if (Math.abs(j2) != l1 || Math.abs(l2) != l1 || p_76484_2_.nextInt(2) != 0 && i3 != 0)
 								{
-									Block block1 = par1World.getBlock(i2, k1, k2);
+									Block block1 = p_76484_1_.getBlock(i2, k1, k2);
 
-									if (block1.isAir(par1World, i2, k1, k2) || block1.isLeaves(par1World, i2, k1, k2))
+									if (block1.isAir(p_76484_1_, i2, k1, k2) || block1.isLeaves(p_76484_1_, i2, k1, k2))
 									{
-										this.setBlockAndNotifyAdequately(par1World, i2, k1, k2, Blocks.leaves, this.metaLeaves);
+										this.setBlockAndNotifyAdequately(p_76484_1_, i2, k1, k2, Blocks.leaves, this.metaLeaves);
 									}
 								}
 							}
@@ -124,32 +124,32 @@ public class WorldGenTrees extends WorldGenAbstractTree
 
 					for (k1 = 0; k1 < l; ++k1)
 					{
-						block = par1World.getBlock(par3, par4 + k1, par5);
+						block = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + k1, p_76484_5_);
 
-						if (block.isAir(par1World, par3, par4 + k1, par5) || block.isLeaves(par1World, par3, par4 + k1, par5))
+						if (block.isAir(p_76484_1_, p_76484_3_, p_76484_4_ + k1, p_76484_5_) || block.isLeaves(p_76484_1_, p_76484_3_, p_76484_4_ + k1, p_76484_5_))
 						{
-							this.setBlockAndNotifyAdequately(par1World, par3, par4 + k1, par5, Blocks.log, this.metaWood);
+							this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + k1, p_76484_5_, Blocks.log, this.metaWood);
 
 							if (this.vinesGrow && k1 > 0)
 							{
-								if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3 - 1, par4 + k1, par5))
+								if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_ - 1, p_76484_4_ + k1, p_76484_5_))
 								{
-									this.setBlockAndNotifyAdequately(par1World, par3 - 1, par4 + k1, par5, Blocks.vine, 8);
+									this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ - 1, p_76484_4_ + k1, p_76484_5_, Blocks.vine, 8);
 								}
 
-								if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3 + 1, par4 + k1, par5))
+								if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_ + 1, p_76484_4_ + k1, p_76484_5_))
 								{
-									this.setBlockAndNotifyAdequately(par1World, par3 + 1, par4 + k1, par5, Blocks.vine, 2);
+									this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + 1, p_76484_4_ + k1, p_76484_5_, Blocks.vine, 2);
 								}
 
-								if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3, par4 + k1, par5 - 1))
+								if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_, p_76484_4_ + k1, p_76484_5_ - 1))
 								{
-									this.setBlockAndNotifyAdequately(par1World, par3, par4 + k1, par5 - 1, Blocks.vine, 1);
+									this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + k1, p_76484_5_ - 1, Blocks.vine, 1);
 								}
 
-								if (par2Random.nextInt(3) > 0 && par1World.isAirBlock(par3, par4 + k1, par5 + 1))
+								if (p_76484_2_.nextInt(3) > 0 && p_76484_1_.isAirBlock(p_76484_3_, p_76484_4_ + k1, p_76484_5_ + 1))
 								{
-									this.setBlockAndNotifyAdequately(par1World, par3, par4 + k1, par5 + 1, Blocks.vine, 4);
+									this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_ + k1, p_76484_5_ + 1, Blocks.vine, 4);
 								}
 							}
 						}
@@ -157,51 +157,51 @@ public class WorldGenTrees extends WorldGenAbstractTree
 
 					if (this.vinesGrow)
 					{
-						for (k1 = par4 - 3 + l; k1 <= par4 + l; ++k1)
+						for (k1 = p_76484_4_ - 3 + l; k1 <= p_76484_4_ + l; ++k1)
 						{
-							i3 = k1 - (par4 + l);
+							i3 = k1 - (p_76484_4_ + l);
 							l1 = 2 - i3 / 2;
 
-							for (i2 = par3 - l1; i2 <= par3 + l1; ++i2)
+							for (i2 = p_76484_3_ - l1; i2 <= p_76484_3_ + l1; ++i2)
 							{
-								for (j2 = par5 - l1; j2 <= par5 + l1; ++j2)
+								for (j2 = p_76484_5_ - l1; j2 <= p_76484_5_ + l1; ++j2)
 								{
-									if (par1World.getBlock(i2, k1, j2).isLeaves(par1World, i2, k1, j2))
+									if (p_76484_1_.getBlock(i2, k1, j2).isLeaves(p_76484_1_, i2, k1, j2))
 									{
-										if (par2Random.nextInt(4) == 0 && par1World.getBlock(i2 - 1, k1, j2).isAir(par1World, i2 - 1, k1, j2))
+										if (p_76484_2_.nextInt(4) == 0 && p_76484_1_.getBlock(i2 - 1, k1, j2).isAir(p_76484_1_, i2 - 1, k1, j2))
 										{
-											this.growVines(par1World, i2 - 1, k1, j2, 8);
+											this.growVines(p_76484_1_, i2 - 1, k1, j2, 8);
 										}
 
-										if (par2Random.nextInt(4) == 0 && par1World.getBlock(i2 + 1, k1, j2).isAir(par1World, i2 + 1, k1, j2))
+										if (p_76484_2_.nextInt(4) == 0 && p_76484_1_.getBlock(i2 + 1, k1, j2).isAir(p_76484_1_, i2 + 1, k1, j2))
 										{
-											this.growVines(par1World, i2 + 1, k1, j2, 2);
+											this.growVines(p_76484_1_, i2 + 1, k1, j2, 2);
 										}
 
-										if (par2Random.nextInt(4) == 0 && par1World.getBlock(i2, k1, j2 - 1).isAir(par1World, i2, k1, j2 - 1))
+										if (p_76484_2_.nextInt(4) == 0 && p_76484_1_.getBlock(i2, k1, j2 - 1).isAir(p_76484_1_, i2, k1, j2 - 1))
 										{
-											this.growVines(par1World, i2, k1, j2 - 1, 1);
+											this.growVines(p_76484_1_, i2, k1, j2 - 1, 1);
 										}
 
-										if (par2Random.nextInt(4) == 0 && par1World.getBlock(i2, k1, j2 + 1).isAir(par1World, i2, k1, j2 + 1))
+										if (p_76484_2_.nextInt(4) == 0 && p_76484_1_.getBlock(i2, k1, j2 + 1).isAir(p_76484_1_, i2, k1, j2 + 1))
 										{
-											this.growVines(par1World, i2, k1, j2 + 1, 4);
+											this.growVines(p_76484_1_, i2, k1, j2 + 1, 4);
 										}
 									}
 								}
 							}
 						}
 
-						if (par2Random.nextInt(5) == 0 && l > 5)
+						if (p_76484_2_.nextInt(5) == 0 && l > 5)
 						{
 							for (k1 = 0; k1 < 2; ++k1)
 							{
 								for (i3 = 0; i3 < 4; ++i3)
 								{
-									if (par2Random.nextInt(4 - k1) == 0)
+									if (p_76484_2_.nextInt(4 - k1) == 0)
 									{
-										l1 = par2Random.nextInt(3);
-										this.setBlockAndNotifyAdequately(par1World, par3 + Direction.offsetX[Direction.rotateOpposite[i3]], par4 + l - 5 + k1, par5 + Direction.offsetZ[Direction.rotateOpposite[i3]], Blocks.cocoa, l1 << 2 | i3);
+										l1 = p_76484_2_.nextInt(3);
+										this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_ + Direction.offsetX[Direction.rotateOpposite[i3]], p_76484_4_ + l - 5 + k1, p_76484_5_ + Direction.offsetZ[Direction.rotateOpposite[i3]], Blocks.cocoa, l1 << 2 | i3);
 									}
 								}
 							}
@@ -222,21 +222,21 @@ public class WorldGenTrees extends WorldGenAbstractTree
 		}
 	}
 
-	private void growVines(World par1World, int par2, int par3, int par4, int par5)
+	private void growVines(World p_76529_1_, int p_76529_2_, int p_76529_3_, int p_76529_4_, int p_76529_5_)
 	{
-		this.setBlockAndNotifyAdequately(par1World, par2, par3, par4, Blocks.vine, par5);
+		this.setBlockAndNotifyAdequately(p_76529_1_, p_76529_2_, p_76529_3_, p_76529_4_, Blocks.vine, p_76529_5_);
 		int i1 = 4;
 
 		while (true)
 		{
-			--par3;
+			--p_76529_3_;
 
-			if (!par1World.getBlock(par2, par3, par4).isAir(par1World, par2, par3, par4) || i1 <= 0)
+			if (!p_76529_1_.getBlock(p_76529_2_, p_76529_3_, p_76529_4_).isAir(p_76529_1_, p_76529_2_, p_76529_3_, p_76529_4_) || i1 <= 0)
 			{
 				return;
 			}
 
-			this.setBlockAndNotifyAdequately(par1World, par2, par3, par4, Blocks.vine, par5);
+			this.setBlockAndNotifyAdequately(p_76529_1_, p_76529_2_, p_76529_3_, p_76529_4_, Blocks.vine, p_76529_5_);
 			--i1;
 		}
 	}

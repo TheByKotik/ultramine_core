@@ -9,48 +9,48 @@ public class ContainerHopper extends Container
 	private final IInventory field_94538_a;
 	private static final String __OBFID = "CL_00001750";
 
-	public ContainerHopper(InventoryPlayer par1InventoryPlayer, IInventory par2IInventory)
+	public ContainerHopper(InventoryPlayer p_i1814_1_, IInventory p_i1814_2_)
 	{
-		this.field_94538_a = par2IInventory;
-		par2IInventory.openInventory();
+		this.field_94538_a = p_i1814_2_;
+		p_i1814_2_.openInventory();
 		byte b0 = 51;
 		int i;
 
-		for (i = 0; i < par2IInventory.getSizeInventory(); ++i)
+		for (i = 0; i < p_i1814_2_.getSizeInventory(); ++i)
 		{
-			this.addSlotToContainer(new Slot(par2IInventory, i, 44 + i * 18, 20));
+			this.addSlotToContainer(new Slot(p_i1814_2_, i, 44 + i * 18, 20));
 		}
 
 		for (i = 0; i < 3; ++i)
 		{
 			for (int j = 0; j < 9; ++j)
 			{
-				this.addSlotToContainer(new Slot(par1InventoryPlayer, j + i * 9 + 9, 8 + j * 18, i * 18 + b0));
+				this.addSlotToContainer(new Slot(p_i1814_1_, j + i * 9 + 9, 8 + j * 18, i * 18 + b0));
 			}
 		}
 
 		for (i = 0; i < 9; ++i)
 		{
-			this.addSlotToContainer(new Slot(par1InventoryPlayer, i, 8 + i * 18, 58 + b0));
+			this.addSlotToContainer(new Slot(p_i1814_1_, i, 8 + i * 18, 58 + b0));
 		}
 	}
 
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+	public boolean canInteractWith(EntityPlayer p_75145_1_)
 	{
-		return this.field_94538_a.isUseableByPlayer(par1EntityPlayer);
+		return this.field_94538_a.isUseableByPlayer(p_75145_1_);
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
 	{
 		ItemStack itemstack = null;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = (Slot)this.inventorySlots.get(p_82846_2_);
 
 		if (slot != null && slot.getHasStack())
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			if (par2 < this.field_94538_a.getSizeInventory())
+			if (p_82846_2_ < this.field_94538_a.getSizeInventory())
 			{
 				if (!this.mergeItemStack(itemstack1, this.field_94538_a.getSizeInventory(), this.inventorySlots.size(), true))
 				{
@@ -75,9 +75,9 @@ public class ContainerHopper extends Container
 		return itemstack;
 	}
 
-	public void onContainerClosed(EntityPlayer par1EntityPlayer)
+	public void onContainerClosed(EntityPlayer p_75134_1_)
 	{
-		super.onContainerClosed(par1EntityPlayer);
+		super.onContainerClosed(p_75134_1_);
 		this.field_94538_a.closeInventory();
 	}
 }
