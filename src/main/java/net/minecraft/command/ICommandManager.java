@@ -5,11 +5,11 @@ import java.util.Map;
 
 public interface ICommandManager
 {
-	int executeCommand(ICommandSender var1, String var2);
+	int executeCommand(ICommandSender p_71556_1_, String p_71556_2_);
 
-	List getPossibleCommands(ICommandSender var1, String var2);
+	List getPossibleCommands(ICommandSender p_71558_1_, String p_71558_2_);
 
-	List getPossibleCommands(ICommandSender var1);
+	List getPossibleCommands(ICommandSender p_71557_1_);
 
 	Map getCommands();
 }

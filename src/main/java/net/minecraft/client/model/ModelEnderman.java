@@ -38,9 +38,9 @@ public class ModelEnderman extends ModelBiped
 		this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F + f, 0.0F);
 	}
 
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity)
+	public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity p_78087_7_)
 	{
-		super.setRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
+		super.setRotationAngles(p_78087_1_, p_78087_2_, p_78087_3_, p_78087_4_, p_78087_5_, p_78087_6_, p_78087_7_);
 		this.bipedHead.showModel = true;
 		float f6 = -14.0F;
 		this.bipedBody.rotateAngleX = 0.0F;

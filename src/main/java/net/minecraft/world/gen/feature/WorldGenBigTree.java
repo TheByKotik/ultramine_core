@@ -28,9 +28,9 @@ public class WorldGenBigTree extends WorldGenAbstractTree
 	int[][] leafNodes;
 	private static final String __OBFID = "CL_00000400";
 
-	public WorldGenBigTree(boolean par1)
+	public WorldGenBigTree(boolean p_i2008_1_)
 	{
-		super(par1);
+		super(p_i2008_1_);
 	}
 
 	void generateLeafNodeList()
@@ -158,16 +158,16 @@ public class WorldGenBigTree extends WorldGenAbstractTree
 		}
 	}
 
-	float layerSize(int par1)
+	float layerSize(int p_76490_1_)
 	{
-		if ((double)par1 < (double)((float)this.heightLimit) * 0.3D)
+		if ((double)p_76490_1_ < (double)((float)this.heightLimit) * 0.3D)
 		{
 			return -1.618F;
 		}
 		else
 		{
 			float f = (float)this.heightLimit / 2.0F;
-			float f1 = (float)this.heightLimit / 2.0F - (float)par1;
+			float f1 = (float)this.heightLimit / 2.0F - (float)p_76490_1_;
 			float f2;
 
 			if (f1 == 0.0F)
@@ -188,19 +188,19 @@ public class WorldGenBigTree extends WorldGenAbstractTree
 		}
 	}
 
-	float leafSize(int par1)
+	float leafSize(int p_76495_1_)
 	{
-		return par1 >= 0 && par1 < this.leafDistanceLimit ? (par1 != 0 && par1 != this.leafDistanceLimit - 1 ? 3.0F : 2.0F) : -1.0F;
+		return p_76495_1_ >= 0 && p_76495_1_ < this.leafDistanceLimit ? (p_76495_1_ != 0 && p_76495_1_ != this.leafDistanceLimit - 1 ? 3.0F : 2.0F) : -1.0F;
 	}
 
-	void generateLeafNode(int par1, int par2, int par3)
+	void generateLeafNode(int p_76491_1_, int p_76491_2_, int p_76491_3_)
 	{
-		int l = par2;
+		int l = p_76491_2_;
 
-		for (int i1 = par2 + this.leafDistanceLimit; l < i1; ++l)
+		for (int i1 = p_76491_2_ + this.leafDistanceLimit; l < i1; ++l)
 		{
-			float f = this.leafSize(l - par2);
-			this.func_150529_a(par1, l, par3, f, (byte)1, Blocks.leaves);
+			float f = this.leafSize(l - p_76491_2_);
+			this.func_150529_a(p_76491_1_, l, p_76491_3_, f, (byte)1, Blocks.leaves);
 		}
 	}
 
@@ -280,9 +280,9 @@ public class WorldGenBigTree extends WorldGenAbstractTree
 		}
 	}
 
-	boolean leafNodeNeedsBase(int par1)
+	boolean leafNodeNeedsBase(int p_76493_1_)
 	{
-		return (double)par1 >= (double)this.heightLimit * 0.2D;
+		return (double)p_76493_1_ >= (double)this.heightLimit * 0.2D;
 	}
 
 	void generateTrunk()
@@ -328,7 +328,7 @@ public class WorldGenBigTree extends WorldGenAbstractTree
 		}
 	}
 
-	int checkBlockLine(int[] par1ArrayOfInteger, int[] par2ArrayOfInteger)
+	int checkBlockLine(int[] p_76496_1_, int[] p_76496_2_)
 	{
 		int[] aint2 = new int[] {0, 0, 0};
 		byte b0 = 0;
@@ -336,7 +336,7 @@ public class WorldGenBigTree extends WorldGenAbstractTree
 
 		for (b1 = 0; b0 < 3; ++b0)
 		{
-			aint2[b0] = par2ArrayOfInteger[b0] - par1ArrayOfInteger[b0];
+			aint2[b0] = p_76496_2_[b0] - p_76496_1_[b0];
 
 			if (Math.abs(aint2[b0]) > Math.abs(aint2[b1]))
 			{
@@ -371,9 +371,9 @@ public class WorldGenBigTree extends WorldGenAbstractTree
 
 			for (j = aint2[b1] + b4; i != j; i += b4)
 			{
-				aint3[b1] = par1ArrayOfInteger[b1] + i;
-				aint3[b2] = MathHelper.floor_double((double)par1ArrayOfInteger[b2] + (double)i * d0);
-				aint3[b3] = MathHelper.floor_double((double)par1ArrayOfInteger[b3] + (double)i * d1);
+				aint3[b1] = p_76496_1_[b1] + i;
+				aint3[b2] = MathHelper.floor_double((double)p_76496_1_[b2] + (double)i * d0);
+				aint3[b3] = MathHelper.floor_double((double)p_76496_1_[b3] + (double)i * d1);
 				Block block = this.worldObj.getBlock(aint3[0], aint3[1], aint3[2]);
 
 				if (!this.isReplaceable(worldObj, aint3[0], aint3[1], aint3[2]))
@@ -417,27 +417,27 @@ public class WorldGenBigTree extends WorldGenAbstractTree
 		}
 	}
 
-	public void setScale(double par1, double par3, double par5)
+	public void setScale(double p_76487_1_, double p_76487_3_, double p_76487_5_)
 	{
-		this.heightLimitLimit = (int)(par1 * 12.0D);
+		this.heightLimitLimit = (int)(p_76487_1_ * 12.0D);
 
-		if (par1 > 0.5D)
+		if (p_76487_1_ > 0.5D)
 		{
 			this.leafDistanceLimit = 5;
 		}
 
-		this.scaleWidth = par3;
-		this.leafDensity = par5;
+		this.scaleWidth = p_76487_3_;
+		this.leafDensity = p_76487_5_;
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
-		this.worldObj = par1World;
-		long l = par2Random.nextLong();
+		this.worldObj = p_76484_1_;
+		long l = p_76484_2_.nextLong();
 		this.rand.setSeed(l);
-		this.basePos[0] = par3;
-		this.basePos[1] = par4;
-		this.basePos[2] = par5;
+		this.basePos[0] = p_76484_3_;
+		this.basePos[1] = p_76484_4_;
+		this.basePos[2] = p_76484_5_;
 
 		if (this.heightLimit == 0)
 		{

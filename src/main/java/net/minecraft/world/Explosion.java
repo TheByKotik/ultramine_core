@@ -36,14 +36,14 @@ public class Explosion
 	private Map field_77288_k = new HashMap();
 	private static final String __OBFID = "CL_00000134";
 
-	public Explosion(World par1World, Entity par2Entity, double par3, double par5, double par7, float par9)
+	public Explosion(World p_i1948_1_, Entity p_i1948_2_, double p_i1948_3_, double p_i1948_5_, double p_i1948_7_, float p_i1948_9_)
 	{
-		this.worldObj = par1World;
-		this.exploder = par2Entity;
-		this.explosionSize = par9;
-		this.explosionX = par3;
-		this.explosionY = par5;
-		this.explosionZ = par7;
+		this.worldObj = p_i1948_1_;
+		this.exploder = p_i1948_2_;
+		this.explosionSize = p_i1948_9_;
+		this.explosionX = p_i1948_3_;
+		this.explosionY = p_i1948_5_;
+		this.explosionZ = p_i1948_7_;
 	}
 
 	public void doExplosionA()
@@ -112,8 +112,8 @@ public class Explosion
 		int i2 = MathHelper.floor_double(this.explosionY + (double)this.explosionSize + 1.0D);
 		int l = MathHelper.floor_double(this.explosionZ - (double)this.explosionSize - 1.0D);
 		int j2 = MathHelper.floor_double(this.explosionZ + (double)this.explosionSize + 1.0D);
-		List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this.exploder, AxisAlignedBB.getAABBPool().getAABB((double)i, (double)k, (double)l, (double)j, (double)i2, (double)j2));
-		Vec3 vec3 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.explosionX, this.explosionY, this.explosionZ);
+		List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this.exploder, AxisAlignedBB.getBoundingBox((double)i, (double)k, (double)l, (double)j, (double)i2, (double)j2));
+		Vec3 vec3 = Vec3.createVectorHelper(this.explosionX, this.explosionY, this.explosionZ);
 
 		for (int i1 = 0; i1 < list.size(); ++i1)
 		{
@@ -142,7 +142,7 @@ public class Explosion
 
 					if (entity instanceof EntityPlayer)
 					{
-						this.field_77288_k.put((EntityPlayer)entity, this.worldObj.getWorldVec3Pool().getVecFromPool(d5 * d11, d6 * d11, d7 * d11));
+						this.field_77288_k.put((EntityPlayer)entity, Vec3.createVectorHelper(d5 * d11, d6 * d11, d7 * d11));
 					}
 				}
 			}
@@ -151,7 +151,7 @@ public class Explosion
 		this.explosionSize = f;
 	}
 
-	public void doExplosionB(boolean par1)
+	public void doExplosionB(boolean p_77279_1_)
 	{
 		this.worldObj.playSoundEffect(this.explosionX, this.explosionY, this.explosionZ, "random.explode", 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 
@@ -183,7 +183,7 @@ public class Explosion
 				k = chunkposition.chunkPosZ;
 				block = this.worldObj.getBlock(i, j, k);
 
-				if (par1)
+				if (p_77279_1_)
 				{
 					double d0 = (double)((float)i + this.worldObj.rand.nextFloat());
 					double d1 = (double)((float)j + this.worldObj.rand.nextFloat());

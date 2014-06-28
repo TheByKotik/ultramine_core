@@ -36,12 +36,12 @@ public class ModelSnowMan extends ModelBase
 		this.bottomBody.setRotationPoint(0.0F, 0.0F + f + 20.0F, 0.0F);
 	}
 
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity)
+	public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity p_78087_7_)
 	{
-		super.setRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
-		this.head.rotateAngleY = par4 / (180F / (float)Math.PI);
-		this.head.rotateAngleX = par5 / (180F / (float)Math.PI);
-		this.body.rotateAngleY = par4 / (180F / (float)Math.PI) * 0.25F;
+		super.setRotationAngles(p_78087_1_, p_78087_2_, p_78087_3_, p_78087_4_, p_78087_5_, p_78087_6_, p_78087_7_);
+		this.head.rotateAngleY = p_78087_4_ / (180F / (float)Math.PI);
+		this.head.rotateAngleX = p_78087_5_ / (180F / (float)Math.PI);
+		this.body.rotateAngleY = p_78087_4_ / (180F / (float)Math.PI) * 0.25F;
 		float f6 = MathHelper.sin(this.body.rotateAngleY);
 		float f7 = MathHelper.cos(this.body.rotateAngleY);
 		this.rightHand.rotateAngleZ = 1.0F;
@@ -54,13 +54,13 @@ public class ModelSnowMan extends ModelBase
 		this.leftHand.rotationPointZ = f6 * 5.0F;
 	}
 
-	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(Entity p_78088_1_, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_)
 	{
-		this.setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
-		this.body.render(par7);
-		this.bottomBody.render(par7);
-		this.head.render(par7);
-		this.rightHand.render(par7);
-		this.leftHand.render(par7);
+		this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, p_78088_7_, p_78088_1_);
+		this.body.render(p_78088_7_);
+		this.bottomBody.render(p_78088_7_);
+		this.head.render(p_78088_7_);
+		this.rightHand.render(p_78088_7_);
+		this.leftHand.render(p_78088_7_);
 	}
 }

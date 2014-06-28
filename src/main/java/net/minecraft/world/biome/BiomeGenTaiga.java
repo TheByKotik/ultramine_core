@@ -48,12 +48,12 @@ public class BiomeGenTaiga extends BiomeGenBase
 		return (WorldGenAbstractTree)((this.field_150644_aH == 1 || this.field_150644_aH == 2) && p_150567_1_.nextInt(3) == 0 ? (this.field_150644_aH != 2 && p_150567_1_.nextInt(13) != 0 ? field_150641_aE : field_150642_aF) : (p_150567_1_.nextInt(3) == 0 ? field_150639_aC : field_150640_aD));
 	}
 
-	public WorldGenerator getRandomWorldGenForGrass(Random par1Random)
+	public WorldGenerator getRandomWorldGenForGrass(Random p_76730_1_)
 	{
-		return par1Random.nextInt(5) > 0 ? new WorldGenTallGrass(Blocks.tallgrass, 2) : new WorldGenTallGrass(Blocks.tallgrass, 1);
+		return p_76730_1_.nextInt(5) > 0 ? new WorldGenTallGrass(Blocks.tallgrass, 2) : new WorldGenTallGrass(Blocks.tallgrass, 1);
 	}
 
-	public void decorate(World par1World, Random par2Random, int par3, int par4)
+	public void decorate(World p_76728_1_, Random p_76728_2_, int p_76728_3_, int p_76728_4_)
 	{
 		int k;
 		int l;
@@ -62,14 +62,14 @@ public class BiomeGenTaiga extends BiomeGenBase
 
 		if (this.field_150644_aH == 1 || this.field_150644_aH == 2)
 		{
-			k = par2Random.nextInt(3);
+			k = p_76728_2_.nextInt(3);
 
 			for (l = 0; l < k; ++l)
 			{
-				i1 = par3 + par2Random.nextInt(16) + 8;
-				j1 = par4 + par2Random.nextInt(16) + 8;
-				int k1 = par1World.getHeightValue(i1, j1);
-				field_150643_aG.generate(par1World, par2Random, i1, k1, j1);
+				i1 = p_76728_3_ + p_76728_2_.nextInt(16) + 8;
+				j1 = p_76728_4_ + p_76728_2_.nextInt(16) + 8;
+				int k1 = p_76728_1_.getHeightValue(i1, j1);
+				field_150643_aG.generate(p_76728_1_, p_76728_2_, i1, k1, j1);
 			}
 		}
 
@@ -77,13 +77,13 @@ public class BiomeGenTaiga extends BiomeGenBase
 
 		for (k = 0; k < 7; ++k)
 		{
-			l = par3 + par2Random.nextInt(16) + 8;
-			i1 = par4 + par2Random.nextInt(16) + 8;
-			j1 = par2Random.nextInt(par1World.getHeightValue(l, i1) + 32);
-			genTallFlowers.generate(par1World, par2Random, l, j1, i1);
+			l = p_76728_3_ + p_76728_2_.nextInt(16) + 8;
+			i1 = p_76728_4_ + p_76728_2_.nextInt(16) + 8;
+			j1 = p_76728_2_.nextInt(p_76728_1_.getHeightValue(l, i1) + 32);
+			genTallFlowers.generate(p_76728_1_, p_76728_2_, l, j1, i1);
 		}
 
-		super.decorate(par1World, par2Random, par3, par4);
+		super.decorate(p_76728_1_, p_76728_2_, p_76728_3_, p_76728_4_);
 	}
 
 	public void genTerrainBlocks(World p_150573_1_, Random p_150573_2_, Block[] p_150573_3_, byte[] p_150573_4_, int p_150573_5_, int p_150573_6_, double p_150573_7_)

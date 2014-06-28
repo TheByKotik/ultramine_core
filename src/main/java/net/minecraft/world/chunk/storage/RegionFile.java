@@ -26,19 +26,19 @@ public class RegionFile
 	private long lastModified;
 	private static final String __OBFID = "CL_00000381";
 
-	public RegionFile(File par1File)
+	public RegionFile(File p_i2001_1_)
 	{
-		this.fileName = par1File;
+		this.fileName = p_i2001_1_;
 		this.sizeDelta = 0;
 
 		try
 		{
-			if (par1File.exists())
+			if (p_i2001_1_.exists())
 			{
-				this.lastModified = par1File.lastModified();
+				this.lastModified = p_i2001_1_.lastModified();
 			}
 
-			this.dataFile = new RandomAccessFile(par1File, "rw");
+			this.dataFile = new RandomAccessFile(p_i2001_1_, "rw");
 			int i;
 
 			if (this.dataFile.length() < 4096L)
@@ -137,9 +137,9 @@ public class RegionFile
 		return false;
 	}
 
-	public synchronized DataInputStream getChunkDataInputStream(int par1, int par2)
+	public synchronized DataInputStream getChunkDataInputStream(int p_76704_1_, int p_76704_2_)
 	{
-		if (this.outOfBounds(par1, par2))
+		if (this.outOfBounds(p_76704_1_, p_76704_2_))
 		{
 			return null;
 		}
@@ -147,7 +147,7 @@ public class RegionFile
 		{
 			try
 			{
-				int k = this.getOffset(par1, par2);
+				int k = this.getOffset(p_76704_1_, p_76704_2_);
 
 				if (k == 0)
 				{
@@ -207,19 +207,19 @@ public class RegionFile
 		}
 	}
 
-	public DataOutputStream getChunkDataOutputStream(int par1, int par2)
+	public DataOutputStream getChunkDataOutputStream(int p_76710_1_, int p_76710_2_)
 	{
-		return this.outOfBounds(par1, par2) ? null : new DataOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(par1, par2)));
+		return this.outOfBounds(p_76710_1_, p_76710_2_) ? null : new DataOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(p_76710_1_, p_76710_2_)));
 	}
 
-	protected synchronized void write(int par1, int par2, byte[] par3ArrayOfByte, int par4)
+	protected synchronized void write(int p_76706_1_, int p_76706_2_, byte[] p_76706_3_, int p_76706_4_)
 	{
 		try
 		{
-			int l = this.getOffset(par1, par2);
+			int l = this.getOffset(p_76706_1_, p_76706_2_);
 			int i1 = l >> 8;
 			int j1 = l & 255;
-			int k1 = (par4 + 5) / 4096 + 1;
+			int k1 = (p_76706_4_ + 5) / 4096 + 1;
 
 			if (k1 >= 256)
 			{
@@ -228,7 +228,7 @@ public class RegionFile
 
 			if (i1 != 0 && j1 == k1)
 			{
-				this.write(i1, par3ArrayOfByte, par4);
+				this.write(i1, p_76706_3_, p_76706_4_);
 			}
 			else
 			{
@@ -274,14 +274,14 @@ public class RegionFile
 				if (i2 >= k1)
 				{
 					i1 = l1;
-					this.setOffset(par1, par2, l1 << 8 | k1);
+					this.setOffset(p_76706_1_, p_76706_2_, l1 << 8 | k1);
 
 					for (j2 = 0; j2 < k1; ++j2)
 					{
 						this.sectorFree.set(i1 + j2, Boolean.valueOf(false));
 					}
 
-					this.write(i1, par3ArrayOfByte, par4);
+					this.write(i1, p_76706_3_, p_76706_4_);
 				}
 				else
 				{
@@ -295,12 +295,12 @@ public class RegionFile
 					}
 
 					this.sizeDelta += 4096 * k1;
-					this.write(i1, par3ArrayOfByte, par4);
-					this.setOffset(par1, par2, i1 << 8 | k1);
+					this.write(i1, p_76706_3_, p_76706_4_);
+					this.setOffset(p_76706_1_, p_76706_2_, i1 << 8 | k1);
 				}
 			}
 
-			this.setChunkTimestamp(par1, par2, (int)(MinecraftServer.getSystemTimeMillis() / 1000L));
+			this.setChunkTimestamp(p_76706_1_, p_76706_2_, (int)(MinecraftServer.getSystemTimeMillis() / 1000L));
 		}
 		catch (IOException ioexception)
 		{
@@ -308,41 +308,41 @@ public class RegionFile
 		}
 	}
 
-	private void write(int par1, byte[] par2ArrayOfByte, int par3) throws IOException
+	private void write(int p_76712_1_, byte[] p_76712_2_, int p_76712_3_) throws IOException
 	{
-		this.dataFile.seek((long)(par1 * 4096));
-		this.dataFile.writeInt(par3 + 1);
+		this.dataFile.seek((long)(p_76712_1_ * 4096));
+		this.dataFile.writeInt(p_76712_3_ + 1);
 		this.dataFile.writeByte(2);
-		this.dataFile.write(par2ArrayOfByte, 0, par3);
+		this.dataFile.write(p_76712_2_, 0, p_76712_3_);
 	}
 
-	private boolean outOfBounds(int par1, int par2)
+	private boolean outOfBounds(int p_76705_1_, int p_76705_2_)
 	{
-		return par1 < 0 || par1 >= 32 || par2 < 0 || par2 >= 32;
+		return p_76705_1_ < 0 || p_76705_1_ >= 32 || p_76705_2_ < 0 || p_76705_2_ >= 32;
 	}
 
-	private int getOffset(int par1, int par2)
+	private int getOffset(int p_76707_1_, int p_76707_2_)
 	{
-		return this.offsets[par1 + par2 * 32];
+		return this.offsets[p_76707_1_ + p_76707_2_ * 32];
 	}
 
-	public boolean isChunkSaved(int par1, int par2)
+	public boolean isChunkSaved(int p_76709_1_, int p_76709_2_)
 	{
-		return this.getOffset(par1, par2) != 0;
+		return this.getOffset(p_76709_1_, p_76709_2_) != 0;
 	}
 
-	private void setOffset(int par1, int par2, int par3) throws IOException
+	private void setOffset(int p_76711_1_, int p_76711_2_, int p_76711_3_) throws IOException
 	{
-		this.offsets[par1 + par2 * 32] = par3;
-		this.dataFile.seek((long)((par1 + par2 * 32) * 4));
-		this.dataFile.writeInt(par3);
+		this.offsets[p_76711_1_ + p_76711_2_ * 32] = p_76711_3_;
+		this.dataFile.seek((long)((p_76711_1_ + p_76711_2_ * 32) * 4));
+		this.dataFile.writeInt(p_76711_3_);
 	}
 
-	private void setChunkTimestamp(int par1, int par2, int par3) throws IOException
+	private void setChunkTimestamp(int p_76713_1_, int p_76713_2_, int p_76713_3_) throws IOException
 	{
-		this.chunkTimestamps[par1 + par2 * 32] = par3;
-		this.dataFile.seek((long)(4096 + (par1 + par2 * 32) * 4));
-		this.dataFile.writeInt(par3);
+		this.chunkTimestamps[p_76713_1_ + p_76713_2_ * 32] = p_76713_3_;
+		this.dataFile.seek((long)(4096 + (p_76713_1_ + p_76713_2_ * 32) * 4));
+		this.dataFile.writeInt(p_76713_3_);
 	}
 
 	public void close() throws IOException
@@ -359,11 +359,11 @@ public class RegionFile
 		private int chunkZ;
 		private static final String __OBFID = "CL_00000382";
 
-		public ChunkBuffer(int par2, int par3)
+		public ChunkBuffer(int p_i2000_2_, int p_i2000_3_)
 		{
 			super(8096);
-			this.chunkX = par2;
-			this.chunkZ = par3;
+			this.chunkX = p_i2000_2_;
+			this.chunkZ = p_i2000_3_;
 		}
 
 		public void close() throws IOException

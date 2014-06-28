@@ -26,9 +26,9 @@ public class RenderWither extends RenderLiving
 		this.field_82419_a = ((ModelWither)this.mainModel).func_82903_a();
 	}
 
-	public void doRender(EntityWither par1EntityWither, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityWither p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		BossStatus.setBossStatus(par1EntityWither, true);
+		BossStatus.setBossStatus(p_76986_1_, true);
 		int i = ((ModelWither)this.mainModel).func_82903_a();
 
 		if (i != this.field_82419_a)
@@ -37,22 +37,22 @@ public class RenderWither extends RenderLiving
 			this.mainModel = new ModelWither();
 		}
 
-		super.doRender((EntityLiving)par1EntityWither, par2, par4, par6, par8, par9);
+		super.doRender((EntityLiving)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected ResourceLocation getEntityTexture(EntityWither par1EntityWither)
+	protected ResourceLocation getEntityTexture(EntityWither p_110775_1_)
 	{
-		int i = par1EntityWither.func_82212_n();
+		int i = p_110775_1_.func_82212_n();
 		return i > 0 && (i > 80 || i / 5 % 2 != 1) ? invulnerableWitherTextures : witherTextures;
 	}
 
-	protected void preRenderCallback(EntityWither par1EntityWither, float par2)
+	protected void preRenderCallback(EntityWither p_77041_1_, float p_77041_2_)
 	{
-		int i = par1EntityWither.func_82212_n();
+		int i = p_77041_1_.func_82212_n();
 
 		if (i > 0)
 		{
-			float f1 = 2.0F - ((float)i - par2) / 220.0F * 0.5F;
+			float f1 = 2.0F - ((float)i - p_77041_2_) / 220.0F * 0.5F;
 			GL11.glScalef(f1, f1, f1);
 		}
 		else
@@ -61,11 +61,11 @@ public class RenderWither extends RenderLiving
 		}
 	}
 
-	protected int shouldRenderPass(EntityWither par1EntityWither, int par2, float par3)
+	protected int shouldRenderPass(EntityWither p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
-		if (par1EntityWither.isArmored())
+		if (p_77032_1_.isArmored())
 		{
-			if (par1EntityWither.isInvisible())
+			if (p_77032_1_.isInvisible())
 			{
 				GL11.glDepthMask(false);
 			}
@@ -74,9 +74,9 @@ public class RenderWither extends RenderLiving
 				GL11.glDepthMask(true);
 			}
 
-			if (par2 == 1)
+			if (p_77032_2_ == 1)
 			{
-				float f1 = (float)par1EntityWither.ticksExisted + par3;
+				float f1 = (float)p_77032_1_.ticksExisted + p_77032_3_;
 				this.bindTexture(invulnerableWitherTextures);
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
 				GL11.glLoadIdentity();
@@ -95,7 +95,7 @@ public class RenderWither extends RenderLiving
 				return 1;
 			}
 
-			if (par2 == 2)
+			if (p_77032_2_ == 2)
 			{
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
 				GL11.glLoadIdentity();
@@ -108,43 +108,43 @@ public class RenderWither extends RenderLiving
 		return -1;
 	}
 
-	protected int inheritRenderPass(EntityWither par1EntityWither, int par2, float par3)
+	protected int inheritRenderPass(EntityWither p_77035_1_, int p_77035_2_, float p_77035_3_)
 	{
 		return -1;
 	}
 
-	public void doRender(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLiving p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityWither)par1EntityLiving, par2, par4, par6, par8, par9);
+		this.doRender((EntityWither)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2)
+	protected void preRenderCallback(EntityLivingBase p_77041_1_, float p_77041_2_)
 	{
-		this.preRenderCallback((EntityWither)par1EntityLivingBase, par2);
+		this.preRenderCallback((EntityWither)p_77041_1_, p_77041_2_);
 	}
 
-	protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+	protected int shouldRenderPass(EntityLivingBase p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
-		return this.shouldRenderPass((EntityWither)par1EntityLivingBase, par2, par3);
+		return this.shouldRenderPass((EntityWither)p_77032_1_, p_77032_2_, p_77032_3_);
 	}
 
-	protected int inheritRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+	protected int inheritRenderPass(EntityLivingBase p_77035_1_, int p_77035_2_, float p_77035_3_)
 	{
-		return this.inheritRenderPass((EntityWither)par1EntityLivingBase, par2, par3);
+		return this.inheritRenderPass((EntityWither)p_77035_1_, p_77035_2_, p_77035_3_);
 	}
 
-	public void doRender(EntityLivingBase par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLivingBase p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityWither)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityWither)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityWither)par1Entity);
+		return this.getEntityTexture((EntityWither)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityWither)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityWither)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

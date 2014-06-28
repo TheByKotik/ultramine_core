@@ -17,15 +17,15 @@ public class GuiChest extends GuiContainer
 	private int inventoryRows;
 	private static final String __OBFID = "CL_00000749";
 
-	public GuiChest(IInventory par1IInventory, IInventory par2IInventory)
+	public GuiChest(IInventory p_i1083_1_, IInventory p_i1083_2_)
 	{
-		super(new ContainerChest(par1IInventory, par2IInventory));
-		this.upperChestInventory = par1IInventory;
-		this.lowerChestInventory = par2IInventory;
+		super(new ContainerChest(p_i1083_1_, p_i1083_2_));
+		this.upperChestInventory = p_i1083_1_;
+		this.lowerChestInventory = p_i1083_2_;
 		this.allowUserInput = false;
 		short short1 = 222;
 		int i = short1 - 108;
-		this.inventoryRows = par2IInventory.getSizeInventory() / 9;
+		this.inventoryRows = p_i1083_2_.getSizeInventory() / 9;
 		this.ySize = i + this.inventoryRows * 18;
 	}
 

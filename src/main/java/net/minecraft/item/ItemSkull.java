@@ -1,13 +1,17 @@
 package net.minecraft.item;
 
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+import java.util.UUID;
 import net.minecraft.block.BlockSkull;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.IIcon;
@@ -30,80 +34,90 @@ public class ItemSkull extends Item
 		this.setHasSubtypes(true);
 	}
 
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
-		if (par7 == 0)
+		if (p_77648_7_ == 0)
 		{
 			return false;
 		}
-		else if (!par3World.getBlock(par4, par5, par6).getMaterial().isSolid())
+		else if (!p_77648_3_.getBlock(p_77648_4_, p_77648_5_, p_77648_6_).getMaterial().isSolid())
 		{
 			return false;
 		}
 		else
 		{
-			if (par7 == 1)
+			if (p_77648_7_ == 1)
 			{
-				++par5;
+				++p_77648_5_;
 			}
 
-			if (par7 == 2)
+			if (p_77648_7_ == 2)
 			{
-				--par6;
+				--p_77648_6_;
 			}
 
-			if (par7 == 3)
+			if (p_77648_7_ == 3)
 			{
-				++par6;
+				++p_77648_6_;
 			}
 
-			if (par7 == 4)
+			if (p_77648_7_ == 4)
 			{
-				--par4;
+				--p_77648_4_;
 			}
 
-			if (par7 == 5)
+			if (p_77648_7_ == 5)
 			{
-				++par4;
+				++p_77648_4_;
 			}
 
-			if (!par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack))
+			if (!p_77648_3_.isRemote)
 			{
-				return false;
-			}
-			else if (!Blocks.skull.canPlaceBlockAt(par3World, par4, par5, par6))
-			{
-				return false;
-			}
-			else
-			{
-				par3World.setBlock(par4, par5, par6, Blocks.skull, par7, 2);
+				p_77648_3_.setBlock(p_77648_4_, p_77648_5_, p_77648_6_, Blocks.skull, p_77648_7_, 2);
 				int i1 = 0;
 
-				if (par7 == 1)
+				if (p_77648_7_ == 1)
 				{
-					i1 = MathHelper.floor_double((double)(par2EntityPlayer.rotationYaw * 16.0F / 360.0F) + 0.5D) & 15;
+					i1 = MathHelper.floor_double((double)(p_77648_2_.rotationYaw * 16.0F / 360.0F) + 0.5D) & 15;
 				}
 
-				TileEntity tileentity = par3World.getTileEntity(par4, par5, par6);
+				TileEntity tileentity = p_77648_3_.getTileEntity(p_77648_4_, p_77648_5_, p_77648_6_);
 
 				if (tileentity != null && tileentity instanceof TileEntitySkull)
 				{
-					String s = "";
-
-					if (par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("SkullOwner", 8))
+					if (p_77648_1_.getItemDamage() == 3)
 					{
-						s = par1ItemStack.getTagCompound().getString("SkullOwner");
+						GameProfile gameprofile = null;
+
+						if (p_77648_1_.hasTagCompound())
+						{
+							NBTTagCompound nbttagcompound = p_77648_1_.getTagCompound();
+
+							if (nbttagcompound.hasKey("SkullOwner", 10))
+							{
+								gameprofile = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("SkullOwner"));
+							}
+							else if (nbttagcompound.hasKey("SkullOwner", 8) && nbttagcompound.getString("SkullOwner").length() > 0)
+							{
+								gameprofile = new GameProfile((UUID)null, nbttagcompound.getString("SkullOwner"));
+							}
+						}
+
+						((TileEntitySkull)tileentity).func_152106_a(gameprofile);
+					}
+					else
+					{
+						((TileEntitySkull)tileentity).func_152107_a(p_77648_1_.getItemDamage());
 					}
 
-					((TileEntitySkull)tileentity).func_145905_a(par1ItemStack.getItemDamage(), s);
 					((TileEntitySkull)tileentity).func_145903_a(i1);
-					((BlockSkull)Blocks.skull).func_149965_a(par3World, par4, par5, par6, (TileEntitySkull)tileentity);
+					((BlockSkull)Blocks.skull).func_149965_a(p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_, (TileEntitySkull)tileentity);
 				}
 
-				--par1ItemStack.stackSize;
-				return true;
+				--p_77648_1_.stackSize;
 			}
+
+			return true;
 		}
 	}
 
@@ -116,14 +130,14 @@ public class ItemSkull extends Item
 		}
 	}
 
-	public int getMetadata(int par1)
+	public int getMetadata(int p_77647_1_)
 	{
-		return par1;
+		return p_77647_1_;
 	}
 
-	public String getUnlocalizedName(ItemStack par1ItemStack)
+	public String getUnlocalizedName(ItemStack p_77667_1_)
 	{
-		int i = par1ItemStack.getItemDamage();
+		int i = p_77667_1_.getItemDamage();
 
 		if (i < 0 || i >= skullTypes.length)
 		{
@@ -134,29 +148,42 @@ public class ItemSkull extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int par1)
+	public IIcon getIconFromDamage(int p_77617_1_)
 	{
-		if (par1 < 0 || par1 >= skullTypes.length)
+		if (p_77617_1_ < 0 || p_77617_1_ >= skullTypes.length)
 		{
-			par1 = 0;
+			p_77617_1_ = 0;
 		}
 
-		return this.field_94586_c[par1];
+		return this.field_94586_c[p_77617_1_];
 	}
 
-	public String getItemStackDisplayName(ItemStack par1ItemStack)
+	public String getItemStackDisplayName(ItemStack p_77653_1_)
 	{
-		return par1ItemStack.getItemDamage() == 3 && par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("SkullOwner", 8) ? StatCollector.translateToLocalFormatted("item.skull.player.name", new Object[] {par1ItemStack.getTagCompound().getString("SkullOwner")}): super.getItemStackDisplayName(par1ItemStack);
+		if (p_77653_1_.getItemDamage() == 3 && p_77653_1_.hasTagCompound())
+		{
+			if (p_77653_1_.getTagCompound().hasKey("SkullOwner", 10))
+			{
+				return StatCollector.translateToLocalFormatted("item.skull.player.name", new Object[] {NBTUtil.func_152459_a(p_77653_1_.getTagCompound().getCompoundTag("SkullOwner")).getName()});
+			}
+
+			if (p_77653_1_.getTagCompound().hasKey("SkullOwner", 8))
+			{
+				return StatCollector.translateToLocalFormatted("item.skull.player.name", new Object[] {p_77653_1_.getTagCompound().getString("SkullOwner")});
+			}
+		}
+
+		return super.getItemStackDisplayName(p_77653_1_);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister)
+	public void registerIcons(IIconRegister p_94581_1_)
 	{
 		this.field_94586_c = new IIcon[field_94587_a.length];
 
 		for (int i = 0; i < field_94587_a.length; ++i)
 		{
-			this.field_94586_c[i] = par1IconRegister.registerIcon(this.getIconString() + "_" + field_94587_a[i]);
+			this.field_94586_c[i] = p_94581_1_.registerIcon(this.getIconString() + "_" + field_94587_a[i]);
 		}
 	}
 }

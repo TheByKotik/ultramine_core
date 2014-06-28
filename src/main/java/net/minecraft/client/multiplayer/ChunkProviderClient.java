@@ -27,47 +27,47 @@ public class ChunkProviderClient implements IChunkProvider
 	private World worldObj;
 	private static final String __OBFID = "CL_00000880";
 
-	public ChunkProviderClient(World par1World)
+	public ChunkProviderClient(World p_i1184_1_)
 	{
-		this.blankChunk = new EmptyChunk(par1World, 0, 0);
-		this.worldObj = par1World;
+		this.blankChunk = new EmptyChunk(p_i1184_1_, 0, 0);
+		this.worldObj = p_i1184_1_;
 	}
 
-	public boolean chunkExists(int par1, int par2)
+	public boolean chunkExists(int p_73149_1_, int p_73149_2_)
 	{
 		return true;
 	}
 
-	public void unloadChunk(int par1, int par2)
+	public void unloadChunk(int p_73234_1_, int p_73234_2_)
 	{
-		Chunk chunk = this.provideChunk(par1, par2);
+		Chunk chunk = this.provideChunk(p_73234_1_, p_73234_2_);
 
 		if (!chunk.isEmpty())
 		{
 			chunk.onChunkUnload();
 		}
 
-		this.chunkMapping.remove(ChunkCoordIntPair.chunkXZ2Int(par1, par2));
+		this.chunkMapping.remove(ChunkCoordIntPair.chunkXZ2Int(p_73234_1_, p_73234_2_));
 		this.chunkListing.remove(chunk);
 	}
 
-	public Chunk loadChunk(int par1, int par2)
+	public Chunk loadChunk(int p_73158_1_, int p_73158_2_)
 	{
-		Chunk chunk = new Chunk(this.worldObj, par1, par2);
-		this.chunkMapping.add(ChunkCoordIntPair.chunkXZ2Int(par1, par2), chunk);
+		Chunk chunk = new Chunk(this.worldObj, p_73158_1_, p_73158_2_);
+		this.chunkMapping.add(ChunkCoordIntPair.chunkXZ2Int(p_73158_1_, p_73158_2_), chunk);
 		this.chunkListing.add(chunk);
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.world.ChunkEvent.Load(chunk));
 		chunk.isChunkLoaded = true;
 		return chunk;
 	}
 
-	public Chunk provideChunk(int par1, int par2)
+	public Chunk provideChunk(int p_73154_1_, int p_73154_2_)
 	{
-		Chunk chunk = (Chunk)this.chunkMapping.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(par1, par2));
+		Chunk chunk = (Chunk)this.chunkMapping.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(p_73154_1_, p_73154_2_));
 		return chunk == null ? this.blankChunk : chunk;
 	}
 
-	public boolean saveChunks(boolean par1, IProgressUpdate par2IProgressUpdate)
+	public boolean saveChunks(boolean p_73151_1_, IProgressUpdate p_73151_2_)
 	{
 		return true;
 	}
@@ -98,14 +98,14 @@ public class ChunkProviderClient implements IChunkProvider
 		return false;
 	}
 
-	public void populate(IChunkProvider par1IChunkProvider, int par2, int par3) {}
+	public void populate(IChunkProvider p_73153_1_, int p_73153_2_, int p_73153_3_) {}
 
 	public String makeString()
 	{
 		return "MultiplayerChunkCache: " + this.chunkMapping.getNumHashElements() + ", " + this.chunkListing.size();
 	}
 
-	public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int par2, int par3, int par4)
+	public List getPossibleCreatures(EnumCreatureType p_73155_1_, int p_73155_2_, int p_73155_3_, int p_73155_4_)
 	{
 		return null;
 	}
@@ -120,5 +120,5 @@ public class ChunkProviderClient implements IChunkProvider
 		return this.chunkListing.size();
 	}
 
-	public void recreateStructures(int par1, int par2) {}
+	public void recreateStructures(int p_82695_1_, int p_82695_2_) {}
 }

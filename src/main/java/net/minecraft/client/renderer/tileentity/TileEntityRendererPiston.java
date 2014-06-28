@@ -22,11 +22,11 @@ public class TileEntityRendererPiston extends TileEntitySpecialRenderer
 	private RenderBlocks field_147516_b;
 	private static final String __OBFID = "CL_00000969";
 
-	public void renderTileEntityAt(TileEntityPiston p_147515_1_, double p_147515_2_, double p_147515_4_, double p_147515_6_, float p_147515_8_)
+	public void renderTileEntityAt(TileEntityPiston p_147500_1_, double p_147500_2_, double p_147500_4_, double p_147500_6_, float p_147500_8_)
 	{
-		Block block = p_147515_1_.getStoredBlockID();
+		Block block = p_147500_1_.getStoredBlockID();
 
-		if (block.getMaterial() != Material.air && p_147515_1_.func_145860_a(p_147515_8_) < 1.0F)
+		if (block.getMaterial() != Material.air && p_147500_1_.func_145860_a(p_147500_8_) < 1.0F)
 		{
 			Tessellator tessellator = Tessellator.instance;
 			this.bindTexture(TextureMap.locationBlocksTexture);
@@ -45,24 +45,24 @@ public class TileEntityRendererPiston extends TileEntitySpecialRenderer
 			}
 
 			tessellator.startDrawingQuads();
-			tessellator.setTranslation((double)((float)p_147515_2_ - (float)p_147515_1_.xCoord + p_147515_1_.func_145865_b(p_147515_8_)), (double)((float)p_147515_4_ - (float)p_147515_1_.yCoord + p_147515_1_.func_145862_c(p_147515_8_)), (double)((float)p_147515_6_ - (float)p_147515_1_.zCoord + p_147515_1_.func_145859_d(p_147515_8_)));
+			tessellator.setTranslation((double)((float)p_147500_2_ - (float)p_147500_1_.xCoord + p_147500_1_.func_145865_b(p_147500_8_)), (double)((float)p_147500_4_ - (float)p_147500_1_.yCoord + p_147500_1_.func_145862_c(p_147500_8_)), (double)((float)p_147500_6_ - (float)p_147500_1_.zCoord + p_147500_1_.func_145859_d(p_147500_8_)));
 			tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
 
-			if (block == Blocks.piston_head && p_147515_1_.func_145860_a(p_147515_8_) < 0.5F)
+			if (block == Blocks.piston_head && p_147500_1_.func_145860_a(p_147500_8_) < 0.5F)
 			{
-				this.field_147516_b.renderPistonExtensionAllFaces(block, p_147515_1_.xCoord, p_147515_1_.yCoord, p_147515_1_.zCoord, false);
+				this.field_147516_b.renderPistonExtensionAllFaces(block, p_147500_1_.xCoord, p_147500_1_.yCoord, p_147500_1_.zCoord, false);
 			}
-			else if (p_147515_1_.func_145867_d() && !p_147515_1_.isExtending())
+			else if (p_147500_1_.func_145867_d() && !p_147500_1_.isExtending())
 			{
 				Blocks.piston_head.func_150086_a(((BlockPistonBase)block).getPistonExtensionTexture());
-				this.field_147516_b.renderPistonExtensionAllFaces(Blocks.piston_head, p_147515_1_.xCoord, p_147515_1_.yCoord, p_147515_1_.zCoord, p_147515_1_.func_145860_a(p_147515_8_) < 0.5F);
+				this.field_147516_b.renderPistonExtensionAllFaces(Blocks.piston_head, p_147500_1_.xCoord, p_147500_1_.yCoord, p_147500_1_.zCoord, p_147500_1_.func_145860_a(p_147500_8_) < 0.5F);
 				Blocks.piston_head.func_150087_e();
-				tessellator.setTranslation((double)((float)p_147515_2_ - (float)p_147515_1_.xCoord), (double)((float)p_147515_4_ - (float)p_147515_1_.yCoord), (double)((float)p_147515_6_ - (float)p_147515_1_.zCoord));
-				this.field_147516_b.renderPistonBaseAllFaces(block, p_147515_1_.xCoord, p_147515_1_.yCoord, p_147515_1_.zCoord);
+				tessellator.setTranslation((double)((float)p_147500_2_ - (float)p_147500_1_.xCoord), (double)((float)p_147500_4_ - (float)p_147500_1_.yCoord), (double)((float)p_147500_6_ - (float)p_147500_1_.zCoord));
+				this.field_147516_b.renderPistonBaseAllFaces(block, p_147500_1_.xCoord, p_147500_1_.yCoord, p_147500_1_.zCoord);
 			}
 			else
 			{
-				this.field_147516_b.renderBlockAllFaces(block, p_147515_1_.xCoord, p_147515_1_.yCoord, p_147515_1_.zCoord);
+				this.field_147516_b.renderBlockAllFaces(block, p_147500_1_.xCoord, p_147500_1_.yCoord, p_147500_1_.zCoord);
 			}
 
 			tessellator.setTranslation(0.0D, 0.0D, 0.0D);

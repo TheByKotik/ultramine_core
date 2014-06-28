@@ -35,28 +35,28 @@ public class Village
 
 	public Village() {}
 
-	public Village(World par1World)
+	public Village(World p_i1675_1_)
 	{
-		this.worldObj = par1World;
+		this.worldObj = p_i1675_1_;
 	}
 
-	public void func_82691_a(World par1World)
+	public void func_82691_a(World p_82691_1_)
 	{
-		this.worldObj = par1World;
+		this.worldObj = p_82691_1_;
 	}
 
-	public void tick(int par1)
+	public void tick(int p_75560_1_)
 	{
-		this.tickCounter = par1;
+		this.tickCounter = p_75560_1_;
 		this.removeDeadAndOutOfRangeDoors();
 		this.removeDeadAndOldAgressors();
 
-		if (par1 % 20 == 0)
+		if (p_75560_1_ % 20 == 0)
 		{
 			this.updateNumVillagers();
 		}
 
-		if (par1 % 30 == 0)
+		if (p_75560_1_ % 30 == 0)
 		{
 			this.updateNumIronGolems();
 		}
@@ -77,39 +77,39 @@ public class Village
 		}
 	}
 
-	private Vec3 tryGetIronGolemSpawningLocation(int par1, int par2, int par3, int par4, int par5, int par6)
+	private Vec3 tryGetIronGolemSpawningLocation(int p_75559_1_, int p_75559_2_, int p_75559_3_, int p_75559_4_, int p_75559_5_, int p_75559_6_)
 	{
 		for (int k1 = 0; k1 < 10; ++k1)
 		{
-			int l1 = par1 + this.worldObj.rand.nextInt(16) - 8;
-			int i2 = par2 + this.worldObj.rand.nextInt(6) - 3;
-			int j2 = par3 + this.worldObj.rand.nextInt(16) - 8;
+			int l1 = p_75559_1_ + this.worldObj.rand.nextInt(16) - 8;
+			int i2 = p_75559_2_ + this.worldObj.rand.nextInt(6) - 3;
+			int j2 = p_75559_3_ + this.worldObj.rand.nextInt(16) - 8;
 
-			if (this.isInRange(l1, i2, j2) && this.isValidIronGolemSpawningLocation(l1, i2, j2, par4, par5, par6))
+			if (this.isInRange(l1, i2, j2) && this.isValidIronGolemSpawningLocation(l1, i2, j2, p_75559_4_, p_75559_5_, p_75559_6_))
 			{
-				return this.worldObj.getWorldVec3Pool().getVecFromPool((double)l1, (double)i2, (double)j2);
+				return Vec3.createVectorHelper((double)l1, (double)i2, (double)j2);
 			}
 		}
 
 		return null;
 	}
 
-	private boolean isValidIronGolemSpawningLocation(int par1, int par2, int par3, int par4, int par5, int par6)
+	private boolean isValidIronGolemSpawningLocation(int p_75563_1_, int p_75563_2_, int p_75563_3_, int p_75563_4_, int p_75563_5_, int p_75563_6_)
 	{
-		if (!World.doesBlockHaveSolidTopSurface(this.worldObj, par1, par2 - 1, par3))
+		if (!World.doesBlockHaveSolidTopSurface(this.worldObj, p_75563_1_, p_75563_2_ - 1, p_75563_3_))
 		{
 			return false;
 		}
 		else
 		{
-			int k1 = par1 - par4 / 2;
-			int l1 = par3 - par6 / 2;
+			int k1 = p_75563_1_ - p_75563_4_ / 2;
+			int l1 = p_75563_3_ - p_75563_6_ / 2;
 
-			for (int i2 = k1; i2 < k1 + par4; ++i2)
+			for (int i2 = k1; i2 < k1 + p_75563_4_; ++i2)
 			{
-				for (int j2 = par2; j2 < par2 + par5; ++j2)
+				for (int j2 = p_75563_2_; j2 < p_75563_2_ + p_75563_5_; ++j2)
 				{
-					for (int k2 = l1; k2 < l1 + par6; ++k2)
+					for (int k2 = l1; k2 < l1 + p_75563_6_; ++k2)
 					{
 						if (this.worldObj.getBlock(i2, j2, k2).isNormalCube())
 						{
@@ -125,13 +125,13 @@ public class Village
 
 	private void updateNumIronGolems()
 	{
-		List list = this.worldObj.getEntitiesWithinAABB(EntityIronGolem.class, AxisAlignedBB.getAABBPool().getAABB((double)(this.center.posX - this.villageRadius), (double)(this.center.posY - 4), (double)(this.center.posZ - this.villageRadius), (double)(this.center.posX + this.villageRadius), (double)(this.center.posY + 4), (double)(this.center.posZ + this.villageRadius)));
+		List list = this.worldObj.getEntitiesWithinAABB(EntityIronGolem.class, AxisAlignedBB.getBoundingBox((double)(this.center.posX - this.villageRadius), (double)(this.center.posY - 4), (double)(this.center.posZ - this.villageRadius), (double)(this.center.posX + this.villageRadius), (double)(this.center.posY + 4), (double)(this.center.posZ + this.villageRadius)));
 		this.numIronGolems = list.size();
 	}
 
 	private void updateNumVillagers()
 	{
-		List list = this.worldObj.getEntitiesWithinAABB(EntityVillager.class, AxisAlignedBB.getAABBPool().getAABB((double)(this.center.posX - this.villageRadius), (double)(this.center.posY - 4), (double)(this.center.posZ - this.villageRadius), (double)(this.center.posX + this.villageRadius), (double)(this.center.posY + 4), (double)(this.center.posZ + this.villageRadius)));
+		List list = this.worldObj.getEntitiesWithinAABB(EntityVillager.class, AxisAlignedBB.getBoundingBox((double)(this.center.posX - this.villageRadius), (double)(this.center.posY - 4), (double)(this.center.posZ - this.villageRadius), (double)(this.center.posX + this.villageRadius), (double)(this.center.posY + 4), (double)(this.center.posZ + this.villageRadius)));
 		this.numVillagers = list.size();
 
 		if (this.numVillagers == 0)
@@ -165,9 +165,9 @@ public class Village
 		return this.numVillagers;
 	}
 
-	public boolean isInRange(int par1, int par2, int par3)
+	public boolean isInRange(int p_75570_1_, int p_75570_2_, int p_75570_3_)
 	{
-		return this.center.getDistanceSquared(par1, par2, par3) < (float)(this.villageRadius * this.villageRadius);
+		return this.center.getDistanceSquared(p_75570_1_, p_75570_2_, p_75570_3_) < (float)(this.villageRadius * this.villageRadius);
 	}
 
 	public List getVillageDoorInfoList()
@@ -175,7 +175,7 @@ public class Village
 		return this.villageDoorInfoList;
 	}
 
-	public VillageDoorInfo findNearestDoor(int par1, int par2, int par3)
+	public VillageDoorInfo findNearestDoor(int p_75564_1_, int p_75564_2_, int p_75564_3_)
 	{
 		VillageDoorInfo villagedoorinfo = null;
 		int l = Integer.MAX_VALUE;
@@ -184,7 +184,7 @@ public class Village
 		while (iterator.hasNext())
 		{
 			VillageDoorInfo villagedoorinfo1 = (VillageDoorInfo)iterator.next();
-			int i1 = villagedoorinfo1.getDistanceSquared(par1, par2, par3);
+			int i1 = villagedoorinfo1.getDistanceSquared(p_75564_1_, p_75564_2_, p_75564_3_);
 
 			if (i1 < l)
 			{
@@ -196,7 +196,7 @@ public class Village
 		return villagedoorinfo;
 	}
 
-	public VillageDoorInfo findNearestDoorUnrestricted(int par1, int par2, int par3)
+	public VillageDoorInfo findNearestDoorUnrestricted(int p_75569_1_, int p_75569_2_, int p_75569_3_)
 	{
 		VillageDoorInfo villagedoorinfo = null;
 		int l = Integer.MAX_VALUE;
@@ -205,7 +205,7 @@ public class Village
 		while (iterator.hasNext())
 		{
 			VillageDoorInfo villagedoorinfo1 = (VillageDoorInfo)iterator.next();
-			int i1 = villagedoorinfo1.getDistanceSquared(par1, par2, par3);
+			int i1 = villagedoorinfo1.getDistanceSquared(p_75569_1_, p_75569_2_, p_75569_3_);
 
 			if (i1 > 256)
 			{
@@ -226,9 +226,9 @@ public class Village
 		return villagedoorinfo;
 	}
 
-	public VillageDoorInfo getVillageDoorAt(int par1, int par2, int par3)
+	public VillageDoorInfo getVillageDoorAt(int p_75578_1_, int p_75578_2_, int p_75578_3_)
 	{
-		if (this.center.getDistanceSquared(par1, par2, par3) > (float)(this.villageRadius * this.villageRadius))
+		if (this.center.getDistanceSquared(p_75578_1_, p_75578_2_, p_75578_3_) > (float)(this.villageRadius * this.villageRadius))
 		{
 			return null;
 		}
@@ -246,20 +246,20 @@ public class Village
 
 				villagedoorinfo = (VillageDoorInfo)iterator.next();
 			}
-			while (villagedoorinfo.posX != par1 || villagedoorinfo.posZ != par3 || Math.abs(villagedoorinfo.posY - par2) > 1);
+			while (villagedoorinfo.posX != p_75578_1_ || villagedoorinfo.posZ != p_75578_3_ || Math.abs(villagedoorinfo.posY - p_75578_2_) > 1);
 
 			return villagedoorinfo;
 		}
 	}
 
-	public void addVillageDoorInfo(VillageDoorInfo par1VillageDoorInfo)
+	public void addVillageDoorInfo(VillageDoorInfo p_75576_1_)
 	{
-		this.villageDoorInfoList.add(par1VillageDoorInfo);
-		this.centerHelper.posX += par1VillageDoorInfo.posX;
-		this.centerHelper.posY += par1VillageDoorInfo.posY;
-		this.centerHelper.posZ += par1VillageDoorInfo.posZ;
+		this.villageDoorInfoList.add(p_75576_1_);
+		this.centerHelper.posX += p_75576_1_.posX;
+		this.centerHelper.posY += p_75576_1_.posY;
+		this.centerHelper.posZ += p_75576_1_.posZ;
 		this.updateVillageRadiusAndCenter();
-		this.lastAddDoorTimestamp = par1VillageDoorInfo.lastActivityTimestamp;
+		this.lastAddDoorTimestamp = p_75576_1_.lastActivityTimestamp;
 	}
 
 	public boolean isAnnihilated()
@@ -267,7 +267,7 @@ public class Village
 		return this.villageDoorInfoList.isEmpty();
 	}
 
-	public void addOrRenewAgressor(EntityLivingBase par1EntityLivingBase)
+	public void addOrRenewAgressor(EntityLivingBase p_75575_1_)
 	{
 		Iterator iterator = this.villageAgressors.iterator();
 		Village.VillageAgressor villageagressor;
@@ -276,18 +276,18 @@ public class Village
 		{
 			if (!iterator.hasNext())
 			{
-				this.villageAgressors.add(new Village.VillageAgressor(par1EntityLivingBase, this.tickCounter));
+				this.villageAgressors.add(new Village.VillageAgressor(p_75575_1_, this.tickCounter));
 				return;
 			}
 
 			villageagressor = (Village.VillageAgressor)iterator.next();
 		}
-		while (villageagressor.agressor != par1EntityLivingBase);
+		while (villageagressor.agressor != p_75575_1_);
 
 		villageagressor.agressionTime = this.tickCounter;
 	}
 
-	public EntityLivingBase findNearestVillageAggressor(EntityLivingBase par1EntityLivingBase)
+	public EntityLivingBase findNearestVillageAggressor(EntityLivingBase p_75571_1_)
 	{
 		double d0 = Double.MAX_VALUE;
 		Village.VillageAgressor villageagressor = null;
@@ -295,7 +295,7 @@ public class Village
 		for (int i = 0; i < this.villageAgressors.size(); ++i)
 		{
 			Village.VillageAgressor villageagressor1 = (Village.VillageAgressor)this.villageAgressors.get(i);
-			double d1 = villageagressor1.agressor.getDistanceSqToEntity(par1EntityLivingBase);
+			double d1 = villageagressor1.agressor.getDistanceSqToEntity(p_75571_1_);
 
 			if (d1 <= d0)
 			{
@@ -307,7 +307,7 @@ public class Village
 		return villageagressor != null ? villageagressor.agressor : null;
 	}
 
-	public EntityPlayer func_82685_c(EntityLivingBase par1EntityLivingBase)
+	public EntityPlayer func_82685_c(EntityLivingBase p_82685_1_)
 	{
 		double d0 = Double.MAX_VALUE;
 		EntityPlayer entityplayer = null;
@@ -323,7 +323,7 @@ public class Village
 
 				if (entityplayer1 != null)
 				{
-					double d1 = entityplayer1.getDistanceSqToEntity(par1EntityLivingBase);
+					double d1 = entityplayer1.getDistanceSqToEntity(p_82685_1_);
 
 					if (d1 <= d0)
 					{
@@ -384,9 +384,9 @@ public class Village
 		}
 	}
 
-	private boolean isBlockDoor(int par1, int par2, int par3)
+	private boolean isBlockDoor(int p_75574_1_, int p_75574_2_, int p_75574_3_)
 	{
-		return this.worldObj.getBlock(par1, par2, par3) == Blocks.wooden_door;
+		return this.worldObj.getBlock(p_75574_1_, p_75574_2_, p_75574_3_) == Blocks.wooden_door;
 	}
 
 	private void updateVillageRadiusAndCenter()
@@ -413,40 +413,40 @@ public class Village
 		}
 	}
 
-	public int getReputationForPlayer(String par1Str)
+	public int getReputationForPlayer(String p_82684_1_)
 	{
-		Integer integer = (Integer)this.playerReputation.get(par1Str);
+		Integer integer = (Integer)this.playerReputation.get(p_82684_1_);
 		return integer != null ? integer.intValue() : 0;
 	}
 
-	public int setReputationForPlayer(String par1Str, int par2)
+	public int setReputationForPlayer(String p_82688_1_, int p_82688_2_)
 	{
-		int j = this.getReputationForPlayer(par1Str);
-		int k = MathHelper.clamp_int(j + par2, -30, 10);
-		this.playerReputation.put(par1Str, Integer.valueOf(k));
+		int j = this.getReputationForPlayer(p_82688_1_);
+		int k = MathHelper.clamp_int(j + p_82688_2_, -30, 10);
+		this.playerReputation.put(p_82688_1_, Integer.valueOf(k));
 		return k;
 	}
 
-	public boolean isPlayerReputationTooLow(String par1Str)
+	public boolean isPlayerReputationTooLow(String p_82687_1_)
 	{
-		return this.getReputationForPlayer(par1Str) <= -15;
+		return this.getReputationForPlayer(p_82687_1_) <= -15;
 	}
 
-	public void readVillageDataFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readVillageDataFromNBT(NBTTagCompound p_82690_1_)
 	{
-		this.numVillagers = par1NBTTagCompound.getInteger("PopSize");
-		this.villageRadius = par1NBTTagCompound.getInteger("Radius");
-		this.numIronGolems = par1NBTTagCompound.getInteger("Golems");
-		this.lastAddDoorTimestamp = par1NBTTagCompound.getInteger("Stable");
-		this.tickCounter = par1NBTTagCompound.getInteger("Tick");
-		this.noBreedTicks = par1NBTTagCompound.getInteger("MTick");
-		this.center.posX = par1NBTTagCompound.getInteger("CX");
-		this.center.posY = par1NBTTagCompound.getInteger("CY");
-		this.center.posZ = par1NBTTagCompound.getInteger("CZ");
-		this.centerHelper.posX = par1NBTTagCompound.getInteger("ACX");
-		this.centerHelper.posY = par1NBTTagCompound.getInteger("ACY");
-		this.centerHelper.posZ = par1NBTTagCompound.getInteger("ACZ");
-		NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Doors", 10);
+		this.numVillagers = p_82690_1_.getInteger("PopSize");
+		this.villageRadius = p_82690_1_.getInteger("Radius");
+		this.numIronGolems = p_82690_1_.getInteger("Golems");
+		this.lastAddDoorTimestamp = p_82690_1_.getInteger("Stable");
+		this.tickCounter = p_82690_1_.getInteger("Tick");
+		this.noBreedTicks = p_82690_1_.getInteger("MTick");
+		this.center.posX = p_82690_1_.getInteger("CX");
+		this.center.posY = p_82690_1_.getInteger("CY");
+		this.center.posZ = p_82690_1_.getInteger("CZ");
+		this.centerHelper.posX = p_82690_1_.getInteger("ACX");
+		this.centerHelper.posY = p_82690_1_.getInteger("ACY");
+		this.centerHelper.posZ = p_82690_1_.getInteger("ACZ");
+		NBTTagList nbttaglist = p_82690_1_.getTagList("Doors", 10);
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i)
 		{
@@ -455,7 +455,7 @@ public class Village
 			this.villageDoorInfoList.add(villagedoorinfo);
 		}
 
-		NBTTagList nbttaglist1 = par1NBTTagCompound.getTagList("Players", 10);
+		NBTTagList nbttaglist1 = p_82690_1_.getTagList("Players", 10);
 
 		for (int j = 0; j < nbttaglist1.tagCount(); ++j)
 		{
@@ -464,20 +464,20 @@ public class Village
 		}
 	}
 
-	public void writeVillageDataToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeVillageDataToNBT(NBTTagCompound p_82689_1_)
 	{
-		par1NBTTagCompound.setInteger("PopSize", this.numVillagers);
-		par1NBTTagCompound.setInteger("Radius", this.villageRadius);
-		par1NBTTagCompound.setInteger("Golems", this.numIronGolems);
-		par1NBTTagCompound.setInteger("Stable", this.lastAddDoorTimestamp);
-		par1NBTTagCompound.setInteger("Tick", this.tickCounter);
-		par1NBTTagCompound.setInteger("MTick", this.noBreedTicks);
-		par1NBTTagCompound.setInteger("CX", this.center.posX);
-		par1NBTTagCompound.setInteger("CY", this.center.posY);
-		par1NBTTagCompound.setInteger("CZ", this.center.posZ);
-		par1NBTTagCompound.setInteger("ACX", this.centerHelper.posX);
-		par1NBTTagCompound.setInteger("ACY", this.centerHelper.posY);
-		par1NBTTagCompound.setInteger("ACZ", this.centerHelper.posZ);
+		p_82689_1_.setInteger("PopSize", this.numVillagers);
+		p_82689_1_.setInteger("Radius", this.villageRadius);
+		p_82689_1_.setInteger("Golems", this.numIronGolems);
+		p_82689_1_.setInteger("Stable", this.lastAddDoorTimestamp);
+		p_82689_1_.setInteger("Tick", this.tickCounter);
+		p_82689_1_.setInteger("MTick", this.noBreedTicks);
+		p_82689_1_.setInteger("CX", this.center.posX);
+		p_82689_1_.setInteger("CY", this.center.posY);
+		p_82689_1_.setInteger("CZ", this.center.posZ);
+		p_82689_1_.setInteger("ACX", this.centerHelper.posX);
+		p_82689_1_.setInteger("ACY", this.centerHelper.posY);
+		p_82689_1_.setInteger("ACZ", this.centerHelper.posZ);
 		NBTTagList nbttaglist = new NBTTagList();
 		Iterator iterator = this.villageDoorInfoList.iterator();
 
@@ -494,7 +494,7 @@ public class Village
 			nbttaglist.appendTag(nbttagcompound1);
 		}
 
-		par1NBTTagCompound.setTag("Doors", nbttaglist);
+		p_82689_1_.setTag("Doors", nbttaglist);
 		NBTTagList nbttaglist1 = new NBTTagList();
 		Iterator iterator1 = this.playerReputation.keySet().iterator();
 
@@ -507,7 +507,7 @@ public class Village
 			nbttaglist1.appendTag(nbttagcompound2);
 		}
 
-		par1NBTTagCompound.setTag("Players", nbttaglist1);
+		p_82689_1_.setTag("Players", nbttaglist1);
 	}
 
 	public void endMatingSeason()
@@ -520,14 +520,14 @@ public class Village
 		return this.noBreedTicks == 0 || this.tickCounter - this.noBreedTicks >= 3600;
 	}
 
-	public void setDefaultPlayerReputation(int par1)
+	public void setDefaultPlayerReputation(int p_82683_1_)
 	{
 		Iterator iterator = this.playerReputation.keySet().iterator();
 
 		while (iterator.hasNext())
 		{
 			String s = (String)iterator.next();
-			this.setReputationForPlayer(s, par1);
+			this.setReputationForPlayer(s, p_82683_1_);
 		}
 	}
 
@@ -537,10 +537,10 @@ public class Village
 		public int agressionTime;
 		private static final String __OBFID = "CL_00001632";
 
-		VillageAgressor(EntityLivingBase par2EntityLivingBase, int par3)
+		VillageAgressor(EntityLivingBase p_i1674_2_, int p_i1674_3_)
 		{
-			this.agressor = par2EntityLivingBase;
-			this.agressionTime = par3;
+			this.agressor = p_i1674_2_;
+			this.agressionTime = p_i1674_3_;
 		}
 	}
 }

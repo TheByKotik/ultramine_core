@@ -22,9 +22,9 @@ public class EntitySlime extends EntityLiving implements IMob
 	private int slimeJumpDelay;
 	private static final String __OBFID = "CL_00001698";
 
-	public EntitySlime(World par1World)
+	public EntitySlime(World p_i1742_1_)
 	{
-		super(par1World);
+		super(p_i1742_1_);
 		int i = 1 << this.rand.nextInt(3);
 		this.yOffset = 0.0F;
 		this.slimeJumpDelay = this.rand.nextInt(20) + 10;
@@ -37,14 +37,14 @@ public class EntitySlime extends EntityLiving implements IMob
 		this.dataWatcher.addObject(16, new Byte((byte)1));
 	}
 
-	protected void setSlimeSize(int par1)
+	protected void setSlimeSize(int p_70799_1_)
 	{
-		this.dataWatcher.updateObject(16, new Byte((byte)par1));
-		this.setSize(0.6F * (float)par1, 0.6F * (float)par1);
+		this.dataWatcher.updateObject(16, new Byte((byte)p_70799_1_));
+		this.setSize(0.6F * (float)p_70799_1_, 0.6F * (float)p_70799_1_);
 		this.setPosition(this.posX, this.posY, this.posZ);
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(par1 * par1));
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(p_70799_1_ * p_70799_1_));
 		this.setHealth(this.getMaxHealth());
-		this.experienceValue = par1;
+		this.experienceValue = p_70799_1_;
 	}
 
 	public int getSlimeSize()
@@ -52,16 +52,23 @@ public class EntitySlime extends EntityLiving implements IMob
 		return this.dataWatcher.getWatchableObjectByte(16);
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setInteger("Size", this.getSlimeSize() - 1);
+		super.writeEntityToNBT(p_70014_1_);
+		p_70014_1_.setInteger("Size", this.getSlimeSize() - 1);
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
-		this.setSlimeSize(par1NBTTagCompound.getInteger("Size") + 1);
+		super.readEntityFromNBT(p_70037_1_);
+		int i = p_70037_1_.getInteger("Size");
+
+		if (i < 0)
+		{
+			i = 0;
+		}
+
+		this.setSlimeSize(i + 1);
 	}
 
 	protected String getSlimeParticle()
@@ -198,13 +205,13 @@ public class EntitySlime extends EntityLiving implements IMob
 		super.setDead();
 	}
 
-	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
+	public void onCollideWithPlayer(EntityPlayer p_70100_1_)
 	{
 		if (this.canDamagePlayer())
 		{
 			int i = this.getSlimeSize();
 
-			if (this.canEntityBeSeen(par1EntityPlayer) && this.getDistanceSqToEntity(par1EntityPlayer) < 0.6D * (double)i * 0.6D * (double)i && par1EntityPlayer.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttackStrength()))
+			if (this.canEntityBeSeen(p_70100_1_) && this.getDistanceSqToEntity(p_70100_1_) < 0.6D * (double)i * 0.6D * (double)i && p_70100_1_.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttackStrength()))
 			{
 				this.playSound("mob.attack", 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 			}

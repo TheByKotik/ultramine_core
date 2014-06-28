@@ -8,7 +8,7 @@ public class ItemSimpleFoiled extends Item
 	private static final String __OBFID = "CL_00000065";
 
 	@SideOnly(Side.CLIENT)
-	public boolean hasEffect(ItemStack par1ItemStack)
+	public boolean hasEffect(ItemStack p_77636_1_)
 	{
 		return true;
 	}

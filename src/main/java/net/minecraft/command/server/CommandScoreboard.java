@@ -38,197 +38,197 @@ public class CommandScoreboard extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.scoreboard.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length >= 1)
+		if (p_71515_2_.length >= 1)
 		{
-			if (par2ArrayOfStr[0].equalsIgnoreCase("objectives"))
+			if (p_71515_2_[0].equalsIgnoreCase("objectives"))
 			{
-				if (par2ArrayOfStr.length == 1)
+				if (p_71515_2_.length == 1)
 				{
 					throw new WrongUsageException("commands.scoreboard.objectives.usage", new Object[0]);
 				}
 
-				if (par2ArrayOfStr[1].equalsIgnoreCase("list"))
+				if (p_71515_2_[1].equalsIgnoreCase("list"))
 				{
-					this.func_147196_d(par1ICommandSender);
+					this.func_147196_d(p_71515_1_);
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("add"))
+				else if (p_71515_2_[1].equalsIgnoreCase("add"))
 				{
-					if (par2ArrayOfStr.length < 4)
+					if (p_71515_2_.length < 4)
 					{
 						throw new WrongUsageException("commands.scoreboard.objectives.add.usage", new Object[0]);
 					}
 
-					this.func_147193_c(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147193_c(p_71515_1_, p_71515_2_, 2);
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("remove"))
+				else if (p_71515_2_[1].equalsIgnoreCase("remove"))
 				{
-					if (par2ArrayOfStr.length != 3)
+					if (p_71515_2_.length != 3)
 					{
 						throw new WrongUsageException("commands.scoreboard.objectives.remove.usage", new Object[0]);
 					}
 
-					this.func_147191_h(par1ICommandSender, par2ArrayOfStr[2]);
+					this.func_147191_h(p_71515_1_, p_71515_2_[2]);
 				}
 				else
 				{
-					if (!par2ArrayOfStr[1].equalsIgnoreCase("setdisplay"))
+					if (!p_71515_2_[1].equalsIgnoreCase("setdisplay"))
 					{
 						throw new WrongUsageException("commands.scoreboard.objectives.usage", new Object[0]);
 					}
 
-					if (par2ArrayOfStr.length != 3 && par2ArrayOfStr.length != 4)
+					if (p_71515_2_.length != 3 && p_71515_2_.length != 4)
 					{
 						throw new WrongUsageException("commands.scoreboard.objectives.setdisplay.usage", new Object[0]);
 					}
 
-					this.func_147198_k(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147198_k(p_71515_1_, p_71515_2_, 2);
 				}
 
 				return;
 			}
 
-			if (par2ArrayOfStr[0].equalsIgnoreCase("players"))
+			if (p_71515_2_[0].equalsIgnoreCase("players"))
 			{
-				if (par2ArrayOfStr.length == 1)
+				if (p_71515_2_.length == 1)
 				{
 					throw new WrongUsageException("commands.scoreboard.players.usage", new Object[0]);
 				}
 
-				if (par2ArrayOfStr[1].equalsIgnoreCase("list"))
+				if (p_71515_2_[1].equalsIgnoreCase("list"))
 				{
-					if (par2ArrayOfStr.length > 3)
+					if (p_71515_2_.length > 3)
 					{
 						throw new WrongUsageException("commands.scoreboard.players.list.usage", new Object[0]);
 					}
 
-					this.func_147195_l(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147195_l(p_71515_1_, p_71515_2_, 2);
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("add"))
+				else if (p_71515_2_[1].equalsIgnoreCase("add"))
 				{
-					if (par2ArrayOfStr.length != 5)
+					if (p_71515_2_.length != 5)
 					{
 						throw new WrongUsageException("commands.scoreboard.players.add.usage", new Object[0]);
 					}
 
-					this.func_147197_m(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147197_m(p_71515_1_, p_71515_2_, 2);
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("remove"))
+				else if (p_71515_2_[1].equalsIgnoreCase("remove"))
 				{
-					if (par2ArrayOfStr.length != 5)
+					if (p_71515_2_.length != 5)
 					{
 						throw new WrongUsageException("commands.scoreboard.players.remove.usage", new Object[0]);
 					}
 
-					this.func_147197_m(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147197_m(p_71515_1_, p_71515_2_, 2);
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("set"))
+				else if (p_71515_2_[1].equalsIgnoreCase("set"))
 				{
-					if (par2ArrayOfStr.length != 5)
+					if (p_71515_2_.length != 5)
 					{
 						throw new WrongUsageException("commands.scoreboard.players.set.usage", new Object[0]);
 					}
 
-					this.func_147197_m(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147197_m(p_71515_1_, p_71515_2_, 2);
 				}
 				else
 				{
-					if (!par2ArrayOfStr[1].equalsIgnoreCase("reset"))
+					if (!p_71515_2_[1].equalsIgnoreCase("reset"))
 					{
 						throw new WrongUsageException("commands.scoreboard.players.usage", new Object[0]);
 					}
 
-					if (par2ArrayOfStr.length != 3)
+					if (p_71515_2_.length != 3)
 					{
 						throw new WrongUsageException("commands.scoreboard.players.reset.usage", new Object[0]);
 					}
 
-					this.func_147187_n(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147187_n(p_71515_1_, p_71515_2_, 2);
 				}
 
 				return;
 			}
 
-			if (par2ArrayOfStr[0].equalsIgnoreCase("teams"))
+			if (p_71515_2_[0].equalsIgnoreCase("teams"))
 			{
-				if (par2ArrayOfStr.length == 1)
+				if (p_71515_2_.length == 1)
 				{
 					throw new WrongUsageException("commands.scoreboard.teams.usage", new Object[0]);
 				}
 
-				if (par2ArrayOfStr[1].equalsIgnoreCase("list"))
+				if (p_71515_2_[1].equalsIgnoreCase("list"))
 				{
-					if (par2ArrayOfStr.length > 3)
+					if (p_71515_2_.length > 3)
 					{
 						throw new WrongUsageException("commands.scoreboard.teams.list.usage", new Object[0]);
 					}
 
-					this.func_147186_g(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147186_g(p_71515_1_, p_71515_2_, 2);
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("add"))
+				else if (p_71515_2_[1].equalsIgnoreCase("add"))
 				{
-					if (par2ArrayOfStr.length < 3)
+					if (p_71515_2_.length < 3)
 					{
 						throw new WrongUsageException("commands.scoreboard.teams.add.usage", new Object[0]);
 					}
 
-					this.func_147185_d(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147185_d(p_71515_1_, p_71515_2_, 2);
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("remove"))
+				else if (p_71515_2_[1].equalsIgnoreCase("remove"))
 				{
-					if (par2ArrayOfStr.length != 3)
+					if (p_71515_2_.length != 3)
 					{
 						throw new WrongUsageException("commands.scoreboard.teams.remove.usage", new Object[0]);
 					}
 
-					this.func_147194_f(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147194_f(p_71515_1_, p_71515_2_, 2);
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("empty"))
+				else if (p_71515_2_[1].equalsIgnoreCase("empty"))
 				{
-					if (par2ArrayOfStr.length != 3)
+					if (p_71515_2_.length != 3)
 					{
 						throw new WrongUsageException("commands.scoreboard.teams.empty.usage", new Object[0]);
 					}
 
-					this.func_147188_j(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147188_j(p_71515_1_, p_71515_2_, 2);
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("join"))
+				else if (p_71515_2_[1].equalsIgnoreCase("join"))
 				{
-					if (par2ArrayOfStr.length < 4 && (par2ArrayOfStr.length != 3 || !(par1ICommandSender instanceof EntityPlayer)))
+					if (p_71515_2_.length < 4 && (p_71515_2_.length != 3 || !(p_71515_1_ instanceof EntityPlayer)))
 					{
 						throw new WrongUsageException("commands.scoreboard.teams.join.usage", new Object[0]);
 					}
 
-					this.func_147190_h(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147190_h(p_71515_1_, p_71515_2_, 2);
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("leave"))
+				else if (p_71515_2_[1].equalsIgnoreCase("leave"))
 				{
-					if (par2ArrayOfStr.length < 3 && !(par1ICommandSender instanceof EntityPlayer))
+					if (p_71515_2_.length < 3 && !(p_71515_1_ instanceof EntityPlayer))
 					{
 						throw new WrongUsageException("commands.scoreboard.teams.leave.usage", new Object[0]);
 					}
 
-					this.func_147199_i(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147199_i(p_71515_1_, p_71515_2_, 2);
 				}
 				else
 				{
-					if (!par2ArrayOfStr[1].equalsIgnoreCase("option"))
+					if (!p_71515_2_[1].equalsIgnoreCase("option"))
 					{
 						throw new WrongUsageException("commands.scoreboard.teams.usage", new Object[0]);
 					}
 
-					if (par2ArrayOfStr.length != 4 && par2ArrayOfStr.length != 5)
+					if (p_71515_2_.length != 4 && p_71515_2_.length != 5)
 					{
 						throw new WrongUsageException("commands.scoreboard.teams.option.usage", new Object[0]);
 					}
 
-					this.func_147200_e(par1ICommandSender, par2ArrayOfStr, 2);
+					this.func_147200_e(p_71515_1_, p_71515_2_, 2);
 				}
 
 				return;
@@ -325,7 +325,7 @@ public class CommandScoreboard extends CommandBase
 				scoreboard.addScoreObjective(s, iscoreobjectivecriteria);
 			}
 
-			notifyAdmins(p_147193_1_, "commands.scoreboard.objectives.add.success", new Object[] {s});
+			func_152373_a(p_147193_1_, this, "commands.scoreboard.objectives.add.success", new Object[] {s});
 		}
 	}
 
@@ -371,7 +371,7 @@ public class CommandScoreboard extends CommandBase
 				scoreboard.createTeam(s);
 			}
 
-			notifyAdmins(p_147185_1_, "commands.scoreboard.teams.add.success", new Object[] {s});
+			func_152373_a(p_147185_1_, this, "commands.scoreboard.teams.add.success", new Object[] {s});
 		}
 	}
 
@@ -437,7 +437,7 @@ public class CommandScoreboard extends CommandBase
 					scoreplayerteam.setSeeFriendlyInvisiblesEnabled(s1.equalsIgnoreCase("true"));
 				}
 
-				notifyAdmins(p_147200_1_, "commands.scoreboard.teams.option.success", new Object[] {s, scoreplayerteam.getRegisteredName(), s1});
+				func_152373_a(p_147200_1_, this, "commands.scoreboard.teams.option.success", new Object[] {s, scoreplayerteam.getRegisteredName(), s1});
 			}
 		}
 	}
@@ -450,7 +450,7 @@ public class CommandScoreboard extends CommandBase
 		if (scoreplayerteam != null)
 		{
 			scoreboard.removeTeam(scoreplayerteam);
-			notifyAdmins(p_147194_1_, "commands.scoreboard.teams.remove.success", new Object[] {scoreplayerteam.getRegisteredName()});
+			func_152373_a(p_147194_1_, this, "commands.scoreboard.teams.remove.success", new Object[] {scoreplayerteam.getRegisteredName()});
 		}
 	}
 
@@ -541,7 +541,7 @@ public class CommandScoreboard extends CommandBase
 
 		if (!hashset.isEmpty())
 		{
-			notifyAdmins(p_147190_1_, "commands.scoreboard.teams.join.success", new Object[] {Integer.valueOf(hashset.size()), s, joinNiceString(hashset.toArray(new String[0]))});
+			func_152373_a(p_147190_1_, this, "commands.scoreboard.teams.join.success", new Object[] {Integer.valueOf(hashset.size()), s, joinNiceString(hashset.toArray(new String[0]))});
 		}
 
 		if (!hashset1.isEmpty())
@@ -589,7 +589,7 @@ public class CommandScoreboard extends CommandBase
 
 		if (!hashset.isEmpty())
 		{
-			notifyAdmins(p_147199_1_, "commands.scoreboard.teams.leave.success", new Object[] {Integer.valueOf(hashset.size()), joinNiceString(hashset.toArray(new String[0]))});
+			func_152373_a(p_147199_1_, this, "commands.scoreboard.teams.leave.success", new Object[] {Integer.valueOf(hashset.size()), joinNiceString(hashset.toArray(new String[0]))});
 		}
 
 		if (!hashset1.isEmpty())
@@ -621,7 +621,7 @@ public class CommandScoreboard extends CommandBase
 					scoreboard.removePlayerFromTeam(s, scoreplayerteam);
 				}
 
-				notifyAdmins(p_147188_1_, "commands.scoreboard.teams.empty.success", new Object[] {Integer.valueOf(arraylist.size()), scoreplayerteam.getRegisteredName()});
+				func_152373_a(p_147188_1_, this, "commands.scoreboard.teams.empty.success", new Object[] {Integer.valueOf(arraylist.size()), scoreplayerteam.getRegisteredName()});
 			}
 		}
 	}
@@ -631,7 +631,7 @@ public class CommandScoreboard extends CommandBase
 		Scoreboard scoreboard = this.func_147192_d();
 		ScoreObjective scoreobjective = this.func_147189_a(p_147191_2_, false);
 		scoreboard.func_96519_k(scoreobjective);
-		notifyAdmins(p_147191_1_, "commands.scoreboard.objectives.remove.success", new Object[] {p_147191_2_});
+		func_152373_a(p_147191_1_, this, "commands.scoreboard.objectives.remove.success", new Object[] {p_147191_2_});
 	}
 
 	protected void func_147196_d(ICommandSender p_147196_1_)
@@ -680,11 +680,11 @@ public class CommandScoreboard extends CommandBase
 
 			if (scoreobjective != null)
 			{
-				notifyAdmins(p_147198_1_, "commands.scoreboard.objectives.setdisplay.successSet", new Object[] {Scoreboard.getObjectiveDisplaySlot(j), scoreobjective.getName()});
+				func_152373_a(p_147198_1_, this, "commands.scoreboard.objectives.setdisplay.successSet", new Object[] {Scoreboard.getObjectiveDisplaySlot(j), scoreobjective.getName()});
 			}
 			else
 			{
-				notifyAdmins(p_147198_1_, "commands.scoreboard.objectives.setdisplay.successCleared", new Object[] {Scoreboard.getObjectiveDisplaySlot(j)});
+				func_152373_a(p_147198_1_, this, "commands.scoreboard.objectives.setdisplay.successCleared", new Object[] {Scoreboard.getObjectiveDisplaySlot(j)});
 			}
 		}
 	}
@@ -752,7 +752,7 @@ public class CommandScoreboard extends CommandBase
 			score.decreaseScore(j);
 		}
 
-		notifyAdmins(p_147197_1_, "commands.scoreboard.players.set.success", new Object[] {scoreobjective.getName(), s1, Integer.valueOf(score.getScorePoints())});
+		func_152373_a(p_147197_1_, this, "commands.scoreboard.players.set.success", new Object[] {scoreobjective.getName(), s1, Integer.valueOf(score.getScorePoints())});
 	}
 
 	protected void func_147187_n(ICommandSender p_147187_1_, String[] p_147187_2_, int p_147187_3_)
@@ -760,136 +760,136 @@ public class CommandScoreboard extends CommandBase
 		Scoreboard scoreboard = this.func_147192_d();
 		String s = func_96332_d(p_147187_1_, p_147187_2_[p_147187_3_++]);
 		scoreboard.func_96515_c(s);
-		notifyAdmins(p_147187_1_, "commands.scoreboard.players.reset.success", new Object[] {s});
+		func_152373_a(p_147187_1_, this, "commands.scoreboard.players.reset.success", new Object[] {s});
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		if (par2ArrayOfStr.length == 1)
+		if (p_71516_2_.length == 1)
 		{
-			return getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"objectives", "players", "teams"});
+			return getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"objectives", "players", "teams"});
 		}
 		else
 		{
-			if (par2ArrayOfStr[0].equalsIgnoreCase("objectives"))
+			if (p_71516_2_[0].equalsIgnoreCase("objectives"))
 			{
-				if (par2ArrayOfStr.length == 2)
+				if (p_71516_2_.length == 2)
 				{
-					return getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"list", "add", "remove", "setdisplay"});
+					return getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"list", "add", "remove", "setdisplay"});
 				}
 
-				if (par2ArrayOfStr[1].equalsIgnoreCase("add"))
+				if (p_71516_2_[1].equalsIgnoreCase("add"))
 				{
-					if (par2ArrayOfStr.length == 4)
+					if (p_71516_2_.length == 4)
 					{
 						Set set = IScoreObjectiveCriteria.field_96643_a.keySet();
-						return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, set);
+						return getListOfStringsFromIterableMatchingLastWord(p_71516_2_, set);
 					}
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("remove"))
+				else if (p_71516_2_[1].equalsIgnoreCase("remove"))
 				{
-					if (par2ArrayOfStr.length == 3)
+					if (p_71516_2_.length == 3)
 					{
-						return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, this.func_147184_a(false));
+						return getListOfStringsFromIterableMatchingLastWord(p_71516_2_, this.func_147184_a(false));
 					}
 				}
-				else if (par2ArrayOfStr[1].equalsIgnoreCase("setdisplay"))
+				else if (p_71516_2_[1].equalsIgnoreCase("setdisplay"))
 				{
-					if (par2ArrayOfStr.length == 3)
+					if (p_71516_2_.length == 3)
 					{
-						return getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"list", "sidebar", "belowName"});
+						return getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"list", "sidebar", "belowName"});
 					}
 
-					if (par2ArrayOfStr.length == 4)
+					if (p_71516_2_.length == 4)
 					{
-						return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, this.func_147184_a(false));
+						return getListOfStringsFromIterableMatchingLastWord(p_71516_2_, this.func_147184_a(false));
 					}
 				}
 			}
-			else if (par2ArrayOfStr[0].equalsIgnoreCase("players"))
+			else if (p_71516_2_[0].equalsIgnoreCase("players"))
 			{
-				if (par2ArrayOfStr.length == 2)
+				if (p_71516_2_.length == 2)
 				{
-					return getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"set", "add", "remove", "reset", "list"});
+					return getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"set", "add", "remove", "reset", "list"});
 				}
 
-				if (!par2ArrayOfStr[1].equalsIgnoreCase("set") && !par2ArrayOfStr[1].equalsIgnoreCase("add") && !par2ArrayOfStr[1].equalsIgnoreCase("remove"))
+				if (!p_71516_2_[1].equalsIgnoreCase("set") && !p_71516_2_[1].equalsIgnoreCase("add") && !p_71516_2_[1].equalsIgnoreCase("remove"))
 				{
-					if ((par2ArrayOfStr[1].equalsIgnoreCase("reset") || par2ArrayOfStr[1].equalsIgnoreCase("list")) && par2ArrayOfStr.length == 3)
+					if ((p_71516_2_[1].equalsIgnoreCase("reset") || p_71516_2_[1].equalsIgnoreCase("list")) && p_71516_2_.length == 3)
 					{
-						return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, this.func_147192_d().getObjectiveNames());
+						return getListOfStringsFromIterableMatchingLastWord(p_71516_2_, this.func_147192_d().getObjectiveNames());
 					}
 				}
 				else
 				{
-					if (par2ArrayOfStr.length == 3)
+					if (p_71516_2_.length == 3)
 					{
-						return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
+						return getListOfStringsMatchingLastWord(p_71516_2_, MinecraftServer.getServer().getAllUsernames());
 					}
 
-					if (par2ArrayOfStr.length == 4)
+					if (p_71516_2_.length == 4)
 					{
-						return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, this.func_147184_a(true));
+						return getListOfStringsFromIterableMatchingLastWord(p_71516_2_, this.func_147184_a(true));
 					}
 				}
 			}
-			else if (par2ArrayOfStr[0].equalsIgnoreCase("teams"))
+			else if (p_71516_2_[0].equalsIgnoreCase("teams"))
 			{
-				if (par2ArrayOfStr.length == 2)
+				if (p_71516_2_.length == 2)
 				{
-					return getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"add", "remove", "join", "leave", "empty", "list", "option"});
+					return getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"add", "remove", "join", "leave", "empty", "list", "option"});
 				}
 
-				if (par2ArrayOfStr[1].equalsIgnoreCase("join"))
+				if (p_71516_2_[1].equalsIgnoreCase("join"))
 				{
-					if (par2ArrayOfStr.length == 3)
+					if (p_71516_2_.length == 3)
 					{
-						return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, this.func_147192_d().getTeamNames());
+						return getListOfStringsFromIterableMatchingLastWord(p_71516_2_, this.func_147192_d().getTeamNames());
 					}
 
-					if (par2ArrayOfStr.length >= 4)
+					if (p_71516_2_.length >= 4)
 					{
-						return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
+						return getListOfStringsMatchingLastWord(p_71516_2_, MinecraftServer.getServer().getAllUsernames());
 					}
 				}
 				else
 				{
-					if (par2ArrayOfStr[1].equalsIgnoreCase("leave"))
+					if (p_71516_2_[1].equalsIgnoreCase("leave"))
 					{
-						return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
+						return getListOfStringsMatchingLastWord(p_71516_2_, MinecraftServer.getServer().getAllUsernames());
 					}
 
-					if (!par2ArrayOfStr[1].equalsIgnoreCase("empty") && !par2ArrayOfStr[1].equalsIgnoreCase("list") && !par2ArrayOfStr[1].equalsIgnoreCase("remove"))
+					if (!p_71516_2_[1].equalsIgnoreCase("empty") && !p_71516_2_[1].equalsIgnoreCase("list") && !p_71516_2_[1].equalsIgnoreCase("remove"))
 					{
-						if (par2ArrayOfStr[1].equalsIgnoreCase("option"))
+						if (p_71516_2_[1].equalsIgnoreCase("option"))
 						{
-							if (par2ArrayOfStr.length == 3)
+							if (p_71516_2_.length == 3)
 							{
-								return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, this.func_147192_d().getTeamNames());
+								return getListOfStringsFromIterableMatchingLastWord(p_71516_2_, this.func_147192_d().getTeamNames());
 							}
 
-							if (par2ArrayOfStr.length == 4)
+							if (p_71516_2_.length == 4)
 							{
-								return getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"color", "friendlyfire", "seeFriendlyInvisibles"});
+								return getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"color", "friendlyfire", "seeFriendlyInvisibles"});
 							}
 
-							if (par2ArrayOfStr.length == 5)
+							if (p_71516_2_.length == 5)
 							{
-								if (par2ArrayOfStr[3].equalsIgnoreCase("color"))
+								if (p_71516_2_[3].equalsIgnoreCase("color"))
 								{
-									return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, EnumChatFormatting.getValidValues(true, false));
+									return getListOfStringsFromIterableMatchingLastWord(p_71516_2_, EnumChatFormatting.getValidValues(true, false));
 								}
 
-								if (par2ArrayOfStr[3].equalsIgnoreCase("friendlyfire") || par2ArrayOfStr[3].equalsIgnoreCase("seeFriendlyInvisibles"))
+								if (p_71516_2_[3].equalsIgnoreCase("friendlyfire") || p_71516_2_[3].equalsIgnoreCase("seeFriendlyInvisibles"))
 								{
-									return getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"true", "false"});
+									return getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"true", "false"});
 								}
 							}
 						}
 					}
-					else if (par2ArrayOfStr.length == 3)
+					else if (p_71516_2_.length == 3)
 					{
-						return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, this.func_147192_d().getTeamNames());
+						return getListOfStringsFromIterableMatchingLastWord(p_71516_2_, this.func_147192_d().getTeamNames());
 					}
 				}
 			}
@@ -917,8 +917,8 @@ public class CommandScoreboard extends CommandBase
 		return arraylist;
 	}
 
-	public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2)
+	public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_)
 	{
-		return par1ArrayOfStr[0].equalsIgnoreCase("players") ? par2 == 2 : (!par1ArrayOfStr[0].equalsIgnoreCase("teams") ? false : par2 == 2 || par2 == 3);
+		return p_82358_1_[0].equalsIgnoreCase("players") ? p_82358_2_ == 2 : (!p_82358_1_[0].equalsIgnoreCase("teams") ? false : p_82358_2_ == 2 || p_82358_2_ == 3);
 	}
 }

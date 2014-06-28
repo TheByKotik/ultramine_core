@@ -24,9 +24,9 @@ public class S36PacketSignEditorOpen extends Packet
 		this.field_149132_c = p_i45207_3_;
 	}
 
-	public void processPacket(INetHandlerPlayClient p_149130_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_149130_1_.handleSignEditorOpen(this);
+		p_148833_1_.handleSignEditorOpen(this);
 	}
 
 	public void readPacketData(PacketBuffer p_148837_1_) throws IOException

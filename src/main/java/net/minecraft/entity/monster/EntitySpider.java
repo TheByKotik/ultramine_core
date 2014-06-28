@@ -18,9 +18,9 @@ public class EntitySpider extends EntityMob
 {
 	private static final String __OBFID = "CL_00001699";
 
-	public EntitySpider(World par1World)
+	public EntitySpider(World p_i1743_1_)
 	{
-		super(par1World);
+		super(p_i1743_1_);
 		this.setSize(1.4F, 0.9F);
 	}
 
@@ -82,7 +82,7 @@ public class EntitySpider extends EntityMob
 		this.playSound("mob.spider.step", 0.15F, 1.0F);
 	}
 
-	protected void attackEntity(Entity par1Entity, float par2)
+	protected void attackEntity(Entity p_70785_1_, float p_70785_2_)
 	{
 		float f1 = this.getBrightness(1.0F);
 
@@ -92,12 +92,12 @@ public class EntitySpider extends EntityMob
 		}
 		else
 		{
-			if (par2 > 2.0F && par2 < 6.0F && this.rand.nextInt(10) == 0)
+			if (p_70785_2_ > 2.0F && p_70785_2_ < 6.0F && this.rand.nextInt(10) == 0)
 			{
 				if (this.onGround)
 				{
-					double d0 = par1Entity.posX - this.posX;
-					double d1 = par1Entity.posZ - this.posZ;
+					double d0 = p_70785_1_.posX - this.posX;
+					double d1 = p_70785_1_.posZ - this.posZ;
 					float f2 = MathHelper.sqrt_double(d0 * d0 + d1 * d1);
 					this.motionX = d0 / (double)f2 * 0.5D * 0.800000011920929D + this.motionX * 0.20000000298023224D;
 					this.motionZ = d1 / (double)f2 * 0.5D * 0.800000011920929D + this.motionZ * 0.20000000298023224D;
@@ -106,7 +106,7 @@ public class EntitySpider extends EntityMob
 			}
 			else
 			{
-				super.attackEntity(par1Entity, par2);
+				super.attackEntity(p_70785_1_, p_70785_2_);
 			}
 		}
 	}
@@ -116,11 +116,11 @@ public class EntitySpider extends EntityMob
 		return Items.string;
 	}
 
-	protected void dropFewItems(boolean par1, int par2)
+	protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
 	{
-		super.dropFewItems(par1, par2);
+		super.dropFewItems(p_70628_1_, p_70628_2_);
 
-		if (par1 && (this.rand.nextInt(3) == 0 || this.rand.nextInt(1 + par2) > 0))
+		if (p_70628_1_ && (this.rand.nextInt(3) == 0 || this.rand.nextInt(1 + p_70628_2_) > 0))
 		{
 			this.dropItem(Items.spider_eye, 1);
 		}
@@ -138,9 +138,9 @@ public class EntitySpider extends EntityMob
 		return EnumCreatureAttribute.ARTHROPOD;
 	}
 
-	public boolean isPotionApplicable(PotionEffect par1PotionEffect)
+	public boolean isPotionApplicable(PotionEffect p_70687_1_)
 	{
-		return par1PotionEffect.getPotionID() == Potion.poison.id ? false : super.isPotionApplicable(par1PotionEffect);
+		return p_70687_1_.getPotionID() == Potion.poison.id ? false : super.isPotionApplicable(p_70687_1_);
 	}
 
 	public boolean isBesideClimbableBlock()
@@ -148,11 +148,11 @@ public class EntitySpider extends EntityMob
 		return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
 	}
 
-	public void setBesideClimbableBlock(boolean par1)
+	public void setBesideClimbableBlock(boolean p_70839_1_)
 	{
 		byte b0 = this.dataWatcher.getWatchableObjectByte(16);
 
-		if (par1)
+		if (p_70839_1_)
 		{
 			b0 = (byte)(b0 | 1);
 		}
@@ -164,9 +164,9 @@ public class EntitySpider extends EntityMob
 		this.dataWatcher.updateObject(16, Byte.valueOf(b0));
 	}
 
-	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
+	public IEntityLivingData onSpawnWithEgg(IEntityLivingData p_110161_1_)
 	{
-		Object p_110161_1_1 = super.onSpawnWithEgg(par1EntityLivingData);
+		Object p_110161_1_1 = super.onSpawnWithEgg(p_110161_1_);
 
 		if (this.worldObj.rand.nextInt(100) == 0)
 		{
@@ -205,9 +205,9 @@ public class EntitySpider extends EntityMob
 			public int field_111105_a;
 			private static final String __OBFID = "CL_00001700";
 
-			public void func_111104_a(Random par1Random)
+			public void func_111104_a(Random p_111104_1_)
 			{
-				int i = par1Random.nextInt(5);
+				int i = p_111104_1_.nextInt(5);
 
 				if (i <= 1)
 				{

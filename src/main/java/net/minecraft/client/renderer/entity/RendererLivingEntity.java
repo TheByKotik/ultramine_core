@@ -38,22 +38,22 @@ public abstract class RendererLivingEntity extends Render
 	public static float NAME_TAG_RANGE = 64.0f;
 	public static float NAME_TAG_RANGE_SNEAK = 32.0f;
 
-	public RendererLivingEntity(ModelBase par1ModelBase, float par2)
+	public RendererLivingEntity(ModelBase p_i1261_1_, float p_i1261_2_)
 	{
-		this.mainModel = par1ModelBase;
-		this.shadowSize = par2;
+		this.mainModel = p_i1261_1_;
+		this.shadowSize = p_i1261_2_;
 	}
 
-	public void setRenderPassModel(ModelBase par1ModelBase)
+	public void setRenderPassModel(ModelBase p_77042_1_)
 	{
-		this.renderPassModel = par1ModelBase;
+		this.renderPassModel = p_77042_1_;
 	}
 
-	private float interpolateRotation(float par1, float par2, float par3)
+	private float interpolateRotation(float p_77034_1_, float p_77034_2_, float p_77034_3_)
 	{
 		float f3;
 
-		for (f3 = par2 - par1; f3 < -180.0F; f3 += 360.0F)
+		for (f3 = p_77034_2_ - p_77034_1_; f3 < -180.0F; f3 += 360.0F)
 		{
 			;
 		}
@@ -63,29 +63,29 @@ public abstract class RendererLivingEntity extends Render
 			f3 -= 360.0F;
 		}
 
-		return par1 + par3 * f3;
+		return p_77034_1_ + p_77034_3_ * f3;
 	}
 
-	public void doRender(EntityLivingBase par1EntityLivingBase, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLivingBase p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		if (MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Pre(par1EntityLivingBase, this, par2, par4, par6))) return;
+		if (MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Pre(p_76986_1_, this, p_76986_2_, p_76986_4_, p_76986_6_))) return;
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		this.mainModel.onGround = this.renderSwingProgress(par1EntityLivingBase, par9);
+		this.mainModel.onGround = this.renderSwingProgress(p_76986_1_, p_76986_9_);
 
 		if (this.renderPassModel != null)
 		{
 			this.renderPassModel.onGround = this.mainModel.onGround;
 		}
 
-		this.mainModel.isRiding = par1EntityLivingBase.isRiding();
+		this.mainModel.isRiding = p_76986_1_.isRiding();
 
 		if (this.renderPassModel != null)
 		{
 			this.renderPassModel.isRiding = this.mainModel.isRiding;
 		}
 
-		this.mainModel.isChild = par1EntityLivingBase.isChild();
+		this.mainModel.isChild = p_76986_1_.isChild();
 
 		if (this.renderPassModel != null)
 		{
@@ -94,14 +94,14 @@ public abstract class RendererLivingEntity extends Render
 
 		try
 		{
-			float f2 = this.interpolateRotation(par1EntityLivingBase.prevRenderYawOffset, par1EntityLivingBase.renderYawOffset, par9);
-			float f3 = this.interpolateRotation(par1EntityLivingBase.prevRotationYawHead, par1EntityLivingBase.rotationYawHead, par9);
+			float f2 = this.interpolateRotation(p_76986_1_.prevRenderYawOffset, p_76986_1_.renderYawOffset, p_76986_9_);
+			float f3 = this.interpolateRotation(p_76986_1_.prevRotationYawHead, p_76986_1_.rotationYawHead, p_76986_9_);
 			float f4;
 
-			if (par1EntityLivingBase.isRiding() && par1EntityLivingBase.ridingEntity instanceof EntityLivingBase)
+			if (p_76986_1_.isRiding() && p_76986_1_.ridingEntity instanceof EntityLivingBase)
 			{
-				EntityLivingBase entitylivingbase1 = (EntityLivingBase)par1EntityLivingBase.ridingEntity;
-				f2 = this.interpolateRotation(entitylivingbase1.prevRenderYawOffset, entitylivingbase1.renderYawOffset, par9);
+				EntityLivingBase entitylivingbase1 = (EntityLivingBase)p_76986_1_.ridingEntity;
+				f2 = this.interpolateRotation(entitylivingbase1.prevRenderYawOffset, entitylivingbase1.renderYawOffset, p_76986_9_);
 				f4 = MathHelper.wrapAngleTo180_float(f3 - f2);
 
 				if (f4 < -85.0F)
@@ -122,19 +122,19 @@ public abstract class RendererLivingEntity extends Render
 				}
 			}
 
-			float f13 = par1EntityLivingBase.prevRotationPitch + (par1EntityLivingBase.rotationPitch - par1EntityLivingBase.prevRotationPitch) * par9;
-			this.renderLivingAt(par1EntityLivingBase, par2, par4, par6);
-			f4 = this.handleRotationFloat(par1EntityLivingBase, par9);
-			this.rotateCorpse(par1EntityLivingBase, f4, f2, par9);
+			float f13 = p_76986_1_.prevRotationPitch + (p_76986_1_.rotationPitch - p_76986_1_.prevRotationPitch) * p_76986_9_;
+			this.renderLivingAt(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_);
+			f4 = this.handleRotationFloat(p_76986_1_, p_76986_9_);
+			this.rotateCorpse(p_76986_1_, f4, f2, p_76986_9_);
 			float f5 = 0.0625F;
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			GL11.glScalef(-1.0F, -1.0F, 1.0F);
-			this.preRenderCallback(par1EntityLivingBase, par9);
+			this.preRenderCallback(p_76986_1_, p_76986_9_);
 			GL11.glTranslatef(0.0F, -24.0F * f5 - 0.0078125F, 0.0F);
-			float f6 = par1EntityLivingBase.prevLimbSwingAmount + (par1EntityLivingBase.limbSwingAmount - par1EntityLivingBase.prevLimbSwingAmount) * par9;
-			float f7 = par1EntityLivingBase.limbSwing - par1EntityLivingBase.limbSwingAmount * (1.0F - par9);
+			float f6 = p_76986_1_.prevLimbSwingAmount + (p_76986_1_.limbSwingAmount - p_76986_1_.prevLimbSwingAmount) * p_76986_9_;
+			float f7 = p_76986_1_.limbSwing - p_76986_1_.limbSwingAmount * (1.0F - p_76986_9_);
 
-			if (par1EntityLivingBase.isChild())
+			if (p_76986_1_.isChild())
 			{
 				f7 *= 3.0F;
 			}
@@ -145,8 +145,8 @@ public abstract class RendererLivingEntity extends Render
 			}
 
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			this.mainModel.setLivingAnimations(par1EntityLivingBase, f7, f6, par9);
-			this.renderModel(par1EntityLivingBase, f7, f6, f4, f3 - f2, f13, f5);
+			this.mainModel.setLivingAnimations(p_76986_1_, f7, f6, p_76986_9_);
+			this.renderModel(p_76986_1_, f7, f6, f4, f3 - f2, f13, f5);
 			int j;
 			float f8;
 			float f9;
@@ -154,22 +154,22 @@ public abstract class RendererLivingEntity extends Render
 
 			for (int i = 0; i < 4; ++i)
 			{
-				j = this.shouldRenderPass(par1EntityLivingBase, i, par9);
+				j = this.shouldRenderPass(p_76986_1_, i, p_76986_9_);
 
 				if (j > 0)
 				{
-					this.renderPassModel.setLivingAnimations(par1EntityLivingBase, f7, f6, par9);
-					this.renderPassModel.render(par1EntityLivingBase, f7, f6, f4, f3 - f2, f13, f5);
+					this.renderPassModel.setLivingAnimations(p_76986_1_, f7, f6, p_76986_9_);
+					this.renderPassModel.render(p_76986_1_, f7, f6, f4, f3 - f2, f13, f5);
 
 					if ((j & 240) == 16)
 					{
-						this.func_82408_c(par1EntityLivingBase, i, par9);
-						this.renderPassModel.render(par1EntityLivingBase, f7, f6, f4, f3 - f2, f13, f5);
+						this.func_82408_c(p_76986_1_, i, p_76986_9_);
+						this.renderPassModel.render(p_76986_1_, f7, f6, f4, f3 - f2, f13, f5);
 					}
 
 					if ((j & 15) == 15)
 					{
-						f8 = (float)par1EntityLivingBase.ticksExisted + par9;
+						f8 = (float)p_76986_1_.ticksExisted + p_76986_9_;
 						this.bindTexture(RES_ITEM_GLINT);
 						GL11.glEnable(GL11.GL_BLEND);
 						f9 = 0.5F;
@@ -191,7 +191,7 @@ public abstract class RendererLivingEntity extends Render
 							GL11.glRotatef(30.0F - (float)k * 60.0F, 0.0F, 0.0F, 1.0F);
 							GL11.glTranslatef(0.0F, f11, 0.0F);
 							GL11.glMatrixMode(GL11.GL_MODELVIEW);
-							this.renderPassModel.render(par1EntityLivingBase, f7, f6, f4, f3 - f2, f13, f5);
+							this.renderPassModel.render(p_76986_1_, f7, f6, f4, f3 - f2, f13, f5);
 						}
 
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -210,14 +210,14 @@ public abstract class RendererLivingEntity extends Render
 			}
 
 			GL11.glDepthMask(true);
-			this.renderEquippedItems(par1EntityLivingBase, par9);
-			float f14 = par1EntityLivingBase.getBrightness(par9);
-			j = this.getColorMultiplier(par1EntityLivingBase, f14, par9);
+			this.renderEquippedItems(p_76986_1_, p_76986_9_);
+			float f14 = p_76986_1_.getBrightness(p_76986_9_);
+			j = this.getColorMultiplier(p_76986_1_, f14, p_76986_9_);
 			OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
-			if ((j >> 24 & 255) > 0 || par1EntityLivingBase.hurtTime > 0 || par1EntityLivingBase.deathTime > 0)
+			if ((j >> 24 & 255) > 0 || p_76986_1_.hurtTime > 0 || p_76986_1_.deathTime > 0)
 			{
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -225,17 +225,17 @@ public abstract class RendererLivingEntity extends Render
 				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 				GL11.glDepthFunc(GL11.GL_EQUAL);
 
-				if (par1EntityLivingBase.hurtTime > 0 || par1EntityLivingBase.deathTime > 0)
+				if (p_76986_1_.hurtTime > 0 || p_76986_1_.deathTime > 0)
 				{
 					GL11.glColor4f(f14, 0.0F, 0.0F, 0.4F);
-					this.mainModel.render(par1EntityLivingBase, f7, f6, f4, f3 - f2, f13, f5);
+					this.mainModel.render(p_76986_1_, f7, f6, f4, f3 - f2, f13, f5);
 
 					for (int l = 0; l < 4; ++l)
 					{
-						if (this.inheritRenderPass(par1EntityLivingBase, l, par9) >= 0)
+						if (this.inheritRenderPass(p_76986_1_, l, p_76986_9_) >= 0)
 						{
 							GL11.glColor4f(f14, 0.0F, 0.0F, 0.4F);
-							this.renderPassModel.render(par1EntityLivingBase, f7, f6, f4, f3 - f2, f13, f5);
+							this.renderPassModel.render(p_76986_1_, f7, f6, f4, f3 - f2, f13, f5);
 						}
 					}
 				}
@@ -247,14 +247,14 @@ public abstract class RendererLivingEntity extends Render
 					float f15 = (float)(j & 255) / 255.0F;
 					f10 = (float)(j >> 24 & 255) / 255.0F;
 					GL11.glColor4f(f8, f9, f15, f10);
-					this.mainModel.render(par1EntityLivingBase, f7, f6, f4, f3 - f2, f13, f5);
+					this.mainModel.render(p_76986_1_, f7, f6, f4, f3 - f2, f13, f5);
 
 					for (int i1 = 0; i1 < 4; ++i1)
 					{
-						if (this.inheritRenderPass(par1EntityLivingBase, i1, par9) >= 0)
+						if (this.inheritRenderPass(p_76986_1_, i1, p_76986_9_) >= 0)
 						{
 							GL11.glColor4f(f8, f9, f15, f10);
-							this.renderPassModel.render(par1EntityLivingBase, f7, f6, f4, f3 - f2, f13, f5);
+							this.renderPassModel.render(p_76986_1_, f7, f6, f4, f3 - f2, f13, f5);
 						}
 					}
 				}
@@ -277,19 +277,19 @@ public abstract class RendererLivingEntity extends Render
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glPopMatrix();
-		this.passSpecialRender(par1EntityLivingBase, par2, par4, par6);
-		MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Post(par1EntityLivingBase, this, par2, par4, par6));
+		this.passSpecialRender(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_);
+		MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Post(p_76986_1_, this, p_76986_2_, p_76986_4_, p_76986_6_));
 	}
 
-	protected void renderModel(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4, float par5, float par6, float par7)
+	protected void renderModel(EntityLivingBase p_77036_1_, float p_77036_2_, float p_77036_3_, float p_77036_4_, float p_77036_5_, float p_77036_6_, float p_77036_7_)
 	{
-		this.bindEntityTexture(par1EntityLivingBase);
+		this.bindEntityTexture(p_77036_1_);
 
-		if (!par1EntityLivingBase.isInvisible())
+		if (!p_77036_1_.isInvisible())
 		{
-			this.mainModel.render(par1EntityLivingBase, par2, par3, par4, par5, par6, par7);
+			this.mainModel.render(p_77036_1_, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
 		}
-		else if (!par1EntityLivingBase.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer))
+		else if (!p_77036_1_.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer))
 		{
 			GL11.glPushMatrix();
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.15F);
@@ -297,7 +297,7 @@ public abstract class RendererLivingEntity extends Render
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
-			this.mainModel.render(par1EntityLivingBase, par2, par3, par4, par5, par6, par7);
+			this.mainModel.render(p_77036_1_, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 			GL11.glPopMatrix();
@@ -305,22 +305,22 @@ public abstract class RendererLivingEntity extends Render
 		}
 		else
 		{
-			this.mainModel.setRotationAngles(par2, par3, par4, par5, par6, par7, par1EntityLivingBase);
+			this.mainModel.setRotationAngles(p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_, p_77036_1_);
 		}
 	}
 
-	protected void renderLivingAt(EntityLivingBase par1EntityLivingBase, double par2, double par4, double par6)
+	protected void renderLivingAt(EntityLivingBase p_77039_1_, double p_77039_2_, double p_77039_4_, double p_77039_6_)
 	{
-		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
+		GL11.glTranslatef((float)p_77039_2_, (float)p_77039_4_, (float)p_77039_6_);
 	}
 
-	protected void rotateCorpse(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4)
+	protected void rotateCorpse(EntityLivingBase p_77043_1_, float p_77043_2_, float p_77043_3_, float p_77043_4_)
 	{
-		GL11.glRotatef(180.0F - par3, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(180.0F - p_77043_3_, 0.0F, 1.0F, 0.0F);
 
-		if (par1EntityLivingBase.deathTime > 0)
+		if (p_77043_1_.deathTime > 0)
 		{
-			float f3 = ((float)par1EntityLivingBase.deathTime + par4 - 1.0F) / 20.0F * 1.6F;
+			float f3 = ((float)p_77043_1_.deathTime + p_77043_4_ - 1.0F) / 20.0F * 1.6F;
 			f3 = MathHelper.sqrt_float(f3);
 
 			if (f3 > 1.0F)
@@ -328,40 +328,40 @@ public abstract class RendererLivingEntity extends Render
 				f3 = 1.0F;
 			}
 
-			GL11.glRotatef(f3 * this.getDeathMaxRotation(par1EntityLivingBase), 0.0F, 0.0F, 1.0F);
+			GL11.glRotatef(f3 * this.getDeathMaxRotation(p_77043_1_), 0.0F, 0.0F, 1.0F);
 		}
 		else
 		{
-			String s = EnumChatFormatting.getTextWithoutFormattingCodes(par1EntityLivingBase.getCommandSenderName());
+			String s = EnumChatFormatting.getTextWithoutFormattingCodes(p_77043_1_.getCommandSenderName());
 
-			if ((s.equals("Dinnerbone") || s.equals("Grumm")) && (!(par1EntityLivingBase instanceof EntityPlayer) || !((EntityPlayer)par1EntityLivingBase).getHideCape()))
+			if ((s.equals("Dinnerbone") || s.equals("Grumm")) && (!(p_77043_1_ instanceof EntityPlayer) || !((EntityPlayer)p_77043_1_).getHideCape()))
 			{
-				GL11.glTranslatef(0.0F, par1EntityLivingBase.height + 0.1F, 0.0F);
+				GL11.glTranslatef(0.0F, p_77043_1_.height + 0.1F, 0.0F);
 				GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
 			}
 		}
 	}
 
-	protected float renderSwingProgress(EntityLivingBase par1EntityLivingBase, float par2)
+	protected float renderSwingProgress(EntityLivingBase p_77040_1_, float p_77040_2_)
 	{
-		return par1EntityLivingBase.getSwingProgress(par2);
+		return p_77040_1_.getSwingProgress(p_77040_2_);
 	}
 
-	protected float handleRotationFloat(EntityLivingBase par1EntityLivingBase, float par2)
+	protected float handleRotationFloat(EntityLivingBase p_77044_1_, float p_77044_2_)
 	{
-		return (float)par1EntityLivingBase.ticksExisted + par2;
+		return (float)p_77044_1_.ticksExisted + p_77044_2_;
 	}
 
-	protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float par2) {}
+	protected void renderEquippedItems(EntityLivingBase p_77029_1_, float p_77029_2_) {}
 
-	protected void renderArrowsStuckInEntity(EntityLivingBase par1EntityLivingBase, float par2)
+	protected void renderArrowsStuckInEntity(EntityLivingBase p_85093_1_, float p_85093_2_)
 	{
-		int i = par1EntityLivingBase.getArrowCountInEntity();
+		int i = p_85093_1_.getArrowCountInEntity();
 
 		if (i > 0)
 		{
-			EntityArrow entityarrow = new EntityArrow(par1EntityLivingBase.worldObj, par1EntityLivingBase.posX, par1EntityLivingBase.posY, par1EntityLivingBase.posZ);
-			Random random = new Random((long)par1EntityLivingBase.getEntityId());
+			EntityArrow entityarrow = new EntityArrow(p_85093_1_.worldObj, p_85093_1_.posX, p_85093_1_.posY, p_85093_1_.posZ);
+			Random random = new Random((long)p_85093_1_.getEntityId());
 			RenderHelper.disableStandardItemLighting();
 
 			for (int j = 0; j < i; ++j)
@@ -390,7 +390,7 @@ public abstract class RendererLivingEntity extends Render
 				double d1 = 0.0D;
 				double d2 = 0.0D;
 				float f8 = 0.0F;
-				this.renderManager.renderEntityWithPosYaw(entityarrow, d0, d1, d2, f8, par2);
+				this.renderManager.renderEntityWithPosYaw(entityarrow, d0, d1, d2, f8, p_85093_2_);
 				GL11.glPopMatrix();
 			}
 
@@ -398,51 +398,51 @@ public abstract class RendererLivingEntity extends Render
 		}
 	}
 
-	protected int inheritRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+	protected int inheritRenderPass(EntityLivingBase p_77035_1_, int p_77035_2_, float p_77035_3_)
 	{
-		return this.shouldRenderPass(par1EntityLivingBase, par2, par3);
+		return this.shouldRenderPass(p_77035_1_, p_77035_2_, p_77035_3_);
 	}
 
-	protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+	protected int shouldRenderPass(EntityLivingBase p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
 		return -1;
 	}
 
-	protected void func_82408_c(EntityLivingBase par1EntityLivingBase, int par2, float par3) {}
+	protected void func_82408_c(EntityLivingBase p_82408_1_, int p_82408_2_, float p_82408_3_) {}
 
-	protected float getDeathMaxRotation(EntityLivingBase par1EntityLivingBase)
+	protected float getDeathMaxRotation(EntityLivingBase p_77037_1_)
 	{
 		return 90.0F;
 	}
 
-	protected int getColorMultiplier(EntityLivingBase par1EntityLivingBase, float par2, float par3)
+	protected int getColorMultiplier(EntityLivingBase p_77030_1_, float p_77030_2_, float p_77030_3_)
 	{
 		return 0;
 	}
 
-	protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2) {}
+	protected void preRenderCallback(EntityLivingBase p_77041_1_, float p_77041_2_) {}
 
-	protected void passSpecialRender(EntityLivingBase par1EntityLivingBase, double par2, double par4, double par6)
+	protected void passSpecialRender(EntityLivingBase p_77033_1_, double p_77033_2_, double p_77033_4_, double p_77033_6_)
 	{
-		if (MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Specials.Pre(par1EntityLivingBase, this, par2, par4, par6))) return;
+		if (MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Specials.Pre(p_77033_1_, this, p_77033_2_, p_77033_4_, p_77033_6_))) return;
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 
-		if (this.func_110813_b(par1EntityLivingBase))
+		if (this.func_110813_b(p_77033_1_))
 		{
 			float f = 1.6F;
 			float f1 = 0.016666668F * f;
-			double d3 = par1EntityLivingBase.getDistanceSqToEntity(this.renderManager.livingPlayer);
-			float f2 = par1EntityLivingBase.isSneaking() ? NAME_TAG_RANGE_SNEAK : NAME_TAG_RANGE;
+			double d3 = p_77033_1_.getDistanceSqToEntity(this.renderManager.livingPlayer);
+			float f2 = p_77033_1_.isSneaking() ? NAME_TAG_RANGE_SNEAK : NAME_TAG_RANGE;
 
 			if (d3 < (double)(f2 * f2))
 			{
-				String s = par1EntityLivingBase.func_145748_c_().getFormattedText();
+				String s = p_77033_1_.func_145748_c_().getFormattedText();
 
-				if (par1EntityLivingBase.isSneaking())
+				if (p_77033_1_.isSneaking())
 				{
 					FontRenderer fontrenderer = this.getFontRendererFromRenderManager();
 					GL11.glPushMatrix();
-					GL11.glTranslatef((float)par2 + 0.0F, (float)par4 + par1EntityLivingBase.height + 0.5F, (float)par6);
+					GL11.glTranslatef((float)p_77033_2_ + 0.0F, (float)p_77033_4_ + p_77033_1_.height + 0.5F, (float)p_77033_6_);
 					GL11.glNormal3f(0.0F, 1.0F, 0.0F);
 					GL11.glRotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 					GL11.glRotatef(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
@@ -472,32 +472,32 @@ public abstract class RendererLivingEntity extends Render
 				}
 				else
 				{
-					this.func_96449_a(par1EntityLivingBase, par2, par4, par6, s, f1, d3);
+					this.func_96449_a(p_77033_1_, p_77033_2_, p_77033_4_, p_77033_6_, s, f1, d3);
 				}
 			}
 		}
-		MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Specials.Post(par1EntityLivingBase, this, par2, par4, par6));
+		MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Specials.Post(p_77033_1_, this, p_77033_2_, p_77033_4_, p_77033_6_));
 	}
 
-	protected boolean func_110813_b(EntityLivingBase par1EntityLivingBase)
+	protected boolean func_110813_b(EntityLivingBase p_110813_1_)
 	{
-		return Minecraft.isGuiEnabled() && par1EntityLivingBase != this.renderManager.livingPlayer && !par1EntityLivingBase.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer) && par1EntityLivingBase.riddenByEntity == null;
+		return Minecraft.isGuiEnabled() && p_110813_1_ != this.renderManager.livingPlayer && !p_110813_1_.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer) && p_110813_1_.riddenByEntity == null;
 	}
 
-	protected void func_96449_a(EntityLivingBase par1EntityLivingBase, double par2, double par4, double par6, String par8Str, float par9, double par10)
+	protected void func_96449_a(EntityLivingBase p_96449_1_, double p_96449_2_, double p_96449_4_, double p_96449_6_, String p_96449_8_, float p_96449_9_, double p_96449_10_)
 	{
-		if (par1EntityLivingBase.isPlayerSleeping())
+		if (p_96449_1_.isPlayerSleeping())
 		{
-			this.func_147906_a(par1EntityLivingBase, par8Str, par2, par4 - 1.5D, par6, 64);
+			this.func_147906_a(p_96449_1_, p_96449_8_, p_96449_2_, p_96449_4_ - 1.5D, p_96449_6_, 64);
 		}
 		else
 		{
-			this.func_147906_a(par1EntityLivingBase, par8Str, par2, par4, par6, 64);
+			this.func_147906_a(p_96449_1_, p_96449_8_, p_96449_2_, p_96449_4_, p_96449_6_, 64);
 		}
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityLivingBase)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityLivingBase)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

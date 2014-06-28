@@ -7,7 +7,7 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public interface IReloadableResourceManager extends IResourceManager
 {
-	void reloadResources(List var1);
+	void reloadResources(List p_110541_1_);
 
-	void registerReloadListener(IResourceManagerReloadListener var1);
+	void registerReloadListener(IResourceManagerReloadListener p_110542_1_);
 }

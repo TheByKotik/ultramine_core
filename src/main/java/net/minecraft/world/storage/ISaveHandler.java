@@ -12,11 +12,11 @@ public interface ISaveHandler
 
 	void checkSessionLock() throws MinecraftException;
 
-	IChunkLoader getChunkLoader(WorldProvider var1);
+	IChunkLoader getChunkLoader(WorldProvider p_75763_1_);
 
-	void saveWorldInfoWithPlayer(WorldInfo var1, NBTTagCompound var2);
+	void saveWorldInfoWithPlayer(WorldInfo p_75755_1_, NBTTagCompound p_75755_2_);
 
-	void saveWorldInfo(WorldInfo var1);
+	void saveWorldInfo(WorldInfo p_75761_1_);
 
 	IPlayerFileData getSaveHandler();
 
@@ -24,7 +24,7 @@ public interface ISaveHandler
 
 	File getWorldDirectory();
 
-	File getMapFileFromName(String var1);
+	File getMapFileFromName(String p_75758_1_);
 
 	String getWorldDirectoryName();
 }

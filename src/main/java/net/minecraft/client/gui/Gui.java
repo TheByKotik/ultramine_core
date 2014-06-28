@@ -17,77 +17,77 @@ public class Gui
 	protected float zLevel;
 	private static final String __OBFID = "CL_00000662";
 
-	protected void drawHorizontalLine(int par1, int par2, int par3, int par4)
+	protected void drawHorizontalLine(int p_73730_1_, int p_73730_2_, int p_73730_3_, int p_73730_4_)
 	{
-		if (par2 < par1)
+		if (p_73730_2_ < p_73730_1_)
 		{
-			int i1 = par1;
-			par1 = par2;
-			par2 = i1;
+			int i1 = p_73730_1_;
+			p_73730_1_ = p_73730_2_;
+			p_73730_2_ = i1;
 		}
 
-		drawRect(par1, par3, par2 + 1, par3 + 1, par4);
+		drawRect(p_73730_1_, p_73730_3_, p_73730_2_ + 1, p_73730_3_ + 1, p_73730_4_);
 	}
 
-	protected void drawVerticalLine(int par1, int par2, int par3, int par4)
+	protected void drawVerticalLine(int p_73728_1_, int p_73728_2_, int p_73728_3_, int p_73728_4_)
 	{
-		if (par3 < par2)
+		if (p_73728_3_ < p_73728_2_)
 		{
-			int i1 = par2;
-			par2 = par3;
-			par3 = i1;
+			int i1 = p_73728_2_;
+			p_73728_2_ = p_73728_3_;
+			p_73728_3_ = i1;
 		}
 
-		drawRect(par1, par2 + 1, par1 + 1, par3, par4);
+		drawRect(p_73728_1_, p_73728_2_ + 1, p_73728_1_ + 1, p_73728_3_, p_73728_4_);
 	}
 
-	public static void drawRect(int par0, int par1, int par2, int par3, int par4)
+	public static void drawRect(int p_73734_0_, int p_73734_1_, int p_73734_2_, int p_73734_3_, int p_73734_4_)
 	{
 		int j1;
 
-		if (par0 < par2)
+		if (p_73734_0_ < p_73734_2_)
 		{
-			j1 = par0;
-			par0 = par2;
-			par2 = j1;
+			j1 = p_73734_0_;
+			p_73734_0_ = p_73734_2_;
+			p_73734_2_ = j1;
 		}
 
-		if (par1 < par3)
+		if (p_73734_1_ < p_73734_3_)
 		{
-			j1 = par1;
-			par1 = par3;
-			par3 = j1;
+			j1 = p_73734_1_;
+			p_73734_1_ = p_73734_3_;
+			p_73734_3_ = j1;
 		}
 
-		float f3 = (float)(par4 >> 24 & 255) / 255.0F;
-		float f = (float)(par4 >> 16 & 255) / 255.0F;
-		float f1 = (float)(par4 >> 8 & 255) / 255.0F;
-		float f2 = (float)(par4 & 255) / 255.0F;
+		float f3 = (float)(p_73734_4_ >> 24 & 255) / 255.0F;
+		float f = (float)(p_73734_4_ >> 16 & 255) / 255.0F;
+		float f1 = (float)(p_73734_4_ >> 8 & 255) / 255.0F;
+		float f2 = (float)(p_73734_4_ & 255) / 255.0F;
 		Tessellator tessellator = Tessellator.instance;
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 		GL11.glColor4f(f, f1, f2, f3);
 		tessellator.startDrawingQuads();
-		tessellator.addVertex((double)par0, (double)par3, 0.0D);
-		tessellator.addVertex((double)par2, (double)par3, 0.0D);
-		tessellator.addVertex((double)par2, (double)par1, 0.0D);
-		tessellator.addVertex((double)par0, (double)par1, 0.0D);
+		tessellator.addVertex((double)p_73734_0_, (double)p_73734_3_, 0.0D);
+		tessellator.addVertex((double)p_73734_2_, (double)p_73734_3_, 0.0D);
+		tessellator.addVertex((double)p_73734_2_, (double)p_73734_1_, 0.0D);
+		tessellator.addVertex((double)p_73734_0_, (double)p_73734_1_, 0.0D);
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
-	protected void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6)
+	protected void drawGradientRect(int p_73733_1_, int p_73733_2_, int p_73733_3_, int p_73733_4_, int p_73733_5_, int p_73733_6_)
 	{
-		float f = (float)(par5 >> 24 & 255) / 255.0F;
-		float f1 = (float)(par5 >> 16 & 255) / 255.0F;
-		float f2 = (float)(par5 >> 8 & 255) / 255.0F;
-		float f3 = (float)(par5 & 255) / 255.0F;
-		float f4 = (float)(par6 >> 24 & 255) / 255.0F;
-		float f5 = (float)(par6 >> 16 & 255) / 255.0F;
-		float f6 = (float)(par6 >> 8 & 255) / 255.0F;
-		float f7 = (float)(par6 & 255) / 255.0F;
+		float f = (float)(p_73733_5_ >> 24 & 255) / 255.0F;
+		float f1 = (float)(p_73733_5_ >> 16 & 255) / 255.0F;
+		float f2 = (float)(p_73733_5_ >> 8 & 255) / 255.0F;
+		float f3 = (float)(p_73733_5_ & 255) / 255.0F;
+		float f4 = (float)(p_73733_6_ >> 24 & 255) / 255.0F;
+		float f5 = (float)(p_73733_6_ >> 16 & 255) / 255.0F;
+		float f6 = (float)(p_73733_6_ >> 8 & 255) / 255.0F;
+		float f7 = (float)(p_73733_6_ & 255) / 255.0F;
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -96,11 +96,11 @@ public class Gui
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
 		tessellator.setColorRGBA_F(f1, f2, f3, f);
-		tessellator.addVertex((double)par3, (double)par2, (double)this.zLevel);
-		tessellator.addVertex((double)par1, (double)par2, (double)this.zLevel);
+		tessellator.addVertex((double)p_73733_3_, (double)p_73733_2_, (double)this.zLevel);
+		tessellator.addVertex((double)p_73733_1_, (double)p_73733_2_, (double)this.zLevel);
 		tessellator.setColorRGBA_F(f5, f6, f7, f4);
-		tessellator.addVertex((double)par1, (double)par4, (double)this.zLevel);
-		tessellator.addVertex((double)par3, (double)par4, (double)this.zLevel);
+		tessellator.addVertex((double)p_73733_1_, (double)p_73733_4_, (double)this.zLevel);
+		tessellator.addVertex((double)p_73733_3_, (double)p_73733_4_, (double)this.zLevel);
 		tessellator.draw();
 		GL11.glShadeModel(GL11.GL_FLAT);
 		GL11.glDisable(GL11.GL_BLEND);
@@ -108,37 +108,37 @@ public class Gui
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 
-	public void drawCenteredString(FontRenderer par1FontRenderer, String par2Str, int par3, int par4, int par5)
+	public void drawCenteredString(FontRenderer p_73732_1_, String p_73732_2_, int p_73732_3_, int p_73732_4_, int p_73732_5_)
 	{
-		par1FontRenderer.drawStringWithShadow(par2Str, par3 - par1FontRenderer.getStringWidth(par2Str) / 2, par4, par5);
+		p_73732_1_.drawStringWithShadow(p_73732_2_, p_73732_3_ - p_73732_1_.getStringWidth(p_73732_2_) / 2, p_73732_4_, p_73732_5_);
 	}
 
-	public void drawString(FontRenderer par1FontRenderer, String par2Str, int par3, int par4, int par5)
+	public void drawString(FontRenderer p_73731_1_, String p_73731_2_, int p_73731_3_, int p_73731_4_, int p_73731_5_)
 	{
-		par1FontRenderer.drawStringWithShadow(par2Str, par3, par4, par5);
+		p_73731_1_.drawStringWithShadow(p_73731_2_, p_73731_3_, p_73731_4_, p_73731_5_);
 	}
 
-	public void drawTexturedModalRect(int par1, int par2, int par3, int par4, int par5, int par6)
+	public void drawTexturedModalRect(int p_73729_1_, int p_73729_2_, int p_73729_3_, int p_73729_4_, int p_73729_5_, int p_73729_6_)
 	{
 		float f = 0.00390625F;
 		float f1 = 0.00390625F;
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
-		tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-		tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
-		tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
+		tessellator.addVertexWithUV((double)(p_73729_1_ + 0), (double)(p_73729_2_ + p_73729_6_), (double)this.zLevel, (double)((float)(p_73729_3_ + 0) * f), (double)((float)(p_73729_4_ + p_73729_6_) * f1));
+		tessellator.addVertexWithUV((double)(p_73729_1_ + p_73729_5_), (double)(p_73729_2_ + p_73729_6_), (double)this.zLevel, (double)((float)(p_73729_3_ + p_73729_5_) * f), (double)((float)(p_73729_4_ + p_73729_6_) * f1));
+		tessellator.addVertexWithUV((double)(p_73729_1_ + p_73729_5_), (double)(p_73729_2_ + 0), (double)this.zLevel, (double)((float)(p_73729_3_ + p_73729_5_) * f), (double)((float)(p_73729_4_ + 0) * f1));
+		tessellator.addVertexWithUV((double)(p_73729_1_ + 0), (double)(p_73729_2_ + 0), (double)this.zLevel, (double)((float)(p_73729_3_ + 0) * f), (double)((float)(p_73729_4_ + 0) * f1));
 		tessellator.draw();
 	}
 
-	public void drawTexturedModelRectFromIcon(int par1, int par2, IIcon par3Icon, int par4, int par5)
+	public void drawTexturedModelRectFromIcon(int p_94065_1_, int p_94065_2_, IIcon p_94065_3_, int p_94065_4_, int p_94065_5_)
 	{
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + par5), (double)this.zLevel, (double)par3Icon.getMinU(), (double)par3Icon.getMaxV());
-		tessellator.addVertexWithUV((double)(par1 + par4), (double)(par2 + par5), (double)this.zLevel, (double)par3Icon.getMaxU(), (double)par3Icon.getMaxV());
-		tessellator.addVertexWithUV((double)(par1 + par4), (double)(par2 + 0), (double)this.zLevel, (double)par3Icon.getMaxU(), (double)par3Icon.getMinV());
-		tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)par3Icon.getMinU(), (double)par3Icon.getMinV());
+		tessellator.addVertexWithUV((double)(p_94065_1_ + 0), (double)(p_94065_2_ + p_94065_5_), (double)this.zLevel, (double)p_94065_3_.getMinU(), (double)p_94065_3_.getMaxV());
+		tessellator.addVertexWithUV((double)(p_94065_1_ + p_94065_4_), (double)(p_94065_2_ + p_94065_5_), (double)this.zLevel, (double)p_94065_3_.getMaxU(), (double)p_94065_3_.getMaxV());
+		tessellator.addVertexWithUV((double)(p_94065_1_ + p_94065_4_), (double)(p_94065_2_ + 0), (double)this.zLevel, (double)p_94065_3_.getMaxU(), (double)p_94065_3_.getMinV());
+		tessellator.addVertexWithUV((double)(p_94065_1_ + 0), (double)(p_94065_2_ + 0), (double)this.zLevel, (double)p_94065_3_.getMinU(), (double)p_94065_3_.getMinV());
 		tessellator.draw();
 	}
 
@@ -152,6 +152,19 @@ public class Gui
 		tessellator.addVertexWithUV((double)(p_146110_0_ + p_146110_4_), (double)(p_146110_1_ + p_146110_5_), 0.0D, (double)((p_146110_2_ + (float)p_146110_4_) * f4), (double)((p_146110_3_ + (float)p_146110_5_) * f5));
 		tessellator.addVertexWithUV((double)(p_146110_0_ + p_146110_4_), (double)p_146110_1_, 0.0D, (double)((p_146110_2_ + (float)p_146110_4_) * f4), (double)(p_146110_3_ * f5));
 		tessellator.addVertexWithUV((double)p_146110_0_, (double)p_146110_1_, 0.0D, (double)(p_146110_2_ * f4), (double)(p_146110_3_ * f5));
+		tessellator.draw();
+	}
+
+	public static void func_152125_a(int p_152125_0_, int p_152125_1_, float p_152125_2_, float p_152125_3_, int p_152125_4_, int p_152125_5_, int p_152125_6_, int p_152125_7_, float p_152125_8_, float p_152125_9_)
+	{
+		float f4 = 1.0F / p_152125_8_;
+		float f5 = 1.0F / p_152125_9_;
+		Tessellator tessellator = Tessellator.instance;
+		tessellator.startDrawingQuads();
+		tessellator.addVertexWithUV((double)p_152125_0_, (double)(p_152125_1_ + p_152125_7_), 0.0D, (double)(p_152125_2_ * f4), (double)((p_152125_3_ + (float)p_152125_5_) * f5));
+		tessellator.addVertexWithUV((double)(p_152125_0_ + p_152125_6_), (double)(p_152125_1_ + p_152125_7_), 0.0D, (double)((p_152125_2_ + (float)p_152125_4_) * f4), (double)((p_152125_3_ + (float)p_152125_5_) * f5));
+		tessellator.addVertexWithUV((double)(p_152125_0_ + p_152125_6_), (double)p_152125_1_, 0.0D, (double)((p_152125_2_ + (float)p_152125_4_) * f4), (double)(p_152125_3_ * f5));
+		tessellator.addVertexWithUV((double)p_152125_0_, (double)p_152125_1_, 0.0D, (double)(p_152125_2_ * f4), (double)(p_152125_3_ * f5));
 		tessellator.draw();
 	}
 }

@@ -9,47 +9,47 @@ public class ChunkLoader
 {
 	private static final String __OBFID = "CL_00000379";
 
-	public static ChunkLoader.AnvilConverterData load(NBTTagCompound par0NBTTagCompound)
+	public static ChunkLoader.AnvilConverterData load(NBTTagCompound p_76691_0_)
 	{
-		int i = par0NBTTagCompound.getInteger("xPos");
-		int j = par0NBTTagCompound.getInteger("zPos");
+		int i = p_76691_0_.getInteger("xPos");
+		int j = p_76691_0_.getInteger("zPos");
 		ChunkLoader.AnvilConverterData anvilconverterdata = new ChunkLoader.AnvilConverterData(i, j);
-		anvilconverterdata.blocks = par0NBTTagCompound.getByteArray("Blocks");
-		anvilconverterdata.data = new NibbleArrayReader(par0NBTTagCompound.getByteArray("Data"), 7);
-		anvilconverterdata.skyLight = new NibbleArrayReader(par0NBTTagCompound.getByteArray("SkyLight"), 7);
-		anvilconverterdata.blockLight = new NibbleArrayReader(par0NBTTagCompound.getByteArray("BlockLight"), 7);
-		anvilconverterdata.heightmap = par0NBTTagCompound.getByteArray("HeightMap");
-		anvilconverterdata.terrainPopulated = par0NBTTagCompound.getBoolean("TerrainPopulated");
-		anvilconverterdata.entities = par0NBTTagCompound.getTagList("Entities", 10);
-		anvilconverterdata.field_151564_i = par0NBTTagCompound.getTagList("TileEntities", 10);
-		anvilconverterdata.field_151563_j = par0NBTTagCompound.getTagList("TileTicks", 10);
+		anvilconverterdata.blocks = p_76691_0_.getByteArray("Blocks");
+		anvilconverterdata.data = new NibbleArrayReader(p_76691_0_.getByteArray("Data"), 7);
+		anvilconverterdata.skyLight = new NibbleArrayReader(p_76691_0_.getByteArray("SkyLight"), 7);
+		anvilconverterdata.blockLight = new NibbleArrayReader(p_76691_0_.getByteArray("BlockLight"), 7);
+		anvilconverterdata.heightmap = p_76691_0_.getByteArray("HeightMap");
+		anvilconverterdata.terrainPopulated = p_76691_0_.getBoolean("TerrainPopulated");
+		anvilconverterdata.entities = p_76691_0_.getTagList("Entities", 10);
+		anvilconverterdata.field_151564_i = p_76691_0_.getTagList("TileEntities", 10);
+		anvilconverterdata.field_151563_j = p_76691_0_.getTagList("TileTicks", 10);
 
 		try
 		{
-			anvilconverterdata.lastUpdated = par0NBTTagCompound.getLong("LastUpdate");
+			anvilconverterdata.lastUpdated = p_76691_0_.getLong("LastUpdate");
 		}
 		catch (ClassCastException classcastexception)
 		{
-			anvilconverterdata.lastUpdated = (long)par0NBTTagCompound.getInteger("LastUpdate");
+			anvilconverterdata.lastUpdated = (long)p_76691_0_.getInteger("LastUpdate");
 		}
 
 		return anvilconverterdata;
 	}
 
-	public static void convertToAnvilFormat(ChunkLoader.AnvilConverterData par0AnvilConverterData, NBTTagCompound par1NBTTagCompound, WorldChunkManager par2WorldChunkManager)
+	public static void convertToAnvilFormat(ChunkLoader.AnvilConverterData p_76690_0_, NBTTagCompound p_76690_1_, WorldChunkManager p_76690_2_)
 	{
-		par1NBTTagCompound.setInteger("xPos", par0AnvilConverterData.x);
-		par1NBTTagCompound.setInteger("zPos", par0AnvilConverterData.z);
-		par1NBTTagCompound.setLong("LastUpdate", par0AnvilConverterData.lastUpdated);
-		int[] aint = new int[par0AnvilConverterData.heightmap.length];
+		p_76690_1_.setInteger("xPos", p_76690_0_.x);
+		p_76690_1_.setInteger("zPos", p_76690_0_.z);
+		p_76690_1_.setLong("LastUpdate", p_76690_0_.lastUpdated);
+		int[] aint = new int[p_76690_0_.heightmap.length];
 
-		for (int i = 0; i < par0AnvilConverterData.heightmap.length; ++i)
+		for (int i = 0; i < p_76690_0_.heightmap.length; ++i)
 		{
-			aint[i] = par0AnvilConverterData.heightmap[i];
+			aint[i] = p_76690_0_.heightmap[i];
 		}
 
-		par1NBTTagCompound.setIntArray("HeightMap", aint);
-		par1NBTTagCompound.setBoolean("TerrainPopulated", par0AnvilConverterData.terrainPopulated);
+		p_76690_1_.setIntArray("HeightMap", aint);
+		p_76690_1_.setBoolean("TerrainPopulated", p_76690_0_.terrainPopulated);
 		NBTTagList nbttaglist = new NBTTagList();
 		int k;
 
@@ -70,7 +70,7 @@ public class ChunkLoader
 						if (i1 < 16)
 						{
 							int j1 = k << 11 | i1 << 7 | l + (j << 4);
-							byte b0 = par0AnvilConverterData.blocks[j1];
+							byte b0 = p_76690_0_.blocks[j1];
 
 							if (b0 == 0)
 							{
@@ -101,11 +101,11 @@ public class ChunkLoader
 						for (int l1 = 0; l1 < 16; ++l1)
 						{
 							int i2 = k2 << 11 | l1 << 7 | k1 + (j << 4);
-							byte b1 = par0AnvilConverterData.blocks[i2];
+							byte b1 = p_76690_0_.blocks[i2];
 							abyte1[k1 << 8 | l1 << 4 | k2] = (byte)(b1 & 255);
-							nibblearray.set(k2, k1, l1, par0AnvilConverterData.data.get(k2, k1 + (j << 4), l1));
-							nibblearray1.set(k2, k1, l1, par0AnvilConverterData.skyLight.get(k2, k1 + (j << 4), l1));
-							nibblearray2.set(k2, k1, l1, par0AnvilConverterData.blockLight.get(k2, k1 + (j << 4), l1));
+							nibblearray.set(k2, k1, l1, p_76690_0_.data.get(k2, k1 + (j << 4), l1));
+							nibblearray1.set(k2, k1, l1, p_76690_0_.skyLight.get(k2, k1 + (j << 4), l1));
+							nibblearray2.set(k2, k1, l1, p_76690_0_.blockLight.get(k2, k1 + (j << 4), l1));
 						}
 					}
 				}
@@ -120,24 +120,24 @@ public class ChunkLoader
 			}
 		}
 
-		par1NBTTagCompound.setTag("Sections", nbttaglist);
+		p_76690_1_.setTag("Sections", nbttaglist);
 		byte[] abyte = new byte[256];
 
 		for (int j2 = 0; j2 < 16; ++j2)
 		{
 			for (k = 0; k < 16; ++k)
 			{
-				abyte[k << 4 | j2] = (byte)(par2WorldChunkManager.getBiomeGenAt(par0AnvilConverterData.x << 4 | j2, par0AnvilConverterData.z << 4 | k).biomeID & 255);
+				abyte[k << 4 | j2] = (byte)(p_76690_2_.getBiomeGenAt(p_76690_0_.x << 4 | j2, p_76690_0_.z << 4 | k).biomeID & 255);
 			}
 		}
 
-		par1NBTTagCompound.setByteArray("Biomes", abyte);
-		par1NBTTagCompound.setTag("Entities", par0AnvilConverterData.entities);
-		par1NBTTagCompound.setTag("TileEntities", par0AnvilConverterData.field_151564_i);
+		p_76690_1_.setByteArray("Biomes", abyte);
+		p_76690_1_.setTag("Entities", p_76690_0_.entities);
+		p_76690_1_.setTag("TileEntities", p_76690_0_.field_151564_i);
 
-		if (par0AnvilConverterData.field_151563_j != null)
+		if (p_76690_0_.field_151563_j != null)
 		{
-			par1NBTTagCompound.setTag("TileTicks", par0AnvilConverterData.field_151563_j);
+			p_76690_1_.setTag("TileTicks", p_76690_0_.field_151563_j);
 		}
 	}
 
@@ -157,10 +157,10 @@ public class ChunkLoader
 			public final int z;
 			private static final String __OBFID = "CL_00000380";
 
-			public AnvilConverterData(int par1, int par2)
+			public AnvilConverterData(int p_i1999_1_, int p_i1999_2_)
 			{
-				this.x = par1;
-				this.z = par2;
+				this.x = p_i1999_1_;
+				this.z = p_i1999_2_;
 			}
 		}
 }

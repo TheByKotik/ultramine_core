@@ -29,16 +29,16 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 	private final String saveDirectoryName;
 	private static final String __OBFID = "CL_00000585";
 
-	public SaveHandler(File par1File, String par2Str, boolean par3)
+	public SaveHandler(File p_i2146_1_, String p_i2146_2_, boolean p_i2146_3_)
 	{
-		this.worldDirectory = new File(par1File, par2Str);
+		this.worldDirectory = new File(p_i2146_1_, p_i2146_2_);
 		this.worldDirectory.mkdirs();
-		this.playersDirectory = new File(this.worldDirectory, "players");
+		this.playersDirectory = new File(this.worldDirectory, "playerdata");
 		this.mapDataDir = new File(this.worldDirectory, "data");
 		this.mapDataDir.mkdirs();
-		this.saveDirectoryName = par2Str;
+		this.saveDirectoryName = p_i2146_2_;
 
-		if (par3)
+		if (p_i2146_3_)
 		{
 			this.playersDirectory.mkdirs();
 		}
@@ -99,7 +99,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 		}
 	}
 
-	public IChunkLoader getChunkLoader(WorldProvider par1WorldProvider)
+	public IChunkLoader getChunkLoader(WorldProvider p_75763_1_)
 	{
 		throw new RuntimeException("Old Chunk Storage is no longer supported.");
 	}
@@ -158,13 +158,13 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 		return null;
 	}
 
-	public void saveWorldInfoWithPlayer(WorldInfo par1WorldInfo, NBTTagCompound par2NBTTagCompound)
+	public void saveWorldInfoWithPlayer(WorldInfo p_75755_1_, NBTTagCompound p_75755_2_)
 	{
-		NBTTagCompound nbttagcompound1 = par1WorldInfo.cloneNBTCompound(par2NBTTagCompound);
+		NBTTagCompound nbttagcompound1 = p_75755_1_.cloneNBTCompound(p_75755_2_);
 		NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 		nbttagcompound2.setTag("Data", nbttagcompound1);
 
-		FMLCommonHandler.instance().handleWorldDataSave(this, par1WorldInfo, nbttagcompound2);
+		FMLCommonHandler.instance().handleWorldDataSave(this, p_75755_1_, nbttagcompound2);
 
 		try
 		{
@@ -198,13 +198,13 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 		}
 	}
 
-	public void saveWorldInfo(WorldInfo par1WorldInfo)
+	public void saveWorldInfo(WorldInfo p_75761_1_)
 	{
-		NBTTagCompound nbttagcompound = par1WorldInfo.getNBTTagCompound();
+		NBTTagCompound nbttagcompound = p_75761_1_.getNBTTagCompound();
 		NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 		nbttagcompound1.setTag("Data", nbttagcompound);
 
-		FMLCommonHandler.instance().handleWorldDataSave(this, par1WorldInfo, nbttagcompound1);
+		FMLCommonHandler.instance().handleWorldDataSave(this, p_75761_1_, nbttagcompound1);
 
 		try
 		{
@@ -238,14 +238,14 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 		}
 	}
 
-	public void writePlayerData(EntityPlayer par1EntityPlayer)
+	public void writePlayerData(EntityPlayer p_75753_1_)
 	{
 		try
 		{
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			par1EntityPlayer.writeToNBT(nbttagcompound);
-			File file1 = new File(this.playersDirectory, par1EntityPlayer.getCommandSenderName() + ".dat.tmp");
-			File file2 = new File(this.playersDirectory, par1EntityPlayer.getCommandSenderName() + ".dat");
+			p_75753_1_.writeToNBT(nbttagcompound);
+			File file1 = new File(this.playersDirectory, p_75753_1_.getUniqueID().toString() + ".dat.tmp");
+			File file2 = new File(this.playersDirectory, p_75753_1_.getUniqueID().toString() + ".dat");
 			CompressedStreamTools.writeCompressed(nbttagcompound, new FileOutputStream(file1));
 
 			if (file2.exists())
@@ -254,44 +254,39 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 			}
 
 			file1.renameTo(file2);
-			net.minecraftforge.event.ForgeEventFactory.firePlayerSavingEvent(par1EntityPlayer, this.playersDirectory, par1EntityPlayer.getUniqueID().toString());
+			net.minecraftforge.event.ForgeEventFactory.firePlayerSavingEvent(p_75753_1_, this.playersDirectory, p_75753_1_.getUniqueID().toString());
 		}
 		catch (Exception exception)
 		{
-			logger.warn("Failed to save player data for " + par1EntityPlayer.getCommandSenderName());
+			logger.warn("Failed to save player data for " + p_75753_1_.getCommandSenderName());
 		}
 	}
 
-	public NBTTagCompound readPlayerData(EntityPlayer par1EntityPlayer)
+	public NBTTagCompound readPlayerData(EntityPlayer p_75752_1_)
 	{
-		NBTTagCompound nbttagcompound = this.getPlayerData(par1EntityPlayer.getCommandSenderName());
+		NBTTagCompound nbttagcompound = null;
 
-		if (nbttagcompound != null)
-		{
-			par1EntityPlayer.readFromNBT(nbttagcompound);
-		}
-
-		net.minecraftforge.event.ForgeEventFactory.firePlayerLoadingEvent(par1EntityPlayer, playersDirectory, par1EntityPlayer.getUniqueID().toString());
-		return nbttagcompound;
-	}
-
-	public NBTTagCompound getPlayerData(String par1Str)
-	{
 		try
 		{
-			File file1 = new File(this.playersDirectory, par1Str + ".dat");
+			File file1 = new File(this.playersDirectory, p_75752_1_.getUniqueID().toString() + ".dat");
 
-			if (file1.exists())
+			if (file1.exists() && file1.isFile())
 			{
-				return CompressedStreamTools.readCompressed(new FileInputStream(file1));
+				nbttagcompound = CompressedStreamTools.readCompressed(new FileInputStream(file1));
 			}
 		}
 		catch (Exception exception)
 		{
-			logger.warn("Failed to load player data for " + par1Str);
+			logger.warn("Failed to load player data for " + p_75752_1_.getCommandSenderName());
 		}
 
-		return null;
+		if (nbttagcompound != null)
+		{
+			p_75752_1_.readFromNBT(nbttagcompound);
+		}
+
+		net.minecraftforge.event.ForgeEventFactory.firePlayerLoadingEvent(p_75752_1_, playersDirectory, p_75752_1_.getUniqueID().toString());
+		return nbttagcompound;
 	}
 
 	public IPlayerFileData getSaveHandler()
@@ -316,9 +311,9 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 
 	public void flush() {}
 
-	public File getMapFileFromName(String par1Str)
+	public File getMapFileFromName(String p_75758_1_)
 	{
-		return new File(this.mapDataDir, par1Str + ".dat");
+		return new File(this.mapDataDir, p_75758_1_ + ".dat");
 	}
 
 	public String getWorldDirectoryName()

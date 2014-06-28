@@ -22,15 +22,15 @@ public class ItemBoat extends Item
 		this.setCreativeTab(CreativeTabs.tabTransport);
 	}
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
 	{
 		float f = 1.0F;
-		float f1 = par3EntityPlayer.prevRotationPitch + (par3EntityPlayer.rotationPitch - par3EntityPlayer.prevRotationPitch) * f;
-		float f2 = par3EntityPlayer.prevRotationYaw + (par3EntityPlayer.rotationYaw - par3EntityPlayer.prevRotationYaw) * f;
-		double d0 = par3EntityPlayer.prevPosX + (par3EntityPlayer.posX - par3EntityPlayer.prevPosX) * (double)f;
-		double d1 = par3EntityPlayer.prevPosY + (par3EntityPlayer.posY - par3EntityPlayer.prevPosY) * (double)f + 1.62D - (double)par3EntityPlayer.yOffset;
-		double d2 = par3EntityPlayer.prevPosZ + (par3EntityPlayer.posZ - par3EntityPlayer.prevPosZ) * (double)f;
-		Vec3 vec3 = par2World.getWorldVec3Pool().getVecFromPool(d0, d1, d2);
+		float f1 = p_77659_3_.prevRotationPitch + (p_77659_3_.rotationPitch - p_77659_3_.prevRotationPitch) * f;
+		float f2 = p_77659_3_.prevRotationYaw + (p_77659_3_.rotationYaw - p_77659_3_.prevRotationYaw) * f;
+		double d0 = p_77659_3_.prevPosX + (p_77659_3_.posX - p_77659_3_.prevPosX) * (double)f;
+		double d1 = p_77659_3_.prevPosY + (p_77659_3_.posY - p_77659_3_.prevPosY) * (double)f + 1.62D - (double)p_77659_3_.yOffset;
+		double d2 = p_77659_3_.prevPosZ + (p_77659_3_.posZ - p_77659_3_.prevPosZ) * (double)f;
+		Vec3 vec3 = Vec3.createVectorHelper(d0, d1, d2);
 		float f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
 		float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
 		float f5 = -MathHelper.cos(-f1 * 0.017453292F);
@@ -39,18 +39,18 @@ public class ItemBoat extends Item
 		float f8 = f3 * f5;
 		double d3 = 5.0D;
 		Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
-		MovingObjectPosition movingobjectposition = par2World.rayTraceBlocks(vec3, vec31, true);
+		MovingObjectPosition movingobjectposition = p_77659_2_.rayTraceBlocks(vec3, vec31, true);
 
 		if (movingobjectposition == null)
 		{
-			return par1ItemStack;
+			return p_77659_1_;
 		}
 		else
 		{
-			Vec3 vec32 = par3EntityPlayer.getLook(f);
+			Vec3 vec32 = p_77659_3_.getLook(f);
 			boolean flag = false;
 			float f9 = 1.0F;
-			List list = par2World.getEntitiesWithinAABBExcludingEntity(par3EntityPlayer, par3EntityPlayer.boundingBox.addCoord(vec32.xCoord * d3, vec32.yCoord * d3, vec32.zCoord * d3).expand((double)f9, (double)f9, (double)f9));
+			List list = p_77659_2_.getEntitiesWithinAABBExcludingEntity(p_77659_3_, p_77659_3_.boundingBox.addCoord(vec32.xCoord * d3, vec32.yCoord * d3, vec32.zCoord * d3).expand((double)f9, (double)f9, (double)f9));
 			int i;
 
 			for (i = 0; i < list.size(); ++i)
@@ -71,7 +71,7 @@ public class ItemBoat extends Item
 
 			if (flag)
 			{
-				return par1ItemStack;
+				return p_77659_1_;
 			}
 			else
 			{
@@ -81,31 +81,31 @@ public class ItemBoat extends Item
 					int j = movingobjectposition.blockY;
 					int k = movingobjectposition.blockZ;
 
-					if (par2World.getBlock(i, j, k) == Blocks.snow_layer)
+					if (p_77659_2_.getBlock(i, j, k) == Blocks.snow_layer)
 					{
 						--j;
 					}
 
-					EntityBoat entityboat = new EntityBoat(par2World, (double)((float)i + 0.5F), (double)((float)j + 1.0F), (double)((float)k + 0.5F));
-					entityboat.rotationYaw = (float)(((MathHelper.floor_double((double)(par3EntityPlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
+					EntityBoat entityboat = new EntityBoat(p_77659_2_, (double)((float)i + 0.5F), (double)((float)j + 1.0F), (double)((float)k + 0.5F));
+					entityboat.rotationYaw = (float)(((MathHelper.floor_double((double)(p_77659_3_.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 
-					if (!par2World.getCollidingBoundingBoxes(entityboat, entityboat.boundingBox.expand(-0.1D, -0.1D, -0.1D)).isEmpty())
+					if (!p_77659_2_.getCollidingBoundingBoxes(entityboat, entityboat.boundingBox.expand(-0.1D, -0.1D, -0.1D)).isEmpty())
 					{
-						return par1ItemStack;
+						return p_77659_1_;
 					}
 
-					if (!par2World.isRemote)
+					if (!p_77659_2_.isRemote)
 					{
-						par2World.spawnEntityInWorld(entityboat);
+						p_77659_2_.spawnEntityInWorld(entityboat);
 					}
 
-					if (!par3EntityPlayer.capabilities.isCreativeMode)
+					if (!p_77659_3_.capabilities.isCreativeMode)
 					{
-						--par1ItemStack.stackSize;
+						--p_77659_1_.stackSize;
 					}
 				}
 
-				return par1ItemStack;
+				return p_77659_1_;
 			}
 		}
 	}

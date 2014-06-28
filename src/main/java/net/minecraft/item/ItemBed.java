@@ -16,21 +16,21 @@ public class ItemBed extends Item
 		this.setCreativeTab(CreativeTabs.tabDecorations);
 	}
 
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
-		if (par3World.isRemote)
+		if (p_77648_3_.isRemote)
 		{
 			return true;
 		}
-		else if (par7 != 1)
+		else if (p_77648_7_ != 1)
 		{
 			return false;
 		}
 		else
 		{
-			++par5;
+			++p_77648_5_;
 			BlockBed blockbed = (BlockBed)Blocks.bed;
-			int i1 = MathHelper.floor_double((double)(par2EntityPlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			int i1 = MathHelper.floor_double((double)(p_77648_2_.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			byte b0 = 0;
 			byte b1 = 0;
 
@@ -54,18 +54,18 @@ public class ItemBed extends Item
 				b0 = 1;
 			}
 
-			if (par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack) && par2EntityPlayer.canPlayerEdit(par4 + b0, par5, par6 + b1, par7, par1ItemStack))
+			if (p_77648_2_.canPlayerEdit(p_77648_4_, p_77648_5_, p_77648_6_, p_77648_7_, p_77648_1_) && p_77648_2_.canPlayerEdit(p_77648_4_ + b0, p_77648_5_, p_77648_6_ + b1, p_77648_7_, p_77648_1_))
 			{
-				if (par3World.isAirBlock(par4, par5, par6) && par3World.isAirBlock(par4 + b0, par5, par6 + b1) && World.doesBlockHaveSolidTopSurface(par3World, par4, par5 - 1, par6) && World.doesBlockHaveSolidTopSurface(par3World, par4 + b0, par5 - 1, par6 + b1))
+				if (p_77648_3_.isAirBlock(p_77648_4_, p_77648_5_, p_77648_6_) && p_77648_3_.isAirBlock(p_77648_4_ + b0, p_77648_5_, p_77648_6_ + b1) && World.doesBlockHaveSolidTopSurface(p_77648_3_, p_77648_4_, p_77648_5_ - 1, p_77648_6_) && World.doesBlockHaveSolidTopSurface(p_77648_3_, p_77648_4_ + b0, p_77648_5_ - 1, p_77648_6_ + b1))
 				{
-					par3World.setBlock(par4, par5, par6, blockbed, i1, 3);
+					p_77648_3_.setBlock(p_77648_4_, p_77648_5_, p_77648_6_, blockbed, i1, 3);
 
-					if (par3World.getBlock(par4, par5, par6) == blockbed)
+					if (p_77648_3_.getBlock(p_77648_4_, p_77648_5_, p_77648_6_) == blockbed)
 					{
-						par3World.setBlock(par4 + b0, par5, par6 + b1, blockbed, i1 + 8, 3);
+						p_77648_3_.setBlock(p_77648_4_ + b0, p_77648_5_, p_77648_6_ + b1, blockbed, i1 + 8, 3);
 					}
 
-					--par1ItemStack.stackSize;
+					--p_77648_1_.stackSize;
 					return true;
 				}
 				else

@@ -9,14 +9,14 @@ public class RecipesMapCloning implements IRecipe
 {
 	private static final String __OBFID = "CL_00000087";
 
-	public boolean matches(InventoryCrafting par1InventoryCrafting, World par2World)
+	public boolean matches(InventoryCrafting p_77569_1_, World p_77569_2_)
 	{
 		int i = 0;
 		ItemStack itemstack = null;
 
-		for (int j = 0; j < par1InventoryCrafting.getSizeInventory(); ++j)
+		for (int j = 0; j < p_77569_1_.getSizeInventory(); ++j)
 		{
-			ItemStack itemstack1 = par1InventoryCrafting.getStackInSlot(j);
+			ItemStack itemstack1 = p_77569_1_.getStackInSlot(j);
 
 			if (itemstack1 != null)
 			{
@@ -44,14 +44,14 @@ public class RecipesMapCloning implements IRecipe
 		return itemstack != null && i > 0;
 	}
 
-	public ItemStack getCraftingResult(InventoryCrafting par1InventoryCrafting)
+	public ItemStack getCraftingResult(InventoryCrafting p_77572_1_)
 	{
 		int i = 0;
 		ItemStack itemstack = null;
 
-		for (int j = 0; j < par1InventoryCrafting.getSizeInventory(); ++j)
+		for (int j = 0; j < p_77572_1_.getSizeInventory(); ++j)
 		{
-			ItemStack itemstack1 = par1InventoryCrafting.getStackInSlot(j);
+			ItemStack itemstack1 = p_77572_1_.getStackInSlot(j);
 
 			if (itemstack1 != null)
 			{

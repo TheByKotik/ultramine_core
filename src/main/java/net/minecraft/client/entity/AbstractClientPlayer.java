@@ -1,25 +1,25 @@
 package net.minecraft.client.entity;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.io.File;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
-public abstract class AbstractClientPlayer extends EntityPlayer
+public abstract class AbstractClientPlayer extends EntityPlayer implements SkinManager.SkinAvailableCallback
 {
 	public static final ResourceLocation locationStevePng = new ResourceLocation("textures/entity/steve.png");
-	private ThreadDownloadImageData downloadImageSkin;
-	private ThreadDownloadImageData downloadImageCape;
 	private ResourceLocation locationSkin;
 	private ResourceLocation locationCape;
 	private static final String __OBFID = "CL_00000935";
@@ -27,35 +27,28 @@ public abstract class AbstractClientPlayer extends EntityPlayer
 	public AbstractClientPlayer(World p_i45074_1_, GameProfile p_i45074_2_)
 	{
 		super(p_i45074_1_, p_i45074_2_);
-		this.setupCustomSkin();
-	}
-
-	protected void setupCustomSkin()
-	{
 		String s = this.getCommandSenderName();
 
 		if (!s.isEmpty())
 		{
-			this.locationSkin = getLocationSkin(s);
-			this.locationCape = getLocationCape(s);
-			this.downloadImageSkin = getDownloadImageSkin(this.locationSkin, s);
-			this.downloadImageCape = getDownloadImageCape(this.locationCape, s);
+			SkinManager skinmanager = Minecraft.getMinecraft().func_152342_ad();
+			skinmanager.func_152790_a(p_i45074_2_, this, true);
 		}
 	}
 
-	public ThreadDownloadImageData getTextureSkin()
+	public boolean func_152122_n()
 	{
-		return this.downloadImageSkin;
+		return this.locationCape != null;
 	}
 
-	public ThreadDownloadImageData getTextureCape()
+	public boolean func_152123_o()
 	{
-		return this.downloadImageCape;
+		return this.locationSkin != null;
 	}
 
 	public ResourceLocation getLocationSkin()
 	{
-		return this.locationSkin;
+		return this.locationSkin == null ? locationStevePng : this.locationSkin;
 	}
 
 	public ResourceLocation getLocationCape()
@@ -63,52 +56,63 @@ public abstract class AbstractClientPlayer extends EntityPlayer
 		return this.locationCape;
 	}
 
-	public static ThreadDownloadImageData getDownloadImageSkin(ResourceLocation par0ResourceLocation, String par1Str)
-	{
-		return getDownloadImage(par0ResourceLocation, getSkinUrl(par1Str), locationStevePng, new ImageBufferDownload());
-	}
-
-	public static ThreadDownloadImageData getDownloadImageCape(ResourceLocation par0ResourceLocation, String par1Str)
-	{
-		return getDownloadImage(par0ResourceLocation, getCapeUrl(par1Str), (ResourceLocation)null, (IImageBuffer)null);
-	}
-
-	private static ThreadDownloadImageData getDownloadImage(ResourceLocation par0ResourceLocation, String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
+	public static ThreadDownloadImageData getDownloadImageSkin(ResourceLocation p_110304_0_, String p_110304_1_)
 	{
 		TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-		Object object = texturemanager.getTexture(par0ResourceLocation);
+		Object object = texturemanager.getTexture(p_110304_0_);
 
 		if (object == null)
 		{
-			object = new ThreadDownloadImageData(par1Str, par2ResourceLocation, par3IImageBuffer);
-			texturemanager.loadTexture(par0ResourceLocation, (ITextureObject)object);
+			object = new ThreadDownloadImageData((File)null, String.format("http://skins.minecraft.net/MinecraftSkins/%s.png", new Object[] {StringUtils.stripControlCodes(p_110304_1_)}), locationStevePng, new ImageBufferDownload());
+			texturemanager.loadTexture(p_110304_0_, (ITextureObject)object);
 		}
 
 		return (ThreadDownloadImageData)object;
 	}
 
-	public static String getSkinUrl(String par0Str)
+	public static ResourceLocation getLocationSkin(String p_110311_0_)
 	{
-		return String.format("http://skins.minecraft.net/MinecraftSkins/%s.png", new Object[] {StringUtils.stripControlCodes(par0Str)});
+		return new ResourceLocation("skins/" + StringUtils.stripControlCodes(p_110311_0_));
 	}
 
-	public static String getCapeUrl(String par0Str)
+	public void func_152121_a(Type p_152121_1_, ResourceLocation p_152121_2_)
 	{
-		return String.format("http://skins.minecraft.net/MinecraftCloaks/%s.png", new Object[] {StringUtils.stripControlCodes(par0Str)});
+		switch (AbstractClientPlayer.SwitchType.field_152630_a[p_152121_1_.ordinal()])
+		{
+			case 1:
+				this.locationSkin = p_152121_2_;
+				break;
+			case 2:
+				this.locationCape = p_152121_2_;
+		}
 	}
 
-	public static ResourceLocation getLocationSkin(String par0Str)
-	{
-		return new ResourceLocation("skins/" + StringUtils.stripControlCodes(par0Str));
-	}
+	@SideOnly(Side.CLIENT)
 
-	public static ResourceLocation getLocationCape(String par0Str)
-	{
-		return new ResourceLocation("cloaks/" + StringUtils.stripControlCodes(par0Str));
-	}
+	static final class SwitchType
+		{
+			static final int[] field_152630_a = new int[Type.values().length];
+			private static final String __OBFID = "CL_00001832";
 
-	public static ResourceLocation getLocationSkull(String par0Str)
-	{
-		return new ResourceLocation("skull/" + StringUtils.stripControlCodes(par0Str));
-	}
+			static
+			{
+				try
+				{
+					field_152630_a[Type.SKIN.ordinal()] = 1;
+				}
+				catch (NoSuchFieldError var2)
+				{
+					;
+				}
+
+				try
+				{
+					field_152630_a[Type.CAPE.ordinal()] = 2;
+				}
+				catch (NoSuchFieldError var1)
+				{
+					;
+				}
+			}
+		}
 }

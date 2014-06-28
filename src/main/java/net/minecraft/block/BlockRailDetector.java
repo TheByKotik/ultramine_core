@@ -79,7 +79,7 @@ public class BlockRailDetector extends BlockRailBase
 		boolean flag = (p_150054_5_ & 8) != 0;
 		boolean flag1 = false;
 		float f = 0.125F;
-		List list = p_150054_1_.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getAABBPool().getAABB((double)((float)p_150054_2_ + f), (double)p_150054_3_, (double)((float)p_150054_4_ + f), (double)((float)(p_150054_2_ + 1) - f), (double)((float)(p_150054_3_ + 1) - f), (double)((float)(p_150054_4_ + 1) - f)));
+		List list = p_150054_1_.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox((double)((float)p_150054_2_ + f), (double)p_150054_3_, (double)((float)p_150054_4_ + f), (double)((float)(p_150054_2_ + 1) - f), (double)((float)(p_150054_3_ + 1) - f), (double)((float)(p_150054_4_ + 1) - f)));
 
 		if (!list.isEmpty())
 		{
@@ -126,14 +126,14 @@ public class BlockRailDetector extends BlockRailBase
 		if ((p_149736_1_.getBlockMetadata(p_149736_2_, p_149736_3_, p_149736_4_) & 8) > 0)
 		{
 			float f = 0.125F;
-			List list = p_149736_1_.getEntitiesWithinAABB(EntityMinecartCommandBlock.class, AxisAlignedBB.getAABBPool().getAABB((double)((float)p_149736_2_ + f), (double)p_149736_3_, (double)((float)p_149736_4_ + f), (double)((float)(p_149736_2_ + 1) - f), (double)((float)(p_149736_3_ + 1) - f), (double)((float)(p_149736_4_ + 1) - f)));
+			List list = p_149736_1_.getEntitiesWithinAABB(EntityMinecartCommandBlock.class, AxisAlignedBB.getBoundingBox((double)((float)p_149736_2_ + f), (double)p_149736_3_, (double)((float)p_149736_4_ + f), (double)((float)(p_149736_2_ + 1) - f), (double)((float)(p_149736_3_ + 1) - f), (double)((float)(p_149736_4_ + 1) - f)));
 
 			if (list.size() > 0)
 			{
 				return ((EntityMinecartCommandBlock)list.get(0)).func_145822_e().func_145760_g();
 			}
 
-			List list1 = p_149736_1_.selectEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getAABBPool().getAABB((double)((float)p_149736_2_ + f), (double)p_149736_3_, (double)((float)p_149736_4_ + f), (double)((float)(p_149736_2_ + 1) - f), (double)((float)(p_149736_3_ + 1) - f), (double)((float)(p_149736_4_ + 1) - f)), IEntitySelector.selectInventories);
+			List list1 = p_149736_1_.selectEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox((double)((float)p_149736_2_ + f), (double)p_149736_3_, (double)((float)p_149736_4_ + f), (double)((float)(p_149736_2_ + 1) - f), (double)((float)(p_149736_3_ + 1) - f), (double)((float)(p_149736_4_ + 1) - f)), IEntitySelector.selectInventories);
 
 			if (list1.size() > 0)
 			{

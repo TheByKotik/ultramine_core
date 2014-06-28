@@ -26,9 +26,9 @@ public class InventoryPlayer implements IInventory
 	public boolean inventoryChanged;
 	private static final String __OBFID = "CL_00001709";
 
-	public InventoryPlayer(EntityPlayer par1EntityPlayer)
+	public InventoryPlayer(EntityPlayer p_i1750_1_)
 	{
-		this.player = par1EntityPlayer;
+		this.player = p_i1750_1_;
 	}
 
 	public ItemStack getCurrentItem()
@@ -68,11 +68,11 @@ public class InventoryPlayer implements IInventory
 		return -1;
 	}
 
-	private int storeItemStack(ItemStack par1ItemStack)
+	private int storeItemStack(ItemStack p_70432_1_)
 	{
 		for (int i = 0; i < this.mainInventory.length; ++i)
 		{
-			if (this.mainInventory[i] != null && this.mainInventory[i].getItem() == par1ItemStack.getItem() && this.mainInventory[i].isStackable() && this.mainInventory[i].stackSize < this.mainInventory[i].getMaxStackSize() && this.mainInventory[i].stackSize < this.getInventoryStackLimit() && (!this.mainInventory[i].getHasSubtypes() || this.mainInventory[i].getItemDamage() == par1ItemStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(this.mainInventory[i], par1ItemStack))
+			if (this.mainInventory[i] != null && this.mainInventory[i].getItem() == p_70432_1_.getItem() && this.mainInventory[i].isStackable() && this.mainInventory[i].stackSize < this.mainInventory[i].getMaxStackSize() && this.mainInventory[i].stackSize < this.getInventoryStackLimit() && (!this.mainInventory[i].getHasSubtypes() || this.mainInventory[i].getItemDamage() == p_70432_1_.getItemDamage()) && ItemStack.areItemStackTagsEqual(this.mainInventory[i], p_70432_1_))
 			{
 				return i;
 			}
@@ -178,19 +178,19 @@ public class InventoryPlayer implements IInventory
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void changeCurrentItem(int par1)
+	public void changeCurrentItem(int p_70453_1_)
 	{
-		if (par1 > 0)
+		if (p_70453_1_ > 0)
 		{
-			par1 = 1;
+			p_70453_1_ = 1;
 		}
 
-		if (par1 < 0)
+		if (p_70453_1_ < 0)
 		{
-			par1 = -1;
+			p_70453_1_ = -1;
 		}
 
-		for (this.currentItem -= par1; this.currentItem < 0; this.currentItem += 9)
+		for (this.currentItem -= p_70453_1_; this.currentItem < 0; this.currentItem += 9)
 		{
 			;
 		}
@@ -202,37 +202,37 @@ public class InventoryPlayer implements IInventory
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void func_70439_a(Item par1Item, int par2)
+	public void func_70439_a(Item p_70439_1_, int p_70439_2_)
 	{
-		if (par1Item != null)
+		if (p_70439_1_ != null)
 		{
 			if (this.currentItemStack != null && this.currentItemStack.isItemEnchantable() && this.func_146024_c(this.currentItemStack.getItem(), this.currentItemStack.getItemDamageForDisplay()) == this.currentItem)
 			{
 				return;
 			}
 
-			int j = this.func_146024_c(par1Item, par2);
+			int j = this.func_146024_c(p_70439_1_, p_70439_2_);
 
 			if (j >= 0)
 			{
 				int k = this.mainInventory[j].stackSize;
 				this.mainInventory[j] = this.mainInventory[this.currentItem];
-				this.mainInventory[this.currentItem] = new ItemStack(par1Item, k, par2);
+				this.mainInventory[this.currentItem] = new ItemStack(p_70439_1_, k, p_70439_2_);
 			}
 			else
 			{
-				this.mainInventory[this.currentItem] = new ItemStack(par1Item, 1, par2);
+				this.mainInventory[this.currentItem] = new ItemStack(p_70439_1_, 1, p_70439_2_);
 			}
 		}
 	}
 
-	private int storePartialItemStack(ItemStack par1ItemStack)
+	private int storePartialItemStack(ItemStack p_70452_1_)
 	{
-		Item item = par1ItemStack.getItem();
-		int i = par1ItemStack.stackSize;
+		Item item = p_70452_1_.getItem();
+		int i = p_70452_1_.stackSize;
 		int j;
 
-		if (par1ItemStack.getMaxStackSize() == 1)
+		if (p_70452_1_.getMaxStackSize() == 1)
 		{
 			j = this.getFirstEmptyStack();
 
@@ -244,7 +244,7 @@ public class InventoryPlayer implements IInventory
 			{
 				if (this.mainInventory[j] == null)
 				{
-					this.mainInventory[j] = ItemStack.copyItemStack(par1ItemStack);
+					this.mainInventory[j] = ItemStack.copyItemStack(p_70452_1_);
 				}
 
 				return 0;
@@ -252,7 +252,7 @@ public class InventoryPlayer implements IInventory
 		}
 		else
 		{
-			j = this.storeItemStack(par1ItemStack);
+			j = this.storeItemStack(p_70452_1_);
 
 			if (j < 0)
 			{
@@ -267,11 +267,11 @@ public class InventoryPlayer implements IInventory
 			{
 				if (this.mainInventory[j] == null)
 				{
-					this.mainInventory[j] = new ItemStack(item, 0, par1ItemStack.getItemDamage());
+					this.mainInventory[j] = new ItemStack(item, 0, p_70452_1_.getItemDamage());
 
-					if (par1ItemStack.hasTagCompound())
+					if (p_70452_1_.hasTagCompound())
 					{
-						this.mainInventory[j].setTagCompound((NBTTagCompound)par1ItemStack.getTagCompound().copy());
+						this.mainInventory[j].setTagCompound((NBTTagCompound)p_70452_1_.getTagCompound().copy());
 					}
 				}
 
@@ -346,28 +346,28 @@ public class InventoryPlayer implements IInventory
 		return i >= 0;
 	}
 
-	public boolean addItemStackToInventory(final ItemStack par1ItemStack)
+	public boolean addItemStackToInventory(final ItemStack p_70441_1_)
 	{
-		if (par1ItemStack != null && par1ItemStack.stackSize != 0 && par1ItemStack.getItem() != null)
+		if (p_70441_1_ != null && p_70441_1_.stackSize != 0 && p_70441_1_.getItem() != null)
 		{
 			try
 			{
 				int i;
 
-				if (par1ItemStack.isItemDamaged())
+				if (p_70441_1_.isItemDamaged())
 				{
 					i = this.getFirstEmptyStack();
 
 					if (i >= 0)
 					{
-						this.mainInventory[i] = ItemStack.copyItemStack(par1ItemStack);
+						this.mainInventory[i] = ItemStack.copyItemStack(p_70441_1_);
 						this.mainInventory[i].animationsToGo = 5;
-						par1ItemStack.stackSize = 0;
+						p_70441_1_.stackSize = 0;
 						return true;
 					}
 					else if (this.player.capabilities.isCreativeMode)
 					{
-						par1ItemStack.stackSize = 0;
+						p_70441_1_.stackSize = 0;
 						return true;
 					}
 					else
@@ -379,19 +379,19 @@ public class InventoryPlayer implements IInventory
 				{
 					do
 					{
-						i = par1ItemStack.stackSize;
-						par1ItemStack.stackSize = this.storePartialItemStack(par1ItemStack);
+						i = p_70441_1_.stackSize;
+						p_70441_1_.stackSize = this.storePartialItemStack(p_70441_1_);
 					}
-					while (par1ItemStack.stackSize > 0 && par1ItemStack.stackSize < i);
+					while (p_70441_1_.stackSize > 0 && p_70441_1_.stackSize < i);
 
-					if (par1ItemStack.stackSize == i && this.player.capabilities.isCreativeMode)
+					if (p_70441_1_.stackSize == i && this.player.capabilities.isCreativeMode)
 					{
-						par1ItemStack.stackSize = 0;
+						p_70441_1_.stackSize = 0;
 						return true;
 					}
 					else
 					{
-						return par1ItemStack.stackSize < i;
+						return p_70441_1_.stackSize < i;
 					}
 				}
 			}
@@ -399,14 +399,14 @@ public class InventoryPlayer implements IInventory
 			{
 				CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Adding item to inventory");
 				CrashReportCategory crashreportcategory = crashreport.makeCategory("Item being added");
-				crashreportcategory.addCrashSection("Item ID", Integer.valueOf(Item.getIdFromItem(par1ItemStack.getItem())));
-				crashreportcategory.addCrashSection("Item data", Integer.valueOf(par1ItemStack.getItemDamage()));
+				crashreportcategory.addCrashSection("Item ID", Integer.valueOf(Item.getIdFromItem(p_70441_1_.getItem())));
+				crashreportcategory.addCrashSection("Item data", Integer.valueOf(p_70441_1_.getItemDamage()));
 				crashreportcategory.addCrashSectionCallable("Item name", new Callable()
 				{
 					private static final String __OBFID = "CL_00001710";
 					public String call()
 					{
-						return par1ItemStack.getDisplayName();
+						return p_70441_1_.getDisplayName();
 					}
 				});
 				throw new ReportedException(crashreport);
@@ -418,33 +418,33 @@ public class InventoryPlayer implements IInventory
 		}
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
 	{
 		ItemStack[] aitemstack = this.mainInventory;
 
-		if (par1 >= this.mainInventory.length)
+		if (p_70298_1_ >= this.mainInventory.length)
 		{
 			aitemstack = this.armorInventory;
-			par1 -= this.mainInventory.length;
+			p_70298_1_ -= this.mainInventory.length;
 		}
 
-		if (aitemstack[par1] != null)
+		if (aitemstack[p_70298_1_] != null)
 		{
 			ItemStack itemstack;
 
-			if (aitemstack[par1].stackSize <= par2)
+			if (aitemstack[p_70298_1_].stackSize <= p_70298_2_)
 			{
-				itemstack = aitemstack[par1];
-				aitemstack[par1] = null;
+				itemstack = aitemstack[p_70298_1_];
+				aitemstack[p_70298_1_] = null;
 				return itemstack;
 			}
 			else
 			{
-				itemstack = aitemstack[par1].splitStack(par2);
+				itemstack = aitemstack[p_70298_1_].splitStack(p_70298_2_);
 
-				if (aitemstack[par1].stackSize == 0)
+				if (aitemstack[p_70298_1_].stackSize == 0)
 				{
-					aitemstack[par1] = null;
+					aitemstack[p_70298_1_] = null;
 				}
 
 				return itemstack;
@@ -456,20 +456,20 @@ public class InventoryPlayer implements IInventory
 		}
 	}
 
-	public ItemStack getStackInSlotOnClosing(int par1)
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_)
 	{
 		ItemStack[] aitemstack = this.mainInventory;
 
-		if (par1 >= this.mainInventory.length)
+		if (p_70304_1_ >= this.mainInventory.length)
 		{
 			aitemstack = this.armorInventory;
-			par1 -= this.mainInventory.length;
+			p_70304_1_ -= this.mainInventory.length;
 		}
 
-		if (aitemstack[par1] != null)
+		if (aitemstack[p_70304_1_] != null)
 		{
-			ItemStack itemstack = aitemstack[par1];
-			aitemstack[par1] = null;
+			ItemStack itemstack = aitemstack[p_70304_1_];
+			aitemstack[p_70304_1_] = null;
 			return itemstack;
 		}
 		else
@@ -478,17 +478,17 @@ public class InventoryPlayer implements IInventory
 		}
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
 		ItemStack[] aitemstack = this.mainInventory;
 
-		if (par1 >= aitemstack.length)
+		if (p_70299_1_ >= aitemstack.length)
 		{
-			par1 -= aitemstack.length;
+			p_70299_1_ -= aitemstack.length;
 			aitemstack = this.armorInventory;
 		}
 
-		aitemstack[par1] = par2ItemStack;
+		aitemstack[p_70299_1_] = p_70299_2_;
 	}
 
 	public float func_146023_a(Block p_146023_1_)
@@ -503,7 +503,7 @@ public class InventoryPlayer implements IInventory
 		return f;
 	}
 
-	public NBTTagList writeToNBT(NBTTagList par1NBTTagList)
+	public NBTTagList writeToNBT(NBTTagList p_70442_1_)
 	{
 		int i;
 		NBTTagCompound nbttagcompound;
@@ -515,7 +515,7 @@ public class InventoryPlayer implements IInventory
 				nbttagcompound = new NBTTagCompound();
 				nbttagcompound.setByte("Slot", (byte)i);
 				this.mainInventory[i].writeToNBT(nbttagcompound);
-				par1NBTTagList.appendTag(nbttagcompound);
+				p_70442_1_.appendTag(nbttagcompound);
 			}
 		}
 
@@ -526,21 +526,21 @@ public class InventoryPlayer implements IInventory
 				nbttagcompound = new NBTTagCompound();
 				nbttagcompound.setByte("Slot", (byte)(i + 100));
 				this.armorInventory[i].writeToNBT(nbttagcompound);
-				par1NBTTagList.appendTag(nbttagcompound);
+				p_70442_1_.appendTag(nbttagcompound);
 			}
 		}
 
-		return par1NBTTagList;
+		return p_70442_1_;
 	}
 
-	public void readFromNBT(NBTTagList par1NBTTagList)
+	public void readFromNBT(NBTTagList p_70443_1_)
 	{
 		this.mainInventory = new ItemStack[36];
 		this.armorInventory = new ItemStack[4];
 
-		for (int i = 0; i < par1NBTTagList.tagCount(); ++i)
+		for (int i = 0; i < p_70443_1_.tagCount(); ++i)
 		{
-			NBTTagCompound nbttagcompound = par1NBTTagList.getCompoundTagAt(i);
+			NBTTagCompound nbttagcompound = p_70443_1_.getCompoundTagAt(i);
 			int j = nbttagcompound.getByte("Slot") & 255;
 			ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
 
@@ -564,17 +564,17 @@ public class InventoryPlayer implements IInventory
 		return this.mainInventory.length + 4;
 	}
 
-	public ItemStack getStackInSlot(int par1)
+	public ItemStack getStackInSlot(int p_70301_1_)
 	{
 		ItemStack[] aitemstack = this.mainInventory;
 
-		if (par1 >= aitemstack.length)
+		if (p_70301_1_ >= aitemstack.length)
 		{
-			par1 -= aitemstack.length;
+			p_70301_1_ -= aitemstack.length;
 			aitemstack = this.armorInventory;
 		}
 
-		return aitemstack[par1];
+		return aitemstack[p_70301_1_];
 	}
 
 	public String getInventoryName()
@@ -605,9 +605,9 @@ public class InventoryPlayer implements IInventory
 		}
 	}
 
-	public ItemStack armorItemInSlot(int par1)
+	public ItemStack armorItemInSlot(int p_70440_1_)
 	{
-		return this.armorInventory[par1];
+		return this.armorInventory[p_70440_1_];
 	}
 
 	public int getTotalArmorValue()
@@ -626,20 +626,20 @@ public class InventoryPlayer implements IInventory
 		return i;
 	}
 
-	public void damageArmor(float par1)
+	public void damageArmor(float p_70449_1_)
 	{
-		par1 /= 4.0F;
+		p_70449_1_ /= 4.0F;
 
-		if (par1 < 1.0F)
+		if (p_70449_1_ < 1.0F)
 		{
-			par1 = 1.0F;
+			p_70449_1_ = 1.0F;
 		}
 
 		for (int i = 0; i < this.armorInventory.length; ++i)
 		{
 			if (this.armorInventory[i] != null && this.armorInventory[i].getItem() instanceof ItemArmor)
 			{
-				this.armorInventory[i].damageItem((int)par1, this.player);
+				this.armorInventory[i].damageItem((int)p_70449_1_, this.player);
 
 				if (this.armorInventory[i].stackSize == 0)
 				{
@@ -677,9 +677,9 @@ public class InventoryPlayer implements IInventory
 		this.inventoryChanged = true;
 	}
 
-	public void setItemStack(ItemStack par1ItemStack)
+	public void setItemStack(ItemStack p_70437_1_)
 	{
-		this.itemStack = par1ItemStack;
+		this.itemStack = p_70437_1_;
 	}
 
 	public ItemStack getItemStack()
@@ -687,18 +687,18 @@ public class InventoryPlayer implements IInventory
 		return this.itemStack;
 	}
 
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
 	{
-		return this.player.isDead ? false : par1EntityPlayer.getDistanceSqToEntity(this.player) <= 64.0D;
+		return this.player.isDead ? false : p_70300_1_.getDistanceSqToEntity(this.player) <= 64.0D;
 	}
 
-	public boolean hasItemStack(ItemStack par1ItemStack)
+	public boolean hasItemStack(ItemStack p_70431_1_)
 	{
 		int i;
 
 		for (i = 0; i < this.armorInventory.length; ++i)
 		{
-			if (this.armorInventory[i] != null && this.armorInventory[i].isItemEqual(par1ItemStack))
+			if (this.armorInventory[i] != null && this.armorInventory[i].isItemEqual(p_70431_1_))
 			{
 				return true;
 			}
@@ -706,7 +706,7 @@ public class InventoryPlayer implements IInventory
 
 		for (i = 0; i < this.mainInventory.length; ++i)
 		{
-			if (this.mainInventory[i] != null && this.mainInventory[i].isItemEqual(par1ItemStack))
+			if (this.mainInventory[i] != null && this.mainInventory[i].isItemEqual(p_70431_1_))
 			{
 				return true;
 			}
@@ -719,25 +719,25 @@ public class InventoryPlayer implements IInventory
 
 	public void closeInventory() {}
 
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
 		return true;
 	}
 
-	public void copyInventory(InventoryPlayer par1InventoryPlayer)
+	public void copyInventory(InventoryPlayer p_70455_1_)
 	{
 		int i;
 
 		for (i = 0; i < this.mainInventory.length; ++i)
 		{
-			this.mainInventory[i] = ItemStack.copyItemStack(par1InventoryPlayer.mainInventory[i]);
+			this.mainInventory[i] = ItemStack.copyItemStack(p_70455_1_.mainInventory[i]);
 		}
 
 		for (i = 0; i < this.armorInventory.length; ++i)
 		{
-			this.armorInventory[i] = ItemStack.copyItemStack(par1InventoryPlayer.armorInventory[i]);
+			this.armorInventory[i] = ItemStack.copyItemStack(p_70455_1_.armorInventory[i]);
 		}
 
-		this.currentItem = par1InventoryPlayer.currentItem;
+		this.currentItem = p_70455_1_.currentItem;
 	}
 }

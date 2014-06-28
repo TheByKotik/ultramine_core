@@ -37,27 +37,27 @@ public class TextureAtlasSprite implements IIcon
 	protected int tickCounter;
 	private static final String __OBFID = "CL_00001062";
 
-	protected TextureAtlasSprite(String par1Str)
+	protected TextureAtlasSprite(String p_i1282_1_)
 	{
-		this.iconName = par1Str;
+		this.iconName = p_i1282_1_;
 	}
 
-	public void initSprite(int par1, int par2, int par3, int par4, boolean par5)
+	public void initSprite(int p_110971_1_, int p_110971_2_, int p_110971_3_, int p_110971_4_, boolean p_110971_5_)
 	{
-		this.originX = par3;
-		this.originY = par4;
-		this.rotated = par5;
-		float f = (float)(0.009999999776482582D / (double)par1);
-		float f1 = (float)(0.009999999776482582D / (double)par2);
-		this.minU = (float)par3 / (float)((double)par1) + f;
-		this.maxU = (float)(par3 + this.width) / (float)((double)par1) - f;
-		this.minV = (float)par4 / (float)par2 + f1;
-		this.maxV = (float)(par4 + this.height) / (float)par2 - f1;
+		this.originX = p_110971_3_;
+		this.originY = p_110971_4_;
+		this.rotated = p_110971_5_;
+		float f = (float)(0.009999999776482582D / (double)p_110971_1_);
+		float f1 = (float)(0.009999999776482582D / (double)p_110971_2_);
+		this.minU = (float)p_110971_3_ / (float)((double)p_110971_1_) + f;
+		this.maxU = (float)(p_110971_3_ + this.width) / (float)((double)p_110971_1_) - f;
+		this.minV = (float)p_110971_4_ / (float)p_110971_2_ + f1;
+		this.maxV = (float)(p_110971_4_ + this.height) / (float)p_110971_2_ - f1;
 
 		if (this.useAnisotropicFiltering)
 		{
-			float f2 = 8.0F / (float)par1;
-			float f3 = 8.0F / (float)par2;
+			float f2 = 8.0F / (float)p_110971_1_;
+			float f3 = 8.0F / (float)p_110971_2_;
 			this.minU += f2;
 			this.maxU -= f2;
 			this.minV += f3;
@@ -65,17 +65,17 @@ public class TextureAtlasSprite implements IIcon
 		}
 	}
 
-	public void copyFrom(TextureAtlasSprite par1TextureAtlasSprite)
+	public void copyFrom(TextureAtlasSprite p_94217_1_)
 	{
-		this.originX = par1TextureAtlasSprite.originX;
-		this.originY = par1TextureAtlasSprite.originY;
-		this.width = par1TextureAtlasSprite.width;
-		this.height = par1TextureAtlasSprite.height;
-		this.rotated = par1TextureAtlasSprite.rotated;
-		this.minU = par1TextureAtlasSprite.minU;
-		this.maxU = par1TextureAtlasSprite.maxU;
-		this.minV = par1TextureAtlasSprite.minV;
-		this.maxV = par1TextureAtlasSprite.maxV;
+		this.originX = p_94217_1_.originX;
+		this.originY = p_94217_1_.originY;
+		this.width = p_94217_1_.width;
+		this.height = p_94217_1_.height;
+		this.rotated = p_94217_1_.rotated;
+		this.minU = p_94217_1_.minU;
+		this.maxU = p_94217_1_.maxU;
+		this.minV = p_94217_1_.minV;
+		this.maxV = p_94217_1_.maxV;
 	}
 
 	public int getOriginX()
@@ -108,10 +108,10 @@ public class TextureAtlasSprite implements IIcon
 		return this.maxU;
 	}
 
-	public float getInterpolatedU(double par1)
+	public float getInterpolatedU(double p_94214_1_)
 	{
 		float f = this.maxU - this.minU;
-		return this.minU + f * (float)par1 / 16.0F;
+		return this.minU + f * (float)p_94214_1_ / 16.0F;
 	}
 
 	public float getMinV()
@@ -124,10 +124,10 @@ public class TextureAtlasSprite implements IIcon
 		return this.maxV;
 	}
 
-	public float getInterpolatedV(double par1)
+	public float getInterpolatedV(double p_94207_1_)
 	{
 		float f = this.maxV - this.minV;
-		return this.minV + f * ((float)par1 / 16.0F);
+		return this.minV + f * ((float)p_94207_1_ / 16.0F);
 	}
 
 	public String getIconName()
@@ -164,14 +164,14 @@ public class TextureAtlasSprite implements IIcon
 		return this.framesTextureData.size();
 	}
 
-	public void setIconWidth(int par1)
+	public void setIconWidth(int p_110966_1_)
 	{
-		this.width = par1;
+		this.width = p_110966_1_;
 	}
 
-	public void setIconHeight(int par1)
+	public void setIconHeight(int p_110969_1_)
 	{
-		this.height = par1;
+		this.height = p_110969_1_;
 	}
 
 	public void loadSprite(BufferedImage[] p_147964_1_, AnimationMetadataSection p_147964_2_, boolean p_147964_3_)
@@ -373,11 +373,11 @@ public class TextureAtlasSprite implements IIcon
 		}
 	}
 
-	private void allocateFrameTextureData(int par1)
+	private void allocateFrameTextureData(int p_130099_1_)
 	{
-		if (this.framesTextureData.size() <= par1)
+		if (this.framesTextureData.size() <= p_130099_1_)
 		{
-			for (int j = this.framesTextureData.size(); j <= par1; ++j)
+			for (int j = this.framesTextureData.size(); j <= p_130099_1_; ++j)
 			{
 				this.framesTextureData.add((Object)null);
 			}
@@ -412,9 +412,9 @@ public class TextureAtlasSprite implements IIcon
 		return this.animationMetadata != null;
 	}
 
-	public void setFramesTextureData(List par1List)
+	public void setFramesTextureData(List p_110968_1_)
 	{
-		this.framesTextureData = par1List;
+		this.framesTextureData = p_110968_1_;
 	}
 
 	private void resetSprite()

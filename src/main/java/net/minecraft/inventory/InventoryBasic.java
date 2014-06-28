@@ -14,54 +14,54 @@ public class InventoryBasic implements IInventory
 	private boolean field_94051_e;
 	private static final String __OBFID = "CL_00001514";
 
-	public InventoryBasic(String par1Str, boolean par2, int par3)
+	public InventoryBasic(String p_i1561_1_, boolean p_i1561_2_, int p_i1561_3_)
 	{
-		this.inventoryTitle = par1Str;
-		this.field_94051_e = par2;
-		this.slotsCount = par3;
-		this.inventoryContents = new ItemStack[par3];
+		this.inventoryTitle = p_i1561_1_;
+		this.field_94051_e = p_i1561_2_;
+		this.slotsCount = p_i1561_3_;
+		this.inventoryContents = new ItemStack[p_i1561_3_];
 	}
 
-	public void func_110134_a(IInvBasic par1IInvBasic)
+	public void func_110134_a(IInvBasic p_110134_1_)
 	{
 		if (this.field_70480_d == null)
 		{
 			this.field_70480_d = new ArrayList();
 		}
 
-		this.field_70480_d.add(par1IInvBasic);
+		this.field_70480_d.add(p_110134_1_);
 	}
 
-	public void func_110132_b(IInvBasic par1IInvBasic)
+	public void func_110132_b(IInvBasic p_110132_1_)
 	{
-		this.field_70480_d.remove(par1IInvBasic);
+		this.field_70480_d.remove(p_110132_1_);
 	}
 
-	public ItemStack getStackInSlot(int par1)
+	public ItemStack getStackInSlot(int p_70301_1_)
 	{
-		return this.inventoryContents[par1];
+		return p_70301_1_ >= 0 && p_70301_1_ < this.inventoryContents.length ? this.inventoryContents[p_70301_1_] : null;
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
 	{
-		if (this.inventoryContents[par1] != null)
+		if (this.inventoryContents[p_70298_1_] != null)
 		{
 			ItemStack itemstack;
 
-			if (this.inventoryContents[par1].stackSize <= par2)
+			if (this.inventoryContents[p_70298_1_].stackSize <= p_70298_2_)
 			{
-				itemstack = this.inventoryContents[par1];
-				this.inventoryContents[par1] = null;
+				itemstack = this.inventoryContents[p_70298_1_];
+				this.inventoryContents[p_70298_1_] = null;
 				this.markDirty();
 				return itemstack;
 			}
 			else
 			{
-				itemstack = this.inventoryContents[par1].splitStack(par2);
+				itemstack = this.inventoryContents[p_70298_1_].splitStack(p_70298_2_);
 
-				if (this.inventoryContents[par1].stackSize == 0)
+				if (this.inventoryContents[p_70298_1_].stackSize == 0)
 				{
-					this.inventoryContents[par1] = null;
+					this.inventoryContents[p_70298_1_] = null;
 				}
 
 				this.markDirty();
@@ -74,12 +74,12 @@ public class InventoryBasic implements IInventory
 		}
 	}
 
-	public ItemStack getStackInSlotOnClosing(int par1)
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_)
 	{
-		if (this.inventoryContents[par1] != null)
+		if (this.inventoryContents[p_70304_1_] != null)
 		{
-			ItemStack itemstack = this.inventoryContents[par1];
-			this.inventoryContents[par1] = null;
+			ItemStack itemstack = this.inventoryContents[p_70304_1_];
+			this.inventoryContents[p_70304_1_] = null;
 			return itemstack;
 		}
 		else
@@ -88,13 +88,13 @@ public class InventoryBasic implements IInventory
 		}
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
-		this.inventoryContents[par1] = par2ItemStack;
+		this.inventoryContents[p_70299_1_] = p_70299_2_;
 
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		if (p_70299_2_ != null && p_70299_2_.stackSize > this.getInventoryStackLimit())
 		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
+			p_70299_2_.stackSize = this.getInventoryStackLimit();
 		}
 
 		this.markDirty();
@@ -115,10 +115,10 @@ public class InventoryBasic implements IInventory
 		return this.field_94051_e;
 	}
 
-	public void func_110133_a(String par1Str)
+	public void func_110133_a(String p_110133_1_)
 	{
 		this.field_94051_e = true;
-		this.inventoryTitle = par1Str;
+		this.inventoryTitle = p_110133_1_;
 	}
 
 	public int getInventoryStackLimit()
@@ -137,7 +137,7 @@ public class InventoryBasic implements IInventory
 		}
 	}
 
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
 	{
 		return true;
 	}
@@ -146,7 +146,7 @@ public class InventoryBasic implements IInventory
 
 	public void closeInventory() {}
 
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
 		return true;
 	}

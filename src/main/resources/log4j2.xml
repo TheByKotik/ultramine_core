@@ -1,43 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" packages="org.ultramine.server.log">
     <Appenders>
-        <Console name="FmlSysOut" target="SYSTEM_OUT">
+        <Console name="SysOut" target="SYSTEM_OUT">
             <UMConsoleLayout />
         </Console>
-        <Routing name="FmlFile">
-            <Routes pattern="$${ctx:side}">
-                <Route>
-                    <RollingRandomAccessFile name="FmlFile" fileName="logs/fml-${ctx:side}-latest.log" filePattern="logs/fml-${ctx:side}-%d{yyyy-MM-dd}-%i.log.gz">
-                        <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] [%logger/%X{mod}]: %replace{%msg}{([\u00A7][0-9a-fk-or])}{}%n" />
-                        <Policies>
-                            <TimeBasedTriggeringPolicy />
-                            <OnStartupTriggeringPolicy />
-                        </Policies>
-                    </RollingRandomAccessFile>
-                </Route>
-                <Route key="$${ctx:side}">
-                    <RandomAccessFile name="FmlFile" fileName="logs/fml-junk-earlystartup.log">
-                        <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] [%logger]: %msg%n" />
-                    </RandomAccessFile>
-                </Route>
-            </Routes>
-        </Routing>
+        <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <OnStartupTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
     </Appenders>
     <Loggers>
-        <Logger level="info" name="com.mojang" additivity="false">
-            <AppenderRef ref="FmlSysOut" level="INFO" />
-            <AppenderRef ref="FmlFile" />
-        </Logger>
-        <Logger level="info" name="net.minecraft" additivity="false">
+        <Root level="info">
             <filters>
                 <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL" />
             </filters>
-            <AppenderRef ref="FmlSysOut" level="INFO" />
-            <AppenderRef ref="FmlFile" />
-        </Logger>
-        <Root level="all">
-            <AppenderRef ref="FmlSysOut" level="INFO" />
-            <AppenderRef ref="FmlFile"/>
+            <AppenderRef ref="SysOut"/>
+            <AppenderRef ref="File"/>
         </Root>
     </Loggers>
 </Configuration>

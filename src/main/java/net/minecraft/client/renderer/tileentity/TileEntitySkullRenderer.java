@@ -1,7 +1,12 @@
 package net.minecraft.client.renderer.tileentity;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Map;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelSkeletonHead;
 import net.minecraft.entity.Entity;
@@ -23,9 +28,9 @@ public class TileEntitySkullRenderer extends TileEntitySpecialRenderer
 	private ModelSkeletonHead field_147538_h = new ModelSkeletonHead(0, 0, 64, 64);
 	private static final String __OBFID = "CL_00000971";
 
-	public void renderTileEntityAt(TileEntitySkull p_147531_1_, double p_147531_2_, double p_147531_4_, double p_147531_6_, float p_147531_8_)
+	public void renderTileEntityAt(TileEntitySkull p_147500_1_, double p_147500_2_, double p_147500_4_, double p_147500_6_, float p_147500_8_)
 	{
-		this.func_147530_a((float)p_147531_2_, (float)p_147531_4_, (float)p_147531_6_, p_147531_1_.getBlockMetadata() & 7, (float)(p_147531_1_.func_145906_b() * 360) / 16.0F, p_147531_1_.func_145904_a(), p_147531_1_.func_145907_c());
+		this.func_152674_a((float)p_147500_2_, (float)p_147500_4_, (float)p_147500_6_, p_147500_1_.getBlockMetadata() & 7, (float)(p_147500_1_.func_145906_b() * 360) / 16.0F, p_147500_1_.func_145904_a(), p_147500_1_.func_152108_a());
 	}
 
 	public void func_147497_a(TileEntityRendererDispatcher p_147497_1_)
@@ -34,11 +39,11 @@ public class TileEntitySkullRenderer extends TileEntitySpecialRenderer
 		field_147536_b = this;
 	}
 
-	public void func_147530_a(float p_147530_1_, float p_147530_2_, float p_147530_3_, int p_147530_4_, float p_147530_5_, int p_147530_6_, String p_147530_7_)
+	public void func_152674_a(float p_152674_1_, float p_152674_2_, float p_152674_3_, int p_152674_4_, float p_152674_5_, int p_152674_6_, GameProfile p_152674_7_)
 	{
 		ModelSkeletonHead modelskeletonhead = this.field_147533_g;
 
-		switch (p_147530_6_)
+		switch (p_152674_6_)
 		{
 			case 0:
 			default:
@@ -54,10 +59,15 @@ public class TileEntitySkullRenderer extends TileEntitySpecialRenderer
 			case 3:
 				ResourceLocation resourcelocation = AbstractClientPlayer.locationStevePng;
 
-				if (p_147530_7_ != null && p_147530_7_.length() > 0)
+				if (p_152674_7_ != null)
 				{
-					resourcelocation = AbstractClientPlayer.getLocationSkull(p_147530_7_);
-					AbstractClientPlayer.getDownloadImageSkin(resourcelocation, p_147530_7_);
+					Minecraft minecraft = Minecraft.getMinecraft();
+					Map map = minecraft.func_152342_ad().func_152788_a(p_152674_7_);
+
+					if (map.containsKey(Type.SKIN))
+					{
+						resourcelocation = minecraft.func_152342_ad().func_152792_a((MinecraftProfileTexture)map.get(Type.SKIN), Type.SKIN);
+					}
 				}
 
 				this.bindTexture(resourcelocation);
@@ -69,37 +79,37 @@ public class TileEntitySkullRenderer extends TileEntitySpecialRenderer
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_CULL_FACE);
 
-		if (p_147530_4_ != 1)
+		if (p_152674_4_ != 1)
 		{
-			switch (p_147530_4_)
+			switch (p_152674_4_)
 			{
 				case 2:
-					GL11.glTranslatef(p_147530_1_ + 0.5F, p_147530_2_ + 0.25F, p_147530_3_ + 0.74F);
+					GL11.glTranslatef(p_152674_1_ + 0.5F, p_152674_2_ + 0.25F, p_152674_3_ + 0.74F);
 					break;
 				case 3:
-					GL11.glTranslatef(p_147530_1_ + 0.5F, p_147530_2_ + 0.25F, p_147530_3_ + 0.26F);
-					p_147530_5_ = 180.0F;
+					GL11.glTranslatef(p_152674_1_ + 0.5F, p_152674_2_ + 0.25F, p_152674_3_ + 0.26F);
+					p_152674_5_ = 180.0F;
 					break;
 				case 4:
-					GL11.glTranslatef(p_147530_1_ + 0.74F, p_147530_2_ + 0.25F, p_147530_3_ + 0.5F);
-					p_147530_5_ = 270.0F;
+					GL11.glTranslatef(p_152674_1_ + 0.74F, p_152674_2_ + 0.25F, p_152674_3_ + 0.5F);
+					p_152674_5_ = 270.0F;
 					break;
 				case 5:
 				default:
-					GL11.glTranslatef(p_147530_1_ + 0.26F, p_147530_2_ + 0.25F, p_147530_3_ + 0.5F);
-					p_147530_5_ = 90.0F;
+					GL11.glTranslatef(p_152674_1_ + 0.26F, p_152674_2_ + 0.25F, p_152674_3_ + 0.5F);
+					p_152674_5_ = 90.0F;
 			}
 		}
 		else
 		{
-			GL11.glTranslatef(p_147530_1_ + 0.5F, p_147530_2_, p_147530_3_ + 0.5F);
+			GL11.glTranslatef(p_152674_1_ + 0.5F, p_152674_2_, p_152674_3_ + 0.5F);
 		}
 
 		float f4 = 0.0625F;
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glScalef(-1.0F, -1.0F, 1.0F);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		modelskeletonhead.render((Entity)null, 0.0F, 0.0F, 0.0F, p_147530_5_, 0.0F, f4);
+		modelskeletonhead.render((Entity)null, 0.0F, 0.0F, 0.0F, p_152674_5_, 0.0F, f4);
 		GL11.glPopMatrix();
 	}
 

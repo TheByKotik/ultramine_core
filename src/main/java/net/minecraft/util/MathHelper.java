@@ -10,80 +10,86 @@ public class MathHelper
 	private static final int[] multiplyDeBruijnBitPosition;
 	private static final String __OBFID = "CL_00001496";
 
-	public static final float sin(float par0)
+	public static final float sin(float p_76126_0_)
 	{
-		return SIN_TABLE[(int)(par0 * 10430.378F) & 65535];
+		return SIN_TABLE[(int)(p_76126_0_ * 10430.378F) & 65535];
 	}
 
-	public static final float cos(float par0)
+	public static final float cos(float p_76134_0_)
 	{
-		return SIN_TABLE[(int)(par0 * 10430.378F + 16384.0F) & 65535];
+		return SIN_TABLE[(int)(p_76134_0_ * 10430.378F + 16384.0F) & 65535];
 	}
 
-	public static final float sqrt_float(float par0)
+	public static final float sqrt_float(float p_76129_0_)
 	{
-		return (float)Math.sqrt((double)par0);
+		return (float)Math.sqrt((double)p_76129_0_);
 	}
 
-	public static final float sqrt_double(double par0)
+	public static final float sqrt_double(double p_76133_0_)
 	{
-		return (float)Math.sqrt(par0);
+		return (float)Math.sqrt(p_76133_0_);
 	}
 
-	public static int floor_float(float par0)
+	public static int floor_float(float p_76141_0_)
 	{
-		int i = (int)par0;
-		return par0 < (float)i ? i - 1 : i;
+		int i = (int)p_76141_0_;
+		return p_76141_0_ < (float)i ? i - 1 : i;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static int truncateDoubleToInt(double par0)
+	public static int truncateDoubleToInt(double p_76140_0_)
 	{
-		return (int)(par0 + 1024.0D) - 1024;
+		return (int)(p_76140_0_ + 1024.0D) - 1024;
 	}
 
-	public static int floor_double(double par0)
+	public static int floor_double(double p_76128_0_)
 	{
-		int i = (int)par0;
-		return par0 < (double)i ? i - 1 : i;
+		int i = (int)p_76128_0_;
+		return p_76128_0_ < (double)i ? i - 1 : i;
 	}
 
-	public static long floor_double_long(double par0)
+	public static long floor_double_long(double p_76124_0_)
 	{
-		long i = (long)par0;
-		return par0 < (double)i ? i - 1L : i;
+		long i = (long)p_76124_0_;
+		return p_76124_0_ < (double)i ? i - 1L : i;
 	}
 
-	public static float abs(float par0)
+	@SideOnly(Side.CLIENT)
+	public static int func_154353_e(double p_154353_0_)
 	{
-		return par0 >= 0.0F ? par0 : -par0;
+		return (int)(p_154353_0_ >= 0.0D ? p_154353_0_ : -p_154353_0_ + 1.0D);
 	}
 
-	public static int abs_int(int par0)
+	public static float abs(float p_76135_0_)
 	{
-		return par0 >= 0 ? par0 : -par0;
+		return p_76135_0_ >= 0.0F ? p_76135_0_ : -p_76135_0_;
 	}
 
-	public static int ceiling_float_int(float par0)
+	public static int abs_int(int p_76130_0_)
 	{
-		int i = (int)par0;
-		return par0 > (float)i ? i + 1 : i;
+		return p_76130_0_ >= 0 ? p_76130_0_ : -p_76130_0_;
 	}
 
-	public static int ceiling_double_int(double par0)
+	public static int ceiling_float_int(float p_76123_0_)
 	{
-		int i = (int)par0;
-		return par0 > (double)i ? i + 1 : i;
+		int i = (int)p_76123_0_;
+		return p_76123_0_ > (float)i ? i + 1 : i;
 	}
 
-	public static int clamp_int(int par0, int par1, int par2)
+	public static int ceiling_double_int(double p_76143_0_)
 	{
-		return par0 < par1 ? par1 : (par0 > par2 ? par2 : par0);
+		int i = (int)p_76143_0_;
+		return p_76143_0_ > (double)i ? i + 1 : i;
 	}
 
-	public static float clamp_float(float par0, float par1, float par2)
+	public static int clamp_int(int p_76125_0_, int p_76125_1_, int p_76125_2_)
 	{
-		return par0 < par1 ? par1 : (par0 > par2 ? par2 : par0);
+		return p_76125_0_ < p_76125_1_ ? p_76125_1_ : (p_76125_0_ > p_76125_2_ ? p_76125_2_ : p_76125_0_);
+	}
+
+	public static float clamp_float(float p_76131_0_, float p_76131_1_, float p_76131_2_)
+	{
+		return p_76131_0_ < p_76131_1_ ? p_76131_1_ : (p_76131_0_ > p_76131_2_ ? p_76131_2_ : p_76131_0_);
 	}
 
 	public static double clamp_double(double p_151237_0_, double p_151237_2_, double p_151237_4_)
@@ -96,36 +102,36 @@ public class MathHelper
 		return p_151238_4_ < 0.0D ? p_151238_0_ : (p_151238_4_ > 1.0D ? p_151238_2_ : p_151238_0_ + (p_151238_2_ - p_151238_0_) * p_151238_4_);
 	}
 
-	public static double abs_max(double par0, double par2)
+	public static double abs_max(double p_76132_0_, double p_76132_2_)
 	{
-		if (par0 < 0.0D)
+		if (p_76132_0_ < 0.0D)
 		{
-			par0 = -par0;
+			p_76132_0_ = -p_76132_0_;
 		}
 
-		if (par2 < 0.0D)
+		if (p_76132_2_ < 0.0D)
 		{
-			par2 = -par2;
+			p_76132_2_ = -p_76132_2_;
 		}
 
-		return par0 > par2 ? par0 : par2;
+		return p_76132_0_ > p_76132_2_ ? p_76132_0_ : p_76132_2_;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static int bucketInt(int par0, int par1)
+	public static int bucketInt(int p_76137_0_, int p_76137_1_)
 	{
-		return par0 < 0 ? -((-par0 - 1) / par1) - 1 : par0 / par1;
+		return p_76137_0_ < 0 ? -((-p_76137_0_ - 1) / p_76137_1_) - 1 : p_76137_0_ / p_76137_1_;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static boolean stringNullOrLengthZero(String par0Str)
+	public static boolean stringNullOrLengthZero(String p_76139_0_)
 	{
-		return par0Str == null || par0Str.length() == 0;
+		return p_76139_0_ == null || p_76139_0_.length() == 0;
 	}
 
-	public static int getRandomIntegerInRange(Random par0Random, int par1, int par2)
+	public static int getRandomIntegerInRange(Random p_76136_0_, int p_76136_1_, int p_76136_2_)
 	{
-		return par1 >= par2 ? par1 : par0Random.nextInt(par2 - par1 + 1) + par1;
+		return p_76136_1_ >= p_76136_2_ ? p_76136_1_ : p_76136_0_.nextInt(p_76136_2_ - p_76136_1_ + 1) + p_76136_1_;
 	}
 
 	public static float randomFloatClamp(Random p_151240_0_, float p_151240_1_, float p_151240_2_)
@@ -133,16 +139,16 @@ public class MathHelper
 		return p_151240_1_ >= p_151240_2_ ? p_151240_1_ : p_151240_0_.nextFloat() * (p_151240_2_ - p_151240_1_) + p_151240_1_;
 	}
 
-	public static double getRandomDoubleInRange(Random par0Random, double par1, double par3)
+	public static double getRandomDoubleInRange(Random p_82716_0_, double p_82716_1_, double p_82716_3_)
 	{
-		return par1 >= par3 ? par1 : par0Random.nextDouble() * (par3 - par1) + par1;
+		return p_82716_1_ >= p_82716_3_ ? p_82716_1_ : p_82716_0_.nextDouble() * (p_82716_3_ - p_82716_1_) + p_82716_1_;
 	}
 
-	public static double average(long[] par0ArrayOfLong)
+	public static double average(long[] p_76127_0_)
 	{
 		long i = 0L;
-		long[] along1 = par0ArrayOfLong;
-		int j = par0ArrayOfLong.length;
+		long[] along1 = p_76127_0_;
+		int j = p_76127_0_.length;
 
 		for (int k = 0; k < j; ++k)
 		{
@@ -150,50 +156,50 @@ public class MathHelper
 			i += l;
 		}
 
-		return (double)i / (double)par0ArrayOfLong.length;
+		return (double)i / (double)p_76127_0_.length;
 	}
 
-	public static float wrapAngleTo180_float(float par0)
+	public static float wrapAngleTo180_float(float p_76142_0_)
 	{
-		par0 %= 360.0F;
+		p_76142_0_ %= 360.0F;
 
-		if (par0 >= 180.0F)
+		if (p_76142_0_ >= 180.0F)
 		{
-			par0 -= 360.0F;
+			p_76142_0_ -= 360.0F;
 		}
 
-		if (par0 < -180.0F)
+		if (p_76142_0_ < -180.0F)
 		{
-			par0 += 360.0F;
+			p_76142_0_ += 360.0F;
 		}
 
-		return par0;
+		return p_76142_0_;
 	}
 
-	public static double wrapAngleTo180_double(double par0)
+	public static double wrapAngleTo180_double(double p_76138_0_)
 	{
-		par0 %= 360.0D;
+		p_76138_0_ %= 360.0D;
 
-		if (par0 >= 180.0D)
+		if (p_76138_0_ >= 180.0D)
 		{
-			par0 -= 360.0D;
+			p_76138_0_ -= 360.0D;
 		}
 
-		if (par0 < -180.0D)
+		if (p_76138_0_ < -180.0D)
 		{
-			par0 += 360.0D;
+			p_76138_0_ += 360.0D;
 		}
 
-		return par0;
+		return p_76138_0_;
 	}
 
-	public static int parseIntWithDefault(String par0Str, int par1)
+	public static int parseIntWithDefault(String p_82715_0_, int p_82715_1_)
 	{
-		int j = par1;
+		int j = p_82715_1_;
 
 		try
 		{
-			j = Integer.parseInt(par0Str);
+			j = Integer.parseInt(p_82715_0_);
 		}
 		catch (Throwable throwable)
 		{
@@ -203,34 +209,34 @@ public class MathHelper
 		return j;
 	}
 
-	public static int parseIntWithDefaultAndMax(String par0Str, int par1, int par2)
+	public static int parseIntWithDefaultAndMax(String p_82714_0_, int p_82714_1_, int p_82714_2_)
 	{
-		int k = par1;
+		int k = p_82714_1_;
 
 		try
 		{
-			k = Integer.parseInt(par0Str);
+			k = Integer.parseInt(p_82714_0_);
 		}
 		catch (Throwable throwable)
 		{
 			;
 		}
 
-		if (k < par2)
+		if (k < p_82714_2_)
 		{
-			k = par2;
+			k = p_82714_2_;
 		}
 
 		return k;
 	}
 
-	public static double parseDoubleWithDefault(String par0Str, double par1)
+	public static double parseDoubleWithDefault(String p_82712_0_, double p_82712_1_)
 	{
-		double d1 = par1;
+		double d1 = p_82712_1_;
 
 		try
 		{
-			d1 = Double.parseDouble(par0Str);
+			d1 = Double.parseDouble(p_82712_0_);
 		}
 		catch (Throwable throwable)
 		{
@@ -240,22 +246,22 @@ public class MathHelper
 		return d1;
 	}
 
-	public static double parseDoubleWithDefaultAndMax(String par0Str, double par1, double par3)
+	public static double parseDoubleWithDefaultAndMax(String p_82713_0_, double p_82713_1_, double p_82713_3_)
 	{
-		double d2 = par1;
+		double d2 = p_82713_1_;
 
 		try
 		{
-			d2 = Double.parseDouble(par0Str);
+			d2 = Double.parseDouble(p_82713_0_);
 		}
 		catch (Throwable throwable)
 		{
 			;
 		}
 
-		if (d2 < par3)
+		if (d2 < p_82713_3_)
 		{
-			d2 = par3;
+			d2 = p_82713_3_;
 		}
 
 		return d2;
@@ -290,6 +296,25 @@ public class MathHelper
 	public static int calculateLogBaseTwo(int p_151239_0_)
 	{
 		return calculateLogBaseTwoDeBruijn(p_151239_0_) - (isPowerOfTwo(p_151239_0_) ? 0 : 1);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static int func_154354_b(int p_154354_0_, int p_154354_1_)
+	{
+		if (p_154354_1_ == 0)
+		{
+			return 0;
+		}
+		else
+		{
+			if (p_154354_0_ < 0)
+			{
+				p_154354_1_ *= -1;
+			}
+
+			int k = p_154354_0_ % p_154354_1_;
+			return k == 0 ? p_154354_0_ : p_154354_0_ + p_154354_1_ - k;
+		}
 	}
 
 	static

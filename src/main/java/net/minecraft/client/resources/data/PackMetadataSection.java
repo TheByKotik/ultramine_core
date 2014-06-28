@@ -2,21 +2,22 @@ package net.minecraft.client.resources.data;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.IChatComponent;
 
 @SideOnly(Side.CLIENT)
 public class PackMetadataSection implements IMetadataSection
 {
-	private final String packDescription;
+	private final IChatComponent packDescription;
 	private final int packFormat;
 	private static final String __OBFID = "CL_00001112";
 
-	public PackMetadataSection(String par1Str, int par2)
+	public PackMetadataSection(IChatComponent p_i1034_1_, int p_i1034_2_)
 	{
-		this.packDescription = par1Str;
-		this.packFormat = par2;
+		this.packDescription = p_i1034_1_;
+		this.packFormat = p_i1034_2_;
 	}
 
-	public String getPackDescription()
+	public IChatComponent func_152805_a()
 	{
 		return this.packDescription;
 	}

@@ -22,16 +22,16 @@ public class StatsComponent extends JComponent
 	private final MinecraftServer field_120037_e;
 	private static final String __OBFID = "CL_00001796";
 
-	public StatsComponent(MinecraftServer par1MinecraftServer)
+	public StatsComponent(MinecraftServer p_i2367_1_)
 	{
-		this.field_120037_e = par1MinecraftServer;
+		this.field_120037_e = p_i2367_1_;
 		this.setPreferredSize(new Dimension(456, 246));
 		this.setMinimumSize(new Dimension(456, 246));
 		this.setMaximumSize(new Dimension(456, 246));
 		(new Timer(500, new ActionListener()
 		{
 			private static final String __OBFID = "CL_00001797";
-			public void actionPerformed(ActionEvent par1ActionEvent)
+			public void actionPerformed(ActionEvent p_actionPerformed_1_)
 			{
 				StatsComponent.this.func_120034_a();
 			}
@@ -48,32 +48,32 @@ public class StatsComponent extends JComponent
 		this.repaint();
 	}
 
-	private double func_120035_a(long[] par1ArrayOfLong)
+	private double func_120035_a(long[] p_120035_1_)
 	{
 		long i = 0L;
 
-		for (int j = 0; j < par1ArrayOfLong.length; ++j)
+		for (int j = 0; j < p_120035_1_.length; ++j)
 		{
-			i += par1ArrayOfLong[j];
+			i += p_120035_1_[j];
 		}
 
-		return (double)i / (double)par1ArrayOfLong.length;
+		return (double)i / (double)p_120035_1_.length;
 	}
 
-	public void paint(Graphics par1Graphics)
+	public void paint(Graphics p_paint_1_)
 	{
-		par1Graphics.setColor(new Color(16777215));
-		par1Graphics.fillRect(0, 0, 456, 246);
+		p_paint_1_.setColor(new Color(16777215));
+		p_paint_1_.fillRect(0, 0, 456, 246);
 		int i;
 
 		for (i = 0; i < 256; ++i)
 		{
 			int j = this.field_120038_b[i + this.field_120039_c & 255];
-			par1Graphics.setColor(new Color(j + 28 << 16));
-			par1Graphics.fillRect(i, 100 - j, 1, j);
+			p_paint_1_.setColor(new Color(j + 28 << 16));
+			p_paint_1_.fillRect(i, 100 - j, 1, j);
 		}
 
-		par1Graphics.setColor(Color.BLACK);
+		p_paint_1_.setColor(Color.BLACK);
 
 		for (i = 0; i < this.field_120036_d.length; ++i)
 		{
@@ -81,7 +81,7 @@ public class StatsComponent extends JComponent
 
 			if (s != null)
 			{
-				par1Graphics.drawString(s, 32, 116 + i * 16);
+				p_paint_1_.drawString(s, 32, 116 + i * 16);
 			}
 		}
 	}

@@ -27,34 +27,34 @@ public class RenderIronGolem extends RenderLiving
 		this.ironGolemModel = (ModelIronGolem)this.mainModel;
 	}
 
-	public void doRender(EntityIronGolem par1EntityIronGolem, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityIronGolem p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		super.doRender((EntityLiving)par1EntityIronGolem, par2, par4, par6, par8, par9);
+		super.doRender((EntityLiving)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected ResourceLocation getEntityTexture(EntityIronGolem par1EntityIronGolem)
+	protected ResourceLocation getEntityTexture(EntityIronGolem p_110775_1_)
 	{
 		return ironGolemTextures;
 	}
 
-	protected void rotateCorpse(EntityIronGolem par1EntityIronGolem, float par2, float par3, float par4)
+	protected void rotateCorpse(EntityIronGolem p_77043_1_, float p_77043_2_, float p_77043_3_, float p_77043_4_)
 	{
-		super.rotateCorpse(par1EntityIronGolem, par2, par3, par4);
+		super.rotateCorpse(p_77043_1_, p_77043_2_, p_77043_3_, p_77043_4_);
 
-		if ((double)par1EntityIronGolem.limbSwingAmount >= 0.01D)
+		if ((double)p_77043_1_.limbSwingAmount >= 0.01D)
 		{
 			float f3 = 13.0F;
-			float f4 = par1EntityIronGolem.limbSwing - par1EntityIronGolem.limbSwingAmount * (1.0F - par4) + 6.0F;
+			float f4 = p_77043_1_.limbSwing - p_77043_1_.limbSwingAmount * (1.0F - p_77043_4_) + 6.0F;
 			float f5 = (Math.abs(f4 % f3 - f3 * 0.5F) - f3 * 0.25F) / (f3 * 0.25F);
 			GL11.glRotatef(6.5F * f5, 0.0F, 0.0F, 1.0F);
 		}
 	}
 
-	protected void renderEquippedItems(EntityIronGolem par1EntityIronGolem, float par2)
+	protected void renderEquippedItems(EntityIronGolem p_77029_1_, float p_77029_2_)
 	{
-		super.renderEquippedItems(par1EntityIronGolem, par2);
+		super.renderEquippedItems(p_77029_1_, p_77029_2_);
 
-		if (par1EntityIronGolem.getHoldRoseTick() != 0)
+		if (p_77029_1_.getHoldRoseTick() != 0)
 		{
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			GL11.glPushMatrix();
@@ -63,7 +63,7 @@ public class RenderIronGolem extends RenderLiving
 			GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
 			float f1 = 0.8F;
 			GL11.glScalef(f1, -f1, f1);
-			int i = par1EntityIronGolem.getBrightnessForRender(par2);
+			int i = p_77029_1_.getBrightnessForRender(p_77029_2_);
 			int j = i % 65536;
 			int k = i / 65536;
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
@@ -75,33 +75,33 @@ public class RenderIronGolem extends RenderLiving
 		}
 	}
 
-	public void doRender(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLiving p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityIronGolem)par1EntityLiving, par2, par4, par6, par8, par9);
+		this.doRender((EntityIronGolem)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float par2)
+	protected void renderEquippedItems(EntityLivingBase p_77029_1_, float p_77029_2_)
 	{
-		this.renderEquippedItems((EntityIronGolem)par1EntityLivingBase, par2);
+		this.renderEquippedItems((EntityIronGolem)p_77029_1_, p_77029_2_);
 	}
 
-	protected void rotateCorpse(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4)
+	protected void rotateCorpse(EntityLivingBase p_77043_1_, float p_77043_2_, float p_77043_3_, float p_77043_4_)
 	{
-		this.rotateCorpse((EntityIronGolem)par1EntityLivingBase, par2, par3, par4);
+		this.rotateCorpse((EntityIronGolem)p_77043_1_, p_77043_2_, p_77043_3_, p_77043_4_);
 	}
 
-	public void doRender(EntityLivingBase par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLivingBase p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityIronGolem)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityIronGolem)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityIronGolem)par1Entity);
+		return this.getEntityTexture((EntityIronGolem)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityIronGolem)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityIronGolem)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

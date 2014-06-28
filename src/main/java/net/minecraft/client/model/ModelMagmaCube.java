@@ -39,10 +39,10 @@ public class ModelMagmaCube extends ModelBase
 		this.field_78108_b.addBox(-2.0F, 18.0F, -2.0F, 4, 4, 4);
 	}
 
-	public void setLivingAnimations(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4)
+	public void setLivingAnimations(EntityLivingBase p_78086_1_, float p_78086_2_, float p_78086_3_, float p_78086_4_)
 	{
-		EntityMagmaCube entitymagmacube = (EntityMagmaCube)par1EntityLivingBase;
-		float f3 = entitymagmacube.prevSquishFactor + (entitymagmacube.squishFactor - entitymagmacube.prevSquishFactor) * par4;
+		EntityMagmaCube entitymagmacube = (EntityMagmaCube)p_78086_1_;
+		float f3 = entitymagmacube.prevSquishFactor + (entitymagmacube.squishFactor - entitymagmacube.prevSquishFactor) * p_78086_4_;
 
 		if (f3 < 0.0F)
 		{
@@ -55,14 +55,14 @@ public class ModelMagmaCube extends ModelBase
 		}
 	}
 
-	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(Entity p_78088_1_, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_)
 	{
-		this.setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
-		this.field_78108_b.render(par7);
+		this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, p_78088_7_, p_78088_1_);
+		this.field_78108_b.render(p_78088_7_);
 
 		for (int i = 0; i < this.field_78109_a.length; ++i)
 		{
-			this.field_78109_a[i].render(par7);
+			this.field_78109_a[i].render(p_78088_7_);
 		}
 	}
 }

@@ -37,30 +37,30 @@ public class TileEntityFurnace extends TileEntity implements ISidedInventory
 		return this.furnaceItemStacks.length;
 	}
 
-	public ItemStack getStackInSlot(int par1)
+	public ItemStack getStackInSlot(int p_70301_1_)
 	{
-		return this.furnaceItemStacks[par1];
+		return this.furnaceItemStacks[p_70301_1_];
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
 	{
-		if (this.furnaceItemStacks[par1] != null)
+		if (this.furnaceItemStacks[p_70298_1_] != null)
 		{
 			ItemStack itemstack;
 
-			if (this.furnaceItemStacks[par1].stackSize <= par2)
+			if (this.furnaceItemStacks[p_70298_1_].stackSize <= p_70298_2_)
 			{
-				itemstack = this.furnaceItemStacks[par1];
-				this.furnaceItemStacks[par1] = null;
+				itemstack = this.furnaceItemStacks[p_70298_1_];
+				this.furnaceItemStacks[p_70298_1_] = null;
 				return itemstack;
 			}
 			else
 			{
-				itemstack = this.furnaceItemStacks[par1].splitStack(par2);
+				itemstack = this.furnaceItemStacks[p_70298_1_].splitStack(p_70298_2_);
 
-				if (this.furnaceItemStacks[par1].stackSize == 0)
+				if (this.furnaceItemStacks[p_70298_1_].stackSize == 0)
 				{
-					this.furnaceItemStacks[par1] = null;
+					this.furnaceItemStacks[p_70298_1_] = null;
 				}
 
 				return itemstack;
@@ -72,12 +72,12 @@ public class TileEntityFurnace extends TileEntity implements ISidedInventory
 		}
 	}
 
-	public ItemStack getStackInSlotOnClosing(int par1)
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_)
 	{
-		if (this.furnaceItemStacks[par1] != null)
+		if (this.furnaceItemStacks[p_70304_1_] != null)
 		{
-			ItemStack itemstack = this.furnaceItemStacks[par1];
-			this.furnaceItemStacks[par1] = null;
+			ItemStack itemstack = this.furnaceItemStacks[p_70304_1_];
+			this.furnaceItemStacks[p_70304_1_] = null;
 			return itemstack;
 		}
 		else
@@ -86,13 +86,13 @@ public class TileEntityFurnace extends TileEntity implements ISidedInventory
 		}
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
-		this.furnaceItemStacks[par1] = par2ItemStack;
+		this.furnaceItemStacks[p_70299_1_] = p_70299_2_;
 
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		if (p_70299_2_ != null && p_70299_2_.stackSize > this.getInventoryStackLimit())
 		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
+			p_70299_2_.stackSize = this.getInventoryStackLimit();
 		}
 	}
 
@@ -203,40 +203,43 @@ public class TileEntityFurnace extends TileEntity implements ISidedInventory
 
 		if (!this.worldObj.isRemote)
 		{
-			if (this.furnaceBurnTime == 0 && this.canSmelt())
+			if (this.furnaceBurnTime != 0 || this.furnaceItemStacks[1] != null && this.furnaceItemStacks[0] != null)
 			{
-				this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.furnaceItemStacks[1]);
-
-				if (this.furnaceBurnTime > 0)
+				if (this.furnaceBurnTime == 0 && this.canSmelt())
 				{
-					flag1 = true;
+					this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.furnaceItemStacks[1]);
 
-					if (this.furnaceItemStacks[1] != null)
+					if (this.furnaceBurnTime > 0)
 					{
-						--this.furnaceItemStacks[1].stackSize;
+						flag1 = true;
 
-						if (this.furnaceItemStacks[1].stackSize == 0)
+						if (this.furnaceItemStacks[1] != null)
 						{
-							this.furnaceItemStacks[1] = furnaceItemStacks[1].getItem().getContainerItem(furnaceItemStacks[1]);
+							--this.furnaceItemStacks[1].stackSize;
+
+							if (this.furnaceItemStacks[1].stackSize == 0)
+							{
+								this.furnaceItemStacks[1] = furnaceItemStacks[1].getItem().getContainerItem(furnaceItemStacks[1]);
+							}
 						}
 					}
 				}
-			}
 
-			if (this.isBurning() && this.canSmelt())
-			{
-				++this.furnaceCookTime;
+				if (this.isBurning() && this.canSmelt())
+				{
+					++this.furnaceCookTime;
 
-				if (this.furnaceCookTime == 200)
+					if (this.furnaceCookTime == 200)
+					{
+						this.furnaceCookTime = 0;
+						this.smeltItem();
+						flag1 = true;
+					}
+				}
+				else
 				{
 					this.furnaceCookTime = 0;
-					this.smeltItem();
-					flag1 = true;
 				}
-			}
-			else
-			{
-				this.furnaceCookTime = 0;
 			}
 
 			if (flag != this.furnaceBurnTime > 0)
@@ -340,32 +343,32 @@ public class TileEntityFurnace extends TileEntity implements ISidedInventory
 		return getItemBurnTime(p_145954_0_) > 0;
 	}
 
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
 	{
-		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : p_70300_1_.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	public void openInventory() {}
 
 	public void closeInventory() {}
 
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
-		return par1 == 2 ? false : (par1 == 1 ? isItemFuel(par2ItemStack) : true);
+		return p_94041_1_ == 2 ? false : (p_94041_1_ == 1 ? isItemFuel(p_94041_2_) : true);
 	}
 
-	public int[] getAccessibleSlotsFromSide(int par1)
+	public int[] getAccessibleSlotsFromSide(int p_94128_1_)
 	{
-		return par1 == 0 ? slotsBottom : (par1 == 1 ? slotsTop : slotsSides);
+		return p_94128_1_ == 0 ? slotsBottom : (p_94128_1_ == 1 ? slotsTop : slotsSides);
 	}
 
-	public boolean canInsertItem(int par1, ItemStack par2ItemStack, int par3)
+	public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, int p_102007_3_)
 	{
-		return this.isItemValidForSlot(par1, par2ItemStack);
+		return this.isItemValidForSlot(p_102007_1_, p_102007_2_);
 	}
 
-	public boolean canExtractItem(int par1, ItemStack par2ItemStack, int par3)
+	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, int p_102008_3_)
 	{
-		return par3 != 0 || par1 != 1 || par2ItemStack.getItem() == Items.bucket;
+		return p_102008_3_ != 0 || p_102008_1_ != 1 || p_102008_2_.getItem() == Items.bucket;
 	}
 }

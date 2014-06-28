@@ -12,6 +12,7 @@ import net.minecraft.command.server.CommandListBans;
 import net.minecraft.command.server.CommandListPlayers;
 import net.minecraft.command.server.CommandMessage;
 import net.minecraft.command.server.CommandMessageRaw;
+import net.minecraft.command.server.CommandNetstat;
 import net.minecraft.command.server.CommandOp;
 import net.minecraft.command.server.CommandPardonIp;
 import net.minecraft.command.server.CommandPardonPlayer;
@@ -29,6 +30,7 @@ import net.minecraft.command.server.CommandTestFor;
 import net.minecraft.command.server.CommandTestForBlock;
 import net.minecraft.command.server.CommandWhitelist;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.rcon.RConConsoleSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
@@ -90,6 +92,7 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
 			this.registerCommand(new CommandListPlayers());
 			this.registerCommand(new CommandWhitelist());
 			this.registerCommand(new CommandSetPlayerTimeout());
+			this.registerCommand(new CommandNetstat());
 		}
 		else
 		{
@@ -97,6 +100,11 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
 		}
 
 		CommandBase.setAdminCommander(this);
+	}
+
+	public void func_152372_a(ICommandSender p_152372_1_, ICommand p_152372_2_, int p_152372_3_, String p_152372_4_, Object ... p_152372_5_)
+	{
+		notifyAdmins(p_152372_1_, p_152372_3_, p_152372_4_, p_152372_5_);
 	}
 
 	public void notifyAdmins(ICommandSender par1ICommandSender, int par2, String par3Str, Object ... par4ArrayOfObj)
@@ -120,7 +128,7 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
 			{
 				EntityPlayerMP entityplayermp = (EntityPlayerMP)iterator.next();
 
-				if (entityplayermp != par1ICommandSender && PermissionHandler.getInstance().hasGlobally(entityplayermp, MinecraftPermissions.COMMAND_NOTIFICATION))
+				if (entityplayermp != par1ICommandSender && PermissionHandler.getInstance().hasGlobally(entityplayermp, MinecraftPermissions.COMMAND_NOTIFICATION) && (!(par1ICommandSender instanceof RConConsoleSource) || MinecraftServer.getServer().func_152363_m()))
 				{
 					entityplayermp.addChatMessage(chatcomponenttranslation);
 				}

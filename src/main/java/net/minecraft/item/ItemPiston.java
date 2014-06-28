@@ -11,7 +11,7 @@ public class ItemPiston extends ItemBlock
 		super(p_i45348_1_);
 	}
 
-	public int getMetadata(int par1)
+	public int getMetadata(int p_77647_1_)
 	{
 		return 7;
 	}

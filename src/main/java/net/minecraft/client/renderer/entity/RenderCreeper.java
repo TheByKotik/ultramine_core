@@ -24,9 +24,9 @@ public class RenderCreeper extends RenderLiving
 		super(new ModelCreeper(), 0.5F);
 	}
 
-	protected void preRenderCallback(EntityCreeper par1EntityCreeper, float par2)
+	protected void preRenderCallback(EntityCreeper p_77041_1_, float p_77041_2_)
 	{
-		float f1 = par1EntityCreeper.getCreeperFlashIntensity(par2);
+		float f1 = p_77041_1_.getCreeperFlashIntensity(p_77041_2_);
 		float f2 = 1.0F + MathHelper.sin(f1 * 100.0F) * f1 * 0.01F;
 
 		if (f1 < 0.0F)
@@ -46,9 +46,9 @@ public class RenderCreeper extends RenderLiving
 		GL11.glScalef(f3, f4, f3);
 	}
 
-	protected int getColorMultiplier(EntityCreeper par1EntityCreeper, float par2, float par3)
+	protected int getColorMultiplier(EntityCreeper p_77030_1_, float p_77030_2_, float p_77030_3_)
 	{
-		float f2 = par1EntityCreeper.getCreeperFlashIntensity(par3);
+		float f2 = p_77030_1_.getCreeperFlashIntensity(p_77030_3_);
 
 		if ((int)(f2 * 10.0F) % 2 == 0)
 		{
@@ -75,11 +75,11 @@ public class RenderCreeper extends RenderLiving
 		}
 	}
 
-	protected int shouldRenderPass(EntityCreeper par1EntityCreeper, int par2, float par3)
+	protected int shouldRenderPass(EntityCreeper p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
-		if (par1EntityCreeper.getPowered())
+		if (p_77032_1_.getPowered())
 		{
-			if (par1EntityCreeper.isInvisible())
+			if (p_77032_1_.isInvisible())
 			{
 				GL11.glDepthMask(false);
 			}
@@ -88,9 +88,9 @@ public class RenderCreeper extends RenderLiving
 				GL11.glDepthMask(true);
 			}
 
-			if (par2 == 1)
+			if (p_77032_2_ == 1)
 			{
-				float f1 = (float)par1EntityCreeper.ticksExisted + par3;
+				float f1 = (float)p_77032_1_.ticksExisted + p_77032_3_;
 				this.bindTexture(armoredCreeperTextures);
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
 				GL11.glLoadIdentity();
@@ -107,7 +107,7 @@ public class RenderCreeper extends RenderLiving
 				return 1;
 			}
 
-			if (par2 == 2)
+			if (p_77032_2_ == 2)
 			{
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
 				GL11.glLoadIdentity();
@@ -120,38 +120,38 @@ public class RenderCreeper extends RenderLiving
 		return -1;
 	}
 
-	protected int inheritRenderPass(EntityCreeper par1EntityCreeper, int par2, float par3)
+	protected int inheritRenderPass(EntityCreeper p_77035_1_, int p_77035_2_, float p_77035_3_)
 	{
 		return -1;
 	}
 
-	protected ResourceLocation getEntityTexture(EntityCreeper par1EntityCreeper)
+	protected ResourceLocation getEntityTexture(EntityCreeper p_110775_1_)
 	{
 		return creeperTextures;
 	}
 
-	protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2)
+	protected void preRenderCallback(EntityLivingBase p_77041_1_, float p_77041_2_)
 	{
-		this.preRenderCallback((EntityCreeper)par1EntityLivingBase, par2);
+		this.preRenderCallback((EntityCreeper)p_77041_1_, p_77041_2_);
 	}
 
-	protected int getColorMultiplier(EntityLivingBase par1EntityLivingBase, float par2, float par3)
+	protected int getColorMultiplier(EntityLivingBase p_77030_1_, float p_77030_2_, float p_77030_3_)
 	{
-		return this.getColorMultiplier((EntityCreeper)par1EntityLivingBase, par2, par3);
+		return this.getColorMultiplier((EntityCreeper)p_77030_1_, p_77030_2_, p_77030_3_);
 	}
 
-	protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+	protected int shouldRenderPass(EntityLivingBase p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
-		return this.shouldRenderPass((EntityCreeper)par1EntityLivingBase, par2, par3);
+		return this.shouldRenderPass((EntityCreeper)p_77032_1_, p_77032_2_, p_77032_3_);
 	}
 
-	protected int inheritRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+	protected int inheritRenderPass(EntityLivingBase p_77035_1_, int p_77035_2_, float p_77035_3_)
 	{
-		return this.inheritRenderPass((EntityCreeper)par1EntityLivingBase, par2, par3);
+		return this.inheritRenderPass((EntityCreeper)p_77035_1_, p_77035_2_, p_77035_3_);
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityCreeper)par1Entity);
+		return this.getEntityTexture((EntityCreeper)p_110775_1_);
 	}
 }

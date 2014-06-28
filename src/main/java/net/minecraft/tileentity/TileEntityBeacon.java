@@ -54,7 +54,7 @@ public class TileEntityBeacon extends TileEntity implements IInventory
 				b0 = 1;
 			}
 
-			AxisAlignedBB axisalignedbb = AxisAlignedBB.getAABBPool().getAABB((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)(this.xCoord + 1), (double)(this.yCoord + 1), (double)(this.zCoord + 1)).expand(d0, d0, d0);
+			AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)(this.xCoord + 1), (double)(this.yCoord + 1), (double)(this.zCoord + 1)).expand(d0, d0, d0);
 			axisalignedbb.maxY = (double)this.worldObj.getHeight();
 			List list = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
 			Iterator iterator = list.iterator();
@@ -132,7 +132,7 @@ public class TileEntityBeacon extends TileEntity implements IInventory
 
 		if (!this.worldObj.isRemote && this.levels == 4 && i < this.levels)
 		{
-			Iterator iterator = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)this.xCoord, (double)(this.yCoord - 4), (double)this.zCoord).expand(10.0D, 5.0D, 10.0D)).iterator();
+			Iterator iterator = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)this.xCoord, (double)(this.yCoord - 4), (double)this.zCoord).expand(10.0D, 5.0D, 10.0D)).iterator();
 
 			while (iterator.hasNext())
 			{
@@ -277,16 +277,16 @@ public class TileEntityBeacon extends TileEntity implements IInventory
 		return 1;
 	}
 
-	public ItemStack getStackInSlot(int par1)
+	public ItemStack getStackInSlot(int p_70301_1_)
 	{
-		return par1 == 0 ? this.payment : null;
+		return p_70301_1_ == 0 ? this.payment : null;
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
 	{
-		if (par1 == 0 && this.payment != null)
+		if (p_70298_1_ == 0 && this.payment != null)
 		{
-			if (par2 >= this.payment.stackSize)
+			if (p_70298_2_ >= this.payment.stackSize)
 			{
 				ItemStack itemstack = this.payment;
 				this.payment = null;
@@ -294,8 +294,8 @@ public class TileEntityBeacon extends TileEntity implements IInventory
 			}
 			else
 			{
-				this.payment.stackSize -= par2;
-				return new ItemStack(this.payment.getItem(), par2, this.payment.getItemDamage());
+				this.payment.stackSize -= p_70298_2_;
+				return new ItemStack(this.payment.getItem(), p_70298_2_, this.payment.getItemDamage());
 			}
 		}
 		else
@@ -304,9 +304,9 @@ public class TileEntityBeacon extends TileEntity implements IInventory
 		}
 	}
 
-	public ItemStack getStackInSlotOnClosing(int par1)
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_)
 	{
-		if (par1 == 0 && this.payment != null)
+		if (p_70304_1_ == 0 && this.payment != null)
 		{
 			ItemStack itemstack = this.payment;
 			this.payment = null;
@@ -318,11 +318,11 @@ public class TileEntityBeacon extends TileEntity implements IInventory
 		}
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
-		if (par1 == 0)
+		if (p_70299_1_ == 0)
 		{
-			this.payment = par2ItemStack;
+			this.payment = p_70299_2_;
 		}
 	}
 
@@ -346,17 +346,17 @@ public class TileEntityBeacon extends TileEntity implements IInventory
 		return 1;
 	}
 
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
 	{
-		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : p_70300_1_.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	public void openInventory() {}
 
 	public void closeInventory() {}
 
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
-		return par2ItemStack.getItem() == Items.emerald || par2ItemStack.getItem() == Items.diamond || par2ItemStack.getItem() == Items.gold_ingot || par2ItemStack.getItem() == Items.iron_ingot;
+		return p_94041_2_.getItem() == Items.emerald || p_94041_2_.getItem() == Items.diamond || p_94041_2_.getItem() == Items.gold_ingot || p_94041_2_.getItem() == Items.iron_ingot;
 	}
 }

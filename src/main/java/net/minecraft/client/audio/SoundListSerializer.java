@@ -16,9 +16,9 @@ public class SoundListSerializer implements JsonDeserializer
 {
 	private static final String __OBFID = "CL_00001124";
 
-	public SoundList deserialize(JsonElement p_148578_1_, Type p_148578_2_, JsonDeserializationContext p_148578_3_)
+	public SoundList deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_)
 	{
-		JsonObject jsonobject = JsonUtils.getJsonElementAsJsonObject(p_148578_1_, "entry");
+		JsonObject jsonobject = JsonUtils.getJsonElementAsJsonObject(p_deserialize_1_, "entry");
 		SoundList soundlist = new SoundList();
 		soundlist.setReplaceExisting(JsonUtils.getJsonObjectBooleanFieldValueOrDefault(jsonobject, "replace", false));
 		SoundCategory soundcategory = SoundCategory.func_147154_a(JsonUtils.getJsonObjectStringFieldValueOrDefault(jsonobject, "category", SoundCategory.MASTER.getCategoryName()));

@@ -15,18 +15,18 @@ public class CommandDefaultGameMode extends CommandGameMode
 		return "defaultgamemode";
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.defaultgamemode.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length > 0)
+		if (p_71515_2_.length > 0)
 		{
-			WorldSettings.GameType gametype = this.getGameModeFromCommand(par1ICommandSender, par2ArrayOfStr[0]);
+			WorldSettings.GameType gametype = this.getGameModeFromCommand(p_71515_1_, p_71515_2_[0]);
 			this.setGameType(gametype);
-			notifyAdmins(par1ICommandSender, "commands.defaultgamemode.success", new Object[] {new ChatComponentTranslation("gameMode." + gametype.getName(), new Object[0])});
+			func_152373_a(p_71515_1_, this, "commands.defaultgamemode.success", new Object[] {new ChatComponentTranslation("gameMode." + gametype.getName(), new Object[0])});
 		}
 		else
 		{
@@ -34,10 +34,10 @@ public class CommandDefaultGameMode extends CommandGameMode
 		}
 	}
 
-	protected void setGameType(WorldSettings.GameType par1EnumGameType)
+	protected void setGameType(WorldSettings.GameType p_71541_1_)
 	{
 		MinecraftServer minecraftserver = MinecraftServer.getServer();
-		minecraftserver.setGameType(par1EnumGameType);
+		minecraftserver.setGameType(p_71541_1_);
 		EntityPlayerMP entityplayermp;
 
 		if (minecraftserver.getForceGamemode())
@@ -45,7 +45,7 @@ public class CommandDefaultGameMode extends CommandGameMode
 			for (Iterator iterator = MinecraftServer.getServer().getConfigurationManager().playerEntityList.iterator(); iterator.hasNext(); entityplayermp.fallDistance = 0.0F)
 			{
 				entityplayermp = (EntityPlayerMP)iterator.next();
-				entityplayermp.setGameType(par1EnumGameType);
+				entityplayermp.setGameType(p_71541_1_);
 			}
 		}
 	}

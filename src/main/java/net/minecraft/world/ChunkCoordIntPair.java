@@ -8,15 +8,15 @@ public class ChunkCoordIntPair
 	public final int chunkZPos;
 	private static final String __OBFID = "CL_00000133";
 
-	public ChunkCoordIntPair(int par1, int par2)
+	public ChunkCoordIntPair(int p_i1947_1_, int p_i1947_2_)
 	{
-		this.chunkXPos = par1;
-		this.chunkZPos = par2;
+		this.chunkXPos = p_i1947_1_;
+		this.chunkZPos = p_i1947_2_;
 	}
 
-	public static long chunkXZ2Int(int par0, int par1)
+	public static long chunkXZ2Int(int p_77272_0_, int p_77272_1_)
 	{
-		return (long)par0 & 4294967295L | ((long)par1 & 4294967295L) << 32;
+		return (long)p_77272_0_ & 4294967295L | ((long)p_77272_1_ & 4294967295L) << 32;
 	}
 
 	public int hashCode()
@@ -24,10 +24,21 @@ public class ChunkCoordIntPair
 		return ChunkHash.chunkToKey(chunkXPos, chunkZPos);
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair)par1Obj;
-		return chunkcoordintpair.chunkXPos == this.chunkXPos && chunkcoordintpair.chunkZPos == this.chunkZPos;
+		if (this == p_equals_1_)
+		{
+			return true;
+		}
+		else if (!(p_equals_1_ instanceof ChunkCoordIntPair))
+		{
+			return false;
+		}
+		else
+		{
+			ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair)p_equals_1_;
+			return this.chunkXPos == chunkcoordintpair.chunkXPos && this.chunkZPos == chunkcoordintpair.chunkZPos;
+		}
 	}
 
 	public int getCenterXPos()

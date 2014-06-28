@@ -2,5 +2,5 @@ package net.minecraft.entity;
 
 public interface IRangedAttackMob
 {
-	void attackEntityWithRangedAttack(EntityLivingBase var1, float var2);
+	void attackEntityWithRangedAttack(EntityLivingBase p_82196_1_, float p_82196_2_);
 }

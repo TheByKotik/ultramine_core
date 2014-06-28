@@ -27,9 +27,9 @@ public abstract class EntityCreature extends EntityLiving
 	private boolean field_110180_bt;
 	private static final String __OBFID = "CL_00001558";
 
-	public EntityCreature(World par1World)
+	public EntityCreature(World p_i1602_1_)
 	{
-		super(par1World);
+		super(p_i1602_1_);
 	}
 
 	protected boolean isMovementCeased()
@@ -213,9 +213,9 @@ public abstract class EntityCreature extends EntityLiving
 		this.worldObj.theProfiler.endSection();
 	}
 
-	protected void attackEntity(Entity par1Entity, float par2) {}
+	protected void attackEntity(Entity p_70785_1_, float p_70785_2_) {}
 
-	public float getBlockPathWeight(int par1, int par2, int par3)
+	public float getBlockPathWeight(int p_70783_1_, int p_70783_2_, int p_70783_3_)
 	{
 		return 0.0F;
 	}
@@ -238,9 +238,9 @@ public abstract class EntityCreature extends EntityLiving
 		return this.pathToEntity != null;
 	}
 
-	public void setPathToEntity(PathEntity par1PathEntity)
+	public void setPathToEntity(PathEntity p_70778_1_)
 	{
-		this.pathToEntity = par1PathEntity;
+		this.pathToEntity = p_70778_1_;
 	}
 
 	public Entity getEntityToAttack()
@@ -248,9 +248,9 @@ public abstract class EntityCreature extends EntityLiving
 		return this.entityToAttack;
 	}
 
-	public void setTarget(Entity par1Entity)
+	public void setTarget(Entity p_70784_1_)
 	{
-		this.entityToAttack = par1Entity;
+		this.entityToAttack = p_70784_1_;
 	}
 
 	public boolean isWithinHomeDistanceCurrentPosition()
@@ -258,15 +258,15 @@ public abstract class EntityCreature extends EntityLiving
 		return this.isWithinHomeDistance(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 	}
 
-	public boolean isWithinHomeDistance(int par1, int par2, int par3)
+	public boolean isWithinHomeDistance(int p_110176_1_, int p_110176_2_, int p_110176_3_)
 	{
-		return this.maximumHomeDistance == -1.0F ? true : this.homePosition.getDistanceSquared(par1, par2, par3) < this.maximumHomeDistance * this.maximumHomeDistance;
+		return this.maximumHomeDistance == -1.0F ? true : this.homePosition.getDistanceSquared(p_110176_1_, p_110176_2_, p_110176_3_) < this.maximumHomeDistance * this.maximumHomeDistance;
 	}
 
-	public void setHomeArea(int par1, int par2, int par3, int par4)
+	public void setHomeArea(int p_110171_1_, int p_110171_2_, int p_110171_3_, int p_110171_4_)
 	{
-		this.homePosition.set(par1, par2, par3);
-		this.maximumHomeDistance = (float)par4;
+		this.homePosition.set(p_110171_1_, p_110171_2_, p_110171_3_);
+		this.maximumHomeDistance = (float)p_110171_4_;
 	}
 
 	public ChunkCoordinates getHomePosition()
@@ -347,5 +347,5 @@ public abstract class EntityCreature extends EntityLiving
 		}
 	}
 
-	protected void func_142017_o(float par1) {}
+	protected void func_142017_o(float p_142017_1_) {}
 }

@@ -158,7 +158,7 @@ public abstract class BlockLiquid extends Block
 
 	private Vec3 getFlowVector(IBlockAccess p_149800_1_, int p_149800_2_, int p_149800_3_, int p_149800_4_)
 	{
-		Vec3 vec3 = p_149800_1_.getWorldVec3Pool().getVecFromPool(0.0D, 0.0D, 0.0D);
+		Vec3 vec3 = Vec3.createVectorHelper(0.0D, 0.0D, 0.0D);
 		int l = this.getEffectiveFlowDecay(p_149800_1_, p_149800_2_, p_149800_3_, p_149800_4_);
 
 		for (int i1 = 0; i1 < 4; ++i1)

@@ -41,32 +41,32 @@ public class BiomeGenHills extends BiomeGenBase
 		return (WorldGenAbstractTree)(p_150567_1_.nextInt(3) > 0 ? this.field_150634_aD : super.func_150567_a(p_150567_1_));
 	}
 
-	public void decorate(World par1World, Random par2Random, int par3, int par4)
+	public void decorate(World p_76728_1_, Random p_76728_2_, int p_76728_3_, int p_76728_4_)
 	{
-		super.decorate(par1World, par2Random, par3, par4);
-		int k = 3 + par2Random.nextInt(6);
+		super.decorate(p_76728_1_, p_76728_2_, p_76728_3_, p_76728_4_);
+		int k = 3 + p_76728_2_.nextInt(6);
 		int l;
 		int i1;
 		int j1;
 
 		for (l = 0; l < k; ++l)
 		{
-			i1 = par3 + par2Random.nextInt(16);
-			j1 = par2Random.nextInt(28) + 4;
-			int k1 = par4 + par2Random.nextInt(16);
+			i1 = p_76728_3_ + p_76728_2_.nextInt(16);
+			j1 = p_76728_2_.nextInt(28) + 4;
+			int k1 = p_76728_4_ + p_76728_2_.nextInt(16);
 
-			if (par1World.getBlock(i1, j1, k1) == Blocks.stone)
+			if (p_76728_1_.getBlock(i1, j1, k1) == Blocks.stone)
 			{
-				par1World.setBlock(i1, j1, k1, Blocks.emerald_ore, 0, 2);
+				p_76728_1_.setBlock(i1, j1, k1, Blocks.emerald_ore, 0, 2);
 			}
 		}
 
 		for (k = 0; k < 7; ++k)
 		{
-			l = par3 + par2Random.nextInt(16);
-			i1 = par2Random.nextInt(64);
-			j1 = par4 + par2Random.nextInt(16);
-			this.theWorldGenerator.generate(par1World, par2Random, l, i1, j1);
+			l = p_76728_3_ + p_76728_2_.nextInt(16);
+			i1 = p_76728_2_.nextInt(64);
+			j1 = p_76728_4_ + p_76728_2_.nextInt(16);
+			this.theWorldGenerator.generate(p_76728_1_, p_76728_2_, l, i1, j1);
 		}
 	}
 

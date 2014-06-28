@@ -21,18 +21,18 @@ public class ItemGlassBottle extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int par1)
+	public IIcon getIconFromDamage(int p_77617_1_)
 	{
 		return Items.potionitem.getIconFromDamage(0);
 	}
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
 	{
-		MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(par2World, par3EntityPlayer, true);
+		MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(p_77659_2_, p_77659_3_, true);
 
 		if (movingobjectposition == null)
 		{
-			return par1ItemStack;
+			return p_77659_1_;
 		}
 		else
 		{
@@ -42,36 +42,36 @@ public class ItemGlassBottle extends Item
 				int j = movingobjectposition.blockY;
 				int k = movingobjectposition.blockZ;
 
-				if (!par2World.canMineBlock(par3EntityPlayer, i, j, k))
+				if (!p_77659_2_.canMineBlock(p_77659_3_, i, j, k))
 				{
-					return par1ItemStack;
+					return p_77659_1_;
 				}
 
-				if (!par3EntityPlayer.canPlayerEdit(i, j, k, movingobjectposition.sideHit, par1ItemStack))
+				if (!p_77659_3_.canPlayerEdit(i, j, k, movingobjectposition.sideHit, p_77659_1_))
 				{
-					return par1ItemStack;
+					return p_77659_1_;
 				}
 
-				if (par2World.getBlock(i, j, k).getMaterial() == Material.water)
+				if (p_77659_2_.getBlock(i, j, k).getMaterial() == Material.water)
 				{
-					--par1ItemStack.stackSize;
+					--p_77659_1_.stackSize;
 
-					if (par1ItemStack.stackSize <= 0)
+					if (p_77659_1_.stackSize <= 0)
 					{
 						return new ItemStack(Items.potionitem);
 					}
 
-					if (!par3EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Items.potionitem)))
+					if (!p_77659_3_.inventory.addItemStackToInventory(new ItemStack(Items.potionitem)))
 					{
-						par3EntityPlayer.dropPlayerItemWithRandomChoice(new ItemStack(Items.potionitem, 1, 0), false);
+						p_77659_3_.dropPlayerItemWithRandomChoice(new ItemStack(Items.potionitem, 1, 0), false);
 					}
 				}
 			}
 
-			return par1ItemStack;
+			return p_77659_1_;
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister) {}
+	public void registerIcons(IIconRegister p_94581_1_) {}
 }

@@ -17,23 +17,23 @@ public class CommandPlaySound extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.playsound.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length < 2)
+		if (p_71515_2_.length < 2)
 		{
-			throw new WrongUsageException(this.getCommandUsage(par1ICommandSender), new Object[0]);
+			throw new WrongUsageException(this.getCommandUsage(p_71515_1_), new Object[0]);
 		}
 		else
 		{
 			byte b0 = 0;
 			int i = b0 + 1;
-			String s = par2ArrayOfStr[b0];
-			EntityPlayerMP entityplayermp = getPlayer(par1ICommandSender, par2ArrayOfStr[i++]);
+			String s = p_71515_2_[b0];
+			EntityPlayerMP entityplayermp = getPlayer(p_71515_1_, p_71515_2_[i++]);
 			double d0 = (double)entityplayermp.getPlayerCoordinates().posX;
 			double d1 = (double)entityplayermp.getPlayerCoordinates().posY;
 			double d2 = (double)entityplayermp.getPlayerCoordinates().posZ;
@@ -41,34 +41,34 @@ public class CommandPlaySound extends CommandBase
 			double d4 = 1.0D;
 			double d5 = 0.0D;
 
-			if (par2ArrayOfStr.length > i)
+			if (p_71515_2_.length > i)
 			{
-				d0 = func_110666_a(par1ICommandSender, d0, par2ArrayOfStr[i++]);
+				d0 = func_110666_a(p_71515_1_, d0, p_71515_2_[i++]);
 			}
 
-			if (par2ArrayOfStr.length > i)
+			if (p_71515_2_.length > i)
 			{
-				d1 = func_110665_a(par1ICommandSender, d1, par2ArrayOfStr[i++], 0, 0);
+				d1 = func_110665_a(p_71515_1_, d1, p_71515_2_[i++], 0, 0);
 			}
 
-			if (par2ArrayOfStr.length > i)
+			if (p_71515_2_.length > i)
 			{
-				d2 = func_110666_a(par1ICommandSender, d2, par2ArrayOfStr[i++]);
+				d2 = func_110666_a(p_71515_1_, d2, p_71515_2_[i++]);
 			}
 
-			if (par2ArrayOfStr.length > i)
+			if (p_71515_2_.length > i)
 			{
-				d3 = parseDoubleBounded(par1ICommandSender, par2ArrayOfStr[i++], 0.0D, 3.4028234663852886E38D);
+				d3 = parseDoubleBounded(p_71515_1_, p_71515_2_[i++], 0.0D, 3.4028234663852886E38D);
 			}
 
-			if (par2ArrayOfStr.length > i)
+			if (p_71515_2_.length > i)
 			{
-				d4 = parseDoubleBounded(par1ICommandSender, par2ArrayOfStr[i++], 0.0D, 2.0D);
+				d4 = parseDoubleBounded(p_71515_1_, p_71515_2_[i++], 0.0D, 2.0D);
 			}
 
-			if (par2ArrayOfStr.length > i)
+			if (p_71515_2_.length > i)
 			{
-				d5 = parseDoubleBounded(par1ICommandSender, par2ArrayOfStr[i++], 0.0D, 1.0D);
+				d5 = parseDoubleBounded(p_71515_1_, p_71515_2_[i++], 0.0D, 1.0D);
 			}
 
 			double d6 = d3 > 1.0D ? d3 * 16.0D : 16.0D;
@@ -103,12 +103,12 @@ public class CommandPlaySound extends CommandBase
 				entityplayermp.playerNetServerHandler.sendPacket(new S29PacketSoundEffect(s, d0, d1, d2, (float)d3, (float)d4));
 			}
 
-			notifyAdmins(par1ICommandSender, "commands.playsound.success", new Object[] {s, entityplayermp.getCommandSenderName()});
+			func_152373_a(p_71515_1_, this, "commands.playsound.success", new Object[] {s, entityplayermp.getCommandSenderName()});
 		}
 	}
 
-	public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2)
+	public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_)
 	{
-		return par2 == 1;
+		return p_82358_2_ == 1;
 	}
 }

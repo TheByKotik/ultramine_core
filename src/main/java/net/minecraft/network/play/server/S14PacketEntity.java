@@ -38,9 +38,9 @@ public class S14PacketEntity extends Packet
 		p_148840_1_.writeInt(this.field_149074_a);
 	}
 
-	public void processPacket(INetHandlerPlayClient p_149067_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_149067_1_.handleEntityMovement(this);
+		p_148833_1_.handleEntityMovement(this);
 	}
 
 	public String serialize()

@@ -33,14 +33,14 @@ public class EffectRenderer
 	private Random rand = new Random();
 	private static final String __OBFID = "CL_00000915";
 
-	public EffectRenderer(World par1World, TextureManager par2TextureManager)
+	public EffectRenderer(World p_i1220_1_, TextureManager p_i1220_2_)
 	{
-		if (par1World != null)
+		if (p_i1220_1_ != null)
 		{
-			this.worldObj = par1World;
+			this.worldObj = p_i1220_1_;
 		}
 
-		this.renderer = par2TextureManager;
+		this.renderer = p_i1220_2_;
 
 		for (int i = 0; i < 4; ++i)
 		{
@@ -48,16 +48,16 @@ public class EffectRenderer
 		}
 	}
 
-	public void addEffect(EntityFX par1EntityFX)
+	public void addEffect(EntityFX p_78873_1_)
 	{
-		int i = par1EntityFX.getFXLayer();
+		int i = p_78873_1_.getFXLayer();
 
 		if (this.fxLayers[i].size() >= 4000)
 		{
 			this.fxLayers[i].remove(0);
 		}
 
-		this.fxLayers[i].add(par1EntityFX);
+		this.fxLayers[i].add(p_78873_1_);
 	}
 
 	public void updateEffects()
@@ -108,16 +108,16 @@ public class EffectRenderer
 		}
 	}
 
-	public void renderParticles(Entity par1Entity, float par2)
+	public void renderParticles(Entity p_78874_1_, float p_78874_2_)
 	{
 		float f1 = ActiveRenderInfo.rotationX;
 		float f2 = ActiveRenderInfo.rotationZ;
 		float f3 = ActiveRenderInfo.rotationYZ;
 		float f4 = ActiveRenderInfo.rotationXY;
 		float f5 = ActiveRenderInfo.rotationXZ;
-		EntityFX.interpPosX = par1Entity.lastTickPosX + (par1Entity.posX - par1Entity.lastTickPosX) * (double)par2;
-		EntityFX.interpPosY = par1Entity.lastTickPosY + (par1Entity.posY - par1Entity.lastTickPosY) * (double)par2;
-		EntityFX.interpPosZ = par1Entity.lastTickPosZ + (par1Entity.posZ - par1Entity.lastTickPosZ) * (double)par2;
+		EntityFX.interpPosX = p_78874_1_.lastTickPosX + (p_78874_1_.posX - p_78874_1_.lastTickPosX) * (double)p_78874_2_;
+		EntityFX.interpPosY = p_78874_1_.lastTickPosY + (p_78874_1_.posY - p_78874_1_.lastTickPosY) * (double)p_78874_2_;
+		EntityFX.interpPosZ = p_78874_1_.lastTickPosZ + (p_78874_1_.posZ - p_78874_1_.lastTickPosZ) * (double)p_78874_2_;
 
 		for (int k = 0; k < 3; ++k)
 		{
@@ -150,11 +150,11 @@ public class EffectRenderer
 				{
 					final EntityFX entityfx = (EntityFX)this.fxLayers[i].get(j);
 					if (entityfx == null) continue;
-					tessellator.setBrightness(entityfx.getBrightnessForRender(par2));
+					tessellator.setBrightness(entityfx.getBrightnessForRender(p_78874_2_));
 
 					try
 					{
-						entityfx.renderParticle(tessellator, par2, f1, f5, f2, f3, f4);
+						entityfx.renderParticle(tessellator, p_78874_2_, f1, f5, f2, f3, f4);
 					}
 					catch (Throwable throwable)
 					{
@@ -188,14 +188,14 @@ public class EffectRenderer
 		}
 	}
 
-	public void renderLitParticles(Entity par1Entity, float par2)
+	public void renderLitParticles(Entity p_78872_1_, float p_78872_2_)
 	{
 		float f1 = 0.017453292F;
-		float f2 = MathHelper.cos(par1Entity.rotationYaw * 0.017453292F);
-		float f3 = MathHelper.sin(par1Entity.rotationYaw * 0.017453292F);
-		float f4 = -f3 * MathHelper.sin(par1Entity.rotationPitch * 0.017453292F);
-		float f5 = f2 * MathHelper.sin(par1Entity.rotationPitch * 0.017453292F);
-		float f6 = MathHelper.cos(par1Entity.rotationPitch * 0.017453292F);
+		float f2 = MathHelper.cos(p_78872_1_.rotationYaw * 0.017453292F);
+		float f3 = MathHelper.sin(p_78872_1_.rotationYaw * 0.017453292F);
+		float f4 = -f3 * MathHelper.sin(p_78872_1_.rotationPitch * 0.017453292F);
+		float f5 = f2 * MathHelper.sin(p_78872_1_.rotationPitch * 0.017453292F);
+		float f6 = MathHelper.cos(p_78872_1_.rotationPitch * 0.017453292F);
 		byte b0 = 3;
 		List list = this.fxLayers[b0];
 
@@ -207,15 +207,15 @@ public class EffectRenderer
 			{
 				EntityFX entityfx = (EntityFX)list.get(i);
 				if (entityfx == null) continue;
-				tessellator.setBrightness(entityfx.getBrightnessForRender(par2));
-				entityfx.renderParticle(tessellator, par2, f2, f6, f3, f4, f5);
+				tessellator.setBrightness(entityfx.getBrightnessForRender(p_78872_2_));
+				entityfx.renderParticle(tessellator, p_78872_2_, f2, f6, f3, f4, f5);
 			}
 		}
 	}
 
-	public void clearEffects(World par1World)
+	public void clearEffects(World p_78870_1_)
 	{
-		this.worldObj = par1World;
+		this.worldObj = p_78870_1_;
 
 		for (int i = 0; i < 4; ++i)
 		{
@@ -245,48 +245,48 @@ public class EffectRenderer
 		}
 	}
 
-	public void addBlockHitEffects(int par1, int par2, int par3, int par4)
+	public void addBlockHitEffects(int p_78867_1_, int p_78867_2_, int p_78867_3_, int p_78867_4_)
 	{
-		Block block = this.worldObj.getBlock(par1, par2, par3);
+		Block block = this.worldObj.getBlock(p_78867_1_, p_78867_2_, p_78867_3_);
 
 		if (block.getMaterial() != Material.air)
 		{
 			float f = 0.1F;
-			double d0 = (double)par1 + this.rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - (double)(f * 2.0F)) + (double)f + block.getBlockBoundsMinX();
-			double d1 = (double)par2 + this.rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (double)(f * 2.0F)) + (double)f + block.getBlockBoundsMinY();
-			double d2 = (double)par3 + this.rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (double)(f * 2.0F)) + (double)f + block.getBlockBoundsMinZ();
+			double d0 = (double)p_78867_1_ + this.rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - (double)(f * 2.0F)) + (double)f + block.getBlockBoundsMinX();
+			double d1 = (double)p_78867_2_ + this.rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (double)(f * 2.0F)) + (double)f + block.getBlockBoundsMinY();
+			double d2 = (double)p_78867_3_ + this.rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (double)(f * 2.0F)) + (double)f + block.getBlockBoundsMinZ();
 
-			if (par4 == 0)
+			if (p_78867_4_ == 0)
 			{
-				d1 = (double)par2 + block.getBlockBoundsMinY() - (double)f;
+				d1 = (double)p_78867_2_ + block.getBlockBoundsMinY() - (double)f;
 			}
 
-			if (par4 == 1)
+			if (p_78867_4_ == 1)
 			{
-				d1 = (double)par2 + block.getBlockBoundsMaxY() + (double)f;
+				d1 = (double)p_78867_2_ + block.getBlockBoundsMaxY() + (double)f;
 			}
 
-			if (par4 == 2)
+			if (p_78867_4_ == 2)
 			{
-				d2 = (double)par3 + block.getBlockBoundsMinZ() - (double)f;
+				d2 = (double)p_78867_3_ + block.getBlockBoundsMinZ() - (double)f;
 			}
 
-			if (par4 == 3)
+			if (p_78867_4_ == 3)
 			{
-				d2 = (double)par3 + block.getBlockBoundsMaxZ() + (double)f;
+				d2 = (double)p_78867_3_ + block.getBlockBoundsMaxZ() + (double)f;
 			}
 
-			if (par4 == 4)
+			if (p_78867_4_ == 4)
 			{
-				d0 = (double)par1 + block.getBlockBoundsMinX() - (double)f;
+				d0 = (double)p_78867_1_ + block.getBlockBoundsMinX() - (double)f;
 			}
 
-			if (par4 == 5)
+			if (p_78867_4_ == 5)
 			{
-				d0 = (double)par1 + block.getBlockBoundsMaxX() + (double)f;
+				d0 = (double)p_78867_1_ + block.getBlockBoundsMaxX() + (double)f;
 			}
 
-			this.addEffect((new EntityDiggingFX(this.worldObj, d0, d1, d2, 0.0D, 0.0D, 0.0D, block, this.worldObj.getBlockMetadata(par1, par2, par3))).applyColourMultiplier(par1, par2, par3).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+			this.addEffect((new EntityDiggingFX(this.worldObj, d0, d1, d2, 0.0D, 0.0D, 0.0D, block, this.worldObj.getBlockMetadata(p_78867_1_, p_78867_2_, p_78867_3_))).applyColourMultiplier(p_78867_1_, p_78867_2_, p_78867_3_).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 		}
 	}
 

@@ -17,19 +17,19 @@ public class GenLayerHills extends GenLayer
 		this.field_151628_d = p_i45479_4_;
 	}
 
-	public int[] getInts(int par1, int par2, int par3, int par4)
+	public int[] getInts(int p_75904_1_, int p_75904_2_, int p_75904_3_, int p_75904_4_)
 	{
-		int[] aint = this.parent.getInts(par1 - 1, par2 - 1, par3 + 2, par4 + 2);
-		int[] aint1 = this.field_151628_d.getInts(par1 - 1, par2 - 1, par3 + 2, par4 + 2);
-		int[] aint2 = IntCache.getIntCache(par3 * par4);
+		int[] aint = this.parent.getInts(p_75904_1_ - 1, p_75904_2_ - 1, p_75904_3_ + 2, p_75904_4_ + 2);
+		int[] aint1 = this.field_151628_d.getInts(p_75904_1_ - 1, p_75904_2_ - 1, p_75904_3_ + 2, p_75904_4_ + 2);
+		int[] aint2 = IntCache.getIntCache(p_75904_3_ * p_75904_4_);
 
-		for (int i1 = 0; i1 < par4; ++i1)
+		for (int i1 = 0; i1 < p_75904_4_; ++i1)
 		{
-			for (int j1 = 0; j1 < par3; ++j1)
+			for (int j1 = 0; j1 < p_75904_3_; ++j1)
 			{
-				this.initChunkSeed((long)(j1 + par1), (long)(i1 + par2));
-				int k1 = aint[j1 + 1 + (i1 + 1) * (par3 + 2)];
-				int l1 = aint1[j1 + 1 + (i1 + 1) * (par3 + 2)];
+				this.initChunkSeed((long)(j1 + p_75904_1_), (long)(i1 + p_75904_2_));
+				int k1 = aint[j1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
+				int l1 = aint1[j1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
 				boolean flag = (l1 - 2) % 29 == 0;
 
 				if (k1 > 255)
@@ -41,16 +41,16 @@ public class GenLayerHills extends GenLayer
 				{
 					if (BiomeGenBase.getBiome(k1 + 128) != null)
 					{
-						aint2[j1 + i1 * par3] = k1 + 128;
+						aint2[j1 + i1 * p_75904_3_] = k1 + 128;
 					}
 					else
 					{
-						aint2[j1 + i1 * par3] = k1;
+						aint2[j1 + i1 * p_75904_3_] = k1;
 					}
 				}
 				else if (this.nextInt(3) != 0 && !flag)
 				{
-					aint2[j1 + i1 * par3] = k1;
+					aint2[j1 + i1 * p_75904_3_] = k1;
 				}
 				else
 				{
@@ -148,14 +148,14 @@ public class GenLayerHills extends GenLayer
 
 					if (i2 == k1)
 					{
-						aint2[j1 + i1 * par3] = k1;
+						aint2[j1 + i1 * p_75904_3_] = k1;
 					}
 					else
 					{
-						j2 = aint[j1 + 1 + (i1 + 1 - 1) * (par3 + 2)];
-						int k2 = aint[j1 + 1 + 1 + (i1 + 1) * (par3 + 2)];
-						int l2 = aint[j1 + 1 - 1 + (i1 + 1) * (par3 + 2)];
-						int i3 = aint[j1 + 1 + (i1 + 1 + 1) * (par3 + 2)];
+						j2 = aint[j1 + 1 + (i1 + 1 - 1) * (p_75904_3_ + 2)];
+						int k2 = aint[j1 + 1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
+						int l2 = aint[j1 + 1 - 1 + (i1 + 1) * (p_75904_3_ + 2)];
+						int i3 = aint[j1 + 1 + (i1 + 1 + 1) * (p_75904_3_ + 2)];
 						int j3 = 0;
 
 						if (compareBiomesById(j2, k1))
@@ -180,11 +180,11 @@ public class GenLayerHills extends GenLayer
 
 						if (j3 >= 3)
 						{
-							aint2[j1 + i1 * par3] = i2;
+							aint2[j1 + i1 * p_75904_3_] = i2;
 						}
 						else
 						{
-							aint2[j1 + i1 * par3] = k1;
+							aint2[j1 + i1 * p_75904_3_] = k1;
 						}
 					}
 				}

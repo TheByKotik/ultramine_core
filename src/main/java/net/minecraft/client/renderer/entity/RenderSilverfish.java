@@ -20,53 +20,53 @@ public class RenderSilverfish extends RenderLiving
 		super(new ModelSilverfish(), 0.3F);
 	}
 
-	protected float getDeathMaxRotation(EntitySilverfish par1EntitySilverfish)
+	protected float getDeathMaxRotation(EntitySilverfish p_77037_1_)
 	{
 		return 180.0F;
 	}
 
-	public void doRender(EntitySilverfish par1EntitySilverfish, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntitySilverfish p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		super.doRender((EntityLiving)par1EntitySilverfish, par2, par4, par6, par8, par9);
+		super.doRender((EntityLiving)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected ResourceLocation getEntityTexture(EntitySilverfish par1EntitySilverfish)
+	protected ResourceLocation getEntityTexture(EntitySilverfish p_110775_1_)
 	{
 		return silverfishTextures;
 	}
 
-	protected int shouldRenderPass(EntitySilverfish par1EntitySilverfish, int par2, float par3)
+	protected int shouldRenderPass(EntitySilverfish p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
 		return -1;
 	}
 
-	public void doRender(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLiving p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntitySilverfish)par1EntityLiving, par2, par4, par6, par8, par9);
+		this.doRender((EntitySilverfish)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected float getDeathMaxRotation(EntityLivingBase par1EntityLivingBase)
+	protected float getDeathMaxRotation(EntityLivingBase p_77037_1_)
 	{
-		return this.getDeathMaxRotation((EntitySilverfish)par1EntityLivingBase);
+		return this.getDeathMaxRotation((EntitySilverfish)p_77037_1_);
 	}
 
-	protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+	protected int shouldRenderPass(EntityLivingBase p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
-		return this.shouldRenderPass((EntitySilverfish)par1EntityLivingBase, par2, par3);
+		return this.shouldRenderPass((EntitySilverfish)p_77032_1_, p_77032_2_, p_77032_3_);
 	}
 
-	public void doRender(EntityLivingBase par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLivingBase p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntitySilverfish)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntitySilverfish)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntitySilverfish)par1Entity);
+		return this.getEntityTexture((EntitySilverfish)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntitySilverfish)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntitySilverfish)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

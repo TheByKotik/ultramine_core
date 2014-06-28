@@ -38,9 +38,9 @@ public class S06PacketUpdateHealth extends Packet
 		p_148840_1_.writeFloat(this.field_149335_c);
 	}
 
-	public void processPacket(INetHandlerPlayClient p_149333_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_149333_1_.handleUpdateHealth(this);
+		p_148833_1_.handleUpdateHealth(this);
 	}
 
 	public void processPacket(INetHandler p_148833_1_)

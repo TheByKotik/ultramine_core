@@ -26,12 +26,12 @@ public class SimpleResource implements IResource
 	private JsonObject mcmetaJson;
 	private static final String __OBFID = "CL_00001093";
 
-	public SimpleResource(ResourceLocation par1ResourceLocation, InputStream par2InputStream, InputStream par3InputStream, IMetadataSerializer par4MetadataSerializer)
+	public SimpleResource(ResourceLocation p_i1300_1_, InputStream p_i1300_2_, InputStream p_i1300_3_, IMetadataSerializer p_i1300_4_)
 	{
-		this.srResourceLocation = par1ResourceLocation;
-		this.resourceInputStream = par2InputStream;
-		this.mcmetaInputStream = par3InputStream;
-		this.srMetadataSerializer = par4MetadataSerializer;
+		this.srResourceLocation = p_i1300_1_;
+		this.resourceInputStream = p_i1300_2_;
+		this.mcmetaInputStream = p_i1300_3_;
+		this.srMetadataSerializer = p_i1300_4_;
 	}
 
 	public InputStream getInputStream()
@@ -44,7 +44,7 @@ public class SimpleResource implements IResource
 		return this.mcmetaInputStream != null;
 	}
 
-	public IMetadataSection getMetadata(String par1Str)
+	public IMetadataSection getMetadata(String p_110526_1_)
 	{
 		if (!this.hasMetadata())
 		{
@@ -68,26 +68,26 @@ public class SimpleResource implements IResource
 				}
 			}
 
-			IMetadataSection imetadatasection = (IMetadataSection)this.mapMetadataSections.get(par1Str);
+			IMetadataSection imetadatasection = (IMetadataSection)this.mapMetadataSections.get(p_110526_1_);
 
 			if (imetadatasection == null)
 			{
-				imetadatasection = this.srMetadataSerializer.parseMetadataSection(par1Str, this.mcmetaJson);
+				imetadatasection = this.srMetadataSerializer.parseMetadataSection(p_110526_1_, this.mcmetaJson);
 			}
 
 			return imetadatasection;
 		}
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (this == par1Obj)
+		if (this == p_equals_1_)
 		{
 			return true;
 		}
-		else if (par1Obj instanceof SimpleResource)
+		else if (p_equals_1_ instanceof SimpleResource)
 		{
-			SimpleResource simpleresource = (SimpleResource)par1Obj;
+			SimpleResource simpleresource = (SimpleResource)p_equals_1_;
 			return this.srResourceLocation != null ? this.srResourceLocation.equals(simpleresource.srResourceLocation) : simpleresource.srResourceLocation == null;
 		}
 		else

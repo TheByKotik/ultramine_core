@@ -17,10 +17,10 @@ public class ContainerBeacon extends Container
 	private int field_82868_i;
 	private static final String __OBFID = "CL_00001735";
 
-	public ContainerBeacon(InventoryPlayer par1InventoryPlayer, TileEntityBeacon par2TileEntityBeacon)
+	public ContainerBeacon(InventoryPlayer p_i1802_1_, TileEntityBeacon p_i1802_2_)
 	{
-		this.tileBeacon = par2TileEntityBeacon;
-		this.addSlotToContainer(this.beaconSlot = new ContainerBeacon.BeaconSlot(par2TileEntityBeacon, 0, 136, 110));
+		this.tileBeacon = p_i1802_2_;
+		this.addSlotToContainer(this.beaconSlot = new ContainerBeacon.BeaconSlot(p_i1802_2_, 0, 136, 110));
 		byte b0 = 36;
 		short short1 = 137;
 		int i;
@@ -29,44 +29,44 @@ public class ContainerBeacon extends Container
 		{
 			for (int j = 0; j < 9; ++j)
 			{
-				this.addSlotToContainer(new Slot(par1InventoryPlayer, j + i * 9 + 9, b0 + j * 18, short1 + i * 18));
+				this.addSlotToContainer(new Slot(p_i1802_1_, j + i * 9 + 9, b0 + j * 18, short1 + i * 18));
 			}
 		}
 
 		for (i = 0; i < 9; ++i)
 		{
-			this.addSlotToContainer(new Slot(par1InventoryPlayer, i, b0 + i * 18, 58 + short1));
+			this.addSlotToContainer(new Slot(p_i1802_1_, i, b0 + i * 18, 58 + short1));
 		}
 
-		this.field_82865_g = par2TileEntityBeacon.getLevels();
-		this.field_82867_h = par2TileEntityBeacon.getPrimaryEffect();
-		this.field_82868_i = par2TileEntityBeacon.getSecondaryEffect();
+		this.field_82865_g = p_i1802_2_.getLevels();
+		this.field_82867_h = p_i1802_2_.getPrimaryEffect();
+		this.field_82868_i = p_i1802_2_.getSecondaryEffect();
 	}
 
-	public void addCraftingToCrafters(ICrafting par1ICrafting)
+	public void addCraftingToCrafters(ICrafting p_75132_1_)
 	{
-		super.addCraftingToCrafters(par1ICrafting);
-		par1ICrafting.sendProgressBarUpdate(this, 0, this.field_82865_g);
-		par1ICrafting.sendProgressBarUpdate(this, 1, this.field_82867_h);
-		par1ICrafting.sendProgressBarUpdate(this, 2, this.field_82868_i);
+		super.addCraftingToCrafters(p_75132_1_);
+		p_75132_1_.sendProgressBarUpdate(this, 0, this.field_82865_g);
+		p_75132_1_.sendProgressBarUpdate(this, 1, this.field_82867_h);
+		p_75132_1_.sendProgressBarUpdate(this, 2, this.field_82868_i);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int par1, int par2)
+	public void updateProgressBar(int p_75137_1_, int p_75137_2_)
 	{
-		if (par1 == 0)
+		if (p_75137_1_ == 0)
 		{
-			this.tileBeacon.func_146005_c(par2);
+			this.tileBeacon.func_146005_c(p_75137_2_);
 		}
 
-		if (par1 == 1)
+		if (p_75137_1_ == 1)
 		{
-			this.tileBeacon.setPrimaryEffect(par2);
+			this.tileBeacon.setPrimaryEffect(p_75137_2_);
 		}
 
-		if (par1 == 2)
+		if (p_75137_1_ == 2)
 		{
-			this.tileBeacon.setSecondaryEffect(par2);
+			this.tileBeacon.setSecondaryEffect(p_75137_2_);
 		}
 	}
 
@@ -75,22 +75,22 @@ public class ContainerBeacon extends Container
 		return this.tileBeacon;
 	}
 
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+	public boolean canInteractWith(EntityPlayer p_75145_1_)
 	{
-		return this.tileBeacon.isUseableByPlayer(par1EntityPlayer);
+		return this.tileBeacon.isUseableByPlayer(p_75145_1_);
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
 	{
 		ItemStack itemstack = null;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = (Slot)this.inventorySlots.get(p_82846_2_);
 
 		if (slot != null && slot.getHasStack())
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			if (par2 == 0)
+			if (p_82846_2_ == 0)
 			{
 				if (!this.mergeItemStack(itemstack1, 1, 37, true))
 				{
@@ -106,14 +106,14 @@ public class ContainerBeacon extends Container
 					return null;
 				}
 			}
-			else if (par2 >= 1 && par2 < 28)
+			else if (p_82846_2_ >= 1 && p_82846_2_ < 28)
 			{
 				if (!this.mergeItemStack(itemstack1, 28, 37, false))
 				{
 					return null;
 				}
 			}
-			else if (par2 >= 28 && par2 < 37)
+			else if (p_82846_2_ >= 28 && p_82846_2_ < 37)
 			{
 				if (!this.mergeItemStack(itemstack1, 1, 28, false))
 				{
@@ -139,7 +139,7 @@ public class ContainerBeacon extends Container
 				return null;
 			}
 
-			slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+			slot.onPickupFromSlot(p_82846_1_, itemstack1);
 		}
 
 		return itemstack;
@@ -149,14 +149,14 @@ public class ContainerBeacon extends Container
 	{
 		private static final String __OBFID = "CL_00001736";
 
-		public BeaconSlot(IInventory par2IInventory, int par3, int par4, int par5)
+		public BeaconSlot(IInventory p_i1801_2_, int p_i1801_3_, int p_i1801_4_, int p_i1801_5_)
 		{
-			super(par2IInventory, par3, par4, par5);
+			super(p_i1801_2_, p_i1801_3_, p_i1801_4_, p_i1801_5_);
 		}
 
-		public boolean isItemValid(ItemStack par1ItemStack)
+		public boolean isItemValid(ItemStack p_75214_1_)
 		{
-			return par1ItemStack == null ? false : par1ItemStack.getItem() == Items.emerald || par1ItemStack.getItem() == Items.diamond || par1ItemStack.getItem() == Items.gold_ingot || par1ItemStack.getItem() == Items.iron_ingot;
+			return p_75214_1_ == null ? false : p_75214_1_.getItem() == Items.emerald || p_75214_1_.getItem() == Items.diamond || p_75214_1_.getItem() == Items.gold_ingot || p_75214_1_.getItem() == Items.iron_ingot;
 		}
 
 		public int getSlotStackLimit()

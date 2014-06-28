@@ -37,7 +37,7 @@ public class EntitySheep extends EntityAnimal implements IShearable
 	private final InventoryCrafting field_90016_e = new InventoryCrafting(new Container()
 	{
 		private static final String __OBFID = "CL_00001649";
-		public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+		public boolean canInteractWith(EntityPlayer p_75145_1_)
 		{
 			return false;
 		}
@@ -47,9 +47,9 @@ public class EntitySheep extends EntityAnimal implements IShearable
 	private EntityAIEatGrass field_146087_bs = new EntityAIEatGrass(this);
 	private static final String __OBFID = "CL_00001648";
 
-	public EntitySheep(World par1World)
+	public EntitySheep(World p_i1691_1_)
 	{
-		super(par1World);
+		super(p_i1691_1_);
 		this.setSize(0.9F, 1.3F);
 		this.getNavigator().setAvoidsWater(true);
 		this.tasks.addTask(0, new EntityAISwimming(this));
@@ -99,7 +99,7 @@ public class EntitySheep extends EntityAnimal implements IShearable
 		this.dataWatcher.addObject(16, new Byte((byte)0));
 	}
 
-	protected void dropFewItems(boolean par1, int par2)
+	protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
 	{
 		if (!this.getSheared())
 		{
@@ -113,35 +113,35 @@ public class EntitySheep extends EntityAnimal implements IShearable
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void handleHealthUpdate(byte par1)
+	public void handleHealthUpdate(byte p_70103_1_)
 	{
-		if (par1 == 10)
+		if (p_70103_1_ == 10)
 		{
 			this.sheepTimer = 40;
 		}
 		else
 		{
-			super.handleHealthUpdate(par1);
+			super.handleHealthUpdate(p_70103_1_);
 		}
 	}
 
-	public boolean interact(EntityPlayer par1EntityPlayer)
+	public boolean interact(EntityPlayer p_70085_1_)
 	{
-		return super.interact(par1EntityPlayer);
+		return super.interact(p_70085_1_);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public float func_70894_j(float par1)
+	public float func_70894_j(float p_70894_1_)
 	{
-		return this.sheepTimer <= 0 ? 0.0F : (this.sheepTimer >= 4 && this.sheepTimer <= 36 ? 1.0F : (this.sheepTimer < 4 ? ((float)this.sheepTimer - par1) / 4.0F : -((float)(this.sheepTimer - 40) - par1) / 4.0F));
+		return this.sheepTimer <= 0 ? 0.0F : (this.sheepTimer >= 4 && this.sheepTimer <= 36 ? 1.0F : (this.sheepTimer < 4 ? ((float)this.sheepTimer - p_70894_1_) / 4.0F : -((float)(this.sheepTimer - 40) - p_70894_1_) / 4.0F));
 	}
 
 	@SideOnly(Side.CLIENT)
-	public float func_70890_k(float par1)
+	public float func_70890_k(float p_70890_1_)
 	{
 		if (this.sheepTimer > 4 && this.sheepTimer <= 36)
 		{
-			float f1 = ((float)(this.sheepTimer - 4) - par1) / 32.0F;
+			float f1 = ((float)(this.sheepTimer - 4) - p_70890_1_) / 32.0F;
 			return ((float)Math.PI / 5F) + ((float)Math.PI * 7F / 100F) * MathHelper.sin(f1 * 28.7F);
 		}
 		else
@@ -150,18 +150,18 @@ public class EntitySheep extends EntityAnimal implements IShearable
 		}
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setBoolean("Sheared", this.getSheared());
-		par1NBTTagCompound.setByte("Color", (byte)this.getFleeceColor());
+		super.writeEntityToNBT(p_70014_1_);
+		p_70014_1_.setBoolean("Sheared", this.getSheared());
+		p_70014_1_.setByte("Color", (byte)this.getFleeceColor());
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
-		this.setSheared(par1NBTTagCompound.getBoolean("Sheared"));
-		this.setFleeceColor(par1NBTTagCompound.getByte("Color"));
+		super.readEntityFromNBT(p_70037_1_);
+		this.setSheared(p_70037_1_.getBoolean("Sheared"));
+		this.setFleeceColor(p_70037_1_.getByte("Color"));
 	}
 
 	protected String getLivingSound()
@@ -189,10 +189,10 @@ public class EntitySheep extends EntityAnimal implements IShearable
 		return this.dataWatcher.getWatchableObjectByte(16) & 15;
 	}
 
-	public void setFleeceColor(int par1)
+	public void setFleeceColor(int p_70891_1_)
 	{
 		byte b0 = this.dataWatcher.getWatchableObjectByte(16);
-		this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 & 240 | par1 & 15)));
+		this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 & 240 | p_70891_1_ & 15)));
 	}
 
 	public boolean getSheared()
@@ -200,11 +200,11 @@ public class EntitySheep extends EntityAnimal implements IShearable
 		return (this.dataWatcher.getWatchableObjectByte(16) & 16) != 0;
 	}
 
-	public void setSheared(boolean par1)
+	public void setSheared(boolean p_70893_1_)
 	{
 		byte b0 = this.dataWatcher.getWatchableObjectByte(16);
 
-		if (par1)
+		if (p_70893_1_)
 		{
 			this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 | 16)));
 		}
@@ -214,15 +214,15 @@ public class EntitySheep extends EntityAnimal implements IShearable
 		}
 	}
 
-	public static int getRandomFleeceColor(Random par0Random)
+	public static int getRandomFleeceColor(Random p_70895_0_)
 	{
-		int i = par0Random.nextInt(100);
-		return i < 5 ? 15 : (i < 10 ? 7 : (i < 15 ? 8 : (i < 18 ? 12 : (par0Random.nextInt(500) == 0 ? 6 : 0))));
+		int i = p_70895_0_.nextInt(100);
+		return i < 5 ? 15 : (i < 10 ? 7 : (i < 15 ? 8 : (i < 18 ? 12 : (p_70895_0_.nextInt(500) == 0 ? 6 : 0))));
 	}
 
-	public EntitySheep createChild(EntityAgeable par1EntityAgeable)
+	public EntitySheep createChild(EntityAgeable p_90011_1_)
 	{
-		EntitySheep entitysheep = (EntitySheep)par1EntityAgeable;
+		EntitySheep entitysheep = (EntitySheep)p_90011_1_;
 		EntitySheep entitysheep1 = new EntitySheep(this.worldObj);
 		int i = this.func_90014_a(this, entitysheep);
 		entitysheep1.setFleeceColor(15 - i);
@@ -239,20 +239,20 @@ public class EntitySheep extends EntityAnimal implements IShearable
 		}
 	}
 
-	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
+	public IEntityLivingData onSpawnWithEgg(IEntityLivingData p_110161_1_)
 	{
-		par1EntityLivingData = super.onSpawnWithEgg(par1EntityLivingData);
+		p_110161_1_ = super.onSpawnWithEgg(p_110161_1_);
 		this.setFleeceColor(getRandomFleeceColor(this.worldObj.rand));
-		return par1EntityLivingData;
+		return p_110161_1_;
 	}
 
-	private int func_90014_a(EntityAnimal par1EntityAnimal, EntityAnimal par2EntityAnimal)
+	private int func_90014_a(EntityAnimal p_90014_1_, EntityAnimal p_90014_2_)
 	{
-		int i = this.func_90013_b(par1EntityAnimal);
-		int j = this.func_90013_b(par2EntityAnimal);
+		int i = this.func_90013_b(p_90014_1_);
+		int j = this.func_90013_b(p_90014_2_);
 		this.field_90016_e.getStackInSlot(0).setItemDamage(i);
 		this.field_90016_e.getStackInSlot(1).setItemDamage(j);
-		ItemStack itemstack = CraftingManager.getInstance().findMatchingRecipe(this.field_90016_e, ((EntitySheep)par1EntityAnimal).worldObj);
+		ItemStack itemstack = CraftingManager.getInstance().findMatchingRecipe(this.field_90016_e, ((EntitySheep)p_90014_1_).worldObj);
 		int k;
 
 		if (itemstack != null && itemstack.getItem() == Items.dye)
@@ -267,9 +267,9 @@ public class EntitySheep extends EntityAnimal implements IShearable
 		return k;
 	}
 
-	private int func_90013_b(EntityAnimal par1EntityAnimal)
+	private int func_90013_b(EntityAnimal p_90013_1_)
 	{
-		return 15 - ((EntitySheep)par1EntityAnimal).getFleeceColor();
+		return 15 - ((EntitySheep)p_90013_1_).getFleeceColor();
 	}
 
 	@Override

@@ -354,11 +354,11 @@ public class TileEntity
 		Block type = getBlockType();
 		if (type == Blocks.enchanting_table)
 		{
-			bb = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
+			bb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
 		}
 		else if (type == Blocks.chest || type == Blocks.trapped_chest)
 		{
-			bb = AxisAlignedBB.getAABBPool().getAABB(xCoord - 1, yCoord, zCoord - 1, xCoord + 2, yCoord + 2, zCoord + 2);
+			bb = AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord, zCoord - 1, xCoord + 2, yCoord + 2, zCoord + 2);
 		}
 		else if (type != null && type != Blocks.beacon)
 		{

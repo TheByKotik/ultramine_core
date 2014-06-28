@@ -36,11 +36,11 @@ public abstract class WorldProvider
 	private float[] colorsSunriseSunset = new float[4];
 	private static final String __OBFID = "CL_00000386";
 
-	public final void registerWorld(World par1World)
+	public final void registerWorld(World p_76558_1_)
 	{
-		this.worldObj = par1World;
-		this.terrainType = par1World.getWorldInfo().getTerrainType();
-		this.field_82913_c = par1World.getWorldInfo().getGeneratorOptions();
+		this.worldObj = p_76558_1_;
+		this.terrainType = p_76558_1_.getWorldInfo().getTerrainType();
+		this.field_82913_c = p_76558_1_.getWorldInfo().getGeneratorOptions();
 		this.registerWorldChunkManager();
 		this.generateLightBrightnessTable();
 	}
@@ -66,15 +66,15 @@ public abstract class WorldProvider
 		return terrainType.getChunkGenerator(worldObj, field_82913_c);
 	}
 
-	public boolean canCoordinateBeSpawn(int par1, int par2)
+	public boolean canCoordinateBeSpawn(int p_76566_1_, int p_76566_2_)
 	{
-		return this.worldObj.getTopBlock(par1, par2) == Blocks.grass;
+		return this.worldObj.getTopBlock(p_76566_1_, p_76566_2_) == Blocks.grass;
 	}
 
-	public float calculateCelestialAngle(long par1, float par3)
+	public float calculateCelestialAngle(long p_76563_1_, float p_76563_3_)
 	{
-		int j = (int)(par1 % 24000L);
-		float f1 = ((float)j + par3) / 24000.0F - 0.25F;
+		int j = (int)(p_76563_1_ % 24000L);
+		float f1 = ((float)j + p_76563_3_) / 24000.0F - 0.25F;
 
 		if (f1 < 0.0F)
 		{
@@ -92,9 +92,9 @@ public abstract class WorldProvider
 		return f1;
 	}
 
-	public int getMoonPhase(long par1)
+	public int getMoonPhase(long p_76559_1_)
 	{
-		return (int)(par1 / 24000L % 8L + 8L) % 8;
+		return (int)(p_76559_1_ / 24000L % 8L + 8L) % 8;
 	}
 
 	public boolean isSurfaceWorld()
@@ -103,10 +103,10 @@ public abstract class WorldProvider
 	}
 
 	@SideOnly(Side.CLIENT)
-	public float[] calcSunriseSunsetColors(float par1, float par2)
+	public float[] calcSunriseSunsetColors(float p_76560_1_, float p_76560_2_)
 	{
 		float f2 = 0.4F;
-		float f3 = MathHelper.cos(par1 * (float)Math.PI * 2.0F) - 0.0F;
+		float f3 = MathHelper.cos(p_76560_1_ * (float)Math.PI * 2.0F) - 0.0F;
 		float f4 = -0.0F;
 
 		if (f3 >= f4 - f2 && f3 <= f4 + f2)
@@ -127,9 +127,9 @@ public abstract class WorldProvider
 	}
 
 	@SideOnly(Side.CLIENT)
-	public Vec3 getFogColor(float par1, float par2)
+	public Vec3 getFogColor(float p_76562_1_, float p_76562_2_)
 	{
-		float f2 = MathHelper.cos(par1 * (float)Math.PI * 2.0F) * 2.0F + 0.5F;
+		float f2 = MathHelper.cos(p_76562_1_ * (float)Math.PI * 2.0F) * 2.0F + 0.5F;
 
 		if (f2 < 0.0F)
 		{
@@ -147,7 +147,7 @@ public abstract class WorldProvider
 		f3 *= f2 * 0.94F + 0.06F;
 		f4 *= f2 * 0.94F + 0.06F;
 		f5 *= f2 * 0.91F + 0.09F;
-		return this.worldObj.getWorldVec3Pool().getVecFromPool((double)f3, (double)f4, (double)f5);
+		return Vec3.createVectorHelper((double)f3, (double)f4, (double)f5);
 	}
 
 	public boolean canRespawnHere()
@@ -155,9 +155,9 @@ public abstract class WorldProvider
 		return true;
 	}
 
-	public static WorldProvider getProviderForDimension(int par0)
+	public static WorldProvider getProviderForDimension(int p_76570_0_)
 	{
-		return DimensionManager.createProviderFor(par0);
+		return DimensionManager.createProviderFor(p_76570_0_);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -195,7 +195,7 @@ public abstract class WorldProvider
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean doesXZShowFog(int par1, int par2)
+	public boolean doesXZShowFog(int p_76568_1_, int p_76568_2_)
 	{
 		return false;
 	}

@@ -103,45 +103,45 @@ public abstract class ChatComponentStyle implements IChatComponent
 		Iterator iterator = Iterators.concat(Iterators.transform(p_150262_0_.iterator(), new Function()
 		{
 			private static final String __OBFID = "CL_00001258";
-			public Iterator apply(IChatComponent p_150665_1_)
+			public Iterator apply(IChatComponent p_apply_1_)
 			{
-				return p_150665_1_.iterator();
+				return p_apply_1_.iterator();
 			}
-			public Object apply(Object par1Obj)
+			public Object apply(Object p_apply_1_)
 			{
-				return this.apply((IChatComponent)par1Obj);
+				return this.apply((IChatComponent)p_apply_1_);
 			}
 		}));
 		iterator = Iterators.transform(iterator, new Function()
 		{
 			private static final String __OBFID = "CL_00001259";
-			public IChatComponent apply(IChatComponent p_150666_1_)
+			public IChatComponent apply(IChatComponent p_apply_1_)
 			{
-				IChatComponent ichatcomponent1 = p_150666_1_.createCopy();
+				IChatComponent ichatcomponent1 = p_apply_1_.createCopy();
 				ichatcomponent1.setChatStyle(ichatcomponent1.getChatStyle().createDeepCopy());
 				return ichatcomponent1;
 			}
-			public Object apply(Object par1Obj)
+			public Object apply(Object p_apply_1_)
 			{
-				return this.apply((IChatComponent)par1Obj);
+				return this.apply((IChatComponent)p_apply_1_);
 			}
 		});
 		return iterator;
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (this == par1Obj)
+		if (this == p_equals_1_)
 		{
 			return true;
 		}
-		else if (!(par1Obj instanceof ChatComponentStyle))
+		else if (!(p_equals_1_ instanceof ChatComponentStyle))
 		{
 			return false;
 		}
 		else
 		{
-			ChatComponentStyle chatcomponentstyle = (ChatComponentStyle)par1Obj;
+			ChatComponentStyle chatcomponentstyle = (ChatComponentStyle)p_equals_1_;
 			return this.siblings.equals(chatcomponentstyle.siblings) && this.getChatStyle().equals(chatcomponentstyle.getChatStyle());
 		}
 	}

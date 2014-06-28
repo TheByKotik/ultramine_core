@@ -17,17 +17,17 @@ public class EntityAITasks
 	private int tickRate = 3;
 	private static final String __OBFID = "CL_00001588";
 
-	public EntityAITasks(Profiler par1Profiler)
+	public EntityAITasks(Profiler p_i1628_1_)
 	{
-		this.theProfiler = par1Profiler;
+		this.theProfiler = p_i1628_1_;
 	}
 
-	public void addTask(int par1, EntityAIBase par2EntityAIBase)
+	public void addTask(int p_75776_1_, EntityAIBase p_75776_2_)
 	{
-		this.taskEntries.add(new EntityAITasks.EntityAITaskEntry(par1, par2EntityAIBase));
+		this.taskEntries.add(new EntityAITasks.EntityAITaskEntry(p_75776_1_, p_75776_2_));
 	}
 
-	public void removeTask(EntityAIBase par1EntityAIBase)
+	public void removeTask(EntityAIBase p_85156_1_)
 	{
 		Iterator iterator = this.taskEntries.iterator();
 
@@ -36,7 +36,7 @@ public class EntityAITasks
 			EntityAITasks.EntityAITaskEntry entityaitaskentry = (EntityAITasks.EntityAITaskEntry)iterator.next();
 			EntityAIBase entityaibase1 = entityaitaskentry.action;
 
-			if (entityaibase1 == par1EntityAIBase)
+			if (entityaibase1 == p_85156_1_)
 			{
 				if (this.executingTaskEntries.contains(entityaitaskentry))
 				{
@@ -122,15 +122,15 @@ public class EntityAITasks
 		this.theProfiler.endSection();
 	}
 
-	private boolean canContinue(EntityAITasks.EntityAITaskEntry par1EntityAITaskEntry)
+	private boolean canContinue(EntityAITasks.EntityAITaskEntry p_75773_1_)
 	{
 		this.theProfiler.startSection("canContinue");
-		boolean flag = par1EntityAITaskEntry.action.continueExecuting();
+		boolean flag = p_75773_1_.action.continueExecuting();
 		this.theProfiler.endSection();
 		return flag;
 	}
 
-	private boolean canUse(EntityAITasks.EntityAITaskEntry par1EntityAITaskEntry)
+	private boolean canUse(EntityAITasks.EntityAITaskEntry p_75775_1_)
 	{
 		this.theProfiler.startSection("canUse");
 		Iterator iterator = this.taskEntries.iterator();
@@ -139,11 +139,11 @@ public class EntityAITasks
 		{
 			EntityAITasks.EntityAITaskEntry entityaitaskentry = (EntityAITasks.EntityAITaskEntry)iterator.next();
 
-			if (entityaitaskentry != par1EntityAITaskEntry)
+			if (entityaitaskentry != p_75775_1_)
 			{
-				if (par1EntityAITaskEntry.priority >= entityaitaskentry.priority)
+				if (p_75775_1_.priority >= entityaitaskentry.priority)
 				{
-					if (this.executingTaskEntries.contains(entityaitaskentry) && !this.areTasksCompatible(par1EntityAITaskEntry, entityaitaskentry))
+					if (this.executingTaskEntries.contains(entityaitaskentry) && !this.areTasksCompatible(p_75775_1_, entityaitaskentry))
 					{
 						this.theProfiler.endSection();
 						return false;
@@ -161,9 +161,9 @@ public class EntityAITasks
 		return true;
 	}
 
-	private boolean areTasksCompatible(EntityAITasks.EntityAITaskEntry par1EntityAITaskEntry, EntityAITasks.EntityAITaskEntry par2EntityAITaskEntry)
+	private boolean areTasksCompatible(EntityAITasks.EntityAITaskEntry p_75777_1_, EntityAITasks.EntityAITaskEntry p_75777_2_)
 	{
-		return (par1EntityAITaskEntry.action.getMutexBits() & par2EntityAITaskEntry.action.getMutexBits()) == 0;
+		return (p_75777_1_.action.getMutexBits() & p_75777_2_.action.getMutexBits()) == 0;
 	}
 
 	public class EntityAITaskEntry
@@ -172,10 +172,10 @@ public class EntityAITasks
 		public int priority;
 		private static final String __OBFID = "CL_00001589";
 
-		public EntityAITaskEntry(int par2, EntityAIBase par3EntityAIBase)
+		public EntityAITaskEntry(int p_i1627_2_, EntityAIBase p_i1627_3_)
 		{
-			this.priority = par2;
-			this.action = par3EntityAIBase;
+			this.priority = p_i1627_2_;
+			this.action = p_i1627_3_;
 		}
 	}
 }

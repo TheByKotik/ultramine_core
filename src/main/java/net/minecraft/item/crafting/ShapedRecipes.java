@@ -14,12 +14,12 @@ public class ShapedRecipes implements IRecipe
 	private boolean field_92101_f;
 	private static final String __OBFID = "CL_00000093";
 
-	public ShapedRecipes(int par1, int par2, ItemStack[] par3ArrayOfItemStack, ItemStack par4ItemStack)
+	public ShapedRecipes(int p_i1917_1_, int p_i1917_2_, ItemStack[] p_i1917_3_, ItemStack p_i1917_4_)
 	{
-		this.recipeWidth = par1;
-		this.recipeHeight = par2;
-		this.recipeItems = par3ArrayOfItemStack;
-		this.recipeOutput = par4ItemStack;
+		this.recipeWidth = p_i1917_1_;
+		this.recipeHeight = p_i1917_2_;
+		this.recipeItems = p_i1917_3_;
+		this.recipeOutput = p_i1917_4_;
 	}
 
 	public ItemStack getRecipeOutput()
@@ -27,18 +27,18 @@ public class ShapedRecipes implements IRecipe
 		return this.recipeOutput;
 	}
 
-	public boolean matches(InventoryCrafting par1InventoryCrafting, World par2World)
+	public boolean matches(InventoryCrafting p_77569_1_, World p_77569_2_)
 	{
 		for (int i = 0; i <= 3 - this.recipeWidth; ++i)
 		{
 			for (int j = 0; j <= 3 - this.recipeHeight; ++j)
 			{
-				if (this.checkMatch(par1InventoryCrafting, i, j, true))
+				if (this.checkMatch(p_77569_1_, i, j, true))
 				{
 					return true;
 				}
 
-				if (this.checkMatch(par1InventoryCrafting, i, j, false))
+				if (this.checkMatch(p_77569_1_, i, j, false))
 				{
 					return true;
 				}
@@ -48,19 +48,19 @@ public class ShapedRecipes implements IRecipe
 		return false;
 	}
 
-	private boolean checkMatch(InventoryCrafting par1InventoryCrafting, int par2, int par3, boolean par4)
+	private boolean checkMatch(InventoryCrafting p_77573_1_, int p_77573_2_, int p_77573_3_, boolean p_77573_4_)
 	{
 		for (int k = 0; k < 3; ++k)
 		{
 			for (int l = 0; l < 3; ++l)
 			{
-				int i1 = k - par2;
-				int j1 = l - par3;
+				int i1 = k - p_77573_2_;
+				int j1 = l - p_77573_3_;
 				ItemStack itemstack = null;
 
 				if (i1 >= 0 && j1 >= 0 && i1 < this.recipeWidth && j1 < this.recipeHeight)
 				{
-					if (par4)
+					if (p_77573_4_)
 					{
 						itemstack = this.recipeItems[this.recipeWidth - i1 - 1 + j1 * this.recipeWidth];
 					}
@@ -70,7 +70,7 @@ public class ShapedRecipes implements IRecipe
 					}
 				}
 
-				ItemStack itemstack1 = par1InventoryCrafting.getStackInRowAndColumn(k, l);
+				ItemStack itemstack1 = p_77573_1_.getStackInRowAndColumn(k, l);
 
 				if (itemstack1 != null || itemstack != null)
 				{
@@ -95,15 +95,15 @@ public class ShapedRecipes implements IRecipe
 		return true;
 	}
 
-	public ItemStack getCraftingResult(InventoryCrafting par1InventoryCrafting)
+	public ItemStack getCraftingResult(InventoryCrafting p_77572_1_)
 	{
 		ItemStack itemstack = this.getRecipeOutput().copy();
 
 		if (this.field_92101_f)
 		{
-			for (int i = 0; i < par1InventoryCrafting.getSizeInventory(); ++i)
+			for (int i = 0; i < p_77572_1_.getSizeInventory(); ++i)
 			{
-				ItemStack itemstack1 = par1InventoryCrafting.getStackInSlot(i);
+				ItemStack itemstack1 = p_77572_1_.getStackInSlot(i);
 
 				if (itemstack1 != null && itemstack1.hasTagCompound())
 				{

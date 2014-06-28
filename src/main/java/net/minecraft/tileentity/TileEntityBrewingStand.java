@@ -238,17 +238,17 @@ public class TileEntityBrewingStand extends TileEntity implements ISidedInventor
 		}
 	}
 
-	public ItemStack getStackInSlot(int par1)
+	public ItemStack getStackInSlot(int p_70301_1_)
 	{
-		return par1 >= 0 && par1 < this.brewingItemStacks.length ? this.brewingItemStacks[par1] : null;
+		return p_70301_1_ >= 0 && p_70301_1_ < this.brewingItemStacks.length ? this.brewingItemStacks[p_70301_1_] : null;
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
 	{
-		if (par1 >= 0 && par1 < this.brewingItemStacks.length)
+		if (p_70298_1_ >= 0 && p_70298_1_ < this.brewingItemStacks.length)
 		{
-			ItemStack itemstack = this.brewingItemStacks[par1];
-			this.brewingItemStacks[par1] = null;
+			ItemStack itemstack = this.brewingItemStacks[p_70298_1_];
+			this.brewingItemStacks[p_70298_1_] = null;
 			return itemstack;
 		}
 		else
@@ -257,12 +257,12 @@ public class TileEntityBrewingStand extends TileEntity implements ISidedInventor
 		}
 	}
 
-	public ItemStack getStackInSlotOnClosing(int par1)
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_)
 	{
-		if (par1 >= 0 && par1 < this.brewingItemStacks.length)
+		if (p_70304_1_ >= 0 && p_70304_1_ < this.brewingItemStacks.length)
 		{
-			ItemStack itemstack = this.brewingItemStacks[par1];
-			this.brewingItemStacks[par1] = null;
+			ItemStack itemstack = this.brewingItemStacks[p_70304_1_];
+			this.brewingItemStacks[p_70304_1_] = null;
 			return itemstack;
 		}
 		else
@@ -271,11 +271,11 @@ public class TileEntityBrewingStand extends TileEntity implements ISidedInventor
 		}
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
-		if (par1 >= 0 && par1 < this.brewingItemStacks.length)
+		if (p_70299_1_ >= 0 && p_70299_1_ < this.brewingItemStacks.length)
 		{
-			this.brewingItemStacks[par1] = par2ItemStack;
+			this.brewingItemStacks[p_70299_1_] = p_70299_2_;
 		}
 	}
 
@@ -284,18 +284,18 @@ public class TileEntityBrewingStand extends TileEntity implements ISidedInventor
 		return 64;
 	}
 
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
 	{
-		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : p_70300_1_.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	public void openInventory() {}
 
 	public void closeInventory() {}
 
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
-		return par1 == 3 ? par2ItemStack.getItem().isPotionIngredient(par2ItemStack) : par2ItemStack.getItem() instanceof ItemPotion || par2ItemStack.getItem() == Items.glass_bottle;
+		return p_94041_1_ == 3 ? p_94041_2_.getItem().isPotionIngredient(p_94041_2_) : p_94041_2_.getItem() instanceof ItemPotion || p_94041_2_.getItem() == Items.glass_bottle;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -319,17 +319,17 @@ public class TileEntityBrewingStand extends TileEntity implements ISidedInventor
 		return i;
 	}
 
-	public int[] getAccessibleSlotsFromSide(int par1)
+	public int[] getAccessibleSlotsFromSide(int p_94128_1_)
 	{
-		return par1 == 1 ? field_145941_a : field_145947_i;
+		return p_94128_1_ == 1 ? field_145941_a : field_145947_i;
 	}
 
-	public boolean canInsertItem(int par1, ItemStack par2ItemStack, int par3)
+	public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, int p_102007_3_)
 	{
-		return this.isItemValidForSlot(par1, par2ItemStack);
+		return this.isItemValidForSlot(p_102007_1_, p_102007_2_);
 	}
 
-	public boolean canExtractItem(int par1, ItemStack par2ItemStack, int par3)
+	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, int p_102008_3_)
 	{
 		return true;
 	}

@@ -99,48 +99,48 @@ public class PropertyManager
 		return this.serverPropertiesFile;
 	}
 
-	public String getStringProperty(String par1Str, String par2Str)
+	public String getStringProperty(String p_73671_1_, String p_73671_2_)
 	{
-		if (!this.serverProperties.containsKey(par1Str))
+		if (!this.serverProperties.containsKey(p_73671_1_))
 		{
-			this.serverProperties.setProperty(par1Str, par2Str);
+			this.serverProperties.setProperty(p_73671_1_, p_73671_2_);
 			this.saveProperties();
 			this.saveProperties();
 		}
 
-		return this.serverProperties.getProperty(par1Str, par2Str);
+		return this.serverProperties.getProperty(p_73671_1_, p_73671_2_);
 	}
 
-	public int getIntProperty(String par1Str, int par2)
+	public int getIntProperty(String p_73669_1_, int p_73669_2_)
 	{
 		try
 		{
-			return Integer.parseInt(this.getStringProperty(par1Str, "" + par2));
+			return Integer.parseInt(this.getStringProperty(p_73669_1_, "" + p_73669_2_));
 		}
 		catch (Exception exception)
 		{
-			this.serverProperties.setProperty(par1Str, "" + par2);
+			this.serverProperties.setProperty(p_73669_1_, "" + p_73669_2_);
 			this.saveProperties();
-			return par2;
+			return p_73669_2_;
 		}
 	}
 
-	public boolean getBooleanProperty(String par1Str, boolean par2)
+	public boolean getBooleanProperty(String p_73670_1_, boolean p_73670_2_)
 	{
 		try
 		{
-			return Boolean.parseBoolean(this.getStringProperty(par1Str, "" + par2));
+			return Boolean.parseBoolean(this.getStringProperty(p_73670_1_, "" + p_73670_2_));
 		}
 		catch (Exception exception)
 		{
-			this.serverProperties.setProperty(par1Str, "" + par2);
+			this.serverProperties.setProperty(p_73670_1_, "" + p_73670_2_);
 			this.saveProperties();
-			return par2;
+			return p_73670_2_;
 		}
 	}
 
-	public void setProperty(String par1Str, Object par2Obj)
+	public void setProperty(String p_73667_1_, Object p_73667_2_)
 	{
-		this.serverProperties.setProperty(par1Str, "" + par2Obj);
+		this.serverProperties.setProperty(p_73667_1_, "" + p_73667_2_);
 	}
 }

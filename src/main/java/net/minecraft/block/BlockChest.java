@@ -7,6 +7,7 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityOcelot;
@@ -490,8 +491,8 @@ public class BlockChest extends BlockContainer
 
 	private static boolean func_149953_o(World p_149953_0_, int p_149953_1_, int p_149953_2_, int p_149953_3_)
 	{
-		Iterator iterator = p_149953_0_.getEntitiesWithinAABB(EntityOcelot.class, AxisAlignedBB.getAABBPool().getAABB((double)p_149953_1_, (double)(p_149953_2_ + 1), (double)p_149953_3_, (double)(p_149953_1_ + 1), (double)(p_149953_2_ + 2), (double)(p_149953_3_ + 1))).iterator();
-		EntityOcelot entityocelot1;
+		Iterator iterator = p_149953_0_.getEntitiesWithinAABB(EntityOcelot.class, AxisAlignedBB.getBoundingBox((double)p_149953_1_, (double)(p_149953_2_ + 1), (double)p_149953_3_, (double)(p_149953_1_ + 1), (double)(p_149953_2_ + 2), (double)(p_149953_3_ + 1))).iterator();
+		EntityOcelot entityocelot;
 
 		do
 		{
@@ -500,10 +501,10 @@ public class BlockChest extends BlockContainer
 				return false;
 			}
 
-			EntityOcelot entityocelot = (EntityOcelot)iterator.next();
-			entityocelot1 = (EntityOcelot)entityocelot;
+			Entity entity = (Entity)iterator.next();
+			entityocelot = (EntityOcelot)entity;
 		}
-		while (!entityocelot1.isSitting());
+		while (!entityocelot.isSitting());
 
 		return true;
 	}

@@ -14,50 +14,50 @@ public class WorldGenShrub extends WorldGenTrees
 	private int field_150527_b;
 	private static final String __OBFID = "CL_00000411";
 
-	public WorldGenShrub(int par1, int par2)
+	public WorldGenShrub(int p_i2015_1_, int p_i2015_2_)
 	{
 		super(false);
-		this.field_150527_b = par1;
-		this.field_150528_a = par2;
+		this.field_150527_b = p_i2015_1_;
+		this.field_150528_a = p_i2015_2_;
 	}
 
-	public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5)
+	public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
 	{
 		Block block;
 
 		do
 		{
-			block = par1World.getBlock(par3, par4, par5);
-			if (!(block.isLeaves(par1World, par3, par4, par5) || block.isAir(par1World, par3, par4, par5)))
+			block = p_76484_1_.getBlock(p_76484_3_, p_76484_4_, p_76484_5_);
+			if (!(block.isLeaves(p_76484_1_, p_76484_3_, p_76484_4_, p_76484_5_) || block.isAir(p_76484_1_, p_76484_3_, p_76484_4_, p_76484_5_)))
 			{
 				break;
 			}
-			--par4;
-		} while (par4 > 0);
+			--p_76484_4_;
+		} while (p_76484_4_ > 0);
 
-		Block block1 = par1World.getBlock(par3, par4, par5);
+		Block block1 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_, p_76484_5_);
 
-		if (block1.canSustainPlant(par1World, par3, par4, par5, ForgeDirection.UP, (IPlantable)Blocks.sapling))
+		if (block1.canSustainPlant(p_76484_1_, p_76484_3_, p_76484_4_, p_76484_5_, ForgeDirection.UP, (IPlantable)Blocks.sapling))
 		{
-			++par4;
-			this.setBlockAndNotifyAdequately(par1World, par3, par4, par5, Blocks.log, this.field_150527_b);
+			++p_76484_4_;
+			this.setBlockAndNotifyAdequately(p_76484_1_, p_76484_3_, p_76484_4_, p_76484_5_, Blocks.log, this.field_150527_b);
 
-			for (int l = par4; l <= par4 + 2; ++l)
+			for (int l = p_76484_4_; l <= p_76484_4_ + 2; ++l)
 			{
-				int i1 = l - par4;
+				int i1 = l - p_76484_4_;
 				int j1 = 2 - i1;
 
-				for (int k1 = par3 - j1; k1 <= par3 + j1; ++k1)
+				for (int k1 = p_76484_3_ - j1; k1 <= p_76484_3_ + j1; ++k1)
 				{
-					int l1 = k1 - par3;
+					int l1 = k1 - p_76484_3_;
 
-					for (int i2 = par5 - j1; i2 <= par5 + j1; ++i2)
+					for (int i2 = p_76484_5_ - j1; i2 <= p_76484_5_ + j1; ++i2)
 					{
-						int j2 = i2 - par5;
+						int j2 = i2 - p_76484_5_;
 
-						if ((Math.abs(l1) != j1 || Math.abs(j2) != j1 || par2Random.nextInt(2) != 0) && par1World.getBlock(k1, l, i2).canBeReplacedByLeaves(par1World, k1, l, i2))
+						if ((Math.abs(l1) != j1 || Math.abs(j2) != j1 || p_76484_2_.nextInt(2) != 0) && p_76484_1_.getBlock(k1, l, i2).canBeReplacedByLeaves(p_76484_1_, k1, l, i2))
 						{
-							this.setBlockAndNotifyAdequately(par1World, k1, l, i2, Blocks.leaves, this.field_150528_a);
+							this.setBlockAndNotifyAdequately(p_76484_1_, k1, l, i2, Blocks.leaves, this.field_150528_a);
 						}
 					}
 				}

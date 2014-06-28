@@ -1,54 +1,57 @@
 package net.minecraft.server.management;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.google.gson.JsonObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Pattern;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-public class BanEntry
+public abstract class BanEntry extends UserListEntry
 {
-	private static final Logger logger = LogManager.getLogger();
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
-	private final String username;
-	private Date banStartDate = new Date();
-	private String bannedBy = "(Unknown)";
-	private Date banEndDate;
-	private String reason = "Banned by an operator.";
+	protected final Date banStartDate;
+	protected final String bannedBy;
+	protected final Date banEndDate;
+	protected final String reason;
 	private static final String __OBFID = "CL_00001395";
 
-	public BanEntry(String par1Str)
+	public BanEntry(Object p_i1173_1_, Date p_i1173_2_, String p_i1173_3_, Date p_i1173_4_, String p_i1173_5_)
 	{
-		this.username = par1Str;
+		super(p_i1173_1_);
+		this.banStartDate = p_i1173_2_ == null ? new Date() : p_i1173_2_;
+		this.bannedBy = p_i1173_3_ == null ? "(Unknown)" : p_i1173_3_;
+		this.banEndDate = p_i1173_4_;
+		this.reason = p_i1173_5_ == null ? "Banned by an operator." : p_i1173_5_;
 	}
 
-	public String getBannedUsername()
+	protected BanEntry(Object p_i1174_1_, JsonObject p_i1174_2_)
 	{
-		return this.username;
-	}
+		super(p_i1174_1_, p_i1174_2_);
+		Date date;
 
-	public Date getBanStartDate()
-	{
-		return this.banStartDate;
-	}
+		try
+		{
+			date = p_i1174_2_.has("created") ? dateFormat.parse(p_i1174_2_.get("created").getAsString()) : new Date();
+		}
+		catch (ParseException parseexception1)
+		{
+			date = new Date();
+		}
 
-	public String getBannedBy()
-	{
-		return this.bannedBy;
-	}
+		this.banStartDate = date;
+		this.bannedBy = p_i1174_2_.has("source") ? p_i1174_2_.get("source").getAsString() : "(Unknown)";
+		Date date1;
 
-	public void setBannedBy(String par1Str)
-	{
-		this.bannedBy = par1Str;
-	}
+		try
+		{
+			date1 = p_i1174_2_.has("expires") ? dateFormat.parse(p_i1174_2_.get("expires").getAsString()) : null;
+		}
+		catch (ParseException parseexception)
+		{
+			date1 = null;
+		}
 
-	@SideOnly(Side.SERVER)
-	public void setBanStartDate(Date par1Date)
-	{
-		this.banStartDate = par1Date != null ? par1Date : new Date();
+		this.banEndDate = date1;
+		this.reason = p_i1174_2_.has("reason") ? p_i1174_2_.get("reason").getAsString() : "Banned by an operator.";
 	}
 
 	public Date getBanEndDate()
@@ -56,120 +59,21 @@ public class BanEntry
 		return this.banEndDate;
 	}
 
-	public boolean hasBanExpired()
-	{
-		return this.banEndDate == null ? false : this.banEndDate.before(new Date());
-	}
-
 	public String getBanReason()
 	{
 		return this.reason;
 	}
 
-	public void setBanReason(String par1Str)
+	boolean hasBanExpired()
 	{
-		this.reason = par1Str;
+		return this.banEndDate == null ? false : this.banEndDate.before(new Date());
 	}
 
-	public String buildBanString()
+	protected void func_152641_a(JsonObject p_152641_1_)
 	{
-		StringBuilder stringbuilder = new StringBuilder();
-		stringbuilder.append(this.getBannedUsername());
-		stringbuilder.append("|");
-		stringbuilder.append(dateFormat.format(this.getBanStartDate()));
-		stringbuilder.append("|");
-		stringbuilder.append(this.getBannedBy());
-		stringbuilder.append("|");
-		stringbuilder.append(this.getBanEndDate() == null ? "Forever" : dateFormat.format(this.getBanEndDate()));
-		stringbuilder.append("|");
-		stringbuilder.append(this.getBanReason());
-		return stringbuilder.toString();
-	}
-
-	@SideOnly(Side.SERVER)
-	public void setBanEndDate(Date par1Date)
-	{
-		this.banEndDate = par1Date;
-	}
-
-	@SideOnly(Side.SERVER)
-	public static BanEntry parse(String par0Str)
-	{
-		if (par0Str.trim().length() < 2)
-		{
-			return null;
-		}
-		else
-		{
-			String[] astring = par0Str.trim().split(Pattern.quote("|"), 5);
-			BanEntry banentry = new BanEntry(astring[0].trim());
-			byte b0 = 0;
-			int j = astring.length;
-			int i = b0 + 1;
-
-			if (j <= i)
-			{
-				return banentry;
-			}
-			else
-			{
-				try
-				{
-					banentry.setBanStartDate(dateFormat.parse(astring[i].trim()));
-				}
-				catch (ParseException parseexception1)
-				{
-					logger.warn("Could not read creation date format for ban entry \'" + banentry.getBannedUsername() + "\' (was: \'" + astring[i] + "\')", parseexception1);
-				}
-
-				j = astring.length;
-				++i;
-
-				if (j <= i)
-				{
-					return banentry;
-				}
-				else
-				{
-					banentry.setBannedBy(astring[i].trim());
-					j = astring.length;
-					++i;
-
-					if (j <= i)
-					{
-						return banentry;
-					}
-					else
-					{
-						try
-						{
-							String s1 = astring[i].trim();
-
-							if (!s1.equalsIgnoreCase("Forever") && s1.length() > 0)
-							{
-								banentry.setBanEndDate(dateFormat.parse(s1));
-							}
-						}
-						catch (ParseException parseexception)
-						{
-							logger.warn("Could not read expiry date format for ban entry \'" + banentry.getBannedUsername() + "\' (was: \'" + astring[i] + "\')", parseexception);
-						}
-
-						j = astring.length;
-						++i;
-
-						if (j <= i)
-						{
-							return banentry;
-						}
-						else
-						{
-							banentry.setBanReason(astring[i].trim());
-							return banentry;
-						}
-					}
-				}
-			}
-		}
+		p_152641_1_.addProperty("created", dateFormat.format(this.banStartDate));
+		p_152641_1_.addProperty("source", this.bannedBy);
+		p_152641_1_.addProperty("expires", this.banEndDate == null ? "forever" : dateFormat.format(this.banEndDate));
+		p_152641_1_.addProperty("reason", this.reason);
 	}
 }

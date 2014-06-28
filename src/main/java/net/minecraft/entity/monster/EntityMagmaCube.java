@@ -12,9 +12,9 @@ public class EntityMagmaCube extends EntitySlime
 {
 	private static final String __OBFID = "CL_00001691";
 
-	public EntityMagmaCube(World par1World)
+	public EntityMagmaCube(World p_i1737_1_)
 	{
-		super(par1World);
+		super(p_i1737_1_);
 		this.isImmuneToFire = true;
 	}
 
@@ -35,12 +35,12 @@ public class EntityMagmaCube extends EntitySlime
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getBrightnessForRender(float par1)
+	public int getBrightnessForRender(float p_70070_1_)
 	{
 		return 15728880;
 	}
 
-	public float getBrightness(float par1)
+	public float getBrightness(float p_70013_1_)
 	{
 		return 1.0F;
 	}
@@ -60,7 +60,7 @@ public class EntityMagmaCube extends EntitySlime
 		return Items.magma_cream;
 	}
 
-	protected void dropFewItems(boolean par1, int par2)
+	protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
 	{
 		Item item = this.getDropItem();
 
@@ -68,9 +68,9 @@ public class EntityMagmaCube extends EntitySlime
 		{
 			int j = this.rand.nextInt(4) - 2;
 
-			if (par2 > 0)
+			if (p_70628_2_ > 0)
 			{
-				j += this.rand.nextInt(par2 + 1);
+				j += this.rand.nextInt(p_70628_2_ + 1);
 			}
 
 			for (int k = 0; k < j; ++k)
@@ -102,7 +102,7 @@ public class EntityMagmaCube extends EntitySlime
 		net.minecraftforge.common.ForgeHooks.onLivingJump(this);
 	}
 
-	protected void fall(float par1) {}
+	protected void fall(float p_70069_1_) {}
 
 	protected boolean canDamagePlayer()
 	{

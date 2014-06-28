@@ -18,21 +18,21 @@ public class ItemFireworkCharge extends Item
 	private static final String __OBFID = "CL_00000030";
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int par1, int par2)
+	public IIcon getIconFromDamageForRenderPass(int p_77618_1_, int p_77618_2_)
 	{
-		return par2 > 0 ? this.field_150904_a : super.getIconFromDamageForRenderPass(par1, par2);
+		return p_77618_2_ > 0 ? this.field_150904_a : super.getIconFromDamageForRenderPass(p_77618_1_, p_77618_2_);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	public int getColorFromItemStack(ItemStack p_82790_1_, int p_82790_2_)
 	{
-		if (par2 != 1)
+		if (p_82790_2_ != 1)
 		{
-			return super.getColorFromItemStack(par1ItemStack, par2);
+			return super.getColorFromItemStack(p_82790_1_, p_82790_2_);
 		}
 		else
 		{
-			NBTBase nbtbase = func_150903_a(par1ItemStack, "Colors");
+			NBTBase nbtbase = func_150903_a(p_82790_1_, "Colors");
 
 			if (nbtbase != null && nbtbase instanceof NBTTagIntArray)
 			{
@@ -95,15 +95,15 @@ public class ItemFireworkCharge extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_)
 	{
-		if (par1ItemStack.hasTagCompound())
+		if (p_77624_1_.hasTagCompound())
 		{
-			NBTTagCompound nbttagcompound = par1ItemStack.getTagCompound().getCompoundTag("Explosion");
+			NBTTagCompound nbttagcompound = p_77624_1_.getTagCompound().getCompoundTag("Explosion");
 
 			if (nbttagcompound != null)
 			{
-				func_150902_a(nbttagcompound, par3List);
+				func_150902_a(nbttagcompound, p_77624_3_);
 			}
 		}
 	}
@@ -221,9 +221,9 @@ public class ItemFireworkCharge extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister)
+	public void registerIcons(IIconRegister p_94581_1_)
 	{
-		super.registerIcons(par1IconRegister);
-		this.field_150904_a = par1IconRegister.registerIcon(this.getIconString() + "_overlay");
+		super.registerIcons(p_94581_1_);
+		this.field_150904_a = p_94581_1_.registerIcon(this.getIconString() + "_overlay");
 	}
 }

@@ -19,19 +19,19 @@ public class ItemLead extends Item
 		this.setCreativeTab(CreativeTabs.tabTools);
 	}
 
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
-		Block block = par3World.getBlock(par4, par5, par6);
+		Block block = p_77648_3_.getBlock(p_77648_4_, p_77648_5_, p_77648_6_);
 
 		if (block.getRenderType() == 11)
 		{
-			if (par3World.isRemote)
+			if (p_77648_3_.isRemote)
 			{
 				return true;
 			}
 			else
 			{
-				func_150909_a(par2EntityPlayer, par3World, par4, par5, par6);
+				func_150909_a(p_77648_2_, p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_);
 				return true;
 			}
 		}
@@ -46,7 +46,7 @@ public class ItemLead extends Item
 		EntityLeashKnot entityleashknot = EntityLeashKnot.getKnotForBlock(p_150909_1_, p_150909_2_, p_150909_3_, p_150909_4_);
 		boolean flag = false;
 		double d0 = 7.0D;
-		List list = p_150909_1_.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().getAABB((double)p_150909_2_ - d0, (double)p_150909_3_ - d0, (double)p_150909_4_ - d0, (double)p_150909_2_ + d0, (double)p_150909_3_ + d0, (double)p_150909_4_ + d0));
+		List list = p_150909_1_.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox((double)p_150909_2_ - d0, (double)p_150909_3_ - d0, (double)p_150909_4_ - d0, (double)p_150909_2_ + d0, (double)p_150909_3_ + d0, (double)p_150909_4_ + d0));
 
 		if (list != null)
 		{

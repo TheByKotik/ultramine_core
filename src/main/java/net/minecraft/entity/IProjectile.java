@@ -2,5 +2,5 @@ package net.minecraft.entity;
 
 public interface IProjectile
 {
-	void setThrowableHeading(double var1, double var3, double var5, float var7, float var8);
+	void setThrowableHeading(double p_70186_1_, double p_70186_3_, double p_70186_5_, float p_70186_7_, float p_70186_8_);
 }

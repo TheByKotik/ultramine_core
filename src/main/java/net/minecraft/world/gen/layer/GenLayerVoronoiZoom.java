@@ -4,20 +4,20 @@ public class GenLayerVoronoiZoom extends GenLayer
 {
 	private static final String __OBFID = "CL_00000571";
 
-	public GenLayerVoronoiZoom(long par1, GenLayer par3GenLayer)
+	public GenLayerVoronoiZoom(long p_i2133_1_, GenLayer p_i2133_3_)
 	{
-		super(par1);
-		super.parent = par3GenLayer;
+		super(p_i2133_1_);
+		super.parent = p_i2133_3_;
 	}
 
-	public int[] getInts(int par1, int par2, int par3, int par4)
+	public int[] getInts(int p_75904_1_, int p_75904_2_, int p_75904_3_, int p_75904_4_)
 	{
-		par1 -= 2;
-		par2 -= 2;
-		int i1 = par1 >> 2;
-		int j1 = par2 >> 2;
-		int k1 = (par3 >> 2) + 2;
-		int l1 = (par4 >> 2) + 2;
+		p_75904_1_ -= 2;
+		p_75904_2_ -= 2;
+		int i1 = p_75904_1_ >> 2;
+		int j1 = p_75904_2_ >> 2;
+		int k1 = (p_75904_3_ >> 2) + 2;
+		int l1 = (p_75904_4_ >> 2) + 2;
 		int[] aint = this.parent.getInts(i1, j1, k1, l1);
 		int i2 = k1 - 1 << 2;
 		int j2 = l1 - 1 << 2;
@@ -82,11 +82,11 @@ public class GenLayerVoronoiZoom extends GenLayer
 			}
 		}
 
-		int[] aint2 = IntCache.getIntCache(par3 * par4);
+		int[] aint2 = IntCache.getIntCache(p_75904_3_ * p_75904_4_);
 
-		for (l2 = 0; l2 < par4; ++l2)
+		for (l2 = 0; l2 < p_75904_4_; ++l2)
 		{
-			System.arraycopy(aint1, (l2 + (par2 & 3)) * i2 + (par1 & 3), aint2, l2 * par3, par3);
+			System.arraycopy(aint1, (l2 + (p_75904_2_ & 3)) * i2 + (p_75904_1_ & 3), aint2, l2 * p_75904_3_, p_75904_3_);
 		}
 
 		return aint2;

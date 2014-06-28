@@ -18,20 +18,20 @@ public class CommandXP extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.xp.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length <= 0)
+		if (p_71515_2_.length <= 0)
 		{
 			throw new WrongUsageException("commands.xp.usage", new Object[0]);
 		}
 		else
 		{
-			String s = par2ArrayOfStr[0];
+			String s = p_71515_2_[0];
 			boolean flag = s.endsWith("l") || s.endsWith("L");
 
 			if (flag && s.length() > 1)
@@ -39,7 +39,7 @@ public class CommandXP extends CommandBase
 				s = s.substring(0, s.length() - 1);
 			}
 
-			int i = parseInt(par1ICommandSender, s);
+			int i = parseInt(p_71515_1_, s);
 			boolean flag1 = i < 0;
 
 			if (flag1)
@@ -49,13 +49,13 @@ public class CommandXP extends CommandBase
 
 			EntityPlayerMP entityplayermp;
 
-			if (par2ArrayOfStr.length > 1)
+			if (p_71515_2_.length > 1)
 			{
-				entityplayermp = getPlayer(par1ICommandSender, par2ArrayOfStr[1]);
+				entityplayermp = getPlayer(p_71515_1_, p_71515_2_[1]);
 			}
 			else
 			{
-				entityplayermp = getCommandSenderAsPlayer(par1ICommandSender);
+				entityplayermp = getCommandSenderAsPlayer(p_71515_1_);
 			}
 
 			if (flag)
@@ -63,12 +63,12 @@ public class CommandXP extends CommandBase
 				if (flag1)
 				{
 					entityplayermp.addExperienceLevel(-i);
-					notifyAdmins(par1ICommandSender, "commands.xp.success.negative.levels", new Object[] {Integer.valueOf(i), entityplayermp.getCommandSenderName()});
+					func_152373_a(p_71515_1_, this, "commands.xp.success.negative.levels", new Object[] {Integer.valueOf(i), entityplayermp.getCommandSenderName()});
 				}
 				else
 				{
 					entityplayermp.addExperienceLevel(i);
-					notifyAdmins(par1ICommandSender, "commands.xp.success.levels", new Object[] {Integer.valueOf(i), entityplayermp.getCommandSenderName()});
+					func_152373_a(p_71515_1_, this, "commands.xp.success.levels", new Object[] {Integer.valueOf(i), entityplayermp.getCommandSenderName()});
 				}
 			}
 			else
@@ -79,14 +79,14 @@ public class CommandXP extends CommandBase
 				}
 
 				entityplayermp.addExperience(i);
-				notifyAdmins(par1ICommandSender, "commands.xp.success", new Object[] {Integer.valueOf(i), entityplayermp.getCommandSenderName()});
+				func_152373_a(p_71515_1_, this, "commands.xp.success", new Object[] {Integer.valueOf(i), entityplayermp.getCommandSenderName()});
 			}
 		}
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		return par2ArrayOfStr.length == 2 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, this.getAllUsernames()) : null;
+		return p_71516_2_.length == 2 ? getListOfStringsMatchingLastWord(p_71516_2_, this.getAllUsernames()) : null;
 	}
 
 	protected String[] getAllUsernames()
@@ -94,8 +94,8 @@ public class CommandXP extends CommandBase
 		return MinecraftServer.getServer().getAllUsernames();
 	}
 
-	public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2)
+	public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_)
 	{
-		return par2 == 1;
+		return p_82358_2_ == 1;
 	}
 }

@@ -61,32 +61,32 @@ public abstract class EntityMinecart extends Entity
 	protected float maxSpeedAirVertical = defaultMaxSpeedAirVertical;
 	protected double dragAir = defaultDragAir;
 
-	public EntityMinecart(World par1World)
+	public EntityMinecart(World p_i1712_1_)
 	{
-		super(par1World);
+		super(p_i1712_1_);
 		this.preventEntitySpawning = true;
 		this.setSize(0.98F, 0.7F);
 		this.yOffset = this.height / 2.0F;
 	}
 
-	public static EntityMinecart createMinecart(World par0World, double par1, double par3, double par5, int par7)
+	public static EntityMinecart createMinecart(World p_94090_0_, double p_94090_1_, double p_94090_3_, double p_94090_5_, int p_94090_7_)
 	{
-		switch (par7)
+		switch (p_94090_7_)
 		{
 			case 1:
-				return new EntityMinecartChest(par0World, par1, par3, par5);
+				return new EntityMinecartChest(p_94090_0_, p_94090_1_, p_94090_3_, p_94090_5_);
 			case 2:
-				return new EntityMinecartFurnace(par0World, par1, par3, par5);
+				return new EntityMinecartFurnace(p_94090_0_, p_94090_1_, p_94090_3_, p_94090_5_);
 			case 3:
-				return new EntityMinecartTNT(par0World, par1, par3, par5);
+				return new EntityMinecartTNT(p_94090_0_, p_94090_1_, p_94090_3_, p_94090_5_);
 			case 4:
-				return new EntityMinecartMobSpawner(par0World, par1, par3, par5);
+				return new EntityMinecartMobSpawner(p_94090_0_, p_94090_1_, p_94090_3_, p_94090_5_);
 			case 5:
-				return new EntityMinecartHopper(par0World, par1, par3, par5);
+				return new EntityMinecartHopper(p_94090_0_, p_94090_1_, p_94090_3_, p_94090_5_);
 			case 6:
-				return new EntityMinecartCommandBlock(par0World, par1, par3, par5);
+				return new EntityMinecartCommandBlock(p_94090_0_, p_94090_1_, p_94090_3_, p_94090_5_);
 			default:
-				return new EntityMinecartEmpty(par0World, par1, par3, par5);
+				return new EntityMinecartEmpty(p_94090_0_, p_94090_1_, p_94090_3_, p_94090_5_);
 		}
 	}
 
@@ -105,13 +105,13 @@ public abstract class EntityMinecart extends Entity
 		this.dataWatcher.addObject(22, Byte.valueOf((byte)0));
 	}
 
-	public AxisAlignedBB getCollisionBox(Entity par1Entity)
+	public AxisAlignedBB getCollisionBox(Entity p_70114_1_)
 	{
 		if (getCollisionHandler() != null)
 		{
-			return getCollisionHandler().getCollisionBox(this, par1Entity);
+			return getCollisionHandler().getCollisionBox(this, p_70114_1_);
 		}
-		return par1Entity.canBePushed() ? par1Entity.boundingBox : null;
+		return p_70114_1_.canBePushed() ? p_70114_1_.boundingBox : null;
 	}
 
 	public AxisAlignedBB getBoundingBox()
@@ -128,16 +128,16 @@ public abstract class EntityMinecart extends Entity
 		return canBePushed;
 	}
 
-	public EntityMinecart(World par1World, double par2, double par4, double par6)
+	public EntityMinecart(World p_i1713_1_, double p_i1713_2_, double p_i1713_4_, double p_i1713_6_)
 	{
-		this(par1World);
-		this.setPosition(par2, par4, par6);
+		this(p_i1713_1_);
+		this.setPosition(p_i1713_2_, p_i1713_4_, p_i1713_6_);
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
-		this.prevPosX = par2;
-		this.prevPosY = par4;
-		this.prevPosZ = par6;
+		this.prevPosX = p_i1713_2_;
+		this.prevPosY = p_i1713_4_;
+		this.prevPosZ = p_i1713_6_;
 	}
 
 	public double getMountedYOffset()
@@ -145,7 +145,7 @@ public abstract class EntityMinecart extends Entity
 		return (double)this.height * 0.0D - 0.30000001192092896D;
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		if (!this.worldObj.isRemote && !this.isDead)
 		{
@@ -158,8 +158,8 @@ public abstract class EntityMinecart extends Entity
 				this.setRollingDirection(-this.getRollingDirection());
 				this.setRollingAmplitude(10);
 				this.setBeenAttacked();
-				this.setDamage(this.getDamage() + par2 * 10.0F);
-				boolean flag = par1DamageSource.getEntity() instanceof EntityPlayer && ((EntityPlayer)par1DamageSource.getEntity()).capabilities.isCreativeMode;
+				this.setDamage(this.getDamage() + p_70097_2_ * 10.0F);
+				boolean flag = p_70097_1_.getEntity() instanceof EntityPlayer && ((EntityPlayer)p_70097_1_.getEntity()).capabilities.isCreativeMode;
 
 				if (flag || this.getDamage() > 40.0F)
 				{
@@ -174,7 +174,7 @@ public abstract class EntityMinecart extends Entity
 					}
 					else
 					{
-						this.killMinecart(par1DamageSource);
+						this.killMinecart(p_70097_1_);
 					}
 				}
 
@@ -187,7 +187,7 @@ public abstract class EntityMinecart extends Entity
 		}
 	}
 
-	public void killMinecart(DamageSource par1DamageSource)
+	public void killMinecart(DamageSource p_94095_1_)
 	{
 		this.setDead();
 		ItemStack itemstack = new ItemStack(Items.minecart, 1);
@@ -408,28 +408,28 @@ public abstract class EntityMinecart extends Entity
 		}
 	}
 
-	public void onActivatorRailPass(int par1, int par2, int par3, boolean par4) {}
+	public void onActivatorRailPass(int p_96095_1_, int p_96095_2_, int p_96095_3_, boolean p_96095_4_) {}
 
-	protected void func_94088_b(double par1)
+	protected void func_94088_b(double p_94088_1_)
 	{
-		if (this.motionX < -par1)
+		if (this.motionX < -p_94088_1_)
 		{
-			this.motionX = -par1;
+			this.motionX = -p_94088_1_;
 		}
 
-		if (this.motionX > par1)
+		if (this.motionX > p_94088_1_)
 		{
-			this.motionX = par1;
+			this.motionX = p_94088_1_;
 		}
 
-		if (this.motionZ < -par1)
+		if (this.motionZ < -p_94088_1_)
 		{
-			this.motionZ = -par1;
+			this.motionZ = -p_94088_1_;
 		}
 
-		if (this.motionZ > par1)
+		if (this.motionZ > p_94088_1_)
 		{
-			this.motionZ = par1;
+			this.motionZ = p_94088_1_;
 		}
 
 		double moveY = motionY;
@@ -693,11 +693,11 @@ public abstract class EntityMinecart extends Entity
 	}
 
 	@SideOnly(Side.CLIENT)
-	public Vec3 func_70495_a(double par1, double par3, double par5, double par7)
+	public Vec3 func_70495_a(double p_70495_1_, double p_70495_3_, double p_70495_5_, double p_70495_7_)
 	{
-		int i = MathHelper.floor_double(par1);
-		int j = MathHelper.floor_double(par3);
-		int k = MathHelper.floor_double(par5);
+		int i = MathHelper.floor_double(p_70495_1_);
+		int j = MathHelper.floor_double(p_70495_3_);
+		int k = MathHelper.floor_double(p_70495_5_);
 
 		if (BlockRailBase.func_150049_b_(this.worldObj, i, j - 1, k))
 		{
@@ -714,11 +714,11 @@ public abstract class EntityMinecart extends Entity
 		{
 			int l = ((BlockRailBase)block).getBasicRailMetadata(worldObj, this, i, j, k);
 
-			par3 = (double)j;
+			p_70495_3_ = (double)j;
 
 			if (l >= 2 && l <= 5)
 			{
-				par3 = (double)(j + 1);
+				p_70495_3_ = (double)(j + 1);
 			}
 
 			int[][] aint = matrix[l];
@@ -727,27 +727,27 @@ public abstract class EntityMinecart extends Entity
 			double d6 = Math.sqrt(d4 * d4 + d5 * d5);
 			d4 /= d6;
 			d5 /= d6;
-			par1 += d4 * par7;
-			par5 += d5 * par7;
+			p_70495_1_ += d4 * p_70495_7_;
+			p_70495_5_ += d5 * p_70495_7_;
 
-			if (aint[0][1] != 0 && MathHelper.floor_double(par1) - i == aint[0][0] && MathHelper.floor_double(par5) - k == aint[0][2])
+			if (aint[0][1] != 0 && MathHelper.floor_double(p_70495_1_) - i == aint[0][0] && MathHelper.floor_double(p_70495_5_) - k == aint[0][2])
 			{
-				par3 += (double)aint[0][1];
+				p_70495_3_ += (double)aint[0][1];
 			}
-			else if (aint[1][1] != 0 && MathHelper.floor_double(par1) - i == aint[1][0] && MathHelper.floor_double(par5) - k == aint[1][2])
+			else if (aint[1][1] != 0 && MathHelper.floor_double(p_70495_1_) - i == aint[1][0] && MathHelper.floor_double(p_70495_5_) - k == aint[1][2])
 			{
-				par3 += (double)aint[1][1];
+				p_70495_3_ += (double)aint[1][1];
 			}
 
-			return this.func_70489_a(par1, par3, par5);
+			return this.func_70489_a(p_70495_1_, p_70495_3_, p_70495_5_);
 		}
 	}
 
-	public Vec3 func_70489_a(double par1, double par3, double par5)
+	public Vec3 func_70489_a(double p_70489_1_, double p_70489_3_, double p_70489_5_)
 	{
-		int i = MathHelper.floor_double(par1);
-		int j = MathHelper.floor_double(par3);
-		int k = MathHelper.floor_double(par5);
+		int i = MathHelper.floor_double(p_70489_1_);
+		int j = MathHelper.floor_double(p_70489_3_);
+		int k = MathHelper.floor_double(p_70489_5_);
 
 		if (BlockRailBase.func_150049_b_(this.worldObj, i, j - 1, k))
 		{
@@ -759,11 +759,11 @@ public abstract class EntityMinecart extends Entity
 		if (BlockRailBase.func_150051_a(block))
 		{
 			int l = ((BlockRailBase)block).getBasicRailMetadata(worldObj, this, i, j, k);
-			par3 = (double)j;
+			p_70489_3_ = (double)j;
 
 			if (l >= 2 && l <= 5)
 			{
-				par3 = (double)(j + 1);
+				p_70489_3_ = (double)(j + 1);
 			}
 
 			int[][] aint = matrix[l];
@@ -780,36 +780,36 @@ public abstract class EntityMinecart extends Entity
 
 			if (d10 == 0.0D)
 			{
-				par1 = (double)i + 0.5D;
-				d3 = par5 - (double)k;
+				p_70489_1_ = (double)i + 0.5D;
+				d3 = p_70489_5_ - (double)k;
 			}
 			else if (d12 == 0.0D)
 			{
-				par5 = (double)k + 0.5D;
-				d3 = par1 - (double)i;
+				p_70489_5_ = (double)k + 0.5D;
+				d3 = p_70489_1_ - (double)i;
 			}
 			else
 			{
-				double d13 = par1 - d4;
-				double d14 = par5 - d6;
+				double d13 = p_70489_1_ - d4;
+				double d14 = p_70489_5_ - d6;
 				d3 = (d13 * d10 + d14 * d12) * 2.0D;
 			}
 
-			par1 = d4 + d10 * d3;
-			par3 = d5 + d11 * d3;
-			par5 = d6 + d12 * d3;
+			p_70489_1_ = d4 + d10 * d3;
+			p_70489_3_ = d5 + d11 * d3;
+			p_70489_5_ = d6 + d12 * d3;
 
 			if (d11 < 0.0D)
 			{
-				++par3;
+				++p_70489_3_;
 			}
 
 			if (d11 > 0.0D)
 			{
-				par3 += 0.5D;
+				p_70489_3_ += 0.5D;
 			}
 
-			return this.worldObj.getWorldVec3Pool().getVecFromPool(par1, par3, par5);
+			return Vec3.createVectorHelper(p_70489_1_, p_70489_3_, p_70489_5_);
 		}
 		else
 		{
@@ -817,34 +817,34 @@ public abstract class EntityMinecart extends Entity
 		}
 	}
 
-	protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	protected void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		if (par1NBTTagCompound.getBoolean("CustomDisplayTile"))
+		if (p_70037_1_.getBoolean("CustomDisplayTile"))
 		{
-			this.func_145819_k(par1NBTTagCompound.getInteger("DisplayTile"));
-			this.setDisplayTileData(par1NBTTagCompound.getInteger("DisplayData"));
-			this.setDisplayTileOffset(par1NBTTagCompound.getInteger("DisplayOffset"));
+			this.func_145819_k(p_70037_1_.getInteger("DisplayTile"));
+			this.setDisplayTileData(p_70037_1_.getInteger("DisplayData"));
+			this.setDisplayTileOffset(p_70037_1_.getInteger("DisplayOffset"));
 		}
 
-		if (par1NBTTagCompound.hasKey("CustomName", 8) && par1NBTTagCompound.getString("CustomName").length() > 0)
+		if (p_70037_1_.hasKey("CustomName", 8) && p_70037_1_.getString("CustomName").length() > 0)
 		{
-			this.entityName = par1NBTTagCompound.getString("CustomName");
+			this.entityName = p_70037_1_.getString("CustomName");
 		}
 	}
 
-	protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	protected void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
 		if (this.hasDisplayTile())
 		{
-			par1NBTTagCompound.setBoolean("CustomDisplayTile", true);
-			par1NBTTagCompound.setInteger("DisplayTile", this.func_145820_n().getMaterial() == Material.air ? 0 : Block.getIdFromBlock(this.func_145820_n()));
-			par1NBTTagCompound.setInteger("DisplayData", this.getDisplayTileData());
-			par1NBTTagCompound.setInteger("DisplayOffset", this.getDisplayTileOffset());
+			p_70014_1_.setBoolean("CustomDisplayTile", true);
+			p_70014_1_.setInteger("DisplayTile", this.func_145820_n().getMaterial() == Material.air ? 0 : Block.getIdFromBlock(this.func_145820_n()));
+			p_70014_1_.setInteger("DisplayData", this.getDisplayTileData());
+			p_70014_1_.setInteger("DisplayOffset", this.getDisplayTileOffset());
 		}
 
 		if (this.entityName != null && this.entityName.length() > 0)
 		{
-			par1NBTTagCompound.setString("CustomName", this.entityName);
+			p_70014_1_.setString("CustomName", this.entityName);
 		}
 	}
 
@@ -854,25 +854,25 @@ public abstract class EntityMinecart extends Entity
 		return 0.0F;
 	}
 
-	public void applyEntityCollision(Entity par1Entity)
+	public void applyEntityCollision(Entity p_70108_1_)
 	{
-		MinecraftForge.EVENT_BUS.post(new MinecartCollisionEvent(this, par1Entity));
+		MinecraftForge.EVENT_BUS.post(new MinecartCollisionEvent(this, p_70108_1_));
 		if (getCollisionHandler() != null)
 		{
-			getCollisionHandler().onEntityCollision(this, par1Entity);
+			getCollisionHandler().onEntityCollision(this, p_70108_1_);
 			return;
 		}
 		if (!this.worldObj.isRemote)
 		{
-			if (par1Entity != this.riddenByEntity)
+			if (p_70108_1_ != this.riddenByEntity)
 			{
-				if (par1Entity instanceof EntityLivingBase && !(par1Entity instanceof EntityPlayer) && !(par1Entity instanceof EntityIronGolem) && canBeRidden()               && this.motionX * this.motionX + this.motionZ * this.motionZ > 0.01D && this.riddenByEntity == null && par1Entity.ridingEntity == null)
+				if (p_70108_1_ instanceof EntityLivingBase && !(p_70108_1_ instanceof EntityPlayer) && !(p_70108_1_ instanceof EntityIronGolem) && canBeRidden()               && this.motionX * this.motionX + this.motionZ * this.motionZ > 0.01D && this.riddenByEntity == null && p_70108_1_.ridingEntity == null)
 				{
-					par1Entity.mountEntity(this);
+					p_70108_1_.mountEntity(this);
 				}
 
-				double d0 = par1Entity.posX - this.posX;
-				double d1 = par1Entity.posZ - this.posZ;
+				double d0 = p_70108_1_.posX - this.posX;
+				double d1 = p_70108_1_.posZ - this.posZ;
 				double d2 = d0 * d0 + d1 * d1;
 
 				if (d2 >= 9.999999747378752E-5D)
@@ -896,12 +896,12 @@ public abstract class EntityMinecart extends Entity
 					d0 *= 0.5D;
 					d1 *= 0.5D;
 
-					if (par1Entity instanceof EntityMinecart)
+					if (p_70108_1_ instanceof EntityMinecart)
 					{
-						double d4 = par1Entity.posX - this.posX;
-						double d5 = par1Entity.posZ - this.posZ;
-						Vec3 vec3 = this.worldObj.getWorldVec3Pool().getVecFromPool(d4, 0.0D, d5).normalize();
-						Vec3 vec31 = this.worldObj.getWorldVec3Pool().getVecFromPool((double)MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F), 0.0D, (double)MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F)).normalize();
+						double d4 = p_70108_1_.posX - this.posX;
+						double d5 = p_70108_1_.posZ - this.posZ;
+						Vec3 vec3 = Vec3.createVectorHelper(d4, 0.0D, d5).normalize();
+						Vec3 vec31 = Vec3.createVectorHelper((double)MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F), 0.0D, (double)MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F)).normalize();
 						double d6 = Math.abs(vec3.dotProduct(vec31));
 
 						if (d6 < 0.800000011920929D)
@@ -909,22 +909,22 @@ public abstract class EntityMinecart extends Entity
 							return;
 						}
 
-						double d7 = par1Entity.motionX + this.motionX;
-						double d8 = par1Entity.motionZ + this.motionZ;
+						double d7 = p_70108_1_.motionX + this.motionX;
+						double d8 = p_70108_1_.motionZ + this.motionZ;
 
-						if (((EntityMinecart)par1Entity).isPoweredCart() && !isPoweredCart())
+						if (((EntityMinecart)p_70108_1_).isPoweredCart() && !isPoweredCart())
 						{
 							this.motionX *= 0.20000000298023224D;
 							this.motionZ *= 0.20000000298023224D;
-							this.addVelocity(par1Entity.motionX - d0, 0.0D, par1Entity.motionZ - d1);
-							par1Entity.motionX *= 0.949999988079071D;
-							par1Entity.motionZ *= 0.949999988079071D;
+							this.addVelocity(p_70108_1_.motionX - d0, 0.0D, p_70108_1_.motionZ - d1);
+							p_70108_1_.motionX *= 0.949999988079071D;
+							p_70108_1_.motionZ *= 0.949999988079071D;
 						}
-						else if (((EntityMinecart)par1Entity).isPoweredCart() && !isPoweredCart())
+						else if (((EntityMinecart)p_70108_1_).isPoweredCart() && !isPoweredCart())
 						{
-							par1Entity.motionX *= 0.20000000298023224D;
-							par1Entity.motionZ *= 0.20000000298023224D;
-							par1Entity.addVelocity(this.motionX + d0, 0.0D, this.motionZ + d1);
+							p_70108_1_.motionX *= 0.20000000298023224D;
+							p_70108_1_.motionZ *= 0.20000000298023224D;
+							p_70108_1_.addVelocity(this.motionX + d0, 0.0D, this.motionZ + d1);
 							this.motionX *= 0.949999988079071D;
 							this.motionZ *= 0.949999988079071D;
 						}
@@ -935,15 +935,15 @@ public abstract class EntityMinecart extends Entity
 							this.motionX *= 0.20000000298023224D;
 							this.motionZ *= 0.20000000298023224D;
 							this.addVelocity(d7 - d0, 0.0D, d8 - d1);
-							par1Entity.motionX *= 0.20000000298023224D;
-							par1Entity.motionZ *= 0.20000000298023224D;
-							par1Entity.addVelocity(d7 + d0, 0.0D, d8 + d1);
+							p_70108_1_.motionX *= 0.20000000298023224D;
+							p_70108_1_.motionZ *= 0.20000000298023224D;
+							p_70108_1_.addVelocity(d7 + d0, 0.0D, d8 + d1);
 						}
 					}
 					else
 					{
 						this.addVelocity(-d0, 0.0D, -d1);
-						par1Entity.addVelocity(d0 / 4.0D, 0.0D, d1 / 4.0D);
+						p_70108_1_.addVelocity(d0 / 4.0D, 0.0D, d1 / 4.0D);
 					}
 				}
 			}
@@ -951,30 +951,30 @@ public abstract class EntityMinecart extends Entity
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)
+	public void setPositionAndRotation2(double p_70056_1_, double p_70056_3_, double p_70056_5_, float p_70056_7_, float p_70056_8_, int p_70056_9_)
 	{
-		this.minecartX = par1;
-		this.minecartY = par3;
-		this.minecartZ = par5;
-		this.minecartYaw = (double)par7;
-		this.minecartPitch = (double)par8;
-		this.turnProgress = par9 + 2;
+		this.minecartX = p_70056_1_;
+		this.minecartY = p_70056_3_;
+		this.minecartZ = p_70056_5_;
+		this.minecartYaw = (double)p_70056_7_;
+		this.minecartPitch = (double)p_70056_8_;
+		this.turnProgress = p_70056_9_ + 2;
 		this.motionX = this.velocityX;
 		this.motionY = this.velocityY;
 		this.motionZ = this.velocityZ;
 	}
 
-	public void setDamage(float par1)
+	public void setDamage(float p_70492_1_)
 	{
-		this.dataWatcher.updateObject(19, Float.valueOf(par1));
+		this.dataWatcher.updateObject(19, Float.valueOf(p_70492_1_));
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void setVelocity(double par1, double par3, double par5)
+	public void setVelocity(double p_70016_1_, double p_70016_3_, double p_70016_5_)
 	{
-		this.velocityX = this.motionX = par1;
-		this.velocityY = this.motionY = par3;
-		this.velocityZ = this.motionZ = par5;
+		this.velocityX = this.motionX = p_70016_1_;
+		this.velocityY = this.motionY = p_70016_3_;
+		this.velocityZ = this.motionZ = p_70016_5_;
 	}
 
 	public float getDamage()
@@ -982,9 +982,9 @@ public abstract class EntityMinecart extends Entity
 		return this.dataWatcher.getWatchableObjectFloat(19);
 	}
 
-	public void setRollingAmplitude(int par1)
+	public void setRollingAmplitude(int p_70497_1_)
 	{
-		this.dataWatcher.updateObject(17, Integer.valueOf(par1));
+		this.dataWatcher.updateObject(17, Integer.valueOf(p_70497_1_));
 	}
 
 	public int getRollingAmplitude()
@@ -992,9 +992,9 @@ public abstract class EntityMinecart extends Entity
 		return this.dataWatcher.getWatchableObjectInt(17);
 	}
 
-	public void setRollingDirection(int par1)
+	public void setRollingDirection(int p_70494_1_)
 	{
-		this.dataWatcher.updateObject(18, Integer.valueOf(par1));
+		this.dataWatcher.updateObject(18, Integer.valueOf(p_70494_1_));
 	}
 
 	public int getRollingDirection()
@@ -1048,15 +1048,15 @@ public abstract class EntityMinecart extends Entity
 		this.setHasDisplayTile(true);
 	}
 
-	public void setDisplayTileData(int par1)
+	public void setDisplayTileData(int p_94092_1_)
 	{
-		this.getDataWatcher().updateObject(20, Integer.valueOf(Block.getIdFromBlock(this.func_145820_n()) & 65535 | par1 << 16));
+		this.getDataWatcher().updateObject(20, Integer.valueOf(Block.getIdFromBlock(this.func_145820_n()) & 65535 | p_94092_1_ << 16));
 		this.setHasDisplayTile(true);
 	}
 
-	public void setDisplayTileOffset(int par1)
+	public void setDisplayTileOffset(int p_94086_1_)
 	{
-		this.getDataWatcher().updateObject(21, Integer.valueOf(par1));
+		this.getDataWatcher().updateObject(21, Integer.valueOf(p_94086_1_));
 		this.setHasDisplayTile(true);
 	}
 
@@ -1065,14 +1065,14 @@ public abstract class EntityMinecart extends Entity
 		return this.getDataWatcher().getWatchableObjectByte(22) == 1;
 	}
 
-	public void setHasDisplayTile(boolean par1)
+	public void setHasDisplayTile(boolean p_94096_1_)
 	{
-		this.getDataWatcher().updateObject(22, Byte.valueOf((byte)(par1 ? 1 : 0)));
+		this.getDataWatcher().updateObject(22, Byte.valueOf((byte)(p_94096_1_ ? 1 : 0)));
 	}
 
-	public void setMinecartName(String par1Str)
+	public void setMinecartName(String p_96094_1_)
 	{
-		this.entityName = par1Str;
+		this.entityName = p_96094_1_;
 	}
 
 	public String getCommandSenderName()

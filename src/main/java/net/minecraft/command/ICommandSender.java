@@ -10,9 +10,9 @@ public interface ICommandSender
 
 	IChatComponent func_145748_c_();
 
-	void addChatMessage(IChatComponent var1);
+	void addChatMessage(IChatComponent p_145747_1_);
 
-	boolean canCommandSenderUseCommand(int var1, String var2);
+	boolean canCommandSenderUseCommand(int p_70003_1_, String p_70003_2_);
 
 	ChunkCoordinates getPlayerCoordinates();
 

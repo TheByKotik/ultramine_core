@@ -62,9 +62,9 @@ public class S18PacketEntityTeleport extends Packet
 		p_148840_1_.writeByte(this.field_149453_f);
 	}
 
-	public void processPacket(INetHandlerPlayClient p_149452_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_149452_1_.handleEntityTeleport(this);
+		p_148833_1_.handleEntityTeleport(this);
 	}
 
 	public void processPacket(INetHandler p_148833_1_)

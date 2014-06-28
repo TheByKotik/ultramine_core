@@ -23,9 +23,9 @@ public class FlatGeneratorInfo
 		return this.biomeToUse;
 	}
 
-	public void setBiome(int par1)
+	public void setBiome(int p_82647_1_)
 	{
-		this.biomeToUse = par1;
+		this.biomeToUse = p_82647_1_;
 	}
 
 	public Map getWorldFeatures()
@@ -120,9 +120,9 @@ public class FlatGeneratorInfo
 		return stringbuilder.toString();
 	}
 
-	private static FlatLayerInfo func_82646_a(String par0Str, int par1)
+	private static FlatLayerInfo func_82646_a(String p_82646_0_, int p_82646_1_)
 	{
-		String[] astring = par0Str.split("x", 2);
+		String[] astring = p_82646_0_.split("x", 2);
 		int j = 1;
 		int l = 0;
 
@@ -132,9 +132,9 @@ public class FlatGeneratorInfo
 			{
 				j = Integer.parseInt(astring[0]);
 
-				if (par1 + j >= 256)
+				if (p_82646_1_ + j >= 256)
 				{
-					j = 256 - par1;
+					j = 256 - p_82646_1_;
 				}
 
 				if (j < 0)
@@ -178,16 +178,16 @@ public class FlatGeneratorInfo
 		}
 
 		FlatLayerInfo flatlayerinfo = new FlatLayerInfo(j, Block.getBlockById(k), l);
-		flatlayerinfo.setMinY(par1);
+		flatlayerinfo.setMinY(p_82646_1_);
 		return flatlayerinfo;
 	}
 
-	private static List func_82652_b(String par0Str)
+	private static List func_82652_b(String p_82652_0_)
 	{
-		if (par0Str != null && par0Str.length() >= 1)
+		if (p_82652_0_ != null && p_82652_0_.length() >= 1)
 		{
 			ArrayList arraylist = new ArrayList();
-			String[] astring = par0Str.split(",");
+			String[] astring = p_82652_0_.split(",");
 			int i = 0;
 			String[] astring1 = astring;
 			int j = astring.length;
@@ -214,15 +214,15 @@ public class FlatGeneratorInfo
 		}
 	}
 
-	public static FlatGeneratorInfo createFlatGeneratorFromString(String par0Str)
+	public static FlatGeneratorInfo createFlatGeneratorFromString(String p_82651_0_)
 	{
-		if (par0Str == null)
+		if (p_82651_0_ == null)
 		{
 			return getDefaultFlatGenerator();
 		}
 		else
 		{
-			String[] astring = par0Str.split(";", -1);
+			String[] astring = p_82651_0_.split(";", -1);
 			int i = astring.length == 1 ? 0 : MathHelper.parseIntWithDefault(astring[0], 0);
 
 			if (i >= 0 && i <= 2)

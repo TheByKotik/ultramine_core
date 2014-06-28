@@ -14,6 +14,20 @@ public class JsonSerializableSet extends ForwardingSet implements IJsonSerializa
 	private final Set underlyingSet = Sets.newHashSet();
 	private static final String __OBFID = "CL_00001482";
 
+	public void func_152753_a(JsonElement p_152753_1_)
+	{
+		if (p_152753_1_.isJsonArray())
+		{
+			Iterator iterator = p_152753_1_.getAsJsonArray().iterator();
+
+			while (iterator.hasNext())
+			{
+				JsonElement jsonelement1 = (JsonElement)iterator.next();
+				this.add(jsonelement1.getAsString());
+			}
+		}
+	}
+
 	public JsonElement getSerializableElement()
 	{
 		JsonArray jsonarray = new JsonArray();

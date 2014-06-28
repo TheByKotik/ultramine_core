@@ -25,9 +25,9 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 	private EntityPlayer field_146084_br;
 	private static final String __OBFID = "CL_00001638";
 
-	public EntityAnimal(World par1World)
+	public EntityAnimal(World p_i1681_1_)
 	{
-		super(par1World);
+		super(p_i1681_1_);
 	}
 
 	protected void updateAITick()
@@ -68,32 +68,32 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 		}
 	}
 
-	protected void attackEntity(Entity par1Entity, float par2)
+	protected void attackEntity(Entity p_70785_1_, float p_70785_2_)
 	{
-		if (par1Entity instanceof EntityPlayer)
+		if (p_70785_1_ instanceof EntityPlayer)
 		{
-			if (par2 < 3.0F)
+			if (p_70785_2_ < 3.0F)
 			{
-				double d0 = par1Entity.posX - this.posX;
-				double d1 = par1Entity.posZ - this.posZ;
+				double d0 = p_70785_1_.posX - this.posX;
+				double d1 = p_70785_1_.posZ - this.posZ;
 				this.rotationYaw = (float)(Math.atan2(d1, d0) * 180.0D / Math.PI) - 90.0F;
 				this.hasAttacked = true;
 			}
 
-			EntityPlayer entityplayer = (EntityPlayer)par1Entity;
+			EntityPlayer entityplayer = (EntityPlayer)p_70785_1_;
 
 			if (entityplayer.getCurrentEquippedItem() == null || !this.isBreedingItem(entityplayer.getCurrentEquippedItem()))
 			{
 				this.entityToAttack = null;
 			}
 		}
-		else if (par1Entity instanceof EntityAnimal)
+		else if (p_70785_1_ instanceof EntityAnimal)
 		{
-			EntityAnimal entityanimal = (EntityAnimal)par1Entity;
+			EntityAnimal entityanimal = (EntityAnimal)p_70785_1_;
 
 			if (this.getGrowingAge() > 0 && entityanimal.getGrowingAge() < 0)
 			{
-				if ((double)par2 < 2.5D)
+				if ((double)p_70785_2_ < 2.5D)
 				{
 					this.hasAttacked = true;
 				}
@@ -105,7 +105,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 					entityanimal.entityToAttack = this;
 				}
 
-				if (entityanimal.entityToAttack == this && (double)par2 < 3.5D)
+				if (entityanimal.entityToAttack == this && (double)p_70785_2_ < 3.5D)
 				{
 					++entityanimal.inLove;
 					++this.inLove;
@@ -118,7 +118,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 
 					if (this.breeding == 60)
 					{
-						this.procreate((EntityAnimal)par1Entity);
+						this.procreate((EntityAnimal)p_70785_1_);
 					}
 				}
 				else
@@ -134,15 +134,15 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 		}
 	}
 
-	private void procreate(EntityAnimal par1EntityAnimal)
+	private void procreate(EntityAnimal p_70876_1_)
 	{
-		EntityAgeable entityageable = this.createChild(par1EntityAnimal);
+		EntityAgeable entityageable = this.createChild(p_70876_1_);
 
 		if (entityageable != null)
 		{
-			if (this.field_146084_br == null && par1EntityAnimal.func_146083_cb() != null)
+			if (this.field_146084_br == null && p_70876_1_.func_146083_cb() != null)
 			{
-				this.field_146084_br = par1EntityAnimal.func_146083_cb();
+				this.field_146084_br = p_70876_1_.func_146083_cb();
 			}
 
 			if (this.field_146084_br != null)
@@ -156,13 +156,13 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 			}
 
 			this.setGrowingAge(6000);
-			par1EntityAnimal.setGrowingAge(6000);
+			p_70876_1_.setGrowingAge(6000);
 			this.inLove = 0;
 			this.breeding = 0;
 			this.entityToAttack = null;
-			par1EntityAnimal.entityToAttack = null;
-			par1EntityAnimal.breeding = 0;
-			par1EntityAnimal.inLove = 0;
+			p_70876_1_.entityToAttack = null;
+			p_70876_1_.breeding = 0;
+			p_70876_1_.inLove = 0;
 			entityageable.setGrowingAge(-24000);
 			entityageable.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
 
@@ -178,7 +178,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 		}
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		if (this.isEntityInvulnerable())
 		{
@@ -200,25 +200,25 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 
 			this.entityToAttack = null;
 			this.inLove = 0;
-			return super.attackEntityFrom(par1DamageSource, par2);
+			return super.attackEntityFrom(p_70097_1_, p_70097_2_);
 		}
 	}
 
-	public float getBlockPathWeight(int par1, int par2, int par3)
+	public float getBlockPathWeight(int p_70783_1_, int p_70783_2_, int p_70783_3_)
 	{
-		return this.worldObj.getBlock(par1, par2 - 1, par3) == Blocks.grass ? 10.0F : this.worldObj.getLightBrightness(par1, par2, par3) - 0.5F;
+		return this.worldObj.getBlock(p_70783_1_, p_70783_2_ - 1, p_70783_3_) == Blocks.grass ? 10.0F : this.worldObj.getLightBrightness(p_70783_1_, p_70783_2_, p_70783_3_) - 0.5F;
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setInteger("InLove", this.inLove);
+		super.writeEntityToNBT(p_70014_1_);
+		p_70014_1_.setInteger("InLove", this.inLove);
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
-		this.inLove = par1NBTTagCompound.getInteger("InLove");
+		super.readEntityFromNBT(p_70037_1_);
+		this.inLove = p_70037_1_.getInteger("InLove");
 	}
 
 	protected Entity findPlayerToAttack()
@@ -299,38 +299,38 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 		return false;
 	}
 
-	protected int getExperiencePoints(EntityPlayer par1EntityPlayer)
+	protected int getExperiencePoints(EntityPlayer p_70693_1_)
 	{
 		return 1 + this.worldObj.rand.nextInt(3);
 	}
 
-	public boolean isBreedingItem(ItemStack par1ItemStack)
+	public boolean isBreedingItem(ItemStack p_70877_1_)
 	{
-		return par1ItemStack.getItem() == Items.wheat;
+		return p_70877_1_.getItem() == Items.wheat;
 	}
 
-	public boolean interact(EntityPlayer par1EntityPlayer)
+	public boolean interact(EntityPlayer p_70085_1_)
 	{
-		ItemStack itemstack = par1EntityPlayer.inventory.getCurrentItem();
+		ItemStack itemstack = p_70085_1_.inventory.getCurrentItem();
 
 		if (itemstack != null && this.isBreedingItem(itemstack) && this.getGrowingAge() == 0 && this.inLove <= 0)
 		{
-			if (!par1EntityPlayer.capabilities.isCreativeMode)
+			if (!p_70085_1_.capabilities.isCreativeMode)
 			{
 				--itemstack.stackSize;
 
 				if (itemstack.stackSize <= 0)
 				{
-					par1EntityPlayer.inventory.setInventorySlotContents(par1EntityPlayer.inventory.currentItem, (ItemStack)null);
+					p_70085_1_.inventory.setInventorySlotContents(p_70085_1_.inventory.currentItem, (ItemStack)null);
 				}
 			}
 
-			this.func_146082_f(par1EntityPlayer);
+			this.func_146082_f(p_70085_1_);
 			return true;
 		}
 		else
 		{
-			return super.interact(par1EntityPlayer);
+			return super.interact(p_70085_1_);
 		}
 	}
 
@@ -357,15 +357,15 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 		this.inLove = 0;
 	}
 
-	public boolean canMateWith(EntityAnimal par1EntityAnimal)
+	public boolean canMateWith(EntityAnimal p_70878_1_)
 	{
-		return par1EntityAnimal == this ? false : (par1EntityAnimal.getClass() != this.getClass() ? false : this.isInLove() && par1EntityAnimal.isInLove());
+		return p_70878_1_ == this ? false : (p_70878_1_.getClass() != this.getClass() ? false : this.isInLove() && p_70878_1_.isInLove());
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void handleHealthUpdate(byte par1)
+	public void handleHealthUpdate(byte p_70103_1_)
 	{
-		if (par1 == 18)
+		if (p_70103_1_ == 18)
 		{
 			for (int i = 0; i < 7; ++i)
 			{
@@ -377,7 +377,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 		}
 		else
 		{
-			super.handleHealthUpdate(par1);
+			super.handleHealthUpdate(p_70103_1_);
 		}
 	}
 }

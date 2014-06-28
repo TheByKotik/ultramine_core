@@ -23,14 +23,14 @@ public class CommandTeleport extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.tp.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length < 1)
+		if (p_71515_2_.length < 1)
 		{
 			throw new WrongUsageException("commands.tp.usage", new Object[0]);
 		}
@@ -38,13 +38,13 @@ public class CommandTeleport extends CommandBase
 		{
 			EntityPlayerMP entityplayermp;
 
-			if (par2ArrayOfStr.length != 2 && par2ArrayOfStr.length != 4)
+			if (p_71515_2_.length != 2 && p_71515_2_.length != 4)
 			{
-				entityplayermp = getCommandSenderAsPlayer(par1ICommandSender);
+				entityplayermp = getCommandSenderAsPlayer(p_71515_1_);
 			}
 			else
 			{
-				entityplayermp = getPlayer(par1ICommandSender, par2ArrayOfStr[0]);
+				entityplayermp = getPlayer(p_71515_1_, p_71515_2_[0]);
 
 				if (entityplayermp == null)
 				{
@@ -52,11 +52,11 @@ public class CommandTeleport extends CommandBase
 				}
 			}
 
-			if (par2ArrayOfStr.length != 3 && par2ArrayOfStr.length != 4)
+			if (p_71515_2_.length != 3 && p_71515_2_.length != 4)
 			{
-				if (par2ArrayOfStr.length == 1 || par2ArrayOfStr.length == 2)
+				if (p_71515_2_.length == 1 || p_71515_2_.length == 2)
 				{
-					EntityPlayerMP entityplayermp1 = getPlayer(par1ICommandSender, par2ArrayOfStr[par2ArrayOfStr.length - 1]);
+					EntityPlayerMP entityplayermp1 = getPlayer(p_71515_1_, p_71515_2_[p_71515_2_.length - 1]);
 
 					if (entityplayermp1 == null)
 					{
@@ -65,35 +65,35 @@ public class CommandTeleport extends CommandBase
 
 					if (entityplayermp1.worldObj != entityplayermp.worldObj)
 					{
-						notifyAdmins(par1ICommandSender, "commands.tp.notSameDimension", new Object[0]);
+						func_152373_a(p_71515_1_, this, "commands.tp.notSameDimension", new Object[0]);
 						return;
 					}
 
 					entityplayermp.mountEntity((Entity)null);
 					entityplayermp.playerNetServerHandler.setPlayerLocation(entityplayermp1.posX, entityplayermp1.posY, entityplayermp1.posZ, entityplayermp1.rotationYaw, entityplayermp1.rotationPitch);
-					notifyAdmins(par1ICommandSender, "commands.tp.success", new Object[] {entityplayermp.getCommandSenderName(), entityplayermp1.getCommandSenderName()});
+					func_152373_a(p_71515_1_, this, "commands.tp.success", new Object[] {entityplayermp.getCommandSenderName(), entityplayermp1.getCommandSenderName()});
 				}
 			}
 			else if (entityplayermp.worldObj != null)
 			{
-				int i = par2ArrayOfStr.length - 3;
-				double d0 = func_110666_a(par1ICommandSender, entityplayermp.posX, par2ArrayOfStr[i++]);
-				double d1 = func_110665_a(par1ICommandSender, entityplayermp.posY, par2ArrayOfStr[i++], 0, 0);
-				double d2 = func_110666_a(par1ICommandSender, entityplayermp.posZ, par2ArrayOfStr[i++]);
+				int i = p_71515_2_.length - 3;
+				double d0 = func_110666_a(p_71515_1_, entityplayermp.posX, p_71515_2_[i++]);
+				double d1 = func_110665_a(p_71515_1_, entityplayermp.posY, p_71515_2_[i++], 0, 0);
+				double d2 = func_110666_a(p_71515_1_, entityplayermp.posZ, p_71515_2_[i++]);
 				entityplayermp.mountEntity((Entity)null);
 				entityplayermp.setPositionAndUpdate(d0, d1, d2);
-				notifyAdmins(par1ICommandSender, "commands.tp.success.coordinates", new Object[] {entityplayermp.getCommandSenderName(), Double.valueOf(d0), Double.valueOf(d1), Double.valueOf(d2)});
+				func_152373_a(p_71515_1_, this, "commands.tp.success.coordinates", new Object[] {entityplayermp.getCommandSenderName(), Double.valueOf(d0), Double.valueOf(d1), Double.valueOf(d2)});
 			}
 		}
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		return par2ArrayOfStr.length != 1 && par2ArrayOfStr.length != 2 ? null : getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
+		return p_71516_2_.length != 1 && p_71516_2_.length != 2 ? null : getListOfStringsMatchingLastWord(p_71516_2_, MinecraftServer.getServer().getAllUsernames());
 	}
 
-	public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2)
+	public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_)
 	{
-		return par2 == 0;
+		return p_82358_2_ == 0;
 	}
 }

@@ -29,13 +29,13 @@ public class GuiTextField extends Gui
 	private boolean visible = true;
 	private static final String __OBFID = "CL_00000670";
 
-	public GuiTextField(FontRenderer par1FontRenderer, int par2, int par3, int par4, int par5)
+	public GuiTextField(FontRenderer p_i1032_1_, int p_i1032_2_, int p_i1032_3_, int p_i1032_4_, int p_i1032_5_)
 	{
-		this.field_146211_a = par1FontRenderer;
-		this.xPosition = par2;
-		this.yPosition = par3;
-		this.width = par4;
-		this.height = par5;
+		this.field_146211_a = p_i1032_1_;
+		this.xPosition = p_i1032_2_;
+		this.yPosition = p_i1032_3_;
+		this.width = p_i1032_4_;
+		this.height = p_i1032_5_;
 	}
 
 	public void updateCursorCounter()

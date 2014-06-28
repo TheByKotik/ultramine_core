@@ -5,9 +5,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public interface IPlayerFileData
 {
-	void writePlayerData(EntityPlayer var1);
+	void writePlayerData(EntityPlayer p_75753_1_);
 
-	NBTTagCompound readPlayerData(EntityPlayer var1);
+	NBTTagCompound readPlayerData(EntityPlayer p_75752_1_);
 
 	String[] getAvailablePlayerDat();
 }

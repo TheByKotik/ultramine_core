@@ -33,85 +33,85 @@ public class DataWatcher
 		this.field_151511_a = p_i45313_1_;
 	}
 
-	public void addObject(int par1, Object par2Obj)
+	public void addObject(int p_75682_1_, Object p_75682_2_)
 	{
-		Integer integer = (Integer)dataTypes.get(par2Obj.getClass());
+		Integer integer = (Integer)dataTypes.get(p_75682_2_.getClass());
 
 		if (integer == null)
 		{
-			throw new IllegalArgumentException("Unknown data type: " + par2Obj.getClass());
+			throw new IllegalArgumentException("Unknown data type: " + p_75682_2_.getClass());
 		}
-		else if (par1 > 31)
+		else if (p_75682_1_ > 31)
 		{
-			throw new IllegalArgumentException("Data value id is too big with " + par1 + "! (Max is " + 31 + ")");
+			throw new IllegalArgumentException("Data value id is too big with " + p_75682_1_ + "! (Max is " + 31 + ")");
 		}
-		else if (this.watchedObjects.containsKey(Integer.valueOf(par1)))
+		else if (this.watchedObjects.containsKey(Integer.valueOf(p_75682_1_)))
 		{
-			throw new IllegalArgumentException("Duplicate id value for " + par1 + "!");
+			throw new IllegalArgumentException("Duplicate id value for " + p_75682_1_ + "!");
 		}
 		else
 		{
-			DataWatcher.WatchableObject watchableobject = new DataWatcher.WatchableObject(integer.intValue(), par1, par2Obj);
+			DataWatcher.WatchableObject watchableobject = new DataWatcher.WatchableObject(integer.intValue(), p_75682_1_, p_75682_2_);
 			this.lock.writeLock().lock();
-			this.watchedObjects.put(Integer.valueOf(par1), watchableobject);
+			this.watchedObjects.put(Integer.valueOf(p_75682_1_), watchableobject);
 			this.lock.writeLock().unlock();
 			this.isBlank = false;
 		}
 	}
 
-	public void addObjectByDataType(int par1, int par2)
+	public void addObjectByDataType(int p_82709_1_, int p_82709_2_)
 	{
-		DataWatcher.WatchableObject watchableobject = new DataWatcher.WatchableObject(par2, par1, (Object)null);
+		DataWatcher.WatchableObject watchableobject = new DataWatcher.WatchableObject(p_82709_2_, p_82709_1_, (Object)null);
 		this.lock.writeLock().lock();
-		this.watchedObjects.put(Integer.valueOf(par1), watchableobject);
+		this.watchedObjects.put(Integer.valueOf(p_82709_1_), watchableobject);
 		this.lock.writeLock().unlock();
 		this.isBlank = false;
 	}
 
-	public byte getWatchableObjectByte(int par1)
+	public byte getWatchableObjectByte(int p_75683_1_)
 	{
-		return ((Byte)this.getWatchedObject(par1).getObject()).byteValue();
+		return ((Byte)this.getWatchedObject(p_75683_1_).getObject()).byteValue();
 	}
 
-	public short getWatchableObjectShort(int par1)
+	public short getWatchableObjectShort(int p_75693_1_)
 	{
-		return ((Short)this.getWatchedObject(par1).getObject()).shortValue();
+		return ((Short)this.getWatchedObject(p_75693_1_).getObject()).shortValue();
 	}
 
-	public int getWatchableObjectInt(int par1)
+	public int getWatchableObjectInt(int p_75679_1_)
 	{
-		return ((Integer)this.getWatchedObject(par1).getObject()).intValue();
+		return ((Integer)this.getWatchedObject(p_75679_1_).getObject()).intValue();
 	}
 
-	public float getWatchableObjectFloat(int par1)
+	public float getWatchableObjectFloat(int p_111145_1_)
 	{
-		return ((Float)this.getWatchedObject(par1).getObject()).floatValue();
+		return ((Float)this.getWatchedObject(p_111145_1_).getObject()).floatValue();
 	}
 
-	public String getWatchableObjectString(int par1)
+	public String getWatchableObjectString(int p_75681_1_)
 	{
-		return (String)this.getWatchedObject(par1).getObject();
+		return (String)this.getWatchedObject(p_75681_1_).getObject();
 	}
 
-	public ItemStack getWatchableObjectItemStack(int par1)
+	public ItemStack getWatchableObjectItemStack(int p_82710_1_)
 	{
-		return (ItemStack)this.getWatchedObject(par1).getObject();
+		return (ItemStack)this.getWatchedObject(p_82710_1_).getObject();
 	}
 
-	private DataWatcher.WatchableObject getWatchedObject(int par1)
+	private DataWatcher.WatchableObject getWatchedObject(int p_75691_1_)
 	{
 		this.lock.readLock().lock();
 		DataWatcher.WatchableObject watchableobject;
 
 		try
 		{
-			watchableobject = (DataWatcher.WatchableObject)this.watchedObjects.get(Integer.valueOf(par1));
+			watchableobject = (DataWatcher.WatchableObject)this.watchedObjects.get(Integer.valueOf(p_75691_1_));
 		}
 		catch (Throwable throwable)
 		{
 			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Getting synched entity data");
 			CrashReportCategory crashreportcategory = crashreport.makeCategory("Synched entity data");
-			crashreportcategory.addCrashSection("Data ID", Integer.valueOf(par1));
+			crashreportcategory.addCrashSection("Data ID", Integer.valueOf(p_75691_1_));
 			throw new ReportedException(crashreport);
 		}
 
@@ -119,22 +119,22 @@ public class DataWatcher
 		return watchableobject;
 	}
 
-	public void updateObject(int par1, Object par2Obj)
+	public void updateObject(int p_75692_1_, Object p_75692_2_)
 	{
-		DataWatcher.WatchableObject watchableobject = this.getWatchedObject(par1);
+		DataWatcher.WatchableObject watchableobject = this.getWatchedObject(p_75692_1_);
 
-		if (ObjectUtils.notEqual(par2Obj, watchableobject.getObject()))
+		if (ObjectUtils.notEqual(p_75692_2_, watchableobject.getObject()))
 		{
-			watchableobject.setObject(par2Obj);
-			this.field_151511_a.func_145781_i(par1);
+			watchableobject.setObject(p_75692_2_);
+			this.field_151511_a.func_145781_i(p_75692_1_);
 			watchableobject.setWatched(true);
 			this.objectChanged = true;
 		}
 	}
 
-	public void setObjectWatched(int par1)
+	public void setObjectWatched(int p_82708_1_)
 	{
-		this.getWatchedObject(par1).watched = true;
+		this.getWatchedObject(p_82708_1_).watched = true;
 		this.objectChanged = true;
 	}
 
@@ -310,10 +310,10 @@ public class DataWatcher
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void updateWatchedObjectsFromList(List par1List)
+	public void updateWatchedObjectsFromList(List p_75687_1_)
 	{
 		this.lock.writeLock().lock();
-		Iterator iterator = par1List.iterator();
+		Iterator iterator = p_75687_1_.iterator();
 
 		while (iterator.hasNext())
 		{
@@ -360,11 +360,11 @@ public class DataWatcher
 			private boolean watched;
 			private static final String __OBFID = "CL_00001560";
 
-			public WatchableObject(int par1, int par2, Object par3Obj)
+			public WatchableObject(int p_i1603_1_, int p_i1603_2_, Object p_i1603_3_)
 			{
-				this.dataValueId = par2;
-				this.watchedObject = par3Obj;
-				this.objectType = par1;
+				this.dataValueId = p_i1603_2_;
+				this.watchedObject = p_i1603_3_;
+				this.objectType = p_i1603_1_;
 				this.watched = true;
 			}
 
@@ -373,9 +373,9 @@ public class DataWatcher
 				return this.dataValueId;
 			}
 
-			public void setObject(Object par1Obj)
+			public void setObject(Object p_75673_1_)
 			{
-				this.watchedObject = par1Obj;
+				this.watchedObject = p_75673_1_;
 			}
 
 			public Object getObject()
@@ -393,9 +393,9 @@ public class DataWatcher
 				return this.watched;
 			}
 
-			public void setWatched(boolean par1)
+			public void setWatched(boolean p_75671_1_)
 			{
-				this.watched = par1;
+				this.watched = p_75671_1_;
 			}
 		}
 }

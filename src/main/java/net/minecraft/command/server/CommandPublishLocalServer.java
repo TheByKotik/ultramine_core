@@ -14,22 +14,22 @@ public class CommandPublishLocalServer extends CommandBase
 		return "publish";
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.publish.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
 		String s = MinecraftServer.getServer().shareToLAN(WorldSettings.GameType.SURVIVAL, false);
 
 		if (s != null)
 		{
-			notifyAdmins(par1ICommandSender, "commands.publish.started", new Object[] {s});
+			func_152373_a(p_71515_1_, this, "commands.publish.started", new Object[] {s});
 		}
 		else
 		{
-			notifyAdmins(par1ICommandSender, "commands.publish.failed", new Object[0]);
+			func_152373_a(p_71515_1_, this, "commands.publish.failed", new Object[0]);
 		}
 	}
 }

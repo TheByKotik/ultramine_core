@@ -15,16 +15,16 @@ public class ItemFirework extends Item
 {
 	private static final String __OBFID = "CL_00000031";
 
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
-		if (!par3World.isRemote)
+		if (!p_77648_3_.isRemote)
 		{
-			EntityFireworkRocket entityfireworkrocket = new EntityFireworkRocket(par3World, (double)((float)par4 + par8), (double)((float)par5 + par9), (double)((float)par6 + par10), par1ItemStack);
-			par3World.spawnEntityInWorld(entityfireworkrocket);
+			EntityFireworkRocket entityfireworkrocket = new EntityFireworkRocket(p_77648_3_, (double)((float)p_77648_4_ + p_77648_8_), (double)((float)p_77648_5_ + p_77648_9_), (double)((float)p_77648_6_ + p_77648_10_), p_77648_1_);
+			p_77648_3_.spawnEntityInWorld(entityfireworkrocket);
 
-			if (!par2EntityPlayer.capabilities.isCreativeMode)
+			if (!p_77648_2_.capabilities.isCreativeMode)
 			{
-				--par1ItemStack.stackSize;
+				--p_77648_1_.stackSize;
 			}
 
 			return true;
@@ -36,17 +36,17 @@ public class ItemFirework extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_)
 	{
-		if (par1ItemStack.hasTagCompound())
+		if (p_77624_1_.hasTagCompound())
 		{
-			NBTTagCompound nbttagcompound = par1ItemStack.getTagCompound().getCompoundTag("Fireworks");
+			NBTTagCompound nbttagcompound = p_77624_1_.getTagCompound().getCompoundTag("Fireworks");
 
 			if (nbttagcompound != null)
 			{
 				if (nbttagcompound.hasKey("Flight", 99))
 				{
-					par3List.add(StatCollector.translateToLocal("item.fireworks.flight") + " " + nbttagcompound.getByte("Flight"));
+					p_77624_3_.add(StatCollector.translateToLocal("item.fireworks.flight") + " " + nbttagcompound.getByte("Flight"));
 				}
 
 				NBTTagList nbttaglist = nbttagcompound.getTagList("Explosions", 10);
@@ -66,7 +66,7 @@ public class ItemFirework extends Item
 								arraylist.set(j, "  " + (String)arraylist.get(j));
 							}
 
-							par3List.addAll(arraylist);
+							p_77624_3_.addAll(arraylist);
 						}
 					}
 				}

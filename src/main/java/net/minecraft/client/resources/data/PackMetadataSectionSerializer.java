@@ -8,6 +8,7 @@ import com.google.gson.JsonSerializer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.lang.reflect.Type;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.JsonUtils;
 
 @SideOnly(Side.CLIENT)
@@ -15,19 +16,19 @@ public class PackMetadataSectionSerializer extends BaseMetadataSectionSerializer
 {
 	private static final String __OBFID = "CL_00001113";
 
-	public PackMetadataSection deserialize(JsonElement par1JsonElement, Type par2Type, JsonDeserializationContext par3JsonDeserializationContext)
+	public PackMetadataSection deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_)
 	{
-		JsonObject jsonobject = par1JsonElement.getAsJsonObject();
-		String s = JsonUtils.getJsonObjectStringFieldValue(jsonobject, "description");
+		JsonObject jsonobject = p_deserialize_1_.getAsJsonObject();
+		IChatComponent ichatcomponent = (IChatComponent)p_deserialize_3_.deserialize(jsonobject.get("description"), IChatComponent.class);
 		int i = JsonUtils.getJsonObjectIntegerFieldValue(jsonobject, "pack_format");
-		return new PackMetadataSection(s, i);
+		return new PackMetadataSection(ichatcomponent, i);
 	}
 
-	public JsonElement serialize(PackMetadataSection par1PackMetadataSection, Type par2Type, JsonSerializationContext par3JsonSerializationContext)
+	public JsonElement serialize(PackMetadataSection p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
 	{
 		JsonObject jsonobject = new JsonObject();
-		jsonobject.addProperty("pack_format", Integer.valueOf(par1PackMetadataSection.getPackFormat()));
-		jsonobject.addProperty("description", par1PackMetadataSection.getPackDescription());
+		jsonobject.addProperty("pack_format", Integer.valueOf(p_serialize_1_.getPackFormat()));
+		jsonobject.add("description", p_serialize_3_.serialize(p_serialize_1_.func_152805_a()));
 		return jsonobject;
 	}
 
@@ -36,8 +37,8 @@ public class PackMetadataSectionSerializer extends BaseMetadataSectionSerializer
 		return "pack";
 	}
 
-	public JsonElement serialize(Object par1Obj, Type par2Type, JsonSerializationContext par3JsonSerializationContext)
+	public JsonElement serialize(Object p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
 	{
-		return this.serialize((PackMetadataSection)par1Obj, par2Type, par3JsonSerializationContext);
+		return this.serialize((PackMetadataSection)p_serialize_1_, p_serialize_2_, p_serialize_3_);
 	}
 }

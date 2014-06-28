@@ -38,37 +38,37 @@ public class RenderItemFrame extends Render
 	private IIcon field_94147_f;
 	private static final String __OBFID = "CL_00001002";
 
-	public void updateIcons(IIconRegister par1IconRegister)
+	public void updateIcons(IIconRegister p_94143_1_)
 	{
-		this.field_94147_f = par1IconRegister.registerIcon("itemframe_background");
+		this.field_94147_f = p_94143_1_.registerIcon("itemframe_background");
 	}
 
-	public void doRender(EntityItemFrame par1EntityItemFrame, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityItemFrame p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
 		GL11.glPushMatrix();
-		double d3 = par1EntityItemFrame.posX - par2 - 0.5D;
-		double d4 = par1EntityItemFrame.posY - par4 - 0.5D;
-		double d5 = par1EntityItemFrame.posZ - par6 - 0.5D;
-		int i = par1EntityItemFrame.field_146063_b + Direction.offsetX[par1EntityItemFrame.hangingDirection];
-		int j = par1EntityItemFrame.field_146064_c;
-		int k = par1EntityItemFrame.field_146062_d + Direction.offsetZ[par1EntityItemFrame.hangingDirection];
+		double d3 = p_76986_1_.posX - p_76986_2_ - 0.5D;
+		double d4 = p_76986_1_.posY - p_76986_4_ - 0.5D;
+		double d5 = p_76986_1_.posZ - p_76986_6_ - 0.5D;
+		int i = p_76986_1_.field_146063_b + Direction.offsetX[p_76986_1_.hangingDirection];
+		int j = p_76986_1_.field_146064_c;
+		int k = p_76986_1_.field_146062_d + Direction.offsetZ[p_76986_1_.hangingDirection];
 		GL11.glTranslated((double)i - d3, (double)j - d4, (double)k - d5);
 
-		if (par1EntityItemFrame.getDisplayedItem() != null && par1EntityItemFrame.getDisplayedItem().getItem() == Items.filled_map)
+		if (p_76986_1_.getDisplayedItem() != null && p_76986_1_.getDisplayedItem().getItem() == Items.filled_map)
 		{
-			this.func_147915_b(par1EntityItemFrame);
+			this.func_147915_b(p_76986_1_);
 		}
 		else
 		{
-			this.renderFrameItemAsBlock(par1EntityItemFrame);
+			this.renderFrameItemAsBlock(p_76986_1_);
 		}
 
-		this.func_82402_b(par1EntityItemFrame);
+		this.func_82402_b(p_76986_1_);
 		GL11.glPopMatrix();
-		this.func_147914_a(par1EntityItemFrame, par2 + (double)((float)Direction.offsetX[par1EntityItemFrame.hangingDirection] * 0.3F), par4 - 0.25D, par6 + (double)((float)Direction.offsetZ[par1EntityItemFrame.hangingDirection] * 0.3F));
+		this.func_147914_a(p_76986_1_, p_76986_2_ + (double)((float)Direction.offsetX[p_76986_1_.hangingDirection] * 0.3F), p_76986_4_ - 0.25D, p_76986_6_ + (double)((float)Direction.offsetZ[p_76986_1_.hangingDirection] * 0.3F));
 	}
 
-	protected ResourceLocation getEntityTexture(EntityItemFrame par1EntityItemFrame)
+	protected ResourceLocation getEntityTexture(EntityItemFrame p_110775_1_)
 	{
 		return null;
 	}
@@ -111,10 +111,10 @@ public class RenderItemFrame extends Render
 		GL11.glPopMatrix();
 	}
 
-	private void renderFrameItemAsBlock(EntityItemFrame par1EntityItemFrame)
+	private void renderFrameItemAsBlock(EntityItemFrame p_82403_1_)
 	{
 		GL11.glPushMatrix();
-		GL11.glRotatef(par1EntityItemFrame.rotationYaw, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(p_82403_1_.rotationYaw, 0.0F, 1.0F, 0.0F);
 		this.renderManager.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		Block block = Blocks.planks;
 		float f = 0.0625F;
@@ -149,22 +149,22 @@ public class RenderItemFrame extends Render
 		GL11.glPopMatrix();
 	}
 
-	private void func_82402_b(EntityItemFrame par1EntityItemFrame)
+	private void func_82402_b(EntityItemFrame p_82402_1_)
 	{
-		ItemStack itemstack = par1EntityItemFrame.getDisplayedItem();
+		ItemStack itemstack = p_82402_1_.getDisplayedItem();
 
 		if (itemstack != null)
 		{
-			EntityItem entityitem = new EntityItem(par1EntityItemFrame.worldObj, 0.0D, 0.0D, 0.0D, itemstack);
+			EntityItem entityitem = new EntityItem(p_82402_1_.worldObj, 0.0D, 0.0D, 0.0D, itemstack);
 			Item item = entityitem.getEntityItem().getItem();
 			entityitem.getEntityItem().stackSize = 1;
 			entityitem.hoverStart = 0.0F;
 			GL11.glPushMatrix();
-			GL11.glTranslatef(-0.453125F * (float)Direction.offsetX[par1EntityItemFrame.hangingDirection], -0.18F, -0.453125F * (float)Direction.offsetZ[par1EntityItemFrame.hangingDirection]);
-			GL11.glRotatef(180.0F + par1EntityItemFrame.rotationYaw, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef((float)(-90 * par1EntityItemFrame.getRotation()), 0.0F, 0.0F, 1.0F);
+			GL11.glTranslatef(-0.453125F * (float)Direction.offsetX[p_82402_1_.hangingDirection], -0.18F, -0.453125F * (float)Direction.offsetZ[p_82402_1_.hangingDirection]);
+			GL11.glRotatef(180.0F + p_82402_1_.rotationYaw, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef((float)(-90 * p_82402_1_.getRotation()), 0.0F, 0.0F, 1.0F);
 
-			switch (par1EntityItemFrame.getRotation())
+			switch (p_82402_1_.getRotation())
 			{
 				case 1:
 					GL11.glTranslatef(-0.16F, -0.16F, 0.0F);
@@ -185,7 +185,7 @@ public class RenderItemFrame extends Render
 				float f = 0.0078125F;
 				GL11.glScalef(f, f, f);
 
-				switch (par1EntityItemFrame.getRotation())
+				switch (p_82402_1_.getRotation())
 				{
 					case 0:
 						GL11.glTranslatef(-64.0F, -87.0F, -1.5F);
@@ -201,7 +201,7 @@ public class RenderItemFrame extends Render
 				}
 
 				GL11.glNormal3f(0.0F, 0.0F, -1.0F);
-				MapData mapdata = Items.filled_map.getMapData(entityitem.getEntityItem(), par1EntityItemFrame.worldObj);
+				MapData mapdata = Items.filled_map.getMapData(entityitem.getEntityItem(), p_82402_1_.worldObj);
 				GL11.glTranslatef(0.0F, 0.0F, -1.0F);
 
 				if (mapdata != null)
@@ -224,7 +224,7 @@ public class RenderItemFrame extends Render
 						double d1 = texturecompass.angleDelta;
 						texturecompass.currentAngle = 0.0D;
 						texturecompass.angleDelta = 0.0D;
-						texturecompass.updateCompass(par1EntityItemFrame.worldObj, par1EntityItemFrame.posX, par1EntityItemFrame.posZ, (double)MathHelper.wrapAngleTo180_float((float)(180 + par1EntityItemFrame.hangingDirection * 90)), false, true);
+						texturecompass.updateCompass(p_82402_1_.worldObj, p_82402_1_.posX, p_82402_1_.posZ, (double)MathHelper.wrapAngleTo180_float((float)(180 + p_82402_1_.hangingDirection * 90)), false, true);
 						texturecompass.currentAngle = d0;
 						texturecompass.angleDelta = d1;
 					}
@@ -302,13 +302,13 @@ public class RenderItemFrame extends Render
 		}
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityItemFrame)par1Entity);
+		return this.getEntityTexture((EntityItemFrame)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityItemFrame)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityItemFrame)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

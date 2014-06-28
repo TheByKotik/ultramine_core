@@ -17,15 +17,15 @@ public class GuiSleepMP extends GuiChat
 		this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height - 40, I18n.format("multiplayer.stopSleeping", new Object[0])));
 	}
 
-	protected void keyTyped(char par1, int par2)
+	protected void keyTyped(char p_73869_1_, int p_73869_2_)
 	{
-		if (par2 == 1)
+		if (p_73869_2_ == 1)
 		{
 			this.func_146418_g();
 		}
-		else if (par2 != 28 && par2 != 156)
+		else if (p_73869_2_ != 28 && p_73869_2_ != 156)
 		{
-			super.keyTyped(par1, par2);
+			super.keyTyped(p_73869_1_, p_73869_2_);
 		}
 		else
 		{

@@ -9,9 +9,9 @@ public class EntityBodyHelper
 	private float field_75667_c;
 	private static final String __OBFID = "CL_00001570";
 
-	public EntityBodyHelper(EntityLivingBase par1EntityLivingBase)
+	public EntityBodyHelper(EntityLivingBase p_i1611_1_)
 	{
-		this.theLiving = par1EntityLivingBase;
+		this.theLiving = p_i1611_1_;
 	}
 
 	public void func_75664_a()
@@ -50,20 +50,20 @@ public class EntityBodyHelper
 		}
 	}
 
-	private float func_75665_a(float par1, float par2, float par3)
+	private float func_75665_a(float p_75665_1_, float p_75665_2_, float p_75665_3_)
 	{
-		float f3 = MathHelper.wrapAngleTo180_float(par1 - par2);
+		float f3 = MathHelper.wrapAngleTo180_float(p_75665_1_ - p_75665_2_);
 
-		if (f3 < -par3)
+		if (f3 < -p_75665_3_)
 		{
-			f3 = -par3;
+			f3 = -p_75665_3_;
 		}
 
-		if (f3 >= par3)
+		if (f3 >= p_75665_3_)
 		{
-			f3 = par3;
+			f3 = p_75665_3_;
 		}
 
-		return par1 - f3;
+		return p_75665_1_ - f3;
 	}
 }

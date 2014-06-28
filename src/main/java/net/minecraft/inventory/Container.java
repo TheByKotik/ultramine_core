@@ -27,24 +27,24 @@ public abstract class Container
 	private Set playerList = new HashSet();
 	private static final String __OBFID = "CL_00001730";
 
-	protected Slot addSlotToContainer(Slot par1Slot)
+	protected Slot addSlotToContainer(Slot p_75146_1_)
 	{
-		par1Slot.slotNumber = this.inventorySlots.size();
-		this.inventorySlots.add(par1Slot);
+		p_75146_1_.slotNumber = this.inventorySlots.size();
+		this.inventorySlots.add(p_75146_1_);
 		this.inventoryItemStacks.add((Object)null);
-		return par1Slot;
+		return p_75146_1_;
 	}
 
-	public void addCraftingToCrafters(ICrafting par1ICrafting)
+	public void addCraftingToCrafters(ICrafting p_75132_1_)
 	{
-		if (this.crafters.contains(par1ICrafting))
+		if (this.crafters.contains(p_75132_1_))
 		{
 			throw new IllegalArgumentException("Listener already listening");
 		}
 		else
 		{
-			this.crafters.add(par1ICrafting);
-			par1ICrafting.sendContainerAndContentsToPlayer(this, this.getInventory());
+			this.crafters.add(p_75132_1_);
+			p_75132_1_.sendContainerAndContentsToPlayer(this, this.getInventory());
 			this.detectAndSendChanges();
 		}
 	}
@@ -62,9 +62,9 @@ public abstract class Container
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void removeCraftingFromCrafters(ICrafting par1ICrafting)
+	public void removeCraftingFromCrafters(ICrafting p_82847_1_)
 	{
-		this.crafters.remove(par1ICrafting);
+		this.crafters.remove(p_82847_1_);
 	}
 
 	public void detectAndSendChanges()
@@ -87,18 +87,18 @@ public abstract class Container
 		}
 	}
 
-	public boolean enchantItem(EntityPlayer par1EntityPlayer, int par2)
+	public boolean enchantItem(EntityPlayer p_75140_1_, int p_75140_2_)
 	{
 		return false;
 	}
 
-	public Slot getSlotFromInventory(IInventory par1IInventory, int par2)
+	public Slot getSlotFromInventory(IInventory p_75147_1_, int p_75147_2_)
 	{
 		for (int j = 0; j < this.inventorySlots.size(); ++j)
 		{
 			Slot slot = (Slot)this.inventorySlots.get(j);
 
-			if (slot.isSlotInInventory(par1IInventory, par2))
+			if (slot.isSlotInInventory(p_75147_1_, p_75147_2_))
 			{
 				return slot;
 			}
@@ -107,28 +107,28 @@ public abstract class Container
 		return null;
 	}
 
-	public Slot getSlot(int par1)
+	public Slot getSlot(int p_75139_1_)
 	{
-		return (Slot)this.inventorySlots.get(par1);
+		return (Slot)this.inventorySlots.get(p_75139_1_);
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
 	{
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = (Slot)this.inventorySlots.get(p_82846_2_);
 		return slot != null ? slot.getStack() : null;
 	}
 
-	public ItemStack slotClick(int par1, int par2, int par3, EntityPlayer par4EntityPlayer)
+	public ItemStack slotClick(int p_75144_1_, int p_75144_2_, int p_75144_3_, EntityPlayer p_75144_4_)
 	{
 		ItemStack itemstack = null;
-		InventoryPlayer inventoryplayer = par4EntityPlayer.inventory;
+		InventoryPlayer inventoryplayer = p_75144_4_.inventory;
 		int i1;
 		ItemStack itemstack3;
 
-		if (par3 == 5)
+		if (p_75144_3_ == 5)
 		{
 			int l = this.field_94536_g;
-			this.field_94536_g = func_94532_c(par2);
+			this.field_94536_g = func_94532_c(p_75144_2_);
 
 			if ((l != 1 || this.field_94536_g != 2) && l != this.field_94536_g)
 			{
@@ -140,7 +140,7 @@ public abstract class Container
 			}
 			else if (this.field_94536_g == 0)
 			{
-				this.field_94535_f = func_94529_b(par2);
+				this.field_94535_f = func_94529_b(p_75144_2_);
 
 				if (func_94528_d(this.field_94535_f))
 				{
@@ -154,7 +154,7 @@ public abstract class Container
 			}
 			else if (this.field_94536_g == 1)
 			{
-				Slot slot = (Slot)this.inventorySlots.get(par1);
+				Slot slot = (Slot)this.inventorySlots.get(p_75144_1_);
 
 				if (slot != null && func_94527_a(slot, inventoryplayer.getItemStack(), true) && slot.isItemValid(inventoryplayer.getItemStack()) && inventoryplayer.getItemStack().stackSize > this.field_94537_h.size() && this.canDragIntoSlot(slot))
 				{
@@ -221,21 +221,21 @@ public abstract class Container
 			int l1;
 			ItemStack itemstack5;
 
-			if ((par3 == 0 || par3 == 1) && (par2 == 0 || par2 == 1))
+			if ((p_75144_3_ == 0 || p_75144_3_ == 1) && (p_75144_2_ == 0 || p_75144_2_ == 1))
 			{
-				if (par1 == -999)
+				if (p_75144_1_ == -999)
 				{
-					if (inventoryplayer.getItemStack() != null && par1 == -999)
+					if (inventoryplayer.getItemStack() != null && p_75144_1_ == -999)
 					{
-						if (par2 == 0)
+						if (p_75144_2_ == 0)
 						{
-							par4EntityPlayer.dropPlayerItemWithRandomChoice(inventoryplayer.getItemStack(), true);
+							p_75144_4_.dropPlayerItemWithRandomChoice(inventoryplayer.getItemStack(), true);
 							inventoryplayer.setItemStack((ItemStack)null);
 						}
 
-						if (par2 == 1)
+						if (p_75144_2_ == 1)
 						{
-							par4EntityPlayer.dropPlayerItemWithRandomChoice(inventoryplayer.getItemStack().splitStack(1), true);
+							p_75144_4_.dropPlayerItemWithRandomChoice(inventoryplayer.getItemStack().splitStack(1), true);
 
 							if (inventoryplayer.getItemStack().stackSize == 0)
 							{
@@ -244,18 +244,18 @@ public abstract class Container
 						}
 					}
 				}
-				else if (par3 == 1)
+				else if (p_75144_3_ == 1)
 				{
-					if (par1 < 0)
+					if (p_75144_1_ < 0)
 					{
 						return null;
 					}
 
-					slot2 = (Slot)this.inventorySlots.get(par1);
+					slot2 = (Slot)this.inventorySlots.get(p_75144_1_);
 
-					if (slot2 != null && slot2.canTakeStack(par4EntityPlayer))
+					if (slot2 != null && slot2.canTakeStack(p_75144_4_))
 					{
-						itemstack3 = this.transferStackInSlot(par4EntityPlayer, par1);
+						itemstack3 = this.transferStackInSlot(p_75144_4_, p_75144_1_);
 
 						if (itemstack3 != null)
 						{
@@ -264,19 +264,19 @@ public abstract class Container
 
 							if (slot2.getStack() != null && slot2.getStack().getItem() == item)
 							{
-								this.retrySlotClick(par1, par2, true, par4EntityPlayer);
+								this.retrySlotClick(p_75144_1_, p_75144_2_, true, p_75144_4_);
 							}
 						}
 					}
 				}
 				else
 				{
-					if (par1 < 0)
+					if (p_75144_1_ < 0)
 					{
 						return null;
 					}
 
-					slot2 = (Slot)this.inventorySlots.get(par1);
+					slot2 = (Slot)this.inventorySlots.get(p_75144_1_);
 
 					if (slot2 != null)
 					{
@@ -292,7 +292,7 @@ public abstract class Container
 						{
 							if (itemstack4 != null && slot2.isItemValid(itemstack4))
 							{
-								l1 = par2 == 0 ? itemstack4.stackSize : 1;
+								l1 = p_75144_2_ == 0 ? itemstack4.stackSize : 1;
 
 								if (l1 > slot2.getSlotStackLimit())
 								{
@@ -310,11 +310,11 @@ public abstract class Container
 								}
 							}
 						}
-						else if (slot2.canTakeStack(par4EntityPlayer))
+						else if (slot2.canTakeStack(p_75144_4_))
 						{
 							if (itemstack4 == null)
 							{
-								l1 = par2 == 0 ? itemstack3.stackSize : (itemstack3.stackSize + 1) / 2;
+								l1 = p_75144_2_ == 0 ? itemstack3.stackSize : (itemstack3.stackSize + 1) / 2;
 								itemstack5 = slot2.decrStackSize(l1);
 								inventoryplayer.setItemStack(itemstack5);
 
@@ -323,13 +323,13 @@ public abstract class Container
 									slot2.putStack((ItemStack)null);
 								}
 
-								slot2.onPickupFromSlot(par4EntityPlayer, inventoryplayer.getItemStack());
+								slot2.onPickupFromSlot(p_75144_4_, inventoryplayer.getItemStack());
 							}
 							else if (slot2.isItemValid(itemstack4))
 							{
 								if (itemstack3.getItem() == itemstack4.getItem() && itemstack3.getItemDamage() == itemstack4.getItemDamage() && ItemStack.areItemStackTagsEqual(itemstack3, itemstack4))
 								{
-									l1 = par2 == 0 ? itemstack4.stackSize : 1;
+									l1 = p_75144_2_ == 0 ? itemstack4.stackSize : 1;
 
 									if (l1 > slot2.getSlotStackLimit() - itemstack3.stackSize)
 									{
@@ -370,7 +370,7 @@ public abstract class Container
 										slot2.putStack((ItemStack)null);
 									}
 
-									slot2.onPickupFromSlot(par4EntityPlayer, inventoryplayer.getItemStack());
+									slot2.onPickupFromSlot(p_75144_4_, inventoryplayer.getItemStack());
 								}
 							}
 						}
@@ -379,13 +379,13 @@ public abstract class Container
 					}
 				}
 			}
-			else if (par3 == 2 && par2 >= 0 && par2 < 9)
+			else if (p_75144_3_ == 2 && p_75144_2_ >= 0 && p_75144_2_ < 9)
 			{
-				slot2 = (Slot)this.inventorySlots.get(par1);
+				slot2 = (Slot)this.inventorySlots.get(p_75144_1_);
 
-				if (slot2.canTakeStack(par4EntityPlayer))
+				if (slot2.canTakeStack(p_75144_4_))
 				{
-					itemstack3 = inventoryplayer.getStackInSlot(par2);
+					itemstack3 = inventoryplayer.getStackInSlot(p_75144_2_);
 					boolean flag = itemstack3 == null || slot2.inventory == inventoryplayer && slot2.isItemValid(itemstack3);
 					l1 = -1;
 
@@ -398,7 +398,7 @@ public abstract class Container
 					if (slot2.getHasStack() && flag)
 					{
 						itemstack5 = slot2.getStack();
-						inventoryplayer.setInventorySlotContents(par2, itemstack5.copy());
+						inventoryplayer.setInventorySlotContents(p_75144_2_, itemstack5.copy());
 
 						if ((slot2.inventory != inventoryplayer || !slot2.isItemValid(itemstack3)) && itemstack3 != null)
 						{
@@ -407,26 +407,26 @@ public abstract class Container
 								inventoryplayer.addItemStackToInventory(itemstack3);
 								slot2.decrStackSize(itemstack5.stackSize);
 								slot2.putStack((ItemStack)null);
-								slot2.onPickupFromSlot(par4EntityPlayer, itemstack5);
+								slot2.onPickupFromSlot(p_75144_4_, itemstack5);
 							}
 						}
 						else
 						{
 							slot2.decrStackSize(itemstack5.stackSize);
 							slot2.putStack(itemstack3);
-							slot2.onPickupFromSlot(par4EntityPlayer, itemstack5);
+							slot2.onPickupFromSlot(p_75144_4_, itemstack5);
 						}
 					}
 					else if (!slot2.getHasStack() && itemstack3 != null && slot2.isItemValid(itemstack3))
 					{
-						inventoryplayer.setInventorySlotContents(par2, (ItemStack)null);
+						inventoryplayer.setInventorySlotContents(p_75144_2_, (ItemStack)null);
 						slot2.putStack(itemstack3);
 					}
 				}
 			}
-			else if (par3 == 3 && par4EntityPlayer.capabilities.isCreativeMode && inventoryplayer.getItemStack() == null && par1 >= 0)
+			else if (p_75144_3_ == 3 && p_75144_4_.capabilities.isCreativeMode && inventoryplayer.getItemStack() == null && p_75144_1_ >= 0)
 			{
-				slot2 = (Slot)this.inventorySlots.get(par1);
+				slot2 = (Slot)this.inventorySlots.get(p_75144_1_);
 
 				if (slot2 != null && slot2.getHasStack())
 				{
@@ -435,26 +435,26 @@ public abstract class Container
 					inventoryplayer.setItemStack(itemstack3);
 				}
 			}
-			else if (par3 == 4 && inventoryplayer.getItemStack() == null && par1 >= 0)
+			else if (p_75144_3_ == 4 && inventoryplayer.getItemStack() == null && p_75144_1_ >= 0)
 			{
-				slot2 = (Slot)this.inventorySlots.get(par1);
+				slot2 = (Slot)this.inventorySlots.get(p_75144_1_);
 
-				if (slot2 != null && slot2.getHasStack() && slot2.canTakeStack(par4EntityPlayer))
+				if (slot2 != null && slot2.getHasStack() && slot2.canTakeStack(p_75144_4_))
 				{
-					itemstack3 = slot2.decrStackSize(par2 == 0 ? 1 : slot2.getStack().stackSize);
-					slot2.onPickupFromSlot(par4EntityPlayer, itemstack3);
-					par4EntityPlayer.dropPlayerItemWithRandomChoice(itemstack3, true);
+					itemstack3 = slot2.decrStackSize(p_75144_2_ == 0 ? 1 : slot2.getStack().stackSize);
+					slot2.onPickupFromSlot(p_75144_4_, itemstack3);
+					p_75144_4_.dropPlayerItemWithRandomChoice(itemstack3, true);
 				}
 			}
-			else if (par3 == 6 && par1 >= 0)
+			else if (p_75144_3_ == 6 && p_75144_1_ >= 0)
 			{
-				slot2 = (Slot)this.inventorySlots.get(par1);
+				slot2 = (Slot)this.inventorySlots.get(p_75144_1_);
 				itemstack3 = inventoryplayer.getItemStack();
 
-				if (itemstack3 != null && (slot2 == null || !slot2.getHasStack() || !slot2.canTakeStack(par4EntityPlayer)))
+				if (itemstack3 != null && (slot2 == null || !slot2.getHasStack() || !slot2.canTakeStack(p_75144_4_)))
 				{
-					i1 = par2 == 0 ? 0 : this.inventorySlots.size() - 1;
-					l1 = par2 == 0 ? 1 : -1;
+					i1 = p_75144_2_ == 0 ? 0 : this.inventorySlots.size() - 1;
+					l1 = p_75144_2_ == 0 ? 1 : -1;
 
 					for (int i2 = 0; i2 < 2; ++i2)
 					{
@@ -462,7 +462,7 @@ public abstract class Container
 						{
 							Slot slot3 = (Slot)this.inventorySlots.get(j2);
 
-							if (slot3.getHasStack() && func_94527_a(slot3, itemstack3, true) && slot3.canTakeStack(par4EntityPlayer) && this.func_94530_a(itemstack3, slot3) && (i2 != 0 || slot3.getStack().stackSize != slot3.getStack().getMaxStackSize()))
+							if (slot3.getHasStack() && func_94527_a(slot3, itemstack3, true) && slot3.canTakeStack(p_75144_4_) && this.func_94530_a(itemstack3, slot3) && (i2 != 0 || slot3.getStack().stackSize != slot3.getStack().getMaxStackSize()))
 							{
 								int k1 = Math.min(itemstack3.getMaxStackSize() - itemstack3.stackSize, slot3.getStack().stackSize);
 								ItemStack itemstack2 = slot3.decrStackSize(k1);
@@ -473,7 +473,7 @@ public abstract class Container
 									slot3.putStack((ItemStack)null);
 								}
 
-								slot3.onPickupFromSlot(par4EntityPlayer, itemstack2);
+								slot3.onPickupFromSlot(p_75144_4_, itemstack2);
 							}
 						}
 					}
@@ -486,116 +486,116 @@ public abstract class Container
 		return itemstack;
 	}
 
-	public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot)
+	public boolean func_94530_a(ItemStack p_94530_1_, Slot p_94530_2_)
 	{
 		return true;
 	}
 
-	protected void retrySlotClick(int par1, int par2, boolean par3, EntityPlayer par4EntityPlayer)
+	protected void retrySlotClick(int p_75133_1_, int p_75133_2_, boolean p_75133_3_, EntityPlayer p_75133_4_)
 	{
-		this.slotClick(par1, par2, 1, par4EntityPlayer);
+		this.slotClick(p_75133_1_, p_75133_2_, 1, p_75133_4_);
 	}
 
-	public void onContainerClosed(EntityPlayer par1EntityPlayer)
+	public void onContainerClosed(EntityPlayer p_75134_1_)
 	{
-		InventoryPlayer inventoryplayer = par1EntityPlayer.inventory;
+		InventoryPlayer inventoryplayer = p_75134_1_.inventory;
 
 		if (inventoryplayer.getItemStack() != null)
 		{
-			par1EntityPlayer.dropPlayerItemWithRandomChoice(inventoryplayer.getItemStack(), false);
+			p_75134_1_.dropPlayerItemWithRandomChoice(inventoryplayer.getItemStack(), false);
 			inventoryplayer.setItemStack((ItemStack)null);
 		}
 	}
 
-	public void onCraftMatrixChanged(IInventory par1IInventory)
+	public void onCraftMatrixChanged(IInventory p_75130_1_)
 	{
 		this.detectAndSendChanges();
 	}
 
-	public void putStackInSlot(int par1, ItemStack par2ItemStack)
+	public void putStackInSlot(int p_75141_1_, ItemStack p_75141_2_)
 	{
-		this.getSlot(par1).putStack(par2ItemStack);
+		this.getSlot(p_75141_1_).putStack(p_75141_2_);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void putStacksInSlots(ItemStack[] par1ArrayOfItemStack)
+	public void putStacksInSlots(ItemStack[] p_75131_1_)
 	{
-		for (int i = 0; i < par1ArrayOfItemStack.length; ++i)
+		for (int i = 0; i < p_75131_1_.length; ++i)
 		{
-			this.getSlot(i).putStack(par1ArrayOfItemStack[i]);
+			this.getSlot(i).putStack(p_75131_1_[i]);
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int par1, int par2) {}
+	public void updateProgressBar(int p_75137_1_, int p_75137_2_) {}
 
 	@SideOnly(Side.CLIENT)
-	public short getNextTransactionID(InventoryPlayer par1InventoryPlayer)
+	public short getNextTransactionID(InventoryPlayer p_75136_1_)
 	{
 		++this.transactionID;
 		return this.transactionID;
 	}
 
-	public boolean isPlayerNotUsingContainer(EntityPlayer par1EntityPlayer)
+	public boolean isPlayerNotUsingContainer(EntityPlayer p_75129_1_)
 	{
-		return !this.playerList.contains(par1EntityPlayer);
+		return !this.playerList.contains(p_75129_1_);
 	}
 
-	public void setPlayerIsPresent(EntityPlayer par1EntityPlayer, boolean par2)
+	public void setPlayerIsPresent(EntityPlayer p_75128_1_, boolean p_75128_2_)
 	{
-		if (par2)
+		if (p_75128_2_)
 		{
-			this.playerList.remove(par1EntityPlayer);
+			this.playerList.remove(p_75128_1_);
 		}
 		else
 		{
-			this.playerList.add(par1EntityPlayer);
+			this.playerList.add(p_75128_1_);
 		}
 	}
 
-	public abstract boolean canInteractWith(EntityPlayer var1);
+	public abstract boolean canInteractWith(EntityPlayer p_75145_1_);
 
-	protected boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4)
+	protected boolean mergeItemStack(ItemStack p_75135_1_, int p_75135_2_, int p_75135_3_, boolean p_75135_4_)
 	{
 		boolean flag1 = false;
-		int k = par2;
+		int k = p_75135_2_;
 
-		if (par4)
+		if (p_75135_4_)
 		{
-			k = par3 - 1;
+			k = p_75135_3_ - 1;
 		}
 
 		Slot slot;
 		ItemStack itemstack1;
 
-		if (par1ItemStack.isStackable())
+		if (p_75135_1_.isStackable())
 		{
-			while (par1ItemStack.stackSize > 0 && (!par4 && k < par3 || par4 && k >= par2))
+			while (p_75135_1_.stackSize > 0 && (!p_75135_4_ && k < p_75135_3_ || p_75135_4_ && k >= p_75135_2_))
 			{
 				slot = (Slot)this.inventorySlots.get(k);
 				itemstack1 = slot.getStack();
 
-				if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1))
+				if (itemstack1 != null && itemstack1.getItem() == p_75135_1_.getItem() && (!p_75135_1_.getHasSubtypes() || p_75135_1_.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(p_75135_1_, itemstack1))
 				{
-					int l = itemstack1.stackSize + par1ItemStack.stackSize;
+					int l = itemstack1.stackSize + p_75135_1_.stackSize;
 
-					if (l <= par1ItemStack.getMaxStackSize())
+					if (l <= p_75135_1_.getMaxStackSize())
 					{
-						par1ItemStack.stackSize = 0;
+						p_75135_1_.stackSize = 0;
 						itemstack1.stackSize = l;
 						slot.onSlotChanged();
 						flag1 = true;
 					}
-					else if (itemstack1.stackSize < par1ItemStack.getMaxStackSize())
+					else if (itemstack1.stackSize < p_75135_1_.getMaxStackSize())
 					{
-						par1ItemStack.stackSize -= par1ItemStack.getMaxStackSize() - itemstack1.stackSize;
-						itemstack1.stackSize = par1ItemStack.getMaxStackSize();
+						p_75135_1_.stackSize -= p_75135_1_.getMaxStackSize() - itemstack1.stackSize;
+						itemstack1.stackSize = p_75135_1_.getMaxStackSize();
 						slot.onSlotChanged();
 						flag1 = true;
 					}
 				}
 
-				if (par4)
+				if (p_75135_4_)
 				{
 					--k;
 				}
@@ -606,32 +606,32 @@ public abstract class Container
 			}
 		}
 
-		if (par1ItemStack.stackSize > 0)
+		if (p_75135_1_.stackSize > 0)
 		{
-			if (par4)
+			if (p_75135_4_)
 			{
-				k = par3 - 1;
+				k = p_75135_3_ - 1;
 			}
 			else
 			{
-				k = par2;
+				k = p_75135_2_;
 			}
 
-			while (!par4 && k < par3 || par4 && k >= par2)
+			while (!p_75135_4_ && k < p_75135_3_ || p_75135_4_ && k >= p_75135_2_)
 			{
 				slot = (Slot)this.inventorySlots.get(k);
 				itemstack1 = slot.getStack();
 
 				if (itemstack1 == null)
 				{
-					slot.putStack(par1ItemStack.copy());
+					slot.putStack(p_75135_1_.copy());
 					slot.onSlotChanged();
-					par1ItemStack.stackSize = 0;
+					p_75135_1_.stackSize = 0;
 					flag1 = true;
 					break;
 				}
 
-				if (par4)
+				if (p_75135_4_)
 				{
 					--k;
 				}
@@ -645,25 +645,25 @@ public abstract class Container
 		return flag1;
 	}
 
-	public static int func_94529_b(int par0)
+	public static int func_94529_b(int p_94529_0_)
 	{
-		return par0 >> 2 & 3;
+		return p_94529_0_ >> 2 & 3;
 	}
 
-	public static int func_94532_c(int par0)
+	public static int func_94532_c(int p_94532_0_)
 	{
-		return par0 & 3;
+		return p_94532_0_ & 3;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static int func_94534_d(int par0, int par1)
+	public static int func_94534_d(int p_94534_0_, int p_94534_1_)
 	{
-		return par0 & 3 | (par1 & 3) << 2;
+		return p_94534_0_ & 3 | (p_94534_1_ & 3) << 2;
 	}
 
-	public static boolean func_94528_d(int par0)
+	public static boolean func_94528_d(int p_94528_0_)
 	{
-		return par0 == 0 || par0 == 1;
+		return p_94528_0_ == 0 || p_94528_0_ == 1;
 	}
 
 	protected void func_94533_d()
@@ -672,41 +672,41 @@ public abstract class Container
 		this.field_94537_h.clear();
 	}
 
-	public static boolean func_94527_a(Slot par0Slot, ItemStack par1ItemStack, boolean par2)
+	public static boolean func_94527_a(Slot p_94527_0_, ItemStack p_94527_1_, boolean p_94527_2_)
 	{
-		boolean flag1 = par0Slot == null || !par0Slot.getHasStack();
+		boolean flag1 = p_94527_0_ == null || !p_94527_0_.getHasStack();
 
-		if (par0Slot != null && par0Slot.getHasStack() && par1ItemStack != null && par1ItemStack.isItemEqual(par0Slot.getStack()) && ItemStack.areItemStackTagsEqual(par0Slot.getStack(), par1ItemStack))
+		if (p_94527_0_ != null && p_94527_0_.getHasStack() && p_94527_1_ != null && p_94527_1_.isItemEqual(p_94527_0_.getStack()) && ItemStack.areItemStackTagsEqual(p_94527_0_.getStack(), p_94527_1_))
 		{
-			int i = par2 ? 0 : par1ItemStack.stackSize;
-			flag1 |= par0Slot.getStack().stackSize + i <= par1ItemStack.getMaxStackSize();
+			int i = p_94527_2_ ? 0 : p_94527_1_.stackSize;
+			flag1 |= p_94527_0_.getStack().stackSize + i <= p_94527_1_.getMaxStackSize();
 		}
 
 		return flag1;
 	}
 
-	public static void func_94525_a(Set par0Set, int par1, ItemStack par2ItemStack, int par3)
+	public static void func_94525_a(Set p_94525_0_, int p_94525_1_, ItemStack p_94525_2_, int p_94525_3_)
 	{
-		switch (par1)
+		switch (p_94525_1_)
 		{
 			case 0:
-				par2ItemStack.stackSize = MathHelper.floor_float((float)par2ItemStack.stackSize / (float)par0Set.size());
+				p_94525_2_.stackSize = MathHelper.floor_float((float)p_94525_2_.stackSize / (float)p_94525_0_.size());
 				break;
 			case 1:
-				par2ItemStack.stackSize = 1;
+				p_94525_2_.stackSize = 1;
 		}
 
-		par2ItemStack.stackSize += par3;
+		p_94525_2_.stackSize += p_94525_3_;
 	}
 
-	public boolean canDragIntoSlot(Slot par1Slot)
+	public boolean canDragIntoSlot(Slot p_94531_1_)
 	{
 		return true;
 	}
 
-	public static int calcRedstoneFromInventory(IInventory par0IInventory)
+	public static int calcRedstoneFromInventory(IInventory p_94526_0_)
 	{
-		if (par0IInventory == null)
+		if (p_94526_0_ == null)
 		{
 			return 0;
 		}
@@ -715,18 +715,18 @@ public abstract class Container
 			int i = 0;
 			float f = 0.0F;
 
-			for (int j = 0; j < par0IInventory.getSizeInventory(); ++j)
+			for (int j = 0; j < p_94526_0_.getSizeInventory(); ++j)
 			{
-				ItemStack itemstack = par0IInventory.getStackInSlot(j);
+				ItemStack itemstack = p_94526_0_.getStackInSlot(j);
 
 				if (itemstack != null)
 				{
-					f += (float)itemstack.stackSize / (float)Math.min(par0IInventory.getInventoryStackLimit(), itemstack.getMaxStackSize());
+					f += (float)itemstack.stackSize / (float)Math.min(p_94526_0_.getInventoryStackLimit(), itemstack.getMaxStackSize());
 					++i;
 				}
 			}
 
-			f /= (float)par0IInventory.getSizeInventory();
+			f /= (float)p_94526_0_.getSizeInventory();
 			return MathHelper.floor_float(f * 14.0F) + (i > 0 ? 1 : 0);
 		}
 	}

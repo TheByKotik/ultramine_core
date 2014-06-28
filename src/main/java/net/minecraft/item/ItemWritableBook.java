@@ -14,10 +14,10 @@ public class ItemWritableBook extends Item
 		this.setMaxStackSize(1);
 	}
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
 	{
-		par3EntityPlayer.displayGUIBook(par1ItemStack);
-		return par1ItemStack;
+		p_77659_3_.displayGUIBook(p_77659_1_);
+		return p_77659_1_;
 	}
 
 	public boolean getShareTag()

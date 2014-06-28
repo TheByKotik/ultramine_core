@@ -8,23 +8,23 @@ public class GenLayerShore extends GenLayer
 {
 	private static final String __OBFID = "CL_00000568";
 
-	public GenLayerShore(long par1, GenLayer par3GenLayer)
+	public GenLayerShore(long p_i2130_1_, GenLayer p_i2130_3_)
 	{
-		super(par1);
-		this.parent = par3GenLayer;
+		super(p_i2130_1_);
+		this.parent = p_i2130_3_;
 	}
 
-	public int[] getInts(int par1, int par2, int par3, int par4)
+	public int[] getInts(int p_75904_1_, int p_75904_2_, int p_75904_3_, int p_75904_4_)
 	{
-		int[] aint = this.parent.getInts(par1 - 1, par2 - 1, par3 + 2, par4 + 2);
-		int[] aint1 = IntCache.getIntCache(par3 * par4);
+		int[] aint = this.parent.getInts(p_75904_1_ - 1, p_75904_2_ - 1, p_75904_3_ + 2, p_75904_4_ + 2);
+		int[] aint1 = IntCache.getIntCache(p_75904_3_ * p_75904_4_);
 
-		for (int i1 = 0; i1 < par4; ++i1)
+		for (int i1 = 0; i1 < p_75904_4_; ++i1)
 		{
-			for (int j1 = 0; j1 < par3; ++j1)
+			for (int j1 = 0; j1 < p_75904_3_; ++j1)
 			{
-				this.initChunkSeed((long)(j1 + par1), (long)(i1 + par2));
-				int k1 = aint[j1 + 1 + (i1 + 1) * (par3 + 2)];
+				this.initChunkSeed((long)(j1 + p_75904_1_), (long)(i1 + p_75904_2_));
+				int k1 = aint[j1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
 				BiomeGenBase biomegenbase = BiomeGenBase.getBiome(k1);
 				int l1;
 				int i2;
@@ -33,99 +33,99 @@ public class GenLayerShore extends GenLayer
 
 				if (k1 == BiomeGenBase.mushroomIsland.biomeID)
 				{
-					l1 = aint[j1 + 1 + (i1 + 1 - 1) * (par3 + 2)];
-					i2 = aint[j1 + 1 + 1 + (i1 + 1) * (par3 + 2)];
-					j2 = aint[j1 + 1 - 1 + (i1 + 1) * (par3 + 2)];
-					k2 = aint[j1 + 1 + (i1 + 1 + 1) * (par3 + 2)];
+					l1 = aint[j1 + 1 + (i1 + 1 - 1) * (p_75904_3_ + 2)];
+					i2 = aint[j1 + 1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
+					j2 = aint[j1 + 1 - 1 + (i1 + 1) * (p_75904_3_ + 2)];
+					k2 = aint[j1 + 1 + (i1 + 1 + 1) * (p_75904_3_ + 2)];
 
 					if (l1 != BiomeGenBase.ocean.biomeID && i2 != BiomeGenBase.ocean.biomeID && j2 != BiomeGenBase.ocean.biomeID && k2 != BiomeGenBase.ocean.biomeID)
 					{
-						aint1[j1 + i1 * par3] = k1;
+						aint1[j1 + i1 * p_75904_3_] = k1;
 					}
 					else
 					{
-						aint1[j1 + i1 * par3] = BiomeGenBase.mushroomIslandShore.biomeID;
+						aint1[j1 + i1 * p_75904_3_] = BiomeGenBase.mushroomIslandShore.biomeID;
 					}
 				}
 				else if (biomegenbase != null && biomegenbase.getBiomeClass() == BiomeGenJungle.class)
 				{
-					l1 = aint[j1 + 1 + (i1 + 1 - 1) * (par3 + 2)];
-					i2 = aint[j1 + 1 + 1 + (i1 + 1) * (par3 + 2)];
-					j2 = aint[j1 + 1 - 1 + (i1 + 1) * (par3 + 2)];
-					k2 = aint[j1 + 1 + (i1 + 1 + 1) * (par3 + 2)];
+					l1 = aint[j1 + 1 + (i1 + 1 - 1) * (p_75904_3_ + 2)];
+					i2 = aint[j1 + 1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
+					j2 = aint[j1 + 1 - 1 + (i1 + 1) * (p_75904_3_ + 2)];
+					k2 = aint[j1 + 1 + (i1 + 1 + 1) * (p_75904_3_ + 2)];
 
 					if (this.func_151631_c(l1) && this.func_151631_c(i2) && this.func_151631_c(j2) && this.func_151631_c(k2))
 					{
 						if (!isBiomeOceanic(l1) && !isBiomeOceanic(i2) && !isBiomeOceanic(j2) && !isBiomeOceanic(k2))
 						{
-							aint1[j1 + i1 * par3] = k1;
+							aint1[j1 + i1 * p_75904_3_] = k1;
 						}
 						else
 						{
-							aint1[j1 + i1 * par3] = BiomeGenBase.beach.biomeID;
+							aint1[j1 + i1 * p_75904_3_] = BiomeGenBase.beach.biomeID;
 						}
 					}
 					else
 					{
-						aint1[j1 + i1 * par3] = BiomeGenBase.jungleEdge.biomeID;
+						aint1[j1 + i1 * p_75904_3_] = BiomeGenBase.jungleEdge.biomeID;
 					}
 				}
 				else if (k1 != BiomeGenBase.extremeHills.biomeID && k1 != BiomeGenBase.extremeHillsPlus.biomeID && k1 != BiomeGenBase.extremeHillsEdge.biomeID)
 				{
 					if (biomegenbase != null && biomegenbase.func_150559_j())
 					{
-						this.func_151632_a(aint, aint1, j1, i1, par3, k1, BiomeGenBase.coldBeach.biomeID);
+						this.func_151632_a(aint, aint1, j1, i1, p_75904_3_, k1, BiomeGenBase.coldBeach.biomeID);
 					}
 					else if (k1 != BiomeGenBase.mesa.biomeID && k1 != BiomeGenBase.mesaPlateau_F.biomeID)
 					{
 						if (k1 != BiomeGenBase.ocean.biomeID && k1 != BiomeGenBase.deepOcean.biomeID && k1 != BiomeGenBase.river.biomeID && k1 != BiomeGenBase.swampland.biomeID)
 						{
-							l1 = aint[j1 + 1 + (i1 + 1 - 1) * (par3 + 2)];
-							i2 = aint[j1 + 1 + 1 + (i1 + 1) * (par3 + 2)];
-							j2 = aint[j1 + 1 - 1 + (i1 + 1) * (par3 + 2)];
-							k2 = aint[j1 + 1 + (i1 + 1 + 1) * (par3 + 2)];
+							l1 = aint[j1 + 1 + (i1 + 1 - 1) * (p_75904_3_ + 2)];
+							i2 = aint[j1 + 1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
+							j2 = aint[j1 + 1 - 1 + (i1 + 1) * (p_75904_3_ + 2)];
+							k2 = aint[j1 + 1 + (i1 + 1 + 1) * (p_75904_3_ + 2)];
 
 							if (!isBiomeOceanic(l1) && !isBiomeOceanic(i2) && !isBiomeOceanic(j2) && !isBiomeOceanic(k2))
 							{
-								aint1[j1 + i1 * par3] = k1;
+								aint1[j1 + i1 * p_75904_3_] = k1;
 							}
 							else
 							{
-								aint1[j1 + i1 * par3] = BiomeGenBase.beach.biomeID;
+								aint1[j1 + i1 * p_75904_3_] = BiomeGenBase.beach.biomeID;
 							}
 						}
 						else
 						{
-							aint1[j1 + i1 * par3] = k1;
+							aint1[j1 + i1 * p_75904_3_] = k1;
 						}
 					}
 					else
 					{
-						l1 = aint[j1 + 1 + (i1 + 1 - 1) * (par3 + 2)];
-						i2 = aint[j1 + 1 + 1 + (i1 + 1) * (par3 + 2)];
-						j2 = aint[j1 + 1 - 1 + (i1 + 1) * (par3 + 2)];
-						k2 = aint[j1 + 1 + (i1 + 1 + 1) * (par3 + 2)];
+						l1 = aint[j1 + 1 + (i1 + 1 - 1) * (p_75904_3_ + 2)];
+						i2 = aint[j1 + 1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
+						j2 = aint[j1 + 1 - 1 + (i1 + 1) * (p_75904_3_ + 2)];
+						k2 = aint[j1 + 1 + (i1 + 1 + 1) * (p_75904_3_ + 2)];
 
 						if (!isBiomeOceanic(l1) && !isBiomeOceanic(i2) && !isBiomeOceanic(j2) && !isBiomeOceanic(k2))
 						{
 							if (this.func_151633_d(l1) && this.func_151633_d(i2) && this.func_151633_d(j2) && this.func_151633_d(k2))
 							{
-								aint1[j1 + i1 * par3] = k1;
+								aint1[j1 + i1 * p_75904_3_] = k1;
 							}
 							else
 							{
-								aint1[j1 + i1 * par3] = BiomeGenBase.desert.biomeID;
+								aint1[j1 + i1 * p_75904_3_] = BiomeGenBase.desert.biomeID;
 							}
 						}
 						else
 						{
-							aint1[j1 + i1 * par3] = k1;
+							aint1[j1 + i1 * p_75904_3_] = k1;
 						}
 					}
 				}
 				else
 				{
-					this.func_151632_a(aint, aint1, j1, i1, par3, k1, BiomeGenBase.stoneBeach.biomeID);
+					this.func_151632_a(aint, aint1, j1, i1, p_75904_3_, k1, BiomeGenBase.stoneBeach.biomeID);
 				}
 			}
 		}

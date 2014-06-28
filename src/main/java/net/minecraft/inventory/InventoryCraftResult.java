@@ -13,7 +13,7 @@ public class InventoryCraftResult implements IInventory
 		return 1;
 	}
 
-	public ItemStack getStackInSlot(int par1)
+	public ItemStack getStackInSlot(int p_70301_1_)
 	{
 		return this.stackResult[0];
 	}
@@ -28,7 +28,7 @@ public class InventoryCraftResult implements IInventory
 		return false;
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
 	{
 		if (this.stackResult[0] != null)
 		{
@@ -42,7 +42,7 @@ public class InventoryCraftResult implements IInventory
 		}
 	}
 
-	public ItemStack getStackInSlotOnClosing(int par1)
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_)
 	{
 		if (this.stackResult[0] != null)
 		{
@@ -56,9 +56,9 @@ public class InventoryCraftResult implements IInventory
 		}
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
-		this.stackResult[0] = par2ItemStack;
+		this.stackResult[0] = p_70299_2_;
 	}
 
 	public int getInventoryStackLimit()
@@ -68,7 +68,7 @@ public class InventoryCraftResult implements IInventory
 
 	public void markDirty() {}
 
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
 	{
 		return true;
 	}
@@ -77,7 +77,7 @@ public class InventoryCraftResult implements IInventory
 
 	public void closeInventory() {}
 
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
 		return true;
 	}

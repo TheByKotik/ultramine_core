@@ -1,14 +1,21 @@
 package net.minecraft.client.main;
 
+import com.google.common.collect.HashMultimap;
+import com.google.gson.Gson;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.io.File;
+import java.lang.reflect.ParameterizedType;
 import java.net.Authenticator;
 import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.Proxy.Type;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import joptsimple.ArgumentAcceptingOptionSpec;
 import joptsimple.NonOptionArgumentSpec;
 import joptsimple.OptionParser;
@@ -19,9 +26,41 @@ import net.minecraft.util.Session;
 @SideOnly(Side.CLIENT)
 public class Main
 {
+	private static final java.lang.reflect.Type field_152370_a = new ParameterizedType()
+	{
+		private static final String __OBFID = "CL_00000828";
+		public java.lang.reflect.Type[] getActualTypeArguments()
+		{
+			return new java.lang.reflect.Type[] {String.class, new ParameterizedType()
+			{
+				private static final String __OBFID = "CL_00001836";
+				public java.lang.reflect.Type[] getActualTypeArguments()
+				{
+					return new java.lang.reflect.Type[] {String.class};
+				}
+				public java.lang.reflect.Type getRawType()
+				{
+					return Collection.class;
+				}
+				public java.lang.reflect.Type getOwnerType()
+				{
+					return null;
+				}
+			}
+												};
+		}
+		public java.lang.reflect.Type getRawType()
+		{
+			return Map.class;
+		}
+		public java.lang.reflect.Type getOwnerType()
+		{
+			return null;
+		}
+	};
 	private static final String __OBFID = "CL_00001461";
 
-	public static void main(String[] par0ArrayOfStr)
+	public static void main(String[] p_main_0_)
 	{
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		OptionParser optionparser = new OptionParser();
@@ -43,8 +82,11 @@ public class Main
 		ArgumentAcceptingOptionSpec argumentacceptingoptionspec12 = optionparser.accepts("version").withRequiredArg().required();
 		ArgumentAcceptingOptionSpec argumentacceptingoptionspec13 = optionparser.accepts("width").withRequiredArg().ofType(Integer.class).defaultsTo(Integer.valueOf(854), new Integer[0]);
 		ArgumentAcceptingOptionSpec argumentacceptingoptionspec14 = optionparser.accepts("height").withRequiredArg().ofType(Integer.class).defaultsTo(Integer.valueOf(480), new Integer[0]);
+		ArgumentAcceptingOptionSpec argumentacceptingoptionspec15 = optionparser.accepts("userProperties").withRequiredArg().required();
+		ArgumentAcceptingOptionSpec argumentacceptingoptionspec16 = optionparser.accepts("assetIndex").withRequiredArg();
+		ArgumentAcceptingOptionSpec argumentacceptingoptionspec17 = optionparser.accepts("userType").withRequiredArg().defaultsTo("legacy", new String[0]);
 		NonOptionArgumentSpec nonoptionargumentspec = optionparser.nonOptions();
-		OptionSet optionset = optionparser.parse(par0ArrayOfStr);
+		OptionSet optionset = optionparser.parse(p_main_0_);
 		List list = optionset.valuesOf(nonoptionargumentspec);
 		String s = (String)optionset.valueOf(argumentacceptingoptionspec5);
 		Proxy proxy = Proxy.NO_PROXY;
@@ -68,7 +110,7 @@ public class Main
 		{
 			Authenticator.setDefault(new Authenticator()
 			{
-				private static final String __OBFID = "CL_00000828";
+				private static final String __OBFID = "CL_00000829";
 				protected PasswordAuthentication getPasswordAuthentication()
 				{
 					return new PasswordAuthentication(s1, s2.toCharArray());
@@ -81,22 +123,32 @@ public class Main
 		boolean flag = optionset.has("fullscreen");
 		boolean flag1 = optionset.has("demo");
 		String s3 = (String)optionset.valueOf(argumentacceptingoptionspec12);
-		File file1 = (File)optionset.valueOf(argumentacceptingoptionspec2);
-		File file2 = optionset.has(argumentacceptingoptionspec3) ? (File)optionset.valueOf(argumentacceptingoptionspec3) : new File(file1, "assets/");
-		File file3 = optionset.has(argumentacceptingoptionspec4) ? (File)optionset.valueOf(argumentacceptingoptionspec4) : new File(file1, "resourcepacks/");
-		String s4 = optionset.has(argumentacceptingoptionspec10) ? (String)argumentacceptingoptionspec10.value(optionset) : (String)argumentacceptingoptionspec9.value(optionset);
-		Session session = new Session((String)argumentacceptingoptionspec9.value(optionset), s4, (String)argumentacceptingoptionspec11.value(optionset));
-		Minecraft minecraft = new Minecraft(session, i, j, flag, flag1, file1, file2, file3, proxy, s3);
-		String s5 = (String)optionset.valueOf(argumentacceptingoptionspec);
+		HashMultimap hashmultimap = HashMultimap.create();
+		Iterator iterator = ((Map)(new Gson()).fromJson((String)optionset.valueOf(argumentacceptingoptionspec15), field_152370_a)).entrySet().iterator();
 
-		if (s5 != null)
+		while (iterator.hasNext())
 		{
-			minecraft.setServer(s5, ((Integer)optionset.valueOf(argumentacceptingoptionspec1)).intValue());
+			Entry entry = (Entry)iterator.next();
+			hashmultimap.putAll(entry.getKey(), (Iterable)entry.getValue());
+		}
+
+		File file2 = (File)optionset.valueOf(argumentacceptingoptionspec2);
+		File file3 = optionset.has(argumentacceptingoptionspec3) ? (File)optionset.valueOf(argumentacceptingoptionspec3) : new File(file2, "assets/");
+		File file1 = optionset.has(argumentacceptingoptionspec4) ? (File)optionset.valueOf(argumentacceptingoptionspec4) : new File(file2, "resourcepacks/");
+		String s4 = optionset.has(argumentacceptingoptionspec10) ? (String)argumentacceptingoptionspec10.value(optionset) : (String)argumentacceptingoptionspec9.value(optionset);
+		String s5 = optionset.has(argumentacceptingoptionspec16) ? (String)argumentacceptingoptionspec16.value(optionset) : null;
+		Session session = new Session((String)argumentacceptingoptionspec9.value(optionset), s4, (String)argumentacceptingoptionspec11.value(optionset), (String)argumentacceptingoptionspec17.value(optionset));
+		Minecraft minecraft = new Minecraft(session, i, j, flag, flag1, file2, file3, file1, proxy, s3, hashmultimap, s5);
+		String s6 = (String)optionset.valueOf(argumentacceptingoptionspec);
+
+		if (s6 != null)
+		{
+			minecraft.setServer(s6, ((Integer)optionset.valueOf(argumentacceptingoptionspec1)).intValue());
 		}
 
 		Runtime.getRuntime().addShutdownHook(new Thread("Client Shutdown Thread")
 		{
-			private static final String __OBFID = "CL_00000829";
+			private static final String __OBFID = "CL_00001835";
 			public void run()
 			{
 				Minecraft.stopIntegratedServer();
@@ -112,8 +164,8 @@ public class Main
 		minecraft.run();
 	}
 
-	private static boolean func_110121_a(String par0Str)
+	private static boolean func_110121_a(String p_110121_0_)
 	{
-		return par0Str != null && !par0Str.isEmpty();
+		return p_110121_0_ != null && !p_110121_0_.isEmpty();
 	}
 }

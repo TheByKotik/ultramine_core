@@ -1,6 +1,7 @@
 package net.minecraft.client.network;
 
 import com.google.common.base.Charsets;
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -30,18 +31,21 @@ import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiPlayerInfo;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenDemo;
-import net.minecraft.client.gui.GuiScreenDisconnectedOnline;
+import net.minecraft.client.gui.GuiScreenRealmsProxy;
 import net.minecraft.client.gui.GuiWinGame;
 import net.minecraft.client.gui.GuiYesNo;
+import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.gui.IProgressMeter;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EntityCrit2FX;
 import net.minecraft.client.particle.EntityPickupFX;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.stream.MetadataAchievement;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLeashKnot;
@@ -157,6 +161,7 @@ import net.minecraft.network.play.server.S3EPacketTeams;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.network.play.server.S40PacketDisconnect;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.realms.DisconnectedOnlineScreen;
 import net.minecraft.scoreboard.IScoreObjectiveCriteria;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
@@ -453,6 +458,7 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 		double d2 = (double)p_147237_1_.func_148946_h() / 32.0D;
 		float f = (float)(p_147237_1_.func_148941_i() * 360) / 256.0F;
 		float f1 = (float)(p_147237_1_.func_148945_j() * 360) / 256.0F;
+		GameProfile gameprofile = p_147237_1_.func_148948_e();
 		EntityOtherPlayerMP entityotherplayermp = new EntityOtherPlayerMP(this.gameController.theWorld, p_147237_1_.func_148948_e());
 		entityotherplayermp.prevPosX = entityotherplayermp.lastTickPosX = (double)(entityotherplayermp.serverPosX = p_147237_1_.func_148942_f());
 		entityotherplayermp.prevPosY = entityotherplayermp.lastTickPosY = (double)(entityotherplayermp.serverPosY = p_147237_1_.func_148949_g());
@@ -634,7 +640,14 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 
 		if (this.guiScreenServer != null)
 		{
-			this.gameController.displayGuiScreen(new GuiScreenDisconnectedOnline(this.guiScreenServer, "disconnect.lost", p_147231_1_));
+			if (this.guiScreenServer instanceof GuiScreenRealmsProxy)
+			{
+				this.gameController.displayGuiScreen((new DisconnectedOnlineScreen(((GuiScreenRealmsProxy)this.guiScreenServer).func_154321_a(), "disconnect.lost", p_147231_1_)).getProxy());
+			}
+			else
+			{
+				this.gameController.displayGuiScreen(new GuiDisconnected(this.guiScreenServer, "disconnect.lost", p_147231_1_));
+			}
 		}
 		else
 		{
@@ -1281,7 +1294,9 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 			{
 				if (this.field_147308_k && this.gameController.thePlayer.getStatFileWriter().writeStat(statbase) == 0)
 				{
-					this.gameController.guiAchievement.func_146256_a((Achievement)statbase);
+					Achievement achievement = (Achievement)statbase;
+					this.gameController.guiAchievement.func_146256_a(achievement);
+					this.gameController.func_152346_Z().func_152911_a(new MetadataAchievement(achievement), 0L);
 
 					if (statbase == AchievementList.openInventory)
 					{
@@ -1411,6 +1426,10 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 			{
 				logger.error("Couldn\'t load trade info", ioexception);
 			}
+			finally
+			{
+				bytebuf.release();
+			}
 		}
 		else if ("MC|Brand".equals(p_147240_1_.func_149169_c()))
 		{
@@ -1420,36 +1439,33 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 		{
 			final String s = new String(p_147240_1_.func_149168_d(), Charsets.UTF_8);
 
-			if (this.gameController.gameSettings.serverTextures)
+			if (this.gameController.func_147104_D() != null && this.gameController.func_147104_D().func_152586_b() == ServerData.ServerResourceMode.ENABLED)
 			{
-				if (this.gameController.func_147104_D() != null && this.gameController.func_147104_D().func_147408_b())
+				this.gameController.getResourcePackRepository().func_148526_a(s);
+			}
+			else if (this.gameController.func_147104_D() == null || this.gameController.func_147104_D().func_152586_b() == ServerData.ServerResourceMode.PROMPT)
+			{
+				this.gameController.displayGuiScreen(new GuiYesNo(new GuiYesNoCallback()
 				{
-					this.gameController.getResourcePackRepository().func_148526_a(s);
-				}
-				else if (this.gameController.func_147104_D() == null || this.gameController.func_147104_D().func_147410_c())
-				{
-					this.gameController.displayGuiScreen(new GuiYesNo(new GuiScreen()
+					private static final String __OBFID = "CL_00000879";
+					public void confirmClicked(boolean p_73878_1_, int p_73878_2_)
 					{
-						private static final String __OBFID = "CL_00000879";
-						public void confirmClicked(boolean par1, int par2)
+						NetHandlerPlayClient.this.gameController = Minecraft.getMinecraft();
+
+						if (NetHandlerPlayClient.this.gameController.func_147104_D() != null)
 						{
-							this.mc = Minecraft.getMinecraft();
-
-							if (this.mc.func_147104_D() != null)
-							{
-								this.mc.func_147104_D().setAcceptsTextures(par1);
-								ServerList.func_147414_b(this.mc.func_147104_D());
-							}
-
-							if (par1)
-							{
-								this.mc.getResourcePackRepository().func_148526_a(s);
-							}
-
-							this.mc.displayGuiScreen((GuiScreen)null);
+							NetHandlerPlayClient.this.gameController.func_147104_D().func_152584_a(ServerData.ServerResourceMode.ENABLED);
+							ServerList.func_147414_b(NetHandlerPlayClient.this.gameController.func_147104_D());
 						}
-					}, I18n.format("multiplayer.texturePrompt.line1", new Object[0]), I18n.format("multiplayer.texturePrompt.line2", new Object[0]), 0));
-				}
+
+						if (p_73878_1_)
+						{
+							NetHandlerPlayClient.this.gameController.getResourcePackRepository().func_148526_a(s);
+						}
+
+						NetHandlerPlayClient.this.gameController.displayGuiScreen((GuiScreen)null);
+					}
+				}, I18n.format("multiplayer.texturePrompt.line1", new Object[0]), I18n.format("multiplayer.texturePrompt.line2", new Object[0]), 0));
 			}
 		}
 	}

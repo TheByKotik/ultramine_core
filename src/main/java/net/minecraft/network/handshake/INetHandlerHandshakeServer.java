@@ -5,5 +5,5 @@ import net.minecraft.network.handshake.client.C00Handshake;
 
 public interface INetHandlerHandshakeServer extends INetHandler
 {
-	void processHandshake(C00Handshake var1);
+	void processHandshake(C00Handshake p_147383_1_);
 }

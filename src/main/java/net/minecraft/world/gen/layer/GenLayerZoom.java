@@ -4,18 +4,18 @@ public class GenLayerZoom extends GenLayer
 {
 	private static final String __OBFID = "CL_00000572";
 
-	public GenLayerZoom(long par1, GenLayer par3GenLayer)
+	public GenLayerZoom(long p_i2134_1_, GenLayer p_i2134_3_)
 	{
-		super(par1);
-		super.parent = par3GenLayer;
+		super(p_i2134_1_);
+		super.parent = p_i2134_3_;
 	}
 
-	public int[] getInts(int par1, int par2, int par3, int par4)
+	public int[] getInts(int p_75904_1_, int p_75904_2_, int p_75904_3_, int p_75904_4_)
 	{
-		int i1 = par1 >> 1;
-		int j1 = par2 >> 1;
-		int k1 = (par3 >> 1) + 2;
-		int l1 = (par4 >> 1) + 2;
+		int i1 = p_75904_1_ >> 1;
+		int j1 = p_75904_2_ >> 1;
+		int k1 = (p_75904_3_ >> 1) + 2;
+		int l1 = (p_75904_4_ >> 1) + 2;
 		int[] aint = this.parent.getInts(i1, j1, k1, l1);
 		int i2 = k1 - 1 << 1;
 		int j2 = l1 - 1 << 1;
@@ -42,23 +42,23 @@ public class GenLayerZoom extends GenLayer
 			}
 		}
 
-		int[] aint2 = IntCache.getIntCache(par3 * par4);
+		int[] aint2 = IntCache.getIntCache(p_75904_3_ * p_75904_4_);
 
-		for (l2 = 0; l2 < par4; ++l2)
+		for (l2 = 0; l2 < p_75904_4_; ++l2)
 		{
-			System.arraycopy(aint1, (l2 + (par2 & 1)) * i2 + (par1 & 1), aint2, l2 * par3, par3);
+			System.arraycopy(aint1, (l2 + (p_75904_2_ & 1)) * i2 + (p_75904_1_ & 1), aint2, l2 * p_75904_3_, p_75904_3_);
 		}
 
 		return aint2;
 	}
 
-	public static GenLayer magnify(long par0, GenLayer par2GenLayer, int par3)
+	public static GenLayer magnify(long p_75915_0_, GenLayer p_75915_2_, int p_75915_3_)
 	{
-		Object object = par2GenLayer;
+		Object object = p_75915_2_;
 
-		for (int k = 0; k < par3; ++k)
+		for (int k = 0; k < p_75915_3_; ++k)
 		{
-			object = new GenLayerZoom(par0 + (long)k, (GenLayer)object);
+			object = new GenLayerZoom(p_75915_0_ + (long)k, (GenLayer)object);
 		}
 
 		return (GenLayer)object;

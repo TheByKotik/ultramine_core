@@ -25,39 +25,39 @@ public class CommandGive extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.give.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length < 2)
+		if (p_71515_2_.length < 2)
 		{
 			throw new WrongUsageException("commands.give.usage", new Object[0]);
 		}
 		else
 		{
-			EntityPlayerMP entityplayermp = getPlayer(par1ICommandSender, par2ArrayOfStr[0]);
-			Item item = getItemByText(par1ICommandSender, par2ArrayOfStr[1]);
+			EntityPlayerMP entityplayermp = getPlayer(p_71515_1_, p_71515_2_[0]);
+			Item item = getItemByText(p_71515_1_, p_71515_2_[1]);
 			int i = 1;
 			int j = 0;
 
-			if (par2ArrayOfStr.length >= 3)
+			if (p_71515_2_.length >= 3)
 			{
-				i = parseIntBounded(par1ICommandSender, par2ArrayOfStr[2], 1, 64);
+				i = parseIntBounded(p_71515_1_, p_71515_2_[2], 1, 64);
 			}
 
-			if (par2ArrayOfStr.length >= 4)
+			if (p_71515_2_.length >= 4)
 			{
-				j = parseInt(par1ICommandSender, par2ArrayOfStr[3]);
+				j = parseInt(p_71515_1_, p_71515_2_[3]);
 			}
 
 			ItemStack itemstack = new ItemStack(item, i, j);
 
-			if (par2ArrayOfStr.length >= 5)
+			if (p_71515_2_.length >= 5)
 			{
-				String s = func_147178_a(par1ICommandSender, par2ArrayOfStr, 4).getUnformattedText();
+				String s = func_147178_a(p_71515_1_, p_71515_2_, 4).getUnformattedText();
 
 				try
 				{
@@ -65,7 +65,7 @@ public class CommandGive extends CommandBase
 
 					if (!(nbtbase instanceof NBTTagCompound))
 					{
-						notifyAdmins(par1ICommandSender, "commands.give.tagError", new Object[] {"Not a valid tag"});
+						func_152373_a(p_71515_1_, this, "commands.give.tagError", new Object[] {"Not a valid tag"});
 						return;
 					}
 
@@ -73,7 +73,7 @@ public class CommandGive extends CommandBase
 				}
 				catch (NBTException nbtexception)
 				{
-					notifyAdmins(par1ICommandSender, "commands.give.tagError", new Object[] {nbtexception.getMessage()});
+					func_152373_a(p_71515_1_, this, "commands.give.tagError", new Object[] {nbtexception.getMessage()});
 					return;
 				}
 			}
@@ -81,13 +81,13 @@ public class CommandGive extends CommandBase
 			EntityItem entityitem = entityplayermp.dropPlayerItemWithRandomChoice(itemstack, false);
 			entityitem.delayBeforeCanPickup = 0;
 			entityitem.func_145797_a(entityplayermp.getCommandSenderName());
-			notifyAdmins(par1ICommandSender, "commands.give.success", new Object[] {itemstack.func_151000_E(), Integer.valueOf(i), entityplayermp.getCommandSenderName()});
+			func_152373_a(p_71515_1_, this, "commands.give.success", new Object[] {itemstack.func_151000_E(), Integer.valueOf(i), entityplayermp.getCommandSenderName()});
 		}
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, this.getPlayers()) : (par2ArrayOfStr.length == 2 ? getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, Item.itemRegistry.getKeys()) : null);
+		return p_71516_2_.length == 1 ? getListOfStringsMatchingLastWord(p_71516_2_, this.getPlayers()) : (p_71516_2_.length == 2 ? getListOfStringsFromIterableMatchingLastWord(p_71516_2_, Item.itemRegistry.getKeys()) : null);
 	}
 
 	protected String[] getPlayers()
@@ -95,8 +95,8 @@ public class CommandGive extends CommandBase
 		return MinecraftServer.getServer().getAllUsernames();
 	}
 
-	public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2)
+	public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_)
 	{
-		return par2 == 0;
+		return p_82358_2_ == 0;
 	}
 }

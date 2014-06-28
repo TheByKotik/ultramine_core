@@ -23,17 +23,17 @@ public class EntityXPOrb extends Entity
 	private int xpTargetColor;
 	private static final String __OBFID = "CL_00001544";
 
-	public EntityXPOrb(World par1World, double par2, double par4, double par6, int par8)
+	public EntityXPOrb(World p_i1585_1_, double p_i1585_2_, double p_i1585_4_, double p_i1585_6_, int p_i1585_8_)
 	{
-		super(par1World);
+		super(p_i1585_1_);
 		this.setSize(0.5F, 0.5F);
 		this.yOffset = this.height / 2.0F;
-		this.setPosition(par2, par4, par6);
+		this.setPosition(p_i1585_2_, p_i1585_4_, p_i1585_6_);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
 		this.motionX = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
 		this.motionY = (double)((float)(Math.random() * 0.2D) * 2.0F);
 		this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-		this.xpValue = par8;
+		this.xpValue = p_i1585_8_;
 	}
 
 	protected boolean canTriggerWalking()
@@ -41,9 +41,9 @@ public class EntityXPOrb extends Entity
 		return false;
 	}
 
-	public EntityXPOrb(World par1World)
+	public EntityXPOrb(World p_i1586_1_)
 	{
-		super(par1World);
+		super(p_i1586_1_);
 		this.setSize(0.25F, 0.25F);
 		this.yOffset = this.height / 2.0F;
 	}
@@ -51,7 +51,7 @@ public class EntityXPOrb extends Entity
 	protected void entityInit() {}
 
 	@SideOnly(Side.CLIENT)
-	public int getBrightnessForRender(float par1)
+	public int getBrightnessForRender(float p_70070_1_)
 	{
 		float f1 = 0.5F;
 
@@ -65,7 +65,7 @@ public class EntityXPOrb extends Entity
 			f1 = 1.0F;
 		}
 
-		int i = super.getBrightnessForRender(par1);
+		int i = super.getBrightnessForRender(p_70070_1_);
 		int j = i & 255;
 		int k = i >> 16 & 255;
 		j += (int)(f1 * 15.0F * 16.0F);
@@ -161,12 +161,12 @@ public class EntityXPOrb extends Entity
 		return this.worldObj.handleMaterialAcceleration(this.boundingBox, Material.water, this);
 	}
 
-	protected void dealFireDamage(int par1)
+	protected void dealFireDamage(int p_70081_1_)
 	{
-		this.attackEntityFrom(DamageSource.inFire, (float)par1);
+		this.attackEntityFrom(DamageSource.inFire, (float)p_70081_1_);
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		if (this.isEntityInvulnerable())
 		{
@@ -175,7 +175,7 @@ public class EntityXPOrb extends Entity
 		else
 		{
 			this.setBeenAttacked();
-			this.xpOrbHealth = (int)((float)this.xpOrbHealth - par2);
+			this.xpOrbHealth = (int)((float)this.xpOrbHealth - p_70097_2_);
 
 			if (this.xpOrbHealth <= 0)
 			{
@@ -186,31 +186,31 @@ public class EntityXPOrb extends Entity
 		}
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		par1NBTTagCompound.setShort("Health", (short)((byte)this.xpOrbHealth));
-		par1NBTTagCompound.setShort("Age", (short)this.xpOrbAge);
-		par1NBTTagCompound.setShort("Value", (short)this.xpValue);
+		p_70014_1_.setShort("Health", (short)((byte)this.xpOrbHealth));
+		p_70014_1_.setShort("Age", (short)this.xpOrbAge);
+		p_70014_1_.setShort("Value", (short)this.xpValue);
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		this.xpOrbHealth = par1NBTTagCompound.getShort("Health") & 255;
-		this.xpOrbAge = par1NBTTagCompound.getShort("Age");
-		this.xpValue = par1NBTTagCompound.getShort("Value");
+		this.xpOrbHealth = p_70037_1_.getShort("Health") & 255;
+		this.xpOrbAge = p_70037_1_.getShort("Age");
+		this.xpValue = p_70037_1_.getShort("Value");
 	}
 
-	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
+	public void onCollideWithPlayer(EntityPlayer p_70100_1_)
 	{
 		if (!this.worldObj.isRemote)
 		{
-			if (this.field_70532_c == 0 && par1EntityPlayer.xpCooldown == 0)
+			if (this.field_70532_c == 0 && p_70100_1_.xpCooldown == 0)
 			{
-				if (MinecraftForge.EVENT_BUS.post(new PlayerPickupXpEvent(par1EntityPlayer, this))) return;
-				par1EntityPlayer.xpCooldown = 2;
-				this.worldObj.playSoundAtEntity(par1EntityPlayer, "random.orb", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
-				par1EntityPlayer.onItemPickup(this, 1);
-				par1EntityPlayer.addExperience(this.xpValue);
+				if (MinecraftForge.EVENT_BUS.post(new PlayerPickupXpEvent(p_70100_1_, this))) return;
+				p_70100_1_.xpCooldown = 2;
+				this.worldObj.playSoundAtEntity(p_70100_1_, "random.orb", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
+				p_70100_1_.onItemPickup(this, 1);
+				p_70100_1_.addExperience(this.xpValue);
 				this.setDead();
 			}
 		}
@@ -227,9 +227,9 @@ public class EntityXPOrb extends Entity
 		return this.xpValue >= 2477 ? 10 : (this.xpValue >= 1237 ? 9 : (this.xpValue >= 617 ? 8 : (this.xpValue >= 307 ? 7 : (this.xpValue >= 149 ? 6 : (this.xpValue >= 73 ? 5 : (this.xpValue >= 37 ? 4 : (this.xpValue >= 17 ? 3 : (this.xpValue >= 7 ? 2 : (this.xpValue >= 3 ? 1 : 0)))))))));
 	}
 
-	public static int getXPSplit(int par0)
+	public static int getXPSplit(int p_70527_0_)
 	{
-		return par0 >= 2477 ? 2477 : (par0 >= 1237 ? 1237 : (par0 >= 617 ? 617 : (par0 >= 307 ? 307 : (par0 >= 149 ? 149 : (par0 >= 73 ? 73 : (par0 >= 37 ? 37 : (par0 >= 17 ? 17 : (par0 >= 7 ? 7 : (par0 >= 3 ? 3 : 1)))))))));
+		return p_70527_0_ >= 2477 ? 2477 : (p_70527_0_ >= 1237 ? 1237 : (p_70527_0_ >= 617 ? 617 : (p_70527_0_ >= 307 ? 307 : (p_70527_0_ >= 149 ? 149 : (p_70527_0_ >= 73 ? 73 : (p_70527_0_ >= 37 ? 37 : (p_70527_0_ >= 17 ? 17 : (p_70527_0_ >= 7 ? 7 : (p_70527_0_ >= 3 ? 3 : 1)))))))));
 	}
 
 	public boolean canAttackWithItem()

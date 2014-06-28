@@ -15,47 +15,47 @@ public class SlotFurnace extends Slot
 	private int field_75228_b;
 	private static final String __OBFID = "CL_00001749";
 
-	public SlotFurnace(EntityPlayer par1EntityPlayer, IInventory par2IInventory, int par3, int par4, int par5)
+	public SlotFurnace(EntityPlayer p_i1813_1_, IInventory p_i1813_2_, int p_i1813_3_, int p_i1813_4_, int p_i1813_5_)
 	{
-		super(par2IInventory, par3, par4, par5);
-		this.thePlayer = par1EntityPlayer;
+		super(p_i1813_2_, p_i1813_3_, p_i1813_4_, p_i1813_5_);
+		this.thePlayer = p_i1813_1_;
 	}
 
-	public boolean isItemValid(ItemStack par1ItemStack)
+	public boolean isItemValid(ItemStack p_75214_1_)
 	{
 		return false;
 	}
 
-	public ItemStack decrStackSize(int par1)
+	public ItemStack decrStackSize(int p_75209_1_)
 	{
 		if (this.getHasStack())
 		{
-			this.field_75228_b += Math.min(par1, this.getStack().stackSize);
+			this.field_75228_b += Math.min(p_75209_1_, this.getStack().stackSize);
 		}
 
-		return super.decrStackSize(par1);
+		return super.decrStackSize(p_75209_1_);
 	}
 
-	public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
+	public void onPickupFromSlot(EntityPlayer p_82870_1_, ItemStack p_82870_2_)
 	{
-		this.onCrafting(par2ItemStack);
-		super.onPickupFromSlot(par1EntityPlayer, par2ItemStack);
+		this.onCrafting(p_82870_2_);
+		super.onPickupFromSlot(p_82870_1_, p_82870_2_);
 	}
 
-	protected void onCrafting(ItemStack par1ItemStack, int par2)
+	protected void onCrafting(ItemStack p_75210_1_, int p_75210_2_)
 	{
-		this.field_75228_b += par2;
-		this.onCrafting(par1ItemStack);
+		this.field_75228_b += p_75210_2_;
+		this.onCrafting(p_75210_1_);
 	}
 
-	protected void onCrafting(ItemStack par1ItemStack)
+	protected void onCrafting(ItemStack p_75208_1_)
 	{
-		par1ItemStack.onCrafting(this.thePlayer.worldObj, this.thePlayer, this.field_75228_b);
+		p_75208_1_.onCrafting(this.thePlayer.worldObj, this.thePlayer, this.field_75228_b);
 
 		if (!this.thePlayer.worldObj.isRemote)
 		{
 			int i = this.field_75228_b;
-			float f = FurnaceRecipes.smelting().func_151398_b(par1ItemStack);
+			float f = FurnaceRecipes.smelting().func_151398_b(p_75208_1_);
 			int j;
 
 			if (f == 0.0F)
@@ -84,14 +84,14 @@ public class SlotFurnace extends Slot
 
 		this.field_75228_b = 0;
 
-		FMLCommonHandler.instance().firePlayerSmeltedEvent(thePlayer, par1ItemStack);
+		FMLCommonHandler.instance().firePlayerSmeltedEvent(thePlayer, p_75208_1_);
 
-		if (par1ItemStack.getItem() == Items.iron_ingot)
+		if (p_75208_1_.getItem() == Items.iron_ingot)
 		{
 			this.thePlayer.addStat(AchievementList.acquireIron, 1);
 		}
 
-		if (par1ItemStack.getItem() == Items.cooked_fished)
+		if (p_75208_1_.getItem() == Items.cooked_fished)
 		{
 			this.thePlayer.addStat(AchievementList.cookFish, 1);
 		}

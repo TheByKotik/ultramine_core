@@ -21,11 +21,11 @@ public class ThreadLanServerPing extends Thread
 	private final String address;
 	private static final String __OBFID = "CL_00001137";
 
-	public ThreadLanServerPing(String par1Str, String par2Str) throws IOException
+	public ThreadLanServerPing(String p_i1321_1_, String p_i1321_2_) throws IOException
 	{
 		super("LanServerPinger #" + field_148658_a.incrementAndGet());
-		this.motd = par1Str;
-		this.address = par2Str;
+		this.motd = p_i1321_1_;
+		this.address = p_i1321_2_;
 		this.setDaemon(true);
 		this.socket = new DatagramSocket();
 	}
@@ -66,14 +66,14 @@ public class ThreadLanServerPing extends Thread
 		this.isStopping = false;
 	}
 
-	public static String getPingResponse(String par0Str, String par1Str)
+	public static String getPingResponse(String p_77525_0_, String p_77525_1_)
 	{
-		return "[MOTD]" + par0Str + "[/MOTD][AD]" + par1Str + "[/AD]";
+		return "[MOTD]" + p_77525_0_ + "[/MOTD][AD]" + p_77525_1_ + "[/AD]";
 	}
 
-	public static String getMotdFromPingResponse(String par0Str)
+	public static String getMotdFromPingResponse(String p_77524_0_)
 	{
-		int i = par0Str.indexOf("[MOTD]");
+		int i = p_77524_0_.indexOf("[MOTD]");
 
 		if (i < 0)
 		{
@@ -81,14 +81,14 @@ public class ThreadLanServerPing extends Thread
 		}
 		else
 		{
-			int j = par0Str.indexOf("[/MOTD]", i + "[MOTD]".length());
-			return j < i ? "missing no" : par0Str.substring(i + "[MOTD]".length(), j);
+			int j = p_77524_0_.indexOf("[/MOTD]", i + "[MOTD]".length());
+			return j < i ? "missing no" : p_77524_0_.substring(i + "[MOTD]".length(), j);
 		}
 	}
 
-	public static String getAdFromPingResponse(String par0Str)
+	public static String getAdFromPingResponse(String p_77523_0_)
 	{
-		int i = par0Str.indexOf("[/MOTD]");
+		int i = p_77523_0_.indexOf("[/MOTD]");
 
 		if (i < 0)
 		{
@@ -96,7 +96,7 @@ public class ThreadLanServerPing extends Thread
 		}
 		else
 		{
-			int j = par0Str.indexOf("[/MOTD]", i + "[/MOTD]".length());
+			int j = p_77523_0_.indexOf("[/MOTD]", i + "[/MOTD]".length());
 
 			if (j >= 0)
 			{
@@ -104,7 +104,7 @@ public class ThreadLanServerPing extends Thread
 			}
 			else
 			{
-				int k = par0Str.indexOf("[AD]", i + "[/MOTD]".length());
+				int k = p_77523_0_.indexOf("[AD]", i + "[/MOTD]".length());
 
 				if (k < 0)
 				{
@@ -112,8 +112,8 @@ public class ThreadLanServerPing extends Thread
 				}
 				else
 				{
-					int l = par0Str.indexOf("[/AD]", k + "[AD]".length());
-					return l < k ? null : par0Str.substring(k + "[AD]".length(), l);
+					int l = p_77523_0_.indexOf("[/AD]", k + "[AD]".length());
+					return l < k ? null : p_77523_0_.substring(k + "[AD]".length(), l);
 				}
 			}
 		}

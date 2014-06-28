@@ -7,13 +7,13 @@ public interface IInventory
 {
 	int getSizeInventory();
 
-	ItemStack getStackInSlot(int var1);
+	ItemStack getStackInSlot(int p_70301_1_);
 
-	ItemStack decrStackSize(int var1, int var2);
+	ItemStack decrStackSize(int p_70298_1_, int p_70298_2_);
 
-	ItemStack getStackInSlotOnClosing(int var1);
+	ItemStack getStackInSlotOnClosing(int p_70304_1_);
 
-	void setInventorySlotContents(int var1, ItemStack var2);
+	void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_);
 
 	String getInventoryName();
 
@@ -23,11 +23,11 @@ public interface IInventory
 
 	void markDirty();
 
-	boolean isUseableByPlayer(EntityPlayer var1);
+	boolean isUseableByPlayer(EntityPlayer p_70300_1_);
 
 	void openInventory();
 
 	void closeInventory();
 
-	boolean isItemValidForSlot(int var1, ItemStack var2);
+	boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_);
 }

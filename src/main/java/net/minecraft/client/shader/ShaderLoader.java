@@ -7,13 +7,13 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Map;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL20;
 
 @SideOnly(Side.CLIENT)
 public class ShaderLoader
@@ -34,7 +34,7 @@ public class ShaderLoader
 	public void func_148056_a(ShaderManager p_148056_1_)
 	{
 		++this.field_148058_d;
-		GL20.glAttachShader(p_148056_1_.func_147986_h(), this.field_148060_c);
+		OpenGlHelper.func_153178_b(p_148056_1_.func_147986_h(), this.field_148060_c);
 	}
 
 	public void func_148054_b(ShaderManager p_148054_1_)
@@ -43,7 +43,7 @@ public class ShaderLoader
 
 		if (this.field_148058_d <= 0)
 		{
-			GL20.glDeleteShader(this.field_148060_c);
+			OpenGlHelper.func_153180_a(this.field_148060_c);
 			this.field_148061_a.func_148064_d().remove(this.field_148059_b);
 		}
 	}
@@ -65,13 +65,13 @@ public class ShaderLoader
 			ByteBuffer bytebuffer = BufferUtils.createByteBuffer(abyte.length);
 			bytebuffer.put(abyte);
 			bytebuffer.position(0);
-			int i = GL20.glCreateShader(p_148057_1_.func_148065_c());
-			GL20.glShaderSource(i, bytebuffer);
-			GL20.glCompileShader(i);
+			int i = OpenGlHelper.func_153195_b(p_148057_1_.func_148065_c());
+			OpenGlHelper.func_153169_a(i, bytebuffer);
+			OpenGlHelper.func_153170_c(i);
 
-			if (GL20.glGetShaderi(i, 35713) == 0)
+			if (OpenGlHelper.func_153157_c(i, OpenGlHelper.field_153208_p) == 0)
 			{
-				String s1 = StringUtils.trim(GL20.glGetShaderInfoLog(i, 32768));
+				String s1 = StringUtils.trim(OpenGlHelper.func_153158_d(i, 32768));
 				JsonException jsonexception = new JsonException("Couldn\'t compile " + p_148057_1_.func_148062_a() + " program: " + s1);
 				jsonexception.func_151381_b(resourcelocation.getResourcePath());
 				throw jsonexception;
@@ -87,8 +87,8 @@ public class ShaderLoader
 	@SideOnly(Side.CLIENT)
 	public static enum ShaderType
 	{
-		VERTEX("vertex", ".vsh", 35633),
-		FRAGMENT("fragment", ".fsh", 35632);
+		VERTEX("vertex", ".vsh", OpenGlHelper.field_153209_q),
+		FRAGMENT("fragment", ".fsh", OpenGlHelper.field_153210_r);
 		private final String field_148072_c;
 		private final String field_148069_d;
 		private final int field_148070_e;

@@ -8,9 +8,9 @@ public class NBTTagEnd extends NBTBase
 {
 	private static final String __OBFID = "CL_00001219";
 
-	void load(DataInput par1DataInput, int par2) throws IOException {}
+	void func_152446_a(DataInput p_152446_1_, int p_152446_2_, NBTSizeTracker p_152446_3_) throws IOException {}
 
-	void write(DataOutput par1DataOutput) throws IOException {}
+	void write(DataOutput p_74734_1_) throws IOException {}
 
 	public byte getId()
 	{

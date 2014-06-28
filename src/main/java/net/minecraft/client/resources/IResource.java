@@ -12,5 +12,5 @@ public interface IResource
 
 	boolean hasMetadata();
 
-	IMetadataSection getMetadata(String var1);
+	IMetadataSection getMetadata(String p_110526_1_);
 }

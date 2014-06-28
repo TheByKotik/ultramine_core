@@ -23,53 +23,53 @@ public class PotionEffect
 	/** List of ItemStack that can cure the potion effect **/
 	private List<ItemStack> curativeItems;
 
-	public PotionEffect(int par1, int par2)
+	public PotionEffect(int p_i1574_1_, int p_i1574_2_)
 	{
-		this(par1, par2, 0);
+		this(p_i1574_1_, p_i1574_2_, 0);
 	}
 
-	public PotionEffect(int par1, int par2, int par3)
+	public PotionEffect(int p_i1575_1_, int p_i1575_2_, int p_i1575_3_)
 	{
-		this(par1, par2, par3, false);
+		this(p_i1575_1_, p_i1575_2_, p_i1575_3_, false);
 	}
 
-	public PotionEffect(int par1, int par2, int par3, boolean par4)
+	public PotionEffect(int p_i1576_1_, int p_i1576_2_, int p_i1576_3_, boolean p_i1576_4_)
 	{
-		this.potionID = par1;
-		this.duration = par2;
-		this.amplifier = par3;
-		this.isAmbient = par4;
+		this.potionID = p_i1576_1_;
+		this.duration = p_i1576_2_;
+		this.amplifier = p_i1576_3_;
+		this.isAmbient = p_i1576_4_;
 		this.curativeItems = new ArrayList<ItemStack>();
 		this.curativeItems.add(new ItemStack(Items.milk_bucket));
 	}
 
-	public PotionEffect(PotionEffect par1PotionEffect)
+	public PotionEffect(PotionEffect p_i1577_1_)
 	{
-		this.potionID = par1PotionEffect.potionID;
-		this.duration = par1PotionEffect.duration;
-		this.amplifier = par1PotionEffect.amplifier;
-		this.curativeItems = par1PotionEffect.curativeItems;
+		this.potionID = p_i1577_1_.potionID;
+		this.duration = p_i1577_1_.duration;
+		this.amplifier = p_i1577_1_.amplifier;
+		this.curativeItems = p_i1577_1_.curativeItems;
 	}
 
-	public void combine(PotionEffect par1PotionEffect)
+	public void combine(PotionEffect p_76452_1_)
 	{
-		if (this.potionID != par1PotionEffect.potionID)
+		if (this.potionID != p_76452_1_.potionID)
 		{
 			System.err.println("This method should only be called for matching effects!");
 		}
 
-		if (par1PotionEffect.amplifier > this.amplifier)
+		if (p_76452_1_.amplifier > this.amplifier)
 		{
-			this.amplifier = par1PotionEffect.amplifier;
-			this.duration = par1PotionEffect.duration;
+			this.amplifier = p_76452_1_.amplifier;
+			this.duration = p_76452_1_.duration;
 		}
-		else if (par1PotionEffect.amplifier == this.amplifier && this.duration < par1PotionEffect.duration)
+		else if (p_76452_1_.amplifier == this.amplifier && this.duration < p_76452_1_.duration)
 		{
-			this.duration = par1PotionEffect.duration;
+			this.duration = p_76452_1_.duration;
 		}
-		else if (!par1PotionEffect.isAmbient && this.isAmbient)
+		else if (!p_76452_1_.isAmbient && this.isAmbient)
 		{
-			this.isAmbient = par1PotionEffect.isAmbient;
+			this.isAmbient = p_76452_1_.isAmbient;
 		}
 	}
 
@@ -88,9 +88,9 @@ public class PotionEffect
 		return this.amplifier;
 	}
 
-	public void setSplashPotion(boolean par1)
+	public void setSplashPotion(boolean p_82721_1_)
 	{
-		this.isSplashPotion = par1;
+		this.isSplashPotion = p_82721_1_;
 	}
 
 	public boolean getIsAmbient()
@@ -98,13 +98,13 @@ public class PotionEffect
 		return this.isAmbient;
 	}
 
-	public boolean onUpdate(EntityLivingBase par1EntityLivingBase)
+	public boolean onUpdate(EntityLivingBase p_76455_1_)
 	{
 		if (this.duration > 0)
 		{
 			if (Potion.potionTypes[this.potionID].isReady(this.duration, this.amplifier))
 			{
-				this.performEffect(par1EntityLivingBase);
+				this.performEffect(p_76455_1_);
 			}
 
 			this.deincrementDuration();
@@ -118,11 +118,11 @@ public class PotionEffect
 		return --this.duration;
 	}
 
-	public void performEffect(EntityLivingBase par1EntityLivingBase)
+	public void performEffect(EntityLivingBase p_76457_1_)
 	{
 		if (this.duration > 0)
 		{
-			Potion.potionTypes[this.potionID].performEffect(par1EntityLivingBase, this.amplifier);
+			Potion.potionTypes[this.potionID].performEffect(p_76457_1_, this.amplifier);
 		}
 	}
 
@@ -157,37 +157,37 @@ public class PotionEffect
 		return Potion.potionTypes[this.potionID].isUsable() ? "(" + s + ")" : s;
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (!(par1Obj instanceof PotionEffect))
+		if (!(p_equals_1_ instanceof PotionEffect))
 		{
 			return false;
 		}
 		else
 		{
-			PotionEffect potioneffect = (PotionEffect)par1Obj;
+			PotionEffect potioneffect = (PotionEffect)p_equals_1_;
 			return this.potionID == potioneffect.potionID && this.amplifier == potioneffect.amplifier && this.duration == potioneffect.duration && this.isSplashPotion == potioneffect.isSplashPotion && this.isAmbient == potioneffect.isAmbient;
 		}
 	}
 
-	public NBTTagCompound writeCustomPotionEffectToNBT(NBTTagCompound par1NBTTagCompound)
+	public NBTTagCompound writeCustomPotionEffectToNBT(NBTTagCompound p_82719_1_)
 	{
-		par1NBTTagCompound.setByte("Id", (byte)this.getPotionID());
-		par1NBTTagCompound.setByte("Amplifier", (byte)this.getAmplifier());
-		par1NBTTagCompound.setInteger("Duration", this.getDuration());
-		par1NBTTagCompound.setBoolean("Ambient", this.getIsAmbient());
-		return par1NBTTagCompound;
+		p_82719_1_.setByte("Id", (byte)this.getPotionID());
+		p_82719_1_.setByte("Amplifier", (byte)this.getAmplifier());
+		p_82719_1_.setInteger("Duration", this.getDuration());
+		p_82719_1_.setBoolean("Ambient", this.getIsAmbient());
+		return p_82719_1_;
 	}
 
-	public static PotionEffect readCustomPotionEffectFromNBT(NBTTagCompound par0NBTTagCompound)
+	public static PotionEffect readCustomPotionEffectFromNBT(NBTTagCompound p_82722_0_)
 	{
-		byte b0 = par0NBTTagCompound.getByte("Id");
+		byte b0 = p_82722_0_.getByte("Id");
 
 		if (b0 >= 0 && b0 < Potion.potionTypes.length && Potion.potionTypes[b0] != null)
 		{
-			byte b1 = par0NBTTagCompound.getByte("Amplifier");
-			int i = par0NBTTagCompound.getInteger("Duration");
-			boolean flag = par0NBTTagCompound.getBoolean("Ambient");
+			byte b1 = p_82722_0_.getByte("Amplifier");
+			int i = p_82722_0_.getInteger("Duration");
+			boolean flag = p_82722_0_.getBoolean("Ambient");
 			return new PotionEffect(b0, i, b1, flag);
 		}
 		else
@@ -197,9 +197,9 @@ public class PotionEffect
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void setPotionDurationMax(boolean par1)
+	public void setPotionDurationMax(boolean p_100012_1_)
 	{
-		this.isPotionDurationMax = par1;
+		this.isPotionDurationMax = p_100012_1_;
 	}
 
 	@SideOnly(Side.CLIENT)

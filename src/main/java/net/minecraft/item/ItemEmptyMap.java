@@ -15,32 +15,32 @@ public class ItemEmptyMap extends ItemMapBase
 		this.setCreativeTab(CreativeTabs.tabMisc);
 	}
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
 	{
-		ItemStack itemstack1 = new ItemStack(Items.filled_map, 1, par2World.getUniqueDataId("map"));
+		ItemStack itemstack1 = new ItemStack(Items.filled_map, 1, p_77659_2_.getUniqueDataId("map"));
 		String s = "map_" + itemstack1.getItemDamage();
 		MapData mapdata = new MapData(s);
-		par2World.setItemData(s, mapdata);
+		p_77659_2_.setItemData(s, mapdata);
 		mapdata.scale = 0;
 		int i = 128 * (1 << mapdata.scale);
-		mapdata.xCenter = (int)(Math.round(par3EntityPlayer.posX / (double)i) * (long)i);
-		mapdata.zCenter = (int)(Math.round(par3EntityPlayer.posZ / (double)i) * (long)i);
-		mapdata.dimension = par2World.provider.dimensionId;
+		mapdata.xCenter = (int)(Math.round(p_77659_3_.posX / (double)i) * (long)i);
+		mapdata.zCenter = (int)(Math.round(p_77659_3_.posZ / (double)i) * (long)i);
+		mapdata.dimension = p_77659_2_.provider.dimensionId;
 		mapdata.markDirty();
-		--par1ItemStack.stackSize;
+		--p_77659_1_.stackSize;
 
-		if (par1ItemStack.stackSize <= 0)
+		if (p_77659_1_.stackSize <= 0)
 		{
 			return itemstack1;
 		}
 		else
 		{
-			if (!par3EntityPlayer.inventory.addItemStackToInventory(itemstack1.copy()))
+			if (!p_77659_3_.inventory.addItemStackToInventory(itemstack1.copy()))
 			{
-				par3EntityPlayer.dropPlayerItemWithRandomChoice(itemstack1, false);
+				p_77659_3_.dropPlayerItemWithRandomChoice(itemstack1, false);
 			}
 
-			return par1ItemStack;
+			return p_77659_1_;
 		}
 	}
 }

@@ -18,7 +18,7 @@ public class GuiDownloadTerrain extends GuiScreen
 		this.field_146594_a = p_i45023_1_;
 	}
 
-	protected void keyTyped(char par1, int par2) {}
+	protected void keyTyped(char p_73869_1_, int p_73869_2_) {}
 
 	public void initGui()
 	{
@@ -40,11 +40,11 @@ public class GuiDownloadTerrain extends GuiScreen
 		}
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		this.drawBackground(0);
 		this.drawCenteredString(this.fontRendererObj, I18n.format("multiplayer.downloadingTerrain", new Object[0]), this.width / 2, this.height / 2 - 50, 16777215);
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 
 	public boolean doesGuiPauseGame()

@@ -1,5 +1,6 @@
 package net.minecraft.client.resources;
 
+import com.google.gson.JsonParseException;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.io.IOException;
@@ -46,8 +47,12 @@ public class ResourcePackListEntryDefault extends ResourcePackListEntry
 
 			if (packmetadatasection != null)
 			{
-				return packmetadatasection.getPackDescription();
+				return packmetadatasection.func_152805_a().getFormattedText();
 			}
+		}
+		catch (JsonParseException jsonparseexception)
+		{
+			logger.error("Couldn\'t load metadata info", jsonparseexception);
 		}
 		catch (IOException ioexception)
 		{

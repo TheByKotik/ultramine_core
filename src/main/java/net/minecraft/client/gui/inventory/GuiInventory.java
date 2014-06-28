@@ -22,9 +22,9 @@ public class GuiInventory extends InventoryEffectRenderer
 	private float ySizeFloat;
 	private static final String __OBFID = "CL_00000761";
 
-	public GuiInventory(EntityPlayer par1EntityPlayer)
+	public GuiInventory(EntityPlayer p_i1094_1_)
 	{
-		super(par1EntityPlayer.inventoryContainer);
+		super(p_i1094_1_.inventoryContainer);
 		this.allowUserInput = true;
 	}
 
@@ -55,11 +55,11 @@ public class GuiInventory extends InventoryEffectRenderer
 		this.fontRendererObj.drawString(I18n.format("container.crafting", new Object[0]), 86, 16, 4210752);
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
-		super.drawScreen(par1, par2, par3);
-		this.xSizeFloat = (float)par1;
-		this.ySizeFloat = (float)par2;
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
+		this.xSizeFloat = (float)p_73863_1_;
+		this.ySizeFloat = (float)p_73863_2_;
 	}
 
 	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_)

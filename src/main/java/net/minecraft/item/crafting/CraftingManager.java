@@ -155,27 +155,27 @@ public class CraftingManager
 		Collections.sort(this.recipes, new Comparator()
 		{
 			private static final String __OBFID = "CL_00000091";
-			public int compare(IRecipe par1IRecipe, IRecipe par2IRecipe)
+			public int compare(IRecipe p_compare_1_, IRecipe p_compare_2_)
 			{
-				return par1IRecipe instanceof ShapelessRecipes && par2IRecipe instanceof ShapedRecipes ? 1 : (par2IRecipe instanceof ShapelessRecipes && par1IRecipe instanceof ShapedRecipes ? -1 : (par2IRecipe.getRecipeSize() < par1IRecipe.getRecipeSize() ? -1 : (par2IRecipe.getRecipeSize() > par1IRecipe.getRecipeSize() ? 1 : 0)));
+				return p_compare_1_ instanceof ShapelessRecipes && p_compare_2_ instanceof ShapedRecipes ? 1 : (p_compare_2_ instanceof ShapelessRecipes && p_compare_1_ instanceof ShapedRecipes ? -1 : (p_compare_2_.getRecipeSize() < p_compare_1_.getRecipeSize() ? -1 : (p_compare_2_.getRecipeSize() > p_compare_1_.getRecipeSize() ? 1 : 0)));
 			}
-			public int compare(Object par1Obj, Object par2Obj)
+			public int compare(Object p_compare_1_, Object p_compare_2_)
 			{
-				return this.compare((IRecipe)par1Obj, (IRecipe)par2Obj);
+				return this.compare((IRecipe)p_compare_1_, (IRecipe)p_compare_2_);
 			}
 		});
 	}
 
-	public ShapedRecipes addRecipe(ItemStack par1ItemStack, Object ... par2ArrayOfObj)
+	public ShapedRecipes addRecipe(ItemStack p_92103_1_, Object ... p_92103_2_)
 	{
 		String s = "";
 		int i = 0;
 		int j = 0;
 		int k = 0;
 
-		if (par2ArrayOfObj[i] instanceof String[])
+		if (p_92103_2_[i] instanceof String[])
 		{
-			String[] astring = (String[])((String[])par2ArrayOfObj[i++]);
+			String[] astring = (String[])((String[])p_92103_2_[i++]);
 
 			for (int l = 0; l < astring.length; ++l)
 			{
@@ -187,9 +187,9 @@ public class CraftingManager
 		}
 		else
 		{
-			while (par2ArrayOfObj[i] instanceof String)
+			while (p_92103_2_[i] instanceof String)
 			{
-				String s2 = (String)par2ArrayOfObj[i++];
+				String s2 = (String)p_92103_2_[i++];
 				++k;
 				j = s2.length();
 				s = s + s2;
@@ -198,22 +198,22 @@ public class CraftingManager
 
 		HashMap hashmap;
 
-		for (hashmap = new HashMap(); i < par2ArrayOfObj.length; i += 2)
+		for (hashmap = new HashMap(); i < p_92103_2_.length; i += 2)
 		{
-			Character character = (Character)par2ArrayOfObj[i];
+			Character character = (Character)p_92103_2_[i];
 			ItemStack itemstack1 = null;
 
-			if (par2ArrayOfObj[i + 1] instanceof Item)
+			if (p_92103_2_[i + 1] instanceof Item)
 			{
-				itemstack1 = new ItemStack((Item)par2ArrayOfObj[i + 1]);
+				itemstack1 = new ItemStack((Item)p_92103_2_[i + 1]);
 			}
-			else if (par2ArrayOfObj[i + 1] instanceof Block)
+			else if (p_92103_2_[i + 1] instanceof Block)
 			{
-				itemstack1 = new ItemStack((Block)par2ArrayOfObj[i + 1], 1, 32767);
+				itemstack1 = new ItemStack((Block)p_92103_2_[i + 1], 1, 32767);
 			}
-			else if (par2ArrayOfObj[i + 1] instanceof ItemStack)
+			else if (p_92103_2_[i + 1] instanceof ItemStack)
 			{
-				itemstack1 = (ItemStack)par2ArrayOfObj[i + 1];
+				itemstack1 = (ItemStack)p_92103_2_[i + 1];
 			}
 
 			hashmap.put(character, itemstack1);
@@ -235,16 +235,16 @@ public class CraftingManager
 			}
 		}
 
-		ShapedRecipes shapedrecipes = new ShapedRecipes(j, k, aitemstack, par1ItemStack);
+		ShapedRecipes shapedrecipes = new ShapedRecipes(j, k, aitemstack, p_92103_1_);
 		this.recipes.add(shapedrecipes);
 		return shapedrecipes;
 	}
 
-	public void addShapelessRecipe(ItemStack par1ItemStack, Object ... par2ArrayOfObj)
+	public void addShapelessRecipe(ItemStack p_77596_1_, Object ... p_77596_2_)
 	{
 		ArrayList arraylist = new ArrayList();
-		Object[] aobject = par2ArrayOfObj;
-		int i = par2ArrayOfObj.length;
+		Object[] aobject = p_77596_2_;
+		int i = p_77596_2_.length;
 
 		for (int j = 0; j < i; ++j)
 		{
@@ -269,19 +269,19 @@ public class CraftingManager
 			}
 		}
 
-		this.recipes.add(new ShapelessRecipes(par1ItemStack, arraylist));
+		this.recipes.add(new ShapelessRecipes(p_77596_1_, arraylist));
 	}
 
-	public ItemStack findMatchingRecipe(InventoryCrafting par1InventoryCrafting, World par2World)
+	public ItemStack findMatchingRecipe(InventoryCrafting p_82787_1_, World p_82787_2_)
 	{
 		int i = 0;
 		ItemStack itemstack = null;
 		ItemStack itemstack1 = null;
 		int j;
 
-		for (j = 0; j < par1InventoryCrafting.getSizeInventory(); ++j)
+		for (j = 0; j < p_82787_1_.getSizeInventory(); ++j)
 		{
-			ItemStack itemstack2 = par1InventoryCrafting.getStackInSlot(j);
+			ItemStack itemstack2 = p_82787_1_.getStackInSlot(j);
 
 			if (itemstack2 != null)
 			{
@@ -320,9 +320,9 @@ public class CraftingManager
 			{
 				IRecipe irecipe = (IRecipe)this.recipes.get(j);
 
-				if (irecipe.matches(par1InventoryCrafting, par2World))
+				if (irecipe.matches(p_82787_1_, p_82787_2_))
 				{
-					return irecipe.getCraftingResult(par1InventoryCrafting);
+					return irecipe.getCraftingResult(p_82787_1_);
 				}
 			}
 

@@ -19,32 +19,32 @@ public class EntityPotion extends EntityThrowable
 	private ItemStack potionDamage;
 	private static final String __OBFID = "CL_00001727";
 
-	public EntityPotion(World par1World)
+	public EntityPotion(World p_i1788_1_)
 	{
-		super(par1World);
+		super(p_i1788_1_);
 	}
 
-	public EntityPotion(World par1World, EntityLivingBase par2EntityLivingBase, int par3)
+	public EntityPotion(World p_i1789_1_, EntityLivingBase p_i1789_2_, int p_i1789_3_)
 	{
-		this(par1World, par2EntityLivingBase, new ItemStack(Items.potionitem, 1, par3));
+		this(p_i1789_1_, p_i1789_2_, new ItemStack(Items.potionitem, 1, p_i1789_3_));
 	}
 
-	public EntityPotion(World par1World, EntityLivingBase par2EntityLivingBase, ItemStack par3ItemStack)
+	public EntityPotion(World p_i1790_1_, EntityLivingBase p_i1790_2_, ItemStack p_i1790_3_)
 	{
-		super(par1World, par2EntityLivingBase);
-		this.potionDamage = par3ItemStack;
+		super(p_i1790_1_, p_i1790_2_);
+		this.potionDamage = p_i1790_3_;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public EntityPotion(World par1World, double par2, double par4, double par6, int par8)
+	public EntityPotion(World p_i1791_1_, double p_i1791_2_, double p_i1791_4_, double p_i1791_6_, int p_i1791_8_)
 	{
-		this(par1World, par2, par4, par6, new ItemStack(Items.potionitem, 1, par8));
+		this(p_i1791_1_, p_i1791_2_, p_i1791_4_, p_i1791_6_, new ItemStack(Items.potionitem, 1, p_i1791_8_));
 	}
 
-	public EntityPotion(World par1World, double par2, double par4, double par6, ItemStack par8ItemStack)
+	public EntityPotion(World p_i1792_1_, double p_i1792_2_, double p_i1792_4_, double p_i1792_6_, ItemStack p_i1792_8_)
 	{
-		super(par1World, par2, par4, par6);
-		this.potionDamage = par8ItemStack;
+		super(p_i1792_1_, p_i1792_2_, p_i1792_4_, p_i1792_6_);
+		this.potionDamage = p_i1792_8_;
 	}
 
 	protected float getGravityVelocity()
@@ -62,14 +62,14 @@ public class EntityPotion extends EntityThrowable
 		return -20.0F;
 	}
 
-	public void setPotionDamage(int par1)
+	public void setPotionDamage(int p_82340_1_)
 	{
 		if (this.potionDamage == null)
 		{
 			this.potionDamage = new ItemStack(Items.potionitem, 1, 0);
 		}
 
-		this.potionDamage.setItemDamage(par1);
+		this.potionDamage.setItemDamage(p_82340_1_);
 	}
 
 	public int getPotionDamage()
@@ -82,7 +82,7 @@ public class EntityPotion extends EntityThrowable
 		return this.potionDamage.getItemDamage();
 	}
 
-	protected void onImpact(MovingObjectPosition par1MovingObjectPosition)
+	protected void onImpact(MovingObjectPosition p_70184_1_)
 	{
 		if (!this.worldObj.isRemote)
 		{
@@ -106,7 +106,7 @@ public class EntityPotion extends EntityThrowable
 						{
 							double d1 = 1.0D - Math.sqrt(d0) / 4.0D;
 
-							if (entitylivingbase == par1MovingObjectPosition.entityHit)
+							if (entitylivingbase == p_70184_1_.entityHit)
 							{
 								d1 = 1.0D;
 							}
@@ -142,17 +142,17 @@ public class EntityPotion extends EntityThrowable
 		}
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
+		super.readEntityFromNBT(p_70037_1_);
 
-		if (par1NBTTagCompound.hasKey("Potion", 10))
+		if (p_70037_1_.hasKey("Potion", 10))
 		{
-			this.potionDamage = ItemStack.loadItemStackFromNBT(par1NBTTagCompound.getCompoundTag("Potion"));
+			this.potionDamage = ItemStack.loadItemStackFromNBT(p_70037_1_.getCompoundTag("Potion"));
 		}
 		else
 		{
-			this.setPotionDamage(par1NBTTagCompound.getInteger("potionValue"));
+			this.setPotionDamage(p_70037_1_.getInteger("potionValue"));
 		}
 
 		if (this.potionDamage == null)
@@ -161,13 +161,13 @@ public class EntityPotion extends EntityThrowable
 		}
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
+		super.writeEntityToNBT(p_70014_1_);
 
 		if (this.potionDamage != null)
 		{
-			par1NBTTagCompound.setTag("Potion", this.potionDamage.writeToNBT(new NBTTagCompound()));
+			p_70014_1_.setTag("Potion", this.potionDamage.writeToNBT(new NBTTagCompound()));
 		}
 	}
 }

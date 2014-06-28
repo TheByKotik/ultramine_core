@@ -33,9 +33,9 @@ public class C0EPacketClickWindow extends Packet
 		this.field_149549_f = p_i45246_4_;
 	}
 
-	public void processPacket(INetHandlerPlayServer p_149545_1_)
+	public void processPacket(INetHandlerPlayServer p_148833_1_)
 	{
-		p_149545_1_.processClickWindow(this);
+		p_148833_1_.processClickWindow(this);
 	}
 
 	public void readPacketData(PacketBuffer p_148837_1_) throws IOException

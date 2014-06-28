@@ -19,28 +19,28 @@ public class ItemEditableBook extends Item
 		this.setMaxStackSize(1);
 	}
 
-	public static boolean validBookTagContents(NBTTagCompound par0NBTTagCompound)
+	public static boolean validBookTagContents(NBTTagCompound p_77828_0_)
 	{
-		if (!ItemWritableBook.func_150930_a(par0NBTTagCompound))
+		if (!ItemWritableBook.func_150930_a(p_77828_0_))
 		{
 			return false;
 		}
-		else if (!par0NBTTagCompound.hasKey("title", 8))
+		else if (!p_77828_0_.hasKey("title", 8))
 		{
 			return false;
 		}
 		else
 		{
-			String s = par0NBTTagCompound.getString("title");
-			return s != null && s.length() <= 16 ? par0NBTTagCompound.hasKey("author", 8) : false;
+			String s = p_77828_0_.getString("title");
+			return s != null && s.length() <= 16 ? p_77828_0_.hasKey("author", 8) : false;
 		}
 	}
 
-	public String getItemStackDisplayName(ItemStack par1ItemStack)
+	public String getItemStackDisplayName(ItemStack p_77653_1_)
 	{
-		if (par1ItemStack.hasTagCompound())
+		if (p_77653_1_.hasTagCompound())
 		{
-			NBTTagCompound nbttagcompound = par1ItemStack.getTagCompound();
+			NBTTagCompound nbttagcompound = p_77653_1_.getTagCompound();
 			String s = nbttagcompound.getString("title");
 
 			if (!StringUtils.isNullOrEmpty(s))
@@ -49,28 +49,28 @@ public class ItemEditableBook extends Item
 			}
 		}
 
-		return super.getItemStackDisplayName(par1ItemStack);
+		return super.getItemStackDisplayName(p_77653_1_);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_)
 	{
-		if (par1ItemStack.hasTagCompound())
+		if (p_77624_1_.hasTagCompound())
 		{
-			NBTTagCompound nbttagcompound = par1ItemStack.getTagCompound();
+			NBTTagCompound nbttagcompound = p_77624_1_.getTagCompound();
 			String s = nbttagcompound.getString("author");
 
 			if (!StringUtils.isNullOrEmpty(s))
 			{
-				par3List.add(EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted("book.byAuthor", new Object[] {s}));
+				p_77624_3_.add(EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted("book.byAuthor", new Object[] {s}));
 			}
 		}
 	}
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
 	{
-		par3EntityPlayer.displayGUIBook(par1ItemStack);
-		return par1ItemStack;
+		p_77659_3_.displayGUIBook(p_77659_1_);
+		return p_77659_1_;
 	}
 
 	public boolean getShareTag()
@@ -79,7 +79,7 @@ public class ItemEditableBook extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean hasEffect(ItemStack par1ItemStack)
+	public boolean hasEffect(ItemStack p_77636_1_)
 	{
 		return true;
 	}

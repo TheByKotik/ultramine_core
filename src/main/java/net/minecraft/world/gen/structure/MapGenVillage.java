@@ -25,10 +25,10 @@ public class MapGenVillage extends MapGenStructure
 		this.field_82666_h = 8;
 	}
 
-	public MapGenVillage(Map par1Map)
+	public MapGenVillage(Map p_i2093_1_)
 	{
 		this();
-		Iterator iterator = par1Map.entrySet().iterator();
+		Iterator iterator = p_i2093_1_.entrySet().iterator();
 
 		while (iterator.hasNext())
 		{
@@ -50,23 +50,23 @@ public class MapGenVillage extends MapGenStructure
 		return "Village";
 	}
 
-	protected boolean canSpawnStructureAtCoords(int par1, int par2)
+	protected boolean canSpawnStructureAtCoords(int p_75047_1_, int p_75047_2_)
 	{
-		int k = par1;
-		int l = par2;
+		int k = p_75047_1_;
+		int l = p_75047_2_;
 
-		if (par1 < 0)
+		if (p_75047_1_ < 0)
 		{
-			par1 -= this.field_82665_g - 1;
+			p_75047_1_ -= this.field_82665_g - 1;
 		}
 
-		if (par2 < 0)
+		if (p_75047_2_ < 0)
 		{
-			par2 -= this.field_82665_g - 1;
+			p_75047_2_ -= this.field_82665_g - 1;
 		}
 
-		int i1 = par1 / this.field_82665_g;
-		int j1 = par2 / this.field_82665_g;
+		int i1 = p_75047_1_ / this.field_82665_g;
+		int j1 = p_75047_2_ / this.field_82665_g;
 		Random random = this.worldObj.setRandomSeed(i1, j1, 10387312);
 		i1 *= this.field_82665_g;
 		j1 *= this.field_82665_g;
@@ -86,9 +86,9 @@ public class MapGenVillage extends MapGenStructure
 		return false;
 	}
 
-	protected StructureStart getStructureStart(int par1, int par2)
+	protected StructureStart getStructureStart(int p_75049_1_, int p_75049_2_)
 	{
-		return new MapGenVillage.Start(this.worldObj, this.rand, par1, par2, this.terrainType);
+		return new MapGenVillage.Start(this.worldObj, this.rand, p_75049_1_, p_75049_2_, this.terrainType);
 	}
 
 	public static class Start extends StructureStart
@@ -98,13 +98,13 @@ public class MapGenVillage extends MapGenStructure
 
 			public Start() {}
 
-			public Start(World par1World, Random par2Random, int par3, int par4, int par5)
+			public Start(World p_i2092_1_, Random p_i2092_2_, int p_i2092_3_, int p_i2092_4_, int p_i2092_5_)
 			{
-				super(par3, par4);
-				List list = StructureVillagePieces.getStructureVillageWeightedPieceList(par2Random, par5);
-				StructureVillagePieces.Start start = new StructureVillagePieces.Start(par1World.getWorldChunkManager(), 0, par2Random, (par3 << 4) + 2, (par4 << 4) + 2, list, par5);
+				super(p_i2092_3_, p_i2092_4_);
+				List list = StructureVillagePieces.getStructureVillageWeightedPieceList(p_i2092_2_, p_i2092_5_);
+				StructureVillagePieces.Start start = new StructureVillagePieces.Start(p_i2092_1_.getWorldChunkManager(), 0, p_i2092_2_, (p_i2092_3_ << 4) + 2, (p_i2092_4_ << 4) + 2, list, p_i2092_5_);
 				this.components.add(start);
-				start.buildComponent(start, this.components, par2Random);
+				start.buildComponent(start, this.components, p_i2092_2_);
 				List list1 = start.field_74930_j;
 				List list2 = start.field_74932_i;
 				int l;
@@ -115,15 +115,15 @@ public class MapGenVillage extends MapGenStructure
 
 					if (list1.isEmpty())
 					{
-						l = par2Random.nextInt(list2.size());
+						l = p_i2092_2_.nextInt(list2.size());
 						structurecomponent = (StructureComponent)list2.remove(l);
-						structurecomponent.buildComponent(start, this.components, par2Random);
+						structurecomponent.buildComponent(start, this.components, p_i2092_2_);
 					}
 					else
 					{
-						l = par2Random.nextInt(list1.size());
+						l = p_i2092_2_.nextInt(list1.size());
 						structurecomponent = (StructureComponent)list1.remove(l);
-						structurecomponent.buildComponent(start, this.components, par2Random);
+						structurecomponent.buildComponent(start, this.components, p_i2092_2_);
 					}
 				}
 
@@ -149,16 +149,16 @@ public class MapGenVillage extends MapGenStructure
 				return this.hasMoreThanTwoComponents;
 			}
 
-			public void func_143022_a(NBTTagCompound par1NBTTagCompound)
+			public void func_143022_a(NBTTagCompound p_143022_1_)
 			{
-				super.func_143022_a(par1NBTTagCompound);
-				par1NBTTagCompound.setBoolean("Valid", this.hasMoreThanTwoComponents);
+				super.func_143022_a(p_143022_1_);
+				p_143022_1_.setBoolean("Valid", this.hasMoreThanTwoComponents);
 			}
 
-			public void func_143017_b(NBTTagCompound par1NBTTagCompound)
+			public void func_143017_b(NBTTagCompound p_143017_1_)
 			{
-				super.func_143017_b(par1NBTTagCompound);
-				this.hasMoreThanTwoComponents = par1NBTTagCompound.getBoolean("Valid");
+				super.func_143017_b(p_143017_1_);
+				this.hasMoreThanTwoComponents = p_143017_1_.getBoolean("Valid");
 			}
 		}
 }

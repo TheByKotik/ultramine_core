@@ -1,5 +1,6 @@
 package net.minecraft.world;
 
+import com.google.common.collect.Lists;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gnu.trove.iterator.TIntByteIterator;
@@ -105,7 +106,7 @@ public class WorldServer extends World
 		super(p_i45284_2_, p_i45284_3_, p_i45284_5_, WorldProvider.getProviderForDimension(p_i45284_4_), p_i45284_6_);
 		this.mcServer = p_i45284_1_;
 		this.theEntityTracker = new EntityTracker(this);
-		this.thePlayerManager = new PlayerManager(this, p_i45284_1_.getConfigurationManager().getViewDistance());
+		this.thePlayerManager = new PlayerManager(this);
 
 		if (this.entityIdMap == null)
 		{
@@ -210,10 +211,10 @@ public class WorldServer extends World
 		this.func_147488_Z();
 	}
 
-	public BiomeGenBase.SpawnListEntry spawnRandomCreature(EnumCreatureType par1EnumCreatureType, int par2, int par3, int par4)
+	public BiomeGenBase.SpawnListEntry spawnRandomCreature(EnumCreatureType p_73057_1_, int p_73057_2_, int p_73057_3_, int p_73057_4_)
 	{
-		List list = this.getChunkProvider().getPossibleCreatures(par1EnumCreatureType, par2, par3, par4);
-		list = ForgeEventFactory.getPotentialSpawns(this, par1EnumCreatureType, par2, par3, par4, list);
+		List list = this.getChunkProvider().getPossibleCreatures(p_73057_1_, p_73057_2_, p_73057_3_, p_73057_4_);
+		list = ForgeEventFactory.getPotentialSpawns(this, p_73057_1_, p_73057_2_, p_73057_3_, p_73057_4_, list);
 		return list != null && !list.isEmpty() ? (BiomeGenBase.SpawnListEntry)WeightedRandom.getRandomItem(this.rand, list) : null;
 	}
 
@@ -514,32 +515,32 @@ public class WorldServer extends World
 		this.updateEntityTick = 0;
 	}
 
-	public boolean tickUpdates(boolean par1)
+	public boolean tickUpdates(boolean p_72955_1_)
 	{
 		//Выполнение отложенных обновлений перенесено в updatePendingOf(Chunk)
 		return false;
 	}
 
-	public List getPendingBlockUpdates(Chunk par1Chunk, boolean par2)
+	public List getPendingBlockUpdates(Chunk p_72920_1_, boolean p_72920_2_)
 	{
 		//Данный метод вызывался только при сохранении чанка. Теперь он не может вызываться нигде, совместимость не предусмотрена.
 		logger.warn("Called deprecated method getPendingBlockUpdates", new Throwable());
 		return null;
 	}
 
-	public void updateEntityWithOptionalForce(Entity par1Entity, boolean par2)
+	public void updateEntityWithOptionalForce(Entity p_72866_1_, boolean p_72866_2_)
 	{
-		if (!getConfig().mobSpawn.spawnAnimals && (par1Entity instanceof EntityAnimal || par1Entity instanceof EntityWaterMob))
+		if (!getConfig().mobSpawn.spawnAnimals && (p_72866_1_ instanceof EntityAnimal || p_72866_1_ instanceof EntityWaterMob))
 		{
-			par1Entity.setDead();
+			p_72866_1_.setDead();
 		}
 
-		if (!getConfig().mobSpawn.spawnNPCs && par1Entity instanceof INpc)
+		if (!getConfig().mobSpawn.spawnNPCs && p_72866_1_ instanceof INpc)
 		{
-			par1Entity.setDead();
+			p_72866_1_.setDead();
 		}
 
-		super.updateEntityWithOptionalForce(par1Entity, par2);
+		super.updateEntityWithOptionalForce(p_72866_1_, p_72866_2_);
 	}
 
 	protected IChunkProvider createChunkProvider()
@@ -579,9 +580,9 @@ public class WorldServer extends World
 		return arraylist;
 	}
 
-	public boolean canMineBlock(EntityPlayer par1EntityPlayer, int par2, int par3, int par4)
+	public boolean canMineBlock(EntityPlayer p_72962_1_, int p_72962_2_, int p_72962_3_, int p_72962_4_)
 	{
-		return super.canMineBlock(par1EntityPlayer, par2, par3, par4);
+		return super.canMineBlock(p_72962_1_, p_72962_2_, p_72962_3_, p_72962_4_);
 	}
 
 	public boolean canMineBlockBody(EntityPlayer par1EntityPlayer, int par2, int par3, int par4)
@@ -589,7 +590,7 @@ public class WorldServer extends World
 		return !this.mcServer.isBlockProtected(this, par2, par3, par4, par1EntityPlayer);
 	}
 
-	protected void initialize(WorldSettings par1WorldSettings)
+	protected void initialize(WorldSettings p_72963_1_)
 	{
 		if (this.entityIdMap == null)
 		{
@@ -606,11 +607,11 @@ public class WorldServer extends World
 			this.pendingTickListEntriesTreeSet = new TreeSet();
 		}
 
-		this.createSpawnPosition(par1WorldSettings);
-		super.initialize(par1WorldSettings);
+		this.createSpawnPosition(p_72963_1_);
+		super.initialize(p_72963_1_);
 	}
 
-	protected void createSpawnPosition(WorldSettings par1WorldSettings)
+	protected void createSpawnPosition(WorldSettings p_73052_1_)
 	{
 		if (!this.provider.canRespawnHere())
 		{
@@ -654,7 +655,7 @@ public class WorldServer extends World
 			this.worldInfo.setSpawnPosition(i, j, k);
 			this.findingSpawnPoint = false;
 
-			if (par1WorldSettings.isBonusChestEnabled())
+			if (p_73052_1_.isBonusChestEnabled())
 			{
 				this.createBonusChest();
 			}
@@ -683,24 +684,36 @@ public class WorldServer extends World
 		return this.provider.getEntrancePortalLocation();
 	}
 
-	public void saveAllChunks(boolean par1, IProgressUpdate par2IProgressUpdate) throws MinecraftException
+	public void saveAllChunks(boolean p_73044_1_, IProgressUpdate p_73044_2_) throws MinecraftException
 	{
 		if (this.chunkProvider.canSave())
 		{
-			if (par2IProgressUpdate != null)
+			if (p_73044_2_ != null)
 			{
-				par2IProgressUpdate.displayProgressMessage("Saving level");
+				p_73044_2_.displayProgressMessage("Saving level");
 			}
 
 			this.saveLevel();
 
-			if (par2IProgressUpdate != null)
+			if (p_73044_2_ != null)
 			{
-				par2IProgressUpdate.resetProgresAndWorkingMessage("Saving chunks");
+				p_73044_2_.resetProgresAndWorkingMessage("Saving chunks");
 			}
 
-			this.chunkProvider.saveChunks(par1, par2IProgressUpdate);
+			this.chunkProvider.saveChunks(p_73044_1_, p_73044_2_);
 			MinecraftForge.EVENT_BUS.post(new WorldEvent.Save(this));
+			ArrayList arraylist = Lists.newArrayList(this.theChunkProviderServer.func_152380_a());
+			Iterator iterator = arraylist.iterator();
+
+			while (iterator.hasNext())
+			{
+				Chunk chunk = (Chunk)iterator.next();
+
+				if (chunk != null && !this.thePlayerManager.func_152621_a(chunk.xPosition, chunk.zPosition))
+				{
+					this.theChunkProviderServer.unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
+				}
+			}
 		}
 	}
 
@@ -720,11 +733,11 @@ public class WorldServer extends World
 		this.perWorldStorage.saveAllData();
 	}
 
-	public void onEntityAdded(Entity par1Entity)
+	public void onEntityAdded(Entity p_72923_1_)
 	{
-		super.onEntityAdded(par1Entity);
-		this.entityIdMap.addKey(par1Entity.getEntityId(), par1Entity);
-		Entity[] aentity = par1Entity.getParts();
+		super.onEntityAdded(p_72923_1_);
+		this.entityIdMap.addKey(p_72923_1_.getEntityId(), p_72923_1_);
+		Entity[] aentity = p_72923_1_.getParts();
 
 		if (aentity != null)
 		{
@@ -735,11 +748,11 @@ public class WorldServer extends World
 		}
 	}
 
-	public void onEntityRemoved(Entity par1Entity)
+	public void onEntityRemoved(Entity p_72847_1_)
 	{
-		super.onEntityRemoved(par1Entity);
-		this.entityIdMap.removeObject(par1Entity.getEntityId());
-		Entity[] aentity = par1Entity.getParts();
+		super.onEntityRemoved(p_72847_1_);
+		this.entityIdMap.removeObject(p_72847_1_.getEntityId());
+		Entity[] aentity = p_72847_1_.getParts();
 
 		if (aentity != null)
 		{
@@ -750,16 +763,16 @@ public class WorldServer extends World
 		}
 	}
 
-	public Entity getEntityByID(int par1)
+	public Entity getEntityByID(int p_73045_1_)
 	{
-		return (Entity)this.entityIdMap.lookup(par1);
+		return (Entity)this.entityIdMap.lookup(p_73045_1_);
 	}
 
-	public boolean addWeatherEffect(Entity par1Entity)
+	public boolean addWeatherEffect(Entity p_72942_1_)
 	{
-		if (super.addWeatherEffect(par1Entity))
+		if (super.addWeatherEffect(p_72942_1_))
 		{
-			this.mcServer.getConfigurationManager().sendToAllNear(par1Entity.posX, par1Entity.posY, par1Entity.posZ, 512.0D, this.provider.dimensionId, new S2CPacketSpawnGlobalEntity(par1Entity));
+			this.mcServer.getConfigurationManager().sendToAllNear(p_72942_1_.posX, p_72942_1_.posY, p_72942_1_.posZ, 512.0D, this.provider.dimensionId, new S2CPacketSpawnGlobalEntity(p_72942_1_));
 			return true;
 		}
 		else
@@ -768,20 +781,20 @@ public class WorldServer extends World
 		}
 	}
 
-	public void setEntityState(Entity par1Entity, byte par2)
+	public void setEntityState(Entity p_72960_1_, byte p_72960_2_)
 	{
-		this.getEntityTracker().func_151248_b(par1Entity, new S19PacketEntityStatus(par1Entity, par2));
+		this.getEntityTracker().func_151248_b(p_72960_1_, new S19PacketEntityStatus(p_72960_1_, p_72960_2_));
 	}
 
-	public Explosion newExplosion(Entity par1Entity, double par2, double par4, double par6, float par8, boolean par9, boolean par10)
+	public Explosion newExplosion(Entity p_72885_1_, double p_72885_2_, double p_72885_4_, double p_72885_6_, float p_72885_8_, boolean p_72885_9_, boolean p_72885_10_)
 	{
-		Explosion explosion = new Explosion(this, par1Entity, par2, par4, par6, par8);
-		explosion.isFlaming = par9;
-		explosion.isSmoking = par10;
+		Explosion explosion = new Explosion(this, p_72885_1_, p_72885_2_, p_72885_4_, p_72885_6_, p_72885_8_);
+		explosion.isFlaming = p_72885_9_;
+		explosion.isSmoking = p_72885_10_;
 		explosion.doExplosionA();
 		explosion.doExplosionB(false);
 
-		if (!par10)
+		if (!p_72885_10_)
 		{
 			explosion.affectedBlockPositions.clear();
 		}
@@ -792,9 +805,9 @@ public class WorldServer extends World
 		{
 			EntityPlayer entityplayer = (EntityPlayer)iterator.next();
 
-			if (entityplayer.getDistanceSq(par2, par4, par6) < 4096.0D)
+			if (entityplayer.getDistanceSq(p_72885_2_, p_72885_4_, p_72885_6_) < 4096.0D)
 			{
-				((EntityPlayerMP)entityplayer).playerNetServerHandler.sendPacket(new S27PacketExplosion(par2, par4, par6, par8, explosion.affectedBlockPositions, (Vec3)explosion.func_77277_b().get(entityplayer)));
+				((EntityPlayerMP)entityplayer).playerNetServerHandler.sendPacket(new S27PacketExplosion(p_72885_2_, p_72885_4_, p_72885_6_, p_72885_8_, explosion.affectedBlockPositions, (Vec3)explosion.func_77277_b().get(entityplayer)));
 			}
 		}
 
@@ -906,6 +919,11 @@ public class WorldServer extends World
 		}
 	}
 
+	protected int func_152379_p()
+	{
+		return config.chunkLoading.chunkUpdateRadius;
+	}
+
 	public MinecraftServer func_73046_m()
 	{
 		return this.mcServer;
@@ -957,7 +975,7 @@ public class WorldServer extends World
 
 			private ServerBlockEventList() {}
 
-			ServerBlockEventList(Object par1ServerBlockEvent)
+			ServerBlockEventList(Object p_i1521_1_)
 			{
 				this();
 			}
@@ -1034,10 +1052,5 @@ public class WorldServer extends World
 	protected boolean isChunkLoaderEnabled()
 	{
 		return config.chunkLoading.enableChunkLoaders;
-	}
-	
-	protected int getChunkUpdateRadius()
-	{
-		return config.chunkLoading.chunkUpdateRadius;
 	}
 }

@@ -69,6 +69,11 @@ public class ChunkProviderServer implements IChunkProvider
 			chunkGC = new ChunkGC(this);
 	}
 
+	public List func_152380_a()
+	{
+		return new ArrayList<Chunk>(loadedChunkHashMap.valueCollection());
+	}
+	
 	public boolean chunkExists(int par1, int par2)
 	{
 		return this.loadedChunkHashMap.contains(par1, par2);

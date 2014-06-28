@@ -44,32 +44,32 @@ public class RenderZombie extends RenderBiped
 		this.field_82433_n = new ModelZombieVillager(0.5F, 0.0F, true);
 	}
 
-	protected int shouldRenderPass(EntityZombie par1EntityZombie, int par2, float par3)
+	protected int shouldRenderPass(EntityZombie p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
-		this.func_82427_a(par1EntityZombie);
-		return super.shouldRenderPass((EntityLiving)par1EntityZombie, par2, par3);
+		this.func_82427_a(p_77032_1_);
+		return super.shouldRenderPass((EntityLiving)p_77032_1_, p_77032_2_, p_77032_3_);
 	}
 
-	public void doRender(EntityZombie par1EntityZombie, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityZombie p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.func_82427_a(par1EntityZombie);
-		super.doRender((EntityLiving)par1EntityZombie, par2, par4, par6, par8, par9);
+		this.func_82427_a(p_76986_1_);
+		super.doRender((EntityLiving)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected ResourceLocation getEntityTexture(EntityZombie par1EntityZombie)
+	protected ResourceLocation getEntityTexture(EntityZombie p_110775_1_)
 	{
-		return par1EntityZombie instanceof EntityPigZombie ? zombiePigmanTextures : (par1EntityZombie.isVillager() ? zombieVillagerTextures : zombieTextures);
+		return p_110775_1_ instanceof EntityPigZombie ? zombiePigmanTextures : (p_110775_1_.isVillager() ? zombieVillagerTextures : zombieTextures);
 	}
 
-	protected void renderEquippedItems(EntityZombie par1EntityZombie, float par2)
+	protected void renderEquippedItems(EntityZombie p_77029_1_, float p_77029_2_)
 	{
-		this.func_82427_a(par1EntityZombie);
-		super.renderEquippedItems((EntityLiving)par1EntityZombie, par2);
+		this.func_82427_a(p_77029_1_);
+		super.renderEquippedItems((EntityLiving)p_77029_1_, p_77029_2_);
 	}
 
-	private void func_82427_a(EntityZombie par1EntityZombie)
+	private void func_82427_a(EntityZombie p_82427_1_)
 	{
-		if (par1EntityZombie.isVillager())
+		if (p_82427_1_.isVillager())
 		{
 			if (this.field_82431_q != this.zombieVillagerModel.func_82897_a())
 			{
@@ -93,63 +93,63 @@ public class RenderZombie extends RenderBiped
 		this.modelBipedMain = (ModelBiped)this.mainModel;
 	}
 
-	protected void rotateCorpse(EntityZombie par1EntityZombie, float par2, float par3, float par4)
+	protected void rotateCorpse(EntityZombie p_77043_1_, float p_77043_2_, float p_77043_3_, float p_77043_4_)
 	{
-		if (par1EntityZombie.isConverting())
+		if (p_77043_1_.isConverting())
 		{
-			par3 += (float)(Math.cos((double)par1EntityZombie.ticksExisted * 3.25D) * Math.PI * 0.25D);
+			p_77043_3_ += (float)(Math.cos((double)p_77043_1_.ticksExisted * 3.25D) * Math.PI * 0.25D);
 		}
 
-		super.rotateCorpse(par1EntityZombie, par2, par3, par4);
+		super.rotateCorpse(p_77043_1_, p_77043_2_, p_77043_3_, p_77043_4_);
 	}
 
-	protected void renderEquippedItems(EntityLiving par1EntityLiving, float par2)
+	protected void renderEquippedItems(EntityLiving p_77029_1_, float p_77029_2_)
 	{
-		this.renderEquippedItems((EntityZombie)par1EntityLiving, par2);
+		this.renderEquippedItems((EntityZombie)p_77029_1_, p_77029_2_);
 	}
 
-	protected ResourceLocation getEntityTexture(EntityLiving par1EntityLiving)
+	protected ResourceLocation getEntityTexture(EntityLiving p_110775_1_)
 	{
-		return this.getEntityTexture((EntityZombie)par1EntityLiving);
+		return this.getEntityTexture((EntityZombie)p_110775_1_);
 	}
 
-	public void doRender(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLiving p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityZombie)par1EntityLiving, par2, par4, par6, par8, par9);
+		this.doRender((EntityZombie)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected int shouldRenderPass(EntityLiving par1EntityLiving, int par2, float par3)
+	protected int shouldRenderPass(EntityLiving p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
-		return this.shouldRenderPass((EntityZombie)par1EntityLiving, par2, par3);
+		return this.shouldRenderPass((EntityZombie)p_77032_1_, p_77032_2_, p_77032_3_);
 	}
 
-	protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3)
+	protected int shouldRenderPass(EntityLivingBase p_77032_1_, int p_77032_2_, float p_77032_3_)
 	{
-		return this.shouldRenderPass((EntityZombie)par1EntityLivingBase, par2, par3);
+		return this.shouldRenderPass((EntityZombie)p_77032_1_, p_77032_2_, p_77032_3_);
 	}
 
-	protected void renderEquippedItems(EntityLivingBase par1EntityLivingBase, float par2)
+	protected void renderEquippedItems(EntityLivingBase p_77029_1_, float p_77029_2_)
 	{
-		this.renderEquippedItems((EntityZombie)par1EntityLivingBase, par2);
+		this.renderEquippedItems((EntityZombie)p_77029_1_, p_77029_2_);
 	}
 
-	protected void rotateCorpse(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4)
+	protected void rotateCorpse(EntityLivingBase p_77043_1_, float p_77043_2_, float p_77043_3_, float p_77043_4_)
 	{
-		this.rotateCorpse((EntityZombie)par1EntityLivingBase, par2, par3, par4);
+		this.rotateCorpse((EntityZombie)p_77043_1_, p_77043_2_, p_77043_3_, p_77043_4_);
 	}
 
-	public void doRender(EntityLivingBase par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLivingBase p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityZombie)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityZombie)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityZombie)par1Entity);
+		return this.getEntityTexture((EntityZombie)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityZombie)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityZombie)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

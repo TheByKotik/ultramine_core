@@ -15,10 +15,10 @@ public class InventoryMerchant implements IInventory
 	private int currentRecipeIndex;
 	private static final String __OBFID = "CL_00001756";
 
-	public InventoryMerchant(EntityPlayer par1EntityPlayer, IMerchant par2IMerchant)
+	public InventoryMerchant(EntityPlayer p_i1820_1_, IMerchant p_i1820_2_)
 	{
-		this.thePlayer = par1EntityPlayer;
-		this.theMerchant = par2IMerchant;
+		this.thePlayer = p_i1820_1_;
+		this.theMerchant = p_i1820_2_;
 	}
 
 	public int getSizeInventory()
@@ -26,29 +26,29 @@ public class InventoryMerchant implements IInventory
 		return this.theInventory.length;
 	}
 
-	public ItemStack getStackInSlot(int par1)
+	public ItemStack getStackInSlot(int p_70301_1_)
 	{
-		return this.theInventory[par1];
+		return this.theInventory[p_70301_1_];
 	}
 
-	public ItemStack decrStackSize(int par1, int par2)
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
 	{
-		if (this.theInventory[par1] != null)
+		if (this.theInventory[p_70298_1_] != null)
 		{
 			ItemStack itemstack;
 
-			if (par1 == 2)
+			if (p_70298_1_ == 2)
 			{
-				itemstack = this.theInventory[par1];
-				this.theInventory[par1] = null;
+				itemstack = this.theInventory[p_70298_1_];
+				this.theInventory[p_70298_1_] = null;
 				return itemstack;
 			}
-			else if (this.theInventory[par1].stackSize <= par2)
+			else if (this.theInventory[p_70298_1_].stackSize <= p_70298_2_)
 			{
-				itemstack = this.theInventory[par1];
-				this.theInventory[par1] = null;
+				itemstack = this.theInventory[p_70298_1_];
+				this.theInventory[p_70298_1_] = null;
 
-				if (this.inventoryResetNeededOnSlotChange(par1))
+				if (this.inventoryResetNeededOnSlotChange(p_70298_1_))
 				{
 					this.resetRecipeAndSlots();
 				}
@@ -57,14 +57,14 @@ public class InventoryMerchant implements IInventory
 			}
 			else
 			{
-				itemstack = this.theInventory[par1].splitStack(par2);
+				itemstack = this.theInventory[p_70298_1_].splitStack(p_70298_2_);
 
-				if (this.theInventory[par1].stackSize == 0)
+				if (this.theInventory[p_70298_1_].stackSize == 0)
 				{
-					this.theInventory[par1] = null;
+					this.theInventory[p_70298_1_] = null;
 				}
 
-				if (this.inventoryResetNeededOnSlotChange(par1))
+				if (this.inventoryResetNeededOnSlotChange(p_70298_1_))
 				{
 					this.resetRecipeAndSlots();
 				}
@@ -78,17 +78,17 @@ public class InventoryMerchant implements IInventory
 		}
 	}
 
-	private boolean inventoryResetNeededOnSlotChange(int par1)
+	private boolean inventoryResetNeededOnSlotChange(int p_70469_1_)
 	{
-		return par1 == 0 || par1 == 1;
+		return p_70469_1_ == 0 || p_70469_1_ == 1;
 	}
 
-	public ItemStack getStackInSlotOnClosing(int par1)
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_)
 	{
-		if (this.theInventory[par1] != null)
+		if (this.theInventory[p_70304_1_] != null)
 		{
-			ItemStack itemstack = this.theInventory[par1];
-			this.theInventory[par1] = null;
+			ItemStack itemstack = this.theInventory[p_70304_1_];
+			this.theInventory[p_70304_1_] = null;
 			return itemstack;
 		}
 		else
@@ -97,16 +97,16 @@ public class InventoryMerchant implements IInventory
 		}
 	}
 
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
-		this.theInventory[par1] = par2ItemStack;
+		this.theInventory[p_70299_1_] = p_70299_2_;
 
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		if (p_70299_2_ != null && p_70299_2_.stackSize > this.getInventoryStackLimit())
 		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
+			p_70299_2_.stackSize = this.getInventoryStackLimit();
 		}
 
-		if (this.inventoryResetNeededOnSlotChange(par1))
+		if (this.inventoryResetNeededOnSlotChange(p_70299_1_))
 		{
 			this.resetRecipeAndSlots();
 		}
@@ -127,16 +127,16 @@ public class InventoryMerchant implements IInventory
 		return 64;
 	}
 
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
 	{
-		return this.theMerchant.getCustomer() == par1EntityPlayer;
+		return this.theMerchant.getCustomer() == p_70300_1_;
 	}
 
 	public void openInventory() {}
 
 	public void closeInventory() {}
 
-	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
 		return true;
 	}
@@ -204,9 +204,9 @@ public class InventoryMerchant implements IInventory
 		return this.currentRecipe;
 	}
 
-	public void setCurrentRecipeIndex(int par1)
+	public void setCurrentRecipeIndex(int p_70471_1_)
 	{
-		this.currentRecipeIndex = par1;
+		this.currentRecipeIndex = p_70471_1_;
 		this.resetRecipeAndSlots();
 	}
 }

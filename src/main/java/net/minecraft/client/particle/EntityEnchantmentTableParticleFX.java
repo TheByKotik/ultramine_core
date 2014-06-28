@@ -13,15 +13,15 @@ public class EntityEnchantmentTableParticleFX extends EntityFX
 	private double field_70566_as;
 	private static final String __OBFID = "CL_00000902";
 
-	public EntityEnchantmentTableParticleFX(World par1World, double par2, double par4, double par6, double par8, double par10, double par12)
+	public EntityEnchantmentTableParticleFX(World p_i1204_1_, double p_i1204_2_, double p_i1204_4_, double p_i1204_6_, double p_i1204_8_, double p_i1204_10_, double p_i1204_12_)
 	{
-		super(par1World, par2, par4, par6, par8, par10, par12);
-		this.motionX = par8;
-		this.motionY = par10;
-		this.motionZ = par12;
-		this.field_70568_aq = this.posX = par2;
-		this.field_70567_ar = this.posY = par4;
-		this.field_70566_as = this.posZ = par6;
+		super(p_i1204_1_, p_i1204_2_, p_i1204_4_, p_i1204_6_, p_i1204_8_, p_i1204_10_, p_i1204_12_);
+		this.motionX = p_i1204_8_;
+		this.motionY = p_i1204_10_;
+		this.motionZ = p_i1204_12_;
+		this.field_70568_aq = this.posX = p_i1204_2_;
+		this.field_70567_ar = this.posY = p_i1204_4_;
+		this.field_70566_as = this.posZ = p_i1204_6_;
 		float f = this.rand.nextFloat() * 0.6F + 0.4F;
 		this.field_70565_a = this.particleScale = this.rand.nextFloat() * 0.5F + 0.2F;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F * f;
@@ -32,9 +32,9 @@ public class EntityEnchantmentTableParticleFX extends EntityFX
 		this.setParticleTextureIndex((int)(Math.random() * 26.0D + 1.0D + 224.0D));
 	}
 
-	public int getBrightnessForRender(float par1)
+	public int getBrightnessForRender(float p_70070_1_)
 	{
-		int i = super.getBrightnessForRender(par1);
+		int i = super.getBrightnessForRender(p_70070_1_);
 		float f1 = (float)this.particleAge / (float)this.particleMaxAge;
 		f1 *= f1;
 		f1 *= f1;
@@ -50,9 +50,9 @@ public class EntityEnchantmentTableParticleFX extends EntityFX
 		return j | k << 16;
 	}
 
-	public float getBrightness(float par1)
+	public float getBrightness(float p_70013_1_)
 	{
-		float f1 = super.getBrightness(par1);
+		float f1 = super.getBrightness(p_70013_1_);
 		float f2 = (float)this.particleAge / (float)this.particleMaxAge;
 		f2 *= f2;
 		f2 *= f2;

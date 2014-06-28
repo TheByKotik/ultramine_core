@@ -7,14 +7,14 @@ public abstract class Team
 {
 	private static final String __OBFID = "CL_00000621";
 
-	public boolean isSameTeam(Team par1Team)
+	public boolean isSameTeam(Team p_142054_1_)
 	{
-		return par1Team == null ? false : this == par1Team;
+		return p_142054_1_ == null ? false : this == p_142054_1_;
 	}
 
 	public abstract String getRegisteredName();
 
-	public abstract String formatString(String var1);
+	public abstract String formatString(String p_142053_1_);
 
 	@SideOnly(Side.CLIENT)
 	public abstract boolean func_98297_h();

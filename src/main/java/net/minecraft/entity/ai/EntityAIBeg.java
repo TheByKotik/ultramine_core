@@ -15,11 +15,11 @@ public class EntityAIBeg extends EntityAIBase
 	private int field_75384_e;
 	private static final String __OBFID = "CL_00001576";
 
-	public EntityAIBeg(EntityWolf par1EntityWolf, float par2)
+	public EntityAIBeg(EntityWolf p_i1617_1_, float p_i1617_2_)
 	{
-		this.theWolf = par1EntityWolf;
-		this.worldObject = par1EntityWolf.worldObj;
-		this.minPlayerDistance = par2;
+		this.theWolf = p_i1617_1_;
+		this.worldObject = p_i1617_1_.worldObj;
+		this.minPlayerDistance = p_i1617_2_;
 		this.setMutexBits(2);
 	}
 
@@ -52,9 +52,9 @@ public class EntityAIBeg extends EntityAIBase
 		--this.field_75384_e;
 	}
 
-	private boolean hasPlayerGotBoneInHand(EntityPlayer par1EntityPlayer)
+	private boolean hasPlayerGotBoneInHand(EntityPlayer p_75382_1_)
 	{
-		ItemStack itemstack = par1EntityPlayer.inventory.getCurrentItem();
+		ItemStack itemstack = p_75382_1_.inventory.getCurrentItem();
 		return itemstack == null ? false : (!this.theWolf.isTamed() && itemstack.getItem() == Items.bone ? true : this.theWolf.isBreedingItem(itemstack));
 	}
 }

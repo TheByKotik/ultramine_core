@@ -18,35 +18,35 @@ public class EntityEnderEye extends Entity
 	private boolean shatterOrDrop;
 	private static final String __OBFID = "CL_00001716";
 
-	public EntityEnderEye(World par1World)
+	public EntityEnderEye(World p_i1757_1_)
 	{
-		super(par1World);
+		super(p_i1757_1_);
 		this.setSize(0.25F, 0.25F);
 	}
 
 	protected void entityInit() {}
 
 	@SideOnly(Side.CLIENT)
-	public boolean isInRangeToRenderDist(double par1)
+	public boolean isInRangeToRenderDist(double p_70112_1_)
 	{
 		double d1 = this.boundingBox.getAverageEdgeLength() * 4.0D;
 		d1 *= 64.0D;
-		return par1 < d1 * d1;
+		return p_70112_1_ < d1 * d1;
 	}
 
-	public EntityEnderEye(World par1World, double par2, double par4, double par6)
+	public EntityEnderEye(World p_i1758_1_, double p_i1758_2_, double p_i1758_4_, double p_i1758_6_)
 	{
-		super(par1World);
+		super(p_i1758_1_);
 		this.despawnTimer = 0;
 		this.setSize(0.25F, 0.25F);
-		this.setPosition(par2, par4, par6);
+		this.setPosition(p_i1758_2_, p_i1758_4_, p_i1758_6_);
 		this.yOffset = 0.0F;
 	}
 
-	public void moveTowards(double par1, int par3, double par4)
+	public void moveTowards(double p_70220_1_, int p_70220_3_, double p_70220_4_)
 	{
-		double d2 = par1 - this.posX;
-		double d3 = par4 - this.posZ;
+		double d2 = p_70220_1_ - this.posX;
+		double d3 = p_70220_4_ - this.posZ;
 		float f = MathHelper.sqrt_double(d2 * d2 + d3 * d3);
 
 		if (f > 12.0F)
@@ -57,9 +57,9 @@ public class EntityEnderEye extends Entity
 		}
 		else
 		{
-			this.targetX = par1;
-			this.targetY = (double)par3;
-			this.targetZ = par4;
+			this.targetX = p_70220_1_;
+			this.targetY = (double)p_70220_3_;
+			this.targetZ = p_70220_4_;
 		}
 
 		this.despawnTimer = 0;
@@ -67,17 +67,17 @@ public class EntityEnderEye extends Entity
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void setVelocity(double par1, double par3, double par5)
+	public void setVelocity(double p_70016_1_, double p_70016_3_, double p_70016_5_)
 	{
-		this.motionX = par1;
-		this.motionY = par3;
-		this.motionZ = par5;
+		this.motionX = p_70016_1_;
+		this.motionY = p_70016_3_;
+		this.motionZ = p_70016_5_;
 
 		if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
 		{
-			float f = MathHelper.sqrt_double(par1 * par1 + par5 * par5);
-			this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(par1, par5) * 180.0D / Math.PI);
-			this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(par3, (double)f) * 180.0D / Math.PI);
+			float f = MathHelper.sqrt_double(p_70016_1_ * p_70016_1_ + p_70016_5_ * p_70016_5_);
+			this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(p_70016_1_, p_70016_5_) * 180.0D / Math.PI);
+			this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(p_70016_3_, (double)f) * 180.0D / Math.PI);
 		}
 	}
 
@@ -178,9 +178,9 @@ public class EntityEnderEye extends Entity
 		}
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {}
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_) {}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {}
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_) {}
 
 	@SideOnly(Side.CLIENT)
 	public float getShadowSize()
@@ -188,13 +188,13 @@ public class EntityEnderEye extends Entity
 		return 0.0F;
 	}
 
-	public float getBrightness(float par1)
+	public float getBrightness(float p_70013_1_)
 	{
 		return 1.0F;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getBrightnessForRender(float par1)
+	public int getBrightnessForRender(float p_70070_1_)
 	{
 		return 15728880;
 	}

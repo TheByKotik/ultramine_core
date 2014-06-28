@@ -42,9 +42,9 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 	private EntityAIAttackOnCollide aiAttackOnCollide = new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.2D, false);
 	private static final String __OBFID = "CL_00001697";
 
-	public EntitySkeleton(World par1World)
+	public EntitySkeleton(World p_i1741_1_)
 	{
-		super(par1World);
+		super(p_i1741_1_);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIRestrictSun(this));
 		this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
@@ -54,7 +54,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
 
-		if (par1World != null && !par1World.isRemote)
+		if (p_i1741_1_ != null && !p_i1741_1_.isRemote)
 		{
 			this.setCombatTask();
 		}
@@ -97,13 +97,13 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 		this.playSound("mob.skeleton.step", 0.15F, 1.0F);
 	}
 
-	public boolean attackEntityAsMob(Entity par1Entity)
+	public boolean attackEntityAsMob(Entity p_70652_1_)
 	{
-		if (super.attackEntityAsMob(par1Entity))
+		if (super.attackEntityAsMob(p_70652_1_))
 		{
-			if (this.getSkeletonType() == 1 && par1Entity instanceof EntityLivingBase)
+			if (this.getSkeletonType() == 1 && p_70652_1_ instanceof EntityLivingBase)
 			{
-				((EntityLivingBase)par1Entity).addPotionEffect(new PotionEffect(Potion.wither.id, 200));
+				((EntityLivingBase)p_70652_1_).addPotionEffect(new PotionEffect(Potion.wither.id, 200));
 			}
 
 			return true;
@@ -172,13 +172,13 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 		}
 	}
 
-	public void onDeath(DamageSource par1DamageSource)
+	public void onDeath(DamageSource p_70645_1_)
 	{
-		super.onDeath(par1DamageSource);
+		super.onDeath(p_70645_1_);
 
-		if (par1DamageSource.getSourceOfDamage() instanceof EntityArrow && par1DamageSource.getEntity() instanceof EntityPlayer)
+		if (p_70645_1_.getSourceOfDamage() instanceof EntityArrow && p_70645_1_.getEntity() instanceof EntityPlayer)
 		{
-			EntityPlayer entityplayer = (EntityPlayer)par1DamageSource.getEntity();
+			EntityPlayer entityplayer = (EntityPlayer)p_70645_1_.getEntity();
 			double d0 = entityplayer.posX - this.posX;
 			double d1 = entityplayer.posZ - this.posZ;
 
@@ -194,14 +194,14 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 		return Items.arrow;
 	}
 
-	protected void dropFewItems(boolean par1, int par2)
+	protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
 	{
 		int j;
 		int k;
 
 		if (this.getSkeletonType() == 1)
 		{
-			j = this.rand.nextInt(3 + par2) - 1;
+			j = this.rand.nextInt(3 + p_70628_2_) - 1;
 
 			for (k = 0; k < j; ++k)
 			{
@@ -210,7 +210,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 		}
 		else
 		{
-			j = this.rand.nextInt(3 + par2);
+			j = this.rand.nextInt(3 + p_70628_2_);
 
 			for (k = 0; k < j; ++k)
 			{
@@ -218,7 +218,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 			}
 		}
 
-		j = this.rand.nextInt(3 + par2);
+		j = this.rand.nextInt(3 + p_70628_2_);
 
 		for (k = 0; k < j; ++k)
 		{
@@ -226,7 +226,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 		}
 	}
 
-	protected void dropRareDrop(int par1)
+	protected void dropRareDrop(int p_70600_1_)
 	{
 		if (this.getSkeletonType() == 1)
 		{
@@ -240,9 +240,9 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 		this.setCurrentItemOrArmor(0, new ItemStack(Items.bow));
 	}
 
-	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
+	public IEntityLivingData onSpawnWithEgg(IEntityLivingData p_110161_1_)
 	{
-		par1EntityLivingData = super.onSpawnWithEgg(par1EntityLivingData);
+		p_110161_1_ = super.onSpawnWithEgg(p_110161_1_);
 
 		if (this.worldObj.provider instanceof WorldProviderHell && this.getRNG().nextInt(5) > 0)
 		{
@@ -271,7 +271,7 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 			}
 		}
 
-		return par1EntityLivingData;
+		return p_110161_1_;
 	}
 
 	public void setCombatTask()
@@ -290,12 +290,12 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 		}
 	}
 
-	public void attackEntityWithRangedAttack(EntityLivingBase par1EntityLivingBase, float par2)
+	public void attackEntityWithRangedAttack(EntityLivingBase p_82196_1_, float p_82196_2_)
 	{
-		EntityArrow entityarrow = new EntityArrow(this.worldObj, this, par1EntityLivingBase, 1.6F, (float)(14 - this.worldObj.difficultySetting.getDifficultyId() * 4));
+		EntityArrow entityarrow = new EntityArrow(this.worldObj, this, p_82196_1_, 1.6F, (float)(14 - this.worldObj.difficultySetting.getDifficultyId() * 4));
 		int i = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, this.getHeldItem());
 		int j = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, this.getHeldItem());
-		entityarrow.setDamage((double)(par2 * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.difficultySetting.getDifficultyId() * 0.11F));
+		entityarrow.setDamage((double)(p_82196_2_ * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.difficultySetting.getDifficultyId() * 0.11F));
 
 		if (i > 0)
 		{
@@ -321,12 +321,12 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 		return this.dataWatcher.getWatchableObjectByte(13);
 	}
 
-	public void setSkeletonType(int par1)
+	public void setSkeletonType(int p_82201_1_)
 	{
-		this.dataWatcher.updateObject(13, Byte.valueOf((byte)par1));
-		this.isImmuneToFire = par1 == 1;
+		this.dataWatcher.updateObject(13, Byte.valueOf((byte)p_82201_1_));
+		this.isImmuneToFire = p_82201_1_ == 1;
 
-		if (par1 == 1)
+		if (p_82201_1_ == 1)
 		{
 			this.setSize(0.72F, 2.34F);
 		}
@@ -336,30 +336,30 @@ public class EntitySkeleton extends EntityMob implements IRangedAttackMob
 		}
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
+		super.readEntityFromNBT(p_70037_1_);
 
-		if (par1NBTTagCompound.hasKey("SkeletonType", 99))
+		if (p_70037_1_.hasKey("SkeletonType", 99))
 		{
-			byte b0 = par1NBTTagCompound.getByte("SkeletonType");
+			byte b0 = p_70037_1_.getByte("SkeletonType");
 			this.setSkeletonType(b0);
 		}
 
 		this.setCombatTask();
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setByte("SkeletonType", (byte)this.getSkeletonType());
+		super.writeEntityToNBT(p_70014_1_);
+		p_70014_1_.setByte("SkeletonType", (byte)this.getSkeletonType());
 	}
 
-	public void setCurrentItemOrArmor(int par1, ItemStack par2ItemStack)
+	public void setCurrentItemOrArmor(int p_70062_1_, ItemStack p_70062_2_)
 	{
-		super.setCurrentItemOrArmor(par1, par2ItemStack);
+		super.setCurrentItemOrArmor(p_70062_1_, p_70062_2_);
 
-		if (!this.worldObj.isRemote && par1 == 0)
+		if (!this.worldObj.isRemote && p_70062_1_ == 0)
 		{
 			this.setCombatTask();
 		}

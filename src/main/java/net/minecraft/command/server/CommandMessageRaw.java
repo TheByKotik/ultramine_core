@@ -25,21 +25,21 @@ public class CommandMessageRaw extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.tellraw.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length < 2)
+		if (p_71515_2_.length < 2)
 		{
 			throw new WrongUsageException("commands.tellraw.usage", new Object[0]);
 		}
 		else
 		{
-			EntityPlayerMP entityplayermp = getPlayer(par1ICommandSender, par2ArrayOfStr[0]);
-			String s = func_82360_a(par1ICommandSender, par2ArrayOfStr, 1);
+			EntityPlayerMP entityplayermp = getPlayer(p_71515_1_, p_71515_2_[0]);
+			String s = func_82360_a(p_71515_1_, p_71515_2_, 1);
 
 			try
 			{
@@ -48,18 +48,19 @@ public class CommandMessageRaw extends CommandBase
 			}
 			catch (JsonParseException jsonparseexception)
 			{
-				throw new SyntaxErrorException("commands.tellraw.jsonException", new Object[] {ExceptionUtils.getRootCause(jsonparseexception).getMessage()});
+				Throwable throwable = ExceptionUtils.getRootCause(jsonparseexception);
+				throw new SyntaxErrorException("commands.tellraw.jsonException", new Object[] {throwable == null ? "" : throwable.getMessage()});
 			}
 		}
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames()) : null;
+		return p_71516_2_.length == 1 ? getListOfStringsMatchingLastWord(p_71516_2_, MinecraftServer.getServer().getAllUsernames()) : null;
 	}
 
-	public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2)
+	public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_)
 	{
-		return par2 == 0;
+		return p_82358_2_ == 0;
 	}
 }

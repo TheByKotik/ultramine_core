@@ -17,13 +17,13 @@ public class ContainerWorkbench extends Container
 	private int posZ;
 	private static final String __OBFID = "CL_00001744";
 
-	public ContainerWorkbench(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5)
+	public ContainerWorkbench(InventoryPlayer p_i1808_1_, World p_i1808_2_, int p_i1808_3_, int p_i1808_4_, int p_i1808_5_)
 	{
-		this.worldObj = par2World;
-		this.posX = par3;
-		this.posY = par4;
-		this.posZ = par5;
-		this.addSlotToContainer(new SlotCrafting(par1InventoryPlayer.player, this.craftMatrix, this.craftResult, 0, 124, 35));
+		this.worldObj = p_i1808_2_;
+		this.posX = p_i1808_3_;
+		this.posY = p_i1808_4_;
+		this.posZ = p_i1808_5_;
+		this.addSlotToContainer(new SlotCrafting(p_i1808_1_.player, this.craftMatrix, this.craftResult, 0, 124, 35));
 		int l;
 		int i1;
 
@@ -39,26 +39,26 @@ public class ContainerWorkbench extends Container
 		{
 			for (i1 = 0; i1 < 9; ++i1)
 			{
-				this.addSlotToContainer(new Slot(par1InventoryPlayer, i1 + l * 9 + 9, 8 + i1 * 18, 84 + l * 18));
+				this.addSlotToContainer(new Slot(p_i1808_1_, i1 + l * 9 + 9, 8 + i1 * 18, 84 + l * 18));
 			}
 		}
 
 		for (l = 0; l < 9; ++l)
 		{
-			this.addSlotToContainer(new Slot(par1InventoryPlayer, l, 8 + l * 18, 142));
+			this.addSlotToContainer(new Slot(p_i1808_1_, l, 8 + l * 18, 142));
 		}
 
 		this.onCraftMatrixChanged(this.craftMatrix);
 	}
 
-	public void onCraftMatrixChanged(IInventory par1IInventory)
+	public void onCraftMatrixChanged(IInventory p_75130_1_)
 	{
 		this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.worldObj));
 	}
 
-	public void onContainerClosed(EntityPlayer par1EntityPlayer)
+	public void onContainerClosed(EntityPlayer p_75134_1_)
 	{
-		super.onContainerClosed(par1EntityPlayer);
+		super.onContainerClosed(p_75134_1_);
 
 		if (!this.worldObj.isRemote)
 		{
@@ -68,28 +68,28 @@ public class ContainerWorkbench extends Container
 
 				if (itemstack != null)
 				{
-					par1EntityPlayer.dropPlayerItemWithRandomChoice(itemstack, false);
+					p_75134_1_.dropPlayerItemWithRandomChoice(itemstack, false);
 				}
 			}
 		}
 	}
 
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+	public boolean canInteractWith(EntityPlayer p_75145_1_)
 	{
-		return this.worldObj.getBlock(this.posX, this.posY, this.posZ) != Blocks.crafting_table ? false : par1EntityPlayer.getDistanceSq((double)this.posX + 0.5D, (double)this.posY + 0.5D, (double)this.posZ + 0.5D) <= 64.0D;
+		return this.worldObj.getBlock(this.posX, this.posY, this.posZ) != Blocks.crafting_table ? false : p_75145_1_.getDistanceSq((double)this.posX + 0.5D, (double)this.posY + 0.5D, (double)this.posZ + 0.5D) <= 64.0D;
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
 	{
 		ItemStack itemstack = null;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = (Slot)this.inventorySlots.get(p_82846_2_);
 
 		if (slot != null && slot.getHasStack())
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			if (par2 == 0)
+			if (p_82846_2_ == 0)
 			{
 				if (!this.mergeItemStack(itemstack1, 10, 46, true))
 				{
@@ -98,14 +98,14 @@ public class ContainerWorkbench extends Container
 
 				slot.onSlotChange(itemstack1, itemstack);
 			}
-			else if (par2 >= 10 && par2 < 37)
+			else if (p_82846_2_ >= 10 && p_82846_2_ < 37)
 			{
 				if (!this.mergeItemStack(itemstack1, 37, 46, false))
 				{
 					return null;
 				}
 			}
-			else if (par2 >= 37 && par2 < 46)
+			else if (p_82846_2_ >= 37 && p_82846_2_ < 46)
 			{
 				if (!this.mergeItemStack(itemstack1, 10, 37, false))
 				{
@@ -131,14 +131,14 @@ public class ContainerWorkbench extends Container
 				return null;
 			}
 
-			slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+			slot.onPickupFromSlot(p_82846_1_, itemstack1);
 		}
 
 		return itemstack;
 	}
 
-	public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot)
+	public boolean func_94530_a(ItemStack p_94530_1_, Slot p_94530_2_)
 	{
-		return par2Slot.inventory != this.craftResult && super.func_94530_a(par1ItemStack, par2Slot);
+		return p_94530_2_.inventory != this.craftResult && super.func_94530_a(p_94530_1_, p_94530_2_);
 	}
 }

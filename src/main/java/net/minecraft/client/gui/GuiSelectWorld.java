@@ -21,7 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @SideOnly(Side.CLIENT)
-public class GuiSelectWorld extends GuiScreen
+public class GuiSelectWorld extends GuiScreen implements GuiYesNoCallback
 {
 	private static final Logger logger = LogManager.getLogger();
 	private final DateFormat field_146633_h = new SimpleDateFormat();
@@ -41,9 +41,9 @@ public class GuiSelectWorld extends GuiScreen
 	private GuiButton field_146631_B;
 	private static final String __OBFID = "CL_00000711";
 
-	public GuiSelectWorld(GuiScreen par1GuiScreen)
+	public GuiSelectWorld(GuiScreen p_i1054_1_)
 	{
-		this.field_146632_a = par1GuiScreen;
+		this.field_146632_a = p_i1054_1_;
 	}
 
 	public void initGui()
@@ -121,7 +121,7 @@ public class GuiSelectWorld extends GuiScreen
 				if (s != null)
 				{
 					this.field_146643_x = true;
-					GuiYesNo guiyesno = func_146623_a(this, s, this.field_146640_r);
+					GuiYesNo guiyesno = func_152129_a(this, s, this.field_146640_r);
 					this.mc.displayGuiScreen(guiyesno);
 				}
 			}
@@ -185,17 +185,17 @@ public class GuiSelectWorld extends GuiScreen
 		}
 	}
 
-	public void confirmClicked(boolean par1, int par2)
+	public void confirmClicked(boolean p_73878_1_, int p_73878_2_)
 	{
 		if (this.field_146643_x)
 		{
 			this.field_146643_x = false;
 
-			if (par1)
+			if (p_73878_1_)
 			{
 				ISaveFormat isaveformat = this.mc.getSaveLoader();
 				isaveformat.flushCache();
-				isaveformat.deleteWorldDirectory(this.func_146621_a(par2));
+				isaveformat.deleteWorldDirectory(this.func_146621_a(p_73878_2_));
 
 				try
 				{
@@ -211,20 +211,20 @@ public class GuiSelectWorld extends GuiScreen
 		}
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
-		this.field_146638_t.drawScreen(par1, par2, par3);
+		this.field_146638_t.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 		this.drawCenteredString(this.fontRendererObj, this.field_146628_f, this.width / 2, 20, 16777215);
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 
-	public static GuiYesNo func_146623_a(GuiScreen p_146623_0_, String p_146623_1_, int p_146623_2_)
+	public static GuiYesNo func_152129_a(GuiYesNoCallback p_152129_0_, String p_152129_1_, int p_152129_2_)
 	{
 		String s1 = I18n.format("selectWorld.deleteQuestion", new Object[0]);
-		String s2 = "\'" + p_146623_1_ + "\' " + I18n.format("selectWorld.deleteWarning", new Object[0]);
+		String s2 = "\'" + p_152129_1_ + "\' " + I18n.format("selectWorld.deleteWarning", new Object[0]);
 		String s3 = I18n.format("selectWorld.deleteButton", new Object[0]);
 		String s4 = I18n.format("gui.cancel", new Object[0]);
-		GuiYesNo guiyesno = new GuiYesNo(p_146623_0_, s1, s2, s3, s4, p_146623_2_);
+		GuiYesNo guiyesno = new GuiYesNo(p_152129_0_, s1, s2, s3, s4, p_152129_2_);
 		return guiyesno;
 	}
 

@@ -8,12 +8,12 @@ public abstract class EntityGolem extends EntityCreature implements IAnimals
 {
 	private static final String __OBFID = "CL_00001644";
 
-	public EntityGolem(World par1World)
+	public EntityGolem(World p_i1686_1_)
 	{
-		super(par1World);
+		super(p_i1686_1_);
 	}
 
-	protected void fall(float par1) {}
+	protected void fall(float p_70069_1_) {}
 
 	protected String getLivingSound()
 	{

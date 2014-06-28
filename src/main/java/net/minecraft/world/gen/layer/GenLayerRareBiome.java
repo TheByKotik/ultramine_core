@@ -12,32 +12,32 @@ public class GenLayerRareBiome extends GenLayer
 		this.parent = p_i45478_3_;
 	}
 
-	public int[] getInts(int par1, int par2, int par3, int par4)
+	public int[] getInts(int p_75904_1_, int p_75904_2_, int p_75904_3_, int p_75904_4_)
 	{
-		int[] aint = this.parent.getInts(par1 - 1, par2 - 1, par3 + 2, par4 + 2);
-		int[] aint1 = IntCache.getIntCache(par3 * par4);
+		int[] aint = this.parent.getInts(p_75904_1_ - 1, p_75904_2_ - 1, p_75904_3_ + 2, p_75904_4_ + 2);
+		int[] aint1 = IntCache.getIntCache(p_75904_3_ * p_75904_4_);
 
-		for (int i1 = 0; i1 < par4; ++i1)
+		for (int i1 = 0; i1 < p_75904_4_; ++i1)
 		{
-			for (int j1 = 0; j1 < par3; ++j1)
+			for (int j1 = 0; j1 < p_75904_3_; ++j1)
 			{
-				this.initChunkSeed((long)(j1 + par1), (long)(i1 + par2));
-				int k1 = aint[j1 + 1 + (i1 + 1) * (par3 + 2)];
+				this.initChunkSeed((long)(j1 + p_75904_1_), (long)(i1 + p_75904_2_));
+				int k1 = aint[j1 + 1 + (i1 + 1) * (p_75904_3_ + 2)];
 
 				if (this.nextInt(57) == 0)
 				{
 					if (k1 == BiomeGenBase.plains.biomeID)
 					{
-						aint1[j1 + i1 * par3] = BiomeGenBase.plains.biomeID + 128;
+						aint1[j1 + i1 * p_75904_3_] = BiomeGenBase.plains.biomeID + 128;
 					}
 					else
 					{
-						aint1[j1 + i1 * par3] = k1;
+						aint1[j1 + i1 * p_75904_3_] = k1;
 					}
 				}
 				else
 				{
-					aint1[j1 + i1 * par3] = k1;
+					aint1[j1 + i1 * p_75904_3_] = k1;
 				}
 			}
 		}

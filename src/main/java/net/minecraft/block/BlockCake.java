@@ -51,7 +51,7 @@ public class BlockCake extends Block
 		float f = 0.0625F;
 		float f1 = (float)(1 + l * 2) / 16.0F;
 		float f2 = 0.5F;
-		return AxisAlignedBB.getAABBPool().getAABB((double)((float)p_149668_2_ + f1), (double)p_149668_3_, (double)((float)p_149668_4_ + f), (double)((float)(p_149668_2_ + 1) - f), (double)((float)p_149668_3_ + f2 - f), (double)((float)(p_149668_4_ + 1) - f));
+		return AxisAlignedBB.getBoundingBox((double)((float)p_149668_2_ + f1), (double)p_149668_3_, (double)((float)p_149668_4_ + f), (double)((float)(p_149668_2_ + 1) - f), (double)((float)p_149668_3_ + f2 - f), (double)((float)(p_149668_4_ + 1) - f));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -61,7 +61,7 @@ public class BlockCake extends Block
 		float f = 0.0625F;
 		float f1 = (float)(1 + l * 2) / 16.0F;
 		float f2 = 0.5F;
-		return AxisAlignedBB.getAABBPool().getAABB((double)((float)p_149633_2_ + f1), (double)p_149633_3_, (double)((float)p_149633_4_ + f), (double)((float)(p_149633_2_ + 1) - f), (double)((float)p_149633_3_ + f2), (double)((float)(p_149633_4_ + 1) - f));
+		return AxisAlignedBB.getBoundingBox((double)((float)p_149633_2_ + f1), (double)p_149633_3_, (double)((float)p_149633_4_ + f), (double)((float)(p_149633_2_ + 1) - f), (double)((float)p_149633_3_ + f2), (double)((float)(p_149633_4_ + 1) - f));
 	}
 
 	@SideOnly(Side.CLIENT)

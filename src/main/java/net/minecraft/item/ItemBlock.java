@@ -24,9 +24,9 @@ public class ItemBlock extends Item
 		this.field_150939_a = p_i45328_1_;
 	}
 
-	public ItemBlock setUnlocalizedName(String p_150937_1_)
+	public ItemBlock setUnlocalizedName(String p_77655_1_)
 	{
-		super.setUnlocalizedName(p_150937_1_);
+		super.setUnlocalizedName(p_77655_1_);
 		return this;
 	}
 
@@ -37,73 +37,73 @@ public class ItemBlock extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int par1)
+	public IIcon getIconFromDamage(int p_77617_1_)
 	{
 		return this.field_150938_b != null ? this.field_150938_b : this.field_150939_a.getBlockTextureFromSide(1);
 	}
 
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
-		Block block = par3World.getBlock(par4, par5, par6);
+		Block block = p_77648_3_.getBlock(p_77648_4_, p_77648_5_, p_77648_6_);
 
-		if (block == Blocks.snow_layer && (par3World.getBlockMetadata(par4, par5, par6) & 7) < 1)
+		if (block == Blocks.snow_layer && (p_77648_3_.getBlockMetadata(p_77648_4_, p_77648_5_, p_77648_6_) & 7) < 1)
 		{
-			par7 = 1;
+			p_77648_7_ = 1;
 		}
-		else if (block != Blocks.vine && block != Blocks.tallgrass && block != Blocks.deadbush && !block.isReplaceable(par3World, par4, par5, par6))
+		else if (block != Blocks.vine && block != Blocks.tallgrass && block != Blocks.deadbush && !block.isReplaceable(p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_))
 		{
-			if (par7 == 0)
+			if (p_77648_7_ == 0)
 			{
-				--par5;
+				--p_77648_5_;
 			}
 
-			if (par7 == 1)
+			if (p_77648_7_ == 1)
 			{
-				++par5;
+				++p_77648_5_;
 			}
 
-			if (par7 == 2)
+			if (p_77648_7_ == 2)
 			{
-				--par6;
+				--p_77648_6_;
 			}
 
-			if (par7 == 3)
+			if (p_77648_7_ == 3)
 			{
-				++par6;
+				++p_77648_6_;
 			}
 
-			if (par7 == 4)
+			if (p_77648_7_ == 4)
 			{
-				--par4;
+				--p_77648_4_;
 			}
 
-			if (par7 == 5)
+			if (p_77648_7_ == 5)
 			{
-				++par4;
+				++p_77648_4_;
 			}
 		}
 
-		if (par1ItemStack.stackSize == 0)
+		if (p_77648_1_.stackSize == 0)
 		{
 			return false;
 		}
-		else if (!par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack))
+		else if (!p_77648_2_.canPlayerEdit(p_77648_4_, p_77648_5_, p_77648_6_, p_77648_7_, p_77648_1_))
 		{
 			return false;
 		}
-		else if (par5 == 255 && this.field_150939_a.getMaterial().isSolid())
+		else if (p_77648_5_ == 255 && this.field_150939_a.getMaterial().isSolid())
 		{
 			return false;
 		}
-		else if (par3World.canPlaceEntityOnSide(this.field_150939_a, par4, par5, par6, false, par7, par2EntityPlayer, par1ItemStack))
+		else if (p_77648_3_.canPlaceEntityOnSide(this.field_150939_a, p_77648_4_, p_77648_5_, p_77648_6_, false, p_77648_7_, p_77648_2_, p_77648_1_))
 		{
-			int i1 = this.getMetadata(par1ItemStack.getItemDamage());
-			int j1 = this.field_150939_a.onBlockPlaced(par3World, par4, par5, par6, par7, par8, par9, par10, i1);
+			int i1 = this.getMetadata(p_77648_1_.getItemDamage());
+			int j1 = this.field_150939_a.onBlockPlaced(p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_, p_77648_7_, p_77648_8_, p_77648_9_, p_77648_10_, i1);
 
-			if (placeBlockAt(par1ItemStack, par2EntityPlayer, par3World, par4, par5, par6, par7, par8, par9, par10, j1))
+			if (placeBlockAt(p_77648_1_, p_77648_2_, p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_, p_77648_7_, p_77648_8_, p_77648_9_, p_77648_10_, j1))
 			{
-				par3World.playSoundEffect((double)((float)par4 + 0.5F), (double)((float)par5 + 0.5F), (double)((float)par6 + 0.5F), this.field_150939_a.stepSound.func_150496_b(), (this.field_150939_a.stepSound.getVolume() + 1.0F) / 2.0F, this.field_150939_a.stepSound.getPitch() * 0.8F);
-				--par1ItemStack.stackSize;
+				p_77648_3_.playSoundEffect((double)((float)p_77648_4_ + 0.5F), (double)((float)p_77648_5_ + 0.5F), (double)((float)p_77648_6_ + 0.5F), this.field_150939_a.stepSound.func_150496_b(), (this.field_150939_a.stepSound.getVolume() + 1.0F) / 2.0F, this.field_150939_a.stepSound.getPitch() * 0.8F);
+				--p_77648_1_.stackSize;
 			}
 
 			return true;
@@ -159,7 +159,7 @@ public class ItemBlock extends Item
 		return p_150936_1_.canPlaceEntityOnSide(this.field_150939_a, p_150936_2_, p_150936_3_, p_150936_4_, false, p_150936_5_, (Entity)null, p_150936_7_);
 	}
 
-	public String getUnlocalizedName(ItemStack par1ItemStack)
+	public String getUnlocalizedName(ItemStack p_77667_1_)
 	{
 		return this.field_150939_a.getUnlocalizedName();
 	}
@@ -182,13 +182,13 @@ public class ItemBlock extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister)
+	public void registerIcons(IIconRegister p_94581_1_)
 	{
 		String s = this.field_150939_a.getItemIconName();
 
 		if (s != null)
 		{
-			this.field_150938_b = par1IconRegister.registerIcon(s);
+			this.field_150938_b = p_94581_1_.registerIcon(s);
 		}
 	}
 

@@ -12,9 +12,9 @@ public class EntitySenses
 	List unseenEntities = new ArrayList();
 	private static final String __OBFID = "CL_00001628";
 
-	public EntitySenses(EntityLiving par1EntityLiving)
+	public EntitySenses(EntityLiving p_i1672_1_)
 	{
-		this.entityObj = par1EntityLiving;
+		this.entityObj = p_i1672_1_;
 	}
 
 	public void clearSensingCache()
@@ -23,29 +23,29 @@ public class EntitySenses
 		this.unseenEntities.clear();
 	}
 
-	public boolean canSee(Entity par1Entity)
+	public boolean canSee(Entity p_75522_1_)
 	{
-		if (this.seenEntities.contains(par1Entity))
+		if (this.seenEntities.contains(p_75522_1_))
 		{
 			return true;
 		}
-		else if (this.unseenEntities.contains(par1Entity))
+		else if (this.unseenEntities.contains(p_75522_1_))
 		{
 			return false;
 		}
 		else
 		{
 			this.entityObj.worldObj.theProfiler.startSection("canSee");
-			boolean flag = this.entityObj.canEntityBeSeen(par1Entity);
+			boolean flag = this.entityObj.canEntityBeSeen(p_75522_1_);
 			this.entityObj.worldObj.theProfiler.endSection();
 
 			if (flag)
 			{
-				this.seenEntities.add(par1Entity);
+				this.seenEntities.add(p_75522_1_);
 			}
 			else
 			{
-				this.unseenEntities.add(par1Entity);
+				this.unseenEntities.add(p_75522_1_);
 			}
 
 			return flag;

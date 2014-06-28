@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
@@ -47,48 +48,49 @@ public class RenderItem extends Render
 		this.shadowOpaque = 0.75F;
 	}
 
-	public void doRender(EntityItem par1EntityItem, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityItem p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		ItemStack itemstack = par1EntityItem.getEntityItem();
+		ItemStack itemstack = p_76986_1_.getEntityItem();
 
 		if (itemstack.getItem() != null)
 		{
-			this.bindEntityTexture(par1EntityItem);
+			this.bindEntityTexture(p_76986_1_);
+			TextureUtil.func_152777_a(false, false, 1.0F);
 			this.random.setSeed(187L);
 			GL11.glPushMatrix();
-			float f2 = shouldBob() ? MathHelper.sin(((float)par1EntityItem.age + par9) / 10.0F + par1EntityItem.hoverStart) * 0.1F + 0.1F : 0F;
-			float f3 = (((float)par1EntityItem.age + par9) / 20.0F + par1EntityItem.hoverStart) * (180F / (float)Math.PI);
+			float f2 = shouldBob() ? MathHelper.sin(((float)p_76986_1_.age + p_76986_9_) / 10.0F + p_76986_1_.hoverStart) * 0.1F + 0.1F : 0F;
+			float f3 = (((float)p_76986_1_.age + p_76986_9_) / 20.0F + p_76986_1_.hoverStart) * (180F / (float)Math.PI);
 			byte b0 = 1;
 
-			if (par1EntityItem.getEntityItem().stackSize > 1)
+			if (p_76986_1_.getEntityItem().stackSize > 1)
 			{
 				b0 = 2;
 			}
 
-			if (par1EntityItem.getEntityItem().stackSize > 5)
+			if (p_76986_1_.getEntityItem().stackSize > 5)
 			{
 				b0 = 3;
 			}
 
-			if (par1EntityItem.getEntityItem().stackSize > 20)
+			if (p_76986_1_.getEntityItem().stackSize > 20)
 			{
 				b0 = 4;
 			}
 
-			if (par1EntityItem.getEntityItem().stackSize > 40)
+			if (p_76986_1_.getEntityItem().stackSize > 40)
 			{
 				b0 = 5;
 			}
 
 			b0 = getMiniBlockCount(itemstack, b0);
 
-			GL11.glTranslatef((float)par2, (float)par4 + f2, (float)par6);
+			GL11.glTranslatef((float)p_76986_2_, (float)p_76986_4_ + f2, (float)p_76986_6_);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			float f6;
 			float f7;
 			int k;
 
-			if (ForgeHooksClient.renderEntityItem(par1EntityItem, itemstack, f2, f3, random, renderManager.renderEngine, field_147909_c, b0))
+			if (ForgeHooksClient.renderEntityItem(p_76986_1_, itemstack, f2, f3, random, renderManager.renderEngine, field_147909_c, b0))
 			{
 				;
 			}
@@ -171,11 +173,11 @@ public class RenderItem extends Render
 							f6 = (float)(k >> 8 & 255) / 255.0F;
 							f7 = (float)(k & 255) / 255.0F;
 							GL11.glColor4f(f5, f6, f7, 1.0F);
-							this.renderDroppedItem(par1EntityItem, iicon1, b0, par9, f5, f6, f7, j);
+							this.renderDroppedItem(p_76986_1_, iicon1, b0, p_76986_9_, f5, f6, f7, j);
 						}
 						else
 						{
-							this.renderDroppedItem(par1EntityItem, iicon1, b0, par9, 1.0F, 1.0F, 1.0F, j);
+							this.renderDroppedItem(p_76986_1_, iicon1, b0, p_76986_9_, 1.0F, 1.0F, 1.0F,  j);
 						}
 					}
 				}
@@ -206,11 +208,11 @@ public class RenderItem extends Render
 						float f4 = (float)(i >> 16 & 255) / 255.0F;
 						f5 = (float)(i >> 8 & 255) / 255.0F;
 						f6 = (float)(i & 255) / 255.0F;
-						this.renderDroppedItem(par1EntityItem, iicon, b0, par9, f4, f5, f6);
+						this.renderDroppedItem(p_76986_1_, iicon, b0, p_76986_9_, f4, f5, f6);
 					}
 					else
 					{
-						this.renderDroppedItem(par1EntityItem, iicon, b0, par9, 1.0F, 1.0F, 1.0F);
+						this.renderDroppedItem(p_76986_1_, iicon, b0, p_76986_9_, 1.0F, 1.0F, 1.0F);
 					}
 
 					if (itemstack != null && itemstack.getItem() instanceof ItemCloth)
@@ -222,34 +224,36 @@ public class RenderItem extends Render
 
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 			GL11.glPopMatrix();
+			this.bindEntityTexture(p_76986_1_);
+			TextureUtil.func_147945_b();
 		}
 	}
 
-	protected ResourceLocation getEntityTexture(EntityItem par1EntityItem)
+	protected ResourceLocation getEntityTexture(EntityItem p_110775_1_)
 	{
-		return this.renderManager.renderEngine.getResourceLocation(par1EntityItem.getEntityItem().getItemSpriteNumber());
+		return this.renderManager.renderEngine.getResourceLocation(p_110775_1_.getEntityItem().getItemSpriteNumber());
 	}
 
-	private void renderDroppedItem(EntityItem par1EntityItem, IIcon par2Icon, int par3, float par4, float par5, float par6, float par7)
+	private void renderDroppedItem(EntityItem p_77020_1_, IIcon p_77020_2_, int p_77020_3_, float p_77020_4_, float p_77020_5_, float p_77020_6_, float p_77020_7_)
 	{
-		this.renderDroppedItem(par1EntityItem, par2Icon, par3, par4, par5, par6, par7, 0);
+		this.renderDroppedItem(p_77020_1_, p_77020_2_, p_77020_3_, p_77020_4_, p_77020_5_, p_77020_6_, p_77020_7_, 0);
 	}
 
-	private void renderDroppedItem(EntityItem par1EntityItem, IIcon par2Icon, int par3, float par4, float par5, float par6, float par7, int pass)
+	private void renderDroppedItem(EntityItem p_77020_1_, IIcon p_77020_2_, int p_77020_3_, float p_77020_4_, float p_77020_5_, float p_77020_6_, float p_77020_7_, int pass)
 	{
 		Tessellator tessellator = Tessellator.instance;
 
-		if (par2Icon == null)
+		if (p_77020_2_ == null)
 		{
 			TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-			ResourceLocation resourcelocation = texturemanager.getResourceLocation(par1EntityItem.getEntityItem().getItemSpriteNumber());
-			par2Icon = ((TextureMap)texturemanager.getTexture(resourcelocation)).getAtlasSprite("missingno");
+			ResourceLocation resourcelocation = texturemanager.getResourceLocation(p_77020_1_.getEntityItem().getItemSpriteNumber());
+			p_77020_2_ = ((TextureMap)texturemanager.getTexture(resourcelocation)).getAtlasSprite("missingno");
 		}
 
-		float f14 = ((IIcon)par2Icon).getMinU();
-		float f15 = ((IIcon)par2Icon).getMaxU();
-		float f4 = ((IIcon)par2Icon).getMinV();
-		float f5 = ((IIcon)par2Icon).getMaxV();
+		float f14 = ((IIcon)p_77020_2_).getMinU();
+		float f15 = ((IIcon)p_77020_2_).getMaxU();
+		float f4 = ((IIcon)p_77020_2_).getMinV();
+		float f5 = ((IIcon)p_77020_2_).getMaxV();
 		float f6 = 1.0F;
 		float f7 = 0.5F;
 		float f8 = 0.25F;
@@ -265,12 +269,12 @@ public class RenderItem extends Render
 			}
 			else
 			{
-				GL11.glRotatef((((float)par1EntityItem.age + par4) / 20.0F + par1EntityItem.hoverStart) * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+				GL11.glRotatef((((float)p_77020_1_.age + p_77020_4_) / 20.0F + p_77020_1_.hoverStart) * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
 			}
 
 			float f9 = 0.0625F;
 			f10 = 0.021875F;
-			ItemStack itemstack = par1EntityItem.getEntityItem();
+			ItemStack itemstack = p_77020_1_.getEntityItem();
 			int j = itemstack.stackSize;
 			byte b0;
 
@@ -319,8 +323,8 @@ public class RenderItem extends Render
 					this.bindTexture(TextureMap.locationItemsTexture);
 				}
 
-				GL11.glColor4f(par5, par6, par7, 1.0F);
-				ItemRenderer.renderItemIn2D(tessellator, f15, f4, f14, f5, ((IIcon)par2Icon).getIconWidth(), ((IIcon)par2Icon).getIconHeight(), f9);
+				GL11.glColor4f(p_77020_5_, p_77020_6_, p_77020_7_, 1.0F);
+				ItemRenderer.renderItemIn2D(tessellator, f15, f4, f14, f5, ((IIcon)p_77020_2_).getIconWidth(), ((IIcon)p_77020_2_).getIconHeight(), f9);
 
 				if (itemstack.hasEffect(pass))
 				{
@@ -358,7 +362,7 @@ public class RenderItem extends Render
 		}
 		else
 		{
-			for (int l = 0; l < par3; ++l)
+			for (int l = 0; l < p_77020_3_; ++l)
 			{
 				GL11.glPushMatrix();
 
@@ -375,7 +379,7 @@ public class RenderItem extends Render
 					GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 				}
 
-				GL11.glColor4f(par5, par6, par7, 1.0F);
+				GL11.glColor4f(p_77020_5_, p_77020_6_, p_77020_7_, 1.0F);
 				tessellator.startDrawingQuads();
 				tessellator.setNormal(0.0F, 1.0F, 0.0F);
 				tessellator.addVertexWithUV((double)(0.0F - f7), (double)(0.0F - f8), 0.0D, (double)f14, (double)f5);
@@ -388,34 +392,46 @@ public class RenderItem extends Render
 		}
 	}
 
-	public void renderItemIntoGUI(FontRenderer par1FontRenderer, TextureManager par2TextureManager, ItemStack par3ItemStack, int par4, int par5)
+	public void renderItemIntoGUI(FontRenderer p_77015_1_, TextureManager p_77015_2_, ItemStack p_77015_3_, int p_77015_4_, int p_77015_5_)
 	{
-		this.renderItemIntoGUI(par1FontRenderer, par2TextureManager, par3ItemStack, par4, par5, false);
+		this.renderItemIntoGUI(p_77015_1_, p_77015_2_, p_77015_3_, p_77015_4_, p_77015_5_, false);
 	}
 
-	public void renderItemIntoGUI(FontRenderer par1FontRenderer, TextureManager par2TextureManager, ItemStack par3ItemStack, int par4, int par5, boolean renderEffect)
+	public void renderItemIntoGUI(FontRenderer p_77015_1_, TextureManager p_77015_2_, ItemStack p_77015_3_, int p_77015_4_, int p_77015_5_, boolean renderEffect)
 	{
-		int k = par3ItemStack.getItemDamage();
-		Object object = par3ItemStack.getIconIndex();
-		GL11.glEnable(GL11.GL_BLEND);
-		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+		int k = p_77015_3_.getItemDamage();
+		Object object = p_77015_3_.getIconIndex();
 		int l;
 		float f;
 		float f3;
 		float f4;
 
-		if (par3ItemStack.getItemSpriteNumber() == 0 && RenderBlocks.renderItemIn3d(Block.getBlockFromItem(par3ItemStack.getItem()).getRenderType()))
+		if (p_77015_3_.getItemSpriteNumber() == 0 && RenderBlocks.renderItemIn3d(Block.getBlockFromItem(p_77015_3_.getItem()).getRenderType()))
 		{
-			par2TextureManager.bindTexture(TextureMap.locationBlocksTexture);
-			Block block = Block.getBlockFromItem(par3ItemStack.getItem());
+			p_77015_2_.bindTexture(TextureMap.locationBlocksTexture);
+			Block block = Block.getBlockFromItem(p_77015_3_.getItem());
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+
+			if (block.getRenderBlockPass() != 0)
+			{
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+				GL11.glEnable(GL11.GL_BLEND);
+				OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+			}
+			else
+			{
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.5F);
+				GL11.glDisable(GL11.GL_BLEND);
+			}
+
 			GL11.glPushMatrix();
-			GL11.glTranslatef((float)(par4 - 2), (float)(par5 + 3), -3.0F + this.zLevel);
+			GL11.glTranslatef((float)(p_77015_4_ - 2), (float)(p_77015_5_ + 3), -3.0F + this.zLevel);
 			GL11.glScalef(10.0F, 10.0F, 10.0F);
 			GL11.glTranslatef(1.0F, 0.5F, 1.0F);
 			GL11.glScalef(1.0F, 1.0F, -1.0F);
 			GL11.glRotatef(210.0F, 1.0F, 0.0F, 0.0F);
 			GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-			l = par3ItemStack.getItem().getColorFromItemStack(par3ItemStack, 0);
+			l = p_77015_3_.getItem().getColorFromItemStack(p_77015_3_, 0);
 			f3 = (float)(l >> 16 & 255) / 255.0F;
 			f4 = (float)(l >> 8 & 255) / 255.0F;
 			f = (float)(l & 255) / 255.0F;
@@ -429,13 +445,19 @@ public class RenderItem extends Render
 			this.renderBlocksRi.useInventoryTint = this.renderWithColor;
 			this.renderBlocksRi.renderBlockAsItem(block, k, 1.0F);
 			this.renderBlocksRi.useInventoryTint = true;
+
+			if (block.getRenderBlockPass() == 0)
+			{
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+			}
+
 			GL11.glPopMatrix();
 		}
-		else if (par3ItemStack.getItem().requiresMultipleRenderPasses())
+		else if (p_77015_3_.getItem().requiresMultipleRenderPasses())
 		{
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			par2TextureManager.bindTexture(TextureMap.locationItemsTexture);
+			p_77015_2_.bindTexture(TextureMap.locationItemsTexture);
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);
@@ -445,22 +467,22 @@ public class RenderItem extends Render
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
 			tessellator.setColorOpaque_I(-1);
-			tessellator.addVertex((double)(par4 - 2), (double)(par5 + 18), (double)this.zLevel);
-			tessellator.addVertex((double)(par4 + 18), (double)(par5 + 18), (double)this.zLevel);
-			tessellator.addVertex((double)(par4 + 18), (double)(par5 - 2), (double)this.zLevel);
-			tessellator.addVertex((double)(par4 - 2), (double)(par5 - 2), (double)this.zLevel);
+			tessellator.addVertex((double)(p_77015_4_ - 2), (double)(p_77015_5_ + 18), (double)this.zLevel);
+			tessellator.addVertex((double)(p_77015_4_ + 18), (double)(p_77015_5_ + 18), (double)this.zLevel);
+			tessellator.addVertex((double)(p_77015_4_ + 18), (double)(p_77015_5_ - 2), (double)this.zLevel);
+			tessellator.addVertex((double)(p_77015_4_ - 2), (double)(p_77015_5_ - 2), (double)this.zLevel);
 			tessellator.draw();
 			GL11.glColorMask(true, true, true, true);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 
-			Item item = par3ItemStack.getItem();
+			Item item = p_77015_3_.getItem();
 			for (l = 0; l < item.getRenderPasses(k); ++l)
 			{
 				OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-				par2TextureManager.bindTexture(item.getSpriteNumber() == 0 ? TextureMap.locationBlocksTexture : TextureMap.locationItemsTexture);
-				IIcon iicon = item.getIcon(par3ItemStack, l);
-				int i1 = par3ItemStack.getItem().getColorFromItemStack(par3ItemStack, l);
+				p_77015_2_.bindTexture(item.getSpriteNumber() == 0 ? TextureMap.locationBlocksTexture : TextureMap.locationItemsTexture);
+				IIcon iicon = item.getIcon(p_77015_3_, l);
+				int i1 = p_77015_3_.getItem().getColorFromItemStack(p_77015_3_, l);
 				f = (float)(i1 >> 16 & 255) / 255.0F;
 				float f1 = (float)(i1 >> 8 & 255) / 255.0F;
 				float f2 = (float)(i1 & 255) / 255.0F;
@@ -473,32 +495,33 @@ public class RenderItem extends Render
 				GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, ad renderEffect can derp them up.
 				GL11.glEnable(GL11.GL_ALPHA_TEST);
 
-				this.renderIcon(par4, par5, iicon, 16, 16);
+				this.renderIcon(p_77015_4_, p_77015_5_, iicon, 16, 16);
 
 				GL11.glDisable(GL11.GL_ALPHA_TEST);
 				GL11.glEnable(GL11.GL_LIGHTING);
 
-				if (renderEffect && par3ItemStack.hasEffect(l))
+				if (renderEffect && p_77015_3_.hasEffect(l))
 				{
-					renderEffect(par2TextureManager, par4, par5);
+					renderEffect(p_77015_2_, p_77015_4_, p_77015_5_);
 				}
 			}
 
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}
 		else
 		{
 			GL11.glDisable(GL11.GL_LIGHTING);
-			ResourceLocation resourcelocation = par2TextureManager.getResourceLocation(par3ItemStack.getItemSpriteNumber());
-			par2TextureManager.bindTexture(resourcelocation);
+			GL11.glEnable(GL11.GL_BLEND);
+			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+			ResourceLocation resourcelocation = p_77015_2_.getResourceLocation(p_77015_3_.getItemSpriteNumber());
+			p_77015_2_.bindTexture(resourcelocation);
 
 			if (object == null)
 			{
 				object = ((TextureMap)Minecraft.getMinecraft().getTextureManager().getTexture(resourcelocation)).getAtlasSprite("missingno");
 			}
 
-			l = par3ItemStack.getItem().getColorFromItemStack(par3ItemStack, 0);
+			l = p_77015_3_.getItem().getColorFromItemStack(p_77015_3_, 0);
 			f3 = (float)(l >> 16 & 255) / 255.0F;
 			f4 = (float)(l >> 8 & 255) / 255.0F;
 			f = (float)(l & 255) / 255.0F;
@@ -508,17 +531,19 @@ public class RenderItem extends Render
 				GL11.glColor4f(f3, f4, f, 1.0F);
 			}
 
-			GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, ad renderEffect can derp them up.
+			GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, a renderEffect can derp them up.
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
 
-			this.renderIcon(par4, par5, (IIcon)object, 16, 16);
+			this.renderIcon(p_77015_4_, p_77015_5_, (IIcon)object, 16, 16);
 
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glDisable(GL11.GL_BLEND);
 
-			if (renderEffect && par3ItemStack.hasEffect(0))
+			if (renderEffect && p_77015_3_.hasEffect(0))
 			{
-				renderEffect(par2TextureManager, par4, par5);
+				renderEffect(p_77015_2_, p_77015_4_, p_77015_5_);
 			}
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}
@@ -527,17 +552,17 @@ public class RenderItem extends Render
 	}
 
 	@SuppressWarnings("unused")
-	public void renderItemAndEffectIntoGUI(FontRenderer par1FontRenderer, TextureManager par2TextureManager, final ItemStack par3ItemStack, int par4, int par5)
+	public void renderItemAndEffectIntoGUI(FontRenderer p_82406_1_, TextureManager p_82406_2_, final ItemStack p_82406_3_, int p_82406_4_, int p_82406_5_)
 	{
-		if (par3ItemStack != null)
+		if (p_82406_3_ != null)
 		{
 			this.zLevel += 50.0F;
 
 			try
 			{
-				if (!ForgeHooksClient.renderInventoryItem(this.field_147909_c, par2TextureManager, par3ItemStack, renderWithColor, zLevel, (float)par4, (float)par5))
+				if (!ForgeHooksClient.renderInventoryItem(this.field_147909_c, p_82406_2_, p_82406_3_, renderWithColor, zLevel, (float)p_82406_4_, (float)p_82406_5_))
 				{
-					this.renderItemIntoGUI(par1FontRenderer, par2TextureManager, par3ItemStack, par4, par5, true);
+					this.renderItemIntoGUI(p_82406_1_, p_82406_2_, p_82406_3_, p_82406_4_, p_82406_5_, true);
 				}
 			}
 			catch (Throwable throwable)
@@ -549,7 +574,7 @@ public class RenderItem extends Render
 					private static final String __OBFID = "CL_00001004";
 					public String call()
 					{
-						return String.valueOf(par3ItemStack.getItem());
+						return String.valueOf(p_82406_3_.getItem());
 					}
 				});
 				crashreportcategory.addCrashSectionCallable("Item Aux", new Callable()
@@ -557,7 +582,7 @@ public class RenderItem extends Render
 					private static final String __OBFID = "CL_00001005";
 					public String call()
 					{
-						return String.valueOf(par3ItemStack.getItemDamage());
+						return String.valueOf(p_82406_3_.getItemDamage());
 					}
 				});
 				crashreportcategory.addCrashSectionCallable("Item NBT", new Callable()
@@ -565,7 +590,7 @@ public class RenderItem extends Render
 					private static final String __OBFID = "CL_00001006";
 					public String call()
 					{
-						return String.valueOf(par3ItemStack.getTagCompound());
+						return String.valueOf(p_82406_3_.getTagCompound());
 					}
 				});
 				crashreportcategory.addCrashSectionCallable("Item Foil", new Callable()
@@ -573,25 +598,25 @@ public class RenderItem extends Render
 					private static final String __OBFID = "CL_00001007";
 					public String call()
 					{
-						return String.valueOf(par3ItemStack.hasEffect());
+						return String.valueOf(p_82406_3_.hasEffect());
 					}
 				});
 				throw new ReportedException(crashreport);
 			}
 
 			// Forge: Bugfix, Move this to a per-render pass, modders must handle themselves
-			if (false && par3ItemStack.hasEffect())
+			if (false && p_82406_3_.hasEffect())
 			{
 				GL11.glDepthFunc(GL11.GL_EQUAL);
 				GL11.glDisable(GL11.GL_LIGHTING);
 				GL11.glDepthMask(false);
-				par2TextureManager.bindTexture(RES_ITEM_GLINT);
+				p_82406_2_.bindTexture(RES_ITEM_GLINT);
 				GL11.glEnable(GL11.GL_ALPHA_TEST);
 				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glColor4f(0.5F, 0.25F, 0.8F, 1.0F);
-				this.renderGlint(par4 * 431278612 + par5 * 32178161, par4 - 2, par5 - 2, 20, 20);
+				this.renderGlint(p_82406_4_ * 431278612 + p_82406_5_ * 32178161, p_82406_4_ - 2, p_82406_5_ - 2, 20, 20);
+				OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 				GL11.glDepthMask(true);
-				GL11.glDisable(GL11.GL_ALPHA_TEST);
 				GL11.glEnable(GL11.GL_LIGHTING);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			}
@@ -617,7 +642,7 @@ public class RenderItem extends Render
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 	}
 
-	private void renderGlint(int par1, int par2, int par3, int par4, int par5)
+	private void renderGlint(int p_77018_1_, int p_77018_2_, int p_77018_3_, int p_77018_4_, int p_77018_5_)
 	{
 		for (int j1 = 0; j1 < 2; ++j1)
 		{
@@ -635,37 +660,37 @@ public class RenderItem extends Render
 			}
 
 			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV((double)(par2 + 0), (double)(par3 + par5), (double)this.zLevel, (double)((f2 + (float)par5 * f4) * f), (double)((f3 + (float)par5) * f1));
-			tessellator.addVertexWithUV((double)(par2 + par4), (double)(par3 + par5), (double)this.zLevel, (double)((f2 + (float)par4 + (float)par5 * f4) * f), (double)((f3 + (float)par5) * f1));
-			tessellator.addVertexWithUV((double)(par2 + par4), (double)(par3 + 0), (double)this.zLevel, (double)((f2 + (float)par4) * f), (double)((f3 + 0.0F) * f1));
-			tessellator.addVertexWithUV((double)(par2 + 0), (double)(par3 + 0), (double)this.zLevel, (double)((f2 + 0.0F) * f), (double)((f3 + 0.0F) * f1));
+			tessellator.addVertexWithUV((double)(p_77018_2_ + 0), (double)(p_77018_3_ + p_77018_5_), (double)this.zLevel, (double)((f2 + (float)p_77018_5_ * f4) * f), (double)((f3 + (float)p_77018_5_) * f1));
+			tessellator.addVertexWithUV((double)(p_77018_2_ + p_77018_4_), (double)(p_77018_3_ + p_77018_5_), (double)this.zLevel, (double)((f2 + (float)p_77018_4_ + (float)p_77018_5_ * f4) * f), (double)((f3 + (float)p_77018_5_) * f1));
+			tessellator.addVertexWithUV((double)(p_77018_2_ + p_77018_4_), (double)(p_77018_3_ + 0), (double)this.zLevel, (double)((f2 + (float)p_77018_4_) * f), (double)((f3 + 0.0F) * f1));
+			tessellator.addVertexWithUV((double)(p_77018_2_ + 0), (double)(p_77018_3_ + 0), (double)this.zLevel, (double)((f2 + 0.0F) * f), (double)((f3 + 0.0F) * f1));
 			tessellator.draw();
 		}
 	}
 
-	public void renderItemOverlayIntoGUI(FontRenderer par1FontRenderer, TextureManager par2TextureManager, ItemStack par3ItemStack, int par4, int par5)
+	public void renderItemOverlayIntoGUI(FontRenderer p_77021_1_, TextureManager p_77021_2_, ItemStack p_77021_3_, int p_77021_4_, int p_77021_5_)
 	{
-		this.renderItemOverlayIntoGUI(par1FontRenderer, par2TextureManager, par3ItemStack, par4, par5, (String)null);
+		this.renderItemOverlayIntoGUI(p_77021_1_, p_77021_2_, p_77021_3_, p_77021_4_, p_77021_5_, (String)null);
 	}
 
-	public void renderItemOverlayIntoGUI(FontRenderer par1FontRenderer, TextureManager par2TextureManager, ItemStack par3ItemStack, int par4, int par5, String par6Str)
+	public void renderItemOverlayIntoGUI(FontRenderer p_94148_1_, TextureManager p_94148_2_, ItemStack p_94148_3_, int p_94148_4_, int p_94148_5_, String p_94148_6_)
 	{
-		if (par3ItemStack != null)
+		if (p_94148_3_ != null)
 		{
-			if (par3ItemStack.stackSize > 1 || par6Str != null)
+			if (p_94148_3_.stackSize > 1 || p_94148_6_ != null)
 			{
-				String s1 = par6Str == null ? String.valueOf(par3ItemStack.stackSize) : par6Str;
+				String s1 = p_94148_6_ == null ? String.valueOf(p_94148_3_.stackSize) : p_94148_6_;
 				GL11.glDisable(GL11.GL_LIGHTING);
 				GL11.glDisable(GL11.GL_DEPTH_TEST);
 				GL11.glDisable(GL11.GL_BLEND);
-				par1FontRenderer.drawStringWithShadow(s1, par4 + 19 - 2 - par1FontRenderer.getStringWidth(s1), par5 + 6 + 3, 16777215);
+				p_94148_1_.drawStringWithShadow(s1, p_94148_4_ + 19 - 2 - p_94148_1_.getStringWidth(s1), p_94148_5_ + 6 + 3, 16777215);
 				GL11.glEnable(GL11.GL_LIGHTING);
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
 			}
 
-			if (par3ItemStack.getItem().showDurabilityBar(par3ItemStack))
+			if (p_94148_3_.getItem().showDurabilityBar(p_94148_3_))
 			{
-				double health = par3ItemStack.getItem().getDurabilityForDisplay(par3ItemStack);
+				double health = p_94148_3_.getItem().getDurabilityForDisplay(p_94148_3_);
 				int j1 = (int)Math.round(13.0D - health * 13.0D);
 				int k = (int)Math.round(255.0D - health * 255.0D);
 				GL11.glDisable(GL11.GL_LIGHTING);
@@ -676,9 +701,11 @@ public class RenderItem extends Render
 				Tessellator tessellator = Tessellator.instance;
 				int l = 255 - k << 16 | k << 8;
 				int i1 = (255 - k) / 4 << 16 | 16128;
-				this.renderQuad(tessellator, par4 + 2, par5 + 13, 13, 2, 0);
-				this.renderQuad(tessellator, par4 + 2, par5 + 13, 12, 1, i1);
-				this.renderQuad(tessellator, par4 + 2, par5 + 13, j1, 1, l);
+				this.renderQuad(tessellator, p_94148_4_ + 2, p_94148_5_ + 13, 13, 2, 0);
+				this.renderQuad(tessellator, p_94148_4_ + 2, p_94148_5_ + 13, 12, 1, i1);
+				this.renderQuad(tessellator, p_94148_4_ + 2, p_94148_5_ + 13, j1, 1, l);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glEnable(GL11.GL_ALPHA_TEST);
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				GL11.glEnable(GL11.GL_LIGHTING);
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -687,36 +714,36 @@ public class RenderItem extends Render
 		}
 	}
 
-	private void renderQuad(Tessellator par1Tessellator, int par2, int par3, int par4, int par5, int par6)
+	private void renderQuad(Tessellator p_77017_1_, int p_77017_2_, int p_77017_3_, int p_77017_4_, int p_77017_5_, int p_77017_6_)
 	{
-		par1Tessellator.startDrawingQuads();
-		par1Tessellator.setColorOpaque_I(par6);
-		par1Tessellator.addVertex((double)(par2 + 0), (double)(par3 + 0), 0.0D);
-		par1Tessellator.addVertex((double)(par2 + 0), (double)(par3 + par5), 0.0D);
-		par1Tessellator.addVertex((double)(par2 + par4), (double)(par3 + par5), 0.0D);
-		par1Tessellator.addVertex((double)(par2 + par4), (double)(par3 + 0), 0.0D);
-		par1Tessellator.draw();
+		p_77017_1_.startDrawingQuads();
+		p_77017_1_.setColorOpaque_I(p_77017_6_);
+		p_77017_1_.addVertex((double)(p_77017_2_ + 0), (double)(p_77017_3_ + 0), 0.0D);
+		p_77017_1_.addVertex((double)(p_77017_2_ + 0), (double)(p_77017_3_ + p_77017_5_), 0.0D);
+		p_77017_1_.addVertex((double)(p_77017_2_ + p_77017_4_), (double)(p_77017_3_ + p_77017_5_), 0.0D);
+		p_77017_1_.addVertex((double)(p_77017_2_ + p_77017_4_), (double)(p_77017_3_ + 0), 0.0D);
+		p_77017_1_.draw();
 	}
 
-	public void renderIcon(int par1, int par2, IIcon par3Icon, int par4, int par5)
+	public void renderIcon(int p_94149_1_, int p_94149_2_, IIcon p_94149_3_, int p_94149_4_, int p_94149_5_)
 	{
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + par5), (double)this.zLevel, (double)par3Icon.getMinU(), (double)par3Icon.getMaxV());
-		tessellator.addVertexWithUV((double)(par1 + par4), (double)(par2 + par5), (double)this.zLevel, (double)par3Icon.getMaxU(), (double)par3Icon.getMaxV());
-		tessellator.addVertexWithUV((double)(par1 + par4), (double)(par2 + 0), (double)this.zLevel, (double)par3Icon.getMaxU(), (double)par3Icon.getMinV());
-		tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)par3Icon.getMinU(), (double)par3Icon.getMinV());
+		tessellator.addVertexWithUV((double)(p_94149_1_ + 0), (double)(p_94149_2_ + p_94149_5_), (double)this.zLevel, (double)p_94149_3_.getMinU(), (double)p_94149_3_.getMaxV());
+		tessellator.addVertexWithUV((double)(p_94149_1_ + p_94149_4_), (double)(p_94149_2_ + p_94149_5_), (double)this.zLevel, (double)p_94149_3_.getMaxU(), (double)p_94149_3_.getMaxV());
+		tessellator.addVertexWithUV((double)(p_94149_1_ + p_94149_4_), (double)(p_94149_2_ + 0), (double)this.zLevel, (double)p_94149_3_.getMaxU(), (double)p_94149_3_.getMinV());
+		tessellator.addVertexWithUV((double)(p_94149_1_ + 0), (double)(p_94149_2_ + 0), (double)this.zLevel, (double)p_94149_3_.getMinU(), (double)p_94149_3_.getMinV());
 		tessellator.draw();
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityItem)par1Entity);
+		return this.getEntityTexture((EntityItem)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityItem)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityItem)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
 	/*==================================== FORGE START ===========================================*/

@@ -20,11 +20,11 @@ public class ContainerPlayer extends Container
 	private final EntityPlayer thePlayer;
 	private static final String __OBFID = "CL_00001754";
 
-	public ContainerPlayer(final InventoryPlayer par1InventoryPlayer, boolean par2, EntityPlayer par3EntityPlayer)
+	public ContainerPlayer(final InventoryPlayer p_i1819_1_, boolean p_i1819_2_, EntityPlayer p_i1819_3_)
 	{
-		this.isLocalWorld = par2;
-		this.thePlayer = par3EntityPlayer;
-		this.addSlotToContainer(new SlotCrafting(par1InventoryPlayer.player, this.craftMatrix, this.craftResult, 0, 144, 36));
+		this.isLocalWorld = p_i1819_2_;
+		this.thePlayer = p_i1819_3_;
+		this.addSlotToContainer(new SlotCrafting(p_i1819_1_.player, this.craftMatrix, this.craftResult, 0, 144, 36));
 		int i;
 		int j;
 
@@ -39,17 +39,17 @@ public class ContainerPlayer extends Container
 		for (i = 0; i < 4; ++i)
 		{
 			final int k = i;
-			this.addSlotToContainer(new Slot(par1InventoryPlayer, par1InventoryPlayer.getSizeInventory() - 1 - i, 8, 8 + i * 18)
+			this.addSlotToContainer(new Slot(p_i1819_1_, p_i1819_1_.getSizeInventory() - 1 - i, 8, 8 + i * 18)
 			{
 				private static final String __OBFID = "CL_00001755";
 				public int getSlotStackLimit()
 				{
 					return 1;
 				}
-				public boolean isItemValid(ItemStack par1ItemStack)
+				public boolean isItemValid(ItemStack p_75214_1_)
 				{
-					if (par1ItemStack == null) return false;
-					return par1ItemStack.getItem().isValidArmor(par1ItemStack, k, thePlayer);
+					if (p_75214_1_ == null) return false;
+					return p_75214_1_.getItem().isValidArmor(p_75214_1_, k, thePlayer);
 				}
 				@SideOnly(Side.CLIENT)
 				public IIcon getBackgroundIconIndex()
@@ -63,26 +63,26 @@ public class ContainerPlayer extends Container
 		{
 			for (j = 0; j < 9; ++j)
 			{
-				this.addSlotToContainer(new Slot(par1InventoryPlayer, j + (i + 1) * 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(p_i1819_1_, j + (i + 1) * 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 
 		for (i = 0; i < 9; ++i)
 		{
-			this.addSlotToContainer(new Slot(par1InventoryPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(p_i1819_1_, i, 8 + i * 18, 142));
 		}
 
 		this.onCraftMatrixChanged(this.craftMatrix);
 	}
 
-	public void onCraftMatrixChanged(IInventory par1IInventory)
+	public void onCraftMatrixChanged(IInventory p_75130_1_)
 	{
 		this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.thePlayer.worldObj));
 	}
 
-	public void onContainerClosed(EntityPlayer par1EntityPlayer)
+	public void onContainerClosed(EntityPlayer p_75134_1_)
 	{
-		super.onContainerClosed(par1EntityPlayer);
+		super.onContainerClosed(p_75134_1_);
 
 		for (int i = 0; i < 4; ++i)
 		{
@@ -90,29 +90,29 @@ public class ContainerPlayer extends Container
 
 			if (itemstack != null)
 			{
-				par1EntityPlayer.dropPlayerItemWithRandomChoice(itemstack, false);
+				p_75134_1_.dropPlayerItemWithRandomChoice(itemstack, false);
 			}
 		}
 
 		this.craftResult.setInventorySlotContents(0, (ItemStack)null);
 	}
 
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+	public boolean canInteractWith(EntityPlayer p_75145_1_)
 	{
 		return true;
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
 	{
 		ItemStack itemstack = null;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = (Slot)this.inventorySlots.get(p_82846_2_);
 
 		if (slot != null && slot.getHasStack())
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			if (par2 == 0)
+			if (p_82846_2_ == 0)
 			{
 				if (!this.mergeItemStack(itemstack1, 9, 45, true))
 				{
@@ -121,14 +121,14 @@ public class ContainerPlayer extends Container
 
 				slot.onSlotChange(itemstack1, itemstack);
 			}
-			else if (par2 >= 1 && par2 < 5)
+			else if (p_82846_2_ >= 1 && p_82846_2_ < 5)
 			{
 				if (!this.mergeItemStack(itemstack1, 9, 45, false))
 				{
 					return null;
 				}
 			}
-			else if (par2 >= 5 && par2 < 9)
+			else if (p_82846_2_ >= 5 && p_82846_2_ < 9)
 			{
 				if (!this.mergeItemStack(itemstack1, 9, 45, false))
 				{
@@ -144,14 +144,14 @@ public class ContainerPlayer extends Container
 					return null;
 				}
 			}
-			else if (par2 >= 9 && par2 < 36)
+			else if (p_82846_2_ >= 9 && p_82846_2_ < 36)
 			{
 				if (!this.mergeItemStack(itemstack1, 36, 45, false))
 				{
 					return null;
 				}
 			}
-			else if (par2 >= 36 && par2 < 45)
+			else if (p_82846_2_ >= 36 && p_82846_2_ < 45)
 			{
 				if (!this.mergeItemStack(itemstack1, 9, 36, false))
 				{
@@ -177,14 +177,14 @@ public class ContainerPlayer extends Container
 				return null;
 			}
 
-			slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+			slot.onPickupFromSlot(p_82846_1_, itemstack1);
 		}
 
 		return itemstack;
 	}
 
-	public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot)
+	public boolean func_94530_a(ItemStack p_94530_1_, Slot p_94530_2_)
 	{
-		return par2Slot.inventory != this.craftResult && super.func_94530_a(par1ItemStack, par2Slot);
+		return p_94530_2_.inventory != this.craftResult && super.func_94530_a(p_94530_1_, p_94530_2_);
 	}
 }

@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.gen.layer.IntCache;
 import org.apache.commons.io.IOUtils;
@@ -35,10 +34,10 @@ public class CrashReport
 	private StackTraceElement[] stacktrace = new StackTraceElement[0];
 	private static final String __OBFID = "CL_00000990";
 
-	public CrashReport(String par1Str, Throwable par2Throwable)
+	public CrashReport(String p_i1348_1_, Throwable p_i1348_2_)
 	{
-		this.description = par1Str;
-		this.cause = par2Throwable;
+		this.description = p_i1348_1_;
+		this.cause = p_i1348_2_;
 		this.populateEnvironment();
 	}
 
@@ -49,7 +48,7 @@ public class CrashReport
 			private static final String __OBFID = "CL_00001197";
 			public String call()
 			{
-				return "1.7.2";
+				return "1.7.10";
 			}
 		});
 		this.theReportCategory.addCrashSectionCallable("Operating System", new Callable()
@@ -125,13 +124,13 @@ public class CrashReport
 			private static final String __OBFID = "CL_00001355";
 			public String call()
 			{
-				int i = AxisAlignedBB.getAABBPool().getlistAABBsize();
-				int j = 56 * i;
-				int k = j / 1024 / 1024;
-				int l = AxisAlignedBB.getAABBPool().getnextPoolIndex();
-				int i1 = 56 * l;
-				int j1 = i1 / 1024 / 1024;
-				return i + " (" + j + " bytes; " + k + " MB) allocated, " + l + " (" + i1 + " bytes; " + j1 + " MB) used";
+				byte b0 = 0;
+				int i = 56 * b0;
+				int j = i / 1024 / 1024;
+				byte b1 = 0;
+				int k = 56 * b1;
+				int l = k / 1024 / 1024;
+				return b0 + " (" + i + " bytes; " + j + " MB) allocated, " + b1 + " (" + k + " bytes; " + l + " MB) used";
 			}
 		});
 		this.theReportCategory.addCrashSectionCallable("IntCache", new Callable()
@@ -155,7 +154,7 @@ public class CrashReport
 		return this.cause;
 	}
 
-	public void getSectionsInStringBuilder(StringBuilder par1StringBuilder)
+	public void getSectionsInStringBuilder(StringBuilder p_71506_1_)
 	{
 		if ((this.stacktrace == null || this.stacktrace.length <= 0) && this.crashReportSections.size() > 0)
 		{
@@ -164,19 +163,19 @@ public class CrashReport
 
 		if (this.stacktrace != null && this.stacktrace.length > 0)
 		{
-			par1StringBuilder.append("-- Head --\n");
-			par1StringBuilder.append("Stacktrace:\n");
+			p_71506_1_.append("-- Head --\n");
+			p_71506_1_.append("Stacktrace:\n");
 			StackTraceElement[] astacktraceelement = this.stacktrace;
 			int i = astacktraceelement.length;
 
 			for (int j = 0; j < i; ++j)
 			{
 				StackTraceElement stacktraceelement = astacktraceelement[j];
-				par1StringBuilder.append("\t").append("at ").append(stacktraceelement.toString());
-				par1StringBuilder.append("\n");
+				p_71506_1_.append("\t").append("at ").append(stacktraceelement.toString());
+				p_71506_1_.append("\n");
 			}
 
-			par1StringBuilder.append("\n");
+			p_71506_1_.append("\n");
 		}
 
 		Iterator iterator = this.crashReportSections.iterator();
@@ -184,11 +183,11 @@ public class CrashReport
 		while (iterator.hasNext())
 		{
 			CrashReportCategory crashreportcategory = (CrashReportCategory)iterator.next();
-			crashreportcategory.appendToStringBuilder(par1StringBuilder);
-			par1StringBuilder.append("\n\n");
+			crashreportcategory.appendToStringBuilder(p_71506_1_);
+			p_71506_1_.append("\n\n");
 		}
 
-		this.theReportCategory.appendToStringBuilder(par1StringBuilder);
+		this.theReportCategory.appendToStringBuilder(p_71506_1_);
 	}
 
 	public String getCauseStackTraceOrString()
@@ -299,26 +298,31 @@ public class CrashReport
 		return this.theReportCategory;
 	}
 
-	public CrashReportCategory makeCategory(String par1Str)
+	public CrashReportCategory makeCategory(String p_85058_1_)
 	{
-		return this.makeCategoryDepth(par1Str, 1);
+		return this.makeCategoryDepth(p_85058_1_, 1);
 	}
 
-	public CrashReportCategory makeCategoryDepth(String par1Str, int par2)
+	public CrashReportCategory makeCategoryDepth(String p_85057_1_, int p_85057_2_)
 	{
-		CrashReportCategory crashreportcategory = new CrashReportCategory(this, par1Str);
+		CrashReportCategory crashreportcategory = new CrashReportCategory(this, p_85057_1_);
 
 		if (this.field_85059_f)
 		{
-			int j = crashreportcategory.getPrunedStackTrace(par2);
+			int j = crashreportcategory.getPrunedStackTrace(p_85057_2_);
 			StackTraceElement[] astacktraceelement = this.cause.getStackTrace();
 			StackTraceElement stacktraceelement = null;
 			StackTraceElement stacktraceelement1 = null;
+			int k = astacktraceelement.length - j;
 
-			int idx = astacktraceelement.length - j; //Forge fix AIOOB exception.
-			if (astacktraceelement != null && idx < astacktraceelement.length && idx >= 0)
+			if (k < 0)
 			{
-				stacktraceelement = astacktraceelement[astacktraceelement.length - j];
+				System.out.println("Negative index in crash report handler (" + astacktraceelement.length + "/" + j + ")");
+			}
+
+			if (astacktraceelement != null && 0 <= k && k < astacktraceelement.length)
+			{
+				stacktraceelement = astacktraceelement[k];
 
 				if (astacktraceelement.length + 1 - j < astacktraceelement.length)
 				{
@@ -333,9 +337,9 @@ public class CrashReport
 				CrashReportCategory crashreportcategory1 = (CrashReportCategory)this.crashReportSections.get(this.crashReportSections.size() - 1);
 				crashreportcategory1.trimStackTraceEntriesFromBottom(j);
 			}
-			else if (astacktraceelement != null && astacktraceelement.length >= j)
+			else if (astacktraceelement != null && astacktraceelement.length >= j && 0 <= k && k < astacktraceelement.length)
 			{
-				this.stacktrace = new StackTraceElement[astacktraceelement.length - j];
+				this.stacktrace = new StackTraceElement[k];
 				System.arraycopy(astacktraceelement, 0, this.stacktrace, 0, this.stacktrace.length);
 			}
 			else
@@ -350,7 +354,7 @@ public class CrashReport
 
 	private static String getWittyComment()
 	{
-		String[] astring = new String[] {"Who set us up the TNT?", "Everything\'s going to plan. No, really, that was supposed to happen.", "Uh... Did I do that?", "Oops.", "Why did you do that?", "I feel sad now :(", "My bad.", "I\'m sorry, Dave.", "I let you down. Sorry :(", "On the bright side, I bought you a teddy bear!", "Daisy, daisy...", "Oh - I know what I did wrong!", "Hey, that tickles! Hehehe!", "I blame Dinnerbone.", "You should try our sister game, Minceraft!", "Don\'t be sad. I\'ll do better next time, I promise!", "Don\'t be sad, have a hug! <3", "I just don\'t know what went wrong :(", "Shall we play a game?", "Quite honestly, I wouldn\'t worry myself about that.", "I bet Cylons wouldn\'t have this problem.", "Sorry :(", "Surprise! Haha. Well, this is awkward.", "Would you like a cupcake?", "Hi. I\'m Minecraft, and I\'m a crashaholic.", "Ooh. Shiny.", "This doesn\'t make any sense!", "Why is it breaking :(", "Don\'t do that.", "Ouch. That hurt :(", "You\'re mean.", "This is a token for 1 free hug. Redeem at your nearest Mojangsta: [~~HUG~~]", "There are four lights!"};
+		String[] astring = new String[] {"Who set us up the TNT?", "Everything\'s going to plan. No, really, that was supposed to happen.", "Uh... Did I do that?", "Oops.", "Why did you do that?", "I feel sad now :(", "My bad.", "I\'m sorry, Dave.", "I let you down. Sorry :(", "On the bright side, I bought you a teddy bear!", "Daisy, daisy...", "Oh - I know what I did wrong!", "Hey, that tickles! Hehehe!", "I blame Dinnerbone.", "You should try our sister game, Minceraft!", "Don\'t be sad. I\'ll do better next time, I promise!", "Don\'t be sad, have a hug! <3", "I just don\'t know what went wrong :(", "Shall we play a game?", "Quite honestly, I wouldn\'t worry myself about that.", "I bet Cylons wouldn\'t have this problem.", "Sorry :(", "Surprise! Haha. Well, this is awkward.", "Would you like a cupcake?", "Hi. I\'m Minecraft, and I\'m a crashaholic.", "Ooh. Shiny.", "This doesn\'t make any sense!", "Why is it breaking :(", "Don\'t do that.", "Ouch. That hurt :(", "You\'re mean.", "This is a token for 1 free hug. Redeem at your nearest Mojangsta: [~~HUG~~]", "There are four lights!", "But it works on my machine."};
 
 		try
 		{
@@ -362,17 +366,17 @@ public class CrashReport
 		}
 	}
 
-	public static CrashReport makeCrashReport(Throwable par0Throwable, String par1Str)
+	public static CrashReport makeCrashReport(Throwable p_85055_0_, String p_85055_1_)
 	{
 		CrashReport crashreport;
 
-		if (par0Throwable instanceof ReportedException)
+		if (p_85055_0_ instanceof ReportedException)
 		{
-			crashreport = ((ReportedException)par0Throwable).getCrashReport();
+			crashreport = ((ReportedException)p_85055_0_).getCrashReport();
 		}
 		else
 		{
-			crashreport = new CrashReport(par1Str, par0Throwable);
+			crashreport = new CrashReport(p_85055_1_, p_85055_0_);
 		}
 
 		return crashreport;

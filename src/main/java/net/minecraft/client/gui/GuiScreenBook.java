@@ -47,15 +47,15 @@ public class GuiScreenBook extends GuiScreen
 	private GuiButton buttonCancel;
 	private static final String __OBFID = "CL_00000744";
 
-	public GuiScreenBook(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack, boolean par3)
+	public GuiScreenBook(EntityPlayer p_i1080_1_, ItemStack p_i1080_2_, boolean p_i1080_3_)
 	{
-		this.editingPlayer = par1EntityPlayer;
-		this.bookObj = par2ItemStack;
-		this.bookIsUnsigned = par3;
+		this.editingPlayer = p_i1080_1_;
+		this.bookObj = p_i1080_2_;
+		this.bookIsUnsigned = p_i1080_3_;
 
-		if (par2ItemStack.hasTagCompound())
+		if (p_i1080_2_.hasTagCompound())
 		{
-			NBTTagCompound nbttagcompound = par2ItemStack.getTagCompound();
+			NBTTagCompound nbttagcompound = p_i1080_2_.getTagCompound();
 			this.bookPages = nbttagcompound.getTagList("pages", 8);
 
 			if (this.bookPages != null)
@@ -70,7 +70,7 @@ public class GuiScreenBook extends GuiScreen
 			}
 		}
 
-		if (this.bookPages == null && par3)
+		if (this.bookPages == null && p_i1080_3_)
 		{
 			this.bookPages = new NBTTagList();
 			this.bookPages.appendTag(new NBTTagString(""));
@@ -247,19 +247,19 @@ public class GuiScreenBook extends GuiScreen
 		}
 	}
 
-	protected void keyTyped(char par1, int par2)
+	protected void keyTyped(char p_73869_1_, int p_73869_2_)
 	{
-		super.keyTyped(par1, par2);
+		super.keyTyped(p_73869_1_, p_73869_2_);
 
 		if (this.bookIsUnsigned)
 		{
 			if (this.field_146480_s)
 			{
-				this.func_146460_c(par1, par2);
+				this.func_146460_c(p_73869_1_, p_73869_2_);
 			}
 			else
 			{
-				this.keyTypedInBook(par1, par2);
+				this.keyTypedInBook(p_73869_1_, p_73869_2_);
 			}
 		}
 	}
@@ -353,7 +353,7 @@ public class GuiScreenBook extends GuiScreen
 		}
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(bookGuiTextures);
@@ -422,7 +422,7 @@ public class GuiScreenBook extends GuiScreen
 			this.fontRendererObj.drawSplitString(s1, k + 36, b0 + 16 + 16, 116, 0);
 		}
 
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -431,10 +431,10 @@ public class GuiScreenBook extends GuiScreen
 			private final boolean field_146151_o;
 			private static final String __OBFID = "CL_00000745";
 
-			public NextPageButton(int par1, int par2, int par3, boolean par4)
+			public NextPageButton(int p_i1079_1_, int p_i1079_2_, int p_i1079_3_, boolean p_i1079_4_)
 			{
-				super(par1, par2, par3, 23, 13, "");
-				this.field_146151_o = par4;
+				super(p_i1079_1_, p_i1079_2_, p_i1079_3_, 23, 13, "");
+				this.field_146151_o = p_i1079_4_;
 			}
 
 			public void drawButton(Minecraft p_146112_1_, int p_146112_2_, int p_146112_3_)

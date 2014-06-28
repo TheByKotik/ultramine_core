@@ -53,15 +53,15 @@ public class BlockFlowerPot extends BlockContainer
 
 		if (itemstack != null && itemstack.getItem() instanceof ItemBlock)
 		{
-			if (p_149727_1_.getBlockMetadata(p_149727_2_, p_149727_3_, p_149727_4_) != 0)
-			{
-				return false;
-			}
-			else
-			{
-				TileEntityFlowerPot tileentityflowerpot = this.func_149929_e(p_149727_1_, p_149727_2_, p_149727_3_, p_149727_4_);
+			TileEntityFlowerPot tileentityflowerpot = this.func_149929_e(p_149727_1_, p_149727_2_, p_149727_3_, p_149727_4_);
 
-				if (tileentityflowerpot != null)
+			if (tileentityflowerpot != null)
+			{
+				if (tileentityflowerpot.getFlowerPotItem() != null)
+				{
+					return false;
+				}
+				else
 				{
 					Block block = Block.getBlockFromItem(itemstack.getItem());
 
@@ -87,10 +87,10 @@ public class BlockFlowerPot extends BlockContainer
 						return true;
 					}
 				}
-				else
-				{
-					return false;
-				}
+			}
+			else
+			{
+				return false;
 			}
 		}
 		else
@@ -137,20 +137,8 @@ public class BlockFlowerPot extends BlockContainer
 		}
 	}
 
-	public void dropBlockAsItemWithChance(World p_149690_1_, int p_149690_2_, int p_149690_3_, int p_149690_4_, int p_149690_5_, float p_149690_6_, int p_149690_7_)
-	{
-		super.dropBlockAsItemWithChance(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, p_149690_5_, p_149690_6_, p_149690_7_);
-	}
-
 	public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
 	{
-		TileEntityFlowerPot tileentityflowerpot = this.func_149929_e(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_);
-
-		if (tileentityflowerpot != null && tileentityflowerpot.getFlowerPotItem() != null)
-		{
-			this.dropBlockAsItem(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, new ItemStack(tileentityflowerpot.getFlowerPotItem(), 1, tileentityflowerpot.getFlowerPotData()));
-		}
-
 		super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
 	}
 
@@ -238,6 +226,7 @@ public class BlockFlowerPot extends BlockContainer
 		return new TileEntityFlowerPot(Item.getItemFromBlock((Block)object), b0);
 	}
 
+	/*============================FORGE START=====================================*/
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
@@ -247,4 +236,17 @@ public class BlockFlowerPot extends BlockContainer
 			ret.add(new ItemStack(te.getFlowerPotItem(), 1, te.getFlowerPotData()));
 		return ret;
 	}
+	@Override
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
+	{
+		if (willHarvest) return true; //If it will harvest, delay deletion of the block until after getDrops
+		return super.removedByPlayer(world, player, x, y, z, willHarvest);
+	}
+	@Override
+	public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta)
+	{
+		super.harvestBlock(world, player, x, y, z, meta);
+		world.setBlockToAir(x, y, z);
+	}
+	/*===========================FORGE END==========================================*/
 }

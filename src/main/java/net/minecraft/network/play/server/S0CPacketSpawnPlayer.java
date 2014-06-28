@@ -1,10 +1,13 @@
 package net.minecraft.network.play.server;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -48,7 +51,18 @@ public class S0CPacketSpawnPlayer extends Packet
 	public void readPacketData(PacketBuffer p_148837_1_) throws IOException
 	{
 		this.field_148957_a = p_148837_1_.readVarIntFromBuffer();
-		this.field_148955_b = new GameProfile(p_148837_1_.readStringFromBuffer(36), p_148837_1_.readStringFromBuffer(16));
+		UUID uuid = UUID.fromString(p_148837_1_.readStringFromBuffer(36));
+		this.field_148955_b = new GameProfile(uuid, p_148837_1_.readStringFromBuffer(16));
+		int i = p_148837_1_.readVarIntFromBuffer();
+
+		for (int j = 0; j < i; ++j)
+		{
+			String s = p_148837_1_.readStringFromBuffer(32767);
+			String s1 = p_148837_1_.readStringFromBuffer(32767);
+			String s2 = p_148837_1_.readStringFromBuffer(32767);
+			this.field_148955_b.getProperties().put(s, new Property(s, s1, s2));
+		}
+
 		this.field_148956_c = p_148837_1_.readInt();
 		this.field_148953_d = p_148837_1_.readInt();
 		this.field_148954_e = p_148837_1_.readInt();
@@ -61,8 +75,20 @@ public class S0CPacketSpawnPlayer extends Packet
 	public void writePacketData(PacketBuffer p_148840_1_) throws IOException
 	{
 		p_148840_1_.writeVarIntToBuffer(this.field_148957_a);
-		p_148840_1_.writeStringToBuffer(this.field_148955_b.getId());
+		UUID uuid = this.field_148955_b.getId();
+		p_148840_1_.writeStringToBuffer(uuid == null ? "" : uuid.toString());
 		p_148840_1_.writeStringToBuffer(this.field_148955_b.getName());
+		p_148840_1_.writeVarIntToBuffer(this.field_148955_b.getProperties().size());
+		Iterator iterator = this.field_148955_b.getProperties().values().iterator();
+
+		while (iterator.hasNext())
+		{
+			Property property = (Property)iterator.next();
+			p_148840_1_.writeStringToBuffer(property.getName());
+			p_148840_1_.writeStringToBuffer(property.getValue());
+			p_148840_1_.writeStringToBuffer(property.getSignature());
+		}
+
 		p_148840_1_.writeInt(this.field_148956_c);
 		p_148840_1_.writeInt(this.field_148953_d);
 		p_148840_1_.writeInt(this.field_148954_e);
@@ -72,9 +98,9 @@ public class S0CPacketSpawnPlayer extends Packet
 		this.field_148960_i.func_151509_a(p_148840_1_);
 	}
 
-	public void processPacket(INetHandlerPlayClient p_148950_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_148950_1_.handleSpawnPlayer(this);
+		p_148833_1_.handleSpawnPlayer(this);
 	}
 
 	@SideOnly(Side.CLIENT)

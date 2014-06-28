@@ -1,6 +1,5 @@
 package net.minecraft.network.play.server;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -28,29 +27,29 @@ public class S3FPacketCustomPayload extends Packet
 		this.field_149172_a = p_i45190_1_;
 		this.field_149171_b = p_i45190_2_;
 
-		if (p_i45190_2_.length > 0x1ffff0)
+		if (p_i45190_2_.length >= 1048576)
 		{
-			throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
+			throw new IllegalArgumentException("Payload may not be larger than 1048576 bytes");
 		}
 	}
 
 	public void readPacketData(PacketBuffer p_148837_1_) throws IOException
 	{
 		this.field_149172_a = p_148837_1_.readStringFromBuffer(20);
-		this.field_149171_b = new byte[ByteBufUtils.readVarShort(p_148837_1_)];
+		this.field_149171_b = new byte[p_148837_1_.readUnsignedShort()];
 		p_148837_1_.readBytes(this.field_149171_b);
 	}
 
 	public void writePacketData(PacketBuffer p_148840_1_) throws IOException
 	{
 		p_148840_1_.writeStringToBuffer(this.field_149172_a);
-		ByteBufUtils.writeVarShort(p_148840_1_, this.field_149171_b.length);
+		p_148840_1_.writeShort(this.field_149171_b.length);
 		p_148840_1_.writeBytes(this.field_149171_b);
 	}
 
-	public void processPacket(INetHandlerPlayClient p_149170_1_)
+	public void processPacket(INetHandlerPlayClient p_148833_1_)
 	{
-		p_149170_1_.handleCustomPayload(this);
+		p_148833_1_.handleCustomPayload(this);
 	}
 
 	public void processPacket(INetHandler p_148833_1_)

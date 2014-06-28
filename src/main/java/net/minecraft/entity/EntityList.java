@@ -82,43 +82,43 @@ public class EntityList
 	public static HashMap entityEggs = new LinkedHashMap();
 	private static final String __OBFID = "CL_00001538";
 
-	public static void addMapping(Class par0Class, String par1Str, int par2)
+	public static void addMapping(Class p_75618_0_, String p_75618_1_, int p_75618_2_)
 	{
-		if (stringToClassMapping.containsKey(par1Str))
+		if (stringToClassMapping.containsKey(p_75618_1_))
 		{
-			throw new IllegalArgumentException("ID is already registered: " + par1Str);
+			throw new IllegalArgumentException("ID is already registered: " + p_75618_1_);
 		}
-		else if (IDtoClassMapping.containsKey(Integer.valueOf(par2)))
+		else if (IDtoClassMapping.containsKey(Integer.valueOf(p_75618_2_)))
 		{
-			throw new IllegalArgumentException("ID is already registered: " + par2);
+			throw new IllegalArgumentException("ID is already registered: " + p_75618_2_);
 		}
 		else
 		{
-			stringToClassMapping.put(par1Str, par0Class);
-			classToStringMapping.put(par0Class, par1Str);
-			IDtoClassMapping.put(Integer.valueOf(par2), par0Class);
-			classToIDMapping.put(par0Class, Integer.valueOf(par2));
-			stringToIDMapping.put(par1Str, Integer.valueOf(par2));
+			stringToClassMapping.put(p_75618_1_, p_75618_0_);
+			classToStringMapping.put(p_75618_0_, p_75618_1_);
+			IDtoClassMapping.put(Integer.valueOf(p_75618_2_), p_75618_0_);
+			classToIDMapping.put(p_75618_0_, Integer.valueOf(p_75618_2_));
+			stringToIDMapping.put(p_75618_1_, Integer.valueOf(p_75618_2_));
 		}
 	}
 
-	public static void addMapping(Class par0Class, String par1Str, int par2, int par3, int par4)
+	public static void addMapping(Class p_75614_0_, String p_75614_1_, int p_75614_2_, int p_75614_3_, int p_75614_4_)
 	{
-		addMapping(par0Class, par1Str, par2);
-		entityEggs.put(Integer.valueOf(par2), new EntityList.EntityEggInfo(par2, par3, par4));
+		addMapping(p_75614_0_, p_75614_1_, p_75614_2_);
+		entityEggs.put(Integer.valueOf(p_75614_2_), new EntityList.EntityEggInfo(p_75614_2_, p_75614_3_, p_75614_4_));
 	}
 
-	public static Entity createEntityByName(String par0Str, World par1World)
+	public static Entity createEntityByName(String p_75620_0_, World p_75620_1_)
 	{
 		Entity entity = null;
 
 		try
 		{
-			Class oclass = (Class)stringToClassMapping.get(par0Str);
+			Class oclass = (Class)stringToClassMapping.get(p_75620_0_);
 
 			if (oclass != null)
 			{
-				entity = (Entity)oclass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {par1World});
+				entity = (Entity)oclass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {p_75620_1_});
 			}
 		}
 		catch (Exception exception)
@@ -129,35 +129,35 @@ public class EntityList
 		return entity;
 	}
 
-	public static Entity createEntityFromNBT(NBTTagCompound par0NBTTagCompound, World par1World)
+	public static Entity createEntityFromNBT(NBTTagCompound p_75615_0_, World p_75615_1_)
 	{
 		Entity entity = null;
 
-		if ("Minecart".equals(par0NBTTagCompound.getString("id")))
+		if ("Minecart".equals(p_75615_0_.getString("id")))
 		{
-			switch (par0NBTTagCompound.getInteger("Type"))
+			switch (p_75615_0_.getInteger("Type"))
 			{
 				case 0:
-					par0NBTTagCompound.setString("id", "MinecartRideable");
+					p_75615_0_.setString("id", "MinecartRideable");
 					break;
 				case 1:
-					par0NBTTagCompound.setString("id", "MinecartChest");
+					p_75615_0_.setString("id", "MinecartChest");
 					break;
 				case 2:
-					par0NBTTagCompound.setString("id", "MinecartFurnace");
+					p_75615_0_.setString("id", "MinecartFurnace");
 			}
 
-			par0NBTTagCompound.removeTag("Type");
+			p_75615_0_.removeTag("Type");
 		}
 
 		Class oclass = null;
 		try
 		{
-			oclass = (Class)stringToClassMapping.get(par0NBTTagCompound.getString("id"));
+			oclass = (Class)stringToClassMapping.get(p_75615_0_.getString("id"));
 
 			if (oclass != null)
 			{
-				entity = (Entity)oclass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {par1World});
+				entity = (Entity)oclass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {p_75615_1_});
 			}
 		}
 		catch (Exception exception)
@@ -169,35 +169,35 @@ public class EntityList
 		{
 			try
 			{
-				entity.readFromNBT(par0NBTTagCompound);
+				entity.readFromNBT(p_75615_0_);
 			}
 			catch (Exception e)
 			{
 				FMLLog.log(Level.ERROR, e,
 						"An Entity %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author",
-						par0NBTTagCompound.getString("id"), oclass.getName());
+						p_75615_0_.getString("id"), oclass.getName());
 				entity = null;
 			}
 		}
 		else
 		{
-			logger.warn("Skipping Entity with id " + par0NBTTagCompound.getString("id"));
+			logger.warn("Skipping Entity with id " + p_75615_0_.getString("id"));
 		}
 
 		return entity;
 	}
 
-	public static Entity createEntityByID(int par0, World par1World)
+	public static Entity createEntityByID(int p_75616_0_, World p_75616_1_)
 	{
 		Entity entity = null;
 
 		try
 		{
-			Class oclass = getClassFromID(par0);
+			Class oclass = getClassFromID(p_75616_0_);
 
 			if (oclass != null)
 			{
-				entity = (Entity)oclass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {par1World});
+				entity = (Entity)oclass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {p_75616_1_});
 			}
 		}
 		catch (Exception exception)
@@ -207,31 +207,31 @@ public class EntityList
 
 		if (entity == null)
 		{
-			logger.warn("Skipping Entity with id " + par0);
+			logger.warn("Skipping Entity with id " + p_75616_0_);
 		}
 
 		return entity;
 	}
 
-	public static int getEntityID(Entity par0Entity)
+	public static int getEntityID(Entity p_75619_0_)
 	{
-		Class oclass = par0Entity.getClass();
+		Class oclass = p_75619_0_.getClass();
 		return classToIDMapping.containsKey(oclass) ? ((Integer)classToIDMapping.get(oclass)).intValue() : 0;
 	}
 
-	public static Class getClassFromID(int par0)
+	public static Class getClassFromID(int p_90035_0_)
 	{
-		return (Class)IDtoClassMapping.get(Integer.valueOf(par0));
+		return (Class)IDtoClassMapping.get(Integer.valueOf(p_90035_0_));
 	}
 
-	public static String getEntityString(Entity par0Entity)
+	public static String getEntityString(Entity p_75621_0_)
 	{
-		return (String)classToStringMapping.get(par0Entity.getClass());
+		return (String)classToStringMapping.get(p_75621_0_.getClass());
 	}
 
-	public static String getStringFromID(int par0)
+	public static String getStringFromID(int p_75617_0_)
 	{
-		Class oclass = getClassFromID(par0);
+		Class oclass = getClassFromID(p_75617_0_);
 		return oclass != null ? (String)classToStringMapping.get(oclass) : null;
 	}
 
@@ -312,11 +312,11 @@ public class EntityList
 			public final StatBase field_151513_e;
 			private static final String __OBFID = "CL_00001539";
 
-			public EntityEggInfo(int par1, int par2, int par3)
+			public EntityEggInfo(int p_i1583_1_, int p_i1583_2_, int p_i1583_3_)
 			{
-				this.spawnedID = par1;
-				this.primaryColor = par2;
-				this.secondaryColor = par3;
+				this.spawnedID = p_i1583_1_;
+				this.primaryColor = p_i1583_2_;
+				this.secondaryColor = p_i1583_3_;
 				this.field_151512_d = StatList.func_151182_a(this);
 				this.field_151513_e = StatList.func_151176_b(this);
 			}

@@ -43,24 +43,24 @@ public class GuiScreen extends Gui
 	private int field_146298_h;
 	private static final String __OBFID = "CL_00000710";
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		int k;
 
 		for (k = 0; k < this.buttonList.size(); ++k)
 		{
-			((GuiButton)this.buttonList.get(k)).drawButton(this.mc, par1, par2);
+			((GuiButton)this.buttonList.get(k)).drawButton(this.mc, p_73863_1_, p_73863_2_);
 		}
 
 		for (k = 0; k < this.labelList.size(); ++k)
 		{
-			((GuiLabel)this.labelList.get(k)).func_146159_a(this.mc, par1, par2);
+			((GuiLabel)this.labelList.get(k)).func_146159_a(this.mc, p_73863_1_, p_73863_2_);
 		}
 	}
 
-	protected void keyTyped(char par1, int par2)
+	protected void keyTyped(char p_73869_1_, int p_73869_2_)
 	{
-		if (par2 == 1)
+		if (p_73869_2_ == 1)
 		{
 			this.mc.displayGuiScreen((GuiScreen)null);
 			this.mc.setIngameFocus();
@@ -207,15 +207,15 @@ public class GuiScreen extends Gui
 		}
 	}
 
-	protected void mouseClicked(int par1, int par2, int par3)
+	protected void mouseClicked(int p_73864_1_, int p_73864_2_, int p_73864_3_)
 	{
-		if (par3 == 0)
+		if (p_73864_3_ == 0)
 		{
 			for (int l = 0; l < this.buttonList.size(); ++l)
 			{
 				GuiButton guibutton = (GuiButton)this.buttonList.get(l);
 
-				if (guibutton.mousePressed(this.mc, par1, par2))
+				if (guibutton.mousePressed(this.mc, p_73864_1_, p_73864_2_))
 				{
 					ActionPerformedEvent.Pre event = new ActionPerformedEvent.Pre(this, guibutton, this.buttonList);
 					if (MinecraftForge.EVENT_BUS.post(event))
@@ -284,11 +284,6 @@ public class GuiScreen extends Gui
 		int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
 		int k = Mouse.getEventButton();
 
-		if (Minecraft.isRunningOnMac && k == 0 && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)))
-		{
-			k = 1;
-		}
-
 		if (Mouse.getEventButtonState())
 		{
 			if (this.mc.gameSettings.touchscreen && this.field_146298_h++ > 0)
@@ -321,17 +316,10 @@ public class GuiScreen extends Gui
 	{
 		if (Keyboard.getEventKeyState())
 		{
-			int i = Keyboard.getEventKey();
-			char c0 = Keyboard.getEventCharacter();
-
-			if (i == 87)
-			{
-				this.mc.toggleFullscreen();
-				return;
-			}
-
-			this.keyTyped(c0, i);
+			this.keyTyped(Keyboard.getEventCharacter(), Keyboard.getEventKey());
 		}
+
+		this.mc.func_152348_aa();
 	}
 
 	public void updateScreen() {}
@@ -377,7 +365,7 @@ public class GuiScreen extends Gui
 		return true;
 	}
 
-	public void confirmClicked(boolean par1, int par2) {}
+	public void confirmClicked(boolean p_73878_1_, int p_73878_2_) {}
 
 	public static boolean isCtrlKeyDown()
 	{

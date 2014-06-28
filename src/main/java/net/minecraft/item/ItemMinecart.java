@@ -19,16 +19,16 @@ public class ItemMinecart extends Item
 	{
 		private final BehaviorDefaultDispenseItem behaviourDefaultDispenseItem = new BehaviorDefaultDispenseItem();
 		private static final String __OBFID = "CL_00000050";
-		public ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+		public ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 		{
-			EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
-			World world = par1IBlockSource.getWorld();
-			double d0 = par1IBlockSource.getX() + (double)((float)enumfacing.getFrontOffsetX() * 1.125F);
-			double d1 = par1IBlockSource.getY() + (double)((float)enumfacing.getFrontOffsetY() * 1.125F);
-			double d2 = par1IBlockSource.getZ() + (double)((float)enumfacing.getFrontOffsetZ() * 1.125F);
-			int i = par1IBlockSource.getXInt() + enumfacing.getFrontOffsetX();
-			int j = par1IBlockSource.getYInt() + enumfacing.getFrontOffsetY();
-			int k = par1IBlockSource.getZInt() + enumfacing.getFrontOffsetZ();
+			EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
+			World world = p_82487_1_.getWorld();
+			double d0 = p_82487_1_.getX() + (double)((float)enumfacing.getFrontOffsetX() * 1.125F);
+			double d1 = p_82487_1_.getY() + (double)((float)enumfacing.getFrontOffsetY() * 1.125F);
+			double d2 = p_82487_1_.getZ() + (double)((float)enumfacing.getFrontOffsetZ() * 1.125F);
+			int i = p_82487_1_.getXInt() + enumfacing.getFrontOffsetX();
+			int j = p_82487_1_.getYInt() + enumfacing.getFrontOffsetY();
+			int k = p_82487_1_.getZInt() + enumfacing.getFrontOffsetZ();
 			Block block = world.getBlock(i, j, k);
 			double d3;
 
@@ -40,26 +40,26 @@ public class ItemMinecart extends Item
 			{
 				if (block.getMaterial() != Material.air || !BlockRailBase.func_150051_a(world.getBlock(i, j - 1, k)))
 				{
-					return this.behaviourDefaultDispenseItem.dispense(par1IBlockSource, par2ItemStack);
+					return this.behaviourDefaultDispenseItem.dispense(p_82487_1_, p_82487_2_);
 				}
 
 				d3 = -1.0D;
 			}
 
-			EntityMinecart entityminecart = EntityMinecart.createMinecart(world, d0, d1 + d3, d2, ((ItemMinecart)par2ItemStack.getItem()).minecartType);
+			EntityMinecart entityminecart = EntityMinecart.createMinecart(world, d0, d1 + d3, d2, ((ItemMinecart)p_82487_2_.getItem()).minecartType);
 
-			if (par2ItemStack.hasDisplayName())
+			if (p_82487_2_.hasDisplayName())
 			{
-				entityminecart.setMinecartName(par2ItemStack.getDisplayName());
+				entityminecart.setMinecartName(p_82487_2_.getDisplayName());
 			}
 
 			world.spawnEntityInWorld(entityminecart);
-			par2ItemStack.splitStack(1);
-			return par2ItemStack;
+			p_82487_2_.splitStack(1);
+			return p_82487_2_;
 		}
-		protected void playDispenseSound(IBlockSource par1IBlockSource)
+		protected void playDispenseSound(IBlockSource p_82485_1_)
 		{
-			par1IBlockSource.getWorld().playAuxSFX(1000, par1IBlockSource.getXInt(), par1IBlockSource.getYInt(), par1IBlockSource.getZInt(), 0);
+			p_82485_1_.getWorld().playAuxSFX(1000, p_82485_1_.getXInt(), p_82485_1_.getYInt(), p_82485_1_.getZInt(), 0);
 		}
 	};
 	public int minecartType;
@@ -73,23 +73,23 @@ public class ItemMinecart extends Item
 		BlockDispenser.dispenseBehaviorRegistry.putObject(this, dispenserMinecartBehavior);
 	}
 
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
-		if (BlockRailBase.func_150051_a(par3World.getBlock(par4, par5, par6)))
+		if (BlockRailBase.func_150051_a(p_77648_3_.getBlock(p_77648_4_, p_77648_5_, p_77648_6_)))
 		{
-			if (!par3World.isRemote)
+			if (!p_77648_3_.isRemote)
 			{
-				EntityMinecart entityminecart = EntityMinecart.createMinecart(par3World, (double)((float)par4 + 0.5F), (double)((float)par5 + 0.5F), (double)((float)par6 + 0.5F), this.minecartType);
+				EntityMinecart entityminecart = EntityMinecart.createMinecart(p_77648_3_, (double)((float)p_77648_4_ + 0.5F), (double)((float)p_77648_5_ + 0.5F), (double)((float)p_77648_6_ + 0.5F), this.minecartType);
 
-				if (par1ItemStack.hasDisplayName())
+				if (p_77648_1_.hasDisplayName())
 				{
-					entityminecart.setMinecartName(par1ItemStack.getDisplayName());
+					entityminecart.setMinecartName(p_77648_1_.getDisplayName());
 				}
 
-				par3World.spawnEntityInWorld(entityminecart);
+				p_77648_3_.spawnEntityInWorld(entityminecart);
 			}
 
-			--par1ItemStack.stackSize;
+			--p_77648_1_.stackSize;
 			return true;
 		}
 		else

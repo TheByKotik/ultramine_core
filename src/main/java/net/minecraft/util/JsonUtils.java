@@ -177,6 +177,19 @@ public class JsonUtils
 	}
 
 	@SideOnly(Side.CLIENT)
+	public static JsonObject func_152754_s(JsonObject p_152754_0_, String p_152754_1_)
+	{
+		if (p_152754_0_.has(p_152754_1_))
+		{
+			return getJsonElementAsJsonObject(p_152754_0_.get(p_152754_1_), p_152754_1_);
+		}
+		else
+		{
+			throw new JsonSyntaxException("Missing " + p_152754_1_ + ", expected to find a JsonObject");
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
 	public static JsonObject getJsonObjectFieldOrDefault(JsonObject p_151218_0_, String p_151218_1_, JsonObject p_151218_2_)
 	{
 		return p_151218_0_.has(p_151218_1_) ? getJsonElementAsJsonObject(p_151218_0_.get(p_151218_1_), p_151218_1_) : p_151218_2_;

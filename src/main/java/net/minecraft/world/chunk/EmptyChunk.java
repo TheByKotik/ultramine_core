@@ -17,17 +17,17 @@ public class EmptyChunk extends Chunk
 {
 	private static final String __OBFID = "CL_00000372";
 
-	public EmptyChunk(World par1World, int par2, int par3)
+	public EmptyChunk(World p_i1994_1_, int p_i1994_2_, int p_i1994_3_)
 	{
-		super(par1World, par2, par3);
+		super(p_i1994_1_, p_i1994_2_, p_i1994_3_);
 	}
 
-	public boolean isAtLocation(int par1, int par2)
+	public boolean isAtLocation(int p_76600_1_, int p_76600_2_)
 	{
-		return par1 == this.xPosition && par2 == this.zPosition;
+		return p_76600_1_ == this.xPosition && p_76600_2_ == this.zPosition;
 	}
 
-	public int getHeightValue(int par1, int par2)
+	public int getHeightValue(int p_76611_1_, int p_76611_2_)
 	{
 		return 0;
 	}
@@ -52,35 +52,35 @@ public class EmptyChunk extends Chunk
 		return true;
 	}
 
-	public int getBlockMetadata(int par1, int par2, int par3)
+	public int getBlockMetadata(int p_76628_1_, int p_76628_2_, int p_76628_3_)
 	{
 		return 0;
 	}
 
-	public boolean setBlockMetadata(int par1, int par2, int par3, int par4)
+	public boolean setBlockMetadata(int p_76589_1_, int p_76589_2_, int p_76589_3_, int p_76589_4_)
 	{
 		return false;
 	}
 
-	public int getSavedLightValue(EnumSkyBlock par1EnumSkyBlock, int par2, int par3, int par4)
+	public int getSavedLightValue(EnumSkyBlock p_76614_1_, int p_76614_2_, int p_76614_3_, int p_76614_4_)
 	{
 		return 0;
 	}
 
-	public void setLightValue(EnumSkyBlock par1EnumSkyBlock, int par2, int par3, int par4, int par5) {}
+	public void setLightValue(EnumSkyBlock p_76633_1_, int p_76633_2_, int p_76633_3_, int p_76633_4_, int p_76633_5_) {}
 
-	public int getBlockLightValue(int par1, int par2, int par3, int par4)
+	public int getBlockLightValue(int p_76629_1_, int p_76629_2_, int p_76629_3_, int p_76629_4_)
 	{
 		return 0;
 	}
 
-	public void addEntity(Entity par1Entity) {}
+	public void addEntity(Entity p_76612_1_) {}
 
-	public void removeEntity(Entity par1Entity) {}
+	public void removeEntity(Entity p_76622_1_) {}
 
-	public void removeEntityAtIndex(Entity par1Entity, int par2) {}
+	public void removeEntityAtIndex(Entity p_76608_1_, int p_76608_2_) {}
 
-	public boolean canBlockSeeTheSky(int par1, int par2, int par3)
+	public boolean canBlockSeeTheSky(int p_76619_1_, int p_76619_2_, int p_76619_3_)
 	{
 		return false;
 	}
@@ -102,18 +102,18 @@ public class EmptyChunk extends Chunk
 
 	public void setChunkModified() {}
 
-	public void getEntitiesWithinAABBForEntity(Entity par1Entity, AxisAlignedBB par2AxisAlignedBB, List par3List, IEntitySelector par4IEntitySelector) {}
+	public void getEntitiesWithinAABBForEntity(Entity p_76588_1_, AxisAlignedBB p_76588_2_, List p_76588_3_, IEntitySelector p_76588_4_) {}
 
-	public void getEntitiesOfTypeWithinAAAB(Class par1Class, AxisAlignedBB par2AxisAlignedBB, List par3List, IEntitySelector par4IEntitySelector) {}
+	public void getEntitiesOfTypeWithinAAAB(Class p_76618_1_, AxisAlignedBB p_76618_2_, List p_76618_3_, IEntitySelector p_76618_4_) {}
 
-	public boolean needsSaving(boolean par1)
+	public boolean needsSaving(boolean p_76601_1_)
 	{
 		return false;
 	}
 
-	public Random getRandomWithSeed(long par1)
+	public Random getRandomWithSeed(long p_76617_1_)
 	{
-		return new Random(this.worldObj.getSeed() + (long)(this.xPosition * this.xPosition * 4987142) + (long)(this.xPosition * 5947611) + (long)(this.zPosition * this.zPosition) * 4392871L + (long)(this.zPosition * 389711) ^ par1);
+		return new Random(this.worldObj.getSeed() + (long)(this.xPosition * this.xPosition * 4987142) + (long)(this.xPosition * 5947611) + (long)(this.zPosition * this.zPosition) * 4392871L + (long)(this.zPosition * 389711) ^ p_76617_1_);
 	}
 
 	public boolean isEmpty()
@@ -121,7 +121,7 @@ public class EmptyChunk extends Chunk
 		return true;
 	}
 
-	public boolean getAreLevelsEmpty(int par1, int par2)
+	public boolean getAreLevelsEmpty(int p_76606_1_, int p_76606_2_)
 	{
 		return true;
 	}

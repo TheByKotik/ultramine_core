@@ -24,14 +24,14 @@ public class ItemColored extends ItemBlock
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	public int getColorFromItemStack(ItemStack p_82790_1_, int p_82790_2_)
 	{
-		return this.field_150944_b.getRenderColor(par1ItemStack.getItemDamage());
+		return this.field_150944_b.getRenderColor(p_82790_1_.getItemDamage());
 	}
 
-	public int getMetadata(int par1)
+	public int getMetadata(int p_77647_1_)
 	{
-		return par1;
+		return p_77647_1_;
 	}
 
 	public ItemColored func_150943_a(String[] p_150943_1_)
@@ -40,22 +40,22 @@ public class ItemColored extends ItemBlock
 		return this;
 	}
 
-	public String getUnlocalizedName(ItemStack par1ItemStack)
+	public String getUnlocalizedName(ItemStack p_77667_1_)
 	{
 		if (this.field_150945_c == null)
 		{
-			return super.getUnlocalizedName(par1ItemStack);
+			return super.getUnlocalizedName(p_77667_1_);
 		}
 		else
 		{
-			int i = par1ItemStack.getItemDamage();
-			return i >= 0 && i < this.field_150945_c.length ? super.getUnlocalizedName(par1ItemStack) + "." + this.field_150945_c[i] : super.getUnlocalizedName(par1ItemStack);
+			int i = p_77667_1_.getItemDamage();
+			return i >= 0 && i < this.field_150945_c.length ? super.getUnlocalizedName(p_77667_1_) + "." + this.field_150945_c[i] : super.getUnlocalizedName(p_77667_1_);
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int par1)
+	public IIcon getIconFromDamage(int p_77617_1_)
 	{
-		return this.field_150944_b.getIcon(0, par1);
+		return this.field_150944_b.getIcon(0, p_77617_1_);
 	}
 }

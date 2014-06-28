@@ -101,7 +101,8 @@ public class CommandContext
 
 	public void notifyAdmins(String messageKey, Object... messageArgs)
 	{
-		CommandBase.notifyAdmins(sender, messageKey, messageArgs);
+		//Не помню, где теперь этот метод и как называется...
+		//CommandBase.notifyAdmins(sender, messageKey, messageArgs);
 	}
 
 	public void checkSenderPermission(String permission)

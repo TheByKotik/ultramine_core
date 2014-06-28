@@ -24,30 +24,30 @@ public class RenderEnderCrystal extends Render
 		this.field_76995_b = new ModelEnderCrystal(0.0F, true);
 	}
 
-	public void doRender(EntityEnderCrystal par1EntityEnderCrystal, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityEnderCrystal p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		float f2 = (float)par1EntityEnderCrystal.innerRotation + par9;
+		float f2 = (float)p_76986_1_.innerRotation + p_76986_9_;
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
+		GL11.glTranslatef((float)p_76986_2_, (float)p_76986_4_, (float)p_76986_6_);
 		this.bindTexture(enderCrystalTextures);
 		float f3 = MathHelper.sin(f2 * 0.2F) / 2.0F + 0.5F;
 		f3 += f3 * f3;
-		this.field_76995_b.render(par1EntityEnderCrystal, 0.0F, f2 * 3.0F, f3 * 0.2F, 0.0F, 0.0F, 0.0625F);
+		this.field_76995_b.render(p_76986_1_, 0.0F, f2 * 3.0F, f3 * 0.2F, 0.0F, 0.0F, 0.0625F);
 		GL11.glPopMatrix();
 	}
 
-	protected ResourceLocation getEntityTexture(EntityEnderCrystal par1EntityEnderCrystal)
+	protected ResourceLocation getEntityTexture(EntityEnderCrystal p_110775_1_)
 	{
 		return enderCrystalTextures;
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityEnderCrystal)par1Entity);
+		return this.getEntityTexture((EntityEnderCrystal)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityEnderCrystal)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityEnderCrystal)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

@@ -29,15 +29,25 @@ public class MessageDeserializer2 extends ByteToMessageDecoder
 
 			if (abyte[i] >= 0)
 			{
-				int j = (new PacketBuffer(Unpooled.wrappedBuffer(abyte))).readVarIntFromBuffer();
+				PacketBuffer packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(abyte));
 
-				if (p_decode_2_.readableBytes() < j)
+				try
 				{
-					p_decode_2_.resetReaderIndex();
-					return;
+					int j = packetbuffer.readVarIntFromBuffer();
+
+					if (p_decode_2_.readableBytes() < j)
+					{
+						p_decode_2_.resetReaderIndex();
+						return;
+					}
+
+					p_decode_3_.add(p_decode_2_.readBytes(j));
+				}
+				finally
+				{
+					packetbuffer.release();
 				}
 
-				p_decode_3_.add(p_decode_2_.readBytes(j));
 				return;
 			}
 		}

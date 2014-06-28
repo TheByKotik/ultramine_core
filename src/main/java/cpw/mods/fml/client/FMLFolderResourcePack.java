@@ -26,9 +26,9 @@ public class FMLFolderResourcePack extends FolderResourcePack {
 	}
 
 	@Override
-	protected boolean hasResourceName(String par1Str)
+	protected boolean hasResourceName(String p_110593_1_)
 	{
-		return super.hasResourceName(par1Str);
+		return super.hasResourceName(p_110593_1_);
 	}
 	@Override
 	public String getPackName()

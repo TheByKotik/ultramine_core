@@ -26,6 +26,7 @@ import net.minecraft.network.rcon.RConThreadQuery;
 import net.minecraft.profiler.PlayerUsageSnooper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.CryptManager;
 import net.minecraft.util.MathHelper;
@@ -60,9 +61,9 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	public static boolean allowPlayerLogins = false;
 	private static final String __OBFID = "CL_00001784";
 
-	public DedicatedServer(File par1File)
+	public DedicatedServer(File p_i1508_1_)
 	{
-		super(par1File, Proxy.NO_PROXY);
+		super(p_i1508_1_, Proxy.NO_PROXY);
 		Thread thread = new Thread("Server Infinisleeper")
 		{
 			private static final String __OBFID = "CL_00001787";
@@ -115,7 +116,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		};
 		thread.setDaemon(true);
 		thread.start();
-		field_155771_h.info("Starting minecraft server version 1.7.2");
+		field_155771_h.info("Starting minecraft server version 1.7.10");
 
 		if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L)
 		{
@@ -187,9 +188,18 @@ public class DedicatedServer extends MinecraftServer implements IServer
 			field_155771_h.warn("To change this, set \"online-mode\" to \"true\" in the server.properties file.");
 		}
 
-		FMLCommonHandler.instance().onServerStarted();
+		if (this.func_152368_aE())
+		{
+			this.func_152358_ax().func_152658_c();
+		}
 
-		this.setConfigurationManager(new DedicatedPlayerList(this));
+		if (!PreYggdrasilConverter.func_152714_a(this.getWorldsDir()))
+		{
+			return false;
+		}
+		
+		FMLCommonHandler.instance().onServerStarted();
+		this.func_152361_a(new DedicatedPlayerList(this));
 		long j = System.nanoTime();
 
 		if (this.getFolderName() == null)
@@ -280,27 +290,12 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		return settings.hardcore;
 	}
 
-	protected void finalTick(CrashReport par1CrashReport)
-	{
-		while (this.isServerRunning())
-		{
-			this.executePendingCommands();
+	protected void finalTick(CrashReport par1CrashReport) {}
 
-			try
-			{
-				Thread.sleep(10L);
-			}
-			catch (InterruptedException interruptedexception)
-			{
-				;
-			}
-		}
-	}
-
-	public CrashReport addServerInfoToCrashReport(CrashReport par1CrashReport)
+	public CrashReport addServerInfoToCrashReport(CrashReport p_71230_1_)
 	{
-		par1CrashReport = super.addServerInfoToCrashReport(par1CrashReport);
-		par1CrashReport.getCategory().addCrashSectionCallable("Is Modded", new Callable()
+		p_71230_1_ = super.addServerInfoToCrashReport(p_71230_1_);
+		p_71230_1_.getCategory().addCrashSectionCallable("Is Modded", new Callable()
 		{
 			private static final String __OBFID = "CL_00001785";
 			public String call()
@@ -309,7 +304,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 				return !s.equals("vanilla") ? "Definitely; Server brand changed to \'" + s + "\'" : "Unknown (can\'t tell)";
 			}
 		});
-		par1CrashReport.getCategory().addCrashSectionCallable("Type", new Callable()
+		p_71230_1_.getCategory().addCrashSectionCallable("Type", new Callable()
 		{
 			private static final String __OBFID = "CL_00001788";
 			public String call()
@@ -317,7 +312,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 				return "Dedicated Server (map_server.txt)";
 			}
 		});
-		return par1CrashReport;
+		return p_71230_1_;
 	}
 
 	protected void systemExitNow()
@@ -341,11 +336,11 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		return ConfigurationHandler.getWorldsConfig().global.mobSpawn.spawnMonsters;
 	}
 
-	public void addServerStatsToSnooper(PlayerUsageSnooper par1PlayerUsageSnooper)
+	public void addServerStatsToSnooper(PlayerUsageSnooper p_70000_1_)
 	{
-		par1PlayerUsageSnooper.addData("whitelist_enabled", Boolean.valueOf(this.getConfigurationManager().isWhiteListEnabled()));
-		par1PlayerUsageSnooper.addData("whitelist_count", Integer.valueOf(this.getConfigurationManager().getWhiteListedPlayers().size()));
-		super.addServerStatsToSnooper(par1PlayerUsageSnooper);
+		p_70000_1_.func_152768_a("whitelist_enabled", Boolean.valueOf(this.getConfigurationManager().isWhiteListEnabled()));
+		p_70000_1_.func_152768_a("whitelist_count", Integer.valueOf(this.getConfigurationManager().func_152598_l().length));
+		super.addServerStatsToSnooper(p_70000_1_);
 	}
 
 	public boolean isSnooperEnabled()
@@ -353,9 +348,9 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		return settings.snooperEnabled;
 	}
 
-	public void addPendingCommand(String par1Str, ICommandSender par2ICommandSender)
+	public void addPendingCommand(String p_71331_1_, ICommandSender p_71331_2_)
 	{
-		this.pendingCommandList.add(new ServerCommand(par1Str, par2ICommandSender));
+		this.pendingCommandList.add(new ServerCommand(p_71331_1_, p_71331_2_));
 	}
 
 	public void executePendingCommands()
@@ -422,7 +417,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		return this.guiIsEnabled;
 	}
 
-	public String shareToLAN(WorldSettings.GameType par1EnumGameType, boolean par2)
+	public String shareToLAN(WorldSettings.GameType p_71206_1_, boolean p_71206_2_)
 	{
 		return "";
 	}
@@ -443,7 +438,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		{
 			return false;
 		}
-		else if (this.getConfigurationManager().getOps().isEmpty())
+		else if (this.getConfigurationManager().func_152603_m().func_152690_d())
 		{
 			return false;
 		}
@@ -477,9 +472,97 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		this.saveProperties();
 	}
 
+	public boolean func_152363_m()
+	{
+		return false;//this.settings.getBooleanProperty("broadcast-rcon-to-ops", true);
+	}
+
 	public boolean func_147136_ar()
 	{
 		return settings.announcePlayerAchievements;
+	}
+
+	protected boolean func_152368_aE() throws IOException
+	{
+		boolean flag = false;
+		int i;
+
+		for (i = 0; !flag && i <= 2; ++i)
+		{
+			if (i > 0)
+			{
+				field_155771_h.warn("Encountered a problem while converting the user banlist, retrying in a few seconds");
+				this.func_152369_aG();
+			}
+
+			flag = PreYggdrasilConverter.func_152724_a(this);
+		}
+
+		boolean flag1 = false;
+
+		for (i = 0; !flag1 && i <= 2; ++i)
+		{
+			if (i > 0)
+			{
+				field_155771_h.warn("Encountered a problem while converting the ip banlist, retrying in a few seconds");
+				this.func_152369_aG();
+			}
+
+			flag1 = PreYggdrasilConverter.func_152722_b(this);
+		}
+
+		boolean flag2 = false;
+
+		for (i = 0; !flag2 && i <= 2; ++i)
+		{
+			if (i > 0)
+			{
+				field_155771_h.warn("Encountered a problem while converting the op list, retrying in a few seconds");
+				this.func_152369_aG();
+			}
+
+			flag2 = PreYggdrasilConverter.func_152718_c(this);
+		}
+
+		boolean flag3 = false;
+
+		for (i = 0; !flag3 && i <= 2; ++i)
+		{
+			if (i > 0)
+			{
+				field_155771_h.warn("Encountered a problem while converting the whitelist, retrying in a few seconds");
+				this.func_152369_aG();
+			}
+
+			flag3 = PreYggdrasilConverter.func_152710_d(this);
+		}
+
+		boolean flag4 = false;
+
+		for (i = 0; !flag4 && i <= 2; ++i)
+		{
+			if (i > 0)
+			{
+				field_155771_h.warn("Encountered a problem while converting the player save files, retrying in a few seconds");
+				this.func_152369_aG();
+			}
+
+			flag4 = PreYggdrasilConverter.func_152723_a(this, this.getWorldsDir());
+		}
+
+		return flag || flag1 || flag2 || flag3 || flag4;
+	}
+
+	private void func_152369_aG()
+	{
+		try
+		{
+			Thread.sleep(5000L);
+		}
+		catch (InterruptedException interruptedexception)
+		{
+			;
+		}
 	}
 	
 	/* ======================================== ULTRAMINE START =====================================*/

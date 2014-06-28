@@ -572,7 +572,7 @@ public class Block
 
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World p_149668_1_, int p_149668_2_, int p_149668_3_, int p_149668_4_)
 	{
-		return AxisAlignedBB.getAABBPool().getAABB((double)p_149668_2_ + this.minX, (double)p_149668_3_ + this.minY, (double)p_149668_4_ + this.minZ, (double)p_149668_2_ + this.maxX, (double)p_149668_3_ + this.maxY, (double)p_149668_4_ + this.maxZ);
+		return AxisAlignedBB.getBoundingBox((double)p_149668_2_ + this.minX, (double)p_149668_3_ + this.minY, (double)p_149668_4_ + this.minZ, (double)p_149668_2_ + this.maxX, (double)p_149668_3_ + this.maxY, (double)p_149668_4_ + this.maxZ);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -584,7 +584,7 @@ public class Block
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World p_149633_1_, int p_149633_2_, int p_149633_3_, int p_149633_4_)
 	{
-		return AxisAlignedBB.getAABBPool().getAABB((double)p_149633_2_ + this.minX, (double)p_149633_3_ + this.minY, (double)p_149633_4_ + this.minZ, (double)p_149633_2_ + this.maxX, (double)p_149633_3_ + this.maxY, (double)p_149633_4_ + this.maxZ);
+		return AxisAlignedBB.getBoundingBox((double)p_149633_2_ + this.minX, (double)p_149633_3_ + this.minY, (double)p_149633_4_ + this.minZ, (double)p_149633_2_ + this.maxX, (double)p_149633_3_ + this.maxY, (double)p_149633_4_ + this.maxZ);
 	}
 
 	public boolean isOpaqueCube()
@@ -1324,8 +1324,16 @@ public class Block
 	 * @param x X Position
 	 * @param y Y position
 	 * @param z Z position
+	 * @param willHarvest True if Block.harvestBlock will be called after this, if the return in true. 
+	 *        Can be useful to delay the destruction of tile entities till after harvestBlock
 	 * @return True if the block is actually destroyed.
 	 */
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
+	{
+		return removedByPlayer(world, player, x, y, z);
+	}
+
+	@Deprecated
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z)
 	{
 		return world.setBlockToAir(x, y, z);

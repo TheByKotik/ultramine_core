@@ -44,9 +44,9 @@ public class Bootstrap
 		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.arrow, new BehaviorProjectileDispense()
 		{
 			private static final String __OBFID = "CL_00001398";
-			protected IProjectile getProjectileEntity(World par1World, IPosition par2IPosition)
+			protected IProjectile getProjectileEntity(World p_82499_1_, IPosition p_82499_2_)
 			{
-				EntityArrow entityarrow = new EntityArrow(par1World, par2IPosition.getX(), par2IPosition.getY(), par2IPosition.getZ());
+				EntityArrow entityarrow = new EntityArrow(p_82499_1_, p_82499_2_.getX(), p_82499_2_.getY(), p_82499_2_.getZ());
 				entityarrow.canBePickedUp = 1;
 				return entityarrow;
 			}
@@ -54,25 +54,25 @@ public class Bootstrap
 		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.egg, new BehaviorProjectileDispense()
 		{
 			private static final String __OBFID = "CL_00001404";
-			protected IProjectile getProjectileEntity(World par1World, IPosition par2IPosition)
+			protected IProjectile getProjectileEntity(World p_82499_1_, IPosition p_82499_2_)
 			{
-				return new EntityEgg(par1World, par2IPosition.getX(), par2IPosition.getY(), par2IPosition.getZ());
+				return new EntityEgg(p_82499_1_, p_82499_2_.getX(), p_82499_2_.getY(), p_82499_2_.getZ());
 			}
 		});
 		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.snowball, new BehaviorProjectileDispense()
 		{
 			private static final String __OBFID = "CL_00001405";
-			protected IProjectile getProjectileEntity(World par1World, IPosition par2IPosition)
+			protected IProjectile getProjectileEntity(World p_82499_1_, IPosition p_82499_2_)
 			{
-				return new EntitySnowball(par1World, par2IPosition.getX(), par2IPosition.getY(), par2IPosition.getZ());
+				return new EntitySnowball(p_82499_1_, p_82499_2_.getX(), p_82499_2_.getY(), p_82499_2_.getZ());
 			}
 		});
 		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.experience_bottle, new BehaviorProjectileDispense()
 		{
 			private static final String __OBFID = "CL_00001406";
-			protected IProjectile getProjectileEntity(World par1World, IPosition par2IPosition)
+			protected IProjectile getProjectileEntity(World p_82499_1_, IPosition p_82499_2_)
 			{
-				return new EntityExpBottle(par1World, par2IPosition.getX(), par2IPosition.getY(), par2IPosition.getZ());
+				return new EntityExpBottle(p_82499_1_, p_82499_2_.getX(), p_82499_2_.getY(), p_82499_2_.getZ());
 			}
 			protected float func_82498_a()
 			{
@@ -87,14 +87,14 @@ public class Bootstrap
 		{
 			private final BehaviorDefaultDispenseItem field_150843_b = new BehaviorDefaultDispenseItem();
 			private static final String __OBFID = "CL_00001407";
-			public ItemStack dispense(IBlockSource par1IBlockSource, final ItemStack par2ItemStack)
+			public ItemStack dispense(IBlockSource p_82482_1_, final ItemStack p_82482_2_)
 			{
-				return ItemPotion.isSplash(par2ItemStack.getItemDamage()) ? (new BehaviorProjectileDispense()
+				return ItemPotion.isSplash(p_82482_2_.getItemDamage()) ? (new BehaviorProjectileDispense()
 				{
 					private static final String __OBFID = "CL_00001408";
-					protected IProjectile getProjectileEntity(World par1World, IPosition par2IPosition)
+					protected IProjectile getProjectileEntity(World p_82499_1_, IPosition p_82499_2_)
 					{
-						return new EntityPotion(par1World, par2IPosition.getX(), par2IPosition.getY(), par2IPosition.getZ(), par2ItemStack.copy());
+						return new EntityPotion(p_82499_1_, p_82499_2_.getX(), p_82499_2_.getY(), p_82499_2_.getZ(), p_82482_2_.copy());
 					}
 					protected float func_82498_a()
 					{
@@ -104,86 +104,86 @@ public class Bootstrap
 					{
 						return super.func_82500_b() * 1.25F;
 					}
-				}).dispense(par1IBlockSource, par2ItemStack): this.field_150843_b.dispense(par1IBlockSource, par2ItemStack);
+				}).dispense(p_82482_1_, p_82482_2_): this.field_150843_b.dispense(p_82482_1_, p_82482_2_);
 			}
 		});
 		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.spawn_egg, new BehaviorDefaultDispenseItem()
 		{
 			private static final String __OBFID = "CL_00001410";
-			public ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+			public ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 			{
-				EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
-				double d0 = par1IBlockSource.getX() + (double)enumfacing.getFrontOffsetX();
-				double d1 = (double)((float)par1IBlockSource.getYInt() + 0.2F);
-				double d2 = par1IBlockSource.getZ() + (double)enumfacing.getFrontOffsetZ();
-				Entity entity = ItemMonsterPlacer.spawnCreature(par1IBlockSource.getWorld(), par2ItemStack.getItemDamage(), d0, d1, d2);
+				EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
+				double d0 = p_82487_1_.getX() + (double)enumfacing.getFrontOffsetX();
+				double d1 = (double)((float)p_82487_1_.getYInt() + 0.2F);
+				double d2 = p_82487_1_.getZ() + (double)enumfacing.getFrontOffsetZ();
+				Entity entity = ItemMonsterPlacer.spawnCreature(p_82487_1_.getWorld(), p_82487_2_.getItemDamage(), d0, d1, d2);
 
-				if (entity instanceof EntityLivingBase && par2ItemStack.hasDisplayName())
+				if (entity instanceof EntityLivingBase && p_82487_2_.hasDisplayName())
 				{
-					((EntityLiving)entity).setCustomNameTag(par2ItemStack.getDisplayName());
+					((EntityLiving)entity).setCustomNameTag(p_82487_2_.getDisplayName());
 				}
 
-				par2ItemStack.splitStack(1);
-				return par2ItemStack;
+				p_82487_2_.splitStack(1);
+				return p_82487_2_;
 			}
 		});
 		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.fireworks, new BehaviorDefaultDispenseItem()
 		{
 			private static final String __OBFID = "CL_00001411";
-			public ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+			public ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 			{
-				EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
-				double d0 = par1IBlockSource.getX() + (double)enumfacing.getFrontOffsetX();
-				double d1 = (double)((float)par1IBlockSource.getYInt() + 0.2F);
-				double d2 = par1IBlockSource.getZ() + (double)enumfacing.getFrontOffsetZ();
-				EntityFireworkRocket entityfireworkrocket = new EntityFireworkRocket(par1IBlockSource.getWorld(), d0, d1, d2, par2ItemStack);
-				par1IBlockSource.getWorld().spawnEntityInWorld(entityfireworkrocket);
-				par2ItemStack.splitStack(1);
-				return par2ItemStack;
+				EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
+				double d0 = p_82487_1_.getX() + (double)enumfacing.getFrontOffsetX();
+				double d1 = (double)((float)p_82487_1_.getYInt() + 0.2F);
+				double d2 = p_82487_1_.getZ() + (double)enumfacing.getFrontOffsetZ();
+				EntityFireworkRocket entityfireworkrocket = new EntityFireworkRocket(p_82487_1_.getWorld(), d0, d1, d2, p_82487_2_);
+				p_82487_1_.getWorld().spawnEntityInWorld(entityfireworkrocket);
+				p_82487_2_.splitStack(1);
+				return p_82487_2_;
 			}
-			protected void playDispenseSound(IBlockSource par1IBlockSource)
+			protected void playDispenseSound(IBlockSource p_82485_1_)
 			{
-				par1IBlockSource.getWorld().playAuxSFX(1002, par1IBlockSource.getXInt(), par1IBlockSource.getYInt(), par1IBlockSource.getZInt(), 0);
+				p_82485_1_.getWorld().playAuxSFX(1002, p_82485_1_.getXInt(), p_82485_1_.getYInt(), p_82485_1_.getZInt(), 0);
 			}
 		});
 		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.fire_charge, new BehaviorDefaultDispenseItem()
 		{
 			private static final String __OBFID = "CL_00001412";
-			public ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+			public ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 			{
-				EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
-				IPosition iposition = BlockDispenser.func_149939_a(par1IBlockSource);
+				EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
+				IPosition iposition = BlockDispenser.func_149939_a(p_82487_1_);
 				double d0 = iposition.getX() + (double)((float)enumfacing.getFrontOffsetX() * 0.3F);
 				double d1 = iposition.getY() + (double)((float)enumfacing.getFrontOffsetX() * 0.3F);
 				double d2 = iposition.getZ() + (double)((float)enumfacing.getFrontOffsetZ() * 0.3F);
-				World world = par1IBlockSource.getWorld();
+				World world = p_82487_1_.getWorld();
 				Random random = world.rand;
 				double d3 = random.nextGaussian() * 0.05D + (double)enumfacing.getFrontOffsetX();
 				double d4 = random.nextGaussian() * 0.05D + (double)enumfacing.getFrontOffsetY();
 				double d5 = random.nextGaussian() * 0.05D + (double)enumfacing.getFrontOffsetZ();
 				world.spawnEntityInWorld(new EntitySmallFireball(world, d0, d1, d2, d3, d4, d5));
-				par2ItemStack.splitStack(1);
-				return par2ItemStack;
+				p_82487_2_.splitStack(1);
+				return p_82487_2_;
 			}
-			protected void playDispenseSound(IBlockSource par1IBlockSource)
+			protected void playDispenseSound(IBlockSource p_82485_1_)
 			{
-				par1IBlockSource.getWorld().playAuxSFX(1009, par1IBlockSource.getXInt(), par1IBlockSource.getYInt(), par1IBlockSource.getZInt(), 0);
+				p_82485_1_.getWorld().playAuxSFX(1009, p_82485_1_.getXInt(), p_82485_1_.getYInt(), p_82485_1_.getZInt(), 0);
 			}
 		});
 		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.boat, new BehaviorDefaultDispenseItem()
 		{
 			private final BehaviorDefaultDispenseItem field_150842_b = new BehaviorDefaultDispenseItem();
 			private static final String __OBFID = "CL_00001413";
-			public ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+			public ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 			{
-				EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
-				World world = par1IBlockSource.getWorld();
-				double d0 = par1IBlockSource.getX() + (double)((float)enumfacing.getFrontOffsetX() * 1.125F);
-				double d1 = par1IBlockSource.getY() + (double)((float)enumfacing.getFrontOffsetY() * 1.125F);
-				double d2 = par1IBlockSource.getZ() + (double)((float)enumfacing.getFrontOffsetZ() * 1.125F);
-				int i = par1IBlockSource.getXInt() + enumfacing.getFrontOffsetX();
-				int j = par1IBlockSource.getYInt() + enumfacing.getFrontOffsetY();
-				int k = par1IBlockSource.getZInt() + enumfacing.getFrontOffsetZ();
+				EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
+				World world = p_82487_1_.getWorld();
+				double d0 = p_82487_1_.getX() + (double)((float)enumfacing.getFrontOffsetX() * 1.125F);
+				double d1 = p_82487_1_.getY() + (double)((float)enumfacing.getFrontOffsetY() * 1.125F);
+				double d2 = p_82487_1_.getZ() + (double)((float)enumfacing.getFrontOffsetZ() * 1.125F);
+				int i = p_82487_1_.getXInt() + enumfacing.getFrontOffsetX();
+				int j = p_82487_1_.getYInt() + enumfacing.getFrontOffsetY();
+				int k = p_82487_1_.getZInt() + enumfacing.getFrontOffsetZ();
 				Material material = world.getBlock(i, j, k).getMaterial();
 				double d3;
 
@@ -195,7 +195,7 @@ public class Bootstrap
 				{
 					if (!Material.air.equals(material) || !Material.water.equals(world.getBlock(i, j - 1, k).getMaterial()))
 					{
-						return this.field_150842_b.dispense(par1IBlockSource, par2ItemStack);
+						return this.field_150842_b.dispense(p_82487_1_, p_82487_2_);
 					}
 
 					d3 = 0.0D;
@@ -203,35 +203,35 @@ public class Bootstrap
 
 				EntityBoat entityboat = new EntityBoat(world, d0, d1 + d3, d2);
 				world.spawnEntityInWorld(entityboat);
-				par2ItemStack.splitStack(1);
-				return par2ItemStack;
+				p_82487_2_.splitStack(1);
+				return p_82487_2_;
 			}
-			protected void playDispenseSound(IBlockSource par1IBlockSource)
+			protected void playDispenseSound(IBlockSource p_82485_1_)
 			{
-				par1IBlockSource.getWorld().playAuxSFX(1000, par1IBlockSource.getXInt(), par1IBlockSource.getYInt(), par1IBlockSource.getZInt(), 0);
+				p_82485_1_.getWorld().playAuxSFX(1000, p_82485_1_.getXInt(), p_82485_1_.getYInt(), p_82485_1_.getZInt(), 0);
 			}
 		});
 		BehaviorDefaultDispenseItem behaviordefaultdispenseitem = new BehaviorDefaultDispenseItem()
 		{
 			private final BehaviorDefaultDispenseItem field_150841_b = new BehaviorDefaultDispenseItem();
 			private static final String __OBFID = "CL_00001399";
-			public ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+			public ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 			{
-				ItemBucket itembucket = (ItemBucket)par2ItemStack.getItem();
-				int i = par1IBlockSource.getXInt();
-				int j = par1IBlockSource.getYInt();
-				int k = par1IBlockSource.getZInt();
-				EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
+				ItemBucket itembucket = (ItemBucket)p_82487_2_.getItem();
+				int i = p_82487_1_.getXInt();
+				int j = p_82487_1_.getYInt();
+				int k = p_82487_1_.getZInt();
+				EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
 
-				if (itembucket.tryPlaceContainedLiquid(par1IBlockSource.getWorld(), i + enumfacing.getFrontOffsetX(), j + enumfacing.getFrontOffsetY(), k + enumfacing.getFrontOffsetZ()))
+				if (itembucket.tryPlaceContainedLiquid(p_82487_1_.getWorld(), i + enumfacing.getFrontOffsetX(), j + enumfacing.getFrontOffsetY(), k + enumfacing.getFrontOffsetZ()))
 				{
-					par2ItemStack.func_150996_a(Items.bucket);
-					par2ItemStack.stackSize = 1;
-					return par2ItemStack;
+					p_82487_2_.func_150996_a(Items.bucket);
+					p_82487_2_.stackSize = 1;
+					return p_82487_2_;
 				}
 				else
 				{
-					return this.field_150841_b.dispense(par1IBlockSource, par2ItemStack);
+					return this.field_150841_b.dispense(p_82487_1_, p_82487_2_);
 				}
 			}
 		};
@@ -241,13 +241,13 @@ public class Bootstrap
 		{
 			private final BehaviorDefaultDispenseItem field_150840_b = new BehaviorDefaultDispenseItem();
 			private static final String __OBFID = "CL_00001400";
-			public ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+			public ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 			{
-				EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
-				World world = par1IBlockSource.getWorld();
-				int i = par1IBlockSource.getXInt() + enumfacing.getFrontOffsetX();
-				int j = par1IBlockSource.getYInt() + enumfacing.getFrontOffsetY();
-				int k = par1IBlockSource.getZInt() + enumfacing.getFrontOffsetZ();
+				EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
+				World world = p_82487_1_.getWorld();
+				int i = p_82487_1_.getXInt() + enumfacing.getFrontOffsetX();
+				int j = p_82487_1_.getYInt() + enumfacing.getFrontOffsetY();
+				int k = p_82487_1_.getZInt() + enumfacing.getFrontOffsetZ();
 				Material material = world.getBlock(i, j, k).getMaterial();
 				int l = world.getBlockMetadata(i, j, k);
 				Item item;
@@ -260,7 +260,7 @@ public class Bootstrap
 				{
 					if (!Material.lava.equals(material) || l != 0)
 					{
-						return super.dispenseStack(par1IBlockSource, par2ItemStack);
+						return super.dispenseStack(p_82487_1_, p_82487_2_);
 					}
 
 					item = Items.lava_bucket;
@@ -268,38 +268,38 @@ public class Bootstrap
 
 				world.setBlockToAir(i, j, k);
 
-				if (--par2ItemStack.stackSize == 0)
+				if (--p_82487_2_.stackSize == 0)
 				{
-					par2ItemStack.func_150996_a(item);
-					par2ItemStack.stackSize = 1;
+					p_82487_2_.func_150996_a(item);
+					p_82487_2_.stackSize = 1;
 				}
-				else if (((TileEntityDispenser)par1IBlockSource.getBlockTileEntity()).func_146019_a(new ItemStack(item)) < 0)
+				else if (((TileEntityDispenser)p_82487_1_.getBlockTileEntity()).func_146019_a(new ItemStack(item)) < 0)
 				{
-					this.field_150840_b.dispense(par1IBlockSource, new ItemStack(item));
+					this.field_150840_b.dispense(p_82487_1_, new ItemStack(item));
 				}
 
-				return par2ItemStack;
+				return p_82487_2_;
 			}
 		});
 		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.flint_and_steel, new BehaviorDefaultDispenseItem()
 		{
 			private boolean field_150839_b = true;
 			private static final String __OBFID = "CL_00001401";
-			protected ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+			protected ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 			{
-				EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
-				World world = par1IBlockSource.getWorld();
-				int i = par1IBlockSource.getXInt() + enumfacing.getFrontOffsetX();
-				int j = par1IBlockSource.getYInt() + enumfacing.getFrontOffsetY();
-				int k = par1IBlockSource.getZInt() + enumfacing.getFrontOffsetZ();
+				EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
+				World world = p_82487_1_.getWorld();
+				int i = p_82487_1_.getXInt() + enumfacing.getFrontOffsetX();
+				int j = p_82487_1_.getYInt() + enumfacing.getFrontOffsetY();
+				int k = p_82487_1_.getZInt() + enumfacing.getFrontOffsetZ();
 
 				if (world.isAirBlock(i, j, k))
 				{
 					world.setBlock(i, j, k, Blocks.fire);
 
-					if (par2ItemStack.attemptDamageItem(1, world.rand))
+					if (p_82487_2_.attemptDamageItem(1, world.rand))
 					{
-						par2ItemStack.stackSize = 0;
+						p_82487_2_.stackSize = 0;
 					}
 				}
 				else if (world.getBlock(i, j, k) == Blocks.tnt)
@@ -312,17 +312,17 @@ public class Bootstrap
 					this.field_150839_b = false;
 				}
 
-				return par2ItemStack;
+				return p_82487_2_;
 			}
-			protected void playDispenseSound(IBlockSource par1IBlockSource)
+			protected void playDispenseSound(IBlockSource p_82485_1_)
 			{
 				if (this.field_150839_b)
 				{
-					par1IBlockSource.getWorld().playAuxSFX(1000, par1IBlockSource.getXInt(), par1IBlockSource.getYInt(), par1IBlockSource.getZInt(), 0);
+					p_82485_1_.getWorld().playAuxSFX(1000, p_82485_1_.getXInt(), p_82485_1_.getYInt(), p_82485_1_.getZInt(), 0);
 				}
 				else
 				{
-					par1IBlockSource.getWorld().playAuxSFX(1001, par1IBlockSource.getXInt(), par1IBlockSource.getYInt(), par1IBlockSource.getZInt(), 0);
+					p_82485_1_.getWorld().playAuxSFX(1001, p_82485_1_.getXInt(), p_82485_1_.getYInt(), p_82485_1_.getZInt(), 0);
 				}
 			}
 		});
@@ -330,17 +330,17 @@ public class Bootstrap
 		{
 			private boolean field_150838_b = true;
 			private static final String __OBFID = "CL_00001402";
-			protected ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+			protected ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 			{
-				if (par2ItemStack.getItemDamage() == 15)
+				if (p_82487_2_.getItemDamage() == 15)
 				{
-					EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
-					World world = par1IBlockSource.getWorld();
-					int i = par1IBlockSource.getXInt() + enumfacing.getFrontOffsetX();
-					int j = par1IBlockSource.getYInt() + enumfacing.getFrontOffsetY();
-					int k = par1IBlockSource.getZInt() + enumfacing.getFrontOffsetZ();
+					EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
+					World world = p_82487_1_.getWorld();
+					int i = p_82487_1_.getXInt() + enumfacing.getFrontOffsetX();
+					int j = p_82487_1_.getYInt() + enumfacing.getFrontOffsetY();
+					int k = p_82487_1_.getZInt() + enumfacing.getFrontOffsetZ();
 
-					if (ItemDye.func_150919_a(par2ItemStack, world, i, j, k))
+					if (ItemDye.func_150919_a(p_82487_2_, world, i, j, k))
 					{
 						if (!world.isRemote)
 						{
@@ -352,39 +352,39 @@ public class Bootstrap
 						this.field_150838_b = false;
 					}
 
-					return par2ItemStack;
+					return p_82487_2_;
 				}
 				else
 				{
-					return super.dispenseStack(par1IBlockSource, par2ItemStack);
+					return super.dispenseStack(p_82487_1_, p_82487_2_);
 				}
 			}
-			protected void playDispenseSound(IBlockSource par1IBlockSource)
+			protected void playDispenseSound(IBlockSource p_82485_1_)
 			{
 				if (this.field_150838_b)
 				{
-					par1IBlockSource.getWorld().playAuxSFX(1000, par1IBlockSource.getXInt(), par1IBlockSource.getYInt(), par1IBlockSource.getZInt(), 0);
+					p_82485_1_.getWorld().playAuxSFX(1000, p_82485_1_.getXInt(), p_82485_1_.getYInt(), p_82485_1_.getZInt(), 0);
 				}
 				else
 				{
-					par1IBlockSource.getWorld().playAuxSFX(1001, par1IBlockSource.getXInt(), par1IBlockSource.getYInt(), par1IBlockSource.getZInt(), 0);
+					p_82485_1_.getWorld().playAuxSFX(1001, p_82485_1_.getXInt(), p_82485_1_.getYInt(), p_82485_1_.getZInt(), 0);
 				}
 			}
 		});
 		BlockDispenser.dispenseBehaviorRegistry.putObject(Item.getItemFromBlock(Blocks.tnt), new BehaviorDefaultDispenseItem()
 		{
 			private static final String __OBFID = "CL_00001403";
-			protected ItemStack dispenseStack(IBlockSource par1IBlockSource, ItemStack par2ItemStack)
+			protected ItemStack dispenseStack(IBlockSource p_82487_1_, ItemStack p_82487_2_)
 			{
-				EnumFacing enumfacing = BlockDispenser.func_149937_b(par1IBlockSource.getBlockMetadata());
-				World world = par1IBlockSource.getWorld();
-				int i = par1IBlockSource.getXInt() + enumfacing.getFrontOffsetX();
-				int j = par1IBlockSource.getYInt() + enumfacing.getFrontOffsetY();
-				int k = par1IBlockSource.getZInt() + enumfacing.getFrontOffsetZ();
+				EnumFacing enumfacing = BlockDispenser.func_149937_b(p_82487_1_.getBlockMetadata());
+				World world = p_82487_1_.getWorld();
+				int i = p_82487_1_.getXInt() + enumfacing.getFrontOffsetX();
+				int j = p_82487_1_.getYInt() + enumfacing.getFrontOffsetY();
+				int k = p_82487_1_.getZInt() + enumfacing.getFrontOffsetZ();
 				EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double)((float)i + 0.5F), (double)((float)j + 0.5F), (double)((float)k + 0.5F), (EntityLivingBase)null);
 				world.spawnEntityInWorld(entitytntprimed);
-				--par2ItemStack.stackSize;
-				return par2ItemStack;
+				--p_82487_2_.stackSize;
+				return p_82487_2_;
 			}
 		});
 	}

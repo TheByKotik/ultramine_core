@@ -14,7 +14,7 @@ public class RenderLightningBolt extends Render
 {
 	private static final String __OBFID = "CL_00001011";
 
-	public void doRender(EntityLightningBolt par1EntityLightningBolt, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(EntityLightningBolt p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
 		Tessellator tessellator = Tessellator.instance;
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -25,7 +25,7 @@ public class RenderLightningBolt extends Render
 		double[] adouble1 = new double[8];
 		double d3 = 0.0D;
 		double d4 = 0.0D;
-		Random random = new Random(par1EntityLightningBolt.boltVertex);
+		Random random = new Random(p_76986_1_.boltVertex);
 
 		for (int i = 7; i >= 0; --i)
 		{
@@ -37,7 +37,7 @@ public class RenderLightningBolt extends Render
 
 		for (int k1 = 0; k1 < 4; ++k1)
 		{
-			Random random1 = new Random(par1EntityLightningBolt.boltVertex);
+			Random random1 = new Random(p_76986_1_.boltVertex);
 
 			for (int j = 0; j < 3; ++j)
 			{
@@ -92,8 +92,8 @@ public class RenderLightningBolt extends Render
 
 					for (int j1 = 0; j1 < 5; ++j1)
 					{
-						double d11 = par2 + 0.5D - d9;
-						double d12 = par6 + 0.5D - d9;
+						double d11 = p_76986_2_ + 0.5D - d9;
+						double d12 = p_76986_6_ + 0.5D - d9;
 
 						if (j1 == 1 || j1 == 2)
 						{
@@ -105,8 +105,8 @@ public class RenderLightningBolt extends Render
 							d12 += d9 * 2.0D;
 						}
 
-						double d13 = par2 + 0.5D - d10;
-						double d14 = par6 + 0.5D - d10;
+						double d13 = p_76986_2_ + 0.5D - d10;
+						double d14 = p_76986_6_ + 0.5D - d10;
 
 						if (j1 == 1 || j1 == 2)
 						{
@@ -118,8 +118,8 @@ public class RenderLightningBolt extends Render
 							d14 += d10 * 2.0D;
 						}
 
-						tessellator.addVertex(d13 + d5, par4 + (double)(i1 * 16), d14 + d6);
-						tessellator.addVertex(d11 + d7, par4 + (double)((i1 + 1) * 16), d12 + d8);
+						tessellator.addVertex(d13 + d5, p_76986_4_ + (double)(i1 * 16), d14 + d6);
+						tessellator.addVertex(d11 + d7, p_76986_4_ + (double)((i1 + 1) * 16), d12 + d8);
 					}
 
 					tessellator.draw();
@@ -132,18 +132,18 @@ public class RenderLightningBolt extends Render
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 
-	protected ResourceLocation getEntityTexture(EntityLightningBolt par1EntityLightningBolt)
+	protected ResourceLocation getEntityTexture(EntityLightningBolt p_110775_1_)
 	{
 		return null;
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityLightningBolt)par1Entity);
+		return this.getEntityTexture((EntityLightningBolt)p_110775_1_);
 	}
 
-	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
+	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		this.doRender((EntityLightningBolt)par1Entity, par2, par4, par6, par8, par9);
+		this.doRender((EntityLightningBolt)p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 }

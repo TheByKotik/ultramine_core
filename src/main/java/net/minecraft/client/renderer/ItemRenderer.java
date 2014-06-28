@@ -50,50 +50,54 @@ public class ItemRenderer
 	private int equippedItemSlot = -1;
 	private static final String __OBFID = "CL_00000953";
 
-	public ItemRenderer(Minecraft par1Minecraft)
+	public ItemRenderer(Minecraft p_i1247_1_)
 	{
-		this.mc = par1Minecraft;
+		this.mc = p_i1247_1_;
 	}
 
-	public void renderItem(EntityLivingBase par1EntityLivingBase, ItemStack par2ItemStack, int par3)
+	public void renderItem(EntityLivingBase p_78443_1_, ItemStack p_78443_2_, int p_78443_3_)
 	{
-		this.renderItem(par1EntityLivingBase, par2ItemStack, par3, EQUIPPED);
+		this.renderItem(p_78443_1_, p_78443_2_, p_78443_3_, EQUIPPED);
 	}
 
-	public void renderItem(EntityLivingBase par1EntityLivingBase, ItemStack par2ItemStack, int par3, ItemRenderType type)
+	public void renderItem(EntityLivingBase p_78443_1_, ItemStack p_78443_2_, int p_78443_3_, ItemRenderType type)
 	{
 		GL11.glPushMatrix();
 		TextureManager texturemanager = this.mc.getTextureManager();
-		Item item = par2ItemStack.getItem();
+		Item item = p_78443_2_.getItem();
 		Block block = Block.getBlockFromItem(item);
 
-		IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer(par2ItemStack, type);
+		if (p_78443_2_ != null && block != null && block.getRenderBlockPass() != 0)
+		{
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+		}
+		IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer(p_78443_2_, type);
 		if (customRenderer != null)
 		{
-			texturemanager.bindTexture(texturemanager.getResourceLocation(par2ItemStack.getItemSpriteNumber()));
-			ForgeHooksClient.renderEquippedItem(type, customRenderer, renderBlocksIr, par1EntityLivingBase, par2ItemStack);
+			texturemanager.bindTexture(texturemanager.getResourceLocation(p_78443_2_.getItemSpriteNumber()));
+			ForgeHooksClient.renderEquippedItem(type, customRenderer, renderBlocksIr, p_78443_1_, p_78443_2_);
 		}
-		else if (par2ItemStack.getItemSpriteNumber() == 0 && item instanceof ItemBlock && RenderBlocks.renderItemIn3d(block.getRenderType()))
+		else
+		if (p_78443_2_.getItemSpriteNumber() == 0 && item instanceof ItemBlock && RenderBlocks.renderItemIn3d(block.getRenderType()))
 		{
 			texturemanager.bindTexture(texturemanager.getResourceLocation(0));
 
-			if (par2ItemStack != null && par2ItemStack.getItem() instanceof ItemCloth)
+			if (p_78443_2_ != null && block != null && block.getRenderBlockPass() != 0)
 			{
-				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glDepthMask(false);
-				OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-				this.renderBlocksIr.renderBlockAsItem(block, par2ItemStack.getItemDamage(), 1.0F);
+				this.renderBlocksIr.renderBlockAsItem(block, p_78443_2_.getItemDamage(), 1.0F);
 				GL11.glDepthMask(true);
-				GL11.glDisable(GL11.GL_BLEND);
 			}
 			else
 			{
-				this.renderBlocksIr.renderBlockAsItem(block, par2ItemStack.getItemDamage(), 1.0F);
+				this.renderBlocksIr.renderBlockAsItem(block, p_78443_2_.getItemDamage(), 1.0F);
 			}
 		}
 		else
 		{
-			IIcon iicon = par1EntityLivingBase.getItemIcon(par2ItemStack, par3);
+			IIcon iicon = p_78443_1_.getItemIcon(p_78443_2_, p_78443_3_);
 
 			if (iicon == null)
 			{
@@ -101,8 +105,8 @@ public class ItemRenderer
 				return;
 			}
 
-			texturemanager.bindTexture(texturemanager.getResourceLocation(par2ItemStack.getItemSpriteNumber()));
-			TextureUtil.func_147950_a(false, false);
+			texturemanager.bindTexture(texturemanager.getResourceLocation(p_78443_2_.getItemSpriteNumber()));
+			TextureUtil.func_152777_a(false, false, 1.0F);
 			Tessellator tessellator = Tessellator.instance;
 			float f = iicon.getMinU();
 			float f1 = iicon.getMaxU();
@@ -119,7 +123,7 @@ public class ItemRenderer
 			GL11.glTranslatef(-0.9375F, -0.0625F, 0.0F);
 			renderItemIn2D(tessellator, f1, f2, f, f3, iicon.getIconWidth(), iicon.getIconHeight(), 0.0625F);
 
-			if (par2ItemStack.hasEffect(par3))
+			if (p_78443_2_.hasEffect(p_78443_3_))
 			{
 				GL11.glDepthFunc(GL11.GL_EQUAL);
 				GL11.glDisable(GL11.GL_LIGHTING);
@@ -151,108 +155,113 @@ public class ItemRenderer
 			}
 
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			texturemanager.bindTexture(texturemanager.getResourceLocation(par2ItemStack.getItemSpriteNumber()));
+			texturemanager.bindTexture(texturemanager.getResourceLocation(p_78443_2_.getItemSpriteNumber()));
 			TextureUtil.func_147945_b();
+		}
+
+		if (p_78443_2_ != null && block != null && block.getRenderBlockPass() != 0)
+		{
+			GL11.glDisable(GL11.GL_BLEND);
 		}
 
 		GL11.glPopMatrix();
 	}
 
-	public static void renderItemIn2D(Tessellator par0Tessellator, float par1, float par2, float par3, float par4, int par5, int par6, float par7)
+	public static void renderItemIn2D(Tessellator p_78439_0_, float p_78439_1_, float p_78439_2_, float p_78439_3_, float p_78439_4_, int p_78439_5_, int p_78439_6_, float p_78439_7_)
 	{
-		par0Tessellator.startDrawingQuads();
-		par0Tessellator.setNormal(0.0F, 0.0F, 1.0F);
-		par0Tessellator.addVertexWithUV(0.0D, 0.0D, 0.0D, (double)par1, (double)par4);
-		par0Tessellator.addVertexWithUV(1.0D, 0.0D, 0.0D, (double)par3, (double)par4);
-		par0Tessellator.addVertexWithUV(1.0D, 1.0D, 0.0D, (double)par3, (double)par2);
-		par0Tessellator.addVertexWithUV(0.0D, 1.0D, 0.0D, (double)par1, (double)par2);
-		par0Tessellator.draw();
-		par0Tessellator.startDrawingQuads();
-		par0Tessellator.setNormal(0.0F, 0.0F, -1.0F);
-		par0Tessellator.addVertexWithUV(0.0D, 1.0D, (double)(0.0F - par7), (double)par1, (double)par2);
-		par0Tessellator.addVertexWithUV(1.0D, 1.0D, (double)(0.0F - par7), (double)par3, (double)par2);
-		par0Tessellator.addVertexWithUV(1.0D, 0.0D, (double)(0.0F - par7), (double)par3, (double)par4);
-		par0Tessellator.addVertexWithUV(0.0D, 0.0D, (double)(0.0F - par7), (double)par1, (double)par4);
-		par0Tessellator.draw();
-		float f5 = 0.5F * (par1 - par3) / (float)par5;
-		float f6 = 0.5F * (par4 - par2) / (float)par6;
-		par0Tessellator.startDrawingQuads();
-		par0Tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+		p_78439_0_.startDrawingQuads();
+		p_78439_0_.setNormal(0.0F, 0.0F, 1.0F);
+		p_78439_0_.addVertexWithUV(0.0D, 0.0D, 0.0D, (double)p_78439_1_, (double)p_78439_4_);
+		p_78439_0_.addVertexWithUV(1.0D, 0.0D, 0.0D, (double)p_78439_3_, (double)p_78439_4_);
+		p_78439_0_.addVertexWithUV(1.0D, 1.0D, 0.0D, (double)p_78439_3_, (double)p_78439_2_);
+		p_78439_0_.addVertexWithUV(0.0D, 1.0D, 0.0D, (double)p_78439_1_, (double)p_78439_2_);
+		p_78439_0_.draw();
+		p_78439_0_.startDrawingQuads();
+		p_78439_0_.setNormal(0.0F, 0.0F, -1.0F);
+		p_78439_0_.addVertexWithUV(0.0D, 1.0D, (double)(0.0F - p_78439_7_), (double)p_78439_1_, (double)p_78439_2_);
+		p_78439_0_.addVertexWithUV(1.0D, 1.0D, (double)(0.0F - p_78439_7_), (double)p_78439_3_, (double)p_78439_2_);
+		p_78439_0_.addVertexWithUV(1.0D, 0.0D, (double)(0.0F - p_78439_7_), (double)p_78439_3_, (double)p_78439_4_);
+		p_78439_0_.addVertexWithUV(0.0D, 0.0D, (double)(0.0F - p_78439_7_), (double)p_78439_1_, (double)p_78439_4_);
+		p_78439_0_.draw();
+		float f5 = 0.5F * (p_78439_1_ - p_78439_3_) / (float)p_78439_5_;
+		float f6 = 0.5F * (p_78439_4_ - p_78439_2_) / (float)p_78439_6_;
+		p_78439_0_.startDrawingQuads();
+		p_78439_0_.setNormal(-1.0F, 0.0F, 0.0F);
 		int k;
 		float f7;
 		float f8;
 
-		for (k = 0; k < par5; ++k)
+		for (k = 0; k < p_78439_5_; ++k)
 		{
-			f7 = (float)k / (float)par5;
-			f8 = par1 + (par3 - par1) * f7 - f5;
-			par0Tessellator.addVertexWithUV((double)f7, 0.0D, (double)(0.0F - par7), (double)f8, (double)par4);
-			par0Tessellator.addVertexWithUV((double)f7, 0.0D, 0.0D, (double)f8, (double)par4);
-			par0Tessellator.addVertexWithUV((double)f7, 1.0D, 0.0D, (double)f8, (double)par2);
-			par0Tessellator.addVertexWithUV((double)f7, 1.0D, (double)(0.0F - par7), (double)f8, (double)par2);
+			f7 = (float)k / (float)p_78439_5_;
+			f8 = p_78439_1_ + (p_78439_3_ - p_78439_1_) * f7 - f5;
+			p_78439_0_.addVertexWithUV((double)f7, 0.0D, (double)(0.0F - p_78439_7_), (double)f8, (double)p_78439_4_);
+			p_78439_0_.addVertexWithUV((double)f7, 0.0D, 0.0D, (double)f8, (double)p_78439_4_);
+			p_78439_0_.addVertexWithUV((double)f7, 1.0D, 0.0D, (double)f8, (double)p_78439_2_);
+			p_78439_0_.addVertexWithUV((double)f7, 1.0D, (double)(0.0F - p_78439_7_), (double)f8, (double)p_78439_2_);
 		}
 
-		par0Tessellator.draw();
-		par0Tessellator.startDrawingQuads();
-		par0Tessellator.setNormal(1.0F, 0.0F, 0.0F);
+		p_78439_0_.draw();
+		p_78439_0_.startDrawingQuads();
+		p_78439_0_.setNormal(1.0F, 0.0F, 0.0F);
 		float f9;
 
-		for (k = 0; k < par5; ++k)
+		for (k = 0; k < p_78439_5_; ++k)
 		{
-			f7 = (float)k / (float)par5;
-			f8 = par1 + (par3 - par1) * f7 - f5;
-			f9 = f7 + 1.0F / (float)par5;
-			par0Tessellator.addVertexWithUV((double)f9, 1.0D, (double)(0.0F - par7), (double)f8, (double)par2);
-			par0Tessellator.addVertexWithUV((double)f9, 1.0D, 0.0D, (double)f8, (double)par2);
-			par0Tessellator.addVertexWithUV((double)f9, 0.0D, 0.0D, (double)f8, (double)par4);
-			par0Tessellator.addVertexWithUV((double)f9, 0.0D, (double)(0.0F - par7), (double)f8, (double)par4);
+			f7 = (float)k / (float)p_78439_5_;
+			f8 = p_78439_1_ + (p_78439_3_ - p_78439_1_) * f7 - f5;
+			f9 = f7 + 1.0F / (float)p_78439_5_;
+			p_78439_0_.addVertexWithUV((double)f9, 1.0D, (double)(0.0F - p_78439_7_), (double)f8, (double)p_78439_2_);
+			p_78439_0_.addVertexWithUV((double)f9, 1.0D, 0.0D, (double)f8, (double)p_78439_2_);
+			p_78439_0_.addVertexWithUV((double)f9, 0.0D, 0.0D, (double)f8, (double)p_78439_4_);
+			p_78439_0_.addVertexWithUV((double)f9, 0.0D, (double)(0.0F - p_78439_7_), (double)f8, (double)p_78439_4_);
 		}
 
-		par0Tessellator.draw();
-		par0Tessellator.startDrawingQuads();
-		par0Tessellator.setNormal(0.0F, 1.0F, 0.0F);
+		p_78439_0_.draw();
+		p_78439_0_.startDrawingQuads();
+		p_78439_0_.setNormal(0.0F, 1.0F, 0.0F);
 
-		for (k = 0; k < par6; ++k)
+		for (k = 0; k < p_78439_6_; ++k)
 		{
-			f7 = (float)k / (float)par6;
-			f8 = par4 + (par2 - par4) * f7 - f6;
-			f9 = f7 + 1.0F / (float)par6;
-			par0Tessellator.addVertexWithUV(0.0D, (double)f9, 0.0D, (double)par1, (double)f8);
-			par0Tessellator.addVertexWithUV(1.0D, (double)f9, 0.0D, (double)par3, (double)f8);
-			par0Tessellator.addVertexWithUV(1.0D, (double)f9, (double)(0.0F - par7), (double)par3, (double)f8);
-			par0Tessellator.addVertexWithUV(0.0D, (double)f9, (double)(0.0F - par7), (double)par1, (double)f8);
+			f7 = (float)k / (float)p_78439_6_;
+			f8 = p_78439_4_ + (p_78439_2_ - p_78439_4_) * f7 - f6;
+			f9 = f7 + 1.0F / (float)p_78439_6_;
+			p_78439_0_.addVertexWithUV(0.0D, (double)f9, 0.0D, (double)p_78439_1_, (double)f8);
+			p_78439_0_.addVertexWithUV(1.0D, (double)f9, 0.0D, (double)p_78439_3_, (double)f8);
+			p_78439_0_.addVertexWithUV(1.0D, (double)f9, (double)(0.0F - p_78439_7_), (double)p_78439_3_, (double)f8);
+			p_78439_0_.addVertexWithUV(0.0D, (double)f9, (double)(0.0F - p_78439_7_), (double)p_78439_1_, (double)f8);
 		}
 
-		par0Tessellator.draw();
-		par0Tessellator.startDrawingQuads();
-		par0Tessellator.setNormal(0.0F, -1.0F, 0.0F);
+		p_78439_0_.draw();
+		p_78439_0_.startDrawingQuads();
+		p_78439_0_.setNormal(0.0F, -1.0F, 0.0F);
 
-		for (k = 0; k < par6; ++k)
+		for (k = 0; k < p_78439_6_; ++k)
 		{
-			f7 = (float)k / (float)par6;
-			f8 = par4 + (par2 - par4) * f7 - f6;
-			par0Tessellator.addVertexWithUV(1.0D, (double)f7, 0.0D, (double)par3, (double)f8);
-			par0Tessellator.addVertexWithUV(0.0D, (double)f7, 0.0D, (double)par1, (double)f8);
-			par0Tessellator.addVertexWithUV(0.0D, (double)f7, (double)(0.0F - par7), (double)par1, (double)f8);
-			par0Tessellator.addVertexWithUV(1.0D, (double)f7, (double)(0.0F - par7), (double)par3, (double)f8);
+			f7 = (float)k / (float)p_78439_6_;
+			f8 = p_78439_4_ + (p_78439_2_ - p_78439_4_) * f7 - f6;
+			p_78439_0_.addVertexWithUV(1.0D, (double)f7, 0.0D, (double)p_78439_3_, (double)f8);
+			p_78439_0_.addVertexWithUV(0.0D, (double)f7, 0.0D, (double)p_78439_1_, (double)f8);
+			p_78439_0_.addVertexWithUV(0.0D, (double)f7, (double)(0.0F - p_78439_7_), (double)p_78439_1_, (double)f8);
+			p_78439_0_.addVertexWithUV(1.0D, (double)f7, (double)(0.0F - p_78439_7_), (double)p_78439_3_, (double)f8);
 		}
 
-		par0Tessellator.draw();
+		p_78439_0_.draw();
 	}
 
-	public void renderItemInFirstPerson(float par1)
+	public void renderItemInFirstPerson(float p_78440_1_)
 	{
-		float f1 = this.prevEquippedProgress + (this.equippedProgress - this.prevEquippedProgress) * par1;
+		float f1 = this.prevEquippedProgress + (this.equippedProgress - this.prevEquippedProgress) * p_78440_1_;
 		EntityClientPlayerMP entityclientplayermp = this.mc.thePlayer;
-		float f2 = entityclientplayermp.prevRotationPitch + (entityclientplayermp.rotationPitch - entityclientplayermp.prevRotationPitch) * par1;
+		float f2 = entityclientplayermp.prevRotationPitch + (entityclientplayermp.rotationPitch - entityclientplayermp.prevRotationPitch) * p_78440_1_;
 		GL11.glPushMatrix();
 		GL11.glRotatef(f2, 1.0F, 0.0F, 0.0F);
-		GL11.glRotatef(entityclientplayermp.prevRotationYaw + (entityclientplayermp.rotationYaw - entityclientplayermp.prevRotationYaw) * par1, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(entityclientplayermp.prevRotationYaw + (entityclientplayermp.rotationYaw - entityclientplayermp.prevRotationYaw) * p_78440_1_, 0.0F, 1.0F, 0.0F);
 		RenderHelper.enableStandardItemLighting();
 		GL11.glPopMatrix();
 		EntityPlayerSP entityplayersp = (EntityPlayerSP)entityclientplayermp;
-		float f3 = entityplayersp.prevRenderArmPitch + (entityplayersp.renderArmPitch - entityplayersp.prevRenderArmPitch) * par1;
-		float f4 = entityplayersp.prevRenderArmYaw + (entityplayersp.renderArmYaw - entityplayersp.prevRenderArmYaw) * par1;
+		float f3 = entityplayersp.prevRenderArmPitch + (entityplayersp.renderArmPitch - entityplayersp.prevRenderArmPitch) * p_78440_1_;
+		float f4 = entityplayersp.prevRenderArmYaw + (entityplayersp.renderArmYaw - entityplayersp.prevRenderArmYaw) * p_78440_1_;
 		GL11.glRotatef((entityclientplayermp.rotationPitch - f3) * 0.1F, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef((entityclientplayermp.rotationYaw - f4) * 0.1F, 0.0F, 1.0F, 0.0F);
 		ItemStack itemstack = this.itemToRender;
@@ -296,7 +305,7 @@ public class ItemRenderer
 		{
 			GL11.glPushMatrix();
 			f13 = 0.8F;
-			f5 = entityclientplayermp.getSwingProgress(par1);
+			f5 = entityclientplayermp.getSwingProgress(p_78440_1_);
 			f6 = MathHelper.sin(f5 * (float)Math.PI);
 			f7 = MathHelper.sin(MathHelper.sqrt_float(f5) * (float)Math.PI);
 			GL11.glTranslatef(-f7 * 0.4F, MathHelper.sin(MathHelper.sqrt_float(f5) * (float)Math.PI * 2.0F) * 0.2F, -f6 * 0.2F);
@@ -336,7 +345,7 @@ public class ItemRenderer
 				GL11.glPopMatrix();
 			}
 
-			f6 = entityclientplayermp.getSwingProgress(par1);
+			f6 = entityclientplayermp.getSwingProgress(p_78440_1_);
 			f7 = MathHelper.sin(f6 * f6 * (float)Math.PI);
 			f8 = MathHelper.sin(MathHelper.sqrt_float(f6) * (float)Math.PI);
 			GL11.glRotatef(-f7 * 20.0F, 0.0F, 1.0F, 0.0F);
@@ -388,7 +397,7 @@ public class ItemRenderer
 
 				if (enumaction == EnumAction.eat || enumaction == EnumAction.drink)
 				{
-					f6 = (float)entityclientplayermp.getItemInUseCount() - par1 + 1.0F;
+					f6 = (float)entityclientplayermp.getItemInUseCount() - p_78440_1_ + 1.0F;
 					f7 = 1.0F - f6 / (float)itemstack.getMaxItemUseDuration();
 					f8 = 1.0F - f7;
 					f8 = f8 * f8 * f8;
@@ -404,7 +413,7 @@ public class ItemRenderer
 			}
 			else
 			{
-				f5 = entityclientplayermp.getSwingProgress(par1);
+				f5 = entityclientplayermp.getSwingProgress(p_78440_1_);
 				f6 = MathHelper.sin(f5 * (float)Math.PI);
 				f7 = MathHelper.sin(MathHelper.sqrt_float(f5) * (float)Math.PI);
 				GL11.glTranslatef(-f7 * 0.4F, MathHelper.sin(MathHelper.sqrt_float(f5) * (float)Math.PI * 2.0F) * 0.2F, -f6 * 0.2F);
@@ -413,7 +422,7 @@ public class ItemRenderer
 			GL11.glTranslatef(0.7F * f13, -0.65F * f13 - (1.0F - f1) * 0.6F, -0.9F * f13);
 			GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			f5 = entityclientplayermp.getSwingProgress(par1);
+			f5 = entityclientplayermp.getSwingProgress(p_78440_1_);
 			f6 = MathHelper.sin(f5 * f5 * (float)Math.PI);
 			f7 = MathHelper.sin(MathHelper.sqrt_float(f5) * (float)Math.PI);
 			GL11.glRotatef(-f6 * 20.0F, 0.0F, 1.0F, 0.0F);
@@ -441,7 +450,7 @@ public class ItemRenderer
 					GL11.glRotatef(-12.0F, 0.0F, 1.0F, 0.0F);
 					GL11.glRotatef(-8.0F, 1.0F, 0.0F, 0.0F);
 					GL11.glTranslatef(-0.9F, 0.2F, 0.0F);
-					f10 = (float)itemstack.getMaxItemUseDuration() - ((float)entityclientplayermp.getItemInUseCount() - par1 + 1.0F);
+					f10 = (float)itemstack.getMaxItemUseDuration() - ((float)entityclientplayermp.getItemInUseCount() - p_78440_1_ + 1.0F);
 					f11 = f10 / 20.0F;
 					f11 = (f11 * f11 + f11 * 2.0F) / 3.0F;
 
@@ -496,14 +505,14 @@ public class ItemRenderer
 		{
 			GL11.glPushMatrix();
 			f13 = 0.8F;
-			f5 = entityclientplayermp.getSwingProgress(par1);
+			f5 = entityclientplayermp.getSwingProgress(p_78440_1_);
 			f6 = MathHelper.sin(f5 * (float)Math.PI);
 			f7 = MathHelper.sin(MathHelper.sqrt_float(f5) * (float)Math.PI);
 			GL11.glTranslatef(-f7 * 0.3F, MathHelper.sin(MathHelper.sqrt_float(f5) * (float)Math.PI * 2.0F) * 0.4F, -f6 * 0.4F);
 			GL11.glTranslatef(0.8F * f13, -0.75F * f13 - (1.0F - f1) * 0.6F, -0.9F * f13);
 			GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			f5 = entityclientplayermp.getSwingProgress(par1);
+			f5 = entityclientplayermp.getSwingProgress(p_78440_1_);
 			f6 = MathHelper.sin(f5 * f5 * (float)Math.PI);
 			f7 = MathHelper.sin(MathHelper.sqrt_float(f5) * (float)Math.PI);
 			GL11.glRotatef(f7 * 70.0F, 0.0F, 1.0F, 0.0F);
@@ -532,13 +541,13 @@ public class ItemRenderer
 		RenderHelper.disableStandardItemLighting();
 	}
 
-	public void renderOverlays(float par1)
+	public void renderOverlays(float p_78447_1_)
 	{
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 
 		if (this.mc.thePlayer.isBurning())
 		{
-			this.renderFireInFirstPerson(par1);
+			this.renderFireInFirstPerson(p_78447_1_);
 		}
 
 		if (this.mc.thePlayer.isEntityInsideOpaqueBlock())
@@ -550,7 +559,7 @@ public class ItemRenderer
 
 			if (this.mc.theWorld.getBlock(i, j, k).isNormalCube())
 			{
-				this.renderInsideOfBlock(par1, block.getBlockTextureFromSide(2));
+				this.renderInsideOfBlock(p_78447_1_, block.getBlockTextureFromSide(2));
 			}
 			else
 			{
@@ -572,19 +581,19 @@ public class ItemRenderer
 
 			if (block.getMaterial() != Material.air)
 			{
-				this.renderInsideOfBlock(par1, block.getBlockTextureFromSide(2));
+				this.renderInsideOfBlock(p_78447_1_, block.getBlockTextureFromSide(2));
 			}
 		}
 
 		if (this.mc.thePlayer.isInsideOfMaterial(Material.water))
 		{
-			this.renderWarpedTextureOverlay(par1);
+			this.renderWarpedTextureOverlay(p_78447_1_);
 		}
 
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 
-	private void renderInsideOfBlock(float par1, IIcon par2Icon)
+	private void renderInsideOfBlock(float p_78446_1_, IIcon p_78446_2_)
 	{
 		this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
 		Tessellator tessellator = Tessellator.instance;
@@ -596,10 +605,10 @@ public class ItemRenderer
 		float f4 = -1.0F;
 		float f5 = 1.0F;
 		float f6 = -0.5F;
-		float f7 = par2Icon.getMinU();
-		float f8 = par2Icon.getMaxU();
-		float f9 = par2Icon.getMinV();
-		float f10 = par2Icon.getMaxV();
+		float f7 = p_78446_2_.getMinU();
+		float f8 = p_78446_2_.getMaxU();
+		float f9 = p_78446_2_.getMinV();
+		float f10 = p_78446_2_.getMaxV();
 		tessellator.startDrawingQuads();
 		tessellator.addVertexWithUV((double)f2, (double)f4, (double)f6, (double)f8, (double)f10);
 		tessellator.addVertexWithUV((double)f3, (double)f4, (double)f6, (double)f7, (double)f10);
@@ -610,11 +619,11 @@ public class ItemRenderer
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	private void renderWarpedTextureOverlay(float par1)
+	private void renderWarpedTextureOverlay(float p_78448_1_)
 	{
 		this.mc.getTextureManager().bindTexture(RES_UNDERWATER_OVERLAY);
 		Tessellator tessellator = Tessellator.instance;
-		float f1 = this.mc.thePlayer.getBrightness(par1);
+		float f1 = this.mc.thePlayer.getBrightness(p_78448_1_);
 		GL11.glColor4f(f1, f1, f1, 0.5F);
 		GL11.glEnable(GL11.GL_BLEND);
 		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
@@ -638,7 +647,7 @@ public class ItemRenderer
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
-	private void renderFireInFirstPerson(float par1)
+	private void renderFireInFirstPerson(float p_78442_1_)
 	{
 		Tessellator tessellator = Tessellator.instance;
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.9F);

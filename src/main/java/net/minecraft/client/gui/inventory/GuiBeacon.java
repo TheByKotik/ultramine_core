@@ -32,10 +32,10 @@ public class GuiBeacon extends GuiContainer
 	private boolean buttonsNotDrawn;
 	private static final String __OBFID = "CL_00000739";
 
-	public GuiBeacon(InventoryPlayer par1InventoryPlayer, TileEntityBeacon par2TileEntityBeacon)
+	public GuiBeacon(InventoryPlayer p_i1078_1_, TileEntityBeacon p_i1078_2_)
 	{
-		super(new ContainerBeacon(par1InventoryPlayer, par2TileEntityBeacon));
-		this.tileBeacon = par2TileEntityBeacon;
+		super(new ContainerBeacon(p_i1078_1_, p_i1078_2_));
+		this.tileBeacon = p_i1078_2_;
 		this.xSize = 230;
 		this.ySize = 219;
 	}
@@ -222,12 +222,12 @@ public class GuiBeacon extends GuiContainer
 			private boolean field_146142_r;
 			private static final String __OBFID = "CL_00000743";
 
-			protected Button(int par1, int par2, int par3, ResourceLocation par4ResourceLocation, int par5, int par6)
+			protected Button(int p_i1077_1_, int p_i1077_2_, int p_i1077_3_, ResourceLocation p_i1077_4_, int p_i1077_5_, int p_i1077_6_)
 			{
-				super(par1, par2, par3, 22, 22, "");
-				this.field_146145_o = par4ResourceLocation;
-				this.field_146144_p = par5;
-				this.field_146143_q = par6;
+				super(p_i1077_1_, p_i1077_2_, p_i1077_3_, 22, 22, "");
+				this.field_146145_o = p_i1077_4_;
+				this.field_146144_p = p_i1077_5_;
+				this.field_146143_q = p_i1077_6_;
 			}
 
 			public void drawButton(Minecraft p_146112_1_, int p_146112_2_, int p_146112_3_)
@@ -280,9 +280,9 @@ public class GuiBeacon extends GuiContainer
 	{
 		private static final String __OBFID = "CL_00000740";
 
-		public CancelButton(int par2, int par3, int par4)
+		public CancelButton(int p_i1074_2_, int p_i1074_3_, int p_i1074_4_)
 		{
-			super(par2, par3, par4, GuiBeacon.beaconGuiTextures, 112, 220);
+			super(p_i1074_2_, p_i1074_3_, p_i1074_4_, GuiBeacon.beaconGuiTextures, 112, 220);
 		}
 
 		public void func_146111_b(int p_146111_1_, int p_146111_2_)
@@ -296,9 +296,9 @@ public class GuiBeacon extends GuiContainer
 	{
 		private static final String __OBFID = "CL_00000741";
 
-		public ConfirmButton(int par2, int par3, int par4)
+		public ConfirmButton(int p_i1075_2_, int p_i1075_3_, int p_i1075_4_)
 		{
-			super(par2, par3, par4, GuiBeacon.beaconGuiTextures, 90, 220);
+			super(p_i1075_2_, p_i1075_3_, p_i1075_4_, GuiBeacon.beaconGuiTextures, 90, 220);
 		}
 
 		public void func_146111_b(int p_146111_1_, int p_146111_2_)
@@ -314,11 +314,11 @@ public class GuiBeacon extends GuiContainer
 		private final int field_146148_q;
 		private static final String __OBFID = "CL_00000742";
 
-		public PowerButton(int par2, int par3, int par4, int par5, int par6)
+		public PowerButton(int p_i1076_2_, int p_i1076_3_, int p_i1076_4_, int p_i1076_5_, int p_i1076_6_)
 		{
-			super(par2, par3, par4, GuiContainer.field_147001_a, 0 + Potion.potionTypes[par5].getStatusIconIndex() % 8 * 18, 198 + Potion.potionTypes[par5].getStatusIconIndex() / 8 * 18);
-			this.field_146149_p = par5;
-			this.field_146148_q = par6;
+			super(p_i1076_2_, p_i1076_3_, p_i1076_4_, GuiContainer.field_147001_a, 0 + Potion.potionTypes[p_i1076_5_].getStatusIconIndex() % 8 * 18, 198 + Potion.potionTypes[p_i1076_5_].getStatusIconIndex() / 8 * 18);
+			this.field_146149_p = p_i1076_5_;
+			this.field_146148_q = p_i1076_6_;
 		}
 
 		public void func_146111_b(int p_146111_1_, int p_146111_2_)

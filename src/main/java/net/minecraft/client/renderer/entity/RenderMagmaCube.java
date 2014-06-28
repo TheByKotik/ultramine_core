@@ -20,27 +20,27 @@ public class RenderMagmaCube extends RenderLiving
 		super(new ModelMagmaCube(), 0.25F);
 	}
 
-	protected ResourceLocation getEntityTexture(EntityMagmaCube par1EntityMagmaCube)
+	protected ResourceLocation getEntityTexture(EntityMagmaCube p_110775_1_)
 	{
 		return magmaCubeTextures;
 	}
 
-	protected void preRenderCallback(EntityMagmaCube par1EntityMagmaCube, float par2)
+	protected void preRenderCallback(EntityMagmaCube p_77041_1_, float p_77041_2_)
 	{
-		int i = par1EntityMagmaCube.getSlimeSize();
-		float f1 = (par1EntityMagmaCube.prevSquishFactor + (par1EntityMagmaCube.squishFactor - par1EntityMagmaCube.prevSquishFactor) * par2) / ((float)i * 0.5F + 1.0F);
+		int i = p_77041_1_.getSlimeSize();
+		float f1 = (p_77041_1_.prevSquishFactor + (p_77041_1_.squishFactor - p_77041_1_.prevSquishFactor) * p_77041_2_) / ((float)i * 0.5F + 1.0F);
 		float f2 = 1.0F / (f1 + 1.0F);
 		float f3 = (float)i;
 		GL11.glScalef(f2 * f3, 1.0F / f2 * f3, f2 * f3);
 	}
 
-	protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2)
+	protected void preRenderCallback(EntityLivingBase p_77041_1_, float p_77041_2_)
 	{
-		this.preRenderCallback((EntityMagmaCube)par1EntityLivingBase, par2);
+		this.preRenderCallback((EntityMagmaCube)p_77041_1_, p_77041_2_);
 	}
 
-	protected ResourceLocation getEntityTexture(Entity par1Entity)
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
-		return this.getEntityTexture((EntityMagmaCube)par1Entity);
+		return this.getEntityTexture((EntityMagmaCube)p_110775_1_);
 	}
 }

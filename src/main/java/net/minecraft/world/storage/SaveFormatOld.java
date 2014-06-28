@@ -20,14 +20,20 @@ public class SaveFormatOld implements ISaveFormat
 	public final File savesDirectory;
 	private static final String __OBFID = "CL_00000586";
 
-	public SaveFormatOld(File par1File)
+	public SaveFormatOld(File p_i2147_1_)
 	{
-		if (!par1File.exists())
+		if (!p_i2147_1_.exists())
 		{
-			par1File.mkdirs();
+			p_i2147_1_.mkdirs();
 		}
 
-		this.savesDirectory = par1File;
+		this.savesDirectory = p_i2147_1_;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String func_154333_a()
+	{
+		return "Old Format";
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -51,9 +57,9 @@ public class SaveFormatOld implements ISaveFormat
 
 	public void flushCache() {}
 
-	public WorldInfo getWorldInfo(String par1Str)
+	public WorldInfo getWorldInfo(String p_75803_1_)
 	{
-		File file1 = new File(this.savesDirectory, par1Str);
+		File file1 = new File(this.savesDirectory, p_75803_1_);
 
 		if (!file1.exists())
 		{
@@ -100,9 +106,9 @@ public class SaveFormatOld implements ISaveFormat
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void renameWorld(String par1Str, String par2Str)
+	public void renameWorld(String p_75806_1_, String p_75806_2_)
 	{
-		File file1 = new File(this.savesDirectory, par1Str);
+		File file1 = new File(this.savesDirectory, p_75806_1_);
 
 		if (file1.exists())
 		{
@@ -114,7 +120,7 @@ public class SaveFormatOld implements ISaveFormat
 				{
 					NBTTagCompound nbttagcompound = CompressedStreamTools.readCompressed(new FileInputStream(file2));
 					NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("Data");
-					nbttagcompound1.setString("LevelName", par2Str);
+					nbttagcompound1.setString("LevelName", p_75806_2_);
 					CompressedStreamTools.writeCompressed(nbttagcompound, new FileOutputStream(file2));
 				}
 				catch (Exception exception)
@@ -125,9 +131,34 @@ public class SaveFormatOld implements ISaveFormat
 		}
 	}
 
-	public boolean deleteWorldDirectory(String par1Str)
+	@SideOnly(Side.CLIENT)
+	public boolean func_154335_d(String p_154335_1_)
 	{
-		File file1 = new File(this.savesDirectory, par1Str);
+		File file1 = new File(this.savesDirectory, p_154335_1_);
+
+		if (file1.exists())
+		{
+			return false;
+		}
+		else
+		{
+			try
+			{
+				file1.mkdir();
+				file1.delete();
+				return true;
+			}
+			catch (Throwable throwable)
+			{
+				logger.warn("Couldn\'t make new level", throwable);
+				return false;
+			}
+		}
+	}
+
+	public boolean deleteWorldDirectory(String p_75802_1_)
+	{
+		File file1 = new File(this.savesDirectory, p_75802_1_);
 
 		if (!file1.exists())
 		{
@@ -135,7 +166,7 @@ public class SaveFormatOld implements ISaveFormat
 		}
 		else
 		{
-			logger.info("Deleting level " + par1Str);
+			logger.info("Deleting level " + p_75802_1_);
 
 			for (int i = 1; i <= 5; ++i)
 			{
@@ -165,11 +196,11 @@ public class SaveFormatOld implements ISaveFormat
 		}
 	}
 
-	protected static boolean deleteFiles(File[] par0ArrayOfFile)
+	protected static boolean deleteFiles(File[] p_75807_0_)
 	{
-		for (int i = 0; i < par0ArrayOfFile.length; ++i)
+		for (int i = 0; i < p_75807_0_.length; ++i)
 		{
-			File file1 = par0ArrayOfFile[i];
+			File file1 = p_75807_0_[i];
 			logger.debug("Deleting " + file1);
 
 			if (file1.isDirectory() && !deleteFiles(file1.listFiles()))
@@ -188,25 +219,31 @@ public class SaveFormatOld implements ISaveFormat
 		return true;
 	}
 
-	public ISaveHandler getSaveLoader(String par1Str, boolean par2)
+	public ISaveHandler getSaveLoader(String p_75804_1_, boolean p_75804_2_)
 	{
-		return new SaveHandler(this.savesDirectory, par1Str, par2);
+		return new SaveHandler(this.savesDirectory, p_75804_1_, p_75804_2_);
 	}
 
-	public boolean isOldMapFormat(String par1Str)
+	@SideOnly(Side.CLIENT)
+	public boolean func_154334_a(String p_154334_1_)
 	{
 		return false;
 	}
 
-	public boolean convertMapFormat(String par1Str, IProgressUpdate par2IProgressUpdate)
+	public boolean isOldMapFormat(String p_75801_1_)
+	{
+		return false;
+	}
+
+	public boolean convertMapFormat(String p_75805_1_, IProgressUpdate p_75805_2_)
 	{
 		return false;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean canLoadWorld(String par1Str)
+	public boolean canLoadWorld(String p_90033_1_)
 	{
-		File file1 = new File(this.savesDirectory, par1Str);
+		File file1 = new File(this.savesDirectory, p_90033_1_);
 		return file1.isDirectory();
 	}
 }

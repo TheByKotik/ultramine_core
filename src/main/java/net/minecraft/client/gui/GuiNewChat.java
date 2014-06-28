@@ -28,9 +28,9 @@ public class GuiNewChat extends Gui
 	private boolean field_146251_k;
 	private static final String __OBFID = "CL_00000669";
 
-	public GuiNewChat(Minecraft par1Minecraft)
+	public GuiNewChat(Minecraft p_i1022_1_)
 	{
-		this.mc = par1Minecraft;
+		this.mc = p_i1022_1_;
 	}
 
 	public void drawChat(int p_146230_1_)
@@ -306,7 +306,7 @@ public class GuiNewChat extends Gui
 		}
 		else
 		{
-			ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+			ScaledResolution scaledresolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
 			int k = scaledresolution.getScaleFactor();
 			float f = this.func_146244_h();
 			int l = p_146236_1_ / k - 3;
@@ -368,32 +368,28 @@ public class GuiNewChat extends Gui
 		Iterator iterator = this.field_146253_i.iterator();
 		ChatLine chatline;
 
-		do
+		while (iterator.hasNext())
 		{
-			if (!iterator.hasNext())
-			{
-				iterator = this.chatLines.iterator();
-
-				do
-				{
-					if (!iterator.hasNext())
-					{
-						return;
-					}
-
-					chatline = (ChatLine)iterator.next();
-				}
-				while (chatline.getChatLineID() != p_146242_1_);
-
-				iterator.remove();
-				return;
-			}
-
 			chatline = (ChatLine)iterator.next();
-		}
-		while (chatline.getChatLineID() != p_146242_1_);
 
-		iterator.remove();
+			if (chatline.getChatLineID() == p_146242_1_)
+			{
+				iterator.remove();
+			}
+		}
+
+		iterator = this.chatLines.iterator();
+
+		while (iterator.hasNext())
+		{
+			chatline = (ChatLine)iterator.next();
+
+			if (chatline.getChatLineID() == p_146242_1_)
+			{
+				iterator.remove();
+				break;
+			}
+		}
 	}
 
 	public int func_146228_f()

@@ -40,31 +40,31 @@ public class ContainerRepair extends Container
 	private final EntityPlayer thePlayer;
 	private static final String __OBFID = "CL_00001732";
 
-	public ContainerRepair(InventoryPlayer par1InventoryPlayer, final World par2World, final int par3, final int par4, final int par5, EntityPlayer par6EntityPlayer)
+	public ContainerRepair(InventoryPlayer p_i1800_1_, final World p_i1800_2_, final int p_i1800_3_, final int p_i1800_4_, final int p_i1800_5_, EntityPlayer p_i1800_6_)
 	{
-		this.theWorld = par2World;
-		this.field_82861_i = par3;
-		this.field_82858_j = par4;
-		this.field_82859_k = par5;
-		this.thePlayer = par6EntityPlayer;
+		this.theWorld = p_i1800_2_;
+		this.field_82861_i = p_i1800_3_;
+		this.field_82858_j = p_i1800_4_;
+		this.field_82859_k = p_i1800_5_;
+		this.thePlayer = p_i1800_6_;
 		this.addSlotToContainer(new Slot(this.inputSlots, 0, 27, 47));
 		this.addSlotToContainer(new Slot(this.inputSlots, 1, 76, 47));
 		this.addSlotToContainer(new Slot(this.outputSlot, 2, 134, 47)
 		{
 			private static final String __OBFID = "CL_00001734";
-			public boolean isItemValid(ItemStack par1ItemStack)
+			public boolean isItemValid(ItemStack p_75214_1_)
 			{
 				return false;
 			}
-			public boolean canTakeStack(EntityPlayer par1EntityPlayer)
+			public boolean canTakeStack(EntityPlayer p_82869_1_)
 			{
-				return (par1EntityPlayer.capabilities.isCreativeMode || par1EntityPlayer.experienceLevel >= ContainerRepair.this.maximumCost) && ContainerRepair.this.maximumCost > 0 && this.getHasStack();
+				return (p_82869_1_.capabilities.isCreativeMode || p_82869_1_.experienceLevel >= ContainerRepair.this.maximumCost) && ContainerRepair.this.maximumCost > 0 && this.getHasStack();
 			}
-			public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
+			public void onPickupFromSlot(EntityPlayer p_82870_1_, ItemStack p_82870_2_)
 			{
-				if (!par1EntityPlayer.capabilities.isCreativeMode)
+				if (!p_82870_1_.capabilities.isCreativeMode)
 				{
-					par1EntityPlayer.addExperienceLevel(-ContainerRepair.this.maximumCost);
+					p_82870_1_.addExperienceLevel(-ContainerRepair.this.maximumCost);
 				}
 
 				ContainerRepair.this.inputSlots.setInventorySlotContents(0, (ItemStack)null);
@@ -90,27 +90,27 @@ public class ContainerRepair extends Container
 
 				ContainerRepair.this.maximumCost = 0;
 
-				if (!par1EntityPlayer.capabilities.isCreativeMode && !par2World.isRemote && par2World.getBlock(par3, par4, par5) == Blocks.anvil && par1EntityPlayer.getRNG().nextFloat() < 0.12F)
+				if (!p_82870_1_.capabilities.isCreativeMode && !p_i1800_2_.isRemote && p_i1800_2_.getBlock(p_i1800_3_, p_i1800_4_, p_i1800_5_) == Blocks.anvil && p_82870_1_.getRNG().nextFloat() < 0.12F)
 				{
-					int i1 = par2World.getBlockMetadata(par3, par4, par5);
+					int i1 = p_i1800_2_.getBlockMetadata(p_i1800_3_, p_i1800_4_, p_i1800_5_);
 					int k = i1 & 3;
 					int l = i1 >> 2;
 					++l;
 
 					if (l > 2)
 					{
-						par2World.setBlockToAir(par3, par4, par5);
-						par2World.playAuxSFX(1020, par3, par4, par5, 0);
+						p_i1800_2_.setBlockToAir(p_i1800_3_, p_i1800_4_, p_i1800_5_);
+						p_i1800_2_.playAuxSFX(1020, p_i1800_3_, p_i1800_4_, p_i1800_5_, 0);
 					}
 					else
 					{
-						par2World.setBlockMetadataWithNotify(par3, par4, par5, k | l << 2, 2);
-						par2World.playAuxSFX(1021, par3, par4, par5, 0);
+						p_i1800_2_.setBlockMetadataWithNotify(p_i1800_3_, p_i1800_4_, p_i1800_5_, k | l << 2, 2);
+						p_i1800_2_.playAuxSFX(1021, p_i1800_3_, p_i1800_4_, p_i1800_5_, 0);
 					}
 				}
-				else if (!par2World.isRemote)
+				else if (!p_i1800_2_.isRemote)
 				{
-					par2World.playAuxSFX(1021, par3, par4, par5, 0);
+					p_i1800_2_.playAuxSFX(1021, p_i1800_3_, p_i1800_4_, p_i1800_5_, 0);
 				}
 			}
 		});
@@ -120,21 +120,21 @@ public class ContainerRepair extends Container
 		{
 			for (int j = 0; j < 9; ++j)
 			{
-				this.addSlotToContainer(new Slot(par1InventoryPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(p_i1800_1_, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 
 		for (i = 0; i < 9; ++i)
 		{
-			this.addSlotToContainer(new Slot(par1InventoryPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(p_i1800_1_, i, 8 + i * 18, 142));
 		}
 	}
 
-	public void onCraftMatrixChanged(IInventory par1IInventory)
+	public void onCraftMatrixChanged(IInventory p_75130_1_)
 	{
-		super.onCraftMatrixChanged(par1IInventory);
+		super.onCraftMatrixChanged(p_75130_1_);
 
-		if (par1IInventory == this.inputSlots)
+		if (p_75130_1_ == this.inputSlots)
 		{
 			this.updateRepairOutput();
 		}
@@ -423,24 +423,24 @@ public class ContainerRepair extends Container
 		}
 	}
 
-	public void addCraftingToCrafters(ICrafting par1ICrafting)
+	public void addCraftingToCrafters(ICrafting p_75132_1_)
 	{
-		super.addCraftingToCrafters(par1ICrafting);
-		par1ICrafting.sendProgressBarUpdate(this, 0, this.maximumCost);
+		super.addCraftingToCrafters(p_75132_1_);
+		p_75132_1_.sendProgressBarUpdate(this, 0, this.maximumCost);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int par1, int par2)
+	public void updateProgressBar(int p_75137_1_, int p_75137_2_)
 	{
-		if (par1 == 0)
+		if (p_75137_1_ == 0)
 		{
-			this.maximumCost = par2;
+			this.maximumCost = p_75137_2_;
 		}
 	}
 
-	public void onContainerClosed(EntityPlayer par1EntityPlayer)
+	public void onContainerClosed(EntityPlayer p_75134_1_)
 	{
-		super.onContainerClosed(par1EntityPlayer);
+		super.onContainerClosed(p_75134_1_);
 
 		if (!this.theWorld.isRemote)
 		{
@@ -450,28 +450,28 @@ public class ContainerRepair extends Container
 
 				if (itemstack != null)
 				{
-					par1EntityPlayer.dropPlayerItemWithRandomChoice(itemstack, false);
+					p_75134_1_.dropPlayerItemWithRandomChoice(itemstack, false);
 				}
 			}
 		}
 	}
 
-	public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+	public boolean canInteractWith(EntityPlayer p_75145_1_)
 	{
-		return this.theWorld.getBlock(this.field_82861_i, this.field_82858_j, this.field_82859_k) != Blocks.anvil ? false : par1EntityPlayer.getDistanceSq((double)this.field_82861_i + 0.5D, (double)this.field_82858_j + 0.5D, (double)this.field_82859_k + 0.5D) <= 64.0D;
+		return this.theWorld.getBlock(this.field_82861_i, this.field_82858_j, this.field_82859_k) != Blocks.anvil ? false : p_75145_1_.getDistanceSq((double)this.field_82861_i + 0.5D, (double)this.field_82858_j + 0.5D, (double)this.field_82859_k + 0.5D) <= 64.0D;
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
 	{
 		ItemStack itemstack = null;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = (Slot)this.inventorySlots.get(p_82846_2_);
 
 		if (slot != null && slot.getHasStack())
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			if (par2 == 2)
+			if (p_82846_2_ == 2)
 			{
 				if (!this.mergeItemStack(itemstack1, 3, 39, true))
 				{
@@ -480,9 +480,9 @@ public class ContainerRepair extends Container
 
 				slot.onSlotChange(itemstack1, itemstack);
 			}
-			else if (par2 != 0 && par2 != 1)
+			else if (p_82846_2_ != 0 && p_82846_2_ != 1)
 			{
-				if (par2 >= 3 && par2 < 39 && !this.mergeItemStack(itemstack1, 0, 2, false))
+				if (p_82846_2_ >= 3 && p_82846_2_ < 39 && !this.mergeItemStack(itemstack1, 0, 2, false))
 				{
 					return null;
 				}
@@ -506,21 +506,21 @@ public class ContainerRepair extends Container
 				return null;
 			}
 
-			slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+			slot.onPickupFromSlot(p_82846_1_, itemstack1);
 		}
 
 		return itemstack;
 	}
 
-	public void updateItemName(String par1Str)
+	public void updateItemName(String p_82850_1_)
 	{
-		this.repairedItemName = par1Str;
+		this.repairedItemName = p_82850_1_;
 
 		if (this.getSlot(2).getHasStack())
 		{
 			ItemStack itemstack = this.getSlot(2).getStack();
 
-			if (StringUtils.isBlank(par1Str))
+			if (StringUtils.isBlank(p_82850_1_))
 			{
 				itemstack.func_135074_t();
 			}

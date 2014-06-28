@@ -14,10 +14,10 @@ public class PlayerListComponent extends JList implements IUpdatePlayerListBox
 	private int field_120014_b;
 	private static final String __OBFID = "CL_00001795";
 
-	public PlayerListComponent(MinecraftServer par1MinecraftServer)
+	public PlayerListComponent(MinecraftServer p_i2366_1_)
 	{
-		this.field_120015_a = par1MinecraftServer;
-		par1MinecraftServer.func_82010_a(this);
+		this.field_120015_a = p_i2366_1_;
+		p_i2366_1_.func_82010_a(this);
 	}
 
 	public void update()

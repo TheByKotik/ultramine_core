@@ -13,10 +13,10 @@ public class EntityAIMoveTowardsRestriction extends EntityAIBase
 	private double movementSpeed;
 	private static final String __OBFID = "CL_00001598";
 
-	public EntityAIMoveTowardsRestriction(EntityCreature par1EntityCreature, double par2)
+	public EntityAIMoveTowardsRestriction(EntityCreature p_i2347_1_, double p_i2347_2_)
 	{
-		this.theEntity = par1EntityCreature;
-		this.movementSpeed = par2;
+		this.theEntity = p_i2347_1_;
+		this.movementSpeed = p_i2347_2_;
 		this.setMutexBits(1);
 	}
 
@@ -29,7 +29,7 @@ public class EntityAIMoveTowardsRestriction extends EntityAIBase
 		else
 		{
 			ChunkCoordinates chunkcoordinates = this.theEntity.getHomePosition();
-			Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(this.theEntity, 16, 7, this.theEntity.worldObj.getWorldVec3Pool().getVecFromPool((double)chunkcoordinates.posX, (double)chunkcoordinates.posY, (double)chunkcoordinates.posZ));
+			Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(this.theEntity, 16, 7, Vec3.createVectorHelper((double)chunkcoordinates.posX, (double)chunkcoordinates.posY, (double)chunkcoordinates.posZ));
 
 			if (vec3 == null)
 			{

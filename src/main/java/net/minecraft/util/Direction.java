@@ -13,8 +13,8 @@ public class Direction
 	public static final int[][] bedDirection = new int[][] {{1, 0, 3, 2, 5, 4}, {1, 0, 5, 4, 2, 3}, {1, 0, 2, 3, 4, 5}, {1, 0, 4, 5, 3, 2}};
 	private static final String __OBFID = "CL_00001506";
 
-	public static int getMovementDirection(double par0, double par2)
+	public static int getMovementDirection(double p_82372_0_, double p_82372_2_)
 	{
-		return MathHelper.abs((float)par0) > MathHelper.abs((float)par2) ? (par0 > 0.0D ? 1 : 3) : (par2 > 0.0D ? 2 : 0);
+		return MathHelper.abs((float)p_82372_0_) > MathHelper.abs((float)p_82372_2_) ? (p_82372_0_ > 0.0D ? 1 : 3) : (p_82372_2_ > 0.0D ? 2 : 0);
 	}
 }

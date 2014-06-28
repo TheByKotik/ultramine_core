@@ -26,20 +26,20 @@ public class RConThreadMain extends RConThreadBase
 	private Map clientThreads;
 	private static final String __OBFID = "CL_00001805";
 
-	public RConThreadMain(IServer par1IServer)
+	public RConThreadMain(IServer p_i1538_1_)
 	{
-		super(par1IServer, "RCON Listener");
+		super(p_i1538_1_, "RCON Listener");
 		this.rconPort = ConfigurationHandler.getServerConfig().vanilla.rconPort;
 		this.rconPassword = ConfigurationHandler.getServerConfig().vanilla.rconPassword;
-		this.hostname = par1IServer.getHostname();
-		this.serverPort = par1IServer.getPort();
+		this.hostname = p_i1538_1_.getHostname();
+		this.serverPort = p_i1538_1_.getPort();
 
 		if (0 == this.rconPort)
 		{
 			this.rconPort = this.serverPort + 10;
 			this.logInfo("Setting default rcon port to " + this.rconPort);
 			ConfigurationHandler.getServerConfig().vanilla.rconPort = rconPort;
-			par1IServer.saveProperties();
+			p_i1538_1_.saveProperties();
 		}
 
 		if (0 == this.hostname.length())

@@ -17,14 +17,15 @@ public class NBTTagFloat extends NBTBase.NBTPrimitive
 		this.data = p_i45131_1_;
 	}
 
-	void write(DataOutput par1DataOutput) throws IOException
+	void write(DataOutput p_74734_1_) throws IOException
 	{
-		par1DataOutput.writeFloat(this.data);
+		p_74734_1_.writeFloat(this.data);
 	}
 
-	void load(DataInput par1DataInput, int par2) throws IOException
+	void func_152446_a(DataInput p_152446_1_, int p_152446_2_, NBTSizeTracker p_152446_3_) throws IOException
 	{
-		this.data = par1DataInput.readFloat();
+		p_152446_3_.func_152450_a(32L);
+		this.data = p_152446_1_.readFloat();
 	}
 
 	public byte getId()
@@ -42,11 +43,11 @@ public class NBTTagFloat extends NBTBase.NBTPrimitive
 		return new NBTTagFloat(this.data);
 	}
 
-	public boolean equals(Object par1Obj)
+	public boolean equals(Object p_equals_1_)
 	{
-		if (super.equals(par1Obj))
+		if (super.equals(p_equals_1_))
 		{
-			NBTTagFloat nbttagfloat = (NBTTagFloat)par1Obj;
+			NBTTagFloat nbttagfloat = (NBTTagFloat)p_equals_1_;
 			return this.data == nbttagfloat.data;
 		}
 		else

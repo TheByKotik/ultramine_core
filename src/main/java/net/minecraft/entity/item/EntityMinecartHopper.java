@@ -18,14 +18,14 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 	private int transferTicker = -1;
 	private static final String __OBFID = "CL_00001676";
 
-	public EntityMinecartHopper(World par1World)
+	public EntityMinecartHopper(World p_i1720_1_)
 	{
-		super(par1World);
+		super(p_i1720_1_);
 	}
 
-	public EntityMinecartHopper(World par1World, double par2, double par4, double par6)
+	public EntityMinecartHopper(World p_i1721_1_, double p_i1721_2_, double p_i1721_4_, double p_i1721_6_)
 	{
-		super(par1World, par2, par4, par6);
+		super(p_i1721_1_, p_i1721_2_, p_i1721_4_, p_i1721_6_);
 	}
 
 	public int getMinecartType()
@@ -48,20 +48,20 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 		return 5;
 	}
 
-	public boolean interactFirst(EntityPlayer par1EntityPlayer)
+	public boolean interactFirst(EntityPlayer p_130002_1_)
 	{
-		if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, par1EntityPlayer))) return true;
+		if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, p_130002_1_))) return true;
 		if (!this.worldObj.isRemote)
 		{
-			par1EntityPlayer.displayGUIHopperMinecart(this);
+			p_130002_1_.displayGUIHopperMinecart(this);
 		}
 
 		return true;
 	}
 
-	public void onActivatorRailPass(int par1, int par2, int par3, boolean par4)
+	public void onActivatorRailPass(int p_96095_1_, int p_96095_2_, int p_96095_3_, boolean p_96095_4_)
 	{
-		boolean flag1 = !par4;
+		boolean flag1 = !p_96095_4_;
 
 		if (flag1 != this.getBlocked())
 		{
@@ -74,9 +74,9 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 		return this.isBlocked;
 	}
 
-	public void setBlocked(boolean par1)
+	public void setBlocked(boolean p_96110_1_)
 	{
-		this.isBlocked = par1;
+		this.isBlocked = p_96110_1_;
 	}
 
 	public World getWorldObj()
@@ -139,27 +139,27 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 		}
 	}
 
-	public void killMinecart(DamageSource par1DamageSource)
+	public void killMinecart(DamageSource p_94095_1_)
 	{
-		super.killMinecart(par1DamageSource);
+		super.killMinecart(p_94095_1_);
 		this.func_145778_a(Item.getItemFromBlock(Blocks.hopper), 1, 0.0F);
 	}
 
-	protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	protected void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setInteger("TransferCooldown", this.transferTicker);
+		super.writeEntityToNBT(p_70014_1_);
+		p_70014_1_.setInteger("TransferCooldown", this.transferTicker);
 	}
 
-	protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	protected void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		super.readEntityFromNBT(par1NBTTagCompound);
-		this.transferTicker = par1NBTTagCompound.getInteger("TransferCooldown");
+		super.readEntityFromNBT(p_70037_1_);
+		this.transferTicker = p_70037_1_.getInteger("TransferCooldown");
 	}
 
-	public void setTransferTicker(int par1)
+	public void setTransferTicker(int p_98042_1_)
 	{
-		this.transferTicker = par1;
+		this.transferTicker = p_98042_1_;
 	}
 
 	public boolean canTransfer()

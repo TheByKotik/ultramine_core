@@ -18,7 +18,7 @@ public interface IIcon
 	float getMaxU();
 
 	@SideOnly(Side.CLIENT)
-	float getInterpolatedU(double var1);
+	float getInterpolatedU(double p_94214_1_);
 
 	@SideOnly(Side.CLIENT)
 	float getMinV();
@@ -27,7 +27,7 @@ public interface IIcon
 	float getMaxV();
 
 	@SideOnly(Side.CLIENT)
-	float getInterpolatedV(double var1);
+	float getInterpolatedV(double p_94207_1_);
 
 	@SideOnly(Side.CLIENT)
 	String getIconName();

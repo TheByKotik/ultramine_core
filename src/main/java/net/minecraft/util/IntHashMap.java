@@ -13,24 +13,24 @@ public class IntHashMap
 	private Set keySet = new HashSet();
 	private static final String __OBFID = "CL_00001490";
 
-	private static int computeHash(int par0)
+	private static int computeHash(int p_76044_0_)
 	{
-		par0 ^= par0 >>> 20 ^ par0 >>> 12;
-		return par0 ^ par0 >>> 7 ^ par0 >>> 4;
+		p_76044_0_ ^= p_76044_0_ >>> 20 ^ p_76044_0_ >>> 12;
+		return p_76044_0_ ^ p_76044_0_ >>> 7 ^ p_76044_0_ >>> 4;
 	}
 
-	private static int getSlotIndex(int par0, int par1)
+	private static int getSlotIndex(int p_76043_0_, int p_76043_1_)
 	{
-		return par0 & par1 - 1;
+		return p_76043_0_ & p_76043_1_ - 1;
 	}
 
-	public Object lookup(int par1)
+	public Object lookup(int p_76041_1_)
 	{
-		int j = computeHash(par1);
+		int j = computeHash(p_76041_1_);
 
 		for (IntHashMap.Entry entry = this.slots[getSlotIndex(j, this.slots.length)]; entry != null; entry = entry.nextEntry)
 		{
-			if (entry.hashEntry == par1)
+			if (entry.hashEntry == p_76041_1_)
 			{
 				return entry.valueEntry;
 			}
@@ -39,18 +39,18 @@ public class IntHashMap
 		return null;
 	}
 
-	public boolean containsItem(int par1)
+	public boolean containsItem(int p_76037_1_)
 	{
-		return this.lookupEntry(par1) != null;
+		return this.lookupEntry(p_76037_1_) != null;
 	}
 
-	final IntHashMap.Entry lookupEntry(int par1)
+	final IntHashMap.Entry lookupEntry(int p_76045_1_)
 	{
-		int j = computeHash(par1);
+		int j = computeHash(p_76045_1_);
 
 		for (IntHashMap.Entry entry = this.slots[getSlotIndex(j, this.slots.length)]; entry != null; entry = entry.nextEntry)
 		{
-			if (entry.hashEntry == par1)
+			if (entry.hashEntry == p_76045_1_)
 			{
 				return entry;
 			}
@@ -59,26 +59,26 @@ public class IntHashMap
 		return null;
 	}
 
-	public void addKey(int par1, Object par2Obj)
+	public void addKey(int p_76038_1_, Object p_76038_2_)
 	{
-		this.keySet.add(Integer.valueOf(par1));
-		int j = computeHash(par1);
+		this.keySet.add(Integer.valueOf(p_76038_1_));
+		int j = computeHash(p_76038_1_);
 		int k = getSlotIndex(j, this.slots.length);
 
 		for (IntHashMap.Entry entry = this.slots[k]; entry != null; entry = entry.nextEntry)
 		{
-			if (entry.hashEntry == par1)
+			if (entry.hashEntry == p_76038_1_)
 			{
-				entry.valueEntry = par2Obj;
+				entry.valueEntry = p_76038_2_;
 				return;
 			}
 		}
 
 		++this.versionStamp;
-		this.insert(j, par1, par2Obj, k);
+		this.insert(j, p_76038_1_, p_76038_2_, k);
 	}
 
-	private void grow(int par1)
+	private void grow(int p_76047_1_)
 	{
 		IntHashMap.Entry[] aentry = this.slots;
 		int j = aentry.length;
@@ -89,17 +89,17 @@ public class IntHashMap
 		}
 		else
 		{
-			IntHashMap.Entry[] aentry1 = new IntHashMap.Entry[par1];
+			IntHashMap.Entry[] aentry1 = new IntHashMap.Entry[p_76047_1_];
 			this.copyTo(aentry1);
 			this.slots = aentry1;
-			this.threshold = (int)((float)par1 * this.growFactor);
+			this.threshold = (int)((float)p_76047_1_ * this.growFactor);
 		}
 	}
 
-	private void copyTo(IntHashMap.Entry[] par1ArrayOfIntHashMapEntry)
+	private void copyTo(IntHashMap.Entry[] p_76048_1_)
 	{
 		IntHashMap.Entry[] aentry = this.slots;
-		int i = par1ArrayOfIntHashMapEntry.length;
+		int i = p_76048_1_.length;
 
 		for (int j = 0; j < aentry.length; ++j)
 		{
@@ -114,8 +114,8 @@ public class IntHashMap
 				{
 					entry1 = entry.nextEntry;
 					int k = getSlotIndex(entry.slotHash, i);
-					entry.nextEntry = par1ArrayOfIntHashMapEntry[k];
-					par1ArrayOfIntHashMapEntry[k] = entry;
+					entry.nextEntry = p_76048_1_[k];
+					p_76048_1_[k] = entry;
 					entry = entry1;
 				}
 				while (entry1 != null);
@@ -123,16 +123,16 @@ public class IntHashMap
 		}
 	}
 
-	public Object removeObject(int par1)
+	public Object removeObject(int p_76049_1_)
 	{
-		this.keySet.remove(Integer.valueOf(par1));
-		IntHashMap.Entry entry = this.removeEntry(par1);
+		this.keySet.remove(Integer.valueOf(p_76049_1_));
+		IntHashMap.Entry entry = this.removeEntry(p_76049_1_);
 		return entry == null ? null : entry.valueEntry;
 	}
 
-	final IntHashMap.Entry removeEntry(int par1)
+	final IntHashMap.Entry removeEntry(int p_76036_1_)
 	{
-		int j = computeHash(par1);
+		int j = computeHash(p_76036_1_);
 		int k = getSlotIndex(j, this.slots.length);
 		IntHashMap.Entry entry = this.slots[k];
 		IntHashMap.Entry entry1;
@@ -142,7 +142,7 @@ public class IntHashMap
 		{
 			entry2 = entry1.nextEntry;
 
-			if (entry1.hashEntry == par1)
+			if (entry1.hashEntry == p_76036_1_)
 			{
 				++this.versionStamp;
 				--this.count;
@@ -178,10 +178,10 @@ public class IntHashMap
 		this.count = 0;
 	}
 
-	private void insert(int par1, int par2, Object par3Obj, int par4)
+	private void insert(int p_76040_1_, int p_76040_2_, Object p_76040_3_, int p_76040_4_)
 	{
-		IntHashMap.Entry entry = this.slots[par4];
-		this.slots[par4] = new IntHashMap.Entry(par1, par2, par3Obj, entry);
+		IntHashMap.Entry entry = this.slots[p_76040_4_];
+		this.slots[p_76040_4_] = new IntHashMap.Entry(p_76040_1_, p_76040_2_, p_76040_3_, entry);
 
 		if (this.count++ >= this.threshold)
 		{
@@ -197,12 +197,12 @@ public class IntHashMap
 			final int slotHash;
 			private static final String __OBFID = "CL_00001491";
 
-			Entry(int par1, int par2, Object par3Obj, IntHashMap.Entry par4IntHashMapEntry)
+			Entry(int p_i1552_1_, int p_i1552_2_, Object p_i1552_3_, IntHashMap.Entry p_i1552_4_)
 			{
-				this.valueEntry = par3Obj;
-				this.nextEntry = par4IntHashMapEntry;
-				this.hashEntry = par2;
-				this.slotHash = par1;
+				this.valueEntry = p_i1552_3_;
+				this.nextEntry = p_i1552_4_;
+				this.hashEntry = p_i1552_2_;
+				this.slotHash = p_i1552_1_;
 			}
 
 			public final int getHash()
@@ -215,15 +215,15 @@ public class IntHashMap
 				return this.valueEntry;
 			}
 
-			public final boolean equals(Object par1Obj)
+			public final boolean equals(Object p_equals_1_)
 			{
-				if (!(par1Obj instanceof IntHashMap.Entry))
+				if (!(p_equals_1_ instanceof IntHashMap.Entry))
 				{
 					return false;
 				}
 				else
 				{
-					IntHashMap.Entry entry = (IntHashMap.Entry)par1Obj;
+					IntHashMap.Entry entry = (IntHashMap.Entry)p_equals_1_;
 					Integer integer = Integer.valueOf(this.getHash());
 					Integer integer1 = Integer.valueOf(entry.getHash());
 

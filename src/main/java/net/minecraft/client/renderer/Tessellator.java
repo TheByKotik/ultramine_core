@@ -50,7 +50,7 @@ public class Tessellator
 	private int bufferSize;
 	private static final String __OBFID = "CL_00000960";
 
-	private Tessellator(int par1)
+	private Tessellator(int p_i1250_1_)
 	{
 	}
 
@@ -212,7 +212,7 @@ public class Tessellator
 		this.startDrawing(7);
 	}
 
-	public void startDrawing(int par1)
+	public void startDrawing(int p_78371_1_)
 	{
 		if (this.isDrawing)
 		{
@@ -222,7 +222,7 @@ public class Tessellator
 		{
 			this.isDrawing = true;
 			this.reset();
-			this.drawMode = par1;
+			this.drawMode = p_78371_1_;
 			this.hasNormals = false;
 			this.hasColor = false;
 			this.hasTexture = false;
@@ -231,98 +231,103 @@ public class Tessellator
 		}
 	}
 
-	public void setTextureUV(double par1, double par3)
+	public void setTextureUV(double p_78385_1_, double p_78385_3_)
 	{
 		this.hasTexture = true;
-		this.textureU = par1;
-		this.textureV = par3;
+		this.textureU = p_78385_1_;
+		this.textureV = p_78385_3_;
 	}
 
-	public void setBrightness(int par1)
+	public void setBrightness(int p_78380_1_)
 	{
 		this.hasBrightness = true;
-		this.brightness = par1;
+		this.brightness = p_78380_1_;
 	}
 
-	public void setColorOpaque_F(float par1, float par2, float par3)
+	public void setColorOpaque_F(float p_78386_1_, float p_78386_2_, float p_78386_3_)
 	{
-		this.setColorOpaque((int)(par1 * 255.0F), (int)(par2 * 255.0F), (int)(par3 * 255.0F));
+		this.setColorOpaque((int)(p_78386_1_ * 255.0F), (int)(p_78386_2_ * 255.0F), (int)(p_78386_3_ * 255.0F));
 	}
 
-	public void setColorRGBA_F(float par1, float par2, float par3, float par4)
+	public void setColorRGBA_F(float p_78369_1_, float p_78369_2_, float p_78369_3_, float p_78369_4_)
 	{
-		this.setColorRGBA((int)(par1 * 255.0F), (int)(par2 * 255.0F), (int)(par3 * 255.0F), (int)(par4 * 255.0F));
+		this.setColorRGBA((int)(p_78369_1_ * 255.0F), (int)(p_78369_2_ * 255.0F), (int)(p_78369_3_ * 255.0F), (int)(p_78369_4_ * 255.0F));
 	}
 
-	public void setColorOpaque(int par1, int par2, int par3)
+	public void setColorOpaque(int p_78376_1_, int p_78376_2_, int p_78376_3_)
 	{
-		this.setColorRGBA(par1, par2, par3, 255);
+		this.setColorRGBA(p_78376_1_, p_78376_2_, p_78376_3_, 255);
 	}
 
-	public void setColorRGBA(int par1, int par2, int par3, int par4)
+	public void setColorRGBA(int p_78370_1_, int p_78370_2_, int p_78370_3_, int p_78370_4_)
 	{
 		if (!this.isColorDisabled)
 		{
-			if (par1 > 255)
+			if (p_78370_1_ > 255)
 			{
-				par1 = 255;
+				p_78370_1_ = 255;
 			}
 
-			if (par2 > 255)
+			if (p_78370_2_ > 255)
 			{
-				par2 = 255;
+				p_78370_2_ = 255;
 			}
 
-			if (par3 > 255)
+			if (p_78370_3_ > 255)
 			{
-				par3 = 255;
+				p_78370_3_ = 255;
 			}
 
-			if (par4 > 255)
+			if (p_78370_4_ > 255)
 			{
-				par4 = 255;
+				p_78370_4_ = 255;
 			}
 
-			if (par1 < 0)
+			if (p_78370_1_ < 0)
 			{
-				par1 = 0;
+				p_78370_1_ = 0;
 			}
 
-			if (par2 < 0)
+			if (p_78370_2_ < 0)
 			{
-				par2 = 0;
+				p_78370_2_ = 0;
 			}
 
-			if (par3 < 0)
+			if (p_78370_3_ < 0)
 			{
-				par3 = 0;
+				p_78370_3_ = 0;
 			}
 
-			if (par4 < 0)
+			if (p_78370_4_ < 0)
 			{
-				par4 = 0;
+				p_78370_4_ = 0;
 			}
 
 			this.hasColor = true;
 
 			if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN)
 			{
-				this.color = par4 << 24 | par3 << 16 | par2 << 8 | par1;
+				this.color = p_78370_4_ << 24 | p_78370_3_ << 16 | p_78370_2_ << 8 | p_78370_1_;
 			}
 			else
 			{
-				this.color = par1 << 24 | par2 << 16 | par3 << 8 | par4;
+				this.color = p_78370_1_ << 24 | p_78370_2_ << 16 | p_78370_3_ << 8 | p_78370_4_;
 			}
 		}
 	}
 
-	public void addVertexWithUV(double par1, double par3, double par5, double par7, double par9)
+	public void func_154352_a(byte p_154352_1_, byte p_154352_2_, byte p_154352_3_)
 	{
-		this.setTextureUV(par7, par9);
-		this.addVertex(par1, par3, par5);
+		this.setColorOpaque(p_154352_1_ & 255, p_154352_2_ & 255, p_154352_3_ & 255);
 	}
 
-	public void addVertex(double par1, double par3, double par5)
+	public void addVertexWithUV(double p_78374_1_, double p_78374_3_, double p_78374_5_, double p_78374_7_, double p_78374_9_)
+	{
+		this.setTextureUV(p_78374_7_, p_78374_9_);
+		this.addVertex(p_78374_1_, p_78374_3_, p_78374_5_);
+	}
+
+	public void addVertex(double p_78377_1_, double p_78377_3_, double p_78377_5_)
 	{
 		if (rawBufferIndex >= rawBufferSize - 32) 
 		{
@@ -360,27 +365,27 @@ public class Tessellator
 			this.rawBuffer[this.rawBufferIndex + 6] = this.normal;
 		}
 
-		this.rawBuffer[this.rawBufferIndex + 0] = Float.floatToRawIntBits((float)(par1 + this.xOffset));
-		this.rawBuffer[this.rawBufferIndex + 1] = Float.floatToRawIntBits((float)(par3 + this.yOffset));
-		this.rawBuffer[this.rawBufferIndex + 2] = Float.floatToRawIntBits((float)(par5 + this.zOffset));
+		this.rawBuffer[this.rawBufferIndex + 0] = Float.floatToRawIntBits((float)(p_78377_1_ + this.xOffset));
+		this.rawBuffer[this.rawBufferIndex + 1] = Float.floatToRawIntBits((float)(p_78377_3_ + this.yOffset));
+		this.rawBuffer[this.rawBufferIndex + 2] = Float.floatToRawIntBits((float)(p_78377_5_ + this.zOffset));
 		this.rawBufferIndex += 8;
 		++this.vertexCount;
 	}
 
-	public void setColorOpaque_I(int par1)
+	public void setColorOpaque_I(int p_78378_1_)
 	{
-		int j = par1 >> 16 & 255;
-		int k = par1 >> 8 & 255;
-		int l = par1 & 255;
+		int j = p_78378_1_ >> 16 & 255;
+		int k = p_78378_1_ >> 8 & 255;
+		int l = p_78378_1_ & 255;
 		this.setColorOpaque(j, k, l);
 	}
 
-	public void setColorRGBA_I(int par1, int par2)
+	public void setColorRGBA_I(int p_78384_1_, int p_78384_2_)
 	{
-		int k = par1 >> 16 & 255;
-		int l = par1 >> 8 & 255;
-		int i1 = par1 & 255;
-		this.setColorRGBA(k, l, i1, par2);
+		int k = p_78384_1_ >> 16 & 255;
+		int l = p_78384_1_ >> 8 & 255;
+		int i1 = p_78384_1_ & 255;
+		this.setColorRGBA(k, l, i1, p_78384_2_);
 	}
 
 	public void disableColor()
@@ -388,26 +393,26 @@ public class Tessellator
 		this.isColorDisabled = true;
 	}
 
-	public void setNormal(float par1, float par2, float par3)
+	public void setNormal(float p_78375_1_, float p_78375_2_, float p_78375_3_)
 	{
 		this.hasNormals = true;
-		byte b0 = (byte)((int)(par1 * 127.0F));
-		byte b1 = (byte)((int)(par2 * 127.0F));
-		byte b2 = (byte)((int)(par3 * 127.0F));
+		byte b0 = (byte)((int)(p_78375_1_ * 127.0F));
+		byte b1 = (byte)((int)(p_78375_2_ * 127.0F));
+		byte b2 = (byte)((int)(p_78375_3_ * 127.0F));
 		this.normal = b0 & 255 | (b1 & 255) << 8 | (b2 & 255) << 16;
 	}
 
-	public void setTranslation(double par1, double par3, double par5)
+	public void setTranslation(double p_78373_1_, double p_78373_3_, double p_78373_5_)
 	{
-		this.xOffset = par1;
-		this.yOffset = par3;
-		this.zOffset = par5;
+		this.xOffset = p_78373_1_;
+		this.yOffset = p_78373_3_;
+		this.zOffset = p_78373_5_;
 	}
 
-	public void addTranslation(float par1, float par2, float par3)
+	public void addTranslation(float p_78372_1_, float p_78372_2_, float p_78372_3_)
 	{
-		this.xOffset += (double)par1;
-		this.yOffset += (double)par2;
-		this.zOffset += (double)par3;
+		this.xOffset += (double)p_78372_1_;
+		this.yOffset += (double)p_78372_2_;
+		this.zOffset += (double)p_78372_3_;
 	}
 }

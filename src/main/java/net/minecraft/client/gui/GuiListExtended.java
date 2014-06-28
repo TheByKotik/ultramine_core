@@ -68,15 +68,15 @@ public abstract class GuiListExtended extends GuiSlot
 		return false;
 	}
 
-	public abstract GuiListExtended.IGuiListEntry getListEntry(int var1);
+	public abstract GuiListExtended.IGuiListEntry getListEntry(int p_148180_1_);
 
 	@SideOnly(Side.CLIENT)
 	public interface IGuiListEntry
 	{
-		void drawEntry(int var1, int var2, int var3, int var4, int var5, Tessellator var6, int var7, int var8, boolean var9);
+		void drawEntry(int p_148279_1_, int p_148279_2_, int p_148279_3_, int p_148279_4_, int p_148279_5_, Tessellator p_148279_6_, int p_148279_7_, int p_148279_8_, boolean p_148279_9_);
 
-		boolean mousePressed(int var1, int var2, int var3, int var4, int var5, int var6);
+		boolean mousePressed(int p_148278_1_, int p_148278_2_, int p_148278_3_, int p_148278_4_, int p_148278_5_, int p_148278_6_);
 
-		void mouseReleased(int var1, int var2, int var3, int var4, int var5, int var6);
+		void mouseReleased(int p_148277_1_, int p_148277_2_, int p_148277_3_, int p_148277_4_, int p_148277_5_, int p_148277_6_);
 	}
 }

@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -69,7 +70,7 @@ import net.minecraft.network.play.server.S32PacketConfirmTransaction;
 import net.minecraft.network.play.server.S3APacketTabComplete;
 import net.minecraft.network.play.server.S40PacketDisconnect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.BanEntry;
+import net.minecraft.server.management.UserListBansEntry;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
@@ -120,13 +121,13 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 	private boolean hasMoved = true;
 	private static final String __OBFID = "CL_00001452";
 
-	public NetHandlerPlayServer(MinecraftServer par1MinecraftServer, NetworkManager par2INetworkManager, EntityPlayerMP par3EntityPlayerMP)
+	public NetHandlerPlayServer(MinecraftServer p_i1530_1_, NetworkManager p_i1530_2_, EntityPlayerMP p_i1530_3_)
 	{
-		this.serverController = par1MinecraftServer;
-		this.netManager = par2INetworkManager;
-		par2INetworkManager.setNetHandler(this);
-		this.playerEntity = par3EntityPlayerMP;
-		par3EntityPlayerMP.playerNetServerHandler = this;
+		this.serverController = p_i1530_1_;
+		this.netManager = p_i1530_2_;
+		p_i1530_2_.setNetHandler(this);
+		this.playerEntity = p_i1530_3_;
+		p_i1530_3_.playerNetServerHandler = this;
 	}
 
 	public void onNetworkTick()
@@ -153,8 +154,10 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			--this.field_147375_m;
 		}
 
-		this.serverController.theProfiler.endStartSection("playerTick");
-		this.serverController.theProfiler.endSection();
+		if (this.playerEntity.func_154331_x() > 0L && this.serverController.func_143007_ar() > 0 && MinecraftServer.getSystemTimeMillis() - this.playerEntity.func_154331_x() > (long)(this.serverController.func_143007_ar() * 1000 * 60))
+		{
+			this.kickPlayerFromServer("You have been idle for too long!");
+		}
 	}
 
 	public NetworkManager func_147362_b()
@@ -847,9 +850,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 					}
 					else
 					{
-						BanEntry banentry = new BanEntry(this.playerEntity.getCommandSenderName());
-						banentry.setBanReason("Death in Hardcore");
-						this.serverController.getConfigurationManager().getBannedPlayers().put(banentry);
+						UserListBansEntry userlistbansentry = new UserListBansEntry(this.playerEntity.getGameProfile(), (Date)null, "(You just lost the game)", (Date)null, "Death in Hardcore");
+						this.serverController.getConfigurationManager().func_152608_h().func_152687_a(userlistbansentry);
 						this.playerEntity.playerNetServerHandler.kickPlayerFromServer("You have died. Game over, man, it\'s game over!");
 					}
 				}
@@ -1068,14 +1070,22 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 
 	public void processVanilla250Packet(C17PacketCustomPayload p_147349_1_)
 	{
+		PacketBuffer packetbuffer;
 		ItemStack itemstack;
 		ItemStack itemstack1;
 
 		if ("MC|BEdit".equals(p_147349_1_.func_149559_c()))
 		{
+			packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(p_147349_1_.func_149558_e()));
+
 			try
 			{
-				itemstack = (new PacketBuffer(Unpooled.wrappedBuffer(p_147349_1_.func_149558_e()))).readItemStackFromBuffer();
+				itemstack = packetbuffer.readItemStackFromBuffer();
+
+				if (itemstack == null)
+				{
+					return;
+				}
 
 				if (!ItemWritableBook.func_150930_a(itemstack.getTagCompound()))
 				{
@@ -1084,41 +1094,72 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 
 				itemstack1 = this.playerEntity.inventory.getCurrentItem();
 
-				if (itemstack.getItem() == Items.writable_book && itemstack.getItem() == itemstack1.getItem())
+				if (itemstack1 != null)
 				{
-					itemstack1.setTagInfo("pages", itemstack.getTagCompound().getTagList("pages", 8));
+					if (itemstack.getItem() == Items.writable_book && itemstack.getItem() == itemstack1.getItem())
+					{
+						itemstack1.setTagInfo("pages", itemstack.getTagCompound().getTagList("pages", 8));
+					}
+
+					return;
 				}
 			}
 			catch (Exception exception4)
 			{
 				logger.error("Couldn\'t handle book info", exception4);
+				return;
 			}
+			finally
+			{
+				packetbuffer.release();
+			}
+
+			return;
 		}
 		else if ("MC|BSign".equals(p_147349_1_.func_149559_c()))
 		{
+			packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(p_147349_1_.func_149558_e()));
+
 			try
 			{
-				itemstack = (new PacketBuffer(Unpooled.wrappedBuffer(p_147349_1_.func_149558_e()))).readItemStackFromBuffer();
+				itemstack = packetbuffer.readItemStackFromBuffer();
 
-				if (!ItemEditableBook.validBookTagContents(itemstack.getTagCompound()))
+				if (itemstack != null)
 				{
-					throw new IOException("Invalid book tag!");
-				}
+					if (!ItemEditableBook.validBookTagContents(itemstack.getTagCompound()))
+					{
+						throw new IOException("Invalid book tag!");
+					}
 
-				itemstack1 = this.playerEntity.inventory.getCurrentItem();
+					itemstack1 = this.playerEntity.inventory.getCurrentItem();
 
-				if (itemstack.getItem() == Items.written_book && itemstack1.getItem() == Items.writable_book)
-				{
-					itemstack1.setTagInfo("author", new NBTTagString(this.playerEntity.getCommandSenderName()));
-					itemstack1.setTagInfo("title", new NBTTagString(itemstack.getTagCompound().getString("title")));
-					itemstack1.setTagInfo("pages", itemstack.getTagCompound().getTagList("pages", 8));
-					itemstack1.func_150996_a(Items.written_book);
+					if (itemstack1 == null)
+					{
+						return;
+					}
+
+					if (itemstack.getItem() == Items.written_book && itemstack1.getItem() == Items.writable_book)
+					{
+						itemstack1.setTagInfo("author", new NBTTagString(this.playerEntity.getCommandSenderName()));
+						itemstack1.setTagInfo("title", new NBTTagString(itemstack.getTagCompound().getString("title")));
+						itemstack1.setTagInfo("pages", itemstack.getTagCompound().getTagList("pages", 8));
+						itemstack1.func_150996_a(Items.written_book);
+					}
+
+					return;
 				}
 			}
 			catch (Exception exception3)
 			{
 				logger.error("Couldn\'t sign book", exception3);
+				return;
 			}
+			finally
+			{
+				packetbuffer.release();
+			}
+
+			return;
 		}
 		else
 		{
@@ -1151,9 +1192,10 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 				}
 				else if (this.playerEntity.canCommandSenderUseCommand(2, "") && this.playerEntity.capabilities.isCreativeMode)
 				{
+					packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(p_147349_1_.func_149558_e()));
+
 					try
 					{
-						PacketBuffer packetbuffer = new PacketBuffer(Unpooled.wrappedBuffer(p_147349_1_.func_149558_e()));
 						byte b0 = packetbuffer.readByte();
 						CommandBlockLogic commandblocklogic = null;
 
@@ -1188,6 +1230,10 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 					catch (Exception exception1)
 					{
 						logger.error("Couldn\'t set command block", exception1);
+					}
+					finally
+					{
+						packetbuffer.release();
 					}
 				}
 				else

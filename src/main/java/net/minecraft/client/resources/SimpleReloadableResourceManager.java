@@ -30,16 +30,16 @@ public class SimpleReloadableResourceManager implements IReloadableResourceManag
 	private final IMetadataSerializer rmMetadataSerializer;
 	private static final String __OBFID = "CL_00001091";
 
-	public SimpleReloadableResourceManager(IMetadataSerializer par1MetadataSerializer)
+	public SimpleReloadableResourceManager(IMetadataSerializer p_i1299_1_)
 	{
-		this.rmMetadataSerializer = par1MetadataSerializer;
+		this.rmMetadataSerializer = p_i1299_1_;
 	}
 
-	public void reloadResourcePack(IResourcePack par1ResourcePack)
+	public void reloadResourcePack(IResourcePack p_110545_1_)
 	{
 		FallbackResourceManager fallbackresourcemanager;
 
-		for (Iterator iterator = par1ResourcePack.getResourceDomains().iterator(); iterator.hasNext(); fallbackresourcemanager.addResourcePack(par1ResourcePack))
+		for (Iterator iterator = p_110545_1_.getResourceDomains().iterator(); iterator.hasNext(); fallbackresourcemanager.addResourcePack(p_110545_1_))
 		{
 			String s = (String)iterator.next();
 			this.setResourceDomains.add(s);
@@ -58,31 +58,31 @@ public class SimpleReloadableResourceManager implements IReloadableResourceManag
 		return this.setResourceDomains;
 	}
 
-	public IResource getResource(ResourceLocation par1ResourceLocation) throws IOException
+	public IResource getResource(ResourceLocation p_110536_1_) throws IOException
 	{
-		IResourceManager iresourcemanager = (IResourceManager)this.domainResourceManagers.get(par1ResourceLocation.getResourceDomain());
+		IResourceManager iresourcemanager = (IResourceManager)this.domainResourceManagers.get(p_110536_1_.getResourceDomain());
 
 		if (iresourcemanager != null)
 		{
-			return iresourcemanager.getResource(par1ResourceLocation);
+			return iresourcemanager.getResource(p_110536_1_);
 		}
 		else
 		{
-			throw new FileNotFoundException(par1ResourceLocation.toString());
+			throw new FileNotFoundException(p_110536_1_.toString());
 		}
 	}
 
-	public List getAllResources(ResourceLocation par1ResourceLocation) throws IOException
+	public List getAllResources(ResourceLocation p_135056_1_) throws IOException
 	{
-		IResourceManager iresourcemanager = (IResourceManager)this.domainResourceManagers.get(par1ResourceLocation.getResourceDomain());
+		IResourceManager iresourcemanager = (IResourceManager)this.domainResourceManagers.get(p_135056_1_.getResourceDomain());
 
 		if (iresourcemanager != null)
 		{
-			return iresourcemanager.getAllResources(par1ResourceLocation);
+			return iresourcemanager.getAllResources(p_135056_1_);
 		}
 		else
 		{
-			throw new FileNotFoundException(par1ResourceLocation.toString());
+			throw new FileNotFoundException(p_135056_1_.toString());
 		}
 	}
 
@@ -92,22 +92,22 @@ public class SimpleReloadableResourceManager implements IReloadableResourceManag
 		this.setResourceDomains.clear();
 	}
 
-	public void reloadResources(List par1List)
+	public void reloadResources(List p_110541_1_)
 	{
 		this.clearResources();
-		logger.info("Reloading ResourceManager: " + joinerResourcePacks.join(Iterables.transform(par1List, new Function()
+		logger.info("Reloading ResourceManager: " + joinerResourcePacks.join(Iterables.transform(p_110541_1_, new Function()
 		{
 			private static final String __OBFID = "CL_00001092";
-			public String apply(IResourcePack par1ResourcePack)
+			public String apply(IResourcePack p_apply_1_)
 			{
-				return par1ResourcePack.getPackName();
+				return p_apply_1_.getPackName();
 			}
-			public Object apply(Object par1Obj)
+			public Object apply(Object p_apply_1_)
 			{
-				return this.apply((IResourcePack)par1Obj);
+				return this.apply((IResourcePack)p_apply_1_);
 			}
 		})));
-		Iterator iterator = par1List.iterator();
+		Iterator iterator = p_110541_1_.iterator();
 
 		while (iterator.hasNext())
 		{
@@ -118,10 +118,10 @@ public class SimpleReloadableResourceManager implements IReloadableResourceManag
 		this.notifyReloadListeners();
 	}
 
-	public void registerReloadListener(IResourceManagerReloadListener par1ResourceManagerReloadListener)
+	public void registerReloadListener(IResourceManagerReloadListener p_110542_1_)
 	{
-		this.reloadListeners.add(par1ResourceManagerReloadListener);
-		par1ResourceManagerReloadListener.onResourceManagerReload(this);
+		this.reloadListeners.add(p_110542_1_);
+		p_110542_1_.onResourceManagerReload(this);
 	}
 
 	private void notifyReloadListeners()

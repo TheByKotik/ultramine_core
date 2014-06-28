@@ -15,9 +15,9 @@ public class FontMetadataSectionSerializer extends BaseMetadataSectionSerializer
 {
 	private static final String __OBFID = "CL_00001109";
 
-	public FontMetadataSection deserialize(JsonElement par1JsonElement, Type par2Type, JsonDeserializationContext par3JsonDeserializationContext)
+	public FontMetadataSection deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_)
 	{
-		JsonObject jsonobject = par1JsonElement.getAsJsonObject();
+		JsonObject jsonobject = p_deserialize_1_.getAsJsonObject();
 		float[] afloat = new float[256];
 		float[] afloat1 = new float[256];
 		float[] afloat2 = new float[256];

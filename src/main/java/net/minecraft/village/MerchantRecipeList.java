@@ -15,17 +15,17 @@ public class MerchantRecipeList extends ArrayList
 
 	public MerchantRecipeList() {}
 
-	public MerchantRecipeList(NBTTagCompound par1NBTTagCompound)
+	public MerchantRecipeList(NBTTagCompound p_i1944_1_)
 	{
-		this.readRecipiesFromTags(par1NBTTagCompound);
+		this.readRecipiesFromTags(p_i1944_1_);
 	}
 
-	public MerchantRecipe canRecipeBeUsed(ItemStack par1ItemStack, ItemStack par2ItemStack, int par3)
+	public MerchantRecipe canRecipeBeUsed(ItemStack p_77203_1_, ItemStack p_77203_2_, int p_77203_3_)
 	{
-		if (par3 > 0 && par3 < this.size())
+		if (p_77203_3_ > 0 && p_77203_3_ < this.size())
 		{
-			MerchantRecipe merchantrecipe1 = (MerchantRecipe)this.get(par3);
-			return par1ItemStack.getItem() == merchantrecipe1.getItemToBuy().getItem() && (par2ItemStack == null && !merchantrecipe1.hasSecondItemToBuy() || merchantrecipe1.hasSecondItemToBuy() && par2ItemStack != null && merchantrecipe1.getSecondItemToBuy().getItem() == par2ItemStack.getItem()) && par1ItemStack.stackSize >= merchantrecipe1.getItemToBuy().stackSize && (!merchantrecipe1.hasSecondItemToBuy() || par2ItemStack.stackSize >= merchantrecipe1.getSecondItemToBuy().stackSize) ? merchantrecipe1 : null;
+			MerchantRecipe merchantrecipe1 = (MerchantRecipe)this.get(p_77203_3_);
+			return p_77203_1_.getItem() == merchantrecipe1.getItemToBuy().getItem() && (p_77203_2_ == null && !merchantrecipe1.hasSecondItemToBuy() || merchantrecipe1.hasSecondItemToBuy() && p_77203_2_ != null && merchantrecipe1.getSecondItemToBuy().getItem() == p_77203_2_.getItem()) && p_77203_1_.stackSize >= merchantrecipe1.getItemToBuy().stackSize && (!merchantrecipe1.hasSecondItemToBuy() || p_77203_2_.stackSize >= merchantrecipe1.getSecondItemToBuy().stackSize) ? merchantrecipe1 : null;
 		}
 		else
 		{
@@ -33,7 +33,7 @@ public class MerchantRecipeList extends ArrayList
 			{
 				MerchantRecipe merchantrecipe = (MerchantRecipe)this.get(j);
 
-				if (par1ItemStack.getItem() == merchantrecipe.getItemToBuy().getItem() && par1ItemStack.stackSize >= merchantrecipe.getItemToBuy().stackSize && (!merchantrecipe.hasSecondItemToBuy() && par2ItemStack == null || merchantrecipe.hasSecondItemToBuy() && par2ItemStack != null && merchantrecipe.getSecondItemToBuy().getItem() == par2ItemStack.getItem() && par2ItemStack.stackSize >= merchantrecipe.getSecondItemToBuy().stackSize))
+				if (p_77203_1_.getItem() == merchantrecipe.getItemToBuy().getItem() && p_77203_1_.stackSize >= merchantrecipe.getItemToBuy().stackSize && (!merchantrecipe.hasSecondItemToBuy() && p_77203_2_ == null || merchantrecipe.hasSecondItemToBuy() && p_77203_2_ != null && merchantrecipe.getSecondItemToBuy().getItem() == p_77203_2_.getItem() && p_77203_2_.stackSize >= merchantrecipe.getSecondItemToBuy().stackSize))
 				{
 					return merchantrecipe;
 				}
@@ -43,24 +43,24 @@ public class MerchantRecipeList extends ArrayList
 		}
 	}
 
-	public void addToListWithCheck(MerchantRecipe par1MerchantRecipe)
+	public void addToListWithCheck(MerchantRecipe p_77205_1_)
 	{
 		for (int i = 0; i < this.size(); ++i)
 		{
 			MerchantRecipe merchantrecipe1 = (MerchantRecipe)this.get(i);
 
-			if (par1MerchantRecipe.hasSameIDsAs(merchantrecipe1))
+			if (p_77205_1_.hasSameIDsAs(merchantrecipe1))
 			{
-				if (par1MerchantRecipe.hasSameItemsAs(merchantrecipe1))
+				if (p_77205_1_.hasSameItemsAs(merchantrecipe1))
 				{
-					this.set(i, par1MerchantRecipe);
+					this.set(i, p_77205_1_);
 				}
 
 				return;
 			}
 		}
 
-		this.add(par1MerchantRecipe);
+		this.add(p_77205_1_);
 	}
 
 	public void func_151391_a(PacketBuffer p_151391_1_) throws IOException
@@ -84,9 +84,9 @@ public class MerchantRecipeList extends ArrayList
 		}
 	}
 
-	public void readRecipiesFromTags(NBTTagCompound par1NBTTagCompound)
+	public void readRecipiesFromTags(NBTTagCompound p_77201_1_)
 	{
-		NBTTagList nbttaglist = par1NBTTagCompound.getTagList("Recipes", 10);
+		NBTTagList nbttaglist = p_77201_1_.getTagList("Recipes", 10);
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i)
 		{

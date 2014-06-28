@@ -10,42 +10,42 @@ public class EntitySmallFireball extends EntityFireball
 {
 	private static final String __OBFID = "CL_00001721";
 
-	public EntitySmallFireball(World par1World)
+	public EntitySmallFireball(World p_i1770_1_)
 	{
-		super(par1World);
+		super(p_i1770_1_);
 		this.setSize(0.3125F, 0.3125F);
 	}
 
-	public EntitySmallFireball(World par1World, EntityLivingBase par2EntityLivingBase, double par3, double par5, double par7)
+	public EntitySmallFireball(World p_i1771_1_, EntityLivingBase p_i1771_2_, double p_i1771_3_, double p_i1771_5_, double p_i1771_7_)
 	{
-		super(par1World, par2EntityLivingBase, par3, par5, par7);
+		super(p_i1771_1_, p_i1771_2_, p_i1771_3_, p_i1771_5_, p_i1771_7_);
 		this.setSize(0.3125F, 0.3125F);
 	}
 
-	public EntitySmallFireball(World par1World, double par2, double par4, double par6, double par8, double par10, double par12)
+	public EntitySmallFireball(World p_i1772_1_, double p_i1772_2_, double p_i1772_4_, double p_i1772_6_, double p_i1772_8_, double p_i1772_10_, double p_i1772_12_)
 	{
-		super(par1World, par2, par4, par6, par8, par10, par12);
+		super(p_i1772_1_, p_i1772_2_, p_i1772_4_, p_i1772_6_, p_i1772_8_, p_i1772_10_, p_i1772_12_);
 		this.setSize(0.3125F, 0.3125F);
 	}
 
-	protected void onImpact(MovingObjectPosition par1MovingObjectPosition)
+	protected void onImpact(MovingObjectPosition p_70227_1_)
 	{
 		if (!this.worldObj.isRemote)
 		{
-			if (par1MovingObjectPosition.entityHit != null)
+			if (p_70227_1_.entityHit != null)
 			{
-				if (!par1MovingObjectPosition.entityHit.isImmuneToFire() && par1MovingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, this.shootingEntity), 5.0F))
+				if (!p_70227_1_.entityHit.isImmuneToFire() && p_70227_1_.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(this, this.shootingEntity), 5.0F))
 				{
-					par1MovingObjectPosition.entityHit.setFire(5);
+					p_70227_1_.entityHit.setFire(5);
 				}
 			}
 			else
 			{
-				int i = par1MovingObjectPosition.blockX;
-				int j = par1MovingObjectPosition.blockY;
-				int k = par1MovingObjectPosition.blockZ;
+				int i = p_70227_1_.blockX;
+				int j = p_70227_1_.blockY;
+				int k = p_70227_1_.blockZ;
 
-				switch (par1MovingObjectPosition.sideHit)
+				switch (p_70227_1_.sideHit)
 				{
 					case 0:
 						--j;
@@ -81,7 +81,7 @@ public class EntitySmallFireball extends EntityFireball
 		return false;
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		return false;
 	}

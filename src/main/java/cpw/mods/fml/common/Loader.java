@@ -38,6 +38,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultiset;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
@@ -104,6 +105,7 @@ import cpw.mods.fml.relauncher.Side;
  */
 public class Loader
 {
+	public static final String MC_VERSION = "1.7.10";
 	private static final Splitter DEPENDENCYPARTSPLITTER = Splitter.on(":").omitEmptyStrings().trimResults();
 	private static final Splitter DEPENDENCYSPLITTER = Splitter.on(";").omitEmptyStrings().trimResults();
 	/**
@@ -177,14 +179,13 @@ public class Loader
 	private Loader()
 	{
 		modClassLoader = new ModClassLoader(getClass().getClassLoader());
-		String actualMCVersion = "1.7.2";
-		if (!mccversion.equals(actualMCVersion))
+		if (!mccversion.equals(MC_VERSION))
 		{
-			FMLLog.severe("This version of FML is built for Minecraft %s, we have detected Minecraft %s in your minecraft jar file", mccversion, actualMCVersion);
+			FMLLog.severe("This version of FML is built for Minecraft %s, we have detected Minecraft %s in your minecraft jar file", mccversion, MC_VERSION);
 			throw new LoaderException();
 		}
 
-		minecraft = new MinecraftDummyContainer(actualMCVersion);
+		minecraft = new MinecraftDummyContainer(MC_VERSION);
 		mcp = new MCPDummyContainer(MetadataCollection.from(getClass().getResourceAsStream("/mcpmod.info"), "MCP").getMetadataForId("mcp", null));
 	}
 
@@ -199,7 +200,7 @@ public class Loader
 		try
 		{
 			BiMap<String, ArtifactVersion> modVersions = HashBiMap.create();
-			for (ModContainer mod : getActiveModList())
+			for (ModContainer mod : Iterables.concat(getActiveModList(), ModAPIManager.INSTANCE.getAPIList()))
 			{
 				modVersions.put(mod.getModId(), mod.getProcessedVersion());
 			}

@@ -16,9 +16,9 @@ public class RecipesMapExtending extends ShapedRecipes
 		super(3, 3, new ItemStack[] {new ItemStack(Items.paper), new ItemStack(Items.paper), new ItemStack(Items.paper), new ItemStack(Items.paper), new ItemStack(Items.filled_map, 0, 32767), new ItemStack(Items.paper), new ItemStack(Items.paper), new ItemStack(Items.paper), new ItemStack(Items.paper)}, new ItemStack(Items.map, 0, 0));
 	}
 
-	public boolean matches(InventoryCrafting par1InventoryCrafting, World par2World)
+	public boolean matches(InventoryCrafting p_77569_1_, World p_77569_2_)
 	{
-		if (!super.matches(par1InventoryCrafting, par2World))
+		if (!super.matches(p_77569_1_, p_77569_2_))
 		{
 			return false;
 		}
@@ -26,9 +26,9 @@ public class RecipesMapExtending extends ShapedRecipes
 		{
 			ItemStack itemstack = null;
 
-			for (int i = 0; i < par1InventoryCrafting.getSizeInventory() && itemstack == null; ++i)
+			for (int i = 0; i < p_77569_1_.getSizeInventory() && itemstack == null; ++i)
 			{
-				ItemStack itemstack1 = par1InventoryCrafting.getStackInSlot(i);
+				ItemStack itemstack1 = p_77569_1_.getStackInSlot(i);
 
 				if (itemstack1 != null && itemstack1.getItem() == Items.filled_map)
 				{
@@ -42,19 +42,19 @@ public class RecipesMapExtending extends ShapedRecipes
 			}
 			else
 			{
-				MapData mapdata = Items.filled_map.getMapData(itemstack, par2World);
+				MapData mapdata = Items.filled_map.getMapData(itemstack, p_77569_2_);
 				return mapdata == null ? false : mapdata.scale < 4;
 			}
 		}
 	}
 
-	public ItemStack getCraftingResult(InventoryCrafting par1InventoryCrafting)
+	public ItemStack getCraftingResult(InventoryCrafting p_77572_1_)
 	{
 		ItemStack itemstack = null;
 
-		for (int i = 0; i < par1InventoryCrafting.getSizeInventory() && itemstack == null; ++i)
+		for (int i = 0; i < p_77572_1_.getSizeInventory() && itemstack == null; ++i)
 		{
-			ItemStack itemstack1 = par1InventoryCrafting.getStackInSlot(i);
+			ItemStack itemstack1 = p_77572_1_.getStackInSlot(i);
 
 			if (itemstack1 != null && itemstack1.getItem() == Items.filled_map)
 			{

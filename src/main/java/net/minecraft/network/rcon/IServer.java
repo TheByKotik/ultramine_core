@@ -6,11 +6,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.SERVER)
 public interface IServer
 {
-	int getIntProperty(String var1, int var2);
+	int getIntProperty(String p_71327_1_, int p_71327_2_);
 
-	String getStringProperty(String var1, String var2);
+	String getStringProperty(String p_71330_1_, String p_71330_2_);
 
-	void setProperty(String var1, Object var2);
+	void setProperty(String p_71328_1_, Object p_71328_2_);
 
 	void saveProperties();
 
@@ -34,15 +34,15 @@ public interface IServer
 
 	String getPlugins();
 
-	String handleRConCommand(String var1);
+	String handleRConCommand(String p_71252_1_);
 
 	boolean isDebuggingEnabled();
 
-	void logInfo(String var1);
+	void logInfo(String p_71244_1_);
 
-	void logWarning(String var1);
+	void logWarning(String p_71236_1_);
 
-	void logSevere(String var1);
+	void logSevere(String p_71201_1_);
 
-	void logDebug(String var1);
+	void logDebug(String p_71198_1_);
 }

@@ -17,7 +17,7 @@ public abstract class CreativeTabs
 	public static CreativeTabs[] creativeTabArray = new CreativeTabs[12];
 	public static final CreativeTabs tabBlock = new CreativeTabs(0, "buildingBlocks")
 	{
-		private static final String __OBFID = "CL_00000010";
+		private static final String __OBFID = "CL_00000006";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -26,7 +26,7 @@ public abstract class CreativeTabs
 	};
 	public static final CreativeTabs tabDecorations = new CreativeTabs(1, "decorations")
 	{
-		private static final String __OBFID = "CL_00000011";
+		private static final String __OBFID = "CL_00000010";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -40,7 +40,7 @@ public abstract class CreativeTabs
 	};
 	public static final CreativeTabs tabRedstone = new CreativeTabs(2, "redstone")
 	{
-		private static final String __OBFID = "CL_00000012";
+		private static final String __OBFID = "CL_00000011";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -49,7 +49,7 @@ public abstract class CreativeTabs
 	};
 	public static final CreativeTabs tabTransport = new CreativeTabs(3, "transportation")
 	{
-		private static final String __OBFID = "CL_00000014";
+		private static final String __OBFID = "CL_00000012";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -58,7 +58,7 @@ public abstract class CreativeTabs
 	};
 	public static final CreativeTabs tabMisc = (new CreativeTabs(4, "misc")
 	{
-		private static final String __OBFID = "CL_00000015";
+		private static final String __OBFID = "CL_00000014";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -67,7 +67,7 @@ public abstract class CreativeTabs
 	}).func_111229_a(new EnumEnchantmentType[] {EnumEnchantmentType.all});
 	public static final CreativeTabs tabAllSearch = (new CreativeTabs(5, "search")
 	{
-		private static final String __OBFID = "CL_00000016";
+		private static final String __OBFID = "CL_00000015";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -76,7 +76,7 @@ public abstract class CreativeTabs
 	}).setBackgroundImageName("item_search.png");
 	public static final CreativeTabs tabFood = new CreativeTabs(6, "food")
 	{
-		private static final String __OBFID = "CL_00000017";
+		private static final String __OBFID = "CL_00000016";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -85,7 +85,7 @@ public abstract class CreativeTabs
 	};
 	public static final CreativeTabs tabTools = (new CreativeTabs(7, "tools")
 	{
-		private static final String __OBFID = "CL_00000018";
+		private static final String __OBFID = "CL_00000017";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -94,7 +94,7 @@ public abstract class CreativeTabs
 	}).func_111229_a(new EnumEnchantmentType[] {EnumEnchantmentType.digger, EnumEnchantmentType.fishing_rod, EnumEnchantmentType.breakable});
 	public static final CreativeTabs tabCombat = (new CreativeTabs(8, "combat")
 	{
-		private static final String __OBFID = "CL_00000007";
+		private static final String __OBFID = "CL_00000018";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -103,7 +103,7 @@ public abstract class CreativeTabs
 	}).func_111229_a(new EnumEnchantmentType[] {EnumEnchantmentType.armor, EnumEnchantmentType.armor_feet, EnumEnchantmentType.armor_head, EnumEnchantmentType.armor_legs, EnumEnchantmentType.armor_torso, EnumEnchantmentType.bow, EnumEnchantmentType.weapon});
 	public static final CreativeTabs tabBrewing = new CreativeTabs(9, "brewing")
 	{
-		private static final String __OBFID = "CL_00000008";
+		private static final String __OBFID = "CL_00000007";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -112,7 +112,7 @@ public abstract class CreativeTabs
 	};
 	public static final CreativeTabs tabMaterials = new CreativeTabs(10, "materials")
 	{
-		private static final String __OBFID = "CL_00000009";
+		private static final String __OBFID = "CL_00000008";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -121,7 +121,7 @@ public abstract class CreativeTabs
 	};
 	public static final CreativeTabs tabInventory = (new CreativeTabs(11, "inventory")
 	{
-		private static final String __OBFID = "CL_00000006";
+		private static final String __OBFID = "CL_00000009";
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem()
 		{
@@ -143,20 +143,20 @@ public abstract class CreativeTabs
 		this(getNextID(), lable);
 	}
 
-	public CreativeTabs(int par1, String par2Str)
+	public CreativeTabs(int p_i1853_1_, String p_i1853_2_)
 	{
-		if (par1 >= creativeTabArray.length)
+		if (p_i1853_1_ >= creativeTabArray.length)
 		{
-			CreativeTabs[] tmp = new CreativeTabs[par1 + 1];
+			CreativeTabs[] tmp = new CreativeTabs[p_i1853_1_ + 1];
 			for (int x = 0; x < creativeTabArray.length; x++)
 			{
 				tmp[x] = creativeTabArray[x];
 			}
 			creativeTabArray = tmp;
 		}
-		this.tabIndex = par1;
-		this.tabLabel = par2Str;
-		creativeTabArray[par1] = this;
+		this.tabIndex = p_i1853_1_;
+		this.tabLabel = p_i1853_2_;
+		creativeTabArray[p_i1853_1_] = this;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -165,9 +165,9 @@ public abstract class CreativeTabs
 		return this.tabIndex;
 	}
 
-	public CreativeTabs setBackgroundImageName(String par1Str)
+	public CreativeTabs setBackgroundImageName(String p_78025_1_)
 	{
-		this.backgroundImageName = par1Str;
+		this.backgroundImageName = p_78025_1_;
 		return this;
 	}
 
@@ -259,14 +259,14 @@ public abstract class CreativeTabs
 		return this.field_111230_s;
 	}
 
-	public CreativeTabs func_111229_a(EnumEnchantmentType ... par1ArrayOfEnumEnchantmentType)
+	public CreativeTabs func_111229_a(EnumEnchantmentType ... p_111229_1_)
 	{
-		this.field_111230_s = par1ArrayOfEnumEnchantmentType;
+		this.field_111230_s = p_111229_1_;
 		return this;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean func_111226_a(EnumEnchantmentType par1EnumEnchantmentType)
+	public boolean func_111226_a(EnumEnchantmentType p_111226_1_)
 	{
 		if (this.field_111230_s == null)
 		{
@@ -281,7 +281,7 @@ public abstract class CreativeTabs
 			{
 				EnumEnchantmentType enumenchantmenttype1 = aenumenchantmenttype[j];
 
-				if (enumenchantmenttype1 == par1EnumEnchantmentType)
+				if (enumenchantmenttype1 == p_111226_1_)
 				{
 					return true;
 				}
@@ -292,7 +292,7 @@ public abstract class CreativeTabs
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void displayAllReleventItems(List par1List)
+	public void displayAllReleventItems(List p_78018_1_)
 	{
 		Iterator iterator = Item.itemRegistry.iterator();
 
@@ -309,19 +309,19 @@ public abstract class CreativeTabs
 			{
 				if (tab == this)
 				{
-					item.getSubItems(item, this, par1List);
+					item.getSubItems(item, this, p_78018_1_);
 				}
 			}
 		}
 
 		if (this.func_111225_m() != null)
 		{
-			this.addEnchantmentBooksToList(par1List, this.func_111225_m());
+			this.addEnchantmentBooksToList(p_78018_1_, this.func_111225_m());
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void addEnchantmentBooksToList(List par1List, EnumEnchantmentType ... par2ArrayOfEnumEnchantmentType)
+	public void addEnchantmentBooksToList(List p_92116_1_, EnumEnchantmentType ... p_92116_2_)
 	{
 		Enchantment[] aenchantment = Enchantment.enchantmentsList;
 		int i = aenchantment.length;
@@ -334,9 +334,9 @@ public abstract class CreativeTabs
 			{
 				boolean flag = false;
 
-				for (int k = 0; k < par2ArrayOfEnumEnchantmentType.length && !flag; ++k)
+				for (int k = 0; k < p_92116_2_.length && !flag; ++k)
 				{
-					if (enchantment.type == par2ArrayOfEnumEnchantmentType[k])
+					if (enchantment.type == p_92116_2_[k])
 					{
 						flag = true;
 					}
@@ -344,7 +344,7 @@ public abstract class CreativeTabs
 
 				if (flag)
 				{
-					par1List.add(Items.enchanted_book.getEnchantedItemStack(new EnchantmentData(enchantment, enchantment.getMaxLevel())));
+					p_92116_1_.add(Items.enchanted_book.getEnchantedItemStack(new EnchantmentData(enchantment, enchantment.getMaxLevel())));
 				}
 			}
 		}

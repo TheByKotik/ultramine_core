@@ -4,9 +4,9 @@ import net.minecraft.util.IChatComponent;
 
 public interface INetHandler
 {
-	void onDisconnect(IChatComponent var1);
+	void onDisconnect(IChatComponent p_147231_1_);
 
-	void onConnectionStateTransition(EnumConnectionState var1, EnumConnectionState var2);
+	void onConnectionStateTransition(EnumConnectionState p_147232_1_, EnumConnectionState p_147232_2_);
 
 	void onNetworkTick();
 }

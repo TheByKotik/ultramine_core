@@ -1,163 +1,49 @@
 package net.minecraft.server.management;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import java.io.BufferedReader;
+import com.google.gson.JsonObject;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.net.SocketAddress;
 
-public class BanList
+public class BanList extends UserList
 {
-	private static final Logger logger = LogManager.getLogger();
-	private final LowerStringMap theBanList = new LowerStringMap();
-	private final File fileName;
-	private boolean listActive = true;
 	private static final String __OBFID = "CL_00001396";
 
-	public BanList(File par1File)
+	public BanList(File p_i1490_1_)
 	{
-		this.fileName = par1File;
+		super(p_i1490_1_);
 	}
 
-	public boolean isListActive()
+	protected UserListEntry func_152682_a(JsonObject p_152682_1_)
 	{
-		return this.listActive;
+		return new IPBanEntry(p_152682_1_);
 	}
 
-	public void setListActive(boolean par1)
+	public boolean func_152708_a(SocketAddress p_152708_1_)
 	{
-		this.listActive = par1;
+		String s = this.func_152707_c(p_152708_1_);
+		return this.func_152692_d(s);
 	}
 
-	public Map getBannedList()
+	public IPBanEntry func_152709_b(SocketAddress p_152709_1_)
 	{
-		this.removeExpiredBans();
-		return this.theBanList;
+		String s = this.func_152707_c(p_152709_1_);
+		return (IPBanEntry)this.func_152683_b(s);
 	}
 
-	public boolean isBanned(String par1Str)
+	private String func_152707_c(SocketAddress p_152707_1_)
 	{
-		if (!this.isListActive())
+		String s = p_152707_1_.toString();
+
+		if (s.contains("/"))
 		{
-			return false;
+			s = s.substring(s.indexOf(47) + 1);
 		}
-		else
+
+		if (s.contains(":"))
 		{
-			this.removeExpiredBans();
-			return this.theBanList.containsKey(par1Str);
+			s = s.substring(0, s.indexOf(58));
 		}
-	}
 
-	public void put(BanEntry par1BanEntry)
-	{
-		this.theBanList.put(par1BanEntry.getBannedUsername(), par1BanEntry);
-		this.saveToFileWithHeader();
-	}
-
-	public void remove(String par1Str)
-	{
-		this.theBanList.remove(par1Str);
-		this.saveToFileWithHeader();
-	}
-
-	public void removeExpiredBans()
-	{
-		Iterator iterator = this.theBanList.values().iterator();
-
-		while (iterator.hasNext())
-		{
-			BanEntry banentry = (BanEntry)iterator.next();
-
-			if (banentry.hasBanExpired())
-			{
-				iterator.remove();
-			}
-		}
-	}
-
-	public void saveToFileWithHeader()
-	{
-		this.saveToFile(true);
-	}
-
-	public void saveToFile(boolean par1)
-	{
-		this.removeExpiredBans();
-
-		try
-		{
-			PrintWriter printwriter = new PrintWriter(new FileWriter(this.fileName, false));
-
-			if (par1)
-			{
-				printwriter.println("# Updated " + (new SimpleDateFormat()).format(new Date()) + " by Minecraft " + "1.7.2");
-				printwriter.println("# victim name | ban date | banned by | banned until | reason");
-				printwriter.println();
-			}
-
-			Iterator iterator = this.theBanList.values().iterator();
-
-			while (iterator.hasNext())
-			{
-				BanEntry banentry = (BanEntry)iterator.next();
-				printwriter.println(banentry.buildBanString());
-			}
-
-			printwriter.close();
-		}
-		catch (IOException ioexception)
-		{
-			logger.error("Could not save ban list", ioexception);
-		}
-	}
-
-	@SideOnly(Side.SERVER)
-	public void loadBanList()
-	{
-		if (this.fileName.isFile())
-		{
-			BufferedReader bufferedreader;
-
-			try
-			{
-				bufferedreader = new BufferedReader(new FileReader(this.fileName));
-			}
-			catch (FileNotFoundException filenotfoundexception)
-			{
-				throw new Error();
-			}
-
-			String s;
-
-			try
-			{
-				while ((s = bufferedreader.readLine()) != null)
-				{
-					if (!s.startsWith("#"))
-					{
-						BanEntry banentry = BanEntry.parse(s);
-
-						if (banentry != null)
-						{
-							this.theBanList.put(banentry.getBannedUsername(), banentry);
-						}
-					}
-				}
-			}
-			catch (IOException ioexception)
-			{
-				logger.error("Could not load ban list", ioexception);
-			}
-		}
+		return s;
 	}
 }

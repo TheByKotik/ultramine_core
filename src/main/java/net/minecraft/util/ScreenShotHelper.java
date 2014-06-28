@@ -115,14 +115,14 @@ public class ScreenShotHelper
 		}
 	}
 
-	private static File getTimestampedPNGFileForDirectory(File par0File)
+	private static File getTimestampedPNGFileForDirectory(File p_74290_0_)
 	{
 		String s = dateFormat.format(new Date()).toString();
 		int i = 1;
 
 		while (true)
 		{
-			File file2 = new File(par0File, s + (i == 1 ? "" : "_" + i) + ".png");
+			File file2 = new File(p_74290_0_, s + (i == 1 ? "" : "_" + i) + ".png");
 
 			if (!file2.exists())
 			{

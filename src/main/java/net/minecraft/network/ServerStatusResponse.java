@@ -11,6 +11,7 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import java.lang.reflect.Type;
+import java.util.UUID;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.JsonUtils;
 
@@ -88,23 +89,23 @@ public class ServerStatusResponse
 				{
 					private static final String __OBFID = "CL_00001390";
 
-					public ServerStatusResponse.MinecraftProtocolVersionIdentifier deserialize(JsonElement p_151309_1_, Type p_151309_2_, JsonDeserializationContext p_151309_3_)
+					public ServerStatusResponse.MinecraftProtocolVersionIdentifier deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_)
 					{
-						JsonObject jsonobject = JsonUtils.getJsonElementAsJsonObject(p_151309_1_, "version");
+						JsonObject jsonobject = JsonUtils.getJsonElementAsJsonObject(p_deserialize_1_, "version");
 						return new ServerStatusResponse.MinecraftProtocolVersionIdentifier(JsonUtils.getJsonObjectStringFieldValue(jsonobject, "name"), JsonUtils.getJsonObjectIntegerFieldValue(jsonobject, "protocol"));
 					}
 
-					public JsonElement serialize(ServerStatusResponse.MinecraftProtocolVersionIdentifier p_151310_1_, Type p_151310_2_, JsonSerializationContext p_151310_3_)
+					public JsonElement serialize(ServerStatusResponse.MinecraftProtocolVersionIdentifier p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
 					{
 						JsonObject jsonobject = new JsonObject();
-						jsonobject.addProperty("name", p_151310_1_.func_151303_a());
-						jsonobject.addProperty("protocol", Integer.valueOf(p_151310_1_.func_151304_b()));
+						jsonobject.addProperty("name", p_serialize_1_.func_151303_a());
+						jsonobject.addProperty("protocol", Integer.valueOf(p_serialize_1_.func_151304_b()));
 						return jsonobject;
 					}
 
-					public JsonElement serialize(Object par1Obj, Type par2Type, JsonSerializationContext par3JsonSerializationContext)
+					public JsonElement serialize(Object p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
 					{
-						return this.serialize((ServerStatusResponse.MinecraftProtocolVersionIdentifier)par1Obj, par2Type, par3JsonSerializationContext);
+						return this.serialize((ServerStatusResponse.MinecraftProtocolVersionIdentifier)p_serialize_1_, p_serialize_2_, p_serialize_3_);
 					}
 				}
 		}
@@ -146,9 +147,9 @@ public class ServerStatusResponse
 				{
 					private static final String __OBFID = "CL_00001387";
 
-					public ServerStatusResponse.PlayerCountData deserialize(JsonElement p_151311_1_, Type p_151311_2_, JsonDeserializationContext p_151311_3_)
+					public ServerStatusResponse.PlayerCountData deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_)
 					{
-						JsonObject jsonobject = JsonUtils.getJsonElementAsJsonObject(p_151311_1_, "players");
+						JsonObject jsonobject = JsonUtils.getJsonElementAsJsonObject(p_deserialize_1_, "players");
 						ServerStatusResponse.PlayerCountData playercountdata = new ServerStatusResponse.PlayerCountData(JsonUtils.getJsonObjectIntegerFieldValue(jsonobject, "max"), JsonUtils.getJsonObjectIntegerFieldValue(jsonobject, "online"));
 
 						if (JsonUtils.jsonObjectFieldTypeIsArray(jsonobject, "sample"))
@@ -162,7 +163,8 @@ public class ServerStatusResponse
 								for (int i = 0; i < agameprofile.length; ++i)
 								{
 									JsonObject jsonobject1 = JsonUtils.getJsonElementAsJsonObject(jsonarray.get(i), "player[" + i + "]");
-									agameprofile[i] = new GameProfile(JsonUtils.getJsonObjectStringFieldValue(jsonobject1, "id"), JsonUtils.getJsonObjectStringFieldValue(jsonobject1, "name"));
+									String s = JsonUtils.getJsonObjectStringFieldValue(jsonobject1, "id");
+									agameprofile[i] = new GameProfile(UUID.fromString(s), JsonUtils.getJsonObjectStringFieldValue(jsonobject1, "name"));
 								}
 
 								playercountdata.func_151330_a(agameprofile);
@@ -172,21 +174,22 @@ public class ServerStatusResponse
 						return playercountdata;
 					}
 
-					public JsonElement serialize(ServerStatusResponse.PlayerCountData p_151312_1_, Type p_151312_2_, JsonSerializationContext p_151312_3_)
+					public JsonElement serialize(ServerStatusResponse.PlayerCountData p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
 					{
 						JsonObject jsonobject = new JsonObject();
-						jsonobject.addProperty("max", Integer.valueOf(p_151312_1_.func_151332_a()));
-						jsonobject.addProperty("online", Integer.valueOf(p_151312_1_.func_151333_b()));
+						jsonobject.addProperty("max", Integer.valueOf(p_serialize_1_.func_151332_a()));
+						jsonobject.addProperty("online", Integer.valueOf(p_serialize_1_.func_151333_b()));
 
-						if (p_151312_1_.func_151331_c() != null && p_151312_1_.func_151331_c().length > 0)
+						if (p_serialize_1_.func_151331_c() != null && p_serialize_1_.func_151331_c().length > 0)
 						{
 							JsonArray jsonarray = new JsonArray();
 
-							for (int i = 0; i < p_151312_1_.func_151331_c().length; ++i)
+							for (int i = 0; i < p_serialize_1_.func_151331_c().length; ++i)
 							{
 								JsonObject jsonobject1 = new JsonObject();
-								jsonobject1.addProperty("id", p_151312_1_.func_151331_c()[i].getId());
-								jsonobject1.addProperty("name", p_151312_1_.func_151331_c()[i].getName());
+								UUID uuid = p_serialize_1_.func_151331_c()[i].getId();
+								jsonobject1.addProperty("id", uuid == null ? "" : uuid.toString());
+								jsonobject1.addProperty("name", p_serialize_1_.func_151331_c()[i].getName());
 								jsonarray.add(jsonobject1);
 							}
 
@@ -196,9 +199,9 @@ public class ServerStatusResponse
 						return jsonobject;
 					}
 
-					public JsonElement serialize(Object par1Obj, Type par2Type, JsonSerializationContext par3JsonSerializationContext)
+					public JsonElement serialize(Object p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
 					{
-						return this.serialize((ServerStatusResponse.PlayerCountData)par1Obj, par2Type, par3JsonSerializationContext);
+						return this.serialize((ServerStatusResponse.PlayerCountData)p_serialize_1_, p_serialize_2_, p_serialize_3_);
 					}
 				}
 		}
@@ -207,24 +210,24 @@ public class ServerStatusResponse
 		{
 			private static final String __OBFID = "CL_00001388";
 
-			public ServerStatusResponse deserialize(JsonElement p_151314_1_, Type p_151314_2_, JsonDeserializationContext p_151314_3_)
+			public ServerStatusResponse deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_)
 			{
-				JsonObject jsonobject = JsonUtils.getJsonElementAsJsonObject(p_151314_1_, "status");
+				JsonObject jsonobject = JsonUtils.getJsonElementAsJsonObject(p_deserialize_1_, "status");
 				ServerStatusResponse serverstatusresponse = new ServerStatusResponse();
 
 				if (jsonobject.has("description"))
 				{
-					serverstatusresponse.func_151315_a((IChatComponent)p_151314_3_.deserialize(jsonobject.get("description"), IChatComponent.class));
+					serverstatusresponse.func_151315_a((IChatComponent)p_deserialize_3_.deserialize(jsonobject.get("description"), IChatComponent.class));
 				}
 
 				if (jsonobject.has("players"))
 				{
-					serverstatusresponse.func_151319_a((ServerStatusResponse.PlayerCountData)p_151314_3_.deserialize(jsonobject.get("players"), ServerStatusResponse.PlayerCountData.class));
+					serverstatusresponse.func_151319_a((ServerStatusResponse.PlayerCountData)p_deserialize_3_.deserialize(jsonobject.get("players"), ServerStatusResponse.PlayerCountData.class));
 				}
 
 				if (jsonobject.has("version"))
 				{
-					serverstatusresponse.func_151321_a((ServerStatusResponse.MinecraftProtocolVersionIdentifier)p_151314_3_.deserialize(jsonobject.get("version"), ServerStatusResponse.MinecraftProtocolVersionIdentifier.class));
+					serverstatusresponse.func_151321_a((ServerStatusResponse.MinecraftProtocolVersionIdentifier)p_deserialize_3_.deserialize(jsonobject.get("version"), ServerStatusResponse.MinecraftProtocolVersionIdentifier.class));
 				}
 
 				if (jsonobject.has("favicon"))
@@ -236,37 +239,37 @@ public class ServerStatusResponse
 				return serverstatusresponse;
 			}
 
-			public JsonElement serialize(ServerStatusResponse p_151313_1_, Type p_151313_2_, JsonSerializationContext p_151313_3_)
+			public JsonElement serialize(ServerStatusResponse p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
 			{
 				JsonObject jsonobject = new JsonObject();
 
-				if (p_151313_1_.func_151317_a() != null)
+				if (p_serialize_1_.func_151317_a() != null)
 				{
-					jsonobject.add("description", p_151313_3_.serialize(p_151313_1_.func_151317_a()));
+					jsonobject.add("description", p_serialize_3_.serialize(p_serialize_1_.func_151317_a()));
 				}
 
-				if (p_151313_1_.func_151318_b() != null)
+				if (p_serialize_1_.func_151318_b() != null)
 				{
-					jsonobject.add("players", p_151313_3_.serialize(p_151313_1_.func_151318_b()));
+					jsonobject.add("players", p_serialize_3_.serialize(p_serialize_1_.func_151318_b()));
 				}
 
-				if (p_151313_1_.func_151322_c() != null)
+				if (p_serialize_1_.func_151322_c() != null)
 				{
-					jsonobject.add("version", p_151313_3_.serialize(p_151313_1_.func_151322_c()));
+					jsonobject.add("version", p_serialize_3_.serialize(p_serialize_1_.func_151322_c()));
 				}
 
-				if (p_151313_1_.func_151316_d() != null)
+				if (p_serialize_1_.func_151316_d() != null)
 				{
-					jsonobject.addProperty("favicon", p_151313_1_.func_151316_d());
+					jsonobject.addProperty("favicon", p_serialize_1_.func_151316_d());
 				}
 
 				FMLNetworkHandler.enhanceStatusQuery(jsonobject);
 				return jsonobject;
 			}
 
-			public JsonElement serialize(Object par1Obj, Type par2Type, JsonSerializationContext par3JsonSerializationContext)
+			public JsonElement serialize(Object p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
 			{
-				return this.serialize((ServerStatusResponse)par1Obj, par2Type, par3JsonSerializationContext);
+				return this.serialize((ServerStatusResponse)p_serialize_1_, p_serialize_2_, p_serialize_3_);
 			}
 		}
 }

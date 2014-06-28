@@ -30,50 +30,50 @@ public abstract class EntityFireball extends Entity
 	public double accelerationZ;
 	private static final String __OBFID = "CL_00001717";
 
-	public EntityFireball(World par1World)
+	public EntityFireball(World p_i1759_1_)
 	{
-		super(par1World);
+		super(p_i1759_1_);
 		this.setSize(1.0F, 1.0F);
 	}
 
 	protected void entityInit() {}
 
 	@SideOnly(Side.CLIENT)
-	public boolean isInRangeToRenderDist(double par1)
+	public boolean isInRangeToRenderDist(double p_70112_1_)
 	{
 		double d1 = this.boundingBox.getAverageEdgeLength() * 4.0D;
 		d1 *= 64.0D;
-		return par1 < d1 * d1;
+		return p_70112_1_ < d1 * d1;
 	}
 
-	public EntityFireball(World par1World, double par2, double par4, double par6, double par8, double par10, double par12)
+	public EntityFireball(World p_i1760_1_, double p_i1760_2_, double p_i1760_4_, double p_i1760_6_, double p_i1760_8_, double p_i1760_10_, double p_i1760_12_)
 	{
-		super(par1World);
+		super(p_i1760_1_);
 		this.setSize(1.0F, 1.0F);
-		this.setLocationAndAngles(par2, par4, par6, this.rotationYaw, this.rotationPitch);
-		this.setPosition(par2, par4, par6);
-		double d6 = (double)MathHelper.sqrt_double(par8 * par8 + par10 * par10 + par12 * par12);
-		this.accelerationX = par8 / d6 * 0.1D;
-		this.accelerationY = par10 / d6 * 0.1D;
-		this.accelerationZ = par12 / d6 * 0.1D;
+		this.setLocationAndAngles(p_i1760_2_, p_i1760_4_, p_i1760_6_, this.rotationYaw, this.rotationPitch);
+		this.setPosition(p_i1760_2_, p_i1760_4_, p_i1760_6_);
+		double d6 = (double)MathHelper.sqrt_double(p_i1760_8_ * p_i1760_8_ + p_i1760_10_ * p_i1760_10_ + p_i1760_12_ * p_i1760_12_);
+		this.accelerationX = p_i1760_8_ / d6 * 0.1D;
+		this.accelerationY = p_i1760_10_ / d6 * 0.1D;
+		this.accelerationZ = p_i1760_12_ / d6 * 0.1D;
 	}
 
-	public EntityFireball(World par1World, EntityLivingBase par2EntityLivingBase, double par3, double par5, double par7)
+	public EntityFireball(World p_i1761_1_, EntityLivingBase p_i1761_2_, double p_i1761_3_, double p_i1761_5_, double p_i1761_7_)
 	{
-		super(par1World);
-		this.shootingEntity = par2EntityLivingBase;
+		super(p_i1761_1_);
+		this.shootingEntity = p_i1761_2_;
 		this.setSize(1.0F, 1.0F);
-		this.setLocationAndAngles(par2EntityLivingBase.posX, par2EntityLivingBase.posY, par2EntityLivingBase.posZ, par2EntityLivingBase.rotationYaw, par2EntityLivingBase.rotationPitch);
+		this.setLocationAndAngles(p_i1761_2_.posX, p_i1761_2_.posY, p_i1761_2_.posZ, p_i1761_2_.rotationYaw, p_i1761_2_.rotationPitch);
 		this.setPosition(this.posX, this.posY, this.posZ);
 		this.yOffset = 0.0F;
 		this.motionX = this.motionY = this.motionZ = 0.0D;
-		par3 += this.rand.nextGaussian() * 0.4D;
-		par5 += this.rand.nextGaussian() * 0.4D;
-		par7 += this.rand.nextGaussian() * 0.4D;
-		double d3 = (double)MathHelper.sqrt_double(par3 * par3 + par5 * par5 + par7 * par7);
-		this.accelerationX = par3 / d3 * 0.1D;
-		this.accelerationY = par5 / d3 * 0.1D;
-		this.accelerationZ = par7 / d3 * 0.1D;
+		p_i1761_3_ += this.rand.nextGaussian() * 0.4D;
+		p_i1761_5_ += this.rand.nextGaussian() * 0.4D;
+		p_i1761_7_ += this.rand.nextGaussian() * 0.4D;
+		double d3 = (double)MathHelper.sqrt_double(p_i1761_3_ * p_i1761_3_ + p_i1761_5_ * p_i1761_5_ + p_i1761_7_ * p_i1761_7_);
+		this.accelerationX = p_i1761_3_ / d3 * 0.1D;
+		this.accelerationY = p_i1761_5_ / d3 * 0.1D;
+		this.accelerationZ = p_i1761_7_ / d3 * 0.1D;
 	}
 
 	public void onUpdate()
@@ -113,15 +113,15 @@ public abstract class EntityFireball extends Entity
 				++this.ticksInAir;
 			}
 
-			Vec3 vec3 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
-			Vec3 vec31 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+			Vec3 vec3 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+			Vec3 vec31 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 			MovingObjectPosition movingobjectposition = this.worldObj.rayTraceBlocks(vec3, vec31);
-			vec3 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
-			vec31 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+			vec3 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+			vec31 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
 			if (movingobjectposition != null)
 			{
-				vec31 = this.worldObj.getWorldVec3Pool().getVecFromPool(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
+				vec31 = Vec3.createVectorHelper(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
 			}
 
 			Entity entity = null;
@@ -218,29 +218,29 @@ public abstract class EntityFireball extends Entity
 		return 0.95F;
 	}
 
-	protected abstract void onImpact(MovingObjectPosition var1);
+	protected abstract void onImpact(MovingObjectPosition p_70227_1_);
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
-		par1NBTTagCompound.setShort("xTile", (short)this.field_145795_e);
-		par1NBTTagCompound.setShort("yTile", (short)this.field_145793_f);
-		par1NBTTagCompound.setShort("zTile", (short)this.field_145794_g);
-		par1NBTTagCompound.setByte("inTile", (byte)Block.getIdFromBlock(this.field_145796_h));
-		par1NBTTagCompound.setByte("inGround", (byte)(this.inGround ? 1 : 0));
-		par1NBTTagCompound.setTag("direction", this.newDoubleNBTList(new double[] {this.motionX, this.motionY, this.motionZ}));
+		p_70014_1_.setShort("xTile", (short)this.field_145795_e);
+		p_70014_1_.setShort("yTile", (short)this.field_145793_f);
+		p_70014_1_.setShort("zTile", (short)this.field_145794_g);
+		p_70014_1_.setByte("inTile", (byte)Block.getIdFromBlock(this.field_145796_h));
+		p_70014_1_.setByte("inGround", (byte)(this.inGround ? 1 : 0));
+		p_70014_1_.setTag("direction", this.newDoubleNBTList(new double[] {this.motionX, this.motionY, this.motionZ}));
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		this.field_145795_e = par1NBTTagCompound.getShort("xTile");
-		this.field_145793_f = par1NBTTagCompound.getShort("yTile");
-		this.field_145794_g = par1NBTTagCompound.getShort("zTile");
-		this.field_145796_h = Block.getBlockById(par1NBTTagCompound.getByte("inTile") & 255);
-		this.inGround = par1NBTTagCompound.getByte("inGround") == 1;
+		this.field_145795_e = p_70037_1_.getShort("xTile");
+		this.field_145793_f = p_70037_1_.getShort("yTile");
+		this.field_145794_g = p_70037_1_.getShort("zTile");
+		this.field_145796_h = Block.getBlockById(p_70037_1_.getByte("inTile") & 255);
+		this.inGround = p_70037_1_.getByte("inGround") == 1;
 
-		if (par1NBTTagCompound.hasKey("direction", 9))
+		if (p_70037_1_.hasKey("direction", 9))
 		{
-			NBTTagList nbttaglist = par1NBTTagCompound.getTagList("direction", 6);
+			NBTTagList nbttaglist = p_70037_1_.getTagList("direction", 6);
 			this.motionX = nbttaglist.func_150309_d(0);
 			this.motionY = nbttaglist.func_150309_d(1);
 			this.motionZ = nbttaglist.func_150309_d(2);
@@ -261,7 +261,7 @@ public abstract class EntityFireball extends Entity
 		return 1.0F;
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		if (this.isEntityInvulnerable())
 		{
@@ -271,9 +271,9 @@ public abstract class EntityFireball extends Entity
 		{
 			this.setBeenAttacked();
 
-			if (par1DamageSource.getEntity() != null)
+			if (p_70097_1_.getEntity() != null)
 			{
-				Vec3 vec3 = par1DamageSource.getEntity().getLookVec();
+				Vec3 vec3 = p_70097_1_.getEntity().getLookVec();
 
 				if (vec3 != null)
 				{
@@ -285,9 +285,9 @@ public abstract class EntityFireball extends Entity
 					this.accelerationZ = this.motionZ * 0.1D;
 				}
 
-				if (par1DamageSource.getEntity() instanceof EntityLivingBase)
+				if (p_70097_1_.getEntity() instanceof EntityLivingBase)
 				{
-					this.shootingEntity = (EntityLivingBase)par1DamageSource.getEntity();
+					this.shootingEntity = (EntityLivingBase)p_70097_1_.getEntity();
 				}
 
 				return true;
@@ -305,13 +305,13 @@ public abstract class EntityFireball extends Entity
 		return 0.0F;
 	}
 
-	public float getBrightness(float par1)
+	public float getBrightness(float p_70013_1_)
 	{
 		return 1.0F;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getBrightnessForRender(float par1)
+	public int getBrightnessForRender(float p_70070_1_)
 	{
 		return 15728880;
 	}

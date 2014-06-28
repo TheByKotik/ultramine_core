@@ -16,10 +16,10 @@ public class GuiFurnace extends GuiContainer
 	private TileEntityFurnace tileFurnace;
 	private static final String __OBFID = "CL_00000758";
 
-	public GuiFurnace(InventoryPlayer par1InventoryPlayer, TileEntityFurnace par2TileEntityFurnace)
+	public GuiFurnace(InventoryPlayer p_i1091_1_, TileEntityFurnace p_i1091_2_)
 	{
-		super(new ContainerFurnace(par1InventoryPlayer, par2TileEntityFurnace));
-		this.tileFurnace = par2TileEntityFurnace;
+		super(new ContainerFurnace(p_i1091_1_, p_i1091_2_));
+		this.tileFurnace = p_i1091_2_;
 	}
 
 	protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_)
@@ -36,15 +36,13 @@ public class GuiFurnace extends GuiContainer
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
-		int i1;
 
 		if (this.tileFurnace.isBurning())
 		{
-			i1 = this.tileFurnace.getBurnTimeRemainingScaled(12);
-			this.drawTexturedModalRect(k + 56, l + 36 + 12 - i1, 176, 12 - i1, 14, i1 + 2);
+			int i1 = this.tileFurnace.getBurnTimeRemainingScaled(13);
+			this.drawTexturedModalRect(k + 56, l + 36 + 12 - i1, 176, 12 - i1, 14, i1 + 1);
+			i1 = this.tileFurnace.getCookProgressScaled(24);
+			this.drawTexturedModalRect(k + 79, l + 34, 176, 14, i1 + 1, 16);
 		}
-
-		i1 = this.tileFurnace.getCookProgressScaled(24);
-		this.drawTexturedModalRect(k + 79, l + 34, 176, 14, i1 + 1, 16);
 	}
 }

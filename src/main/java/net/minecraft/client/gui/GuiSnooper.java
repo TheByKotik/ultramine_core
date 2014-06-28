@@ -23,10 +23,10 @@ public class GuiSnooper extends GuiScreen
 	private GuiButton field_146605_t;
 	private static final String __OBFID = "CL_00000714";
 
-	public GuiSnooper(GuiScreen par1GuiScreen, GameSettings par2GameSettings)
+	public GuiSnooper(GuiScreen p_i1061_1_, GameSettings p_i1061_2_)
 	{
-		this.field_146608_a = par1GuiScreen;
-		this.field_146603_f = par2GameSettings;
+		this.field_146608_a = p_i1061_1_;
+		this.field_146603_f = p_i1061_2_;
 	}
 
 	public void initGui()
@@ -92,10 +92,10 @@ public class GuiSnooper extends GuiScreen
 		}
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		this.drawDefaultBackground();
-		this.field_146606_s.drawScreen(par1, par2, par3);
+		this.field_146606_s.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 		this.drawCenteredString(this.fontRendererObj, this.field_146610_i, this.width / 2, 8, 16777215);
 		int k = 22;
 		String[] astring = this.field_146607_r;
@@ -108,7 +108,7 @@ public class GuiSnooper extends GuiScreen
 			k += this.fontRendererObj.FONT_HEIGHT;
 		}
 
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 
 	@SideOnly(Side.CLIENT)

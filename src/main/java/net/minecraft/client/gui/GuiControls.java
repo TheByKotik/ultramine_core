@@ -2,6 +2,7 @@ package net.minecraft.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
@@ -14,14 +15,15 @@ public class GuiControls extends GuiScreen
 	protected String field_146495_a = "Controls";
 	private GameSettings options;
 	public KeyBinding buttonId = null;
+	public long field_152177_g;
 	private GuiKeyBindingList keyBindingList;
 	private GuiButton field_146493_s;
 	private static final String __OBFID = "CL_00000736";
 
-	public GuiControls(GuiScreen par1GuiScreen, GameSettings par2GameSettings)
+	public GuiControls(GuiScreen p_i1027_1_, GameSettings p_i1027_2_)
 	{
-		this.parentScreen = par1GuiScreen;
-		this.options = par2GameSettings;
+		this.parentScreen = p_i1027_1_;
+		this.options = p_i1027_2_;
 	}
 
 	public void initGui()
@@ -77,17 +79,17 @@ public class GuiControls extends GuiScreen
 		}
 	}
 
-	protected void mouseClicked(int par1, int par2, int par3)
+	protected void mouseClicked(int p_73864_1_, int p_73864_2_, int p_73864_3_)
 	{
 		if (this.buttonId != null)
 		{
-			this.options.setOptionKeyBinding(this.buttonId, -100 + par3);
+			this.options.setOptionKeyBinding(this.buttonId, -100 + p_73864_3_);
 			this.buttonId = null;
 			KeyBinding.resetKeyBindingArrayAndHash();
 		}
-		else if (par3 != 0 || !this.keyBindingList.func_148179_a(par1, par2, par3))
+		else if (p_73864_3_ != 0 || !this.keyBindingList.func_148179_a(p_73864_1_, p_73864_2_, p_73864_3_))
 		{
-			super.mouseClicked(par1, par2, par3);
+			super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
 		}
 	}
 
@@ -99,32 +101,33 @@ public class GuiControls extends GuiScreen
 		}
 	}
 
-	protected void keyTyped(char par1, int par2)
+	protected void keyTyped(char p_73869_1_, int p_73869_2_)
 	{
 		if (this.buttonId != null)
 		{
-			if (par2 == 1)
+			if (p_73869_2_ == 1)
 			{
 				this.options.setOptionKeyBinding(this.buttonId, 0);
 			}
 			else
 			{
-				this.options.setOptionKeyBinding(this.buttonId, par2);
+				this.options.setOptionKeyBinding(this.buttonId, p_73869_2_);
 			}
 
 			this.buttonId = null;
+			this.field_152177_g = Minecraft.getSystemTime();
 			KeyBinding.resetKeyBindingArrayAndHash();
 		}
 		else
 		{
-			super.keyTyped(par1, par2);
+			super.keyTyped(p_73869_1_, p_73869_2_);
 		}
 	}
 
-	public void drawScreen(int par1, int par2, float par3)
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		this.drawDefaultBackground();
-		this.keyBindingList.drawScreen(par1, par2, par3);
+		this.keyBindingList.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 		this.drawCenteredString(this.fontRendererObj, this.field_146495_a, this.width / 2, 8, 16777215);
 		boolean flag = true;
 		KeyBinding[] akeybinding = this.options.keyBindings;
@@ -142,6 +145,6 @@ public class GuiControls extends GuiScreen
 		}
 
 		this.field_146493_s.enabled = !flag;
-		super.drawScreen(par1, par2, par3);
+		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
 	}
 }

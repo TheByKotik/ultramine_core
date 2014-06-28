@@ -10,18 +10,18 @@ public class StringUtils
 	private static final String __OBFID = "CL_00001501";
 
 	@SideOnly(Side.CLIENT)
-	public static String ticksToElapsedTime(int par0)
+	public static String ticksToElapsedTime(int p_76337_0_)
 	{
-		int j = par0 / 20;
+		int j = p_76337_0_ / 20;
 		int k = j / 60;
 		j %= 60;
 		return j < 10 ? k + ":0" + j : k + ":" + j;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static String stripControlCodes(String par0Str)
+	public static String stripControlCodes(String p_76338_0_)
 	{
-		return patternControlCode.matcher(par0Str).replaceAll("");
+		return patternControlCode.matcher(p_76338_0_).replaceAll("");
 	}
 
 	public static boolean isNullOrEmpty(String p_151246_0_)

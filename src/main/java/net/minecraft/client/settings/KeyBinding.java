@@ -24,11 +24,11 @@ public class KeyBinding implements Comparable
 	private int pressTime;
 	private static final String __OBFID = "CL_00000628";
 
-	public static void onTick(int par0)
+	public static void onTick(int p_74507_0_)
 	{
-		if (par0 != 0)
+		if (p_74507_0_ != 0)
 		{
-			KeyBinding keybinding = (KeyBinding)hash.lookup(par0);
+			KeyBinding keybinding = (KeyBinding)hash.lookup(p_74507_0_);
 
 			if (keybinding != null)
 			{
@@ -37,15 +37,15 @@ public class KeyBinding implements Comparable
 		}
 	}
 
-	public static void setKeyBindState(int par0, boolean par1)
+	public static void setKeyBindState(int p_74510_0_, boolean p_74510_1_)
 	{
-		if (par0 != 0)
+		if (p_74510_0_ != 0)
 		{
-			KeyBinding keybinding = (KeyBinding)hash.lookup(par0);
+			KeyBinding keybinding = (KeyBinding)hash.lookup(p_74510_0_);
 
 			if (keybinding != null)
 			{
-				keybinding.pressed = par1;
+				keybinding.pressed = p_74510_1_;
 			}
 		}
 	}
@@ -138,20 +138,20 @@ public class KeyBinding implements Comparable
 		this.keyCode = p_151462_1_;
 	}
 
-	public int compareTo(KeyBinding p_151465_1_)
+	public int compareTo(KeyBinding p_compareTo_1_)
 	{
-		int i = I18n.format(this.keyCategory, new Object[0]).compareTo(I18n.format(p_151465_1_.keyCategory, new Object[0]));
+		int i = I18n.format(this.keyCategory, new Object[0]).compareTo(I18n.format(p_compareTo_1_.keyCategory, new Object[0]));
 
 		if (i == 0)
 		{
-			i = I18n.format(this.keyDescription, new Object[0]).compareTo(I18n.format(p_151465_1_.keyDescription, new Object[0]));
+			i = I18n.format(this.keyDescription, new Object[0]).compareTo(I18n.format(p_compareTo_1_.keyDescription, new Object[0]));
 		}
 
 		return i;
 	}
 
-	public int compareTo(Object par1Obj)
+	public int compareTo(Object p_compareTo_1_)
 	{
-		return this.compareTo((KeyBinding)par1Obj);
+		return this.compareTo((KeyBinding)p_compareTo_1_);
 	}
 }

@@ -7,13 +7,13 @@ public class ItemAnvilBlock extends ItemMultiTexture
 {
 	private static final String __OBFID = "CL_00001764";
 
-	public ItemAnvilBlock(Block par1Block)
+	public ItemAnvilBlock(Block p_i1826_1_)
 	{
-		super(par1Block, par1Block, BlockAnvil.anvilDamageNames);
+		super(p_i1826_1_, p_i1826_1_, BlockAnvil.anvilDamageNames);
 	}
 
-	public int getMetadata(int par1)
+	public int getMetadata(int p_77647_1_)
 	{
-		return par1 << 2;
+		return p_77647_1_ << 2;
 	}
 }

@@ -13,10 +13,10 @@ public class ShapelessRecipes implements IRecipe
 	public final List recipeItems;
 	private static final String __OBFID = "CL_00000094";
 
-	public ShapelessRecipes(ItemStack par1ItemStack, List par2List)
+	public ShapelessRecipes(ItemStack p_i1918_1_, List p_i1918_2_)
 	{
-		this.recipeOutput = par1ItemStack;
-		this.recipeItems = par2List;
+		this.recipeOutput = p_i1918_1_;
+		this.recipeItems = p_i1918_2_;
 	}
 
 	public ItemStack getRecipeOutput()
@@ -24,7 +24,7 @@ public class ShapelessRecipes implements IRecipe
 		return this.recipeOutput;
 	}
 
-	public boolean matches(InventoryCrafting par1InventoryCrafting, World par2World)
+	public boolean matches(InventoryCrafting p_77569_1_, World p_77569_2_)
 	{
 		ArrayList arraylist = new ArrayList(this.recipeItems);
 
@@ -32,7 +32,7 @@ public class ShapelessRecipes implements IRecipe
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				ItemStack itemstack = par1InventoryCrafting.getStackInRowAndColumn(j, i);
+				ItemStack itemstack = p_77569_1_.getStackInRowAndColumn(j, i);
 
 				if (itemstack != null)
 				{
@@ -62,7 +62,7 @@ public class ShapelessRecipes implements IRecipe
 		return arraylist.isEmpty();
 	}
 
-	public ItemStack getCraftingResult(InventoryCrafting par1InventoryCrafting)
+	public ItemStack getCraftingResult(InventoryCrafting p_77572_1_)
 	{
 		return this.recipeOutput.copy();
 	}

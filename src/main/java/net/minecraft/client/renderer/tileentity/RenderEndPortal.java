@@ -22,7 +22,7 @@ public class RenderEndPortal extends TileEntitySpecialRenderer
 	FloatBuffer field_147528_b = GLAllocation.createDirectFloatBuffer(16);
 	private static final String __OBFID = "CL_00000972";
 
-	public void renderTileEntityAt(TileEntityEndPortal p_147524_1_, double p_147524_2_, double p_147524_4_, double p_147524_6_, float p_147524_8_)
+	public void renderTileEntityAt(TileEntityEndPortal p_147500_1_, double p_147500_2_, double p_147500_4_, double p_147500_6_, float p_147500_8_)
 	{
 		float f1 = (float)this.field_147501_a.field_147560_j;
 		float f2 = (float)this.field_147501_a.field_147561_k;
@@ -56,11 +56,11 @@ public class RenderEndPortal extends TileEntitySpecialRenderer
 				f6 = 0.5F;
 			}
 
-			float f8 = (float)(-(p_147524_4_ + (double)f4));
+			float f8 = (float)(-(p_147500_4_ + (double)f4));
 			float f9 = f8 + ActiveRenderInfo.objectY;
 			float f10 = f8 + f5 + ActiveRenderInfo.objectY;
 			float f11 = f9 / f10;
-			f11 += (float)(p_147524_4_ + (double)f4);
+			f11 += (float)(p_147500_4_ + (double)f4);
 			GL11.glTranslatef(f1, f11, f3);
 			GL11.glTexGeni(GL11.GL_S, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
 			GL11.glTexGeni(GL11.GL_T, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
@@ -100,10 +100,10 @@ public class RenderEndPortal extends TileEntitySpecialRenderer
 			}
 
 			tessellator.setColorRGBA_F(f11 * f7, f12 * f7, f13 * f7, 1.0F);
-			tessellator.addVertex(p_147524_2_, p_147524_4_ + (double)f4, p_147524_6_);
-			tessellator.addVertex(p_147524_2_, p_147524_4_ + (double)f4, p_147524_6_ + 1.0D);
-			tessellator.addVertex(p_147524_2_ + 1.0D, p_147524_4_ + (double)f4, p_147524_6_ + 1.0D);
-			tessellator.addVertex(p_147524_2_ + 1.0D, p_147524_4_ + (double)f4, p_147524_6_);
+			tessellator.addVertex(p_147500_2_, p_147500_4_ + (double)f4, p_147500_6_);
+			tessellator.addVertex(p_147500_2_, p_147500_4_ + (double)f4, p_147500_6_ + 1.0D);
+			tessellator.addVertex(p_147500_2_ + 1.0D, p_147500_4_ + (double)f4, p_147500_6_ + 1.0D);
+			tessellator.addVertex(p_147500_2_ + 1.0D, p_147500_4_ + (double)f4, p_147500_6_);
 			tessellator.draw();
 			GL11.glPopMatrix();
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);

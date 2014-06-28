@@ -20,43 +20,43 @@ public class CommandWeather extends CommandBase
 		return 2;
 	}
 
-	public String getCommandUsage(ICommandSender par1ICommandSender)
+	public String getCommandUsage(ICommandSender p_71518_1_)
 	{
 		return "commands.weather.usage";
 	}
 
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_)
 	{
-		if (par2ArrayOfStr.length >= 1 && par2ArrayOfStr.length <= 2)
+		if (p_71515_2_.length >= 1 && p_71515_2_.length <= 2)
 		{
 			int i = (300 + (new Random()).nextInt(600)) * 20;
 
-			if (par2ArrayOfStr.length >= 2)
+			if (p_71515_2_.length >= 2)
 			{
-				i = parseIntBounded(par1ICommandSender, par2ArrayOfStr[1], 1, 1000000) * 20;
+				i = parseIntBounded(p_71515_1_, p_71515_2_[1], 1, 1000000) * 20;
 			}
 
 			WorldServer worldserver = MinecraftServer.getServer().worldServers[0];
 			WorldInfo worldinfo = worldserver.getWorldInfo();
 
-			if ("clear".equalsIgnoreCase(par2ArrayOfStr[0]))
+			if ("clear".equalsIgnoreCase(p_71515_2_[0]))
 			{
 				worldinfo.setRainTime(0);
 				worldinfo.setThunderTime(0);
 				worldinfo.setRaining(false);
 				worldinfo.setThundering(false);
-				notifyAdmins(par1ICommandSender, "commands.weather.clear", new Object[0]);
+				func_152373_a(p_71515_1_, this, "commands.weather.clear", new Object[0]);
 			}
-			else if ("rain".equalsIgnoreCase(par2ArrayOfStr[0]))
+			else if ("rain".equalsIgnoreCase(p_71515_2_[0]))
 			{
 				worldinfo.setRainTime(i);
 				worldinfo.setRaining(true);
 				worldinfo.setThundering(false);
-				notifyAdmins(par1ICommandSender, "commands.weather.rain", new Object[0]);
+				func_152373_a(p_71515_1_, this, "commands.weather.rain", new Object[0]);
 			}
 			else
 			{
-				if (!"thunder".equalsIgnoreCase(par2ArrayOfStr[0]))
+				if (!"thunder".equalsIgnoreCase(p_71515_2_[0]))
 				{
 					throw new WrongUsageException("commands.weather.usage", new Object[0]);
 				}
@@ -65,7 +65,7 @@ public class CommandWeather extends CommandBase
 				worldinfo.setThunderTime(i);
 				worldinfo.setRaining(true);
 				worldinfo.setThundering(true);
-				notifyAdmins(par1ICommandSender, "commands.weather.thunder", new Object[0]);
+				func_152373_a(p_71515_1_, this, "commands.weather.thunder", new Object[0]);
 			}
 		}
 		else
@@ -74,8 +74,8 @@ public class CommandWeather extends CommandBase
 		}
 	}
 
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
-		return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"clear", "rain", "thunder"}): null;
+		return p_71516_2_.length == 1 ? getListOfStringsMatchingLastWord(p_71516_2_, new String[] {"clear", "rain", "thunder"}): null;
 	}
 }

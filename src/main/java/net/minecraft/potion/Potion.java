@@ -62,13 +62,13 @@ public class Potion
 	private boolean usable;
 	private static final String __OBFID = "CL_00001528";
 
-	protected Potion(int par1, boolean par2, int par3)
+	protected Potion(int p_i1573_1_, boolean p_i1573_2_, int p_i1573_3_)
 	{
-		this.id = par1;
-		potionTypes[par1] = this;
-		this.isBadEffect = par2;
+		this.id = p_i1573_1_;
+		potionTypes[p_i1573_1_] = this;
+		this.isBadEffect = p_i1573_2_;
 
-		if (par2)
+		if (p_i1573_2_)
 		{
 			this.effectiveness = 0.5D;
 		}
@@ -77,12 +77,12 @@ public class Potion
 			this.effectiveness = 1.0D;
 		}
 
-		this.liquidColor = par3;
+		this.liquidColor = p_i1573_3_;
 	}
 
-	protected Potion setIconIndex(int par1, int par2)
+	protected Potion setIconIndex(int p_76399_1_, int p_76399_2_)
 	{
-		this.statusIconIndex = par1 + par2 * 8;
+		this.statusIconIndex = p_76399_1_ + p_76399_2_ * 8;
 		return this;
 	}
 
@@ -91,74 +91,74 @@ public class Potion
 		return this.id;
 	}
 
-	public void performEffect(EntityLivingBase par1EntityLivingBase, int par2)
+	public void performEffect(EntityLivingBase p_76394_1_, int p_76394_2_)
 	{
 		if (this.id == regeneration.id)
 		{
-			if (par1EntityLivingBase.getHealth() < par1EntityLivingBase.getMaxHealth())
+			if (p_76394_1_.getHealth() < p_76394_1_.getMaxHealth())
 			{
-				par1EntityLivingBase.heal(1.0F);
+				p_76394_1_.heal(1.0F);
 			}
 		}
 		else if (this.id == poison.id)
 		{
-			if (par1EntityLivingBase.getHealth() > 1.0F)
+			if (p_76394_1_.getHealth() > 1.0F)
 			{
-				par1EntityLivingBase.attackEntityFrom(DamageSource.magic, 1.0F);
+				p_76394_1_.attackEntityFrom(DamageSource.magic, 1.0F);
 			}
 		}
 		else if (this.id == wither.id)
 		{
-			par1EntityLivingBase.attackEntityFrom(DamageSource.wither, 1.0F);
+			p_76394_1_.attackEntityFrom(DamageSource.wither, 1.0F);
 		}
-		else if (this.id == hunger.id && par1EntityLivingBase instanceof EntityPlayer)
+		else if (this.id == hunger.id && p_76394_1_ instanceof EntityPlayer)
 		{
-			((EntityPlayer)par1EntityLivingBase).addExhaustion(0.025F * (float)(par2 + 1));
+			((EntityPlayer)p_76394_1_).addExhaustion(0.025F * (float)(p_76394_2_ + 1));
 		}
-		else if (this.id == field_76443_y.id && par1EntityLivingBase instanceof EntityPlayer)
+		else if (this.id == field_76443_y.id && p_76394_1_ instanceof EntityPlayer)
 		{
-			if (!par1EntityLivingBase.worldObj.isRemote)
+			if (!p_76394_1_.worldObj.isRemote)
 			{
-				((EntityPlayer)par1EntityLivingBase).getFoodStats().addStats(par2 + 1, 1.0F);
+				((EntityPlayer)p_76394_1_).getFoodStats().addStats(p_76394_2_ + 1, 1.0F);
 			}
 		}
-		else if ((this.id != heal.id || par1EntityLivingBase.isEntityUndead()) && (this.id != harm.id || !par1EntityLivingBase.isEntityUndead()))
+		else if ((this.id != heal.id || p_76394_1_.isEntityUndead()) && (this.id != harm.id || !p_76394_1_.isEntityUndead()))
 		{
-			if (this.id == harm.id && !par1EntityLivingBase.isEntityUndead() || this.id == heal.id && par1EntityLivingBase.isEntityUndead())
+			if (this.id == harm.id && !p_76394_1_.isEntityUndead() || this.id == heal.id && p_76394_1_.isEntityUndead())
 			{
-				par1EntityLivingBase.attackEntityFrom(DamageSource.magic, (float)(6 << par2));
+				p_76394_1_.attackEntityFrom(DamageSource.magic, (float)(6 << p_76394_2_));
 			}
 		}
 		else
 		{
-			par1EntityLivingBase.heal((float)Math.max(4 << par2, 0));
+			p_76394_1_.heal((float)Math.max(4 << p_76394_2_, 0));
 		}
 	}
 
-	public void affectEntity(EntityLivingBase par1EntityLivingBase, EntityLivingBase par2EntityLivingBase, int par3, double par4)
+	public void affectEntity(EntityLivingBase p_76402_1_, EntityLivingBase p_76402_2_, int p_76402_3_, double p_76402_4_)
 	{
 		int j;
 
-		if ((this.id != heal.id || par2EntityLivingBase.isEntityUndead()) && (this.id != harm.id || !par2EntityLivingBase.isEntityUndead()))
+		if ((this.id != heal.id || p_76402_2_.isEntityUndead()) && (this.id != harm.id || !p_76402_2_.isEntityUndead()))
 		{
-			if (this.id == harm.id && !par2EntityLivingBase.isEntityUndead() || this.id == heal.id && par2EntityLivingBase.isEntityUndead())
+			if (this.id == harm.id && !p_76402_2_.isEntityUndead() || this.id == heal.id && p_76402_2_.isEntityUndead())
 			{
-				j = (int)(par4 * (double)(6 << par3) + 0.5D);
+				j = (int)(p_76402_4_ * (double)(6 << p_76402_3_) + 0.5D);
 
-				if (par1EntityLivingBase == null)
+				if (p_76402_1_ == null)
 				{
-					par2EntityLivingBase.attackEntityFrom(DamageSource.magic, (float)j);
+					p_76402_2_.attackEntityFrom(DamageSource.magic, (float)j);
 				}
 				else
 				{
-					par2EntityLivingBase.attackEntityFrom(DamageSource.causeIndirectMagicDamage(par2EntityLivingBase, par1EntityLivingBase), (float)j);
+					p_76402_2_.attackEntityFrom(DamageSource.causeIndirectMagicDamage(p_76402_2_, p_76402_1_), (float)j);
 				}
 			}
 		}
 		else
 		{
-			j = (int)(par4 * (double)(4 << par3) + 0.5D);
-			par2EntityLivingBase.heal((float)j);
+			j = (int)(p_76402_4_ * (double)(4 << p_76402_3_) + 0.5D);
+			p_76402_2_.heal((float)j);
 		}
 	}
 
@@ -167,24 +167,24 @@ public class Potion
 		return false;
 	}
 
-	public boolean isReady(int par1, int par2)
+	public boolean isReady(int p_76397_1_, int p_76397_2_)
 	{
 		int k;
 
 		if (this.id == regeneration.id)
 		{
-			k = 50 >> par2;
-			return k > 0 ? par1 % k == 0 : true;
+			k = 50 >> p_76397_2_;
+			return k > 0 ? p_76397_1_ % k == 0 : true;
 		}
 		else if (this.id == poison.id)
 		{
-			k = 25 >> par2;
-			return k > 0 ? par1 % k == 0 : true;
+			k = 25 >> p_76397_2_;
+			return k > 0 ? p_76397_1_ % k == 0 : true;
 		}
 		else if (this.id == wither.id)
 		{
-			k = 40 >> par2;
-			return k > 0 ? par1 % k == 0 : true;
+			k = 40 >> p_76397_2_;
+			return k > 0 ? p_76397_1_ % k == 0 : true;
 		}
 		else
 		{
@@ -192,9 +192,9 @@ public class Potion
 		}
 	}
 
-	public Potion setPotionName(String par1Str)
+	public Potion setPotionName(String p_76390_1_)
 	{
-		this.name = par1Str;
+		this.name = p_76390_1_;
 		return this;
 	}
 
@@ -203,9 +203,9 @@ public class Potion
 		return this.name;
 	}
 
-	protected Potion setEffectiveness(double par1)
+	protected Potion setEffectiveness(double p_76404_1_)
 	{
-		this.effectiveness = par1;
+		this.effectiveness = p_76404_1_;
 		return this;
 	}
 
@@ -228,15 +228,15 @@ public class Potion
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static String getDurationString(PotionEffect par0PotionEffect)
+	public static String getDurationString(PotionEffect p_76389_0_)
 	{
-		if (par0PotionEffect.getIsPotionDurationMax())
+		if (p_76389_0_.getIsPotionDurationMax())
 		{
 			return "**:**";
 		}
 		else
 		{
-			int i = par0PotionEffect.getDuration();
+			int i = p_76389_0_.getDuration();
 			return StringUtils.ticksToElapsedTime(i);
 		}
 	}
@@ -256,21 +256,21 @@ public class Potion
 		return this.liquidColor;
 	}
 
-	public Potion func_111184_a(IAttribute par1Attribute, String par2Str, double par3, int par5)
+	public Potion func_111184_a(IAttribute p_111184_1_, String p_111184_2_, double p_111184_3_, int p_111184_5_)
 	{
-		AttributeModifier attributemodifier = new AttributeModifier(UUID.fromString(par2Str), this.getName(), par3, par5);
-		this.field_111188_I.put(par1Attribute, attributemodifier);
+		AttributeModifier attributemodifier = new AttributeModifier(UUID.fromString(p_111184_2_), this.getName(), p_111184_3_, p_111184_5_);
+		this.field_111188_I.put(p_111184_1_, attributemodifier);
 		return this;
 	}
 
-	public void removeAttributesModifiersFromEntity(EntityLivingBase par1EntityLivingBase, BaseAttributeMap par2BaseAttributeMap, int par3)
+	public void removeAttributesModifiersFromEntity(EntityLivingBase p_111187_1_, BaseAttributeMap p_111187_2_, int p_111187_3_)
 	{
 		Iterator iterator = this.field_111188_I.entrySet().iterator();
 
 		while (iterator.hasNext())
 		{
 			Entry entry = (Entry)iterator.next();
-			IAttributeInstance iattributeinstance = par2BaseAttributeMap.getAttributeInstance((IAttribute)entry.getKey());
+			IAttributeInstance iattributeinstance = p_111187_2_.getAttributeInstance((IAttribute)entry.getKey());
 
 			if (iattributeinstance != null)
 			{
@@ -285,26 +285,26 @@ public class Potion
 		return this.field_111188_I;
 	}
 
-	public void applyAttributesModifiersToEntity(EntityLivingBase par1EntityLivingBase, BaseAttributeMap par2BaseAttributeMap, int par3)
+	public void applyAttributesModifiersToEntity(EntityLivingBase p_111185_1_, BaseAttributeMap p_111185_2_, int p_111185_3_)
 	{
 		Iterator iterator = this.field_111188_I.entrySet().iterator();
 
 		while (iterator.hasNext())
 		{
 			Entry entry = (Entry)iterator.next();
-			IAttributeInstance iattributeinstance = par2BaseAttributeMap.getAttributeInstance((IAttribute)entry.getKey());
+			IAttributeInstance iattributeinstance = p_111185_2_.getAttributeInstance((IAttribute)entry.getKey());
 
 			if (iattributeinstance != null)
 			{
 				AttributeModifier attributemodifier = (AttributeModifier)entry.getValue();
 				iattributeinstance.removeModifier(attributemodifier);
-				iattributeinstance.applyModifier(new AttributeModifier(attributemodifier.getID(), this.getName() + " " + par3, this.func_111183_a(par3, attributemodifier), attributemodifier.getOperation()));
+				iattributeinstance.applyModifier(new AttributeModifier(attributemodifier.getID(), this.getName() + " " + p_111185_3_, this.func_111183_a(p_111185_3_, attributemodifier), attributemodifier.getOperation()));
 			}
 		}
 	}
 
-	public double func_111183_a(int par1, AttributeModifier par2AttributeModifier)
+	public double func_111183_a(int p_111183_1_, AttributeModifier p_111183_2_)
 	{
-		return par2AttributeModifier.getAmount() * (double)(par1 + 1);
+		return p_111183_2_.getAmount() * (double)(p_111183_1_ + 1);
 	}
 }

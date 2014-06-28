@@ -38,11 +38,11 @@ public class GuiEnchantment extends GuiContainer
 	private String field_147079_H;
 	private static final String __OBFID = "CL_00000757";
 
-	public GuiEnchantment(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5, String par6Str)
+	public GuiEnchantment(InventoryPlayer p_i1090_1_, World p_i1090_2_, int p_i1090_3_, int p_i1090_4_, int p_i1090_5_, String p_i1090_6_)
 	{
-		super(new ContainerEnchantment(par1InventoryPlayer, par2World, par3, par4, par5));
+		super(new ContainerEnchantment(p_i1090_1_, p_i1090_2_, p_i1090_3_, p_i1090_4_, p_i1090_5_));
 		this.field_147075_G = (ContainerEnchantment)this.inventorySlots;
-		this.field_147079_H = par6Str;
+		this.field_147079_H = p_i1090_6_;
 	}
 
 	protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_)
@@ -57,16 +57,16 @@ public class GuiEnchantment extends GuiContainer
 		this.func_147068_g();
 	}
 
-	protected void mouseClicked(int par1, int par2, int par3)
+	protected void mouseClicked(int p_73864_1_, int p_73864_2_, int p_73864_3_)
 	{
-		super.mouseClicked(par1, par2, par3);
+		super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
 		int l = (this.width - this.xSize) / 2;
 		int i1 = (this.height - this.ySize) / 2;
 
 		for (int j1 = 0; j1 < 3; ++j1)
 		{
-			int k1 = par1 - (l + 60);
-			int l1 = par2 - (i1 + 14 + 19 * j1);
+			int k1 = p_73864_1_ - (l + 60);
+			int l1 = p_73864_2_ - (i1 + 14 + 19 * j1);
 
 			if (k1 >= 0 && l1 >= 0 && k1 < 108 && l1 < 19 && this.field_147075_G.enchantItem(this.mc.thePlayer, j1))
 			{
@@ -86,7 +86,7 @@ public class GuiEnchantment extends GuiContainer
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glPushMatrix();
 		GL11.glLoadIdentity();
-		ScaledResolution scaledresolution = new ScaledResolution(this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
 		GL11.glViewport((scaledresolution.getScaledWidth() - 320) / 2 * scaledresolution.getScaleFactor(), (scaledresolution.getScaledHeight() - 240) / 2 * scaledresolution.getScaleFactor(), 320 * scaledresolution.getScaleFactor(), 240 * scaledresolution.getScaleFactor());
 		GL11.glTranslatef(-0.34F, 0.23F, 0.0F);
 		Project.gluPerspective(90.0F, 1.3333334F, 9.0F, 80.0F);

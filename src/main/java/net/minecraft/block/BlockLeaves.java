@@ -266,7 +266,7 @@ public abstract class BlockLeaves extends BlockLeavesBase implements IShearable
 	}
 
 	@SideOnly(Side.CLIENT)
-	public abstract IIcon getIcon(int var1, int var2);
+	public abstract IIcon getIcon(int p_149691_1_, int p_149691_2_);
 
 	@SideOnly(Side.CLIENT)
 	public void setGraphicsLevel(boolean p_150122_1_)

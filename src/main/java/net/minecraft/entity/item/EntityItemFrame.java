@@ -18,15 +18,15 @@ public class EntityItemFrame extends EntityHanging
 	private float itemDropChance = 1.0F;
 	private static final String __OBFID = "CL_00001547";
 
-	public EntityItemFrame(World par1World)
+	public EntityItemFrame(World p_i1590_1_)
 	{
-		super(par1World);
+		super(p_i1590_1_);
 	}
 
-	public EntityItemFrame(World par1World, int par2, int par3, int par4, int par5)
+	public EntityItemFrame(World p_i1591_1_, int p_i1591_2_, int p_i1591_3_, int p_i1591_4_, int p_i1591_5_)
 	{
-		super(par1World, par2, par3, par4, par5);
-		this.setDirection(par5);
+		super(p_i1591_1_, p_i1591_2_, p_i1591_3_, p_i1591_4_, p_i1591_5_);
+		this.setDirection(p_i1591_5_);
 	}
 
 	protected void entityInit()
@@ -35,7 +35,7 @@ public class EntityItemFrame extends EntityHanging
 		this.getDataWatcher().addObject(3, Byte.valueOf((byte)0));
 	}
 
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		if (this.isEntityInvulnerable())
 		{
@@ -45,7 +45,7 @@ public class EntityItemFrame extends EntityHanging
 		{
 			if (!this.worldObj.isRemote)
 			{
-				this.func_146065_b(par1DamageSource.getEntity(), false);
+				this.func_146065_b(p_70097_1_.getEntity(), false);
 				this.setDisplayedItem((ItemStack)null);
 			}
 
@@ -53,7 +53,7 @@ public class EntityItemFrame extends EntityHanging
 		}
 		else
 		{
-			return super.attackEntityFrom(par1DamageSource, par2);
+			return super.attackEntityFrom(p_70097_1_, p_70097_2_);
 		}
 	}
 
@@ -68,16 +68,16 @@ public class EntityItemFrame extends EntityHanging
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean isInRangeToRenderDist(double par1)
+	public boolean isInRangeToRenderDist(double p_70112_1_)
 	{
 		double d1 = 16.0D;
 		d1 *= 64.0D * this.renderDistanceWeight;
-		return par1 < d1 * d1;
+		return p_70112_1_ < d1 * d1;
 	}
 
-	public void onBroken(Entity par1Entity)
+	public void onBroken(Entity p_110128_1_)
 	{
-		this.func_146065_b(par1Entity, true);
+		this.func_146065_b(p_110128_1_, true);
 	}
 
 	public void func_146065_b(Entity p_146065_1_, boolean p_146065_2_)
@@ -108,17 +108,17 @@ public class EntityItemFrame extends EntityHanging
 		}
 	}
 
-	private void removeFrameFromMap(ItemStack par1ItemStack)
+	private void removeFrameFromMap(ItemStack p_110131_1_)
 	{
-		if (par1ItemStack != null)
+		if (p_110131_1_ != null)
 		{
-			if (par1ItemStack.getItem() == Items.filled_map)
+			if (p_110131_1_.getItem() == Items.filled_map)
 			{
-				MapData mapdata = ((ItemMap)par1ItemStack.getItem()).getMapData(par1ItemStack, this.worldObj);
+				MapData mapdata = ((ItemMap)p_110131_1_.getItem()).getMapData(p_110131_1_, this.worldObj);
 				mapdata.playersVisibleOnMap.remove("frame-" + this.getEntityId());
 			}
 
-			par1ItemStack.setItemFrame((EntityItemFrame)null);
+			p_110131_1_.setItemFrame((EntityItemFrame)null);
 		}
 	}
 
@@ -127,16 +127,16 @@ public class EntityItemFrame extends EntityHanging
 		return this.getDataWatcher().getWatchableObjectItemStack(2);
 	}
 
-	public void setDisplayedItem(ItemStack par1ItemStack)
+	public void setDisplayedItem(ItemStack p_82334_1_)
 	{
-		if (par1ItemStack != null)
+		if (p_82334_1_ != null)
 		{
-			par1ItemStack = par1ItemStack.copy();
-			par1ItemStack.stackSize = 1;
-			par1ItemStack.setItemFrame(this);
+			p_82334_1_ = p_82334_1_.copy();
+			p_82334_1_.stackSize = 1;
+			p_82334_1_.setItemFrame(this);
 		}
 
-		this.getDataWatcher().updateObject(2, par1ItemStack);
+		this.getDataWatcher().updateObject(2, p_82334_1_);
 		this.getDataWatcher().setObjectWatched(2);
 	}
 
@@ -145,54 +145,54 @@ public class EntityItemFrame extends EntityHanging
 		return this.getDataWatcher().getWatchableObjectByte(3);
 	}
 
-	public void setItemRotation(int par1)
+	public void setItemRotation(int p_82336_1_)
 	{
-		this.getDataWatcher().updateObject(3, Byte.valueOf((byte)(par1 % 4)));
+		this.getDataWatcher().updateObject(3, Byte.valueOf((byte)(p_82336_1_ % 4)));
 	}
 
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeEntityToNBT(NBTTagCompound p_70014_1_)
 	{
 		if (this.getDisplayedItem() != null)
 		{
-			par1NBTTagCompound.setTag("Item", this.getDisplayedItem().writeToNBT(new NBTTagCompound()));
-			par1NBTTagCompound.setByte("ItemRotation", (byte)this.getRotation());
-			par1NBTTagCompound.setFloat("ItemDropChance", this.itemDropChance);
+			p_70014_1_.setTag("Item", this.getDisplayedItem().writeToNBT(new NBTTagCompound()));
+			p_70014_1_.setByte("ItemRotation", (byte)this.getRotation());
+			p_70014_1_.setFloat("ItemDropChance", this.itemDropChance);
 		}
 
-		super.writeEntityToNBT(par1NBTTagCompound);
+		super.writeEntityToNBT(p_70014_1_);
 	}
 
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	public void readEntityFromNBT(NBTTagCompound p_70037_1_)
 	{
-		NBTTagCompound nbttagcompound1 = par1NBTTagCompound.getCompoundTag("Item");
+		NBTTagCompound nbttagcompound1 = p_70037_1_.getCompoundTag("Item");
 
 		if (nbttagcompound1 != null && !nbttagcompound1.hasNoTags())
 		{
 			this.setDisplayedItem(ItemStack.loadItemStackFromNBT(nbttagcompound1));
-			this.setItemRotation(par1NBTTagCompound.getByte("ItemRotation"));
+			this.setItemRotation(p_70037_1_.getByte("ItemRotation"));
 
-			if (par1NBTTagCompound.hasKey("ItemDropChance", 99))
+			if (p_70037_1_.hasKey("ItemDropChance", 99))
 			{
-				this.itemDropChance = par1NBTTagCompound.getFloat("ItemDropChance");
+				this.itemDropChance = p_70037_1_.getFloat("ItemDropChance");
 			}
 		}
 
-		super.readEntityFromNBT(par1NBTTagCompound);
+		super.readEntityFromNBT(p_70037_1_);
 	}
 
-	public boolean interactFirst(EntityPlayer par1EntityPlayer)
+	public boolean interactFirst(EntityPlayer p_130002_1_)
 	{
 		if (this.getDisplayedItem() == null)
 		{
-			ItemStack itemstack = par1EntityPlayer.getHeldItem();
+			ItemStack itemstack = p_130002_1_.getHeldItem();
 
 			if (itemstack != null && !this.worldObj.isRemote)
 			{
 				this.setDisplayedItem(itemstack);
 
-				if (!par1EntityPlayer.capabilities.isCreativeMode && --itemstack.stackSize <= 0)
+				if (!p_130002_1_.capabilities.isCreativeMode && --itemstack.stackSize <= 0)
 				{
-					par1EntityPlayer.inventory.setInventorySlotContents(par1EntityPlayer.inventory.currentItem, (ItemStack)null);
+					p_130002_1_.inventory.setInventorySlotContents(p_130002_1_.inventory.currentItem, (ItemStack)null);
 				}
 			}
 		}

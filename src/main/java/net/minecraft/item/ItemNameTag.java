@@ -14,23 +14,23 @@ public class ItemNameTag extends Item
 		this.setCreativeTab(CreativeTabs.tabTools);
 	}
 
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase)
+	public boolean itemInteractionForEntity(ItemStack p_111207_1_, EntityPlayer p_111207_2_, EntityLivingBase p_111207_3_)
 	{
-		if (!par1ItemStack.hasDisplayName())
+		if (!p_111207_1_.hasDisplayName())
 		{
 			return false;
 		}
-		else if (par3EntityLivingBase instanceof EntityLiving)
+		else if (p_111207_3_ instanceof EntityLiving)
 		{
-			EntityLiving entityliving = (EntityLiving)par3EntityLivingBase;
-			entityliving.setCustomNameTag(par1ItemStack.getDisplayName());
+			EntityLiving entityliving = (EntityLiving)p_111207_3_;
+			entityliving.setCustomNameTag(p_111207_1_.getDisplayName());
 			entityliving.func_110163_bv();
-			--par1ItemStack.stackSize;
+			--p_111207_1_.stackSize;
 			return true;
 		}
 		else
 		{
-			return super.itemInteractionForEntity(par1ItemStack, par2EntityPlayer, par3EntityLivingBase);
+			return super.itemInteractionForEntity(p_111207_1_, p_111207_2_, p_111207_3_);
 		}
 	}
 }

@@ -11,9 +11,9 @@ public class EntityLavaFX extends EntityFX
 	private float lavaParticleScale;
 	private static final String __OBFID = "CL_00000912";
 
-	public EntityLavaFX(World par1World, double par2, double par4, double par6)
+	public EntityLavaFX(World p_i1215_1_, double p_i1215_2_, double p_i1215_4_, double p_i1215_6_)
 	{
-		super(par1World, par2, par4, par6, 0.0D, 0.0D, 0.0D);
+		super(p_i1215_1_, p_i1215_2_, p_i1215_4_, p_i1215_6_, 0.0D, 0.0D, 0.0D);
 		this.motionX *= 0.800000011920929D;
 		this.motionY *= 0.800000011920929D;
 		this.motionZ *= 0.800000011920929D;
@@ -26,9 +26,9 @@ public class EntityLavaFX extends EntityFX
 		this.setParticleTextureIndex(49);
 	}
 
-	public int getBrightnessForRender(float par1)
+	public int getBrightnessForRender(float p_70070_1_)
 	{
-		float f1 = ((float)this.particleAge + par1) / (float)this.particleMaxAge;
+		float f1 = ((float)this.particleAge + p_70070_1_) / (float)this.particleMaxAge;
 
 		if (f1 < 0.0F)
 		{
@@ -40,22 +40,22 @@ public class EntityLavaFX extends EntityFX
 			f1 = 1.0F;
 		}
 
-		int i = super.getBrightnessForRender(par1);
+		int i = super.getBrightnessForRender(p_70070_1_);
 		short short1 = 240;
 		int j = i >> 16 & 255;
 		return short1 | j << 16;
 	}
 
-	public float getBrightness(float par1)
+	public float getBrightness(float p_70013_1_)
 	{
 		return 1.0F;
 	}
 
-	public void renderParticle(Tessellator par1Tessellator, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void renderParticle(Tessellator p_70539_1_, float p_70539_2_, float p_70539_3_, float p_70539_4_, float p_70539_5_, float p_70539_6_, float p_70539_7_)
 	{
-		float f6 = ((float)this.particleAge + par2) / (float)this.particleMaxAge;
+		float f6 = ((float)this.particleAge + p_70539_2_) / (float)this.particleMaxAge;
 		this.particleScale = this.lavaParticleScale * (1.0F - f6 * f6);
-		super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
+		super.renderParticle(p_70539_1_, p_70539_2_, p_70539_3_, p_70539_4_, p_70539_5_, p_70539_6_, p_70539_7_);
 	}
 
 	public void onUpdate()

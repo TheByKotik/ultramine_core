@@ -25,7 +25,7 @@ public class ModelDragon extends ModelBase
 	private float partialTicks;
 	private static final String __OBFID = "CL_00000870";
 
-	public ModelDragon(float par1)
+	public ModelDragon(float p_i1169_1_)
 	{
 		this.textureWidth = 256;
 		this.textureHeight = 256;
@@ -104,15 +104,15 @@ public class ModelDragon extends ModelBase
 		this.rearLegTip.addChild(this.rearFoot);
 	}
 
-	public void setLivingAnimations(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4)
+	public void setLivingAnimations(EntityLivingBase p_78086_1_, float p_78086_2_, float p_78086_3_, float p_78086_4_)
 	{
-		this.partialTicks = par4;
+		this.partialTicks = p_78086_4_;
 	}
 
-	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
+	public void render(Entity p_78088_1_, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_)
 	{
 		GL11.glPushMatrix();
-		EntityDragon entitydragon = (EntityDragon)par1Entity;
+		EntityDragon entitydragon = (EntityDragon)p_78088_1_;
 		float f6 = entitydragon.prevAnimTime + (entitydragon.animTime - entitydragon.prevAnimTime) * this.partialTicks;
 		this.jaw.rotateAngleX = (float)(Math.sin((double)(f6 * (float)Math.PI * 2.0F)) + 1.0D) * 0.2F;
 		float f7 = (float)(Math.sin((double)(f6 * (float)Math.PI * 2.0F - 1.0F)) + 1.0D);
@@ -144,7 +144,7 @@ public class ModelDragon extends ModelBase
 			f8 = (float)((double)f8 + Math.sin((double)this.spine.rotateAngleX) * 10.0D);
 			f9 = (float)((double)f9 - Math.cos((double)this.spine.rotateAngleY) * Math.cos((double)this.spine.rotateAngleX) * 10.0D);
 			f10 = (float)((double)f10 - Math.sin((double)this.spine.rotateAngleY) * Math.cos((double)this.spine.rotateAngleX) * 10.0D);
-			this.spine.render(par7);
+			this.spine.render(p_78088_7_);
 		}
 
 		this.head.rotationPointY = f8;
@@ -153,13 +153,13 @@ public class ModelDragon extends ModelBase
 		double[] adouble2 = entitydragon.getMovementOffsets(0, this.partialTicks);
 		this.head.rotateAngleY = this.updateRotations(adouble2[0] - adouble[0]) * (float)Math.PI / 180.0F * 1.0F;
 		this.head.rotateAngleZ = -this.updateRotations(adouble2[0] - (double)f13) * (float)Math.PI / 180.0F * 1.0F;
-		this.head.render(par7);
+		this.head.render(p_78088_7_);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-f12 * f11 * 1.0F, 0.0F, 0.0F, 1.0F);
 		GL11.glTranslatef(0.0F, -1.0F, 0.0F);
 		this.body.rotateAngleZ = 0.0F;
-		this.body.render(par7);
+		this.body.render(p_78088_7_);
 
 		for (int j = 0; j < 2; ++j)
 		{
@@ -175,9 +175,9 @@ public class ModelDragon extends ModelBase
 			this.frontLeg.rotateAngleX = 1.3F + f7 * 0.1F;
 			this.frontLegTip.rotateAngleX = -0.5F - f7 * 0.1F;
 			this.frontFoot.rotateAngleX = 0.75F + f7 * 0.1F;
-			this.wing.render(par7);
-			this.frontLeg.render(par7);
-			this.rearLeg.render(par7);
+			this.wing.render(p_78088_7_);
+			this.frontLeg.render(p_78088_7_);
+			this.rearLeg.render(p_78088_7_);
 			GL11.glScalef(-1.0F, 1.0F, 1.0F);
 
 			if (j == 0)
@@ -209,24 +209,24 @@ public class ModelDragon extends ModelBase
 			f8 = (float)((double)f8 + Math.sin((double)this.spine.rotateAngleX) * 10.0D);
 			f9 = (float)((double)f9 - Math.cos((double)this.spine.rotateAngleY) * Math.cos((double)this.spine.rotateAngleX) * 10.0D);
 			f10 = (float)((double)f10 - Math.sin((double)this.spine.rotateAngleY) * Math.cos((double)this.spine.rotateAngleX) * 10.0D);
-			this.spine.render(par7);
+			this.spine.render(p_78088_7_);
 		}
 
 		GL11.glPopMatrix();
 	}
 
-	private float updateRotations(double par1)
+	private float updateRotations(double p_78214_1_)
 	{
-		while (par1 >= 180.0D)
+		while (p_78214_1_ >= 180.0D)
 		{
-			par1 -= 360.0D;
+			p_78214_1_ -= 360.0D;
 		}
 
-		while (par1 < -180.0D)
+		while (p_78214_1_ < -180.0D)
 		{
-			par1 += 360.0D;
+			p_78214_1_ += 360.0D;
 		}
 
-		return (float)par1;
+		return (float)p_78214_1_;
 	}
 }

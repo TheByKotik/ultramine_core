@@ -8,27 +8,27 @@ public class GenLayerRiverMix extends GenLayer
 	private GenLayer riverPatternGeneratorChain;
 	private static final String __OBFID = "CL_00000567";
 
-	public GenLayerRiverMix(long par1, GenLayer par3GenLayer, GenLayer par4GenLayer)
+	public GenLayerRiverMix(long p_i2129_1_, GenLayer p_i2129_3_, GenLayer p_i2129_4_)
 	{
-		super(par1);
-		this.biomePatternGeneratorChain = par3GenLayer;
-		this.riverPatternGeneratorChain = par4GenLayer;
+		super(p_i2129_1_);
+		this.biomePatternGeneratorChain = p_i2129_3_;
+		this.riverPatternGeneratorChain = p_i2129_4_;
 	}
 
-	public void initWorldGenSeed(long par1)
+	public void initWorldGenSeed(long p_75905_1_)
 	{
-		this.biomePatternGeneratorChain.initWorldGenSeed(par1);
-		this.riverPatternGeneratorChain.initWorldGenSeed(par1);
-		super.initWorldGenSeed(par1);
+		this.biomePatternGeneratorChain.initWorldGenSeed(p_75905_1_);
+		this.riverPatternGeneratorChain.initWorldGenSeed(p_75905_1_);
+		super.initWorldGenSeed(p_75905_1_);
 	}
 
-	public int[] getInts(int par1, int par2, int par3, int par4)
+	public int[] getInts(int p_75904_1_, int p_75904_2_, int p_75904_3_, int p_75904_4_)
 	{
-		int[] aint = this.biomePatternGeneratorChain.getInts(par1, par2, par3, par4);
-		int[] aint1 = this.riverPatternGeneratorChain.getInts(par1, par2, par3, par4);
-		int[] aint2 = IntCache.getIntCache(par3 * par4);
+		int[] aint = this.biomePatternGeneratorChain.getInts(p_75904_1_, p_75904_2_, p_75904_3_, p_75904_4_);
+		int[] aint1 = this.riverPatternGeneratorChain.getInts(p_75904_1_, p_75904_2_, p_75904_3_, p_75904_4_);
+		int[] aint2 = IntCache.getIntCache(p_75904_3_ * p_75904_4_);
 
-		for (int i1 = 0; i1 < par3 * par4; ++i1)
+		for (int i1 = 0; i1 < p_75904_3_ * p_75904_4_; ++i1)
 		{
 			if (aint[i1] != BiomeGenBase.ocean.biomeID && aint[i1] != BiomeGenBase.deepOcean.biomeID)
 			{
