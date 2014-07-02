@@ -1015,6 +1015,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	
 	public void setData(PlayerData playerData)
 	{
+		playerData.setProfile(getGameProfile());
 		this.playerData = playerData;
 	}
 	

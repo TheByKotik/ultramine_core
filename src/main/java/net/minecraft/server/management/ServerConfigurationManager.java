@@ -8,6 +8,7 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.File;
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
@@ -71,6 +72,7 @@ import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.permission.internal.OpPermissionProxySet;
 import org.ultramine.server.chunk.IChunkLoadCallback;
+import org.ultramine.server.data.ServerDataLoader;
 
 public abstract class ServerConfigurationManager
 {
@@ -119,14 +121,14 @@ public abstract class ServerConfigurationManager
 		serverDataLoader.initializeConnectionToPlayer(p_72355_1_, p_72355_2_, nethandlerplayserver);
 	}
 
-	public void initializeConnectionToPlayer_body(NetworkManager p_72355_1_, EntityPlayerMP p_72355_2_, NetHandlerPlayServer nethandlerplayserver)
+	public void initializeConnectionToPlayer_body(NetworkManager p_72355_1_, EntityPlayerMP p_72355_2_, NetHandlerPlayServer nethandlerplayserver, NBTTagCompound nbttagcompound)
 	{
 		GameProfile gameprofile = p_72355_2_.getGameProfile();
 		PlayerProfileCache playerprofilecache = this.mcServer.func_152358_ax();
 		GameProfile gameprofile1 = playerprofilecache.func_152652_a(gameprofile.getId());
 		String s = gameprofile1 == null ? gameprofile.getName() : gameprofile1.getName();
 		playerprofilecache.func_152649_a(gameprofile);
-		NBTTagCompound nbttagcompound = this.readPlayerDataFromFile(p_72355_2_);
+//		NBTTagCompound nbttagcompound = this.readPlayerDataFromFile(p_72355_2_);
 		
 		World playerWorld = this.mcServer.worldServerForDimension(p_72355_2_.dimension);
 		if (playerWorld==null)

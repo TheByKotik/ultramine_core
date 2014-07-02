@@ -8,13 +8,12 @@ import com.mojang.authlib.GameProfile;
 
 public class PlayerData
 {
-	private final GameProfile profile;
+	private GameProfile profile;
 	private final Map<Class<? extends PlayerDataExtension>, PlayerDataExtension> data = new HashMap<Class<? extends PlayerDataExtension>, PlayerDataExtension>();
 	private final PlayerCoreData coreData;
 
-	public PlayerData(GameProfile profile, List<PlayerDataExtension> list)
+	public PlayerData(List<PlayerDataExtension> list)
 	{
-		this.profile = profile;
 		for(PlayerDataExtension o : list)
 			data.put(o.getClass(), o);
 		coreData = get(PlayerCoreData.class);
@@ -23,6 +22,11 @@ public class PlayerData
 	public GameProfile getProfile()
 	{
 		return profile;
+	}
+	
+	public void setProfile(GameProfile profile)
+	{
+		this.profile = profile;
 	}
 
 	public <T> T get(Class<T> clazz)

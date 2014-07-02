@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,13 +36,27 @@ public class NBTFileDataProvider implements IDataProvider
 	@Override
 	public NBTTagCompound loadPlayer(GameProfile player)
 	{
-		return ((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerData(player.getName());
+		File dir = ((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir();
+		File file = new File(dir, player.getId().toString() + ".dat");
+		if(file.exists())
+		{
+			try
+			{
+				return CompressedStreamTools.readCompressed(new FileInputStream(file));
+			}
+			catch(IOException e)
+			{
+				log.warn("Failed to load player data for " + player.getName(), e);
+			}
+		}
+		
+		return null;
 	}
 	
 	@Override
 	public void savePlayer(GameProfile player, NBTTagCompound nbt)
 	{
-		safeWriteNBT(new File(((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getName() + ".dat"), nbt);
+		safeWriteNBT(new File(((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getId().toString() + ".dat"), nbt);
 	}
 
 	@Override
@@ -49,7 +64,7 @@ public class NBTFileDataProvider implements IDataProvider
 	{
 		checkPlayerDir();
 		
-		return readPlayerData(getPlayerDataNBT(player.getName()));
+		return readPlayerData(getPlayerDataNBT(player.getId().toString()));
 	}
 	
 	public List<PlayerData> loadAllPlayerData()
@@ -79,7 +94,7 @@ public class NBTFileDataProvider implements IDataProvider
 	public void savePlayerData(PlayerData data)
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setString("id", data.getProfile().getId());
+		nbt.setString("id", data.getProfile().getId().toString());
 		nbt.setString("name", data.getProfile().getName());
 		for(PlayerDataExtensionInfo info : mgr.getDataLoader().getDataExtProviders())
 		{
@@ -88,7 +103,7 @@ public class NBTFileDataProvider implements IDataProvider
 			nbt.setTag(info.getTagName(), extnbt);
 		}
 		
-		safeWriteNBT(new File(umPlayerDir, data.getProfile() + ".dat"), nbt);
+		safeWriteNBT(new File(umPlayerDir, data.getProfile().getId().toString() + ".dat"), nbt);
 	}
 	
 	private void checkPlayerDir()
@@ -121,9 +136,6 @@ public class NBTFileDataProvider implements IDataProvider
 	
 	private PlayerData readPlayerData(NBTTagCompound nbt)
 	{
-		String id = nbt.getString("id");
-		String username = nbt.getString("name");
-		
 		List<PlayerDataExtensionInfo> infos = mgr.getDataLoader().getDataExtProviders();
 		List<PlayerDataExtension> data = new ArrayList<PlayerDataExtension>(infos.size());
 		
@@ -132,7 +144,10 @@ public class NBTFileDataProvider implements IDataProvider
 			data.add(info.createFromNBT(nbt));
 		}
 		
-		return new PlayerData(new GameProfile(id, username), data);
+		PlayerData pdata = new PlayerData(data);
+		if(nbt != null && nbt.hasKey("id") && nbt.hasKey("name"))
+			pdata.setProfile(new GameProfile(UUID.fromString(nbt.getString("id")), nbt.getString("name")));
+		return pdata;
 	}
 	
 	private void safeWriteNBT(File file, NBTTagCompound nbt)
