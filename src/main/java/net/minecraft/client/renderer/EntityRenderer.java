@@ -1829,7 +1829,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
 		net.minecraftforge.client.event.EntityViewRenderEvent.FogColors event = new net.minecraftforge.client.event.EntityViewRenderEvent.FogColors(this, entitylivingbase, block, p_78466_1_, this.fogColorRed, this.fogColorGreen, this.fogColorBlue);
 		MinecraftForge.EVENT_BUS.post(event);
-		
+
 		this.fogColorRed = event.red;
 		this.fogColorBlue = event.blue;
 		this.fogColorGreen = event.green;
@@ -1869,13 +1869,13 @@ public class EntityRenderer implements IResourceManagerReloadListener
 			Block block = ActiveRenderInfo.getBlockAtEntityViewpoint(this.mc.theWorld, entitylivingbase, p_78468_2_);
 			float f1;
 
-			net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity event = new net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity(this, entitylivingbase, block, 0.1F, p_78468_2_);
+			net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity event = new net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity(this, entitylivingbase, block, p_78468_2_, 0.1F);
 
-			if (MinecraftForge.EVENT_BUS.post(event)) 
+			if (MinecraftForge.EVENT_BUS.post(event))
 			{
 				GL11.glFogf(GL11.GL_FOG_DENSITY, event.density);
 			}
-			else 
+			else
 			if (entitylivingbase.isPotionActive(Potion.blindness))
 			{
 				f1 = 5.0F;

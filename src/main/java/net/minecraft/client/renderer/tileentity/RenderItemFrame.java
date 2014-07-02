@@ -176,6 +176,9 @@ public class RenderItemFrame extends Render
 					GL11.glTranslatef(0.16F, -0.16F, 0.0F);
 			}
 
+			net.minecraftforge.client.event.RenderItemInFrameEvent event = new net.minecraftforge.client.event.RenderItemInFrameEvent(p_82402_1_, this);
+			if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+			{
 			if (item == Items.filled_map)
 			{
 				this.renderManager.renderEngine.bindTexture(mapBackgroundTextures);
@@ -243,6 +246,7 @@ public class RenderItemFrame extends Render
 						textureatlassprite.updateAnimation();
 					}
 				}
+			}
 			}
 
 			GL11.glPopMatrix();

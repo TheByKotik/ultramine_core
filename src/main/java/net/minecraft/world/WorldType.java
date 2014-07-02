@@ -217,7 +217,7 @@ public class WorldType
 	{
 		this(getNextID(), name);
 	}
-	
+
 	/**
 	 * Called when 'Create New World' button is pressed before starting game
 	 */
@@ -230,7 +230,7 @@ public class WorldType
 	 */
 	public int getSpawnFuzz()
 	{
-		return 20;
+		return net.minecraftforge.common.ForgeModContainer.defaultSpawnFuzz;
 	}
 
 	/**
@@ -255,7 +255,7 @@ public class WorldType
 	{
 		return this == FLAT;
 	}
-	
+
 
 	/**
 	 * Get the height to render the clouds for this world type
@@ -268,7 +268,7 @@ public class WorldType
 
 	/**
 	 * Creates the GenLayerBiome used for generating the world
-	 * 
+	 *
 	 * @param worldSeed The world seed
 	 * @param parentLayer The parent layer to feed into any layer you return
 	 * @return A GenLayer that will return ints representing the Biomes to be generated, see GenLayerBiome

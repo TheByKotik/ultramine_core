@@ -157,13 +157,13 @@ public class ItemInWorldManager
 				float f = 1.0F;
 				Block block = this.theWorld.getBlock(p_73074_1_, p_73074_2_, p_73074_3_);
 
-				
+
 				if (!block.isAir(theWorld, p_73074_1_, p_73074_2_, p_73074_3_))
 				{
 					if (event.useBlock != Event.Result.DENY)
 					{
 						block.onBlockClicked(theWorld, p_73074_1_, p_73074_2_, p_73074_3_, thisPlayerMP);
-						theWorld.extinguishFire(thisPlayerMP, p_73074_1_, p_73074_2_, p_73074_3_, p_73074_4_);
+						theWorld.extinguishFire(null, p_73074_1_, p_73074_2_, p_73074_3_, p_73074_4_);
 					}
 					else
 					{
