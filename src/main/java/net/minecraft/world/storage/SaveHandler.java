@@ -320,4 +320,9 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 	{
 		return this.saveDirectoryName;
 	}
+	
+	public File getPlayerSaveDir()
+	{
+		return playersDirectory;
+	}
 }

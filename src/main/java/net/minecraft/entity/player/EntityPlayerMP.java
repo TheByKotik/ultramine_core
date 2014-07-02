@@ -104,6 +104,7 @@ import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkSendManager;
+import org.ultramine.server.data.player.PlayerData;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.common.ForgeHooks;
@@ -989,6 +990,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	
 	private int renderDistance;
 	private final ChunkSendManager chunkMgr = new ChunkSendManager(this);
+	private PlayerData playerData;
 	
 	@Override
 	public boolean isEntityPlayerMP()
@@ -1004,6 +1006,16 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public int getRenderDistance()
 	{
 		return renderDistance;
+	}
+	
+	public PlayerData getData()
+	{
+		return playerData;
+	}
+	
+	public void setData(PlayerData playerData)
+	{
+		this.playerData = playerData;
 	}
 	
 	/**

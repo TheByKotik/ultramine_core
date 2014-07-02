@@ -12,6 +12,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import cpw.mods.fml.common.DummyModContainer;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.event.FMLConstructionEvent;
@@ -29,6 +30,7 @@ import org.ultramine.commands.basic.VanillaCommands;
 import org.ultramine.commands.syntax.DefaultCompleters;
 import org.ultramine.permission.commands.BasicPermissionCommands;
 import org.ultramine.permission.internal.OpPermissionProxySet;
+import org.ultramine.server.data.player.PlayerCoreData;
 
 public class UltramineServerModContainer extends DummyModContainer
 {
@@ -64,7 +66,9 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void init(FMLInitializationEvent e)
 	{
-		MinecraftForge.EVENT_BUS.register(new UMEventHandler());
+		UMEventHandler handler = new UMEventHandler();
+		MinecraftForge.EVENT_BUS.register(handler);
+		FMLCommonHandler.instance().bus().register(handler);
 	}
 
 	@Subscribe
@@ -83,6 +87,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void serverStarting(FMLServerStartingEvent e)
 	{
+		e.getServer().getConfigurationManager().getDataLoader().registerPlayerDataExt(PlayerCoreData.class, "core");
 		e.registerArgumentHandlers(DefaultCompleters.class);
 		e.registerCommands(BasicPermissionCommands.class);
 		e.registerCommands(VanillaCommands.class);

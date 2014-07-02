@@ -113,8 +113,13 @@ public abstract class ServerConfigurationManager
 		this.bannedIPs.func_152686_a(false);
 		this.maxPlayers = 8;
 	}
-
+	
 	public void initializeConnectionToPlayer(NetworkManager p_72355_1_, EntityPlayerMP p_72355_2_, NetHandlerPlayServer nethandlerplayserver)
+	{
+		serverDataLoader.initializeConnectionToPlayer(p_72355_1_, p_72355_2_, nethandlerplayserver);
+	}
+
+	public void initializeConnectionToPlayer_body(NetworkManager p_72355_1_, EntityPlayerMP p_72355_2_, NetHandlerPlayServer nethandlerplayserver)
 	{
 		GameProfile gameprofile = p_72355_2_.getGameProfile();
 		PlayerProfileCache playerprofilecache = this.mcServer.func_152358_ax();
@@ -280,7 +285,7 @@ public abstract class ServerConfigurationManager
 	{
 		if (p_72391_1_.playerNetServerHandler == null) return;
 
-		this.playerNBTManagerObj.writePlayerData(p_72391_1_);
+		this.getDataLoader().savePlayer(p_72391_1_);
 		StatisticsFile statisticsfile = (StatisticsFile)this.field_148547_k.get(p_72391_1_.getUniqueID());
 
 		if (statisticsfile != null)
@@ -1129,5 +1134,19 @@ public abstract class ServerConfigurationManager
 	public boolean isWhiteListEnabled()
 	{
 		return this.whiteListEnforced;
+	}
+	
+	/* ======================================== ULTRAMINE START =====================================*/
+	
+	private final ServerDataLoader serverDataLoader = new ServerDataLoader(this);
+	
+	public ServerDataLoader getDataLoader()
+	{
+		return serverDataLoader;
+	}
+	
+	public IPlayerFileData getPlayerNBTLoader()
+	{
+		return playerNBTManagerObj;
 	}
 }

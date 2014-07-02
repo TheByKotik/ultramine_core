@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -15,6 +16,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.S37PacketStatistics;
@@ -22,9 +24,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IJsonSerializable;
 import net.minecraft.util.TupleIntJsonSerializable;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.util.AsyncIOUtils;
 
 public class StatisticsFile extends StatFileWriter
 {
@@ -64,14 +68,14 @@ public class StatisticsFile extends StatFileWriter
 
 	public void func_150883_b()
 	{
-		try
-		{
-			FileUtils.writeStringToFile(this.field_150887_d, func_150880_a(this.field_150875_a));
-		}
-		catch (IOException ioexception)
-		{
-			logger.error("Couldn\'t save stats", ioexception);
-		}
+//		try
+//		{
+			AsyncIOUtils.writeString(this.field_150887_d, func_150880_a(this.field_150875_a));
+//		}
+//		catch (IOException ioexception)
+//		{
+//			logger.error("Couldn\'t save stats", ioexception);
+//		}
 	}
 
 	public void func_150873_a(EntityPlayer p_150873_1_, StatBase p_150873_2_, int p_150873_3_)

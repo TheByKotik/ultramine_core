@@ -1,6 +1,9 @@
 package org.ultramine.server;
 
+import org.ultramine.server.data.player.io.PlayerDataIOExecutor;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
@@ -40,5 +43,14 @@ public class UMEventHandler
 		}
 		
 		e.component = new ChatComponentTranslation("%s%s%s\u00A77: %s", prefix, username, postfix, msg);
+	}
+	
+	@SubscribeEvent
+	public void onServerTick(TickEvent.ServerTickEvent e)
+	{
+		if(e.phase == TickEvent.Phase.START)
+		{
+			PlayerDataIOExecutor.tick();
+		}
 	}
 }
