@@ -13,6 +13,7 @@ public class WarpLocation
 	public float pitch;
 	public double randomRadius;
 	
+	public WarpLocation(){}
 	public WarpLocation(int dimension, double x, double y, double z, float yaw, float pitch, double randomRadius)
 	{
 		this.dimension = dimension;

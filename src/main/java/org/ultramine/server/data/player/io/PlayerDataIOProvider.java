@@ -39,6 +39,6 @@ public class PlayerDataIOProvider implements AsynchronousExecutor.CallBackProvid
 	@Override
 	public void callStage3(QueuedPlayer param, LoadedDataStruct data, ServerDataLoader callback) throws RuntimeException
 	{
-		callback.plyaerLoadCallback(param.getNetwork(), param.getPlayer(), param.getNethandler(), data.getNBT(), data.getPlayerData());
+		callback.playerLoadCallback(param.getNetwork(), param.getPlayer(), param.getNethandler(), data.getNBT(), data.getPlayerData());
 	}
 }

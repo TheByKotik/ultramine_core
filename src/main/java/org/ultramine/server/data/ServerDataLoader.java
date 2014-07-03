@@ -10,7 +10,7 @@ import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.data.player.PlayerDataExtension;
 import org.ultramine.server.data.player.PlayerDataExtensionInfo;
 import org.ultramine.server.data.player.io.PlayerDataIOExecutor;
-import org.ultramine.server.util.GlobalExecutors;
+import org.ultramine.server.util.WarpLocation;
 
 import com.mojang.authlib.GameProfile;
 
@@ -30,6 +30,7 @@ public class ServerDataLoader
 	private final IDataProvider dataProvider;
 	private final List<PlayerDataExtensionInfo> dataExtinfos = new ArrayList<PlayerDataExtensionInfo>();
 	private final Map<UUID, PlayerData> playerDataCache = new HashMap<UUID, PlayerData>();
+	private final Map<String, WarpLocation> warps = new HashMap<String, WarpLocation>();
 	
 	public ServerDataLoader(ServerConfigurationManager mgr)
 	{
@@ -57,10 +58,34 @@ public class ServerDataLoader
 		return playerDataCache.get(mgr.getServerInstance().func_152358_ax().func_152655_a(username));
 	}
 	
+	public WarpLocation getWarp(String name)
+	{
+		return warps.get(name);
+	}
+	
+	public void setWarp(String name, WarpLocation warp)
+	{
+		warps.put(name, warp);
+		dataProvider.saveWarp(name, warp);
+	}
+	
+	public void removeWarp(String name)
+	{
+		if(warps.remove(name) != null)
+			dataProvider.removeWarp(name);
+	}
+	
+	public Map<String, WarpLocation> getWarps()
+	{
+		return warps;
+	}
+	
 	public void loadCache()
 	{
 		for(PlayerData data : dataProvider.loadAllPlayerData())
 			playerDataCache.put(data.getProfile().getId(), data);
+		warps.putAll(dataProvider.loadWarps());
+		
 	}
 	
 	public void initializeConnectionToPlayer(NetworkManager network, EntityPlayerMP player, NetHandlerPlayServer nethandler)
@@ -77,7 +102,7 @@ public class ServerDataLoader
 		}
 	}
 	
-	public void plyaerLoadCallback(NetworkManager network, EntityPlayerMP player, NetHandlerPlayServer nethandler, NBTTagCompound nbt, PlayerData data)
+	public void playerLoadCallback(NetworkManager network, EntityPlayerMP player, NetHandlerPlayServer nethandler, NBTTagCompound nbt, PlayerData data)
 	{
 		if(data != null)
 		{
@@ -92,20 +117,14 @@ public class ServerDataLoader
 		mgr.initializeConnectionToPlayer_body(network, player, nethandler, nbt);
 	}
 	
-	public void savePlayer(final EntityPlayerMP player)
+	public void savePlayer(EntityPlayerMP player)
 	{
 		ForgeEventFactory.firePlayerSavingEvent(player, ((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getUniqueID().toString());
-		final NBTTagCompound nbt = new NBTTagCompound();
+		NBTTagCompound nbt = new NBTTagCompound();
 		player.writeToNBT(nbt);
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				getDataProvider().savePlayer(player.getGameProfile(), nbt);
-				getDataProvider().savePlayerData(player.getData());
-			}
-		});
+		
+		getDataProvider().savePlayer(player.getGameProfile(), nbt);
+		getDataProvider().savePlayerData(player.getData());
 	}
 	
 	public void registerPlayerDataExt(Class<? extends PlayerDataExtension> clazz, String nbtTagName)

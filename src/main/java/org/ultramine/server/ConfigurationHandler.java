@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.util.AsyncIOUtils;
 import org.ultramine.server.util.Resources;
 import org.ultramine.server.util.YamlConfigProvider;
 
@@ -37,9 +38,15 @@ public class ConfigurationHandler
 		serverConfig = YamlConfigProvider.getOrCreateConfig(serverConfigFile, UltramineServerConfig.class);
 		
 		if(!worldsConfigFile.exists())
-			YamlConfigProvider.writeFile(worldsConfigFile, Resources.getAsString("/org/ultramine/defaults/defaultworlds.yml")
-					.replace("{seed}", Long.toString(Math.abs(new Random().nextLong()))));
-		worldsConfig = YamlConfigProvider.readConfig(worldsConfigFile, WorldsConfig.class);
+		{
+			String def = Resources.getAsString("/org/ultramine/defaults/defaultworlds.yml").replace("{seed}", Long.toString(Math.abs(new Random().nextLong())));
+			AsyncIOUtils.writeString(worldsConfigFile, def);
+			worldsConfig = YamlConfigProvider.readConfig(def, WorldsConfig.class);
+		}
+		else
+		{
+			worldsConfig = YamlConfigProvider.readConfig(worldsConfigFile, WorldsConfig.class);
+		}
 	}
 	
 	public static File getSettingDir()

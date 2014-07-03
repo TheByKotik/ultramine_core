@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +15,9 @@ import org.apache.logging.log4j.Logger;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.data.player.PlayerDataExtension;
 import org.ultramine.server.data.player.PlayerDataExtensionInfo;
+import org.ultramine.server.util.AsyncIOUtils;
+import org.ultramine.server.util.WarpLocation;
+import org.ultramine.server.util.YamlConfigProvider;
 
 import com.mojang.authlib.GameProfile;
 
@@ -56,7 +61,7 @@ public class NBTFileDataProvider implements IDataProvider
 	@Override
 	public void savePlayer(GameProfile player, NBTTagCompound nbt)
 	{
-		safeWriteNBT(new File(((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getId().toString() + ".dat"), nbt);
+		AsyncIOUtils.safeWriteNBT(new File(((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getId().toString() + ".dat"), nbt);
 	}
 
 	@Override
@@ -103,7 +108,32 @@ public class NBTFileDataProvider implements IDataProvider
 			nbt.setTag(info.getTagName(), extnbt);
 		}
 		
-		safeWriteNBT(new File(umPlayerDir, data.getProfile().getId().toString() + ".dat"), nbt);
+		AsyncIOUtils.safeWriteNBT(new File(umPlayerDir, data.getProfile().getId().toString() + ".dat"), nbt);
+	}
+	
+	@Override
+	public Map<String, WarpLocation> loadWarps()
+	{
+		File file = mgr.getServerInstance().getFile("warps.yml");
+		if(file.exists())
+		{
+			YamlWarpList warps = YamlConfigProvider.getOrCreateConfig(file, YamlWarpList.class);
+			return warps.warps;
+		}
+		
+		return Collections.emptyMap();
+	}
+	
+	@Override
+	public void saveWarp(String name, WarpLocation warp)
+	{
+		writeWarpList();
+	}
+	
+	@Override
+	public void removeWarp(String name)
+	{
+		writeWarpList();
 	}
 	
 	private void checkPlayerDir()
@@ -165,5 +195,18 @@ public class NBTFileDataProvider implements IDataProvider
 		{
 			log.warn("Failed to write file: "+file.getAbsolutePath(), e);
 		}
+	}
+	
+	private void writeWarpList()
+	{
+		File file = mgr.getServerInstance().getFile("warps.yml");
+		YamlWarpList warps = new YamlWarpList();
+		warps.warps = mgr.getDataLoader().getWarps();
+		YamlConfigProvider.saveConfig(file, warps);
+	}
+	
+	private static class YamlWarpList
+	{
+		public Map<String, WarpLocation> warps;
 	}
 }

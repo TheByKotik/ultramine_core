@@ -76,20 +76,13 @@ public class YamlConfigProvider
 		}
 	}
 	
-	public static void saveConfig(File configFile, Object o)
+	public static <T> T readConfig(String config, Class<T> clazz)
 	{
-		writeFile(configFile, YAML.dumpAsMap(o));
+		return YAML.loadAs(config, clazz);
 	}
 	
-	public static void writeFile(File configFile, String text)
+	public static void saveConfig(File configFile, Object o)
 	{
-		try
-		{
-			FileUtils.write(configFile, text, Charsets.UTF_8);
-		}
-		catch (IOException e)
-		{
-			throw new RuntimeException("Failed to save config: " + configFile.getPath(), e);
-		}
+		AsyncIOUtils.writeString(configFile, YAML.dumpAsMap(o));
 	}
 }
