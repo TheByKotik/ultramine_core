@@ -20,6 +20,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
@@ -93,6 +94,12 @@ public class UltramineServerModContainer extends DummyModContainer
 		e.registerCommands(VanillaCommands.class);
 
 		e.getPermissionHandler().createGroup(OpPermissionProxySet.OP_GROUP, "*");
+	}
+	
+	@Subscribe
+	public void serverStarted(FMLServerStartedEvent e)
+	{
+		MinecraftServer.getServer().getConfigurationManager().getDataLoader().loadCache();
 	}
 	
 	@Subscribe
