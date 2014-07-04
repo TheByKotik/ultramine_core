@@ -308,12 +308,12 @@ public abstract class CommandBase implements ICommand
 			{
 				Item item1 = Item.getItemById(Integer.parseInt(p_147179_1_));
 
-				if (item1 != null)
-				{
-					ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("commands.generic.deprecatedId", new Object[] {Item.itemRegistry.getNameForObject(item1)});
-					chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.GRAY);
-					p_147179_0_.addChatMessage(chatcomponenttranslation);
-				}
+//				if (item1 != null)
+//				{
+//					ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("commands.generic.deprecatedId", new Object[] {Item.itemRegistry.getNameForObject(item1)});
+//					chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.GRAY);
+//					p_147179_0_.addChatMessage(chatcomponenttranslation);
+//				}
 
 				item = item1;
 			}
@@ -348,9 +348,9 @@ public abstract class CommandBase implements ICommand
 				if (Block.blockRegistry.containsId(i))
 				{
 					Block block = Block.getBlockById(i);
-					ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("commands.generic.deprecatedId", new Object[] {Block.blockRegistry.getNameForObject(block)});
-					chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.GRAY);
-					p_147180_0_.addChatMessage(chatcomponenttranslation);
+//					ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("commands.generic.deprecatedId", new Object[] {Block.blockRegistry.getNameForObject(block)});
+//					chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.GRAY);
+//					p_147180_0_.addChatMessage(chatcomponenttranslation);
 					return block;
 				}
 			}
