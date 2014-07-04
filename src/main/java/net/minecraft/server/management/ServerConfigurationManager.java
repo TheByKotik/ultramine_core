@@ -305,24 +305,8 @@ public abstract class ServerConfigurationManager
 		
 		int cx = MathHelper.floor_double(par1EntityPlayerMP.posX) >> 4;
 		int cz = MathHelper.floor_double(par1EntityPlayerMP.posZ) >> 4;
-		if(worldserver.chunkExists(cx, cz))
-		{
-			worldserver.spawnEntityInWorld(par1EntityPlayerMP);
-			this.func_72375_a(par1EntityPlayerMP, (WorldServer)null);
-		}
-		else
-		{
-			worldserver.theChunkProviderServer.loadAsync(cx, cz, new IChunkLoadCallback()
-			{
-				@Override
-				public void onChunkLoaded(Chunk chunk)
-				{
-					worldserver.spawnEntityInWorld(par1EntityPlayerMP);
-					func_72375_a(par1EntityPlayerMP, (WorldServer)null);
-				}
-			});
-			worldserver.theChunkProviderServer.loadAsyncRadius(cx, cz, 1, IChunkLoadCallback.EMPTY);
-		}
+		worldserver.spawnEntityInWorld(par1EntityPlayerMP);
+		func_72375_a(par1EntityPlayerMP, (WorldServer)null);
 
 		for (int i = 0; i < this.playerEntityList.size(); ++i)
 		{
@@ -523,8 +507,9 @@ public abstract class ServerConfigurationManager
 		p_72356_1_.playerNetServerHandler.sendPacket(new S07PacketRespawn(p_72356_1_.dimension, p_72356_1_.worldObj.difficultySetting, p_72356_1_.worldObj.getWorldInfo().getTerrainType(), p_72356_1_.theItemInWorldManager.getGameType()));
 		worldserver.removePlayerEntityDangerously(p_72356_1_);
 		p_72356_1_.isDead = false;
-		this.transferEntityToWorld(p_72356_1_, j, worldserver, worldserver1, teleporter);
+		p_72356_1_.setWorld(worldserver1);
 		this.func_72375_a(p_72356_1_, worldserver);
+		this.transferEntityToWorld(p_72356_1_, j, worldserver, worldserver1, teleporter);
 		p_72356_1_.playerNetServerHandler.setPlayerLocation(p_72356_1_.posX, p_72356_1_.posY, p_72356_1_.posZ, p_72356_1_.rotationYaw, p_72356_1_.rotationPitch);
 		p_72356_1_.theItemInWorldManager.setWorld(worldserver1);
 		this.updateTimeAndWeatherForPlayer(p_72356_1_, worldserver1);

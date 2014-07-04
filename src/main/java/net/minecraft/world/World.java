@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.chunk.ChunkHash;
+import org.ultramine.server.chunk.IChunkLoadCallback;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHopper;
@@ -1288,24 +1289,25 @@ public abstract class World implements IBlockAccess
 		return true;
 	}
 
-	public boolean spawnEntityInWorld(Entity p_72838_1_)
+	public boolean spawnEntityInWorld(final Entity p_72838_1_)
 	{
 		int i = MathHelper.floor_double(p_72838_1_.posX / 16.0D);
 		int j = MathHelper.floor_double(p_72838_1_.posZ / 16.0D);
 		boolean flag = p_72838_1_.forceSpawn;
+		boolean chunkExists = chunkExists(i, j);
 
-		if (p_72838_1_ instanceof EntityPlayer)
+		if (p_72838_1_.isEntityPlayer())
 		{
 			flag = true;
 		}
 
-		if (!flag && !this.chunkExists(i, j))
+		if (!flag && !chunkExists)
 		{
 			return false;
 		}
 		else
 		{
-			if (p_72838_1_ instanceof EntityPlayer)
+			if (p_72838_1_.isEntityPlayer())
 			{
 				EntityPlayer entityplayer = (EntityPlayer)p_72838_1_;
 				this.playerEntities.add(entityplayer);
@@ -1313,7 +1315,25 @@ public abstract class World implements IBlockAccess
 			}
 			if (MinecraftForge.EVENT_BUS.post(new EntityJoinWorldEvent(p_72838_1_, this)) && !flag) return false;
 
-			this.getChunkFromChunkCoords(i, j).addEntity(p_72838_1_);
+			if(chunkExists || isRemote)
+			{
+				this.getChunkFromChunkCoords(i, j).addEntity(p_72838_1_);
+			}
+			else if(p_72838_1_.isEntityPlayerMP())
+			{
+				p_72838_1_.addedToChunk = false;
+			}
+			else
+			{
+				((WorldServer)this).theChunkProviderServer.loadAsync(i, j, new IChunkLoadCallback()
+				{
+					@Override
+					public void onChunkLoaded(Chunk chunk)
+					{
+						chunk.addEntity(p_72838_1_);
+					}
+				});
+			}
 			this.loadedEntityList.add(p_72838_1_);
 			this.onEntityAdded(p_72838_1_);
 			return true;
@@ -1997,7 +2017,7 @@ public abstract class World implements IBlockAccess
 		//boolean isForced = getPersistentChunks().containsKey(new ChunkCoordIntPair(i >> 4, j >> 4));
 		//byte b0 = isForced ? (byte)0 : 32;
 		//boolean canUpdate = !p_72866_2_ || this.checkChunksExist(i - b0, 0, j - b0, i + b0, 0, j + b0);
-		boolean canUpdate = p_72866_1_.isEntityPlayerMP() || activeChunkSet.containsKey(ChunkHash.chunkToKey(i >> 4, j >> 4));
+		boolean canUpdate = p_72866_1_.isEntityPlayerMP() || activeChunkSet.containsKey(ChunkHash.chunkToKey(i >> 4, j >> 4)) || isRemote && p_72866_1_.isEntityPlayer();
 		
 		//if (!canUpdate)
 		//{
