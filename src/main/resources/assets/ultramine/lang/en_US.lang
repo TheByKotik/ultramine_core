@@ -50,3 +50,34 @@ command.sethome.usage=/sethome [name]
 command.sethome.description=Sets your /home teleportation point
 command.sethome.success=Home set
 command.sethome.multi.fail=You have no rights tp set multiple homes
+
+command.removehome.usage=/removehome <name>
+command.removehome.description=Removes your home with specified name
+command.removehome.fail=Home with specified name not found
+command.removehome.success=Home removed
+
+command.homelist.usage=/homelist
+command.homelist.description=Displays list of your homes
+command.homelist.head=Home list:
+
+command.warp.usage=/warp <name>
+command.warp.description=Teleports you to specified warp point
+command.warp.fail=Warp not found
+
+command.setwarp.usage=/setwarp <name> [randomradius]
+command.setwarp.description=Sets new warp ar current location
+command.setwarp.fail=Warp with specified name already set
+command.setwarp.success=Warp set
+
+command.resetwarp.usage=/resetwarp <name> [randomradius]
+command.resetwarp.description=Sets new or overrides exists warp at current location
+command.resetwarp.success=Warp set
+
+command.removewarp.usage=/removewarp <name>
+command.removewarp.description=Removes warp with specified name
+command.removewarp.fail=Warp not found
+command.removewarp.success=Warp removed
+
+command.warplist.usage=/warplist
+command.warplist.description=Displays list of all server warps
+command.warplist.head=Warp list:
