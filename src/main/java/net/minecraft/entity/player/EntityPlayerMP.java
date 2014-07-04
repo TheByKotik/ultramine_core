@@ -103,6 +103,7 @@ import net.minecraft.world.chunk.Chunk;
 import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.chunk.ChunkSendManager;
 import org.ultramine.server.data.player.PlayerData;
 
@@ -1017,6 +1018,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	{
 		playerData.setProfile(getGameProfile());
 		this.playerData = playerData;
+	}
+	
+	public boolean hasPermission(String permission)
+	{
+		return PermissionHandler.getInstance().has(this, permission);
 	}
 	
 	/**

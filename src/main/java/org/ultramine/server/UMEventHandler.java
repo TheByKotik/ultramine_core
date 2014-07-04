@@ -51,6 +51,7 @@ public class UMEventHandler
 		if(e.phase == TickEvent.Phase.START)
 		{
 			PlayerDataIOExecutor.tick();
+			Teleporter.tick();
 		}
 	}
 }

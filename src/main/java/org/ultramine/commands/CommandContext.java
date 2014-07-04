@@ -107,8 +107,13 @@ public class CommandContext
 
 	public void checkSenderPermission(String permission)
 	{
+		checkSenderPermission(permission, "commands.generic.permission");
+	}
+	
+	public void checkSenderPermission(String permission, String msg)
+	{
 		if (!senderIsServer() && !PermissionHandler.getInstance().has(sender, permission))
-			throw new CommandException("commands.generic.permission");
+			throw new CommandException(msg);
 	}
 
 	public void checkSenderPermissionInWorld(String world, String permission)
@@ -123,10 +128,26 @@ public class CommandContext
 		comp.getChatStyle().setColor(color);
 		sender.addChatMessage(comp);
 	}
+	
+	public void sendMessage(String msg, Object... args)
+	{
+		sendMessage(EnumChatFormatting.GOLD, msg, args);
+	}
 
 	public void throwBadUsage()
 	{
 		throw new WrongUsageException(command.getCommandUsage(sender));
+	}
+	
+	public void failure(String msg)
+	{
+		throw new CommandException(msg);
+	}
+	
+	public void check(boolean flag, String msg)
+	{
+		if(!flag)
+			throw new CommandException(msg);
 	}
 
 	public String[] getArgs()

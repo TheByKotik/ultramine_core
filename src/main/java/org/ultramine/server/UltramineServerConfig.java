@@ -6,12 +6,19 @@ import java.util.Map;
 public class UltramineServerConfig
 {
 	public WatchdogThreadConfig	watchdogThread = new WatchdogThreadConfig();
+	public Teleportation teleportation = new Teleportation();
 	public VanillaConfig		vanilla = new VanillaConfig();
 
 	public static class WatchdogThreadConfig
 	{
 		public int timeout = 120;
 		public boolean restart = true;
+	}
+	
+	public static class Teleportation
+	{
+		public int cooldown = 60;
+		public int delay = 5;
 	}
 	
 	

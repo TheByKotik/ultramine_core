@@ -1,3 +1,8 @@
+#Server core
+teleporter.fail.cooldownd=You will be able to teleport in %s seconds
+teleporter.delay=You will be teleported in %s seconds
+teleporter.canceled=Teleportation canceled
+
 #Command generic
 commands.generic.world.invalid=Can't find world '%s'
 
@@ -34,3 +39,14 @@ command.pgroup.description=Add/remove permissions OR set meta for group
 command.pgroup.success.add=Add permission <%s> to group <%s>
 command.pgroup.success.remove=Remove permission <%s> from group <%s>
 command.pgroup.success.meta=Set meta <%s> to <%s> for group <%s>
+
+#Basic commands
+command.home.usage=/home [name]
+command.home.description=Teleports you to your home, sets with /sethome
+command.home.fail.notset=Home is not set
+command.home.multi.fail=You have no rights tp use multiple homes
+
+command.sethome.usage=/sethome [name]
+command.sethome.description=Sets your /home teleportation point
+command.sethome.success=Home set
+command.sethome.multi.fail=You have no rights tp set multiple homes

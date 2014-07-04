@@ -3,6 +3,7 @@ package org.ultramine.server.data.player;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.ultramine.server.Teleporter;
 import org.ultramine.server.util.WarpLocation;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +13,11 @@ public class PlayerCoreData extends PlayerDataExtension
 {
 	private Map<String, WarpLocation> homes = new HashMap<String, WarpLocation>();
 	
+	//undatabased
+	private Teleporter teleporter;
+	private long nextTeleportationTime;
+	private WarpLocation lastLocation;
+	
 	public WarpLocation getHome(String name)
 	{
 		return homes.get(name);
@@ -20,6 +26,41 @@ public class PlayerCoreData extends PlayerDataExtension
 	public void setHome(String name, WarpLocation home)
 	{
 		homes.put(name, home);
+	}
+	
+	public Map<String, WarpLocation> getHomes()
+	{
+		return homes;
+	}
+	
+	public Teleporter getTeleporter()
+	{
+		return teleporter;
+	}
+	
+	public void setTeleporter(Teleporter teleporter)
+	{
+		this.teleporter = teleporter;
+	}
+	
+	public long getNextTeleportationTime()
+	{
+		return nextTeleportationTime;
+	}
+
+	public void setNextTeleportationTime(long nextTeleportationTime)
+	{
+		this.nextTeleportationTime = nextTeleportationTime;
+	}
+	
+	public WarpLocation getLastLocation()
+	{
+		return lastLocation;
+	}
+
+	public void setLastLocation(WarpLocation lastLocation)
+	{
+		this.lastLocation = lastLocation;
 	}
 	
 	@Override
