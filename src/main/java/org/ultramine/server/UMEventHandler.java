@@ -4,11 +4,13 @@ import org.ultramine.server.data.player.io.PlayerDataIOExecutor;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class UMEventHandler
 {
@@ -52,6 +54,15 @@ public class UMEventHandler
 		{
 			PlayerDataIOExecutor.tick();
 			Teleporter.tick();
+		}
+	}
+	
+	@SubscribeEvent
+	public void onPlayerClone(PlayerEvent.Clone e)
+	{
+		if(e.entityPlayer.isEntityPlayerMP())
+		{
+			((EntityPlayerMP)e.entityPlayer).setData(((EntityPlayerMP)e.original).getData());
 		}
 	}
 }
