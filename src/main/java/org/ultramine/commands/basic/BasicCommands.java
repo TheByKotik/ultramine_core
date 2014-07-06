@@ -3,6 +3,7 @@ package org.ultramine.commands.basic;
 import java.util.Map;
 
 import net.minecraft.server.MinecraftServer;
+import static net.minecraft.util.EnumChatFormatting.*;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
@@ -81,7 +82,7 @@ public class BasicCommands
 		ctx.getSenderAsPlayer();
 		ctx.sendMessage("command.homelist.head");
 		for(Map.Entry<String, WarpLocation> ent : ctx.getSenderAsPlayer().getData().core().getHomes().entrySet())
-			ctx.sendMessage("    - %s [%s](%s, %s, %s)", ent.getKey(), ent.getValue().dimension, (int)ent.getValue().x, (int)ent.getValue().y, (int)ent.getValue().z);
+			ctx.sendMessage(GOLD, "    - %s [%s](%s, %s, %s)", ent.getKey(), ent.getValue().dimension, (int)ent.getValue().x, (int)ent.getValue().y, (int)ent.getValue().z);
 	}
 	
 	@Command(
@@ -153,6 +154,6 @@ public class BasicCommands
 		ctx.getSenderAsPlayer();
 		ctx.sendMessage("command.warplist.head");
 		for(Map.Entry<String, WarpLocation> ent : MinecraftServer.getServer().getConfigurationManager().getDataLoader().getWarps().entrySet())
-			ctx.sendMessage("    - %s [%s](%s, %s, %s)", ent.getKey(), ent.getValue().dimension, (int)ent.getValue().x, (int)ent.getValue().y, (int)ent.getValue().z);
+			ctx.sendMessage(GOLD, "    - %s [%s](%s, %s, %s)", ent.getKey(), ent.getValue().dimension, (int)ent.getValue().x, (int)ent.getValue().y, (int)ent.getValue().z);
 	}
 }

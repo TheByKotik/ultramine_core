@@ -81,3 +81,19 @@ command.removewarp.success=Warp removed
 command.warplist.usage=/warplist
 command.warplist.description=Displays list of all server warps
 command.warplist.head=Warp list:
+
+#Technical commands
+command.id.usage=/id <id>
+command.id.description=Displays information about specified item id
+
+command.uptime.usage=/uptime
+command.uptime.description=Displays server's up time and load information
+command.uptime.msg.up=UP: %s
+command.uptime.msg.load=Load average: %s
+command.uptime.msg.tps=Ticks per second: %s/20 (%s)
+
+command.debuginfo.usage=/debuginfo [world/player]
+command.debuginfo.description=Some debug information
+
+command.memstat.usage=/memstat
+command.memstat.description=Displays max, current allocated and free memory

@@ -9,7 +9,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
@@ -121,16 +123,28 @@ public class CommandContext
 			throw new CommandException("commands.generic.permission");
 	}
 	
-	public void sendMessage(EnumChatFormatting color, String msg, Object... args)
+	public void sendMessage(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
 	{
+		for(int i = 0; i < args.length; i++)
+		{
+			Object o = args[i];
+			if(!(o instanceof IChatComponent))
+				args[i] = new ChatComponentText(o.toString()).setChatStyle(new ChatStyle().setColor(argsColor));
+		}
+		
 		ChatComponentTranslation comp = new ChatComponentTranslation(msg, args);
-		comp.getChatStyle().setColor(color);
+		comp.getChatStyle().setColor(tplColor);
 		sender.addChatMessage(comp);
+	}
+	
+	public void sendMessage(EnumChatFormatting argsColor, String msg, Object... args)
+	{
+		sendMessage(EnumChatFormatting.GOLD, argsColor, msg, args);
 	}
 	
 	public void sendMessage(String msg, Object... args)
 	{
-		sendMessage(EnumChatFormatting.GOLD, msg, args);
+		sendMessage(EnumChatFormatting.GOLD, EnumChatFormatting.YELLOW, msg, args);
 	}
 
 	public void throwBadUsage()

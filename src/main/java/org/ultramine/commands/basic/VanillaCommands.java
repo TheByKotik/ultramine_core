@@ -3,7 +3,6 @@ package org.ultramine.commands.basic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldServer;
 
@@ -35,7 +34,7 @@ public class VanillaCommands
 		{
 			EntityPlayerMP dst = context.get("dst").asPlayer();
 			Teleporter.tpNow(target, dst);
-			context.sendMessage(EnumChatFormatting.GOLD, "command.tp.success.player", target.getCommandSenderName(), dst.getCommandSenderName());
+			context.sendMessage("command.tp.success.player", target.getCommandSenderName(), dst.getCommandSenderName());
 		}
 		else if(context.contains("x") && context.contains("y") && context.contains("z"))
 		{
@@ -44,7 +43,7 @@ public class VanillaCommands
 			double y = context.get("y").asCoordinate(target.posY);
 			double z = context.get("z").asCoordinate(target.posZ);
 			Teleporter.tpNow(target, world.provider.dimensionId, x, y, z);
-			context.sendMessage(EnumChatFormatting.GOLD, "command.tp.success.coordinate",
+			context.sendMessage("command.tp.success.coordinate",
 					target.getCommandSenderName(), world.getWorldInfo().getWorldName(), x, y, z);
 		}
 	}

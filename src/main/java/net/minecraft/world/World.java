@@ -4048,6 +4048,11 @@ public abstract class World implements IBlockAccess
 		return true;
 	}
 	
+	public int getActiveChunkSetSize()
+	{
+		return activeChunkSet.size();
+	}
+	
 	protected boolean isChunkLoaderEnabled()
 	{
 		return true;

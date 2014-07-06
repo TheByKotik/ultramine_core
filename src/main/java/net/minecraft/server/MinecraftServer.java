@@ -1481,6 +1481,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	public double currentTPS = 20;
 	private long catchupTime = 0;
 	public long currentWait = TICK_TIME;
+	public final long startTime = System.currentTimeMillis();
 	private final MultiWorld multiworld = new MultiWorld(this);
 	private IPermissionManager permissionManager;
 	

@@ -352,6 +352,11 @@ public class ChunkSendManager
 		return movX >= -radius && movX <= radius ? movZ >= -radius && movZ <= radius : false;
 	}
 	
+	public double getRate()
+	{
+		return rate;
+	}
+	
 	
 	
 	
