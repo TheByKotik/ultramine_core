@@ -144,12 +144,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	private final GameProfileRepository field_152365_W;
 	private final PlayerProfileCache field_152366_X;
 	private static final String __OBFID = "CL_00001462";
-	
-	private static final int TPS = 20;
-	private static final int TICK_TIME = 1000000000 / TPS;
-	public static double currentTPS = 20;
-	private static long catchupTime = 0;
-	private IPermissionManager permissionManager;
 
 	public MinecraftServer(File p_i45281_1_, Proxy p_i45281_2_)
 	{
@@ -413,12 +407,15 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				
 				if(!isSinglePlayer()) WatchdogThread.doStart();
 				
+				long curWait = 0L;
 				for (long lastTick = 0L; this.serverRunning; this.serverIsRunning = true)
 				{
 					long curTime = System.nanoTime();
-					long wait = TICK_TIME - (curTime - lastTick) - catchupTime;
+					long wait = TICK_TIME - (curTime - lastTick);
+					if(curWait == 0) curWait = wait;
+					wait -= catchupTime;
 
-					if (wait > 0)
+					if (wait > 100000)
 					{
 						Thread.sleep(wait / 1000000);
 						catchupTime = 0;
@@ -426,10 +423,12 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 					}
 					else
 					{
-						catchupTime = Math.min(TICK_TIME * TPS, Math.abs(wait));
+						catchupTime = Math.min(TICK_TIME * TPS, -wait);
 					}
 
 					currentTPS = (currentTPS * 0.95) + (1E9 / (curTime - lastTick) * 0.05);
+					currentWait = (long)(currentWait * 0.95 + curWait * 0.05);
+					curWait = 0;
 					
 					lastTick = curTime;
 					this.tick();
@@ -1477,7 +1476,13 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	/* ========================================= ULTRAMINE START ======================================*/
 
 	private static final boolean useUMConsole = Boolean.parseBoolean(System.getProperty("org.ultramine.server.umconsole"));
+	private static final int TPS = 20;
+	private static final int TICK_TIME = 1000000000 / TPS;
+	public double currentTPS = 20;
+	private long catchupTime = 0;
+	public long currentWait = TICK_TIME;
 	private final MultiWorld multiworld = new MultiWorld(this);
+	private IPermissionManager permissionManager;
 	
 	public MultiWorld getMultiWorld()
 	{
