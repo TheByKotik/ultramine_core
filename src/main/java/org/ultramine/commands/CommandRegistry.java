@@ -3,7 +3,9 @@ package org.ultramine.commands;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+
 import org.ultramine.commands.syntax.ArgumentsPatternParser;
+import org.ultramine.server.util.TranslitTable;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -24,8 +26,10 @@ public class CommandRegistry
 
 	public IExtendedCommand registerCommand(IExtendedCommand command)
 	{
+		@SuppressWarnings("unchecked")
 		List<String> aliases = command.getCommandAliases();
 		commandMap.put(command.getCommandName(), command);
+		commandMap.put(TranslitTable.translitENRU(command.getCommandName()), command);
 		registeredCommands.add(command);
 
 		if (aliases != null)
@@ -34,7 +38,10 @@ public class CommandRegistry
 			{
 				IExtendedCommand cmd = commandMap.get(alias);
 				if (cmd == null || !cmd.getCommandName().equals(alias))
+				{
 					commandMap.put(alias, command);
+					commandMap.put(TranslitTable.translitENRU(alias), command);
+				}
 			}
 		}
 

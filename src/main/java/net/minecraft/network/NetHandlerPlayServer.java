@@ -718,9 +718,9 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 				}
 			}
 
-			if (s.startsWith("/"))
+			if (s.startsWith("/") || s.length() > 1 && s.charAt(0) == '.' && s.charAt(1) != '.')
 			{
-				this.handleSlashCommand(s);
+				this.handleSlashCommand(s.substring(1));
 			}
 			else
 			{
