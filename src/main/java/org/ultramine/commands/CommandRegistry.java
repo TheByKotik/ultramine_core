@@ -36,12 +36,8 @@ public class CommandRegistry
 		{
 			for (String alias : aliases)
 			{
-				IExtendedCommand cmd = commandMap.get(alias);
-				if (cmd == null || !cmd.getCommandName().equals(alias))
-				{
-					commandMap.put(alias, command);
-					commandMap.put(TranslitTable.translitENRU(alias), command);
-				}
+				commandMap.put(alias, command);
+				commandMap.put(TranslitTable.translitENRU(alias), command);
 			}
 		}
 
