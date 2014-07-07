@@ -1,13 +1,19 @@
 package org.ultramine.commands.basic;
 
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentStyle;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
+import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldServer;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
+import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.Teleporter;
 import org.ultramine.server.util.BasicTypeParser;
 
@@ -70,5 +76,45 @@ public class VanillaCommands
 			server.func_147139_a(difficulty);
 		else
 			world.difficultySetting = difficulty;
+	}
+	
+	private static void sendMessage(ICommandSender from, ICommandSender to, String message)
+	{
+		ChatComponentStyle msg = new ChatComponentText(message);
+		msg.getChatStyle().setColor(BasicTypeParser.parseColor(PermissionHandler.getInstance().getMeta(from, "textcolor")));
+		
+		from.addChatMessage(new ChatComponentTranslation("command.msg.display.outgoing", to.func_145748_c_(), msg).setChatStyle(new ChatStyle().setColor(GOLD)));
+		to.addChatMessage(new ChatComponentTranslation("command.msg.display.incoming", from.func_145748_c_(), msg).setChatStyle(new ChatStyle().setColor(GOLD)));
+		
+		if(from instanceof EntityPlayerMP) ((EntityPlayerMP)from).getData().core().setLastMessagedPlayer(to.getCommandSenderName());
+		if(to instanceof EntityPlayerMP) ((EntityPlayerMP)to).getData().core().setLastMessagedPlayer(from.getCommandSenderName());
+	}
+	
+	@Command(
+			name = "msg",
+			aliases={"tell", "t", "w"},
+			group = "vanilla",
+			permissions = {"command.vanilla.msg"},
+			syntax = {"<player> <%msg>..."}
+	)
+	public static void msg(CommandContext ctx)
+	{
+		ICommandSender to = ctx.get("player").asString().equalsIgnoreCase("server") ? MinecraftServer.getServer() : ctx.get("player").asPlayer();
+		sendMessage(ctx.getSender(), to, ctx.get("msg").asString());
+	}
+	
+	@Command(
+			name = "reply",
+			aliases={"r"},
+			group = "vanilla",
+			permissions = {"command.vanilla.reply"},
+			syntax = {"<%msg>..."}
+	)
+	public static void reply(CommandContext ctx)
+	{
+		String name = ctx.getSenderAsPlayer().getData().core().getLastMessagedPlayer();
+		ctx.check(name != null, "command.reply.fail");
+		ICommandSender to = name.equalsIgnoreCase("server") ? MinecraftServer.getServer() : MinecraftServer.getServer().getConfigurationManager().func_152612_a(name);
+		sendMessage(ctx.getSender(), to, ctx.get("msg").asString());
 	}
 }

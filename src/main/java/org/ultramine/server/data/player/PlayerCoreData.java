@@ -17,6 +17,7 @@ public class PlayerCoreData extends PlayerDataExtension
 	private Teleporter teleporter;
 	private long nextTeleportationTime;
 	private WarpLocation lastLocation;
+	private String lastMessagedPlayer;
 	
 	public WarpLocation getHome(String name)
 	{
@@ -61,6 +62,16 @@ public class PlayerCoreData extends PlayerDataExtension
 	public void setLastLocation(WarpLocation lastLocation)
 	{
 		this.lastLocation = lastLocation;
+	}
+	
+	public String getLastMessagedPlayer()
+	{
+		return lastMessagedPlayer;
+	}
+	
+	public void setLastMessagedPlayer(String lastMessagedPlayer)
+	{
+		this.lastMessagedPlayer = lastMessagedPlayer;
 	}
 	
 	@Override

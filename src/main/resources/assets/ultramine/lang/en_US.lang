@@ -16,6 +16,15 @@ command.difficulty.usage=/difficulty [world] <peaceful easy normal hard>
 command.difficulty.description=Changes difficulty setting of selected world
 command.difficulty.success=Difficulty of world %s changed from %s to %s
 
+command.msg.usage=/msg <player> <message ...>
+command.msg.description=Send private message to player
+command.msg.display.outgoing=[me -> %s] %s
+command.msg.display.incoming=[%s -> me] %s
+
+command.reply.usage=/reply <message ...>
+command.reply.description=Send private message to the last player which you sent message with /msg
+command.reply.fail=Use /msg command first
+
 # Permissions
 command.pconfig.usage=/pconfig <save|reload>
 command.pconfig.description=Save or reload all permissions configs

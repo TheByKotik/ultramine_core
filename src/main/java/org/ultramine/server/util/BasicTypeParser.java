@@ -1,5 +1,6 @@
 package org.ultramine.server.util;
 
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.EnumDifficulty;
 
 public class BasicTypeParser
@@ -78,6 +79,17 @@ public class BasicTypeParser
 		else if(str.equals("h") || str.equals("hard"))
 		{
 			return EnumDifficulty.HARD;
+		}
+		
+		return null;
+	}
+	
+	public static EnumChatFormatting parseColor(String str)
+	{
+		if(!str.isEmpty())
+		{
+			char c = str.charAt(0);
+			return EnumChatFormatting.getByColorCode(str.length() == 1 ? c : c == '&' ? str.charAt(1) : c);
 		}
 		
 		return null;

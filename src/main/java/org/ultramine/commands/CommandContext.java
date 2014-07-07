@@ -95,6 +95,11 @@ public class CommandContext
 	{
 		return !(sender instanceof EntityPlayer);
 	}
+	
+	public boolean senderIsPlayer()
+	{
+		return sender instanceof EntityPlayer;
+	}
 
 	public EntityPlayerMP getSenderAsPlayer()
 	{
