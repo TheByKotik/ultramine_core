@@ -135,6 +135,7 @@ public abstract class Enchantment
 		return canApply(stack);
 	}
 
+	private static final java.lang.reflect.Field bookSetter = Enchantment.class.getDeclaredFields()[1];
 	/**
 	 * Add to the list of enchantments applicable by the anvil from a book
 	 *
@@ -142,7 +143,15 @@ public abstract class Enchantment
 	 */
 	public static void addToBookList(Enchantment enchantment)
 	{
-		com.google.common.collect.ObjectArrays.concat(enchantmentsBookList, enchantment);
+		try
+		{
+			net.minecraftforge.common.util.EnumHelper.setFailsafeFieldValue(bookSetter, null,
+				com.google.common.collect.ObjectArrays.concat(enchantmentsBookList, enchantment));
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException(e); //Rethrow see what happens
+		}
 	}
 
 	/**
