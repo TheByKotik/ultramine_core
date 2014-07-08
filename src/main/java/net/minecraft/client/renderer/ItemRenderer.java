@@ -557,6 +557,7 @@ public class ItemRenderer
 			int j = MathHelper.floor_double(this.mc.thePlayer.posY);
 			int k = MathHelper.floor_double(this.mc.thePlayer.posZ);
 			Block block = this.mc.theWorld.getBlock(i, j, k);
+			int block2_X = i, block2_Y = j, block2_Z = k;
 
 			if (this.mc.theWorld.getBlock(i, j, k).isNormalCube())
 			{
@@ -577,13 +578,16 @@ public class ItemRenderer
 					if (this.mc.theWorld.getBlock(i1, j1, k1).isNormalCube())
 					{
 						block = this.mc.theWorld.getBlock(i1, j1, k1);
+						block2_X = i;
+						block2_Y = j;
+						block2_Z = k;
 					}
 				}
 			}
 
 			if (block.getMaterial() != Material.air)
 			{
-				if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderBlockOverlayEvent(this.mc.thePlayer, p_78447_1_, net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType.BLOCK, block, i, j, k)))
+				if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderBlockOverlayEvent(this.mc.thePlayer, p_78447_1_, net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType.BLOCK, block, block2_X, block2_Y, block2_Z)))
 				this.renderInsideOfBlock(p_78447_1_, block.getBlockTextureFromSide(2));
 			}
 		}
