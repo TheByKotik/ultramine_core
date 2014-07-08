@@ -547,6 +547,7 @@ public class ItemRenderer
 
 		if (this.mc.thePlayer.isBurning())
 		{
+			if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderBlockOverlayEvent(this.mc.thePlayer, p_78447_1_, net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType.FIRE, Blocks.fire, MathHelper.floor_double(this.mc.thePlayer.posX), MathHelper.floor_double(this.mc.thePlayer.posY), MathHelper.floor_double(this.mc.thePlayer.posZ))))
 			this.renderFireInFirstPerson(p_78447_1_);
 		}
 
@@ -559,6 +560,7 @@ public class ItemRenderer
 
 			if (this.mc.theWorld.getBlock(i, j, k).isNormalCube())
 			{
+				if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderBlockOverlayEvent(this.mc.thePlayer, p_78447_1_, net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType.BLOCK, block, i, j, k)))
 				this.renderInsideOfBlock(p_78447_1_, block.getBlockTextureFromSide(2));
 			}
 			else
@@ -581,12 +583,14 @@ public class ItemRenderer
 
 			if (block.getMaterial() != Material.air)
 			{
+				if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderBlockOverlayEvent(this.mc.thePlayer, p_78447_1_, net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType.BLOCK, block, i, j, k)))
 				this.renderInsideOfBlock(p_78447_1_, block.getBlockTextureFromSide(2));
 			}
 		}
 
 		if (this.mc.thePlayer.isInsideOfMaterial(Material.water))
 		{
+			if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderBlockOverlayEvent(this.mc.thePlayer, p_78447_1_, net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType.WATER, Blocks.water, MathHelper.floor_double(this.mc.thePlayer.posX), MathHelper.floor_double(this.mc.thePlayer.posY), MathHelper.floor_double(this.mc.thePlayer.posZ))))
 			this.renderWarpedTextureOverlay(p_78447_1_);
 		}
 

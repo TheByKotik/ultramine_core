@@ -55,7 +55,7 @@ public class BiomeGenHills extends BiomeGenBase
 			j1 = p_76728_2_.nextInt(28) + 4;
 			int k1 = p_76728_4_ + p_76728_2_.nextInt(16);
 
-			if (p_76728_1_.getBlock(i1, j1, k1) == Blocks.stone)
+			if (p_76728_1_.getBlock(i1, j1, k1).isReplaceableOreGen(p_76728_1_, i1, j1, k1, Blocks.stone))
 			{
 				p_76728_1_.setBlock(i1, j1, k1, Blocks.emerald_ore, 0, 2);
 			}

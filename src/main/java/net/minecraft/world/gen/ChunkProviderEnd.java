@@ -125,9 +125,14 @@ public class ChunkProviderEnd implements IChunkProvider
 		}
 	}
 
+	@Deprecated // Supply metadata to the below function.
 	public void func_147421_b(int p_147421_1_, int p_147421_2_, Block[] p_147421_3_, BiomeGenBase[] p_147421_4_)
 	{
-		ChunkProviderEvent.ReplaceBiomeBlocks event = new ChunkProviderEvent.ReplaceBiomeBlocks(this, p_147421_1_, p_147421_2_, p_147421_3_, p_147421_4_);
+		replaceBiomeBlocks(p_147421_1_, p_147421_2_, p_147421_3_, p_147421_4_, new byte[p_147421_3_.length]);
+	}
+	public void replaceBiomeBlocks(int p_147421_1_, int p_147421_2_, Block[] p_147421_3_, BiomeGenBase[] p_147421_4_, byte[] meta)
+	{
+		ChunkProviderEvent.ReplaceBiomeBlocks event = new ChunkProviderEvent.ReplaceBiomeBlocks(this, p_147421_1_, p_147421_2_, p_147421_3_, meta, p_147421_4_, this.endWorld);
 		MinecraftForge.EVENT_BUS.post(event);
 		if (event.getResult() == Result.DENY) return;
 
@@ -193,10 +198,11 @@ public class ChunkProviderEnd implements IChunkProvider
 	{
 		this.endRNG.setSeed((long)p_73154_1_ * 341873128712L + (long)p_73154_2_ * 132897987541L);
 		Block[] ablock = new Block[32768];
+		byte[] meta = new byte[ablock.length];
 		this.biomesForGeneration = this.endWorld.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, p_73154_1_ * 16, p_73154_2_ * 16, 16, 16);
 		this.func_147420_a(p_73154_1_, p_73154_2_, ablock, this.biomesForGeneration);
-		this.func_147421_b(p_73154_1_, p_73154_2_, ablock, this.biomesForGeneration);
-		Chunk chunk = new Chunk(this.endWorld, ablock, p_73154_1_, p_73154_2_);
+		this.replaceBiomeBlocks(p_73154_1_, p_73154_2_, ablock, this.biomesForGeneration, meta);
+		Chunk chunk = new Chunk(this.endWorld, ablock, meta, p_73154_1_, p_73154_2_);
 		byte[] abyte = chunk.getBiomeArray();
 
 		for (int k = 0; k < abyte.length; ++k)
