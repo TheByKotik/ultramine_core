@@ -3,6 +3,9 @@ package org.ultramine.commands.basic;
 import java.util.Map;
 
 import static net.minecraft.util.EnumChatFormatting.*;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.storage.WorldInfo;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
@@ -178,5 +181,45 @@ public class BasicCommands
 			ctx.check(ctx.getServerData().removeFastWarp(name), "command.fastwarp.fail.nofastwarp");
 		}
 		ctx.sendMessage("command.fastwarp.success."+ctx.getAction());
+	}
+	
+	@Command(
+			name = "setspawn",
+			group = "admin",
+			permissions = {"command.setspawn"},
+			syntax = {"", "<%radius>"}
+	)
+	public static void setspawn(CommandContext ctx)
+	{
+		WarpLocation warp = WarpLocation.getFromPlayer(ctx.getSenderAsPlayer());
+		if(ctx.contains("radius"))
+			warp.randomRadius = ctx.get("radius").asDouble();
+		ctx.getServerData().setWarp("spawn", warp);
+		ctx.sendMessage("command.setspawn.success");
+	}
+	
+	@Command(
+			name = "setlocalspawn",
+			group = "admin",
+			permissions = {"command.setlocalspawn"}
+	)
+	public static void setlocalspawn(CommandContext ctx)
+	{
+		EntityPlayerMP player = ctx.getSenderAsPlayer();
+		WorldInfo wi = player.worldObj.getWorldInfo();
+		wi.setSpawnPosition(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
+		ctx.sendMessage("command.setlocalspawn.success");
+	}
+	
+	@Command(
+			name = "localspawn",
+			group = "admin",
+			permissions = {"command.localspawn"}
+	)
+	public static void localspawn(CommandContext ctx)
+	{
+		EntityPlayerMP player = ctx.getSenderAsPlayer();
+		WorldInfo wi = player.worldObj.getWorldInfo();
+		Teleporter.tpNow(player, wi.getSpawnX(), wi.getSpawnY(), wi.getSpawnZ());
 	}
 }

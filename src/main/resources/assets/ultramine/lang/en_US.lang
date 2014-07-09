@@ -102,6 +102,17 @@ command.fastwarp.success.add=Fastwarp added
 command.fastwarp.success.remove=Fastwarp removed
 command.fastwarp.use.description=Teleport to this point
 
+command.setspawn.usage=/setspawn [randomradius]
+command.setspawn.description=Set spawn point
+command.setspawn.success=Spawn set
+
+command.setlocalspawn.usage=/setlocalspawn
+command.setlocalspawn.description=Set local spawn of current world (vanilla logic)
+command.setlocalspawn.success=Localspawn set
+
+command.localspawn.usage=/localspawn
+command.localspawn.description=Teleport to local spawn of current world (vanilla logic)
+
 #Technical commands
 command.id.usage=/id <id>
 command.id.description=Displays information about specified item id
