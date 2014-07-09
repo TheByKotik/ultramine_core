@@ -450,7 +450,8 @@ public abstract class ServerConfigurationManager
 		}
 
 		EntityPlayerMP entityplayermp1 = new EntityPlayerMP(this.mcServer, this.mcServer.worldServerForDimension(p_72368_1_.dimension), p_72368_1_.getGameProfile(), (ItemInWorldManager)object);
-		WarpLocation spawn = getDataLoader().getWarp(getServerInstance().isSinglePlayer() ? "spawn" : ConfigurationHandler.getServerConfig().spawnLocations.deathSpawn).randomize();
+		WarpLocation spawnWarp = getDataLoader().getWarp(getServerInstance().isSinglePlayer() ? "spawn" : ConfigurationHandler.getServerConfig().spawnLocations.deathSpawn);
+		WarpLocation spawn = (spawnWarp != null ? spawnWarp : getDataLoader().getWarp("spawn")).randomize();
 		entityplayermp1.setLocationAndAngles(spawn.x, spawn.y, spawn.z, spawn.yaw, spawn.pitch);
 		entityplayermp1.playerNetServerHandler = p_72368_1_.playerNetServerHandler;
 		entityplayermp1.clonePlayer(p_72368_1_, p_72368_3_);

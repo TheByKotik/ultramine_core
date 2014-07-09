@@ -74,10 +74,14 @@ public class ServerDataLoader
 		dataProvider.saveWarp(name, warp);
 	}
 	
-	public void removeWarp(String name)
+	public boolean removeWarp(String name)
 	{
 		if(warps.remove(name) != null)
+		{
 			dataProvider.removeWarp(name);
+			return true;
+		}
+		return false;
 	}
 	
 	public Map<String, WarpLocation> getWarps()
@@ -94,10 +98,15 @@ public class ServerDataLoader
 		}
 	}
 	
-	public void removeFastWarp(String name)
+	public boolean removeFastWarp(String name)
 	{
 		if(fastWarps.remove(name))
+		{
 			dataProvider.removeFastWarp(name);
+			((CommandHandler)mgr.getServerInstance().getCommandManager()).getRegistry().getCommandMap().remove(name);
+			return true;
+		}
+		return false;
 	}
 	
 	public List<String> getFastWarps()
@@ -161,7 +170,8 @@ public class ServerDataLoader
 		}
 		if(nbt == null) //first login
 		{
-			WarpLocation spawn = getWarp(isClient ? "spawn" : ConfigurationHandler.getServerConfig().spawnLocations.firstSpawn).randomize();
+			WarpLocation spawnWarp = getWarp(isClient ? "spawn" : ConfigurationHandler.getServerConfig().spawnLocations.firstSpawn);
+			WarpLocation spawn = (spawnWarp != null ? spawnWarp : getWarp("spawn")).randomize();
 			player.setLocationAndAngles(spawn.x, spawn.y, spawn.z, spawn.yaw, spawn.pitch);
 		}
 		ForgeEventFactory.firePlayerLoadingEvent(player, ((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getUniqueID().toString());

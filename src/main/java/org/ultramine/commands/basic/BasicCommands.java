@@ -2,7 +2,6 @@ package org.ultramine.commands.basic;
 
 import java.util.Map;
 
-import net.minecraft.server.MinecraftServer;
 import static net.minecraft.util.EnumChatFormatting.*;
 
 import org.ultramine.commands.Command;
@@ -93,7 +92,7 @@ public class BasicCommands
 	)
 	public static void warp(CommandContext ctx)
 	{
-		WarpLocation warp = MinecraftServer.getServer().getConfigurationManager().getDataLoader().getWarp(ctx.get("name").asString());
+		WarpLocation warp = ctx.getServerData().getWarp(ctx.get("name").asString());
 		ctx.check(warp != null, "command.warp.fail");
 		Teleporter.tpLater(ctx.getSenderAsPlayer(), warp);
 	}
@@ -106,11 +105,11 @@ public class BasicCommands
 	)
 	public static void setwarp(CommandContext ctx)
 	{
-		ctx.check(MinecraftServer.getServer().getConfigurationManager().getDataLoader().getWarp(ctx.get("name").asString()) == null, "command.setwarp.fail");
+		ctx.check(ctx.getServerData().getWarp(ctx.get("name").asString()) == null, "command.setwarp.fail");
 		WarpLocation warp = WarpLocation.getFromPlayer(ctx.getSenderAsPlayer());
 		if(ctx.contains("radius"))
 			warp.randomRadius = ctx.get("radius").asDouble();
-		MinecraftServer.getServer().getConfigurationManager().getDataLoader().setWarp(ctx.get("name").asString(), warp);
+		ctx.getServerData().setWarp(ctx.get("name").asString(), warp);
 		ctx.sendMessage("command.setwarp.success");
 	}
 	
@@ -125,7 +124,7 @@ public class BasicCommands
 		WarpLocation warp = WarpLocation.getFromPlayer(ctx.getSenderAsPlayer());
 		if(ctx.contains("radius"))
 			warp.randomRadius = ctx.get("radius").asDouble();
-		MinecraftServer.getServer().getConfigurationManager().getDataLoader().setWarp(ctx.get("name").asString(), warp);
+		ctx.getServerData().setWarp(ctx.get("name").asString(), warp);
 		ctx.sendMessage("command.resetwarp.success");
 	}
 	
@@ -139,8 +138,9 @@ public class BasicCommands
 	public static void removewarp(CommandContext ctx)
 	{
 		String name = ctx.get("name").asString();
-		ctx.check(MinecraftServer.getServer().getConfigurationManager().getDataLoader().getWarp(name) != null, "command.removewarp.fail");
-		MinecraftServer.getServer().getConfigurationManager().getDataLoader().setWarp(name, null);
+		ctx.check(!name.equals("spawn"), "command.removewarp.fail.spawn");
+		ctx.check(ctx.getServerData().removeWarp(name), "command.removewarp.fail.nowarp");
+		ctx.getServerData().removeFastWarp(name);
 		ctx.sendMessage("command.removewarp.success");
 	}
 	
@@ -153,7 +153,7 @@ public class BasicCommands
 	{
 		ctx.getSenderAsPlayer();
 		ctx.sendMessage("command.warplist.head");
-		for(Map.Entry<String, WarpLocation> ent : MinecraftServer.getServer().getConfigurationManager().getDataLoader().getWarps().entrySet())
+		for(Map.Entry<String, WarpLocation> ent : ctx.getServerData().getWarps().entrySet())
 			ctx.sendMessage(GOLD, "    - %s [%s](%s, %s, %s)", ent.getKey(), ent.getValue().dimension, (int)ent.getValue().x, (int)ent.getValue().y, (int)ent.getValue().z);
 	}
 	
@@ -169,11 +169,13 @@ public class BasicCommands
 		ctx.check(!name.equals("spawn"), "command.fastwarp.fail.spawn");
 		if(ctx.getAction().equals("add"))
 		{
-			MinecraftServer.getServer().getConfigurationManager().getDataLoader().addFastWarp(name);
+			ctx.check(ctx.getServerData().getWarp(name) != null, "command.fastwarp.fail.nowarp");
+			ctx.check(!ctx.getServerData().getFastWarps().contains(name), "command.fastwarp.fail.already");
+			ctx.getServerData().addFastWarp(name);
 		}
 		else if(ctx.getAction().equals("remove"))
 		{
-			MinecraftServer.getServer().getConfigurationManager().getDataLoader().removeFastWarp(name);
+			ctx.check(ctx.getServerData().removeFastWarp(name), "command.fastwarp.fail.nofastwarp");
 		}
 		ctx.sendMessage("command.fastwarp.success."+ctx.getAction());
 	}

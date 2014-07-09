@@ -17,6 +17,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
 
 import org.ultramine.server.PermissionHandler;
+import org.ultramine.server.data.ServerDataLoader;
 
 import java.util.HashMap;
 import java.util.List;
@@ -177,6 +178,17 @@ public class CommandContext
 	{
 		return command;
 	}
+	
+	public MinecraftServer getServer()
+	{
+		return MinecraftServer.getServer();
+	}
+	
+	public ServerDataLoader getServerData()
+	{
+		return getServer().getConfigurationManager().getDataLoader();
+	}
+
 
 	public class Argument
 	{

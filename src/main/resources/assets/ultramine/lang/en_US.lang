@@ -84,7 +84,8 @@ command.resetwarp.success=Warp set
 
 command.removewarp.usage=/removewarp <name>
 command.removewarp.description=Removes warp with specified name
-command.removewarp.fail=Warp not found
+command.removewarp.fail.spawn=Can't remove spawn warp
+command.removewarp.fail.nowarp=Warp not found
 command.removewarp.success=Warp removed
 
 command.warplist.usage=/warplist
@@ -94,6 +95,9 @@ command.warplist.head=Warp list:
 command.fastwarp.usage=/fastwarp <app|remove> <name>
 command.fastwarp.description=Add fastwarp
 command.fastwarp.fail.spawn=Can't change spawn fastwarp
+command.fastwarp.fail.nowarp=Warp with specified name not set; Use /setwarp
+command.fastwarp.fail.nofastwarp=Fastwarp with specified name not set
+command.fastwarp.fail.already=Fastwarp with specified name already set
 command.fastwarp.success.add=Fastwarp added
 command.fastwarp.success.remove=Fastwarp removed
 command.fastwarp.use.description=Teleport to this point

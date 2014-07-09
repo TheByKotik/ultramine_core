@@ -3,7 +3,6 @@ package org.ultramine.commands.basic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import static net.minecraft.util.EnumChatFormatting.*;
@@ -39,10 +38,10 @@ public class TechCommands
 	)
 	public static void uptime(CommandContext ctx)
 	{
-		double tps = Math.round(MinecraftServer.getServer().currentTPS*10)/10d;
-		double downtime = MinecraftServer.getServer().currentWait/1000/1000d;
+		double tps = Math.round(ctx.getServer().currentTPS*10)/10d;
+		double downtime = ctx.getServer().currentWait/1000/1000d;
 		int load = (int)Math.round((50-downtime)/50*100);
-		int uptime = (int)((System.currentTimeMillis() - MinecraftServer.getServer().startTime)/1000);
+		int uptime = (int)((System.currentTimeMillis() - ctx.getServer().startTime)/1000);
 		ctx.sendMessage(DARK_GREEN, "command.uptime.msg.up", String.format("%dd %dh %dm %ds", uptime/(60*60*24), uptime/(60*60)%24, uptime/60%60, uptime%60));
 		ctx.sendMessage(load > 100 ? RED : DARK_GREEN, "command.uptime.msg.load", Integer.toString(load).concat("%"));
 		ctx.sendMessage(tps < 15 ? RED : DARK_GREEN, "command.uptime.msg.tps",  Double.toString(tps),
