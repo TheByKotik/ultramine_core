@@ -334,7 +334,7 @@ public class CommandContext
 
 		public Builder resolveArguments(List<String> names)
 		{
-			context.lastArgumentNum = names.size();
+			context.lastArgumentNum = names.size() - 1;
 			Map<String, Integer> nameCount = new HashMap<String, Integer>();
 			for (int i = 0; i < names.size(); i++)
 			{
