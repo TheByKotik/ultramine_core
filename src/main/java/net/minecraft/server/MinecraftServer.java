@@ -142,13 +142,11 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	private final MinecraftSessionService field_147143_S;
 	private long field_147142_T = 0L;
 	private final GameProfileRepository field_152365_W;
-	private final PlayerProfileCache field_152366_X;
+	protected PlayerProfileCache field_152366_X;
 	private static final String __OBFID = "CL_00001462";
 
 	public MinecraftServer(File p_i45281_1_, Proxy p_i45281_2_)
 	{
-		field_152367_a = new File(getDataDirectory(), "usercache.json");
-		this.field_152366_X = new PlayerProfileCache(this, field_152367_a);
 		mcServer = this;
 		this.serverProxy = p_i45281_2_;
 		this.anvilFile = p_i45281_1_;

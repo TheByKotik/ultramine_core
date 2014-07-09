@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.command.CommandHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -27,12 +28,15 @@ import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 
+import org.ultramine.commands.CommandRegistry;
 import org.ultramine.commands.basic.BasicCommands;
+import org.ultramine.commands.basic.FastWarpCommand;
 import org.ultramine.commands.basic.TechCommands;
 import org.ultramine.commands.basic.VanillaCommands;
 import org.ultramine.commands.syntax.DefaultCompleters;
 import org.ultramine.permission.commands.BasicPermissionCommands;
 import org.ultramine.permission.internal.OpPermissionProxySet;
+import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerCoreData;
 
 public class UltramineServerModContainer extends DummyModContainer
@@ -103,7 +107,12 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void serverStarted(FMLServerStartedEvent e)
 	{
-		MinecraftServer.getServer().getConfigurationManager().getDataLoader().loadCache();
+		ServerDataLoader loader = MinecraftServer.getServer().getConfigurationManager().getDataLoader();
+		CommandRegistry reg = ((CommandHandler)MinecraftServer.getServer().getCommandManager()).getRegistry();
+		loader.loadCache();
+		loader.addDefaultWarps();
+		for(String name : loader.getFastWarps())
+			reg.registerCommand(new FastWarpCommand(name));
 	}
 	
 	@Subscribe

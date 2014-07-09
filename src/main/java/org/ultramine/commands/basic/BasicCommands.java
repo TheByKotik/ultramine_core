@@ -156,4 +156,25 @@ public class BasicCommands
 		for(Map.Entry<String, WarpLocation> ent : MinecraftServer.getServer().getConfigurationManager().getDataLoader().getWarps().entrySet())
 			ctx.sendMessage(GOLD, "    - %s [%s](%s, %s, %s)", ent.getKey(), ent.getValue().dimension, (int)ent.getValue().x, (int)ent.getValue().y, (int)ent.getValue().z);
 	}
+	
+	@Command(
+			name = "fastwarp",
+			group = "admin",
+			permissions = {"command.fastwarp"},
+			syntax = {"[add remove] <%name>"}
+	)
+	public static void fastwarp(CommandContext ctx)
+	{
+		String name = ctx.get("name").asString();
+		ctx.check(!name.equals("spawn"), "command.fastwarp.fail.spawn");
+		if(ctx.getAction().equals("add"))
+		{
+			MinecraftServer.getServer().getConfigurationManager().getDataLoader().addFastWarp(name);
+		}
+		else if(ctx.getAction().equals("remove"))
+		{
+			MinecraftServer.getServer().getConfigurationManager().getDataLoader().removeFastWarp(name);
+		}
+		ctx.sendMessage("command.fastwarp.success."+ctx.getAction());
+	}
 }

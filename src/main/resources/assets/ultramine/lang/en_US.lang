@@ -91,6 +91,13 @@ command.warplist.usage=/warplist
 command.warplist.description=Displays list of all server warps
 command.warplist.head=Warp list:
 
+command.fastwarp.usage=/fastwarp <app|remove> <name>
+command.fastwarp.description=Add fastwarp
+command.fastwarp.fail.spawn=Can't change spawn fastwarp
+command.fastwarp.success.add=Fastwarp added
+command.fastwarp.success.remove=Fastwarp removed
+command.fastwarp.use.description=Teleport to this point
+
 #Technical commands
 command.id.usage=/id <id>
 command.id.description=Displays information about specified item id

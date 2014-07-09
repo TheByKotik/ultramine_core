@@ -69,10 +69,12 @@ import net.minecraft.world.storage.IPlayerFileData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.MinecraftPermissions;
+import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.permission.internal.OpPermissionProxySet;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 import org.ultramine.server.data.ServerDataLoader;
+import org.ultramine.server.util.WarpLocation;
 
 public abstract class ServerConfigurationManager
 {
@@ -448,6 +450,8 @@ public abstract class ServerConfigurationManager
 		}
 
 		EntityPlayerMP entityplayermp1 = new EntityPlayerMP(this.mcServer, this.mcServer.worldServerForDimension(p_72368_1_.dimension), p_72368_1_.getGameProfile(), (ItemInWorldManager)object);
+		WarpLocation spawn = getDataLoader().getWarp(getServerInstance().isSinglePlayer() ? "spawn" : ConfigurationHandler.getServerConfig().spawnLocations.deathSpawn).randomize();
+		entityplayermp1.setLocationAndAngles(spawn.x, spawn.y, spawn.z, spawn.yaw, spawn.pitch);
 		entityplayermp1.playerNetServerHandler = p_72368_1_.playerNetServerHandler;
 		entityplayermp1.clonePlayer(p_72368_1_, p_72368_3_);
 		entityplayermp1.dimension = p_72368_2_;
@@ -456,7 +460,7 @@ public abstract class ServerConfigurationManager
 		this.func_72381_a(entityplayermp1, p_72368_1_, worldserver);
 		ChunkCoordinates chunkcoordinates1;
 
-		if (chunkcoordinates != null)
+		if (chunkcoordinates != null && (getServerInstance().isSinglePlayer() || ConfigurationHandler.getServerConfig().spawnLocations.respawnOnBed))
 		{
 			chunkcoordinates1 = EntityPlayer.verifyRespawnCoordinates(this.mcServer.worldServerForDimension(p_72368_1_.dimension), chunkcoordinates, flag1);
 
@@ -471,11 +475,14 @@ public abstract class ServerConfigurationManager
 			}
 		}
 
-		worldserver.theChunkProviderServer.loadChunk((int)entityplayermp1.posX >> 4, (int)entityplayermp1.posZ >> 4);
-
-		while (!worldserver.getCollidingBoundingBoxes(entityplayermp1, entityplayermp1.boundingBox).isEmpty())
+		if(getServerInstance().isSinglePlayer())
 		{
-			entityplayermp1.setPosition(entityplayermp1.posX, entityplayermp1.posY + 1.0D, entityplayermp1.posZ);
+			worldserver.theChunkProviderServer.loadChunk((int)entityplayermp1.posX >> 4, (int)entityplayermp1.posZ >> 4);
+
+			while (!worldserver.getCollidingBoundingBoxes(entityplayermp1, entityplayermp1.boundingBox).isEmpty())
+			{
+				entityplayermp1.setPosition(entityplayermp1.posX, entityplayermp1.posY + 1.0D, entityplayermp1.posZ);
+			}
 		}
 
 		entityplayermp1.playerNetServerHandler.sendPacket(new S07PacketRespawn(entityplayermp1.dimension, entityplayermp1.worldObj.difficultySetting, entityplayermp1.worldObj.getWorldInfo().getTerrainType(), entityplayermp1.theItemInWorldManager.getGameType()));

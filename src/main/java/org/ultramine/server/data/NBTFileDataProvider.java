@@ -32,6 +32,7 @@ public class NBTFileDataProvider implements IDataProvider
 
 	private final ServerConfigurationManager mgr;
 	private File umPlayerDir;
+	private List<String> fastWarps = Collections.emptyList();
 
 	public NBTFileDataProvider(ServerConfigurationManager mgr)
 	{
@@ -118,6 +119,7 @@ public class NBTFileDataProvider implements IDataProvider
 		if(file.exists())
 		{
 			YamlWarpList warps = YamlConfigProvider.getOrCreateConfig(file, YamlWarpList.class);
+			fastWarps = warps.fastWarps;
 			return warps.warps;
 		}
 		
@@ -132,6 +134,24 @@ public class NBTFileDataProvider implements IDataProvider
 	
 	@Override
 	public void removeWarp(String name)
+	{
+		writeWarpList();
+	}
+	
+	@Override
+	public List<String> loadFastWarps()
+	{
+		return fastWarps;
+	}
+
+	@Override
+	public void saveFastWarp(String name)
+	{
+		writeWarpList();
+	}
+
+	@Override
+	public void removeFastWarp(String name)
 	{
 		writeWarpList();
 	}
@@ -202,11 +222,13 @@ public class NBTFileDataProvider implements IDataProvider
 		File file = mgr.getServerInstance().getFile("warps.yml");
 		YamlWarpList warps = new YamlWarpList();
 		warps.warps = mgr.getDataLoader().getWarps();
+		warps.fastWarps = mgr.getDataLoader().getFastWarps();
 		YamlConfigProvider.saveConfig(file, warps);
 	}
 	
 	private static class YamlWarpList
 	{
 		public Map<String, WarpLocation> warps;
+		public List<String> fastWarps;
 	}
 }

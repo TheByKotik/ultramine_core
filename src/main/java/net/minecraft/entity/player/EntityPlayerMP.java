@@ -145,21 +145,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		super(p_i45285_2_, p_i45285_3_);
 		p_i45285_4_.thisPlayerMP = this;
 		this.theItemInWorldManager = p_i45285_4_;
-		ChunkCoordinates chunkcoordinates = p_i45285_2_.provider.getRandomizedSpawnPoint();
-		int i = chunkcoordinates.posX;
-		int j = chunkcoordinates.posZ;
-		int k = chunkcoordinates.posY;
 
 		this.mcServer = p_i45285_1_;
 		this.field_147103_bO = p_i45285_1_.getConfigurationManager().func_152602_a(this);
 		this.stepHeight = 0.0F;
 		this.yOffset = 0.0F;
-		this.setLocationAndAngles((double)i + 0.5D, (double)k, (double)j + 0.5D, 0.0F, 0.0F);
-
-		while (!p_i45285_2_.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty())
-		{
-			this.setPosition(this.posX, this.posY + 1.0D, this.posZ);
-		}
 		
 		renderDistance = p_i45285_1_.getConfigurationManager().getViewDistance();
 	}

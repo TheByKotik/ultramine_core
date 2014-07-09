@@ -25,6 +25,7 @@ import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -928,7 +929,7 @@ public class Chunk
 		}
 		MinecraftForge.EVENT_BUS.post(new ChunkEvent.Load(this));
 
-		loadTime = unbindTime = ((WorldServer)worldObj).func_73046_m().getTickCounter();
+		loadTime = unbindTime = MinecraftServer.getServer().getTickCounter();
 		lastsavePendingCount = pendingUpdatesSet == null ? 0 : pendingUpdatesSet.size();
 	}
 

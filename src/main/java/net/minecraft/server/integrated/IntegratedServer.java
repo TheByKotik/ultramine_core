@@ -3,16 +3,19 @@ package net.minecraft.server.integrated;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.concurrent.Callable;
+
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ThreadLanServerPing;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.profiler.PlayerUsageSnooper;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.util.CryptManager;
 import net.minecraft.util.HttpUtil;
 import net.minecraft.world.EnumDifficulty;
@@ -26,6 +29,7 @@ import net.minecraft.world.storage.ISaveHandler;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.PermissionRepository;
@@ -54,6 +58,8 @@ public class IntegratedServer extends MinecraftServer
 		this.mc = p_i1317_1_;
 		this.func_152361_a(new IntegratedPlayerList(this));
 		this.theWorldSettings = p_i1317_4_;
+		field_152367_a = new File(getDataDirectory(), "usercache.json");
+		field_152366_X = new PlayerProfileCache(this, field_152367_a);
 	}
 
 	protected void loadAllWorlds(String p_71247_1_, String p_71247_2_, long p_71247_3_, WorldType p_71247_5_, String p_71247_6_)

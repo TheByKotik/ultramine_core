@@ -26,6 +26,7 @@ import net.minecraft.network.rcon.RConThreadQuery;
 import net.minecraft.profiler.PlayerUsageSnooper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.MinecraftServerGui;
+import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.CryptManager;
@@ -64,6 +65,8 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	public DedicatedServer(File p_i1508_1_)
 	{
 		super(p_i1508_1_, Proxy.NO_PROXY);
+		field_152367_a = new File(getDataDirectory(), "usercache.json");
+		field_152366_X = new PlayerProfileCache(this, field_152367_a);
 		Thread thread = new Thread("Server Infinisleeper")
 		{
 			private static final String __OBFID = "CL_00001787";

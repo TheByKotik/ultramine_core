@@ -37,7 +37,7 @@ public class Teleporter
 	public static void tpNow(EntityPlayerMP target, WarpLocation dst)
 	{
 		if(target == null || dst == null) return;
-		doTeleportation(target, dst.dimension, dst.x, dst.y, dst.z, dst.yaw, dst.pitch);
+		doTeleportation(target, dst);
 	}
 	
 	public static void tpLater(EntityPlayerMP target, WarpLocation dst)
@@ -68,6 +68,12 @@ public class Teleporter
 			teleporters.add(tel);
 			target.getData().core().setTeleporter(tel);
 		}
+	}
+	
+	private static void doTeleportation(EntityPlayerMP target, WarpLocation dst)
+	{
+		dst = dst.randomize();
+		doTeleportation(target, dst.dimension, dst.x, dst.y, dst.z, dst.yaw, dst.pitch);
 	}
 	
 	private static void doTeleportation(EntityPlayerMP player, int dimension, double x, double y, double z, float yaw, float pitch)
@@ -118,7 +124,7 @@ public class Teleporter
 	{
 		if(timeEnd - System.currentTimeMillis() <= 0)
 		{
-			doTeleportation(target, dst.dimension, dst.x, dst.y, dst.z, dst.yaw, dst.pitch);
+			doTeleportation(target, dst);
 			return true;
 		}
 		

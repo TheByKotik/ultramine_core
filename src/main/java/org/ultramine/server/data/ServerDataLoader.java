@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.ultramine.commands.basic.FastWarpCommand;
+import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.data.player.PlayerDataExtension;
 import org.ultramine.server.data.player.PlayerDataExtensionInfo;
@@ -15,12 +17,14 @@ import org.ultramine.server.util.WarpLocation;
 import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraft.command.CommandHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.world.storage.SaveHandler;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.event.ForgeEventFactory;
 
 public class ServerDataLoader
@@ -31,6 +35,7 @@ public class ServerDataLoader
 	private final List<PlayerDataExtensionInfo> dataExtinfos = new ArrayList<PlayerDataExtensionInfo>();
 	private final Map<UUID, PlayerData> playerDataCache = new HashMap<UUID, PlayerData>();
 	private final Map<String, WarpLocation> warps = new HashMap<String, WarpLocation>();
+	private final List<String> fastWarps = new ArrayList<String>();
 	
 	public ServerDataLoader(ServerConfigurationManager mgr)
 	{
@@ -80,12 +85,53 @@ public class ServerDataLoader
 		return warps;
 	}
 	
+	public void addFastWarp(String name)
+	{
+		if(fastWarps.add(name))
+		{
+			dataProvider.saveFastWarp(name);
+			((CommandHandler)mgr.getServerInstance().getCommandManager()).getRegistry().registerCommand(new FastWarpCommand(name));
+		}
+	}
+	
+	public void removeFastWarp(String name)
+	{
+		if(fastWarps.remove(name))
+			dataProvider.removeFastWarp(name);
+	}
+	
+	public List<String> getFastWarps()
+	{
+		return fastWarps;
+	}
+	
 	public void loadCache()
 	{
 		for(PlayerData data : dataProvider.loadAllPlayerData())
 			playerDataCache.put(data.getProfile().getId(), data);
 		warps.putAll(dataProvider.loadWarps());
-		
+		fastWarps.addAll(dataProvider.loadFastWarps());
+	}
+	
+	public void addDefaultWarps()
+	{
+		if(!warps.containsKey("spawn"))
+		{
+			WorldInfo wi = mgr.getServerInstance().getMultiWorld().getWorldByID(0).getWorldInfo();
+			setWarp("spawn", new WarpLocation(0, wi.getSpawnX(), wi.getSpawnY(), wi.getSpawnZ(), 0, 0, 20));
+		}
+		if(!fastWarps.contains("spawn"))
+		{
+			fastWarps.add("spawn");
+			dataProvider.saveFastWarp("spawn");
+		}
+		if(!isClient)
+		{
+			String firstSpawn = ConfigurationHandler.getServerConfig().spawnLocations.firstSpawn;
+			String deathSpawn = ConfigurationHandler.getServerConfig().spawnLocations.deathSpawn;
+			if(!warps.containsKey(firstSpawn)) setWarp(firstSpawn, getWarp("spawn"));
+			if(!warps.containsKey(deathSpawn)) setWarp(deathSpawn, getWarp("spawn"));
+		}
 	}
 	
 	public void initializeConnectionToPlayer(NetworkManager network, EntityPlayerMP player, NetHandlerPlayServer nethandler)
@@ -112,6 +158,11 @@ public class ServerDataLoader
 		else
 		{
 			player.setData(playerDataCache.get(player.getGameProfile().getId()));
+		}
+		if(nbt == null) //first login
+		{
+			WarpLocation spawn = getWarp(isClient ? "spawn" : ConfigurationHandler.getServerConfig().spawnLocations.firstSpawn).randomize();
+			player.setLocationAndAngles(spawn.x, spawn.y, spawn.z, spawn.yaw, spawn.pitch);
 		}
 		ForgeEventFactory.firePlayerLoadingEvent(player, ((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getUniqueID().toString());
 		mgr.initializeConnectionToPlayer_body(network, player, nethandler, nbt);

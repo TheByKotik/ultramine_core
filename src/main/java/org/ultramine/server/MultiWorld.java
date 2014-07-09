@@ -135,7 +135,15 @@ public class MultiWorld
 		conf.settings = new WorldConfig.Settings();
 		conf.chunkLoading = new WorldConfig.ChunkLoading();
 		for(WorldServer world : server.worldServers)
+		{
 			world.setConfig(conf);
+			String name = world.getWorldInfo().getWorldName();
+			dimToWorldMap.put(world.provider.dimensionId, world);
+			if(nameToWorldMap.containsKey(name))
+				nameToWorldMap.put(name + world.provider.dimensionId, world);
+			else
+				nameToWorldMap.put(name, world);
+		}
 	}
 	
 	@SideOnly(Side.SERVER)

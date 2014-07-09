@@ -7,6 +7,7 @@ public class UltramineServerConfig
 {
 	public WatchdogThreadConfig	watchdogThread = new WatchdogThreadConfig();
 	public Teleportation teleportation = new Teleportation();
+	public SpawnLocations spawnLocations = new SpawnLocations();
 	public VanillaConfig		vanilla = new VanillaConfig();
 
 	public static class WatchdogThreadConfig
@@ -19,6 +20,13 @@ public class UltramineServerConfig
 	{
 		public int cooldown = 60;
 		public int delay = 5;
+	}
+	
+	public static class SpawnLocations
+	{
+		public String firstSpawn = "spawn";
+		public String deathSpawn = "spawn";
+		public boolean respawnOnBed = true;
 	}
 	
 	

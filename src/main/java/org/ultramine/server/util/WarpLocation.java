@@ -1,7 +1,11 @@
 package org.ultramine.server.util;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.WorldServer;
 
 public class WarpLocation
 {
@@ -35,14 +39,26 @@ public class WarpLocation
 		this(dimension, x, y, z, 0, 0);
 	}
 	
-	public void round()
+	public WarpLocation randomize()
 	{
-		x = (double)Math.round(x*100)/100.0;
-		y = (double)Math.round(y*100)/100.0;
-		z = (double)Math.round(z*100)/100.0;
+		if(randomRadius == 0)
+			return this;
 		
-		yaw = (float)Math.round(yaw*100)/100.0F;
-		pitch = (float)Math.round(pitch*100)/100.0F;
+		WorldServer world = MinecraftServer.getServer().getMultiWorld().getWorldByID(dimension);
+		double newX = x + randomRadius*world.rand.nextDouble();
+		double newZ = z + randomRadius*world.rand.nextDouble();
+		double newY = y;
+		int intX = MathHelper.floor_double(newX);
+		int intZ = MathHelper.floor_double(newZ);
+		if(world.chunkExists(intX >> 4, intZ >> 4))
+		{
+			while(world.getBlock(intX, MathHelper.floor_double(newY), intZ) != Blocks.air)
+				newY++;
+			while(world.getBlock(intX, MathHelper.floor_double(newY)-1, intZ) == Blocks.air)
+				newY--;
+		}
+		
+		return new WarpLocation(dimension, newX, newY, newZ, yaw, pitch, 0);
 	}
 	
 	public boolean equals(WarpLocation loc)
@@ -86,8 +102,11 @@ public class WarpLocation
 	
 	public static WarpLocation getFromPlayer(EntityPlayer player)
 	{
-		WarpLocation s =  new WarpLocation(player.dimension, player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
-		s.round();
-		return s;
+		return new WarpLocation(player.dimension,
+				(double)Math.round(player.posX*100)/100.0,
+				(double)Math.round(player.posY*100)/100.0,
+				(double)Math.round(player.posZ*100)/100.0,
+				(float)Math.round(player.rotationYaw*100)/100.0F,
+				(float)Math.round(player.rotationPitch*100)/100.0F);
 	}
 }

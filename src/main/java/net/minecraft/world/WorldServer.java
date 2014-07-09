@@ -652,7 +652,7 @@ public class WorldServer extends World
 				}
 			}
 
-			this.worldInfo.setSpawnPosition(i, j, k);
+			this.worldInfo.setSpawnPosition(i, getHeightValue(i, k), k);
 			this.findingSpawnPoint = false;
 
 			if (p_73052_1_.isBonusChestEnabled())
