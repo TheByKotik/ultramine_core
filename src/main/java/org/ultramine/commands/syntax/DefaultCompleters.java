@@ -47,6 +47,12 @@ public class DefaultCompleters
 	{
 		return filterCollection(val, MinecraftServer.getServer().getMultiWorld().getAllNames());
 	}
+	
+	@ArgumentCompleter("warp")
+	public static List<String> warp(String val, String[] args)
+	{
+		return filterCollection(val, MinecraftServer.getServer().getConfigurationManager().getDataLoader().getWarps().keySet());
+	}
 
 	@ArgumentValidator("world")
 	public static boolean world_validator(String val, String[] args)

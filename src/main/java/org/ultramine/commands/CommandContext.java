@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,6 +19,7 @@ import net.minecraft.world.WorldServer;
 
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.data.ServerDataLoader;
+import org.ultramine.server.data.player.PlayerData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -127,6 +129,12 @@ public class CommandContext
 	{
 		if (!senderIsServer() && !PermissionHandler.getInstance().has(world, sender.getCommandSenderName(), permission))
 			throw new CommandException("commands.generic.permission");
+	}
+	
+	public void checkPermissionIfArg(String arg, String permission, String msg)
+	{
+		if(contains(arg))
+			checkSenderPermission(permission, msg);
 	}
 	
 	public void sendMessage(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
@@ -287,6 +295,14 @@ public class CommandContext
 		public EntityPlayerMP asPlayer()
 		{
 			return CommandBase.getPlayer(sender, value);
+		}
+		
+		public PlayerData asPlayerData()
+		{
+			PlayerData data = getServerData().getPlayerData(value);
+			if(data == null)
+				throw new PlayerNotFoundException();
+			return data;
 		}
 		
 		public WorldServer asWorld()

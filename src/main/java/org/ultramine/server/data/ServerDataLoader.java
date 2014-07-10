@@ -34,6 +34,7 @@ public class ServerDataLoader
 	private final IDataProvider dataProvider;
 	private final List<PlayerDataExtensionInfo> dataExtinfos = new ArrayList<PlayerDataExtensionInfo>();
 	private final Map<UUID, PlayerData> playerDataCache = new HashMap<UUID, PlayerData>();
+	private final Map<String, PlayerData> namedPlayerDataCache = new HashMap<String, PlayerData>();
 	private final Map<String, WarpLocation> warps = new HashMap<String, WarpLocation>();
 	private final List<String> fastWarps = new ArrayList<String>();
 	
@@ -60,7 +61,7 @@ public class ServerDataLoader
 	
 	public PlayerData getPlayerData(String username)
 	{
-		return playerDataCache.get(mgr.getServerInstance().func_152358_ax().func_152655_a(username));
+		return namedPlayerDataCache.get(username);
 	}
 	
 	public WarpLocation getWarp(String name)
@@ -117,7 +118,10 @@ public class ServerDataLoader
 	public void loadCache()
 	{
 		for(PlayerData data : dataProvider.loadAllPlayerData())
+		{
 			playerDataCache.put(data.getProfile().getId(), data);
+			namedPlayerDataCache.put(data.getProfile().getName(), data);
+		}
 		warps.putAll(dataProvider.loadWarps());
 		fastWarps.addAll(dataProvider.loadFastWarps());
 	}
@@ -163,6 +167,7 @@ public class ServerDataLoader
 		{
 			player.setData(data);
 			playerDataCache.put(data.getProfile().getId(), data);
+			namedPlayerDataCache.put(data.getProfile().getName(), data);
 		}
 		else
 		{

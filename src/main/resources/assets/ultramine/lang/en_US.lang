@@ -53,7 +53,8 @@ command.pgroup.success.meta=Set meta <%s> to <%s> for group <%s>
 command.home.usage=/home [name]
 command.home.description=Teleports you to your home, sets with /sethome
 command.home.fail.notset=Home is not set
-command.home.multi.fail=You have no rights tp use multiple homes
+command.home.multi.fail=You don't have permissions to use multiple homes
+command.home.other.fail=You don't have permissions to use homes of other players
 
 command.sethome.usage=/sethome [name]
 command.sethome.description=Sets your /home teleportation point
@@ -72,6 +73,7 @@ command.homelist.head=Home list:
 command.warp.usage=/warp <name>
 command.warp.description=Teleports you to specified warp point
 command.warp.fail=Warp not found
+command.warp.noperm.other=You don't have permissions to teleport other players
 
 command.setwarp.usage=/setwarp <name> [randomradius]
 command.setwarp.description=Sets new warp ar current location
@@ -91,6 +93,10 @@ command.removewarp.success=Warp removed
 command.warplist.usage=/warplist
 command.warplist.description=Displays list of all server warps
 command.warplist.head=Warp list:
+
+command.back.usage=/back
+command.back.description=Teleport to last location
+command.back.fail=Last location not found
 
 command.fastwarp.usage=/fastwarp <app|remove> <name>
 command.fastwarp.description=Add fastwarp

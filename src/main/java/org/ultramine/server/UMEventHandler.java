@@ -2,6 +2,7 @@ package org.ultramine.server;
 
 import org.ultramine.server.data.player.io.PlayerDataIOExecutor;
 import org.ultramine.server.util.BasicTypeParser;
+import org.ultramine.server.util.WarpLocation;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -11,6 +12,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class UMEventHandler
@@ -47,6 +49,19 @@ public class UMEventHandler
 		if(e.entityPlayer.isEntityPlayerMP())
 		{
 			((EntityPlayerMP)e.entityPlayer).setData(((EntityPlayerMP)e.original).getData());
+		}
+	}
+	
+	@SubscribeEvent
+	public void onLivingDeath(LivingDeathEvent e)
+	{
+		if(e.entityLiving.isEntityPlayerMP())
+		{
+			EntityPlayerMP player = (EntityPlayerMP)e.entityLiving;
+			Teleporter tp = player.getData().core().getTeleporter();
+			if(tp != null)
+				tp.cancel();
+			player.getData().core().setLastLocation(WarpLocation.getFromPlayer(player));
 		}
 	}
 }

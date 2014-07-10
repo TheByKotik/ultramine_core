@@ -10,6 +10,7 @@ import net.minecraft.world.storage.WorldInfo;
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
 import org.ultramine.server.Teleporter;
+import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.util.WarpLocation;
 
 public class BasicCommands
@@ -18,43 +19,45 @@ public class BasicCommands
 			name = "home",
 			group = "player",
 			aliases = {"дом", "хата"},
-			permissions = {"command.home", "command.home.multi"},
-			syntax = {"", "<%name>"}
+			permissions = {"command.home", "command.home.multi", "command.home.other"},
+			syntax = {
+					"",
+					"<%name>",
+					"<player%dst> <%name>",
+					"<player%target> <player%dst> <%name>"
+			}
 	)
 	public static void home(CommandContext ctx)
 	{
-		WarpLocation home;
-		if(ctx.contains("name"))
-		{
-			ctx.checkSenderPermission("command.home.multi", "command.home.multi.fail");
-			home = ctx.getSenderAsPlayer().getData().core().getHome(ctx.get("name").asString());
-		}
-		else
-		{
-			home = ctx.getSenderAsPlayer().getData().core().getHome("home");
-		}
+		ctx.checkPermissionIfArg("name", "command.home.multi", "command.home.multi.fail");
+		ctx.checkPermissionIfArg("dst", "command.home.other", "command.home.other.fail");
+		EntityPlayerMP target = ctx.contains("target") ? ctx.get("target").asPlayer() : ctx.getSenderAsPlayer();
+		PlayerData data = ctx.contains("dst") ? ctx.get("dst").asPlayerData() : ctx.getSenderAsPlayer().getData();
+		WarpLocation home = data.core().getHome(ctx.contains("name") ? ctx.get("name").asString() : "home");
 		ctx.check(home != null, "command.home.fail.notset");
-		Teleporter.tpLater(ctx.getSenderAsPlayer(), home);
+		Teleporter.tpLater(target, home);
 	}
 	
 	@Command(
 			name = "sethome",
 			group = "player",
 			aliases = {"здесьдом"},
-			permissions = {"command.home", "command.home.multi"},
-			syntax = {"", "<%name>"}
+			permissions = {"command.home", "command.home.multi", "command.home.other"},
+			syntax = {
+					"",
+					"<%name>",
+					"<player%target> <%name>",
+					"<warp%dst> <player%target> <%name>"
+			}
 	)
 	public static void sethome(CommandContext ctx)
 	{
-		if(ctx.contains("name"))
-		{
-			ctx.checkSenderPermission("command.home.multi", "command.sethome.multi.fail");
-			ctx.getSenderAsPlayer().getData().core().setHome(ctx.get("name").asString(), WarpLocation.getFromPlayer(ctx.getSenderAsPlayer()));
-		}
-		else
-		{
-			ctx.getSenderAsPlayer().getData().core().setHome("home", WarpLocation.getFromPlayer(ctx.getSenderAsPlayer()));
-		}
+		ctx.checkPermissionIfArg("name", "command.home.multi", "command.home.multi.fail");
+		ctx.checkPermissionIfArg("target", "command.home.other", "command.home.other.fail");
+		PlayerData data = ctx.contains("target") ? ctx.get("target").asPlayerData() : ctx.getSenderAsPlayer().getData();
+		WarpLocation dst = ctx.contains("dst") ? ctx.getServerData().getWarp(ctx.get("dst").asString()) : WarpLocation.getFromPlayer(ctx.getSenderAsPlayer());
+		ctx.check(dst != null, "command.warp.fail");
+		data.core().setHome(ctx.contains("name") ? ctx.get("name").asString() : "home", dst);
 		ctx.sendMessage("command.sethome.success");
 	}
 	
@@ -90,14 +93,20 @@ public class BasicCommands
 	@Command(
 			name = "warp",
 			group = "player",
-			permissions = {"command.warp"},
-			syntax = {"<%name>"}
+			permissions = {"command.warp", "command.warp.other"},
+			syntax = {
+					"<warp%name>",
+					"<player> <warp%name>"
+			}
 	)
 	public static void warp(CommandContext ctx)
 	{
+		if(ctx.contains("player"))
+			ctx.checkSenderPermission("command.warp.other", "command.warp.noperm.other");
+		EntityPlayerMP target = ctx.contains("player") ? ctx.get("player").asPlayer() : ctx.getSenderAsPlayer();
 		WarpLocation warp = ctx.getServerData().getWarp(ctx.get("name").asString());
 		ctx.check(warp != null, "command.warp.fail");
-		Teleporter.tpLater(ctx.getSenderAsPlayer(), warp);
+		Teleporter.tpLater(target, warp);
 	}
 	
 	@Command(
@@ -158,6 +167,18 @@ public class BasicCommands
 		ctx.sendMessage("command.warplist.head");
 		for(Map.Entry<String, WarpLocation> ent : ctx.getServerData().getWarps().entrySet())
 			ctx.sendMessage(GOLD, "    - %s [%s](%s, %s, %s)", ent.getKey(), ent.getValue().dimension, (int)ent.getValue().x, (int)ent.getValue().y, (int)ent.getValue().z);
+	}
+	
+	@Command(
+			name = "back",
+			group = "player",
+			permissions = {"command.back"}
+	)
+	public static void back(CommandContext ctx)
+	{
+		WarpLocation loc = ctx.getSenderAsPlayer().getData().core().getLastLocation();
+		ctx.check(loc != null, "command.back.fail");
+		Teleporter.tpLater(ctx.getSenderAsPlayer(), loc);
 	}
 	
 	@Command(
