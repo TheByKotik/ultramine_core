@@ -1,5 +1,13 @@
 package org.ultramine.server.util;
 
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.EnumDifficulty;
 
@@ -93,5 +101,72 @@ public class BasicTypeParser
 		}
 		
 		return null;
+	}
+	
+	public static ItemStack parseItemStack(String str)
+	{
+		int len = str.length();
+		int ind1 = str.indexOf(':');
+		int ind4 = str.indexOf(':', ind1+1);
+		int ind2 = str.indexOf('*');
+		int ind3 = str.indexOf('{');
+		if(ind3 != -1 && ind1 > ind3) ind1 = -1;
+		if(ind3 != -1 && ind2 > ind3) ind2 = -1;
+		if(ind4 != -1 && ind4 != -1 && (ind4 < ind3 || ind3 == -1)) ind1 = ind4;
+		boolean hasData = ind1 != -1;
+		boolean hasSize = ind2 != -1;
+		boolean hasNBT = ind3 != -1;
+		int idEndInd = hasData ? ind1 : hasSize ? ind2 : hasNBT ? ind3 : len;
+		int dataEndInd = hasSize ? ind2 : hasNBT ? ind3 : len;
+		int sizeEndInd = hasNBT ? ind3 : len;
+		int data = 0;
+		int size = -1;
+		NBTTagCompound nbt = null;
+		int endInd;
+		Item item = CommandBase.getItemByText(null, str.substring(0, endInd = idEndInd));
+		if(hasData)
+		{
+			String dataS = str.substring(endInd+1, endInd = dataEndInd);
+			try
+			{
+				data = Integer.parseInt(dataS);
+			}
+			catch(NumberFormatException e)
+			{
+				throw new CommandException("commands.generic.itemstack.data", dataS);
+			}
+		}
+		if(hasSize)
+		{
+			String sizeS = str.substring(endInd+1, endInd = sizeEndInd);
+			try
+			{
+				size = Integer.parseInt(sizeS);
+			}
+			catch(NumberFormatException e)
+			{
+				throw new CommandException("commands.generic.itemstack.size", sizeS);
+			}
+		}
+		if(hasNBT)
+		{
+			try
+			{
+				NBTBase nbtbase = JsonToNBT.func_150315_a(str.substring(endInd, len));
+				if(nbtbase instanceof NBTTagCompound)
+					nbt = (NBTTagCompound)nbtbase;
+			}
+			catch(NBTException e)
+			{
+				throw new CommandException("commands.setblock.tagError", e.getMessage());
+			}
+		}
+		
+		ItemStack is = new ItemStack(item, 1, data);
+		if(nbt != null)
+			is.setTagCompound(nbt);
+		is.stackSize = size != -1 ? size : is.getMaxStackSize();
+		
+		return is;
 	}
 }

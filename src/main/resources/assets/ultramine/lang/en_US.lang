@@ -5,6 +5,8 @@ teleporter.canceled=Teleportation canceled
 
 #Command generic
 commands.generic.world.invalid=Can't find world '%s'
+commands.generic.itemstack.data=Failed to parse item data: %s
+commands.generic.itemstack.size=Failed to parse stack size: %s
 
 #Vanilla replacements
 command.tp.usage=/tp [target player] <destination player> OR /tp [target player] [world] <x> <y> <z>
@@ -118,6 +120,23 @@ command.setlocalspawn.success=Localspawn set
 
 command.localspawn.usage=/localspawn
 command.localspawn.description=Teleport to local spawn of current world (vanilla logic)
+
+command.heal.usage=/heal [player]
+command.heal.description=Restores health and hunger
+command.heal.noperm.other=Yout don't have permissions to heal other player
+command.heal.success=You have been healed
+command.heal.success.other=Player %s has been healed
+
+command.dropall.usage=/dropall [player]
+command.dropall.description=Drops all items in inventory
+command.dropall.noperm.other=Yout don't have permissions to dropall other player
+
+command.item.usage=/item <item> [count] OR /item <player> <item{NBT with spaces}>
+command.item.description=Get specified item stack
+
+command.dupe.usage=/dupe [count]
+command.dupe.description=Dupe the item in hand
+command.dupe.fail=Get item for dupe to the hand first
 
 #Technical commands
 command.id.usage=/id <id>

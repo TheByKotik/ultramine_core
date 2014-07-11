@@ -9,6 +9,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
@@ -20,6 +21,7 @@ import net.minecraft.world.WorldServer;
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerData;
+import org.ultramine.server.util.BasicTypeParser;
 
 import java.util.HashMap;
 import java.util.List;
@@ -336,6 +338,11 @@ public class CommandContext
 		public Block asBlock()
 		{
 			return CommandBase.getBlockByText(sender, value);
+		}
+
+		public ItemStack asItemStack()
+		{
+			return BasicTypeParser.parseItemStack(asString());
 		}
 	}
 

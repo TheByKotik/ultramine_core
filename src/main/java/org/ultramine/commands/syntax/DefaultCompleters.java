@@ -5,7 +5,12 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
+
 import org.ultramine.server.util.BasicTypeParser;
+
+import com.google.common.collect.Iterables;
+
+import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,18 +23,25 @@ public class DefaultCompleters
 		return filterArray(val, MinecraftServer.getServer().getAllUsernames());
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ArgumentCompleter("item")
-	public static List<String> item(String val, String[] args)
+	public static  List<String> item(String val, String[] args)
 	{
-		return filterCollection(val, Item.itemRegistry.getKeys());
+		Iterable it = Iterables.concat(Item.itemRegistry.getKeys(), ((FMLControlledNamespacedRegistry)Item.itemRegistry).getAliases().keySet());
+		List<String> ret = filterCollection(val, it);
+		if(val.indexOf(':') == -1)
+			ret.addAll(filterCollection("minecraft:".concat(val), it));
+		return ret;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ArgumentCompleter("block")
 	public static List<String> block(String val, String[] args)
 	{
-		return filterCollection(val, Block.blockRegistry.getKeys());
+		return filterCollection(val, Iterables.concat(Block.blockRegistry.getKeys(), ((FMLControlledNamespacedRegistry)Block.blockRegistry).getAliases().keySet()));
 	}
 
+	@SuppressWarnings({ "unchecked" })
 	@ArgumentCompleter("entity")
 	public static List<String> entity(String val, String[] args)
 	{
@@ -54,6 +66,12 @@ public class DefaultCompleters
 		return filterCollection(val, MinecraftServer.getServer().getConfigurationManager().getDataLoader().getWarps().keySet());
 	}
 
+	@ArgumentValidator("int")
+	public static boolean int_validator(String val, String[] args)
+	{
+		return BasicTypeParser.isInt(val);
+	}
+	
 	@ArgumentValidator("world")
 	public static boolean world_validator(String val, String[] args)
 	{
