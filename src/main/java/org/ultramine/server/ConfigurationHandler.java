@@ -19,6 +19,7 @@ public class ConfigurationHandler
 	public static Logger log = LogManager.getLogger();
 	
 	private static File settingsDir = new File(FMLLaunchHandler.getMinecraftHome(), "settings");
+	private static File storageDir = new File(FMLLaunchHandler.getMinecraftHome(), "storage");
 	private static File worldsDir = new File(FMLLaunchHandler.getMinecraftHome(), "worlds");
 	
 	private static File serverConfigFile = new File(getSettingDir(), "server.yml");
@@ -30,6 +31,7 @@ public class ConfigurationHandler
 	static
 	{
 		if(!settingsDir.exists()) settingsDir.mkdir();
+		if(!storageDir.exists()) storageDir.mkdir();
 		if(!worldsDir.exists()) worldsDir.mkdir();
 	}
 	
@@ -52,6 +54,11 @@ public class ConfigurationHandler
 	public static File getSettingDir()
 	{
 		return settingsDir;
+	}
+	
+	public static File getStorageDir()
+	{
+		return storageDir;
 	}
 	
 	public static File getWorldsDir()

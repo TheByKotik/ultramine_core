@@ -461,7 +461,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				crashreport = this.addServerInfoToCrashReport(new CrashReport("Exception in server tick loop", throwable1));
 			}
 
-			File file1 = new File(new File(this.getDataDirectory(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
+			File file1 = new File(new File(this.getHomeDirectory(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
 
 			if (crashreport.saveToFile(file1))
 			{
@@ -1501,5 +1501,10 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	public File getWorldsDir()
 	{
 		return anvilFile;
+	}
+	
+	protected File getHomeDirectory()
+	{
+		return getDataDirectory();
 	}
 }

@@ -1,6 +1,7 @@
 package net.minecraft.server.dedicated;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -583,6 +584,11 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	
 	protected File getDataDirectory()
 	{
-		return ConfigurationHandler.getSettingDir();
+		return ConfigurationHandler.getStorageDir();
+	}
+	
+	protected File getHomeDirectory()
+	{
+		return FMLLaunchHandler.getMinecraftHome();
 	}
 }

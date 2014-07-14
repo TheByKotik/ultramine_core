@@ -187,6 +187,9 @@ public class UserList
 	@SideOnly(Side.SERVER)
 	public void func_152679_g() throws IOException
 	{
+		if(!field_152695_c.exists())
+			return; //Без лишних исключений при старте сервера
+		
 		Collection collection = null;
 		BufferedReader bufferedreader = null;
 
