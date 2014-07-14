@@ -9,6 +9,8 @@ public class UltramineServerConfig
 	public Teleportation teleportation = new Teleportation();
 	public SpawnLocations spawnLocations = new SpawnLocations();
 	public VanillaConfig		vanilla = new VanillaConfig();
+	public Map<String, Database> databases;
+	public SQLServerStorage inSQLServerStorage = new SQLServerStorage();
 
 	public static class WatchdogThreadConfig
 	{
@@ -27,6 +29,21 @@ public class UltramineServerConfig
 		public String firstSpawn = "spawn";
 		public String deathSpawn = "spawn";
 		public boolean respawnOnBed = true;
+	}
+	
+	public static class Database
+	{
+		public String url; //jdbc:mysql://localhost:3306/databasename
+		public String username;
+		public String password;
+		public int maxConnections;
+	}
+	
+	public static class SQLServerStorage
+	{
+		public boolean enabled = false;
+		public String database = "global";
+		public String tablePrefix = "mc_";
 	}
 	
 	

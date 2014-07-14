@@ -38,6 +38,16 @@ public class NBTFileDataProvider implements IDataProvider
 	{
 		this.mgr = mgr;
 	}
+	
+	@Override
+	public void init()
+	{
+		if(umPlayerDir == null)
+		{
+			umPlayerDir = new File(((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), "ultramine");
+			umPlayerDir.mkdir();
+		}
+	}
 
 	@Override
 	public NBTTagCompound loadPlayer(GameProfile player)
@@ -68,15 +78,11 @@ public class NBTFileDataProvider implements IDataProvider
 	@Override
 	public PlayerData loadPlayerData(GameProfile player)
 	{
-		checkPlayerDir();
-		
 		return readPlayerData(getPlayerDataNBT(player.getId().toString()));
 	}
 	
 	public List<PlayerData> loadAllPlayerData()
 	{
-		checkPlayerDir();
-		
 		List<PlayerData> list = new ArrayList<PlayerData>();
 		for(File file : umPlayerDir.listFiles())
 		{
@@ -154,15 +160,6 @@ public class NBTFileDataProvider implements IDataProvider
 	public void removeFastWarp(String name)
 	{
 		writeWarpList();
-	}
-	
-	private void checkPlayerDir()
-	{
-		if(umPlayerDir == null)
-		{
-			umPlayerDir = new File(((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), "ultramine");
-			umPlayerDir.mkdir();
-		}
 	}
 
 	private NBTTagCompound getPlayerDataNBT(String username)

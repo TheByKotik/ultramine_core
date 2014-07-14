@@ -36,6 +36,7 @@ import org.ultramine.commands.basic.VanillaCommands;
 import org.ultramine.commands.syntax.DefaultCompleters;
 import org.ultramine.permission.commands.BasicPermissionCommands;
 import org.ultramine.permission.internal.OpPermissionProxySet;
+import org.ultramine.server.data.Databases;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerCoreData;
 
@@ -67,7 +68,10 @@ public class UltramineServerModContainer extends DummyModContainer
 	public void preInit(FMLPreInitializationEvent e)
 	{
 		if(e.getSide().isServer())
+		{
 			ConfigurationHandler.load();
+			Databases.init();
+		}
 	}
 	
 	@Subscribe

@@ -31,7 +31,7 @@ public class ServerDataLoader
 {
 	private static final boolean isClient = FMLCommonHandler.instance().getSide().isClient();
 	private final ServerConfigurationManager mgr;
-	private final IDataProvider dataProvider;
+	private IDataProvider dataProvider;
 	private final List<PlayerDataExtensionInfo> dataExtinfos = new ArrayList<PlayerDataExtensionInfo>();
 	private final Map<UUID, PlayerData> playerDataCache = new HashMap<UUID, PlayerData>();
 	private final Map<String, PlayerData> namedPlayerDataCache = new HashMap<String, PlayerData>();
@@ -41,7 +41,6 @@ public class ServerDataLoader
 	public ServerDataLoader(ServerConfigurationManager mgr)
 	{
 		this.mgr = mgr;
-		dataProvider = new NBTFileDataProvider(mgr);
 	}
 	
 	public IDataProvider getDataProvider()
@@ -117,6 +116,9 @@ public class ServerDataLoader
 	
 	public void loadCache()
 	{
+		dataProvider = isClient || !ConfigurationHandler.getServerConfig().inSQLServerStorage.enabled ? new NBTFileDataProvider(mgr) : new JDBCDataProvider(mgr);
+		dataProvider.init();
+		
 		for(PlayerData data : dataProvider.loadAllPlayerData())
 		{
 			playerDataCache.put(data.getProfile().getId(), data);

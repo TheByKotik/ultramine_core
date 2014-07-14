@@ -16,6 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public interface IDataProvider
 {
+	void init();
+	
 	NBTTagCompound loadPlayer(GameProfile player);
 
 	void savePlayer(GameProfile player, NBTTagCompound nbt);
