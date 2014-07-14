@@ -450,7 +450,7 @@ public abstract class ServerConfigurationManager
 		}
 
 		EntityPlayerMP entityplayermp1 = new EntityPlayerMP(this.mcServer, this.mcServer.worldServerForDimension(p_72368_1_.dimension), p_72368_1_.getGameProfile(), (ItemInWorldManager)object);
-		WarpLocation spawnWarp = getDataLoader().getWarp(getServerInstance().isSinglePlayer() ? "spawn" : ConfigurationHandler.getServerConfig().spawnLocations.deathSpawn);
+		WarpLocation spawnWarp = getDataLoader().getWarp(getServerInstance().isSinglePlayer() ? "spawn" : ConfigurationHandler.getServerConfig().settings.spawnLocations.deathSpawn);
 		WarpLocation spawn = (spawnWarp != null ? spawnWarp : getDataLoader().getWarp("spawn")).randomize();
 		entityplayermp1.setLocationAndAngles(spawn.x, spawn.y, spawn.z, spawn.yaw, spawn.pitch);
 		entityplayermp1.playerNetServerHandler = p_72368_1_.playerNetServerHandler;
@@ -461,7 +461,7 @@ public abstract class ServerConfigurationManager
 		this.func_72381_a(entityplayermp1, p_72368_1_, worldserver);
 		ChunkCoordinates chunkcoordinates1;
 
-		if (chunkcoordinates != null && (getServerInstance().isSinglePlayer() || ConfigurationHandler.getServerConfig().spawnLocations.respawnOnBed))
+		if (chunkcoordinates != null && (getServerInstance().isSinglePlayer() || ConfigurationHandler.getServerConfig().settings.spawnLocations.respawnOnBed))
 		{
 			chunkcoordinates1 = EntityPlayer.verifyRespawnCoordinates(this.mcServer.worldServerForDimension(p_72368_1_.dimension), chunkcoordinates, flag1);
 

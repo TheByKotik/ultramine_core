@@ -40,7 +40,7 @@ public class WatchdogThread extends Thread
 	
 	public static void doStart()
 	{
-		doStart(ConfigurationHandler.getServerConfig().watchdogThread.timeout, ConfigurationHandler.getServerConfig().watchdogThread.restart);
+		doStart(ConfigurationHandler.getServerConfig().settings.watchdogThread.timeout, ConfigurationHandler.getServerConfig().settings.watchdogThread.restart);
 	}
 
 	public static void tick()

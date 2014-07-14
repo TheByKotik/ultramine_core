@@ -44,7 +44,7 @@ import org.ultramine.permission.PermissionRepository;
 import org.ultramine.permission.internal.ServerPermissionManager;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.PermissionHandler;
-import org.ultramine.server.UltramineServerConfig.VanillaConfig;
+import org.ultramine.server.UltramineServerConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.util.BasicTypeParser;
 
@@ -55,7 +55,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	public final List pendingCommandList = Collections.synchronizedList(new ArrayList());
 	private RConThreadQuery theRConThreadQuery;
 	private RConThreadMain theRConThreadMain;
-	private VanillaConfig settings;
+	private UltramineServerConfig settings;
 	private boolean canSpawnStructures;
 	private WorldSettings.GameType gameType;
 	private boolean guiIsEnabled;
@@ -129,7 +129,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		FMLCommonHandler.instance().onServerStart(this);
 
 		field_155771_h.info("Loading properties");
-		settings = ConfigurationHandler.getServerConfig().vanilla;
+		settings = ConfigurationHandler.getServerConfig();
 		WorldConfig globalWConf = ConfigurationHandler.getWorldsConfig().global;
 
 		if (this.isSinglePlayer())
@@ -138,21 +138,21 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		}
 		else
 		{
-			this.setOnlineMode(settings.onlineMode);
-			this.setHostname(settings.serverIp);
+			this.setOnlineMode(settings.settings.authorization.onlineMode);
+			this.setHostname(settings.listen.serverIP);
 		}
 
 		this.setCanSpawnAnimals(globalWConf.mobSpawn.spawnAnimals);
 		this.setCanSpawnNPCs(globalWConf.mobSpawn.spawnNPCs);
 		this.setAllowPvp(globalWConf.settings.pvp);
-		this.setAllowFlight(settings.allowFlight);
-		this.func_155759_m(settings.resourcePack);
-		this.setMOTD(settings.motd);
-		this.setForceGamemode(settings.forceGamemode);
-		this.func_143006_e(settings.playerIdleTimeout);
+		this.setAllowFlight(settings.settings.player.allowFlight);
+		this.func_155759_m(settings.settings.other.resourcePack);
+		this.setMOTD(settings.settings.messages.motd);
+		this.setForceGamemode(settings.settings.player.forceGamemode);
+		this.func_143006_e(settings.settings.player.playerIdleTimeout);
 
 		this.canSpawnStructures = globalWConf.generation.generateStructures;
-		int i = settings.gamemode;
+		int i = settings.settings.player.gamemode;
 		this.gameType = WorldSettings.getGameTypeById(i);
 		field_155771_h.info("Default game type: " + this.gameType);
 		InetAddress inetaddress = null;
@@ -164,7 +164,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 		if (this.getServerPort() < 0)
 		{
-			this.setServerPort(settings.serverPort);
+			this.setServerPort(settings.listen.minecraft.port);
 		}
 
 		field_155771_h.info("Generating keypair");
@@ -255,14 +255,14 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		String s3 = String.format("%.3fs", new Object[] {Double.valueOf((double)i1 / 1.0E9D)});
 		field_155771_h.info("Done (" + s3 + ")! For help, type \"help\" or \"?\"");
 
-		if (settings.enableQuery)
+		if (settings.listen.query.enabled)
 		{
 			field_155771_h.info("Starting GS4 status listener");
 			this.theRConThreadQuery = new RConThreadQuery(this);
 			this.theRConThreadQuery.startThread();
 		}
 
-		if (settings.enableRcon)
+		if (settings.listen.rcon.enabled)
 		{
 			field_155771_h.info("Starting remote control listener");
 			this.theRConThreadMain = new RConThreadMain(this);
@@ -290,7 +290,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public boolean isHardcore()
 	{
-		return settings.hardcore;
+		return settings.settings.other.hardcore;
 	}
 
 	protected void finalTick(CrashReport par1CrashReport) {}
@@ -348,7 +348,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public boolean isSnooperEnabled()
 	{
-		return settings.snooperEnabled;
+		return settings.settings.other.snooperEnabled;
 	}
 
 	public void addPendingCommand(String p_71331_1_, ICommandSender p_71331_2_)
@@ -378,25 +378,25 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	public int getIntProperty(String par1Str, int par2)
 	{
 		logInfo("Attempted to get server config unresolved integer parameter " + par1Str);
-		return settings.unresolved.containsKey(par1Str) ? (Integer)settings.unresolved.get(par1Str) : par2;
+		return settings.vanilla.unresolved.containsKey(par1Str) ? (Integer)settings.vanilla.unresolved.get(par1Str) : par2;
 	}
 
 	public String getStringProperty(String par1Str, String par2Str)
 	{
 		logInfo("Attempted to get server config unresolved string parameter " + par1Str);
-		return settings.unresolved.containsKey(par1Str) ? (String)settings.unresolved.get(par1Str) : par2Str;
+		return settings.vanilla.unresolved.containsKey(par1Str) ? (String)settings.vanilla.unresolved.get(par1Str) : par2Str;
 	}
 
 	public boolean getBooleanProperty(String par1Str, boolean par2)
 	{
 		logInfo("Attempted to get server config unresolved boolean parameter " + par1Str);
-		return settings.unresolved.containsKey(par1Str) ? (Boolean)settings.unresolved.get(par1Str) : par2;
+		return settings.vanilla.unresolved.containsKey(par1Str) ? (Boolean)settings.vanilla.unresolved.get(par1Str) : par2;
 	}
 
 	public void setProperty(String par1Str, Object par2Obj)
 	{
 		logInfo("Attempted to set server config unresolved parameter " + par1Str);
-		settings.unresolved.put(par1Str, par2Obj);
+		settings.vanilla.unresolved.put(par1Str, par2Obj);
 	}
 
 	public void saveProperties()
@@ -427,7 +427,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public boolean isCommandBlockEnabled()
 	{
-		return settings.enableCommandBlock;
+		return settings.settings.other.enableCommandBlock;
 	}
 
 	public int getSpawnProtectionSize()
@@ -471,7 +471,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	public void func_143006_e(int par1)
 	{
 		super.func_143006_e(par1);
-		settings.playerIdleTimeout = par1;
+		settings.settings.player.playerIdleTimeout = par1;
 		this.saveProperties();
 	}
 
@@ -482,7 +482,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public boolean func_147136_ar()
 	{
-		return settings.announcePlayerAchievements;
+		return settings.settings.messages.announcePlayerAchievements;
 	}
 
 	protected boolean func_152368_aE() throws IOException

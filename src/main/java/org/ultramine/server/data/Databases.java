@@ -19,9 +19,9 @@ public class Databases
 	
 	public static void init()
 	{
-		for(Map.Entry<String, UltramineServerConfig.Database> ent : ConfigurationHandler.getServerConfig().databases.entrySet())
+		for(Map.Entry<String, UltramineServerConfig.DatabaseConf> ent : ConfigurationHandler.getServerConfig().databases.entrySet())
 		{
-			UltramineServerConfig.Database info = ent.getValue();
+			UltramineServerConfig.DatabaseConf info = ent.getValue();
 			
 			BasicDataSource ds = new BasicDataSource();
 			if(info.url.startsWith("jdbc:mysql:"))

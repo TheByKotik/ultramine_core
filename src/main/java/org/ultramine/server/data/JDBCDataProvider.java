@@ -54,14 +54,14 @@ public class JDBCDataProvider implements IDataProvider
 	{
 		this.mgr = mgr;
 		
-		String tablePrefix = ConfigurationHandler.getServerConfig().inSQLServerStorage.tablePrefix;
+		String tablePrefix = ConfigurationHandler.getServerConfig().settings.inSQLServerStorage.tablePrefix;
 		tab_player_ids = tablePrefix + "player_ids";
 		tab_player_gamedata = tablePrefix + "player_gamedata";
 		tab_player_data = tablePrefix + "player_data";
 		tab_warps = tablePrefix + "warps";
 		tab_fastwarps = tablePrefix + "warps_fast";
 		
-		ds = Databases.getDataSource(ConfigurationHandler.getServerConfig().inSQLServerStorage.database);
+		ds = Databases.getDataSource(ConfigurationHandler.getServerConfig().settings.inSQLServerStorage.database);
 	}
 
 	@Override

@@ -29,8 +29,8 @@ public class RConThreadMain extends RConThreadBase
 	public RConThreadMain(IServer p_i1538_1_)
 	{
 		super(p_i1538_1_, "RCON Listener");
-		this.rconPort = ConfigurationHandler.getServerConfig().vanilla.rconPort;
-		this.rconPassword = ConfigurationHandler.getServerConfig().vanilla.rconPassword;
+		this.rconPort = ConfigurationHandler.getServerConfig().listen.rcon.port;
+		this.rconPassword = ConfigurationHandler.getServerConfig().listen.rcon.password;
 		this.hostname = p_i1538_1_.getHostname();
 		this.serverPort = p_i1538_1_.getPort();
 
@@ -38,7 +38,7 @@ public class RConThreadMain extends RConThreadBase
 		{
 			this.rconPort = this.serverPort + 10;
 			this.logInfo("Setting default rcon port to " + this.rconPort);
-			ConfigurationHandler.getServerConfig().vanilla.rconPort = rconPort;
+			ConfigurationHandler.getServerConfig().listen.rcon.port = rconPort;
 			p_i1538_1_.saveProperties();
 		}
 

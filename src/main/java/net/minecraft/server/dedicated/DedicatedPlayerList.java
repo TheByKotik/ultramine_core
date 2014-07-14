@@ -24,8 +24,8 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 	{
 		super(p_i1503_1_);
 		this.func_152611_a(ConfigurationHandler.getWorldsConfig().global.chunkLoading.viewDistance);
-		this.maxPlayers = ConfigurationHandler.getServerConfig().vanilla.maxPlayers;
-		this.setWhiteListEnabled(ConfigurationHandler.getServerConfig().vanilla.whiteList);
+		this.maxPlayers = ConfigurationHandler.getServerConfig().settings.player.maxPlayers;
+		this.setWhiteListEnabled(ConfigurationHandler.getServerConfig().settings.player.whiteList);
 
 		if (!p_i1503_1_.isSinglePlayer())
 		{
@@ -48,7 +48,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 	public void setWhiteListEnabled(boolean p_72371_1_)
 	{
 		super.setWhiteListEnabled(p_72371_1_);
-		ConfigurationHandler.getServerConfig().vanilla.whiteList = p_72371_1_;
+		ConfigurationHandler.getServerConfig().settings.player.whiteList = p_72371_1_;
 		this.getServerInstance().saveProperties();
 	}
 

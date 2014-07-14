@@ -1,76 +1,119 @@
 package org.ultramine.server;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class UltramineServerConfig
 {
-	public WatchdogThreadConfig	watchdogThread = new WatchdogThreadConfig();
-	public Teleportation teleportation = new Teleportation();
-	public SpawnLocations spawnLocations = new SpawnLocations();
-	public VanillaConfig		vanilla = new VanillaConfig();
-	public Map<String, Database> databases;
-	public SQLServerStorage inSQLServerStorage = new SQLServerStorage();
+	public ListenConf listen = new ListenConf();
+	public SettingsConf settings = new SettingsConf();
+	public Map<String, DatabaseConf> databases = new HashMap<String, DatabaseConf>();
+	public VanillaConf vanilla = new VanillaConf();
 
-	public static class WatchdogThreadConfig
+	public static class ListenConf
 	{
-		public int timeout = 120;
-		public boolean restart = true;
+		public String serverIP = "";
+		public MinecraftConf minecraft = new MinecraftConf();
+		public QueryConf query = new QueryConf();
+		public RConConf rcon = new RConConf();
+
+		public static class MinecraftConf
+		{
+			public int port = 25565;
+		}
+
+		public static class QueryConf
+		{
+			public boolean enabled = false;
+			public int port = 25565;
+		}
+
+		public static class RConConf
+		{
+			public boolean enabled = false;
+			public int port = 25565;
+			public String password = "";
+		}
 	}
-	
-	public static class Teleportation
+
+	public static class SettingsConf
 	{
-		public int cooldown = 60;
-		public int delay = 5;
+		public AuthorizationConf authorization = new AuthorizationConf();
+		public PlayerConf player = new PlayerConf();
+		public OtherConf other = new OtherConf();
+		public SpawnLocationsConf spawnLocations = new SpawnLocationsConf();
+		public TeleportationConf teleportation = new TeleportationConf();
+		public MessagesConf messages = new MessagesConf();
+		public WatchdogThreadConf	watchdogThread = new WatchdogThreadConf();
+		public SQLServerStorageConf inSQLServerStorage = new SQLServerStorageConf();
+
+		public static class AuthorizationConf
+		{
+			public boolean onlineMode = true;
+		}
+
+		public static class PlayerConf
+		{
+			public int playerIdleTimeout = 0;
+			public int gamemode = 0;
+			public int maxPlayers = 20;
+			public boolean allowFlight = false;
+			public boolean forceGamemode = false;
+			public boolean whiteList = false;
+		}
+
+		public static class OtherConf
+		{
+			public boolean snooperEnabled = true;
+			public boolean hardcore = false;
+			public String resourcePack = "";
+			public boolean enableCommandBlock = false;
+		}
+
+		public static class SpawnLocationsConf
+		{
+			public String firstSpawn = "spawn";
+			public String deathSpawn = "spawn";
+			public boolean respawnOnBed = true;
+		}
+
+		public static class TeleportationConf
+		{
+			public int cooldown = 60;
+			public int delay = 5;
+		}
+
+		public static class MessagesConf
+		{
+			public boolean announcePlayerAchievements = true;
+			public String motd = "A Minecraft Server";
+		}
+
+		public static class WatchdogThreadConf
+		{
+			public int timeout = 120;
+			public boolean restart = true;
+		}
+
+		public static class SQLServerStorageConf
+		{
+			public boolean enabled = false;
+			public String database = "global";
+			public String tablePrefix = "mc_";
+		}
 	}
-	
-	public static class SpawnLocations
-	{
-		public String firstSpawn = "spawn";
-		public String deathSpawn = "spawn";
-		public boolean respawnOnBed = true;
-	}
-	
-	public static class Database
+
+	public static class DatabaseConf
 	{
 		public String url; //jdbc:mysql://localhost:3306/databasename
 		public String username;
 		public String password;
 		public int maxConnections;
 	}
-	
-	public static class SQLServerStorage
-	{
-		public boolean enabled = false;
-		public String database = "global";
-		public String tablePrefix = "mc_";
-	}
-	
-	
-	
-	public static class VanillaConfig
-	{
-		public boolean	enableQuery					= false;
-		public int		queryPort					= 25565;
-		public boolean	allowFlight					= false;
-		public boolean	announcePlayerAchievements	= true;
-		public int		serverPort					= 25565;
-		public boolean	enableRcon					= false;
-		public int		rconPort					= 0;
-		public String	rconPassword				= "";
-		public boolean	forceGamemode				= false;
-		public String	serverIp					= "";
-		public boolean	whiteList					= false;
-		public boolean	snooperEnabled				= true;
-		public boolean	hardcore					= false;
-		public boolean	onlineMode					= true;
-		public String	resourcePack				= "";
-		public boolean	enableCommandBlock			= false;
-		public int		playerIdleTimeout			= 0;
-		public int		gamemode					= 0;
-		public int		maxPlayers					= 20;
-		public String	motd						= "A Minecraft Server";
 
-		public Map<String, Object> 	unresolved = new LinkedHashMap<String, Object>();
+	public static class VanillaConf
+	{
+		public Map<String, Object> unresolved = new LinkedHashMap<String, Object>();
 	}
 }

@@ -47,7 +47,7 @@ public class RConThreadQuery extends RConThreadBase
 	public RConThreadQuery(IServer p_i1536_1_)
 	{
 		super(p_i1536_1_, "Query Listener");
-		this.queryPort = ConfigurationHandler.getServerConfig().vanilla.queryPort;
+		this.queryPort = ConfigurationHandler.getServerConfig().listen.query.port;
 		this.serverHostname = p_i1536_1_.getHostname();
 		this.serverPort = p_i1536_1_.getPort();
 		this.serverMotd = p_i1536_1_.getMotd();
@@ -79,7 +79,7 @@ public class RConThreadQuery extends RConThreadBase
 		{
 			this.queryPort = this.serverPort;
 			this.logInfo("Setting default query port to " + this.queryPort);
-			ConfigurationHandler.getServerConfig().vanilla.queryPort = queryPort;
+			ConfigurationHandler.getServerConfig().listen.query.port = queryPort;
 			p_i1536_1_.setProperty("debug", Boolean.valueOf(false));
 			p_i1536_1_.saveProperties();
 		}
