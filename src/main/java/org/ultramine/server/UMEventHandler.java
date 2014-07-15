@@ -1,6 +1,5 @@
 package org.ultramine.server;
 
-import org.ultramine.server.data.player.io.PlayerDataIOExecutor;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.WarpLocation;
 
@@ -38,7 +37,6 @@ public class UMEventHandler
 	{
 		if(e.phase == TickEvent.Phase.START)
 		{
-			PlayerDataIOExecutor.tick();
 			Teleporter.tick();
 		}
 	}

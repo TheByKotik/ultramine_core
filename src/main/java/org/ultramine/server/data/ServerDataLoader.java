@@ -11,9 +11,10 @@ import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.data.player.PlayerDataExtension;
 import org.ultramine.server.data.player.PlayerDataExtensionInfo;
-import org.ultramine.server.data.player.io.PlayerDataIOExecutor;
+import org.ultramine.server.util.TwoStepsExecutor;
 import org.ultramine.server.util.WarpLocation;
 
+import com.google.common.base.Function;
 import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -30,6 +31,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 public class ServerDataLoader
 {
 	private static final boolean isClient = FMLCommonHandler.instance().getSide().isClient();
+	private final TwoStepsExecutor executor = isClient ? null : new TwoStepsExecutor("PlayerData loader #%d");
 	private final ServerConfigurationManager mgr;
 	private IDataProvider dataProvider;
 	private final List<PlayerDataExtensionInfo> dataExtinfos = new ArrayList<PlayerDataExtensionInfo>();
@@ -118,6 +120,7 @@ public class ServerDataLoader
 	{
 		dataProvider = isClient || !ConfigurationHandler.getServerConfig().settings.inSQLServerStorage.enabled ? new NBTFileDataProvider(mgr) : new JDBCDataProvider(mgr);
 		dataProvider.init();
+		if(!isClient) executor.register();
 		
 		for(PlayerData data : dataProvider.loadAllPlayerData())
 		{
@@ -149,7 +152,7 @@ public class ServerDataLoader
 		}
 	}
 	
-	public void initializeConnectionToPlayer(NetworkManager network, EntityPlayerMP player, NetHandlerPlayServer nethandler)
+	public void initializeConnectionToPlayer(final NetworkManager network, final EntityPlayerMP player, final NetHandlerPlayServer nethandler)
 	{
 		if(isClient)
 		{
@@ -159,7 +162,29 @@ public class ServerDataLoader
 		}
 		else
 		{
-			PlayerDataIOExecutor.requestData(getDataProvider(), network, player, nethandler, this, !playerDataCache.containsKey(player.getGameProfile().getId()));
+			//PlayerDataIOExecutor.requestData(getDataProvider(), network, player, nethandler, this, !playerDataCache.containsKey(player.getGameProfile().getId()));
+			final boolean loadData = !playerDataCache.containsKey(player.getGameProfile().getId());
+			executor.execute(new Function<Void, LoadedDataStruct>()
+			{
+				@Override
+				public LoadedDataStruct apply(Void input) //async
+				{
+					NBTTagCompound nbt =  getDataProvider().loadPlayer(player.getGameProfile());
+					PlayerData data = loadData ? getDataProvider().loadPlayerData(player.getGameProfile()) : null;
+					return new LoadedDataStruct(nbt, data);
+				}
+			}, new Function<LoadedDataStruct, Void>()
+			{
+				@Override
+				public Void apply(LoadedDataStruct data) //sync
+				{
+					if(data.getNBT() != null)
+						player.readFromNBT(data.getNBT());
+					playerLoadCallback(network, player, nethandler, data.getNBT(), data.getPlayerData());
+					
+					return null;
+				}
+			});
 		}
 	}
 	
@@ -203,5 +228,27 @@ public class ServerDataLoader
 	public List<PlayerDataExtensionInfo> getDataExtProviders()
 	{
 		return dataExtinfos;
+	}
+	
+	private class LoadedDataStruct
+	{
+		private final NBTTagCompound nbt;
+		private final PlayerData data;
+
+		public LoadedDataStruct(NBTTagCompound nbt, PlayerData data)
+		{
+			this.nbt = nbt;
+			this.data = data;
+		}
+
+		public NBTTagCompound getNBT()
+		{
+			return nbt;
+		}
+
+		public PlayerData getPlayerData()
+		{
+			return data;
+		}
 	}
 }
