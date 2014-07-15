@@ -704,18 +704,6 @@ public class WorldServer extends World
 
 			this.chunkProvider.saveChunks(p_73044_1_, p_73044_2_);
 			MinecraftForge.EVENT_BUS.post(new WorldEvent.Save(this));
-			ArrayList arraylist = Lists.newArrayList(this.theChunkProviderServer.func_152380_a());
-			Iterator iterator = arraylist.iterator();
-
-			while (iterator.hasNext())
-			{
-				Chunk chunk = (Chunk)iterator.next();
-
-				if (chunk != null && !this.thePlayerManager.func_152621_a(chunk.xPosition, chunk.zPosition))
-				{
-					this.theChunkProviderServer.unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
-				}
-			}
 		}
 	}
 

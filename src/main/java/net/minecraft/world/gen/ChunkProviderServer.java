@@ -81,7 +81,13 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public void unloadChunksIfNotNearSpawn(int par1, int par2)
 	{
-		this.chunksToUnload.add(ChunkHash.chunkToKey(par1, par2));
+		Chunk chunk = loadedChunkHashMap.get(par1, par2);
+		if(chunk != null)
+		{
+			chunk.unbind();
+			if(chunk.getBindState().canUnload())
+				chunksToUnload.add(ChunkHash.chunkToKey(par1, par2));
+		}
 	}
 
 	public void unloadAllChunks()
@@ -452,8 +458,9 @@ public class ChunkProviderServer implements IChunkProvider
 	
 	public void unbindChunk(Chunk chunk)
 	{
-		chunk.unbind();
-		if(!isServer)
+		if(isServer)
+			chunk.unbind();
+		else
 			unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
 	}
 }
