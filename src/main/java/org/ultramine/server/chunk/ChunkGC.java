@@ -38,7 +38,7 @@ public class ChunkGC
 	public void onTick()
 	{
 		int confCacheSize = world.getConfig().chunkLoading.chunkCacheSize;
-		int chunksPerPlayer = (int)Math.pow(world.getConfig().chunkLoading.viewDistance*2 + 1, 2);
+		int chunksPerPlayer = (int)Math.pow(world.getViewDistance()*2 + 1, 2);
 		int boundChunks = world.playerEntities.size()*chunksPerPlayer + world.getPersistentChunks().size();
 		int chunkLimit = boundChunks + confCacheSize + MAX_CHUNKS_PER_OP;
 		

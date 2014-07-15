@@ -1,6 +1,8 @@
 package net.minecraft.world;
 
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gnu.trove.iterator.TIntByteIterator;
@@ -983,6 +985,7 @@ public class WorldServer extends World
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
+	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
 	private WorldConfig config;
 	
 	@Override
@@ -1049,6 +1052,11 @@ public class WorldServer extends World
 	public WorldConfig getConfig()
 	{
 		return config;
+	}
+	
+	public int getViewDistance()
+	{
+		return isServer ? config.chunkLoading.viewDistance : mcServer.getConfigurationManager().getViewDistance();
 	}
 	
 	@Override

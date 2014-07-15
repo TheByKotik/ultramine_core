@@ -1106,6 +1106,9 @@ public abstract class ServerConfigurationManager
 
 	public void func_152611_a(int p_152611_1_)
 	{
+		if(viewDistance == p_152611_1_)
+			return;
+		
 		this.viewDistance = p_152611_1_;
 
 		if (this.mcServer.worldServers != null)
@@ -1119,7 +1122,7 @@ public abstract class ServerConfigurationManager
 
 				if (worldserver != null)
 				{
-					worldserver.getPlayerManager().func_152622_a(p_152611_1_);
+					worldserver.getPlayerManager().func_152622_a(worldserver.getViewDistance());
 				}
 			}
 		}

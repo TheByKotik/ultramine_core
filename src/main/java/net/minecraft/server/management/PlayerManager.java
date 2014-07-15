@@ -202,7 +202,9 @@ public class PlayerManager
 	public void func_152622_a(int p_152622_1_)
 	{
 		p_152622_1_ = MathHelper.clamp_int(p_152622_1_, 3, 20);
-
+		
+		this.playerViewRadius = p_152622_1_;
+/*
 		if (p_152622_1_ != this.playerViewRadius)
 		{
 			int j = p_152622_1_ - this.playerViewRadius;
@@ -248,6 +250,7 @@ public class PlayerManager
 
 			this.playerViewRadius = p_152622_1_;
 		}
+*/
 	}
 
 	public static int getFurthestViewableBlock(int p_72686_0_)
