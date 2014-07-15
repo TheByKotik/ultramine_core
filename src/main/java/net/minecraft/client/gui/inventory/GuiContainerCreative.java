@@ -914,6 +914,7 @@ public class GuiContainerCreative extends InventoryEffectRenderer
 
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor3f(1F, 1F, 1F); //Forge: Reset color in case Items change it.
+		GL11.glEnable(GL11.GL_BLEND); //Forge: Make sure blend is enabled else tabs show a white border.
 		this.drawTexturedModalRect(l, i1, j, k, 28, b0);
 		this.zLevel = 100.0F;
 		itemRender.zLevel = 100.0F;

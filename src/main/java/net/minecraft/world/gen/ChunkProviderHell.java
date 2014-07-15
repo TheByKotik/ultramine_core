@@ -155,9 +155,14 @@ public class ChunkProviderHell implements IChunkProvider
 		}
 	}
 
+	@Deprecated //You should provide meatadata and biome data in the below method
 	public void func_147418_b(int p_147418_1_, int p_147418_2_, Block[] p_147418_3_)
 	{
-		ChunkProviderEvent.ReplaceBiomeBlocks event = new ChunkProviderEvent.ReplaceBiomeBlocks(this, p_147418_1_, p_147418_2_, p_147418_3_, null);
+		replaceBiomeBlocks(p_147418_1_, p_147418_2_, p_147418_3_, new byte[p_147418_3_.length], null);
+	}
+	public void replaceBiomeBlocks(int p_147418_1_, int p_147418_2_, Block[] p_147418_3_, byte[] meta, BiomeGenBase[] biomes)
+	{
+		ChunkProviderEvent.ReplaceBiomeBlocks event = new ChunkProviderEvent.ReplaceBiomeBlocks(this, p_147418_1_, p_147418_2_, p_147418_3_, meta, biomes, this.worldObj);
 		MinecraftForge.EVENT_BUS.post(event);
 		if (event.getResult() == Result.DENY) return;
 
@@ -261,12 +266,13 @@ public class ChunkProviderHell implements IChunkProvider
 	{
 		this.hellRNG.setSeed((long)p_73154_1_ * 341873128712L + (long)p_73154_2_ * 132897987541L);
 		Block[] ablock = new Block[32768];
+		byte[] meta = new byte[ablock.length];
+		BiomeGenBase[] abiomegenbase = this.worldObj.getWorldChunkManager().loadBlockGeneratorData((BiomeGenBase[])null, p_73154_1_ * 16, p_73154_2_ * 16, 16, 16); //Forge Move up to allow for passing to replaceBiomeBlocks
 		this.func_147419_a(p_73154_1_, p_73154_2_, ablock);
-		this.func_147418_b(p_73154_1_, p_73154_2_, ablock);
+		this.replaceBiomeBlocks(p_73154_1_, p_73154_2_, ablock, meta, abiomegenbase);
 		this.netherCaveGenerator.func_151539_a(this, this.worldObj, p_73154_1_, p_73154_2_, ablock);
 		this.genNetherBridge.func_151539_a(this, this.worldObj, p_73154_1_, p_73154_2_, ablock);
-		Chunk chunk = new Chunk(this.worldObj, ablock, p_73154_1_, p_73154_2_);
-		BiomeGenBase[] abiomegenbase = this.worldObj.getWorldChunkManager().loadBlockGeneratorData((BiomeGenBase[])null, p_73154_1_ * 16, p_73154_2_ * 16, 16, 16);
+		Chunk chunk = new Chunk(this.worldObj, ablock, meta, p_73154_1_, p_73154_2_);
 		byte[] abyte = chunk.getBiomeArray();
 
 		for (int k = 0; k < abyte.length; ++k)
@@ -463,7 +469,7 @@ public class ChunkProviderHell implements IChunkProvider
 		}
 
 		i1 = this.hellRNG.nextInt(this.hellRNG.nextInt(10) + 1);
-		
+
 		doGen = TerrainGen.populate(p_73153_1_, worldObj, hellRNG, p_73153_2_, p_73153_3_, false, GLOWSTONE);
 		for (j1 = 0; doGen && j1 < i1; ++j1)
 		{

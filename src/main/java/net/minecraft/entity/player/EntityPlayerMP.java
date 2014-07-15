@@ -772,6 +772,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	{
 		if (p_71064_1_ != null)
 		{
+			if (p_71064_1_.isAchievement() && MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.AchievementEvent(this, (net.minecraft.stats.Achievement) p_71064_1_))) return;
 			this.field_147103_bO.func_150871_b(this, p_71064_1_, p_71064_2_);
 			Iterator iterator = this.getWorldScoreboard().func_96520_a(p_71064_1_.func_150952_k()).iterator();
 
