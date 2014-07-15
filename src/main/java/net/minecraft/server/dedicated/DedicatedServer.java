@@ -571,6 +571,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
+	@Override
 	protected void loadAllWorlds(String par1Str, String par2Str, long par3, WorldType par5WorldType, String par6Str)
 	{
 		convertMapIfNeeded(par1Str);
@@ -582,11 +583,13 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		initialWorldChunkLoad();
 	}
 	
+	@Override
 	protected File getDataDirectory()
 	{
 		return ConfigurationHandler.getStorageDir();
 	}
 	
+	@Override
 	protected File getHomeDirectory()
 	{
 		return FMLLaunchHandler.getMinecraftHome();

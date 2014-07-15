@@ -985,11 +985,13 @@ public class WorldServer extends World
 	
 	private WorldConfig config;
 	
+	@Override
 	public void checkSessionLock() throws MinecraftException
 	{
 		//Removes world lock checking on server
 	}
 	
+	@Override
 	public Chunk getChunkIfExists(int cx, int cz)
 	{
 		return theChunkProviderServer.getChunkIfExists(cx, cz);
@@ -1049,6 +1051,7 @@ public class WorldServer extends World
 		return config;
 	}
 	
+	@Override
 	protected boolean isChunkLoaderEnabled()
 	{
 		return config.chunkLoading.enableChunkLoaders;
