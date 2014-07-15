@@ -530,12 +530,12 @@ public class WorldServer extends World
 
 	public void updateEntityWithOptionalForce(Entity p_72866_1_, boolean p_72866_2_)
 	{
-		if (!getConfig().mobSpawn.spawnAnimals && (p_72866_1_ instanceof EntityAnimal || p_72866_1_ instanceof EntityWaterMob))
+		if (!getConfig().mobSpawn.allowAnimals && (p_72866_1_ instanceof EntityAnimal || p_72866_1_ instanceof EntityWaterMob))
 		{
 			p_72866_1_.setDead();
 		}
 
-		if (!getConfig().mobSpawn.spawnNPCs && p_72866_1_ instanceof INpc)
+		if (!getConfig().mobSpawn.allowNPCs && p_72866_1_ instanceof INpc)
 		{
 			p_72866_1_.setDead();
 		}

@@ -27,9 +27,10 @@ public class WorldsConfig
 		
 		public static class MobSpawn
 		{
+			public boolean allowAnimals = true;
 			public boolean spawnAnimals = true;
 			public boolean spawnMonsters = true;
-			public boolean spawnNPCs = true;
+			public boolean allowNPCs = true;
 		}
 		
 		public static class Settings

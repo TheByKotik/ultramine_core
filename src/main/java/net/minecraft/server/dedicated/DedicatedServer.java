@@ -144,7 +144,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		}
 
 		this.setCanSpawnAnimals(globalWConf.mobSpawn.spawnAnimals);
-		this.setCanSpawnNPCs(globalWConf.mobSpawn.spawnNPCs);
+		this.setCanSpawnNPCs(globalWConf.mobSpawn.allowNPCs);
 		this.setAllowPvp(globalWConf.settings.pvp);
 		this.setAllowFlight(settings.settings.player.allowFlight);
 		this.func_155759_m(settings.settings.other.resourcePack);
