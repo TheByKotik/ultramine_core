@@ -992,6 +992,8 @@ public class WorldServer extends World
 	public void checkSessionLock() throws MinecraftException
 	{
 		//Removes world lock checking on server
+		if(!isServer)
+			super.checkSessionLock();
 	}
 	
 	@Override
