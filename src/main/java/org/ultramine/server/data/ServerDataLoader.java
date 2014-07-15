@@ -230,7 +230,7 @@ public class ServerDataLoader
 		return dataExtinfos;
 	}
 	
-	private class LoadedDataStruct
+	private static class LoadedDataStruct
 	{
 		private final NBTTagCompound nbt;
 		private final PlayerData data;
