@@ -40,6 +40,7 @@ public class RealmsConnect
 
 				try
 				{
+					cpw.mods.fml.client.FMLClientHandler.instance().connectToRealmsServer(p_connect_1_, p_connect_2_);
 					inetaddress = InetAddress.getByName(p_connect_1_);
 
 					if (RealmsConnect.this.aborted)

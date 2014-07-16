@@ -391,7 +391,8 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 
 	public void handleSpawnExperienceOrb(S11PacketSpawnExperienceOrb p_147286_1_)
 	{
-		EntityXPOrb entityxporb = new EntityXPOrb(this.clientWorldController, (double)p_147286_1_.func_148984_d(), (double)p_147286_1_.func_148983_e(), (double)p_147286_1_.func_148982_f(), p_147286_1_.func_148986_g());
+		EntityXPOrb entityxporb = new EntityXPOrb(this.clientWorldController, (double)p_147286_1_.func_148984_d() / 32.0D, (double)p_147286_1_.func_148983_e() / 32.0D, (double)p_147286_1_.func_148982_f() / 32.0D, p_147286_1_.func_148986_g());
+		// FORGE: BugFix MC-12013 Wrong XP orb clientside spawn position
 		entityxporb.serverPosX = p_147286_1_.func_148984_d();
 		entityxporb.serverPosY = p_147286_1_.func_148983_e();
 		entityxporb.serverPosZ = p_147286_1_.func_148982_f();
