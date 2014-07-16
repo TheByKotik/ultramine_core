@@ -570,13 +570,14 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			this.field_147147_p.func_151318_b().func_151330_a(agameprofile);
 		}
 
-		if (this.tickCounter % 900 == 0)
-		{
+//		if (this.tickCounter % 900 == 0)
+//		{
 			this.theProfiler.startSection("save");
-			this.serverConfigManager.saveAllPlayerData();
-			this.saveAllWorlds(true);
+			this.serverConfigManager.saveOnePlayerData(tickCounter);
+			for(WorldServer world : worldServers)
+				world.theChunkProviderServer.saveOneChunk(tickCounter);
 			this.theProfiler.endSection();
-		}
+//		}
 
 		this.theProfiler.startSection("tallying");
 		this.tickTimeArray[this.tickCounter % 100] = System.nanoTime() - i;

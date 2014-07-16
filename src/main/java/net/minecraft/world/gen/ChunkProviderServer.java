@@ -1,6 +1,7 @@
 package net.minecraft.world.gen;
 
 import gnu.trove.iterator.TIntIterator;
+import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
@@ -413,7 +414,10 @@ public class ChunkProviderServer implements IChunkProvider
 	/* ======================================== ULTRAMINE START =====================================*/
 	
 	private static final int MAX_SAVE_QUEUE_SIZE = 20;
+	private static final int FULL_SAVE_INTERVAL = 10*60*20; //10 min
 	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
+	private final TIntSet possibleSaves = new TIntHashSet();
+	private int lastFullSaveTick;
 	
 	@SideOnly(Side.SERVER)
 	private ChunkGC chunkGC;
@@ -459,8 +463,48 @@ public class ChunkProviderServer implements IChunkProvider
 	public void unbindChunk(Chunk chunk)
 	{
 		if(isServer)
+		{
 			chunk.unbind();
+			possibleSaves.add(ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition));
+		}
 		else
+		{
 			unloadChunksIfNotNearSpawn(chunk.xPosition, chunk.zPosition);
+		}
+	}
+	
+	public void saveOneChunk(int tick)
+	{
+		if(tick - lastFullSaveTick >= FULL_SAVE_INTERVAL)
+		{
+			for(TIntObjectIterator<Chunk> it = loadedChunkHashMap.iterator(); it.hasNext();)
+			{
+				it.advance();
+				int key = it.key();
+				if(it.value().needsSaving(false) && !chunksToUnload.contains(key))
+					possibleSaves.add(key);
+			}
+			
+			lastFullSaveTick = tick;
+		}
+		
+		if(!possibleSaves.isEmpty())
+		{
+			int count = Math.min(10, Math.max(1, possibleSaves.size()/(FULL_SAVE_INTERVAL - tick + lastFullSaveTick)));
+			
+			for(TIntIterator it = possibleSaves.iterator(); it.hasNext();)
+			{
+				int key = it.next();
+				it.remove();
+				Chunk chunk = loadedChunkHashMap.get(key);
+				if(chunk != null && chunk.needsSaving(false) && !chunksToUnload.contains(key))
+				{
+					safeSaveChunk(chunk);
+					chunk.isModified = false;
+					chunk.postSave();
+					if(--count == 0) break;
+				}
+			}
+		}
 	}
 }

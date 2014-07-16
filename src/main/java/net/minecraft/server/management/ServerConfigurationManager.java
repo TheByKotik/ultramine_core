@@ -1157,4 +1157,13 @@ public abstract class ServerConfigurationManager
 	{
 		return playerNBTManagerObj;
 	}
+	
+	public void saveOnePlayerData(int tick)
+	{
+		int ind = tick % Math.max(900, playerEntityList.size()); //Может ведь быть более 900 игроков, не правда ли?)
+		if(ind < playerEntityList.size())
+		{
+			writePlayerData((EntityPlayerMP)playerEntityList.get(ind));
+		}
+	}
 }
