@@ -124,7 +124,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public double managedPosZ;
 	public final List loadedChunks = new LinkedList();
 	private final List destroyedItemsNetCache = new LinkedList();
-	private final StatisticsFile field_147103_bO;
+	private StatisticsFile field_147103_bO;
 	private float field_130068_bO = Float.MIN_VALUE;
 	private float lastHealth = -1.0E8F;
 	private int lastFoodLevel = -99999999;
@@ -147,7 +147,6 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		this.theItemInWorldManager = p_i45285_4_;
 
 		this.mcServer = p_i45285_1_;
-		this.field_147103_bO = p_i45285_1_.getConfigurationManager().func_152602_a(this);
 		this.stepHeight = 0.0F;
 		this.yOffset = 0.0F;
 		
@@ -1027,5 +1026,10 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		this.lastExperience = -1;
 		this.lastHealth = -1.0F;
 		this.lastFoodLevel = -1;
+	}
+	
+	public void setStatisticsFile(StatisticsFile stats)
+	{
+		this.field_147103_bO = stats;
 	}
 }

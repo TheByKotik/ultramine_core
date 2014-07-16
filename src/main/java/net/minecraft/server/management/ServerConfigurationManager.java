@@ -1080,7 +1080,13 @@ public abstract class ServerConfigurationManager
 	{
 		UUID uuid = p_152602_1_.getUniqueID();
 		StatisticsFile statisticsfile = uuid == null ? null : (StatisticsFile)this.field_148547_k.get(uuid);
+		return statisticsfile;
+	}
 
+	public StatisticsFile loadStatisticsFile_Async(GameProfile profile) //Method splited for async loading
+	{
+		UUID uuid = profile.getId();
+		StatisticsFile statisticsfile = null;
 		if (statisticsfile == null)
 		{
 			File file1 = new File(this.mcServer.worldServerForDimension(0).getSaveHandler().getWorldDirectory(), "stats");
@@ -1088,7 +1094,7 @@ public abstract class ServerConfigurationManager
 
 			if (!file2.exists())
 			{
-				File file3 = new File(file1, p_152602_1_.getCommandSenderName() + ".json");
+				File file3 = new File(file1, profile.getName() + ".json");
 
 				if (file3.exists() && file3.isFile())
 				{
@@ -1098,10 +1104,14 @@ public abstract class ServerConfigurationManager
 
 			statisticsfile = new StatisticsFile(this.mcServer, file2);
 			statisticsfile.func_150882_a();
-			this.field_148547_k.put(uuid, statisticsfile);
 		}
 
 		return statisticsfile;
+	}
+	
+	public void addStatFile(GameProfile profile, StatisticsFile statisticsfile)
+	{
+		this.field_148547_k.put(profile.getId(), statisticsfile);
 	}
 
 	public void func_152611_a(int p_152611_1_)

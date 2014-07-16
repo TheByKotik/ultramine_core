@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.stats.StatisticsFile;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -162,16 +163,18 @@ public class ServerDataLoader
 		}
 		else
 		{
-			//PlayerDataIOExecutor.requestData(getDataProvider(), network, player, nethandler, this, !playerDataCache.containsKey(player.getGameProfile().getId()));
+			final GameProfile profile = player.getGameProfile();
 			final boolean loadData = !playerDataCache.containsKey(player.getGameProfile().getId());
+			final StatisticsFile loadedStats = mgr.func_152602_a(player);
 			executor.execute(new Function<Void, LoadedDataStruct>()
 			{
 				@Override
 				public LoadedDataStruct apply(Void input) //async
 				{
-					NBTTagCompound nbt =  getDataProvider().loadPlayer(player.getGameProfile());
-					PlayerData data = loadData ? getDataProvider().loadPlayerData(player.getGameProfile()) : null;
-					return new LoadedDataStruct(nbt, data);
+					NBTTagCompound nbt =  getDataProvider().loadPlayer(profile);
+					PlayerData data = loadData ? getDataProvider().loadPlayerData(profile) : null;
+					StatisticsFile stats = loadedStats != null ? loadedStats : mgr.loadStatisticsFile_Async(profile);
+					return new LoadedDataStruct(nbt, data, stats);
 				}
 			}, new Function<LoadedDataStruct, Void>()
 			{
@@ -180,7 +183,7 @@ public class ServerDataLoader
 				{
 					if(data.getNBT() != null)
 						player.readFromNBT(data.getNBT());
-					playerLoadCallback(network, player, nethandler, data.getNBT(), data.getPlayerData());
+					playerLoadCallback(network, player, nethandler, data.getNBT(), data.getPlayerData(), data.getStats());
 					
 					return null;
 				}
@@ -188,7 +191,7 @@ public class ServerDataLoader
 		}
 	}
 	
-	public void playerLoadCallback(NetworkManager network, EntityPlayerMP player, NetHandlerPlayServer nethandler, NBTTagCompound nbt, PlayerData data)
+	private void playerLoadCallback(NetworkManager network, EntityPlayerMP player, NetHandlerPlayServer nethandler, NBTTagCompound nbt, PlayerData data, StatisticsFile stats)
 	{
 		if(data != null)
 		{
@@ -200,6 +203,8 @@ public class ServerDataLoader
 		{
 			player.setData(playerDataCache.get(player.getGameProfile().getId()));
 		}
+		mgr.addStatFile(player.getGameProfile(), stats);
+		player.setStatisticsFile(stats);
 		if(nbt == null) //first login
 		{
 			WarpLocation spawnWarp = getWarp(isClient ? "spawn" : ConfigurationHandler.getServerConfig().settings.spawnLocations.firstSpawn);
@@ -234,11 +239,13 @@ public class ServerDataLoader
 	{
 		private final NBTTagCompound nbt;
 		private final PlayerData data;
+		private final StatisticsFile stats;
 
-		public LoadedDataStruct(NBTTagCompound nbt, PlayerData data)
+		public LoadedDataStruct(NBTTagCompound nbt, PlayerData data, StatisticsFile stats)
 		{
 			this.nbt = nbt;
 			this.data = data;
+			this.stats = stats;
 		}
 
 		public NBTTagCompound getNBT()
@@ -249,6 +256,11 @@ public class ServerDataLoader
 		public PlayerData getPlayerData()
 		{
 			return data;
+		}
+		
+		public StatisticsFile getStats()
+		{
+			return stats;
 		}
 	}
 }
