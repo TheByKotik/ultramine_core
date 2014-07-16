@@ -55,8 +55,8 @@ public final class TwoStepsExecutor
 	{
 		if(e.phase == TickEvent.Phase.START)
 		{
-			while(!queue.isEmpty())
-				queue.poll().call();
+			for(CallbackDataStruct<?> toCall; (toCall = queue.poll()) != null;)
+				toCall.call();
 		}
 	}
 	

@@ -215,9 +215,8 @@ public class ChunkSendManager
 			}
 		}
 		
-		while(!toUpdate.isEmpty())
+		for(Chunk chunk; (chunk = toUpdate.poll()) != null;)
 		{
-			Chunk chunk = toUpdate.poll();
 			int key = ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition);
 			
 			if(sending.contains(key))
@@ -252,10 +251,8 @@ public class ChunkSendManager
 			}
 		}
 		
-		while(!toUnload.isEmpty())
+		for(Chunk chunk; (chunk = toUnload.poll()) != null;)
 		{
-			Chunk chunk = toUnload.poll();
-			
 			PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, false);
 			if (pi == null)
 				((WorldServer)chunk.worldObj).theChunkProviderServer.unbindChunk(chunk);
