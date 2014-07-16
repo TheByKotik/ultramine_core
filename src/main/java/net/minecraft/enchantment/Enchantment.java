@@ -50,7 +50,7 @@ public abstract class Enchantment
 
 		if (enchantmentsList[p_i1926_1_] != null)
 		{
-			throw new IllegalArgumentException("Duplicate enchantment id!");
+			throw new IllegalArgumentException("Duplicate enchantment id! " + this.getClass() + " and " + enchantmentsList[p_i1926_1_].getClass() + " Enchantment ID:" + p_i1926_1_);
 		}
 		else
 		{
