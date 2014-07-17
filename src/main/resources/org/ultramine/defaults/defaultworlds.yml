@@ -17,6 +17,8 @@ global: &global
         time: NORMAL
         weather: NORMAL
         useIsolatedPlayerData: false
+        respawnOnWarp: null
+        reconnectOnWarp: null
     chunkLoading: &global_cl
         viewDistance: 10
         chunkUpdateRadius: 7

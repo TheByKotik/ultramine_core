@@ -421,9 +421,19 @@ public abstract class ServerConfigurationManager
 	public EntityPlayerMP respawnPlayer(EntityPlayerMP p_72368_1_, int p_72368_2_, boolean p_72368_3_)
 	{
 		int oldDim = p_72368_1_.dimension;
+		WorldServer oldWorld = mcServer.getMultiWorld().getWorldByID(oldDim);
 		boolean respawnOnBed = (getServerInstance().isSinglePlayer() || ConfigurationHandler.getServerConfig().settings.spawnLocations.respawnOnBed);
-		WarpLocation spawnWarp = getDataLoader().getWarp(getServerInstance().isSinglePlayer() ? "spawn" : ConfigurationHandler.getServerConfig().settings.spawnLocations.deathSpawn);
-		WarpLocation spawn = (spawnWarp != null ? spawnWarp : getDataLoader().getWarp("spawn")).randomize();
+		WarpLocation spawn = null;
+		if(oldWorld.getConfig().settings.respawnOnWarp != null)
+			spawn = getDataLoader().getWarp(oldWorld.getConfig().settings.respawnOnWarp);
+		
+		if(spawn == null)
+		{
+			WarpLocation spawnWarp = getDataLoader().getWarp(getServerInstance().isSinglePlayer() ? "spawn" : ConfigurationHandler.getServerConfig().settings.spawnLocations.deathSpawn);
+			spawn = (spawnWarp != null ? spawnWarp : getDataLoader().getWarp("spawn"));
+		}
+		
+		spawn = spawn.randomize();
 		
 		World world = mcServer.worldServerForDimension(p_72368_2_);
 		if (world == null)

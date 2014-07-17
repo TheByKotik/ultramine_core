@@ -41,6 +41,8 @@ public class WorldsConfig
 			public WorldTime time = WorldTime.NORMAL;
 			public Weather weather = Weather.NORMAL;
 			public boolean useIsolatedPlayerData = false;
+			public String respawnOnWarp = null;
+			public String reconnectOnWarp = null;
 			
 			public enum WorldTime
 			{

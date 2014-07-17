@@ -215,10 +215,21 @@ public class ServerDataLoader
 		}
 		mgr.addStatFile(player.getGameProfile(), stats);
 		player.setStatisticsFile(stats);
+		WarpLocation spawn = null;
 		if(nbt == null) //first login
 		{
 			WarpLocation spawnWarp = getWarp(isClient ? "spawn" : ConfigurationHandler.getServerConfig().settings.spawnLocations.firstSpawn);
-			WarpLocation spawn = (spawnWarp != null ? spawnWarp : getWarp("spawn")).randomize();
+			spawn = (spawnWarp != null ? spawnWarp : getWarp("spawn"));
+		}
+		else
+		{
+			String warpName = mgr.getServerInstance().getMultiWorld().getWorldByID(player.dimension).getConfig().settings.reconnectOnWarp;
+			if(warpName != null)
+				spawn = getWarp(warpName);
+		}
+		if(spawn != null)
+		{
+			spawn = spawn.randomize();
 			player.setLocationAndAngles(spawn.x, spawn.y, spawn.z, spawn.yaw, spawn.pitch);
 		}
 		ForgeEventFactory.firePlayerLoadingEvent(player, ((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getUniqueID().toString());
