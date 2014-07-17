@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -104,7 +105,8 @@ public class WatchdogThread extends Thread
 
 				if(restart)
 				{
-					System.exit(0);
+					Thread.currentThread().interrupt();
+					FMLCommonHandler.instance().handleExit(0);
 				}
 
 				break;
