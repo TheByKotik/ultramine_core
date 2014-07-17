@@ -3,9 +3,12 @@ package org.ultramine.server;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.WarpLocation;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
@@ -47,6 +50,7 @@ public class UMEventHandler
 		if(e.entityPlayer.isEntityPlayerMP())
 		{
 			((EntityPlayerMP)e.entityPlayer).setData(((EntityPlayerMP)e.original).getData());
+			((EntityPlayerMP)e.entityPlayer).setStatisticsFile(MinecraftServer.getServer().getConfigurationManager().func_152602_a(e.entityPlayer));
 		}
 	}
 	
@@ -61,5 +65,11 @@ public class UMEventHandler
 				tp.cancel();
 			player.getData().core().setLastLocation(WarpLocation.getFromPlayer(player));
 		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onPlayerChangedDimension(PlayerChangedDimensionEvent e)
+	{
+		MinecraftServer.getServer().getConfigurationManager().getDataLoader().handlePlayerDimensionChange((EntityPlayerMP)e.player, e.fromDim, e.toDim);
 	}
 }

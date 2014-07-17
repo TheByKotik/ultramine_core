@@ -1,5 +1,7 @@
 package org.ultramine.server.data;
 
+import gnu.trove.set.TIntSet;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,7 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.stats.StatisticsFile;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -34,7 +37,7 @@ public class ServerDataLoader
 	private static final boolean isClient = FMLCommonHandler.instance().getSide().isClient();
 	private final TwoStepsExecutor executor = isClient ? null : new TwoStepsExecutor("PlayerData loader #%d");
 	private final ServerConfigurationManager mgr;
-	private IDataProvider dataProvider;
+	private final IDataProvider dataProvider;
 	private final List<PlayerDataExtensionInfo> dataExtinfos = new ArrayList<PlayerDataExtensionInfo>();
 	private final Map<UUID, PlayerData> playerDataCache = new HashMap<UUID, PlayerData>();
 	private final Map<String, PlayerData> namedPlayerDataCache = new HashMap<String, PlayerData>();
@@ -44,6 +47,7 @@ public class ServerDataLoader
 	public ServerDataLoader(ServerConfigurationManager mgr)
 	{
 		this.mgr = mgr;
+		dataProvider = isClient || !ConfigurationHandler.getServerConfig().settings.inSQLServerStorage.enabled ? new NBTFileDataProvider(mgr) : new JDBCDataProvider(mgr);
 	}
 	
 	public IDataProvider getDataProvider()
@@ -119,7 +123,6 @@ public class ServerDataLoader
 	
 	public void loadCache()
 	{
-		dataProvider = isClient || !ConfigurationHandler.getServerConfig().settings.inSQLServerStorage.enabled ? new NBTFileDataProvider(mgr) : new JDBCDataProvider(mgr);
 		dataProvider.init();
 		if(!isClient) executor.register();
 		
@@ -166,12 +169,19 @@ public class ServerDataLoader
 			final GameProfile profile = player.getGameProfile();
 			final boolean loadData = !playerDataCache.containsKey(player.getGameProfile().getId());
 			final StatisticsFile loadedStats = mgr.func_152602_a(player);
+			final TIntSet isolatedDataDims = mgr.getServerInstance().getMultiWorld().getIsolatedDataDims();
 			executor.execute(new Function<Void, LoadedDataStruct>()
 			{
 				@Override
 				public LoadedDataStruct apply(Void input) //async
 				{
-					NBTTagCompound nbt =  getDataProvider().loadPlayer(profile);
+					NBTTagCompound nbt = getDataProvider().loadPlayer(profile);
+					if(nbt != null)
+					{
+						int dim = nbt.getInteger("Dimension");
+						if(dim != 0 && isolatedDataDims.contains(dim))
+							nbt = getDataProvider().loadPlayer(dim, profile);
+					}
 					PlayerData data = loadData ? getDataProvider().loadPlayerData(profile) : null;
 					StatisticsFile stats = loadedStats != null ? loadedStats : mgr.loadStatisticsFile_Async(profile);
 					return new LoadedDataStruct(nbt, data, stats);
@@ -221,10 +231,109 @@ public class ServerDataLoader
 		NBTTagCompound nbt = new NBTTagCompound();
 		player.writeToNBT(nbt);
 		
-		getDataProvider().savePlayer(player.getGameProfile(), nbt);
+		if(player.getServerForPlayer().getConfig().settings.useIsolatedPlayerData)
+			getDataProvider().savePlayer(player.worldObj.provider.dimensionId, player.getGameProfile(), nbt);
+		else
+			getDataProvider().savePlayer(player.getGameProfile(), nbt);
 		getDataProvider().savePlayerData(player.getData());
 	}
 	
+	public void handlePlayerDimensionChange(EntityPlayerMP player, int fromDim, int toDim)
+	{
+		WorldServer from = mgr.getServerInstance().getMultiWorld().getWorldByID(fromDim);
+		WorldServer to = mgr.getServerInstance().getMultiWorld().getWorldByID(toDim);
+
+		boolean fromIs = from.getConfig().settings.useIsolatedPlayerData;
+		boolean toIs = to.getConfig().settings.useIsolatedPlayerData;
+
+		if(fromIs || toIs)
+		{
+			NBTTagCompound nbt = new NBTTagCompound();
+			player.writeToNBT(nbt);
+			if(fromIs)
+				dataProvider.savePlayer(fromDim, player.getGameProfile(), nbt);
+			else// if(toIs)
+				dataProvider.savePlayer(player.getGameProfile(), nbt);
+
+			loadIsolatedData(player, toDim, toIs, true);
+		}
+	}
+
+	public void handleRespawn(EntityPlayerMP dead, EntityPlayerMP created, int oldDim, int newDim)
+	{
+		WorldServer from = mgr.getServerInstance().getMultiWorld().getWorldByID(oldDim);
+		WorldServer to = mgr.getServerInstance().getMultiWorld().getWorldByID(newDim);
+
+		boolean fromIs = from.getConfig().settings.useIsolatedPlayerData;
+		boolean toIs = to.getConfig().settings.useIsolatedPlayerData;
+
+		if(fromIs || toIs)
+		{
+			if(fromIs)
+				dataProvider.savePlayer(oldDim, dead.getGameProfile(), new NBTTagCompound());
+
+			loadIsolatedData(created, newDim, toIs, false);
+		}
+	}
+	
+	private void loadIsolatedData(final EntityPlayerMP player, final int toDim, final boolean toIs, boolean replaceToNull)
+	{
+		final GameProfile profile = player.getGameProfile();
+		if(isClient)
+		{
+			NBTTagCompound nbt;
+			if(toIs)
+				nbt = dataProvider.loadPlayer(toDim, profile);
+			else// if(fromIs)
+				nbt = dataProvider.loadPlayer(profile);
+			applyIsolatedData(player, nbt);
+		}
+		else
+		{
+			if(replaceToNull)
+				applyIsolatedData(player, null);
+
+			executor.execute(new Function<Void, NBTTagCompound>()
+			{
+				@Override
+				public NBTTagCompound apply(Void input) //async
+				{
+					if(toIs)
+						return dataProvider.loadPlayer(toDim, profile);
+					else// if(fromIs)
+						return dataProvider.loadPlayer(profile);
+				}
+			}, new Function<NBTTagCompound, Void>()
+			{
+				@Override
+				public Void apply(NBTTagCompound nbt) //sync
+				{
+					player.inventory.dropAllItems();
+					applyIsolatedData(player, nbt);
+					return null;
+				}
+			});
+		}
+	}
+
+	private void applyIsolatedData(EntityPlayerMP player, NBTTagCompound nbt)
+	{
+		double x = player.posX;
+		double y = player.posY;
+		double z = player.posZ;
+		float yaw = player.rotationYaw;
+		float pitch = player.rotationPitch;
+
+		player.readFromNBT(nbt != null ? nbt : new NBTTagCompound());
+
+		player.dimension = player.worldObj.provider.dimensionId;
+		player.prevPosX = player.lastTickPosX = player.posX = x;
+		player.prevPosY = player.lastTickPosY = player.posY = y;
+		player.prevPosZ = player.lastTickPosZ = player.posZ = z;
+		player.prevRotationYaw = player.rotationYaw = yaw;
+		player.prevRotationPitch = player.rotationPitch = pitch;
+	}
+
 	public void registerPlayerDataExt(Class<? extends PlayerDataExtension> clazz, String nbtTagName)
 	{
 		dataExtinfos.add(new PlayerDataExtensionInfo(clazz, nbtTagName));

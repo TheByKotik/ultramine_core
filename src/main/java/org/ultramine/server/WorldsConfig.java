@@ -40,6 +40,7 @@ public class WorldsConfig
 			public int maxBuildHeight = 256;
 			public WorldTime time = WorldTime.NORMAL;
 			public Weather weather = Weather.NORMAL;
+			public boolean useIsolatedPlayerData = false;
 			
 			public enum WorldTime
 			{

@@ -29,8 +29,8 @@ public class Databases
 			ds.setUrl(info.url);
 			ds.setUsername(info.username);
 			ds.setPassword(info.password);
-			
-			ds.setMaxActive(info.maxConnections);
+			if(info.maxConnections > 0)
+				ds.setMaxActive(info.maxConnections);
 			
 			databases.put(ent.getKey(), ds);
 		}

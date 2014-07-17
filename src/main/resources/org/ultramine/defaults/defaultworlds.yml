@@ -16,6 +16,7 @@ global: &global
         pvp: true
         time: NORMAL
         weather: NORMAL
+        useIsolatedPlayerData: false
     chunkLoading: &global_cl
         viewDistance: 10
         chunkUpdateRadius: 7

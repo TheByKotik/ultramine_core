@@ -19,8 +19,11 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gnu.trove.TCollections;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.set.TIntSet;
+import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldManager;
 import net.minecraft.world.WorldServer;
@@ -39,10 +42,11 @@ import net.minecraftforge.event.world.WorldEvent;
 public class MultiWorld
 {
 	private static final Logger log = LogManager.getLogger();
-	private final TIntObjectHashMap<String> dimToNameMap = new TIntObjectHashMap<String>();
+	private final MinecraftServer server;
+	private final TIntObjectMap<String> dimToNameMap = new TIntObjectHashMap<String>();
 	private final TIntObjectMap<WorldServer> dimToWorldMap = new TIntObjectHashMap<WorldServer>();
 	private final Map<String, WorldServer> nameToWorldMap = new HashMap<String, WorldServer>();
-	private final MinecraftServer server;
+	private TIntSet isolatedDataDims;
 
 	public MultiWorld(MinecraftServer server)
 	{
@@ -78,14 +82,19 @@ public class MultiWorld
 		DimensionManager.unregisterDimension(1);
 		
 		Map<String, WorldConfig> worlds = ConfigurationHandler.getWorldsConfig().worlds;
+		TIntSet isolatedDataDimsSet = new TIntHashSet();
 		
 		for(Map.Entry<String, WorldConfig> ent : worlds.entrySet())
 		{
 			WorldConfig conf = ent.getValue();
 			DimensionManager.registerDimension(conf.dimension, conf.generation.providerID);
+			if(conf.settings.useIsolatedPlayerData)
+				isolatedDataDimsSet.add(conf.dimension);
 			
 			dimToNameMap.put(conf.dimension, ent.getKey());
 		}
+		
+		isolatedDataDims = TCollections.unmodifiableSet(isolatedDataDimsSet);
 		
 		String mainWorldName = dimToNameMap.get(0);
 		if(mainWorldName == null)
@@ -94,6 +103,14 @@ public class MultiWorld
 		WorldConfig mainConf = worlds.get(mainWorldName);
 		if(mainConf == null)
 			mainConf = ConfigurationHandler.getWorldsConfig().global;
+		
+		if(mainConf.settings.useIsolatedPlayerData)
+		{
+			log.warn("Can't use isolated player data in main world! Ignoring it");
+			mainConf.settings.useIsolatedPlayerData = false;
+		}
+		
+		boolean usingPlayerDir = server.getConfigurationManager().getDataLoader().getDataProvider().isUsingWorldPlayerDir();
 		
 		ISaveFormat format = server.getActiveAnvilConverter();
 		ISaveHandler mainSaveHandler = format.getSaveLoader(mainWorldName, true);
@@ -118,7 +135,7 @@ public class MultiWorld
 			}
 			else
 			{
-				ISaveHandler save = format.getSaveLoader(name, false);
+				ISaveHandler save = format.getSaveLoader(name, usingPlayerDir && conf.settings.useIsolatedPlayerData);
 				((AnvilSaveHandler)save).setSingleStorage();
 				world = new WorldServer(server, save, name, dim, makeSettings(save, conf), server.theProfiler);
 			}
@@ -246,6 +263,11 @@ public class MultiWorld
 	public Set<String> getAllNames()
 	{
 		return nameToWorldMap.keySet();
+	}
+	
+	public TIntSet getIsolatedDataDims()
+	{
+		return isolatedDataDims;
 	}
 	
 	public void register()

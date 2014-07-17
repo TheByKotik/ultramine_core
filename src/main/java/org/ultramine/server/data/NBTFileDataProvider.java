@@ -50,29 +50,33 @@ public class NBTFileDataProvider implements IDataProvider
 	}
 
 	@Override
+	public boolean isUsingWorldPlayerDir()
+	{
+		return true;
+	}
+
+	@Override
 	public NBTTagCompound loadPlayer(GameProfile player)
 	{
-		File dir = ((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir();
-		File file = new File(dir, player.getId().toString() + ".dat");
-		if(file.exists())
-		{
-			try
-			{
-				return CompressedStreamTools.readCompressed(new FileInputStream(file));
-			}
-			catch(IOException e)
-			{
-				log.warn("Failed to load player data for " + player.getName(), e);
-			}
-		}
-		
-		return null;
+		return loadPlayer((SaveHandler)mgr.getPlayerNBTLoader(), player);
 	}
-	
+
+	@Override
+	public NBTTagCompound loadPlayer(int dim, GameProfile player)
+	{
+		return loadPlayer((SaveHandler)mgr.getServerInstance().getMultiWorld().getWorldByID(dim).getSaveHandler(), player);
+	}
+
 	@Override
 	public void savePlayer(GameProfile player, NBTTagCompound nbt)
 	{
-		AsyncIOUtils.safeWriteNBT(new File(((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getId().toString() + ".dat"), nbt);
+		savePlayer((SaveHandler)mgr.getPlayerNBTLoader(), player, nbt);
+	}
+
+	@Override
+	public void savePlayer(int dim, GameProfile player, NBTTagCompound nbt)
+	{
+		savePlayer((SaveHandler)mgr.getServerInstance().getMultiWorld().getWorldByID(dim).getSaveHandler(), player, nbt);
 	}
 
 	@Override
@@ -160,6 +164,30 @@ public class NBTFileDataProvider implements IDataProvider
 	public void removeFastWarp(String name)
 	{
 		writeWarpList();
+	}
+
+	public NBTTagCompound loadPlayer(SaveHandler sh, GameProfile player)
+	{
+		File dir = sh.getPlayerSaveDir();
+		File file = new File(dir, player.getId().toString() + ".dat");
+		if(file.exists())
+		{
+			try
+			{
+				return CompressedStreamTools.readCompressed(new FileInputStream(file));
+			}
+			catch(IOException e)
+			{
+				log.warn("Failed to load player data for " + player.getName(), e);
+			}
+		}
+
+		return null;
+	}
+
+	public void savePlayer(SaveHandler sh, GameProfile player, NBTTagCompound nbt)
+	{
+		AsyncIOUtils.safeWriteNBT(new File(sh.getPlayerSaveDir(), player.getId().toString() + ".dat"), nbt);
 	}
 
 	private NBTTagCompound getPlayerDataNBT(String username)

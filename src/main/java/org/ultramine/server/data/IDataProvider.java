@@ -18,9 +18,15 @@ public interface IDataProvider
 {
 	void init();
 	
+	boolean isUsingWorldPlayerDir();
+
 	NBTTagCompound loadPlayer(GameProfile player);
 
+	NBTTagCompound loadPlayer(int dim, GameProfile player);
+
 	void savePlayer(GameProfile player, NBTTagCompound nbt);
+
+	void savePlayer(int dim, GameProfile player, NBTTagCompound nbt);
 
 	PlayerData loadPlayerData(GameProfile player);
 

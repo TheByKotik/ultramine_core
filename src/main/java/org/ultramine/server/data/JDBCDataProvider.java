@@ -83,8 +83,10 @@ public class JDBCDataProvider implements IDataProvider
 			
 			s.execute("CREATE TABLE IF NOT EXISTS `"+tab_player_gamedata+"` ("
 					+ "`pid` int(11) unsigned NOT NULL AUTO_INCREMENT,"
+					+ "`forDim` int(11) NOT NULL,"
+					+ "`curDim` int(11) NOT NULL,"
 					+ "`data` blob NOT NULL,"
-					+ "PRIMARY KEY (`pid`)"
+					+ "PRIMARY KEY (`pid`, `forDim`)"
 					+ ") ENGINE=InnoDB");
 			
 			s.execute("CREATE TABLE IF NOT EXISTS `"+tab_player_data+"` ("
@@ -141,9 +143,21 @@ public class JDBCDataProvider implements IDataProvider
 			close(conn, ps, rs);
 		}
 	}
-	
+
+	@Override
+	public boolean isUsingWorldPlayerDir()
+	{
+		return false;
+	}
+
 	@Override
 	public NBTTagCompound loadPlayer(GameProfile player)
+	{
+		return loadPlayer(0, player);
+	}
+
+	@Override
+	public NBTTagCompound loadPlayer(int dim, GameProfile player)
 	{
 		int id = playerIDs.get(player.getId());
 		if(id == -1)
@@ -155,12 +169,15 @@ public class JDBCDataProvider implements IDataProvider
 		try
 		{
 			conn = ds.getConnection();
-			ps = conn.prepareStatement("SELECT `data` FROM `"+tab_player_gamedata+"` WHERE `pid`=?");
+			ps = conn.prepareStatement("SELECT `data`, `curDim` FROM `"+tab_player_gamedata+"` WHERE `pid`=? AND `forDim`=?");
 			ps.setInt(1, id);
+			ps.setInt(2, dim);
 			rs = ps.executeQuery();
 			if(!rs.next())
 				return null;
-			return CompressedStreamTools.readCompressed(new ByteArrayInputStream(rs.getBytes("data")));
+			NBTTagCompound nbt = CompressedStreamTools.readCompressed(new ByteArrayInputStream(rs.getBytes("data")));
+			nbt.setInteger("Dimension", rs.getInt("curDim"));
+			return nbt;
 		}
 		catch(Exception e)
 		{
@@ -177,6 +194,12 @@ public class JDBCDataProvider implements IDataProvider
 	@Override
 	public void savePlayer(final GameProfile player, final NBTTagCompound nbt)
 	{
+		savePlayer(0, player, nbt);
+	}
+
+	@Override
+	public void savePlayer(final int dim, final GameProfile player, final NBTTagCompound nbt)
+	{
 		GlobalExecutors.writingIOExecutor().execute(new Runnable()
 		{
 			@Override
@@ -191,11 +214,12 @@ public class JDBCDataProvider implements IDataProvider
 					conn = ds.getConnection();
 					if(id == -1)
 						id = createPlayerID(conn, player);
-					ps = conn.prepareStatement("INSERT INTO `"+tab_player_gamedata+"` (`pid`, `data`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `data`=?");
+					ps = conn.prepareStatement("INSERT INTO `"+tab_player_gamedata+"` (`pid`, `data`, `forDim`, `curDim`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE "
+							+ "`data`=values(data), `forDim`=values(forDim), `curDim`=values(curDim)");
 					ps.setInt(1, id);
-					byte[] data = CompressedStreamTools.compress(nbt);
-					ps.setBytes(2, data);
-					ps.setBytes(3, data);
+					ps.setBytes(2, CompressedStreamTools.compress(nbt));
+					ps.setInt(3, dim);
+					ps.setInt(4, nbt.getInteger("Dimension"));
 					ps.executeUpdate();
 				}
 				catch(Exception e)
@@ -510,7 +534,7 @@ public class JDBCDataProvider implements IDataProvider
 			}
 		});
 	}
-	
+
 	private int createPlayerID(Connection conn, GameProfile player) throws SQLException
 	{
 		PreparedStatement ps = null;
