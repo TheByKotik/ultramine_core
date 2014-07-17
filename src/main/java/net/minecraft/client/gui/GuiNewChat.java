@@ -99,6 +99,7 @@ public class GuiNewChat extends Gui
 								byte b0 = 0;
 								int j2 = -j1 * 9;
 								drawRect(b0, j2 - 9, b0 + i1 + 4, j2, i2 / 2 << 24);
+								GL11.glEnable(GL11.GL_BLEND); // FORGE: BugFix MC-36812 Chat Opacity Broken in 1.7.x
 								String s = chatline.func_151461_a().getFormattedText();
 								this.mc.fontRenderer.drawStringWithShadow(s, b0, j2 - 8, 16777215 + (i2 << 24));
 								GL11.glDisable(GL11.GL_ALPHA_TEST);

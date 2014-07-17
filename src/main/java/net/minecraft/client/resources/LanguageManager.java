@@ -84,8 +84,8 @@ public class LanguageManager implements IResourceManagerReloadListener
 			arraylist.add(this.currentLanguage);
 		}
 
-		currentLocale.loadLocaleDataFiles(p_110549_1_, arraylist);
 		LanguageRegistry.instance().loadLanguageTable(currentLocale.field_135032_a, this.currentLanguage);
+		currentLocale.loadLocaleDataFiles(p_110549_1_, arraylist);
 		StringTranslate.replaceWith(currentLocale.field_135032_a);
 	}
 
