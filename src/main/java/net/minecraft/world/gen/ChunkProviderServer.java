@@ -188,7 +188,6 @@ public class ChunkProviderServer implements IChunkProvider
 			this.loadedChunkHashMap.put(par1, par2, chunk);
 			chunk.onChunkLoad();
 			chunk.populateChunk(this, this, par1, par2);
-			chunk.func_150804_b(false);
 		}
 
 		return chunk;

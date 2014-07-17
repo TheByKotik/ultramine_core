@@ -27,6 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 
@@ -219,7 +220,7 @@ public class ChunkSendManager
 		{
 			int key = ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition);
 			
-			if(sending.contains(key))
+			if(sending.contains(key) && ((WorldServer)chunk.worldObj).getPlayerManager() == manager)
 			{
 				manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, true).addPlayer(player);
 				
@@ -245,7 +246,7 @@ public class ChunkSendManager
 			{
 				player.playerNetServerHandler.sendPacket(S21PacketChunkData.makeForUnload(chunk));
 				
-				PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, false);
+				PlayerManager.PlayerInstance pi = ((WorldServer)chunk.worldObj).getPlayerManager().getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, false);
 				if (pi == null)
 					((WorldServer)chunk.worldObj).theChunkProviderServer.unbindChunk(chunk);
 			}
@@ -253,7 +254,7 @@ public class ChunkSendManager
 		
 		for(Chunk chunk; (chunk = toUnload.poll()) != null;)
 		{
-			PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, false);
+			PlayerManager.PlayerInstance pi = ((WorldServer)chunk.worldObj).getPlayerManager().getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, false);
 			if (pi == null)
 				((WorldServer)chunk.worldObj).theChunkProviderServer.unbindChunk(chunk);
 		}
@@ -354,16 +355,26 @@ public class ChunkSendManager
 		return rate;
 	}
 	
-	
-	
-	
 	private IChunkLoadCallback chunkLoadCallback = new IChunkLoadCallback()
 	{
 		@Override
 		public void onChunkLoaded(Chunk chunk)
 		{
-			chunk.setBindState(ChunkBindState.PLAYER);
-			executor.execute(new CompressAndSendChunkTask(chunk));
+			if(chunk.isTerrainPopulated)
+			{
+				chunk.func_150804_b(true);
+				chunk.setBindState(ChunkBindState.PLAYER);
+				executor.execute(new CompressAndSendChunkTask(chunk));
+			}
+			else
+			{
+				sendingQueueSize.decrementAndGet();
+				((WorldServer)chunk.worldObj).theChunkProviderServer.loadAsyncRadius(chunk.xPosition, chunk.zPosition, 1, IChunkLoadCallback.EMPTY);
+				
+				int key = ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition);
+				toSend.insert(Math.min((int)rate*2+1, toSend.size()-1), key);
+				sending.remove(key);
+			}
 		}
 	};
 	

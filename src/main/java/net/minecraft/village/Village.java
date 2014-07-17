@@ -111,7 +111,7 @@ public class Village
 				{
 					for (int k2 = l1; k2 < l1 + p_75563_6_; ++k2)
 					{
-						if (this.worldObj.getBlock(i2, j2, k2).isNormalCube())
+						if (this.worldObj.getBlockIfExists(i2, j2, k2).isNormalCube())
 						{
 							return false;
 						}
@@ -386,7 +386,7 @@ public class Village
 
 	private boolean isBlockDoor(int p_75574_1_, int p_75574_2_, int p_75574_3_)
 	{
-		return this.worldObj.getBlock(p_75574_1_, p_75574_2_, p_75574_3_) == Blocks.wooden_door;
+		return this.worldObj.getBlockIfExists(p_75574_1_, p_75574_2_, p_75574_3_) == Blocks.wooden_door;
 	}
 
 	private void updateVillageRadiusAndCenter()
