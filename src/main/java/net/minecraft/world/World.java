@@ -4053,8 +4053,30 @@ public abstract class World implements IBlockAccess
 		return activeChunkSet.size();
 	}
 	
+	public TIntByteMap getActiveChunkSet()
+	{
+		return activeChunkSet;
+	}
+	
 	protected boolean isChunkLoaderEnabled()
 	{
 		return true;
+	}
+	
+	public int countEntitiesByType(EnumCreatureType type, int cx, int cz, int radius)
+	{
+		int count = 0;
+		
+		for(int x = cx - radius; x <= cx + radius; x++)
+		{
+			for(int z = cz - radius; z <= cz + radius; z++)
+			{
+				Chunk chunk = getChunkIfExists(x, z);
+				if(chunk == null)
+					return Integer.MAX_VALUE;
+				count += chunk.getEntityCountByType(type);
+			}
+		}
+		return count;
 	}
 }

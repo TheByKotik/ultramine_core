@@ -22,4 +22,18 @@ public abstract class EntityAmbientCreature extends EntityLiving implements IAni
 	{
 		return false;
 	}
+	
+	/*===================================== ULTRAMINE START =====================================*/
+	
+	@Override
+	public boolean isEntityAmbient()
+	{
+		return true;
+	}
+	
+	@Override
+	public double getEntityDespawnDistance()
+	{
+		return 4096d; //4 chunks square
+	}
 }

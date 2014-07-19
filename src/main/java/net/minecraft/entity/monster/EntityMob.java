@@ -201,4 +201,12 @@ public abstract class EntityMob extends EntityCreature implements IMob
 	{
 		return true;
 	}
+	
+	/*===================================== ULTRAMINE START =====================================*/
+	
+	@Override
+	public boolean isEntityMonster()
+    {
+		return true;
+    }
 }

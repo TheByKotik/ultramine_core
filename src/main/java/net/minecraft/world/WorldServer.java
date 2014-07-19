@@ -77,6 +77,7 @@ import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig.Settings.WorldTime;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.PendingBlockUpdate;
+import org.ultramine.server.mobspawn.MobSpawnManager;
 
 public class WorldServer extends World
 {
@@ -169,7 +170,10 @@ public class WorldServer extends World
 
 		if (this.getGameRules().getGameRuleBooleanValue("doMobSpawning"))
 		{
-			this.animalSpawner.findChunksForSpawning(this, this.spawnHostileMobs, this.spawnPeacefulMobs, this.worldInfo.getWorldTotalTime() % 400L == 0L);
+			if(isServer && mobSpawner != null)
+				mobSpawner.performSpawn(spawnHostileMobs, spawnPeacefulMobs, worldInfo.getWorldTotalTime());
+			else
+				this.animalSpawner.findChunksForSpawning(this, this.spawnHostileMobs, this.spawnPeacefulMobs, this.worldInfo.getWorldTotalTime() % 400L == 0L);
 		}
 
 		this.theProfiler.endStartSection("chunkSource");
@@ -975,6 +979,8 @@ public class WorldServer extends World
 	
 	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
 	private WorldConfig config;
+	@SideOnly(Side.SERVER)
+	private MobSpawnManager mobSpawner;
 	
 	@Override
 	public void checkSessionLock() throws MinecraftException
@@ -1037,6 +1043,12 @@ public class WorldServer extends World
 	public void setConfig(WorldConfig config)
 	{
 		this.config = config;
+		if(isServer && config.mobSpawn.spawnEngine == WorldConfig.MobSpawn.MobSpawnEngine.NEW)
+		{
+			if(mobSpawner == null)
+				mobSpawner = new MobSpawnManager(this);
+			mobSpawner.configure(config);
+		}
 	}
 	
 	public WorldConfig getConfig()

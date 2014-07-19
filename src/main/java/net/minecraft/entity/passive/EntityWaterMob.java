@@ -60,4 +60,12 @@ public abstract class EntityWaterMob extends EntityCreature implements IAnimals
 			this.setAir(300);
 		}
 	}
+	
+	/*===================================== ULTRAMINE START =====================================*/
+	
+	@Override
+	public boolean isEntityWater()
+	{
+		return true;
+	}
 }

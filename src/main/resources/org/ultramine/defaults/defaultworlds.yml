@@ -7,9 +7,39 @@ global: &global
         providerID: 0
         seed: {seed}
     mobSpawn:
+        allowAnimals: true
         spawnAnimals: true
         spawnMonsters: true
         spawnNPCs: true
+        spawnEngine: NEW
+        newEngineSettings:
+            monsters:
+                minRadius: 2
+                maxRadius: 2
+                minPlayerDistance: 0
+                performInterval: 20
+                localCheckRadius: 1
+                localLimit: 3
+                nightlyLocalLimit: 5
+            water:
+                minRadius: 3
+                maxRadius: 5
+                minPlayerDistance: 0
+                performInterval: 400
+                localCheckRadius: 4
+                localLimit: 3
+            animals:
+                minRadius: 5
+                maxRadius: 6
+                minPlayerDistance: 0
+                performInterval: 401
+                localCheckRadius: 5
+                localLimit: 3
+            ambient:
+                minPlayerDistance: 8
+                performInterval: 1203
+                localCheckRadius: 4
+                localLimit: 10
     settings:
         difficulty: 1
         maxBuildHeight: 256

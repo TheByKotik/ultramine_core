@@ -2478,17 +2478,42 @@ public abstract class Entity
 	/* ===================================== ULTRAMINE START =====================================*/
 	
 	public boolean isEntityLiving()
-    {
-    	return false;
-    }
-    
-    public boolean isEntityPlayer()
-    {
-    	return false;
-    }
-    
-    public boolean isEntityPlayerMP()
-    {
-    	return false;
-    }
+	{
+		return false;
+	}
+	
+	public boolean isEntityPlayer()
+	{
+		return false;
+	}
+	
+	public boolean isEntityPlayerMP()
+	{
+		return false;
+	}
+	
+	public boolean isEntityMonster()
+	{
+		return this instanceof net.minecraft.entity.monster.IMob;
+	}
+	
+	public boolean isEntityAnimal()
+	{
+		return false;
+	}
+	
+	public boolean isEntityAmbient()
+	{
+		return false;
+	}
+	
+	public boolean isEntityWater()
+	{
+		return false;
+	}
+	
+	public double getEntityDespawnDistance()
+	{
+		return 9216d;//16384.0d;
+	}
 }

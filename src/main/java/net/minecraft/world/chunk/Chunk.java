@@ -24,6 +24,7 @@ import net.minecraft.command.IEntitySelector;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
@@ -803,6 +804,7 @@ public class Chunk
 		p_76612_1_.chunkCoordY = k;
 		p_76612_1_.chunkCoordZ = this.zPosition;
 		this.entityLists[k].add(p_76612_1_);
+		onEntityAdd(p_76612_1_);
 	}
 
 	public void removeEntity(Entity p_76622_1_)
@@ -822,7 +824,8 @@ public class Chunk
 			p_76608_2_ = this.entityLists.length - 1;
 		}
 
-		this.entityLists[p_76608_2_].remove(p_76608_1_);
+		if(this.entityLists[p_76608_2_].remove(p_76608_1_))
+			onEntityRemove(p_76608_1_);
 	}
 
 	public boolean canBlockSeeTheSky(int p_76619_1_, int p_76619_2_, int p_76619_3_)
@@ -923,6 +926,7 @@ public class Chunk
 			{
 				Entity entity = (Entity)iterator.next();
 				entity.onChunkLoad();
+				onEntityAdd(entity);
 			}
 
 			this.worldObj.addLoadedEntities(this.entityLists[i]);
@@ -949,6 +953,7 @@ public class Chunk
 			this.worldObj.unloadEntities(this.entityLists[i]);
 		}
 		MinecraftForge.EVENT_BUS.post(new ChunkEvent.Unload(this));
+		resetEntityCounters();
 	}
 
 	public void setChunkModified()
@@ -1546,6 +1551,12 @@ public class Chunk
 	private boolean wasActive;
 	private int lastsavePendingCount;
 	
+	private short entityLivingCount;
+	private short entityMonsterCount;
+	private short entityAnimalCount;
+	private short entityAmbientCount;
+	private short entityWaterCount;
+	
 	public PendingBlockUpdate pollPending(long time)
 	{
 		if(pendingUpdatesQueue == null || pendingUpdatesQueue.size() == 0) return null;
@@ -1634,5 +1645,60 @@ public class Chunk
 	public boolean shouldSaveOnUnload()
 	{
 		return isModified || pendingUpdatesSet != null && lastsavePendingCount != pendingUpdatesSet.size() || wasActive && hasEntities;
+	}
+	
+	private void onEntityAdd(Entity e)
+	{
+		if(e.isEntityLiving() && !e.isEntityPlayerMP())
+		{
+			entityLivingCount++;
+			if(e.isEntityMonster())			++entityMonsterCount;
+			else if(e.isEntityAnimal())		++entityAnimalCount;
+			else if(e.isEntityAmbient())	++entityAmbientCount;
+			else if(e.isEntityWater())		++entityWaterCount;
+		}
+	}
+	
+	private void onEntityRemove(Entity e)
+	{
+		if(e.isEntityLiving() && !e.isEntityPlayerMP())
+		{
+			entityLivingCount--;
+			if(e.isEntityMonster())			--entityMonsterCount;
+			else if(e.isEntityAnimal())		--entityAnimalCount;
+			else if(e.isEntityAmbient())	--entityAmbientCount;
+			else if(e.isEntityWater())		--entityWaterCount;
+		}
+	}
+	
+	private void resetEntityCounters()
+	{
+		entityLivingCount = 0;
+		entityMonsterCount = 0;
+		entityAnimalCount = 0;
+		entityAmbientCount = 0;
+		entityWaterCount = 0;
+	}
+	
+	public int getEntityCount()
+	{
+		return entityLivingCount;
+	}
+	
+	public int getEntityCountByType(EnumCreatureType type)
+	{
+		switch(type)
+		{
+		case monster:
+			return entityMonsterCount;
+		case creature:
+			return entityAnimalCount;
+		case ambient:
+			return entityAmbientCount;
+		case waterCreature:
+			return entityWaterCount;
+		default:
+			return 0;
+		}
 	}
 }

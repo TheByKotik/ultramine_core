@@ -480,6 +480,8 @@ public abstract class EntityLiving extends EntityLivingBase
 
 	protected void despawnEntity()
 	{
+		if(!canDespawn())
+			return; //Зачем события кидать лишний раз? Если моду надо, в своих классах реализует метод по-своему
 		Result result = null;
 		if (this.persistenceRequired)
 		{
@@ -507,7 +509,7 @@ public abstract class EntityLiving extends EntityLivingBase
 				double d2 = entityplayer.posZ - this.posZ;
 				double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
-				if (this.canDespawn() && d3 > 16384.0D)
+				if (this.canDespawn() && d3 > getEntityDespawnDistance())
 				{
 					this.setDead();
 				}

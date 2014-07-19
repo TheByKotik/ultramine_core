@@ -31,6 +31,36 @@ public class WorldsConfig
 			public boolean spawnAnimals = true;
 			public boolean spawnMonsters = true;
 			public boolean allowNPCs = true;
+			public MobSpawnEngine spawnEngine = MobSpawnEngine.OLD;
+			public NewEngineSettings newEngineSettings;
+			
+			public static enum MobSpawnEngine
+			{
+				OLD, NEW, NONE
+			}
+			
+			public static class NewEngineSettings
+			{
+				public MonsterSettings monsters;
+				public PerTypeMobSpawnSettings animals;
+				public PerTypeMobSpawnSettings water;
+				public PerTypeMobSpawnSettings ambient;
+				
+				public static class PerTypeMobSpawnSettings
+				{
+					public int minRadius;
+					public int maxRadius;
+					public int minPlayerDistance;
+					public int performInterval;
+					public int localCheckRadius;
+					public int localLimit;
+				}
+				
+				public static class MonsterSettings extends PerTypeMobSpawnSettings
+				{
+					public int nightlyLocalLimit;
+				}
+			}
 		}
 		
 		public static class Settings

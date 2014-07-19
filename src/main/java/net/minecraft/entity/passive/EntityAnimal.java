@@ -2,7 +2,9 @@ package net.minecraft.entity.passive;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -379,5 +381,13 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 		{
 			super.handleHealthUpdate(p_70103_1_);
 		}
+	}
+	
+	/*===================================== ULTRAMINE START =====================================*/
+	
+	@Override
+	public boolean isEntityAnimal()
+	{
+		return true;
 	}
 }
