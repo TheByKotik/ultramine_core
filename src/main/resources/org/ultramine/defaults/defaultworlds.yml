@@ -10,7 +10,7 @@ global: &global
         allowAnimals: true
         spawnAnimals: true
         spawnMonsters: true
-        spawnNPCs: true
+        allowNPCs: true
         spawnEngine: NEW
         newEngineSettings:
             monsters:
