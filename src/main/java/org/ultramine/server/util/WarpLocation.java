@@ -45,8 +45,8 @@ public class WarpLocation
 			return this;
 		
 		WorldServer world = MinecraftServer.getServer().getMultiWorld().getWorldByID(dimension);
-		double newX = x + randomRadius*world.rand.nextDouble();
-		double newZ = z + randomRadius*world.rand.nextDouble();
+		double newX = x + randomRadius*world.rand.nextDouble()*(world.rand.nextBoolean() ? -1 : 1);
+		double newZ = z + randomRadius*world.rand.nextDouble()*(world.rand.nextBoolean() ? -1 : 1);
 		double newY = y;
 		int intX = MathHelper.floor_double(newX);
 		int intZ = MathHelper.floor_double(newZ);
