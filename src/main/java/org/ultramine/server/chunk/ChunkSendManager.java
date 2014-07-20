@@ -372,7 +372,11 @@ public class ChunkSendManager
 				((WorldServer)chunk.worldObj).theChunkProviderServer.loadAsyncRadius(chunk.xPosition, chunk.zPosition, 1, IChunkLoadCallback.EMPTY);
 				
 				int key = ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition);
-				toSend.insert(Math.min((int)rate*2+1, toSend.size()-1), key);
+				int ind = (int)rate*2+1;
+				if(ind < toSend.size()-1)
+					toSend.insert(ind, key);
+				else
+					toSend.add(key);
 				sending.remove(key);
 			}
 		}
