@@ -162,6 +162,10 @@ public class ServerDataLoader
 		{
 			NBTTagCompound nbt = mgr.readPlayerDataFromFile(player);
 			player.setData(getDataProvider().loadPlayerData(player.getGameProfile()));
+			StatisticsFile existsStats = mgr.func_152602_a(player);
+			StatisticsFile stats = existsStats != null ? existsStats : mgr.loadStatisticsFile_Async(player.getGameProfile());
+			mgr.addStatFile(player.getGameProfile(), stats);
+			player.setStatisticsFile(stats);
 			mgr.initializeConnectionToPlayer_body(network, player, nethandler, nbt);
 		}
 		else
