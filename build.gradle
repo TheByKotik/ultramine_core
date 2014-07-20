@@ -35,6 +35,8 @@ apply plugin: 'eclipse'
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
+compileJava.options.encoding = 'UTF-8'
+
 repositories {
 	maven {
 		name 'forge'
