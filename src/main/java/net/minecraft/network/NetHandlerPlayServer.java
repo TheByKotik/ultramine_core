@@ -206,7 +206,9 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 
 			if (this.hasMoved)
 			{
-				if(!playerEntity.worldObj.blockExists(MathHelper.floor_double(playerEntity.posX), 64, MathHelper.floor_double(playerEntity.posZ)))
+				int xPosForCheck = MathHelper.floor_double(playerEntity.posX);
+				int zPosForCheck = MathHelper.floor_double(playerEntity.posZ);
+				if(!playerEntity.worldObj.checkChunksExist(xPosForCheck-2, 0, zPosForCheck-2, xPosForCheck+2, 64, zPosForCheck+2))
 					return;
 				
 				double d1;
