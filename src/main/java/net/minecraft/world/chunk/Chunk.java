@@ -1385,7 +1385,7 @@ public class Chunk
 
 		if (!this.worldObj.provider.hasNoSky)
 		{
-			if (this.worldObj.checkChunksExist(this.xPosition * 16 - 1, 0, this.zPosition * 16 - 1, this.xPosition * 16 + 1, 63, this.zPosition * 16 + 1))
+			if (this.worldObj.chunkRoundExists(xPosition, zPosition, 1))
 			{
 				for (int i = 0; i < 16; ++i)
 				{
