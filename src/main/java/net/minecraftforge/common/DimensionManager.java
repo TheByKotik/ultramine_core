@@ -239,13 +239,18 @@ public class DimensionManager
 			return; // If a provider hasn't been registered then we can't hotload the dim
 		}
 		MinecraftServer mcServer = overworld.func_73046_m();
-		mcServer.getMultiWorld().initDimension(dim);
-		/*
+		if(!mcServer.isSinglePlayer())
+		{
+			mcServer.getMultiWorld().initDimension(dim);
+			return;
+		}
+		
 		ISaveHandler savehandler = overworld.getSaveHandler();
 		WorldSettings worldSettings = new WorldSettings(overworld.getWorldInfo());
 
 		WorldServer world = (dim == 0 ? overworld : new WorldServerMulti(mcServer, savehandler, overworld.getWorldInfo().getWorldName(), dim, worldSettings, overworld, mcServer.theProfiler));
 		world.addWorldAccess(new WorldManager(mcServer, world));
+		mcServer.getMultiWorld().onClientInitDimension(world);
 		MinecraftForge.EVENT_BUS.post(new WorldEvent.Load(world));
 		if (!mcServer.isSinglePlayer())
 		{
@@ -253,7 +258,6 @@ public class DimensionManager
 		}
 
 		mcServer.func_147139_a(mcServer.func_147135_j());
-		*/
 	}
 
 	public static WorldServer getWorld(int id)
