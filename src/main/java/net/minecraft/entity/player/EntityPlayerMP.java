@@ -769,7 +769,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
 	public void addStat(StatBase p_71064_1_, int p_71064_2_)
 	{
-		if (p_71064_1_ != null)
+		if (p_71064_1_ != null && field_147103_bO != null)
 		{
 			if (p_71064_1_.isAchievement() && MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.AchievementEvent(this, (net.minecraft.stats.Achievement) p_71064_1_))) return;
 			this.field_147103_bO.func_150871_b(this, p_71064_1_, p_71064_2_);
