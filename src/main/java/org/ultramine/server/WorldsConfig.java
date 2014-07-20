@@ -48,6 +48,7 @@ public class WorldsConfig
 				
 				public static class PerTypeMobSpawnSettings
 				{
+					public boolean enabled;
 					public int minRadius;
 					public int maxRadius;
 					public int minPlayerDistance;

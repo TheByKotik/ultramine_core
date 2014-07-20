@@ -74,7 +74,7 @@ public abstract class MobSpawner
 
 	public void performSpawn(long currentTick)
 	{
-		if(set != null && shouldPerform())
+		if(set != null && set.enabled && shouldPerform())
 		{
 			if(listIndex == chunks.size())
 			{

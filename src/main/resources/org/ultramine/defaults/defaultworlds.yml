@@ -14,6 +14,7 @@ global: &global
         spawnEngine: NEW
         newEngineSettings:
             monsters:
+                enabled: true
                 minRadius: 2
                 maxRadius: 2
                 minPlayerDistance: 0
@@ -22,6 +23,7 @@ global: &global
                 localLimit: 3
                 nightlyLocalLimit: 5
             water:
+                enabled: true
                 minRadius: 3
                 maxRadius: 5
                 minPlayerDistance: 0
@@ -29,6 +31,7 @@ global: &global
                 localCheckRadius: 4
                 localLimit: 3
             animals:
+                enabled: true
                 minRadius: 5
                 maxRadius: 6
                 minPlayerDistance: 0
@@ -36,6 +39,7 @@ global: &global
                 localCheckRadius: 5
                 localLimit: 3
             ambient:
+                enabled: true
                 minPlayerDistance: 8
                 performInterval: 1203
                 localCheckRadius: 4
