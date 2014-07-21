@@ -31,6 +31,7 @@ public class EntityItem extends Entity
 	private String field_145801_f;
 	private String field_145802_g;
 	public float hoverStart;
+	private long lastTick;
 	private static final String __OBFID = "CL_00001669";
 
 	/**
@@ -50,6 +51,7 @@ public class EntityItem extends Entity
 		this.motionX = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D));
 		this.motionY = 0.20000000298023224D;
 		this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D));
+		lastTick = p_i1709_1_.getTotalWorldTime();
 	}
 
 	public EntityItem(World p_i1710_1_, double p_i1710_2_, double p_i1710_4_, double p_i1710_6_, ItemStack p_i1710_8_)
@@ -71,6 +73,7 @@ public class EntityItem extends Entity
 		this.hoverStart = (float)(Math.random() * Math.PI * 2.0D);
 		this.setSize(0.25F, 0.25F);
 		this.yOffset = this.height / 2.0F;
+		lastTick = p_i1711_1_.getTotalWorldTime();
 	}
 
 	protected void entityInit()
@@ -142,7 +145,9 @@ public class EntityItem extends Entity
 				this.motionY *= -0.5D;
 			}
 
-			++this.age;
+			int elapsedTicks = (int)(worldObj.getTotalWorldTime() - lastTick);
+			lastTick = worldObj.getTotalWorldTime();
+			this.age += elapsedTicks;
 
 			ItemStack item = getDataWatcher().getWatchableObjectItemStack(10);
 	
