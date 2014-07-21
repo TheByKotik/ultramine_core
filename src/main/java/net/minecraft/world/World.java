@@ -17,6 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.ServerLoadBalancer;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 
@@ -2012,12 +2013,12 @@ public abstract class World implements IBlockAccess
 
 	public void updateEntityWithOptionalForce(Entity p_72866_1_, boolean p_72866_2_)
 	{
-		int i = MathHelper.floor_double(p_72866_1_.posX);
-		int j = MathHelper.floor_double(p_72866_1_.posZ);
+		//int i = MathHelper.floor_double(p_72866_1_.posX);
+		//int j = MathHelper.floor_double(p_72866_1_.posZ);
 		//boolean isForced = getPersistentChunks().containsKey(new ChunkCoordIntPair(i >> 4, j >> 4));
 		//byte b0 = isForced ? (byte)0 : 32;
 		//boolean canUpdate = !p_72866_2_ || this.checkChunksExist(i - b0, 0, j - b0, i + b0, 0, j + b0);
-		boolean canUpdate = p_72866_1_.isEntityPlayerMP() || activeChunkSet.containsKey(ChunkHash.chunkToKey(i >> 4, j >> 4)) || isRemote && p_72866_1_.isEntityPlayer();
+		boolean canUpdate = balancer.canUpdateEntity(p_72866_1_);
 		
 		//if (!canUpdate)
 		//{
@@ -4027,6 +4028,7 @@ public abstract class World implements IBlockAccess
 	
 	
 	public static final int MAX_BLOCK_COORD = 500000;//524288;
+	private final ServerLoadBalancer balancer = new ServerLoadBalancer(this);
 	
 	public Chunk getChunkIfExists(int cx, int cz)
 	{

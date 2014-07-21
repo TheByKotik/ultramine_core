@@ -236,4 +236,11 @@ public class EntityXPOrb extends Entity
 	{
 		return false;
 	}
+	
+	/*===================================== ULTRAMINE START =====================================*/
+	
+	public boolean isEntityXPOrb()
+	{
+		return true;
+	}
 }

@@ -15,6 +15,7 @@ public class WorldsConfig
 		public MobSpawn mobSpawn;
 		public Settings settings;
 		public ChunkLoading chunkLoading;
+		public LoadBalancer loadBalancer;
 		
 		public static class Generation
 		{
@@ -92,6 +93,26 @@ public class WorldsConfig
 			public int chunkUpdateRadius = 7;
 			public int chunkCacheSize;
 			public boolean enableChunkLoaders = true;
+		}
+		
+		public static class LoadBalancer
+		{
+			public Limits limits;
+			public static class Limits
+			{
+				public PerChunkEntityLimits monsters;
+				public PerChunkEntityLimits animals;
+				public PerChunkEntityLimits water;
+				public PerChunkEntityLimits ambient;
+				public PerChunkEntityLimits items;
+				public PerChunkEntityLimits xpOrbs;
+				
+				public static class PerChunkEntityLimits
+				{
+					public int lowerLimit;
+					public int higherLimit;
+				}
+			}
 		}
 	}
 }

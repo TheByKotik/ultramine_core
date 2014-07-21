@@ -451,4 +451,11 @@ public class EntityItem extends Entity
 	{
 		this.field_145801_f = p_145799_1_;
 	}
+	
+	/*===================================== ULTRAMINE START =====================================*/
+	
+	public boolean isEntityItem()
+	{
+		return true;
+	}
 }

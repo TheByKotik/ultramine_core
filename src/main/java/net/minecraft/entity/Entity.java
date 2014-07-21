@@ -2512,6 +2512,16 @@ public abstract class Entity
 		return false;
 	}
 	
+	public boolean isEntityItem()
+	{
+		return false;
+	}
+	
+	public boolean isEntityXPOrb()
+	{
+		return false;
+	}
+	
 	public double getEntityDespawnDistance()
 	{
 		return 9216d;//16384.0d;

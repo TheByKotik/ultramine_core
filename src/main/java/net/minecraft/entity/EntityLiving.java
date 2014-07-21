@@ -2,9 +2,11 @@ package net.minecraft.entity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityJumpHelper;
@@ -1152,4 +1154,35 @@ public abstract class EntityLiving extends EntityLivingBase
     {
     	return true;
     }
+	
+	public EnumCreatureType getCreatureType()
+	{
+		if(isEntityAnimal())
+			return EnumCreatureType.creature;
+		if(isEntityAmbient())
+			return EnumCreatureType.ambient;
+		if(isEntityWater())
+			return EnumCreatureType.waterCreature;
+		
+		return EnumCreatureType.monster;
+	}
+	
+	public void despawnInactive()
+	{
+		if(!canDespawn() || ++entityAge <= 600)
+			return;
+
+		EntityPlayer player = worldObj.getClosestPlayerToEntity(this, -1.0D);
+
+		if (player != null)
+		{
+			double distX = player.posX - posX;
+			double distY = player.posY - posY;
+			double distZ = player.posZ - posZ;
+			double square = distX*distX + distY*distY + distZ*distZ;
+
+			if (square > getEntityDespawnDistance())
+				setDead();
+		}
+	}
 }

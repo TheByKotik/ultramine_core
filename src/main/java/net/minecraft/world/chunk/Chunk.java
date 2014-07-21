@@ -926,7 +926,6 @@ public class Chunk
 			{
 				Entity entity = (Entity)iterator.next();
 				entity.onChunkLoad();
-				onEntityAdd(entity);
 			}
 
 			this.worldObj.addLoadedEntities(this.entityLists[i]);
@@ -1556,6 +1555,8 @@ public class Chunk
 	private short entityAnimalCount;
 	private short entityAmbientCount;
 	private short entityWaterCount;
+	private short entityItemCount;
+	private short entityXPOrbCount;
 	
 	public PendingBlockUpdate pollPending(long time)
 	{
@@ -1657,6 +1658,10 @@ public class Chunk
 			else if(e.isEntityAmbient())	++entityAmbientCount;
 			else if(e.isEntityWater())		++entityWaterCount;
 		}
+		else if(e.isEntityItem())
+			++entityItemCount;
+		else if(e.isEntityXPOrb())
+			++entityXPOrbCount;
 	}
 	
 	private void onEntityRemove(Entity e)
@@ -1669,6 +1674,10 @@ public class Chunk
 			else if(e.isEntityAmbient())	--entityAmbientCount;
 			else if(e.isEntityWater())		--entityWaterCount;
 		}
+		else if(e.isEntityItem())
+			--entityItemCount;
+		else if(e.isEntityXPOrb())
+			--entityXPOrbCount;
 	}
 	
 	private void resetEntityCounters()
@@ -1678,6 +1687,8 @@ public class Chunk
 		entityAnimalCount = 0;
 		entityAmbientCount = 0;
 		entityWaterCount = 0;
+		entityItemCount = 0;
+		entityXPOrbCount = 0;
 	}
 	
 	public int getEntityCount()
@@ -1700,5 +1711,17 @@ public class Chunk
 		default:
 			return 0;
 		}
+	}
+	
+	public int getEntityCountOfSameType(Entity e)
+	{
+		if(e.isEntityMonster())			return entityMonsterCount;
+		else if(e.isEntityAnimal())		return entityAnimalCount;
+		else if(e.isEntityAmbient())	return entityAmbientCount;
+		else if(e.isEntityWater())		return entityWaterCount;
+		else if(e.isEntityItem())		return entityItemCount;
+		else if(e.isEntityXPOrb())		return entityXPOrbCount;
+		
+		return 0;
 	}
 }
