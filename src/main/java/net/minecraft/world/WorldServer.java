@@ -304,14 +304,6 @@ public class WorldServer extends World
 		int j = 0;
 		Iterator iterator = this.activeChunkSet.iterator();
 
-		doneChunks.retainAll(activeChunkSet);
-		if (doneChunks.size() == activeChunkSet.size())
-		{
-			doneChunks.clear();
-		}
-
-		final long startTime = System.nanoTime();
-
 		while (iterator.hasNext())
 		{
 			ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair)iterator.next();
@@ -321,11 +313,7 @@ public class WorldServer extends World
 			Chunk chunk = this.getChunkFromChunkCoords(chunkcoordintpair.chunkXPos, chunkcoordintpair.chunkZPos);
 			this.func_147467_a(k, l, chunk);
 			this.theProfiler.endStartSection("tickChunk");
-			//Limits and evenly distributes the lighting update time
-			if (System.nanoTime() - startTime <= 4000000 && doneChunks.add(chunkcoordintpair))
-			{
-				chunk.func_150804_b(false);
-			}
+			chunk.func_150804_b(false);
 			this.theProfiler.endStartSection("thunder");
 			int i1;
 			int j1;
