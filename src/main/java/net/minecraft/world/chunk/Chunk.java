@@ -584,7 +584,7 @@ public class Chunk
 
 			int l1 = this.xPosition * 16 + p_150807_1_;
 			int i2 = this.zPosition * 16 + p_150807_3_;
-			
+
 			int k2 = block1.getLightOpacity(this.worldObj, l1, p_150807_2_, i2);
 
 			if (!this.worldObj.isRemote)
@@ -593,14 +593,15 @@ public class Chunk
 			}
 
 			extendedblockstorage.func_150818_a(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_4_);
-			extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // Move this above to prevent other mods/tile entites from creating invalid ones for the wrong metadata
 
 			if (!this.worldObj.isRemote)
 			{
 				block1.breakBlock(this.worldObj, l1, p_150807_2_, i2, block1, k1);
+				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // This needs to be below block break as it some breaks depend on this ordering {redstone/lava}
 			}
 			else if (block1.hasTileEntity(k1))
 			{
+				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // Move this above to prevent other mods/tile entites from creating invalid ones for the wrong metadata
 				TileEntity te = this.getTileEntityUnsafe(p_150807_1_ & 0x0F, p_150807_2_, p_150807_3_ & 0x0F);
 				if (te != null && te.shouldRefresh(block1, p_150807_4_, k1, p_150807_5_, worldObj, l1, p_150807_2_, i2))
 				{
@@ -1475,7 +1476,7 @@ public class Chunk
 	/**
 	 * Retrieves the tile entity, WITHOUT creating it.
 	 * Good for checking if it exists.
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 * @param z
@@ -1498,7 +1499,7 @@ public class Chunk
 	/**
 	 * Removes the tile entity at the specified position, only if it's
 	 * marked as invalid.
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 * @param z
