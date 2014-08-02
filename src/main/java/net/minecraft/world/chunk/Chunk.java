@@ -597,7 +597,6 @@ public class Chunk
 			if (!this.worldObj.isRemote)
 			{
 				block1.breakBlock(this.worldObj, l1, p_150807_2_, i2, block1, k1);
-				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // This needs to be below block break as it some breaks depend on this ordering {redstone/lava}
 			}
 			else if (block1.hasTileEntity(k1))
 			{
@@ -607,6 +606,11 @@ public class Chunk
 				{
 					this.worldObj.removeTileEntity(l1, p_150807_2_, i2);
 				}
+			}
+
+			if (!block1.hasTileEntity(k1))
+			{
+				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // Don't do this if we alredy have in the TE code above.
 			}
 
 			if (extendedblockstorage.getBlockByExtId(p_150807_1_, p_150807_2_ & 15, p_150807_3_) != p_150807_4_)
