@@ -35,7 +35,7 @@ public class ContainerRepair extends Container
 	private int field_82858_j;
 	private int field_82859_k;
 	public int maximumCost;
-	private int stackSizeToBeUsedInRepair;
+	public int stackSizeToBeUsedInRepair;
 	private String repairedItemName;
 	private final EntityPlayer thePlayer;
 	private static final String __OBFID = "CL_00001732";
@@ -67,6 +67,8 @@ public class ContainerRepair extends Container
 					p_82870_1_.addExperienceLevel(-ContainerRepair.this.maximumCost);
 				}
 
+				float breakChance = ForgeHooks.onAnvilRepair(p_82870_1_, p_82870_2_, ContainerRepair.this.inputSlots.getStackInSlot(0), ContainerRepair.this.inputSlots.getStackInSlot(1));
+				
 				ContainerRepair.this.inputSlots.setInventorySlotContents(0, (ItemStack)null);
 
 				if (ContainerRepair.this.stackSizeToBeUsedInRepair > 0)
@@ -90,7 +92,7 @@ public class ContainerRepair extends Container
 
 				ContainerRepair.this.maximumCost = 0;
 
-				if (!p_82870_1_.capabilities.isCreativeMode && !p_i1800_2_.isRemote && p_i1800_2_.getBlock(p_i1800_3_, p_i1800_4_, p_i1800_5_) == Blocks.anvil && p_82870_1_.getRNG().nextFloat() < 0.12F)
+				if (!p_82870_1_.capabilities.isCreativeMode && !p_i1800_2_.isRemote && p_i1800_2_.getBlock(p_i1800_3_, p_i1800_4_, p_i1800_5_) == Blocks.anvil && p_82870_1_.getRNG().nextFloat() < breakChance)
 				{
 					int i1 = p_i1800_2_.getBlockMetadata(p_i1800_3_, p_i1800_4_, p_i1800_5_);
 					int k = i1 & 3;
