@@ -1072,20 +1072,20 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			{
 				itemstack = packetbuffer.readItemStackFromBuffer();
 
-				if (itemstack == null)
+				if (itemstack != null)
 				{
-					return;
-				}
+					if (!ItemWritableBook.func_150930_a(itemstack.getTagCompound()))
+					{
+						throw new IOException("Invalid book tag!");
+					}
 
-				if (!ItemWritableBook.func_150930_a(itemstack.getTagCompound()))
-				{
-					throw new IOException("Invalid book tag!");
-				}
+					itemstack1 = this.playerEntity.inventory.getCurrentItem();
 
-				itemstack1 = this.playerEntity.inventory.getCurrentItem();
+					if (itemstack1 == null)
+					{
+						return;
+					}
 
-				if (itemstack1 != null)
-				{
 					if (itemstack.getItem() == Items.writable_book && itemstack.getItem() == itemstack1.getItem())
 					{
 						itemstack1.setTagInfo("pages", itemstack.getTagCompound().getTagList("pages", 8));
