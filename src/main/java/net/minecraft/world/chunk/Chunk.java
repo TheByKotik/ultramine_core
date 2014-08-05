@@ -597,20 +597,20 @@ public class Chunk
 			if (!this.worldObj.isRemote)
 			{
 				block1.breakBlock(this.worldObj, l1, p_150807_2_, i2, block1, k1);
+				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); //After break for redstone dust.
 			}
 			else if (block1.hasTileEntity(k1))
 			{
-				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // Move this above to prevent other mods/tile entites from creating invalid ones for the wrong metadata
+				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // Above TE to prevent requiring refresh
 				TileEntity te = this.getTileEntityUnsafe(p_150807_1_ & 0x0F, p_150807_2_, p_150807_3_ & 0x0F);
 				if (te != null && te.shouldRefresh(block1, p_150807_4_, k1, p_150807_5_, worldObj, l1, p_150807_2_, i2))
 				{
 					this.worldObj.removeTileEntity(l1, p_150807_2_, i2);
 				}
 			}
-
-			if (!block1.hasTileEntity(k1))
+			else
 			{
-				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // Don't do this if we alredy have in the TE code above.
+				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // Above everything else on the client.
 			}
 
 			if (extendedblockstorage.getBlockByExtId(p_150807_1_, p_150807_2_ & 15, p_150807_3_) != p_150807_4_)
