@@ -70,8 +70,11 @@ public class MultiWorld
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event)
 	{
-		dimToWorldMap.remove(event.world.provider.dimensionId);
-		nameToWorldMap.remove(event.world.getWorldInfo().getWorldName());
+		if(!event.world.isRemote)
+		{
+			dimToWorldMap.remove(event.world.provider.dimensionId);
+			nameToWorldMap.remove(event.world.getWorldInfo().getWorldName());
+		}
 	}
 	
 	@SideOnly(Side.SERVER)
