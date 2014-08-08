@@ -27,7 +27,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 
@@ -169,6 +168,11 @@ public class ChunkSendManager
 		
 		sended.clear();
 		this.manager = null;
+	}
+	
+	public void stopSending()
+	{
+		removeFrom(manager);
 	}
 	
 	public void update()
