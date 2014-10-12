@@ -36,6 +36,7 @@ import org.lwjgl.input.Keyboard;
 public class GuiEditArray extends GuiScreen
 {
 	protected GuiScreen parentScreen;
+	@SuppressWarnings("rawtypes")
 	protected IConfigElement configElement;
 	private GuiEditArrayEntries entryList;
 	private GuiButtonExt btnUndoChanges, btnDefault, btnDone;
@@ -46,9 +47,11 @@ public class GuiEditArray extends GuiScreen
 	private final Object[] beforeValues;
 	private Object[] currentValues;
 	private HoverChecker tooltipHoverChecker;
+	@SuppressWarnings("rawtypes")
 	private List toolTip;
 	protected boolean enabled;
 	
+	@SuppressWarnings("rawtypes")
 	public GuiEditArray(GuiScreen parentScreen, IConfigElement configElement, int slotIndex, Object[] currentValues, boolean enabled)
 	{
 		this.mc = Minecraft.getMinecraft();
@@ -94,6 +97,7 @@ public class GuiEditArray extends GuiScreen
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui()
 	{
@@ -197,6 +201,7 @@ public class GuiEditArray extends GuiScreen
 			drawToolTip(this.toolTip, par1, par2);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void drawToolTip(List stringList, int x, int y)
 	{
 		this.func_146283_a(stringList, x, y);

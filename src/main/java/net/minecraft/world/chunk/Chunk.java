@@ -593,24 +593,25 @@ public class Chunk
 			}
 
 			extendedblockstorage.func_150818_a(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_4_);
+			extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // This line duplicates the one below, so breakBlock fires with valid worldstate
 
 			if (!this.worldObj.isRemote)
 			{
 				block1.breakBlock(this.worldObj, l1, p_150807_2_, i2, block1, k1);
-				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); //After break for redstone dust.
+				// After breakBlock a phantom TE might have been created with incorrect meta. This attempts to kill that phantom TE so the normal one can be create properly later
+				TileEntity te = this.getTileEntityUnsafe(p_150807_1_ & 0x0F, p_150807_2_, p_150807_3_ & 0x0F);
+				if (te != null && te.shouldRefresh(block1, getBlock(p_150807_1_ & 0x0F, p_150807_2_, p_150807_3_ & 0x0F), k1, getBlockMetadata(p_150807_1_ & 0x0F, p_150807_2_, p_150807_3_ & 0x0F), worldObj, l1, p_150807_2_, i2))
+				{
+					this.removeTileEntity(p_150807_1_ & 0x0F, p_150807_2_, p_150807_3_ & 0x0F);
+				}
 			}
 			else if (block1.hasTileEntity(k1))
 			{
-				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // Above TE to prevent requiring refresh
 				TileEntity te = this.getTileEntityUnsafe(p_150807_1_ & 0x0F, p_150807_2_, p_150807_3_ & 0x0F);
 				if (te != null && te.shouldRefresh(block1, p_150807_4_, k1, p_150807_5_, worldObj, l1, p_150807_2_, i2))
 				{
 					this.worldObj.removeTileEntity(l1, p_150807_2_, i2);
 				}
-			}
-			else
-			{
-				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_); // Above everything else on the client.
 			}
 
 			if (extendedblockstorage.getBlockByExtId(p_150807_1_, p_150807_2_ & 15, p_150807_3_) != p_150807_4_)
@@ -619,6 +620,8 @@ public class Chunk
 			}
 			else
 			{
+				extendedblockstorage.setExtBlockMetadata(p_150807_1_, p_150807_2_ & 15, p_150807_3_, p_150807_5_);
+
 				if (flag)
 				{
 					this.generateSkylightMap();

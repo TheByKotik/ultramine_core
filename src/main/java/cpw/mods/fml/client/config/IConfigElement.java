@@ -34,6 +34,7 @@ public interface IConfigElement<T>
 	 * This method returns a class that implements {@code IConfigEntry} or null. This class MUST
 	 * provide a constructor with the following parameter types: {@code GuiConfig}, {@code GuiConfigEntries}, {@code IConfigElement}
 	 */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends IConfigEntry> getConfigEntryClass();
 	
 	/**
@@ -67,6 +68,7 @@ public interface IConfigElement<T>
 	/**
 	 * [Category] Gets this category's child categories/properties.
 	 */
+	@SuppressWarnings("rawtypes")
 	public List<IConfigElement> getChildElements();
 	
 	/**

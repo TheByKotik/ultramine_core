@@ -357,6 +357,6 @@ public class TileEntityBeacon extends TileEntity implements IInventory
 
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
 	{
-		return p_94041_2_.getItem() == Items.emerald || p_94041_2_.getItem() == Items.diamond || p_94041_2_.getItem() == Items.gold_ingot || p_94041_2_.getItem() == Items.iron_ingot;
+		return p_94041_2_.getItem() != null && p_94041_2_.getItem().isBeaconPayment(p_94041_2_);
 	}
 }

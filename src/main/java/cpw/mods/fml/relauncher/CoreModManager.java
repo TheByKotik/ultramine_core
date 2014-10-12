@@ -21,7 +21,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +33,7 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.apache.logging.log4j.Level;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ObjectArrays;
@@ -51,6 +51,8 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 public class CoreModManager {
 	private static final Attributes.Name COREMODCONTAINSFMLMOD = new Attributes.Name("FMLCorePluginContainsFMLMod");
+	private static final Attributes.Name MODTYPE = new Attributes.Name("ModType");
+	private static final Attributes.Name MODSIDE = new Attributes.Name("ModSide");
 	private static String[] rootPlugins = { "cpw.mods.fml.relauncher.FMLCorePlugin", "net.minecraftforge.classloading.FMLForgePlugin" };
 	private static List<String> loadedCoremods = Lists.newArrayList();
 	private static List<FMLPluginWrapper> loadPlugins;
@@ -115,6 +117,7 @@ public class CoreModManager {
 				{
 					IFMLCallHook call = (IFMLCallHook) Class.forName(setupClass, true, classLoader).newInstance();
 					Map<String, Object> callData = new HashMap<String, Object>();
+					callData.put("runtimeDeobfuscationEnabled", !deobfuscatedEnvironment);
 					callData.put("mcLocation", mcDir);
 					callData.put("classLoader", classLoader);
 					callData.put("coremodLocation", location);
@@ -214,6 +217,7 @@ public class CoreModManager {
 
 	private static void discoverCoreMods(File mcDir, LaunchClassLoader classLoader)
 	{
+		ModListHelper.parseModList(mcDir);
 		FMLRelaunchLog.fine("Discovering coremods");
 		File coreMods = setupCoreModDir(mcDir);
 		FilenameFilter ff = new FilenameFilter() {
@@ -223,6 +227,22 @@ public class CoreModManager {
 				return name.endsWith(".jar");
 			}
 		};
+		FilenameFilter derpfilter = new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name)
+			{
+				return name.endsWith(".jar.zip");
+			}
+		};
+		File[] derplist = coreMods.listFiles(derpfilter);
+		if (derplist != null && derplist.length > 0)
+		{
+			FMLRelaunchLog.severe("FML has detected several badly downloaded jar files,  which have been named as zip files. You probably need to download them again, or they may not work properly");
+			for (File f : derplist)
+			{
+				FMLRelaunchLog.severe("Problem file : %s", f.getName());
+			}
+		}
 		File[] coreModList = coreMods.listFiles(ff);
 		File versionedModDir = new File(coreMods, FMLInjectionData.mccversion);
 		if (versionedModDir.isDirectory())
@@ -230,6 +250,8 @@ public class CoreModManager {
 			File[] versionedCoreMods = versionedModDir.listFiles(ff);
 			coreModList = ObjectArrays.concat(coreModList, versionedCoreMods, File.class);
 		}
+
+		ObjectArrays.concat(coreModList, ModListHelper.additionalMods.values().toArray(new File[0]), File.class);
 
 		coreModList = FileListHelper.sortFileList(coreModList);
 
@@ -278,7 +300,21 @@ public class CoreModManager {
 				loadedCoremods.add(coreMod.getName());
 				continue;
 			}
+			List<String> modTypes = mfAttributes.containsKey(MODTYPE) ? Arrays.asList(mfAttributes.getValue(MODTYPE).split(",")) : ImmutableList.of("FML");
 
+			if (!modTypes.contains("FML"))
+			{
+				FMLRelaunchLog.fine("Adding %s to the list of things to skip. It is not an FML mod,  it has types %s", coreMod.getName(), modTypes);
+				loadedCoremods.add(coreMod.getName());
+				continue;
+			}
+			String modSide = mfAttributes.containsKey(MODSIDE) ? mfAttributes.getValue(MODSIDE) : "BOTH";
+			if (! ("BOTH".equals(modSide) || FMLLaunchHandler.side.name().equals(modSide)))
+			{
+				FMLRelaunchLog.fine("Mod %s has ModSide meta-inf value %s, and we're %s. It will be ignored", coreMod.getName(), modSide, FMLLaunchHandler.side.name());
+				loadedCoremods.add(coreMod.getName());
+				continue;
+			}
 			String fmlCorePlugin = mfAttributes.getValue("FMLCorePlugin");
 			if (fmlCorePlugin == null)
 			{
@@ -286,7 +322,7 @@ public class CoreModManager {
 				FMLRelaunchLog.fine("Not found coremod data in %s", coreMod.getName());
 				continue;
 			}
-
+			// Support things that are mod jars, but not FML mod jars
 			try
 			{
 				classLoader.addURL(coreMod.toURI().toURL());
@@ -514,7 +550,10 @@ public class CoreModManager {
 	{
 		@SuppressWarnings("unchecked")
 		List<ITweaker> tweakers = (List<ITweaker>) Launch.blackboard.get("Tweaks");
-		Collections.sort(tweakers, new Comparator<ITweaker>() {
+		// Basically a copy of Collections.sort pre 8u20, optimized as we know we're an array list.
+		// Thanks unhelpful fixer of http://bugs.java.com/view_bug.do?bug_id=8032636
+		ITweaker[] toSort = tweakers.toArray(new ITweaker[tweakers.size()]);
+		Arrays.sort(toSort, new Comparator<ITweaker>() {
 			@Override
 			public int compare(ITweaker o1, ITweaker o2)
 			{
@@ -557,6 +596,11 @@ public class CoreModManager {
 				return Ints.saturatedCast((long)first - (long)second);
 			}
 		});
+		// Basically a copy of Collections.sort, optimized as we know we're an array list.
+		// Thanks unhelpful fixer of http://bugs.java.com/view_bug.do?bug_id=8032636
+		for (int j = 0; j < toSort.length; j++) {
+			tweakers.set(j, toSort[j]);
+		}
 	}
 
 	public static List<String> getAccessTransformers()

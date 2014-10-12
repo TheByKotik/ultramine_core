@@ -1,13 +1,12 @@
 package cpw.mods.fml.client.config;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 
 import org.lwjgl.opengl.GL11;
 
 /**
  * This class is blatantly stolen from iChunUtils with permission.
- * 
+ *
  * @author iChun
  */
 public class GuiSlider extends GuiButtonExt
@@ -77,6 +76,7 @@ public class GuiSlider extends GuiButtonExt
 	 * Returns 0 if the button is disabled, 1 if the mouse is NOT hovering over this button and 2 if it IS hovering over
 	 * this button.
 	 */
+	@Override
 	public int getHoverState(boolean par1)
 	{
 		return 0;
@@ -85,6 +85,7 @@ public class GuiSlider extends GuiButtonExt
 	/**
 	 * Fired when the mouse button is dragged. Equivalent of MouseListener.mouseDragged(MouseEvent e).
 	 */
+	@Override
 	protected void mouseDragged(Minecraft par1Minecraft, int par2, int par3)
 	{
 		if (this.visible)
@@ -105,6 +106,7 @@ public class GuiSlider extends GuiButtonExt
 	 * Returns true if the mouse has been pressed on this control. Equivalent of MouseListener.mousePressed(MouseEvent
 	 * e).
 	 */
+	@Override
 	public boolean mousePressed(Minecraft par1Minecraft, int par2, int par3)
 	{
 		if (super.mousePressed(par1Minecraft, par2, par3))
@@ -174,6 +176,7 @@ public class GuiSlider extends GuiButtonExt
 	/**
 	 * Fired when the mouse button is released. Equivalent of MouseListener.mouseReleased(MouseEvent e).
 	 */
+	@Override
 	public void mouseReleased(int par1, int par2)
 	{
 		this.dragging = false;
@@ -188,12 +191,12 @@ public class GuiSlider extends GuiButtonExt
 	{
 		return sliderValue * (maxValue - minValue) + minValue;
 	}
-	
+
 	public void setValue(double d)
 	{
 		this.sliderValue = (d - minValue) / (maxValue - minValue);
 	}
-	
+
 	public static interface ISlider
 	{
 		void onChangeSliderValue(GuiSlider slider);

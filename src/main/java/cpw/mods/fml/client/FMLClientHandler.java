@@ -841,7 +841,7 @@ public class FMLClientHandler implements IFMLSidedHandler
 		boolean gotIt = false;
 		try
 		{
-			gotIt = playClientBlock.await(1,TimeUnit.SECONDS);
+			gotIt = playClientBlock.await(5,TimeUnit.SECONDS);
 		} catch (InterruptedException e)
 		{
 		}
@@ -869,5 +869,10 @@ public class FMLClientHandler implements IFMLSidedHandler
 	public boolean shouldAllowPlayerLogins()
 	{
 		return true; //Always true as the server has to be started before clicking 'Open to lan'
+	}
+
+	@Override
+	public void allowLogins() {
+		// NOOP for integrated server
 	}
 }

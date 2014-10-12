@@ -30,6 +30,7 @@ public class FMLConfigGuiFactory implements IModGuiFactory
 			super(parent, getConfigElements(), "FML", false, false, I18n.format("fml.config.sample.title"));
 		}
 		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		private static List<IConfigElement> getConfigElements()
 		{
 			List<IConfigElement> list = new ArrayList<IConfigElement>();
@@ -75,7 +76,7 @@ public class FMLConfigGuiFactory implements IModGuiFactory
 			// Numbers category
 			numbersList.add((new DummyConfigElement<Integer>("basicInteger", 42, ConfigGuiType.INTEGER, "fml.config.sample.basicInteger")));
 			numbersList.add((new DummyConfigElement<Integer>("boundedInteger", 42, ConfigGuiType.INTEGER, "fml.config.sample.boundedInteger", -1, 256)));
-			numbersList.add((new DummyConfigElement<Integer>("sliderInteger", 42, ConfigGuiType.INTEGER, "fml.config.sample.sliderInteger", -1, 256)).setCustomListEntryClass(NumberSliderEntry.class));
+			numbersList.add((new DummyConfigElement<Integer>("sliderInteger", 2000, ConfigGuiType.INTEGER, "fml.config.sample.sliderInteger", 100, 10000)).setCustomListEntryClass(NumberSliderEntry.class));
 			numbersList.add(new DummyConfigElement<Double>("basicDouble", 42.4242D, ConfigGuiType.DOUBLE, "fml.config.sample.basicDouble"));
 			numbersList.add(new DummyConfigElement<Double>("boundedDouble", 42.4242D, ConfigGuiType.DOUBLE, "fml.config.sample.boundedDouble", -1.0D, 256.256D));
 			numbersList.add(new DummyConfigElement<Double>("sliderDouble", 42.4242D, ConfigGuiType.DOUBLE, "fml.config.sample.sliderDouble", -1.0D, 256.256D).setCustomListEntryClass(NumberSliderEntry.class));
@@ -86,11 +87,9 @@ public class FMLConfigGuiFactory implements IModGuiFactory
 		}
 	}
 
-	private Minecraft minecraft;
 	@Override
 	public void initialize(Minecraft minecraftInstance)
 	{
-		this.minecraft = minecraftInstance;
 	}
 
 	@Override

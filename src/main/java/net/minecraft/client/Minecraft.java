@@ -897,12 +897,11 @@ public class Minecraft implements IPlayerUsage
 					}
 
 					this.displayCrashReport(this.crashReporter);
-					return;
 				}
 			}
 			catch (MinecraftError minecrafterror)
 			{
-				;
+				break;
 			}
 			catch (ReportedException reportedexception)
 			{
@@ -910,6 +909,7 @@ public class Minecraft implements IPlayerUsage
 				this.freeMemory();
 				logger.fatal("Reported exception thrown!", reportedexception);
 				this.displayCrashReport(reportedexception.getCrashReport());
+				break;
 			}
 			catch (Throwable throwable1)
 			{
@@ -917,6 +917,7 @@ public class Minecraft implements IPlayerUsage
 				this.freeMemory();
 				logger.fatal("Unreported exception thrown!", throwable1);
 				this.displayCrashReport(crashreport);
+				break;
 			}
 			finally
 			{
@@ -1857,8 +1858,8 @@ public class Minecraft implements IPlayerUsage
 							}
 						}
 					}
-					FMLCommonHandler.instance().fireKeyInput();
 				}
+				FMLCommonHandler.instance().fireKeyInput();
 			}
 
 			for (j = 0; j < 9; ++j)

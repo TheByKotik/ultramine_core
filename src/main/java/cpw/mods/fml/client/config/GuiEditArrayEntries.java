@@ -37,6 +37,7 @@ import cpw.mods.fml.common.FMLLog;
  * 
  * @author bspkrs
  */
+@SuppressWarnings("rawtypes")
 public class GuiEditArrayEntries extends GuiListExtended
 {
 	private GuiEditArray owningGui;
@@ -50,6 +51,7 @@ public class GuiEditArrayEntries extends GuiListExtended
 	public final Object[] beforeValues;
 	public Object[] currentValues;
 
+	@SuppressWarnings("unchecked")
 	public GuiEditArrayEntries(GuiEditArray parent, Minecraft mc, IConfigElement configElement, Object[] beforeValues, Object[] currentValues)
 	{
 		super(mc, parent.width, parent.height, parent.titleLine2 != null ? (parent.titleLine3 != null ? 43 : 33) : 23, parent.height - 32, 20);
@@ -219,6 +221,7 @@ public class GuiEditArrayEntries extends GuiListExtended
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void saveListChanges()
 	{
 		int listLength = configElement.isListLengthFixed() ? listEntries.size() : listEntries.size() - 1;
@@ -540,6 +543,7 @@ public class GuiEditArrayEntries extends GuiListExtended
 		protected boolean isValidValue = true;
 		protected boolean isValidated = false;
 
+		@SuppressWarnings({ "unchecked" })
 		public BaseEntry(GuiEditArray owningScreen, GuiEditArrayEntries owningEntryList, IConfigElement configElement)
 		{
 			this.owningScreen = owningScreen;

@@ -11,6 +11,7 @@ public class TerminalTransformer implements IClassTransformer
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass)
 	{
+		if (basicClass == null) return null;
 		ClassReader reader = new ClassReader(basicClass);
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 
@@ -41,21 +42,26 @@ public class TerminalTransformer implements IClassTransformer
 		@Override
 		public MethodVisitor visitMethod(int mAccess, final String mName, final String mDesc, String mSignature, String[] mExceptions)
 		{
-			final boolean warn = !clsName.equals("net/minecraft/client/Minecraft") &&
-								 !clsName.equals("net/minecraft/server/dedicated/DedicatedServer") &&
-								 !clsName.equals("cpw/mods/fml/common/FMLCommonHandler");
+			final boolean warn = !(clsName.equals("net/minecraft/client/Minecraft") ||
+								   clsName.equals("net/minecraft/server/dedicated/DedicatedServer") ||
+								   clsName.equals("cpw/mods/fml/common/FMLCommonHandler") ||
+								   clsName.startsWith("com/jcraft/jogg/") ||
+								   clsName.startsWith("scala/sys/")
+								   );
 
 			return new MethodVisitor(Opcodes.ASM4, super.visitMethod(mAccess, mName, mDesc, mSignature, mExceptions))
 			{
-				public void visitMethodInsn(int opcode, String owner, String name, String desc)
+				@Override
+				public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean isIntf)
 				{
 					if (opcode == Opcodes.INVOKESTATIC && owner.equals("java/lang/System") && name.equals("exit") && desc.equals("(I)V"))
 					{
 						if (warn)
 						{
 							FMLRelaunchLog.warning("=============================================================");
-							FMLRelaunchLog.warning("MOD HAS DIRECT REFERENCE System.exit() THIS IS NOT ALLOWED REROUTING TO FMLCommonHandler!");
+							FMLRelaunchLog.warning("MOD HAS DIRECT REFERENCE System.exit() THIS IS NOT ALLOWED REROUTING TO FML!");
 							FMLRelaunchLog.warning("Offendor: %s.%s%s", ExitVisitor.this.clsName, mName, mDesc);
+							FMLRelaunchLog.warning("Use FMLCommonHandler.exitJava instead");
 							FMLRelaunchLog.warning("=============================================================");
 						}
 						owner = ExitVisitor.callbackOwner;
@@ -66,8 +72,9 @@ public class TerminalTransformer implements IClassTransformer
 						if (warn)
 						{
 							FMLRelaunchLog.warning("=============================================================");
-							FMLRelaunchLog.warning("MOD HAS DIRECT REFERENCE Runtime.exit() THIS IS NOT ALLOWED REROUTING TO FMLCommonHandler!");
+							FMLRelaunchLog.warning("MOD HAS DIRECT REFERENCE Runtime.exit() THIS IS NOT ALLOWED REROUTING TO FML!");
 							FMLRelaunchLog.warning("Offendor: %s.%s%s", ExitVisitor.this.clsName, mName, mDesc);
+							FMLRelaunchLog.warning("Use FMLCommonHandler.exitJava instead");
 							FMLRelaunchLog.warning("=============================================================");
 						}
 						opcode = Opcodes.INVOKESTATIC;
@@ -75,8 +82,23 @@ public class TerminalTransformer implements IClassTransformer
 						name = "runtimeExitCalled";
 						desc = "(Ljava/lang/Runtime;I)V";
 					}
+					else if (opcode == Opcodes.INVOKEVIRTUAL && owner.equals("java/lang/Runtime") && name.equals("halt") && desc.equals("(I)V"))
+					{
+						if (warn)
+						{
+							FMLRelaunchLog.warning("=============================================================");
+							FMLRelaunchLog.warning("MOD HAS DIRECT REFERENCE Runtime.halt() THIS IS NOT ALLOWED REROUTING TO FML!");
+							FMLRelaunchLog.warning("Offendor: %s.%s%s", ExitVisitor.this.clsName, mName, mDesc);
+							FMLRelaunchLog.warning("Use FMLCommonHandler.exitJava instead");
+							FMLRelaunchLog.warning("=============================================================");
+						}
+						opcode = Opcodes.INVOKESTATIC;
+						owner = ExitVisitor.callbackOwner;
+						name = "runtimeHaltCalled";
+						desc = "(Ljava/lang/Runtime;I)V";
+					}
 
-					super.visitMethodInsn(opcode, owner, name, desc);
+					super.visitMethodInsn(opcode, owner, name, desc, isIntf);
 				}
 			};
 		}
@@ -92,6 +114,13 @@ public class TerminalTransformer implements IClassTransformer
 		{
 			ExitVisitor.checkAccess();
 			runtime.exit(status);
+		}
+
+		// Intercept Runtime.getRuntime().halt, and check if the caller is allowed to use it, if not wrap it in a ExitTrappedException
+		public static void runtimeHaltCalled(Runtime runtime, int status)
+		{
+			ExitVisitor.checkAccess();
+			runtime.halt(status);
 		}
 
 		private static void checkAccess()

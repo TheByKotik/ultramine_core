@@ -138,7 +138,7 @@ public class GuiChat extends GuiScreen implements GuiYesNoCallback
 	public void func_146403_a(String p_146403_1_)
 	{
 		this.mc.ingameGUI.getChatGUI().addToSentMessages(p_146403_1_);
-		if (net.minecraftforge.client.ClientCommandHandler.instance.executeCommand(mc.thePlayer, p_146403_1_) == 1) return;
+		if (net.minecraftforge.client.ClientCommandHandler.instance.executeCommand(mc.thePlayer, p_146403_1_) != 0) return;
 		this.mc.thePlayer.sendChatMessage(p_146403_1_);
 	}
 

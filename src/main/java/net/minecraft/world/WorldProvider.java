@@ -369,6 +369,29 @@ public abstract class WorldProvider
 	{
 		return worldObj.skylightSubtracted < 4;
 	}
+	
+	/**
+	 * The current sun brightness factor for this dimension.
+	 * 0.0f means no light at all, and 1.0f means maximum sunlight.
+	 * This will be used for the "calculateSkylightSubtracted"
+	 * which is for Sky light value calculation.
+	 * 
+	 * @return The current brightness factor
+	 * */
+	public float getSunBrightnessFactor(float par1)
+	{
+		return worldObj.getSunBrightnessFactor(par1);
+	}
+	
+	/**
+	 * Calculates the current moon phase factor.
+	 * This factor is effective for slimes.
+	 * (This method do not affect the moon rendering)
+	 * */
+	public float getCurrentMoonPhaseFactor()
+	{
+		return worldObj.getCurrentMoonPhaseFactorBody();
+	}
 
 	@SideOnly(Side.CLIENT)
 	public Vec3 getSkyColor(Entity cameraEntity, float partialTicks)
@@ -382,6 +405,18 @@ public abstract class WorldProvider
 		return worldObj.drawCloudsBody(partialTicks);
 	}
 
+	/**
+	 * Gets the Sun Brightness for rendering sky.
+	 * */
+	@SideOnly(Side.CLIENT)
+	public float getSunBrightness(float par1)
+	{
+		return worldObj.getSunBrightnessBody(par1);
+	}
+	
+	/**
+	 * Gets the Star Brightness for rendering sky.
+	 * */
 	@SideOnly(Side.CLIENT)
 	public float getStarBrightness(float par1)
 	{

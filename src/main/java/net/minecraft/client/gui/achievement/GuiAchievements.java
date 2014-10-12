@@ -471,6 +471,7 @@ public class GuiAchievements extends GuiScreen implements IProgressMeter
 
 				this.mc.getTextureManager().bindTexture(field_146561_C);
 
+				GL11.glEnable(GL11.GL_BLEND);// Forge: Specifically enable blend because it is needed here. And we fix Generic RenderItem's leakage of it.
 				if (achievement2.getSpecial())
 				{
 					this.drawTexturedModalRect(i5 - 2, j5 - 2, 26, 202, 26, 26);
@@ -479,6 +480,7 @@ public class GuiAchievements extends GuiScreen implements IProgressMeter
 				{
 					this.drawTexturedModalRect(i5 - 2, j5 - 2, 0, 202, 26, 26);
 				}
+				GL11.glDisable(GL11.GL_BLEND); //Forge: Cleanup states we set.
 
 				if (!this.field_146556_E.canUnlockAchievement(achievement2))
 				{
@@ -487,7 +489,7 @@ public class GuiAchievements extends GuiScreen implements IProgressMeter
 					renderitem.renderWithColor = false;
 				}
 
-				GL11.glEnable(GL11.GL_LIGHTING);
+				GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure Lighting is disabled. Fixes MC-33065
 				GL11.glEnable(GL11.GL_CULL_FACE);
 				renderitem.renderItemAndEffectIntoGUI(this.mc.fontRenderer, this.mc.getTextureManager(), achievement2.theItemStack, i5 + 3, j5 + 3);
 				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

@@ -15,6 +15,7 @@ import cpw.mods.fml.relauncher.FMLRelaunchLog;
 
 public class ModAccessTransformer extends AccessTransformer {
 	private static Map<String, String> embedded = Maps.newHashMap(); //Needs to be primitive so that both classloaders get the same class.
+	@SuppressWarnings("unchecked")
 	public ModAccessTransformer() throws Exception
 	{
 		super(ModAccessTransformer.class);

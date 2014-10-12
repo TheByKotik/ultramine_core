@@ -74,6 +74,8 @@ public class Item
 	protected String iconString;
 	private static final String __OBFID = "CL_00000041";
 
+	public final cpw.mods.fml.common.registry.RegistryDelegate<Item> delegate = 
+			((cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry)itemRegistry).getDelegate(this, Item.class);
 	public static int getIdFromItem(Item p_150891_0_)
 	{
 		return p_150891_0_ == null ? 0 : itemRegistry.getIDForObject(p_150891_0_);
@@ -1305,6 +1307,27 @@ public class Item
 	{
 		Integer ret = toolClasses.get(toolClass);
 		return ret == null ? -1 : ret; 
+	}
+	
+	/**
+	 * ItemStack sensitive version of getItemEnchantability
+	 * 
+	 * @param stack The ItemStack
+	 * @return the item echantability value
+	 */
+	public int getItemEnchantability(ItemStack stack)
+	{
+		return getItemEnchantability();
+	}
+	
+	/**
+	 * Whether this Item can be used as a payment to activate the vanilla beacon.
+	 * @param stack the ItemStack
+	 * @return true if this Item can be used
+	 */
+	public boolean isBeaconPayment(ItemStack stack)
+	{
+		return this == Items.emerald || this == Items.diamond || this == Items.gold_ingot || this == Items.iron_ingot;
 	}
 	/* ======================================== FORGE END   =====================================*/
 

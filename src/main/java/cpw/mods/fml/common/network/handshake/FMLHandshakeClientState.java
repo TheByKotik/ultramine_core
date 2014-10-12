@@ -85,7 +85,7 @@ enum FMLHandshakeClientState implements IHandshakeState<FMLHandshakeClientState>
 		public FMLHandshakeClientState accept(ChannelHandlerContext ctx, FMLHandshakeMessage msg)
 		{
 			FMLHandshakeMessage.ModIdData modIds = (FMLHandshakeMessage.ModIdData)msg;
-			List<String> locallyMissing = GameData.injectWorldIDMap(modIds.dataList(), false, false);
+			List<String> locallyMissing = GameData.injectWorldIDMap(modIds.dataList(), modIds.blockSubstitutions(), modIds.itemSubstitutions(), false, false);
 			if (!locallyMissing.isEmpty())
 			{
 				NetworkDispatcher dispatcher = ctx.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
@@ -125,6 +125,11 @@ enum FMLHandshakeClientState implements IHandshakeState<FMLHandshakeClientState>
 		@Override
 		public FMLHandshakeClientState accept(ChannelHandlerContext ctx, FMLHandshakeMessage msg)
 		{
+			if (msg instanceof FMLHandshakeMessage.HandshakeReset)
+			{
+				GameData.revertToFrozen();
+				return HELLO;
+			}
 			return this;
 		}
 	},
