@@ -130,6 +130,9 @@ public abstract class World implements IBlockAccess
 	private boolean field_147481_N;
 	int[] lightUpdateBlockList;
 	private static final String __OBFID = "CL_00000140";
+	public boolean restoringBlockSnapshots = false;
+	public boolean captureBlockSnapshots = false;
+	public ArrayList<net.minecraftforge.common.util.BlockSnapshot> capturedBlockSnapshots = new ArrayList<net.minecraftforge.common.util.BlockSnapshot>();
 
 	public BiomeGenBase getBiomeGenForCoords(final int p_72807_1_, final int p_72807_2_)
 	{
@@ -441,33 +444,33 @@ public abstract class World implements IBlockAccess
 			{
 				Chunk chunk = this.getChunkFromChunkCoords(p_147465_1_ >> 4, p_147465_3_ >> 4);
 				Block block1 = null;
+				net.minecraftforge.common.util.BlockSnapshot blockSnapshot = null;
 
 				if ((p_147465_6_ & 1) != 0)
 				{
 					block1 = chunk.getBlock(p_147465_1_ & 15, p_147465_2_, p_147465_3_ & 15);
+					if (this.captureBlockSnapshots && block1 != null && !this.isRemote)
+					{
+						blockSnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot(this, p_147465_1_, p_147465_2_, p_147465_3_, p_147465_6_);
+						this.capturedBlockSnapshots.add(blockSnapshot);
+					}
 				}
 
 				boolean flag = chunk.func_150807_a(p_147465_1_ & 15, p_147465_2_, p_147465_3_ & 15, p_147465_4_, p_147465_5_);
+
+				if (!flag && this.captureBlockSnapshots && block1 != null && !this.isRemote) 
+				{
+					this.capturedBlockSnapshots.remove(blockSnapshot);
+				}
+
 				this.theProfiler.startSection("checkLight");
 				this.func_147451_t(p_147465_1_, p_147465_2_, p_147465_3_);
 				this.theProfiler.endSection();
 
-				if (flag)
+				if (flag && !this.captureBlockSnapshots) // Don't notify clients or update physics while capturing blockstates
 				{
-					if ((p_147465_6_ & 2) != 0 && (!this.isRemote || (p_147465_6_ & 4) == 0) && chunk.func_150802_k())
-					{
-						this.markBlockForUpdate(p_147465_1_, p_147465_2_, p_147465_3_);
-					}
-
-					if (!this.isRemote && (p_147465_6_ & 1) != 0)
-					{
-						this.notifyBlockChange(p_147465_1_, p_147465_2_, p_147465_3_, block1);
-
-						if (p_147465_4_.hasComparatorInputOverride())
-						{
-							this.func_147453_f(p_147465_1_, p_147465_2_, p_147465_3_, p_147465_4_);
-						}
-					}
+					// Modularize client and physic updates
+					this.markAndNotifyBlock(p_147465_1_, p_147465_2_, p_147465_3_, chunk, block1, p_147465_4_, p_147465_6_);
 				}
 
 				return flag;
@@ -476,6 +479,25 @@ public abstract class World implements IBlockAccess
 		else
 		{
 			return false;
+		}
+	}
+
+	// Split off from original setBlock(int p_147465_1_, int p_147465_2_, int p_147465_3_, Block p_147465_4_, int p_147465_5_, int p_147465_6_) method in order to directly send client and physic updates
+	public void markAndNotifyBlock(int x, int y, int z, Chunk chunk, Block oldBlock, Block newBlock, int flag)
+	{
+		if ((flag & 2) != 0 && (chunk == null || chunk.func_150802_k()))
+		{
+			this.markBlockForUpdate(x, y, z);
+		}
+
+		if (!this.isRemote && (flag & 1) != 0)
+		{
+			this.notifyBlockChange(x, y, z, oldBlock);
+
+			if (newBlock.hasComparatorInputOverride())
+			{
+				this.func_147453_f(x, y, z, newBlock);
+			}
 		}
 	}
 
@@ -1292,6 +1314,9 @@ public abstract class World implements IBlockAccess
 
 	public boolean spawnEntityInWorld(final Entity p_72838_1_)
 	{
+		// do not drop any items while restoring blocksnapshots. Prevents dupes
+		if (!this.isRemote && (p_72838_1_ == null || (p_72838_1_ instanceof net.minecraft.entity.item.EntityItem && this.restoringBlockSnapshots))) return false;
+
 		int i = MathHelper.floor_double(p_72838_1_.posX / 16.0D);
 		int j = MathHelper.floor_double(p_72838_1_.posZ / 16.0D);
 		boolean flag = p_72838_1_.forceSpawn;
@@ -1504,6 +1529,20 @@ public abstract class World implements IBlockAccess
 
 	public int calculateSkylightSubtracted(float p_72967_1_)
 	{
+		float f2 = provider.getSunBrightnessFactor(p_72967_1_);
+		f2 = 1.0F - f2;
+		return (int)(f2 * 11.0F);
+	}
+	
+	/**
+	 * The current sun brightness factor for this dimension.
+	 * 0.0f means no light at all, and 1.0f means maximum sunlight.
+	 * Highly recommended for sunlight detection like solar panel.
+	 * 
+	 * @return The current brightness factor
+	 * */
+	public float getSunBrightnessFactor(float p_72967_1_)
+	{
 		float f1 = this.getCelestialAngle(p_72967_1_);
 		float f2 = 1.0F - (MathHelper.cos(f1 * (float)Math.PI * 2.0F) * 2.0F + 0.5F);
 
@@ -1520,8 +1559,7 @@ public abstract class World implements IBlockAccess
 		f2 = 1.0F - f2;
 		f2 = (float)((double)f2 * (1.0D - (double)(this.getRainStrength(p_72967_1_) * 5.0F) / 16.0D));
 		f2 = (float)((double)f2 * (1.0D - (double)(this.getWeightedThunderStrength(p_72967_1_) * 5.0F) / 16.0D));
-		f2 = 1.0F - f2;
-		return (int)(f2 * 11.0F);
+		return f2;
 	}
 
 	public void removeWorldAccess(IWorldAccess p_72848_1_)
@@ -1531,6 +1569,12 @@ public abstract class World implements IBlockAccess
 
 	@SideOnly(Side.CLIENT)
 	public float getSunBrightness(float p_72971_1_)
+	{
+		return provider.getSunBrightness(p_72971_1_);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public float getSunBrightnessBody(float p_72971_1_)
 	{
 		float f1 = this.getCelestialAngle(p_72971_1_);
 		float f2 = 1.0F - (MathHelper.cos(f1 * (float)Math.PI * 2.0F) * 2.0F + 0.2F);
@@ -1637,6 +1681,11 @@ public abstract class World implements IBlockAccess
 	}
 
 	public float getCurrentMoonPhaseFactor()
+	{
+		return provider.getCurrentMoonPhaseFactor();
+	}
+	
+	public float getCurrentMoonPhaseFactorBody()
 	{
 		return WorldProvider.moonPhaseFactors[this.provider.getMoonPhase(this.worldInfo.getWorldTime())];
 	}

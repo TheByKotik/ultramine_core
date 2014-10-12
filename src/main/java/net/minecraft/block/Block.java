@@ -124,6 +124,8 @@ public class Block
 	protected IIcon blockIcon;
 	private static final String __OBFID = "CL_00000199";
 
+	public final cpw.mods.fml.common.registry.RegistryDelegate<Block> delegate = 
+			((cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry)blockRegistry).getDelegate(this, Block.class);
 	public static int getIdFromBlock(Block p_149682_0_)
 	{
 		return blockRegistry.getIDForObject(p_149682_0_);
@@ -648,7 +650,7 @@ public class Block
 
 	public void dropBlockAsItemWithChance(World p_149690_1_, int p_149690_2_, int p_149690_3_, int p_149690_4_, int p_149690_5_, float p_149690_6_, int p_149690_7_)
 	{
-		if (!p_149690_1_.isRemote)
+		if (!p_149690_1_.isRemote && !p_149690_1_.restoringBlockSnapshots) // do not drop items while restoring blockstates, prevents item dupe
 		{
 			ArrayList<ItemStack> items = getDrops(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, p_149690_5_, p_149690_7_);
 			p_149690_6_ = ForgeEventFactory.fireBlockHarvesting(items, p_149690_1_, this, p_149690_2_, p_149690_3_, p_149690_4_, p_149690_5_, p_149690_7_, p_149690_6_, false, harvesters.get());
@@ -665,7 +667,7 @@ public class Block
 
 	protected void dropBlockAsItem(World p_149642_1_, int p_149642_2_, int p_149642_3_, int p_149642_4_, ItemStack p_149642_5_)
 	{
-		if (!p_149642_1_.isRemote && p_149642_1_.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+		if (!p_149642_1_.isRemote && p_149642_1_.getGameRules().getGameRuleBooleanValue("doTileDrops") && !p_149642_1_.restoringBlockSnapshots) // do not drop items while restoring blockstates, prevents item dupe
 		{
 			if (captureDrops.get())
 			{

@@ -1449,6 +1449,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
 	public void wakeUpPlayer(boolean p_70999_1_, boolean p_70999_2_, boolean p_70999_3_)
 	{
+		MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.PlayerWakeUpEvent(this));
 		this.setSize(0.6F, 1.8F);
 		this.resetHeight();
 		ChunkCoordinates chunkcoordinates = this.playerLocation;

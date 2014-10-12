@@ -67,7 +67,7 @@ public class Session
 		}
 		catch (IllegalArgumentException illegalargumentexception)
 		{
-			return new GameProfile((UUID)null, this.getUsername());
+			return new GameProfile(net.minecraft.entity.player.EntityPlayer.func_146094_a(new GameProfile((UUID)null, this.getUsername())), this.getUsername());
 		}
 	}
 

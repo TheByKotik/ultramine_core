@@ -46,7 +46,14 @@ public class ItemLilyPad extends ItemColored
 
 				if (p_77659_2_.getBlock(i, j, k).getMaterial() == Material.water && p_77659_2_.getBlockMetadata(i, j, k) == 0 && p_77659_2_.isAirBlock(i, j + 1, k))
 				{
+					// special case for handling block placement with water lilies
+					net.minecraftforge.common.util.BlockSnapshot blocksnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot(p_77659_2_, i, j + 1, k);
 					p_77659_2_.setBlock(i, j + 1, k, Blocks.waterlily);
+					if (net.minecraftforge.event.ForgeEventFactory.onPlayerBlockPlace(p_77659_3_, blocksnapshot, net.minecraftforge.common.util.ForgeDirection.UP).isCanceled()) 
+					{
+						blocksnapshot.restore(true, false);
+						return p_77659_1_;
+					}
 
 					if (!p_77659_3_.capabilities.isCreativeMode)
 					{

@@ -84,7 +84,7 @@ public class ServerListEntryNormal implements GuiListExtended.IGuiListEntry
 		boolean flag2 = this.field_148301_e.field_82821_f < 5;
 		boolean flag3 = flag1 || flag2;
 		this.field_148300_d.fontRenderer.drawString(this.field_148301_e.serverName, p_148279_2_ + 32 + 3, p_148279_3_ + 1, 16777215);
-		List list = this.field_148300_d.fontRenderer.listFormattedStringToWidth(FMLClientHandler.instance().fixDescription(this.field_148301_e.serverMOTD), p_148279_4_ - 32 - 2);
+		List list = this.field_148300_d.fontRenderer.listFormattedStringToWidth(FMLClientHandler.instance().fixDescription(this.field_148301_e.serverMOTD), p_148279_4_ - 48 - 2);
 
 		for (int l1 = 0; l1 < Math.min(list.size(), 2); ++l1)
 		{

@@ -357,6 +357,7 @@ public class GuiContainerCreative extends InventoryEffectRenderer
 		Enchantment[] aenchantment = Enchantment.enchantmentsList;
 		int j = aenchantment.length;
 
+		if (CreativeTabs.creativeTabArray[selectedTabIndex] != CreativeTabs.tabAllSearch) j = 0; //Forge: Don't add enchants to custom tabs.
 		for (int i = 0; i < j; ++i)
 		{
 			Enchantment enchantment = aenchantment[i];
@@ -544,6 +545,8 @@ public class GuiContainerCreative extends InventoryEffectRenderer
 				this.searchField.setCanLoseFocus(false);
 				this.searchField.setFocused(true);
 				this.searchField.setText("");
+				this.searchField.width = p_147050_1_.getSearchbarWidth();
+				this.searchField.xPosition = this.guiLeft + (82 /*default left*/ + 89 /*default width*/) - this.searchField.width;
 				this.updateCreativeSearch();
 			}
 			else

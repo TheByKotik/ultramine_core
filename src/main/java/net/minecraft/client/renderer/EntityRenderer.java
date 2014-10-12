@@ -1980,6 +1980,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
 					GL11.glFogf(GL11.GL_FOG_START, f1 * 0.05F);
 					GL11.glFogf(GL11.GL_FOG_END, Math.min(f1, 192.0F) * 0.5F);
 				}
+				MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent(this, entitylivingbase, block, p_78468_2_, p_78468_1_, f1));
 			}
 
 			GL11.glEnable(GL11.GL_COLOR_MATERIAL);

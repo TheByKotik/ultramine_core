@@ -49,7 +49,9 @@ public class DummyConfigElement<T> implements IConfigElement<T>
 	protected boolean requiresMcRestart = false;
 	protected boolean isListFixedLength = false;
 	protected int maxListLength = -1;
+	@SuppressWarnings("rawtypes")
 	protected List<IConfigElement> childElements;
+	@SuppressWarnings("rawtypes")
 	protected Class<? extends IConfigEntry> configEntryClass;
 	protected Class<? extends IArrayEntry> arrayEntryClass;
 	
@@ -59,16 +61,19 @@ public class DummyConfigElement<T> implements IConfigElement<T>
 	 */
 	public static class DummyCategoryElement<T> extends DummyConfigElement<T>
 	{
+		@SuppressWarnings("rawtypes")
 		public DummyCategoryElement(String name, String langKey, List<IConfigElement> childElements)
 		{
-			this(name, langKey, childElements, (Class) null);
+			this(name, langKey, childElements, (Class<? extends IConfigEntry>) null);
 		}
 		
+		@SuppressWarnings("rawtypes")
 		public DummyCategoryElement(String name, String langKey, Class<? extends IConfigEntry> customListEntryClass)
 		{
 			this(name, langKey, new ArrayList<IConfigElement>(), customListEntryClass);
 		}
 		
+		@SuppressWarnings("rawtypes")
 		public DummyCategoryElement(String name, String langKey, List<IConfigElement> childElements, Class<? extends IConfigEntry> customListEntryClass)
 		{
 			super(name, (T) null, ConfigGuiType.CONFIG_CATEGORY, langKey);
@@ -144,6 +149,7 @@ public class DummyConfigElement<T> implements IConfigElement<T>
 			this(name, defaultValues, type, langKey, false, maxListLength, validStringPattern, (T) null, (T) null);
 		}
 		
+		@SuppressWarnings("rawtypes")
 		public DummyListElement setCustomEditListEntryClass(Class<? extends IArrayEntry> clazz)
 		{
 			this.arrayEntryClass = clazz;
@@ -157,6 +163,7 @@ public class DummyConfigElement<T> implements IConfigElement<T>
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public DummyConfigElement(String name, T defaultValue, ConfigGuiType type, String langKey, String[] validValues, Pattern validStringPattern, T minValue, T maxValue)
 	{
 		this.name = name;
@@ -206,6 +213,7 @@ public class DummyConfigElement<T> implements IConfigElement<T>
 		this(name, defaultValue, type, langKey, (String[]) null, (Pattern) null, minValue, maxValue);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public DummyConfigElement setCustomListEntryClass(Class<? extends IConfigEntry> clazz)
 	{
 		this.configEntryClass = clazz;
@@ -218,18 +226,21 @@ public class DummyConfigElement<T> implements IConfigElement<T>
 		return isProperty;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public IConfigElement setConfigEntryClass(Class<? extends IConfigEntry> clazz)
 	{
 		this.configEntryClass = clazz;
 		return this;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Class<? extends IConfigEntry> getConfigEntryClass()
 	{
 		return configEntryClass;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public IConfigElement setArrayEntryClass(Class<? extends IArrayEntry> clazz)
 	{
 		this.arrayEntryClass = clazz;
@@ -266,6 +277,7 @@ public class DummyConfigElement<T> implements IConfigElement<T>
 		return I18n.format(langKey + ".tooltip");
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List<IConfigElement> getChildElements()
 	{

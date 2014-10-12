@@ -529,6 +529,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 		WorldServer worldserver = this.serverController.worldServerForDimension(this.playerEntity.dimension);
 		ItemStack itemstack = this.playerEntity.inventory.getCurrentItem();
 		boolean flag = false;
+		boolean placeResult = true;
 		int i = p_147346_1_.func_149576_c();
 		int j = p_147346_1_.func_149571_d();
 		int k = p_147346_1_.func_149570_e();
@@ -563,7 +564,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			dist *= dist;
 			if (this.hasMoved && this.playerEntity.getDistanceSq((double)i + 0.5D, (double)j + 0.5D, (double)k + 0.5D) < dist && !this.serverController.isBlockProtected(worldserver, i, j, k, this.playerEntity))
 			{
-				this.playerEntity.theItemInWorldManager.activateBlockOrUseItem(this.playerEntity, worldserver, itemstack, i, j, k, l, p_147346_1_.func_149573_h(), p_147346_1_.func_149569_i(), p_147346_1_.func_149575_j());
+				// record block place result so we can update client itemstack size if place event was cancelled.
+				if (!this.playerEntity.theItemInWorldManager.activateBlockOrUseItem(this.playerEntity, worldserver, itemstack, i, j, k, l, p_147346_1_.func_149573_h(), p_147346_1_.func_149569_i(), p_147346_1_.func_149575_j()))
+				{
+					placeResult = false;
+				}
 			}
 
 			flag = true;
@@ -622,7 +627,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			this.playerEntity.openContainer.detectAndSendChanges();
 			this.playerEntity.isChangingQuantityOnly = false;
 
-			if (!ItemStack.areItemStacksEqual(this.playerEntity.inventory.getCurrentItem(), p_147346_1_.func_149574_g()))
+			if (!ItemStack.areItemStacksEqual(this.playerEntity.inventory.getCurrentItem(), p_147346_1_.func_149574_g()) || !placeResult) // force client itemstack update if place event was cancelled
 			{
 				this.sendPacket(new S2FPacketSetSlot(this.playerEntity.openContainer.windowId, slot.slotNumber, this.playerEntity.inventory.getCurrentItem()));
 			}
@@ -1084,20 +1089,20 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			{
 				itemstack = packetbuffer.readItemStackFromBuffer();
 
-				if (itemstack == null)
+				if (itemstack != null)
 				{
-					return;
-				}
+					if (!ItemWritableBook.func_150930_a(itemstack.getTagCompound()))
+					{
+						throw new IOException("Invalid book tag!");
+					}
 
-				if (!ItemWritableBook.func_150930_a(itemstack.getTagCompound()))
-				{
-					throw new IOException("Invalid book tag!");
-				}
+					itemstack1 = this.playerEntity.inventory.getCurrentItem();
 
-				itemstack1 = this.playerEntity.inventory.getCurrentItem();
+					if (itemstack1 == null)
+					{
+						return;
+					}
 
-				if (itemstack1 != null)
-				{
 					if (itemstack.getItem() == Items.writable_book && itemstack.getItem() == itemstack1.getItem())
 					{
 						itemstack1.setTagInfo("pages", itemstack.getTagCompound().getTagList("pages", 8));
@@ -1126,20 +1131,20 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			{
 				itemstack = packetbuffer.readItemStackFromBuffer();
 
-				if (itemstack != null)
+				if (itemstack == null)
 				{
-					if (!ItemEditableBook.validBookTagContents(itemstack.getTagCompound()))
-					{
-						throw new IOException("Invalid book tag!");
-					}
+					return;
+				}
 
-					itemstack1 = this.playerEntity.inventory.getCurrentItem();
+				if (!ItemEditableBook.validBookTagContents(itemstack.getTagCompound()))
+				{
+					throw new IOException("Invalid book tag!");
+				}
 
-					if (itemstack1 == null)
-					{
-						return;
-					}
+				itemstack1 = this.playerEntity.inventory.getCurrentItem();
 
+				if (itemstack1 != null)
+				{
 					if (itemstack.getItem() == Items.written_book && itemstack1.getItem() == Items.writable_book)
 					{
 						itemstack1.setTagInfo("author", new NBTTagString(this.playerEntity.getCommandSenderName()));

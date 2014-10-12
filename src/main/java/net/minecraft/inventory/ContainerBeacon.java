@@ -156,7 +156,7 @@ public class ContainerBeacon extends Container
 
 		public boolean isItemValid(ItemStack p_75214_1_)
 		{
-			return p_75214_1_ == null ? false : p_75214_1_.getItem() == Items.emerald || p_75214_1_.getItem() == Items.diamond || p_75214_1_.getItem() == Items.gold_ingot || p_75214_1_.getItem() == Items.iron_ingot;
+			return p_75214_1_ != null && p_75214_1_.getItem() != null && p_75214_1_.getItem().isBeaconPayment(p_75214_1_);
 		}
 
 		public int getSlotStackLimit()

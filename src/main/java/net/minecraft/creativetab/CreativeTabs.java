@@ -366,11 +366,22 @@ public abstract class CreativeTabs
 
 	/**
 	 * Determines if the search bar should be shown for this tab.
-	 * 
+	 *
 	 * @return True to show the bar
 	 */
 	public boolean hasSearchBar()
 	{
 		return tabIndex == CreativeTabs.tabAllSearch.tabIndex;
+	}
+
+	/**
+	 * Gets the width of the search bar of the creative tab, use this if your
+	 * creative tab name overflows together with a custom texture.
+	 *
+	 * @return The width of the search bar, 89 by default
+	 */
+	public int getSearchbarWidth()
+	{
+		return 89;
 	}
 }

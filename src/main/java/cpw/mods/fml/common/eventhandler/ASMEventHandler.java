@@ -5,7 +5,6 @@ import static org.objectweb.asm.Opcodes.*;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
-
 import org.apache.logging.log4j.ThreadContext;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -22,25 +21,29 @@ public class ASMEventHandler implements IEventListener
 	private static final String HANDLER_FUNC_DESC = Type.getMethodDescriptor(IEventListener.class.getDeclaredMethods()[0]);
 	private static final ASMClassLoader LOADER = new ASMClassLoader();
 	private static final HashMap<Method, Class<?>> cache = Maps.newHashMap();
+	private static final boolean GETCONTEXT = Boolean.parseBoolean(System.getProperty("fml.LogContext", "false"));
 
 	private final IEventListener handler;
 	private final SubscribeEvent subInfo;
 	private ModContainer owner;
+	private String readable;
+
 	public ASMEventHandler(Object target, Method method, ModContainer owner) throws Exception
 	{
 		this.owner = owner;
 		handler = (IEventListener)createWrapper(method).getConstructor(Object.class).newInstance(target);
 		subInfo = method.getAnnotation(SubscribeEvent.class);
+		readable = "ASM: " + target + " " + method.getName() + Type.getMethodDescriptor(method);
 	}
 
 	@Override
 	public void invoke(Event event)
 	{
-		if (owner != null)
+		if (owner != null && GETCONTEXT)
 		{
 			ThreadContext.put("mod", owner.getName());
 		}
-		else
+		else if (GETCONTEXT)
 		{
 			ThreadContext.put("mod", "");
 		}
@@ -51,7 +54,8 @@ public class ASMEventHandler implements IEventListener
 				handler.invoke(event);
 			}
 		}
-		ThreadContext.remove("mod");
+		if (GETCONTEXT)
+			ThreadContext.remove("mod");
 	}
 
 	public EventPriority getPriority()
@@ -92,7 +96,7 @@ public class ASMEventHandler implements IEventListener
 			mv = cw.visitMethod(ACC_PUBLIC, "<init>", "(Ljava/lang/Object;)V", null, null);
 			mv.visitCode();
 			mv.visitVarInsn(ALOAD, 0);
-			mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+			mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
 			mv.visitVarInsn(ALOAD, 0);
 			mv.visitVarInsn(ALOAD, 1);
 			mv.visitFieldInsn(PUTFIELD, desc, "instance", "Ljava/lang/Object;");
@@ -108,7 +112,7 @@ public class ASMEventHandler implements IEventListener
 			mv.visitTypeInsn(CHECKCAST, instType);
 			mv.visitVarInsn(ALOAD, 1);
 			mv.visitTypeInsn(CHECKCAST, eventType);
-			mv.visitMethodInsn(INVOKEVIRTUAL, instType, callback.getName(), Type.getMethodDescriptor(callback));
+			mv.visitMethodInsn(INVOKEVIRTUAL, instType, callback.getName(), Type.getMethodDescriptor(callback), false);
 			mv.visitInsn(RETURN);
 			mv.visitMaxs(2, 2);
 			mv.visitEnd();
@@ -140,4 +144,8 @@ public class ASMEventHandler implements IEventListener
 		}
 	}
 
+	public String toString()
+	{
+		return readable;
+	}
 }

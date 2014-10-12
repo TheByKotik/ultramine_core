@@ -100,8 +100,6 @@ public class WorldServer extends World
 	private IntHashMap entityIdMap;
 	private static final String __OBFID = "CL_00001437";
 
-	/** Stores the recently processed (lighting) chunks */
-	protected TIntSet doneChunks = new TIntHashSet(512);
 	public List<Teleporter> customTeleporters = new ArrayList<Teleporter>();
 
 	public WorldServer(MinecraftServer p_i45284_1_, ISaveHandler p_i45284_2_, String p_i45284_3_, int p_i45284_4_, WorldSettings p_i45284_5_, Profiler p_i45284_6_)
@@ -324,14 +322,6 @@ public class WorldServer extends World
 		int i = 0;
 		int j = 0;
 
-		doneChunks.retainAll(activeChunkSet.keySet());
-		if (doneChunks.size() == activeChunkSet.size())
-		{
-			doneChunks.clear();
-		}
-
-		final long startTime = System.nanoTime();
-
 		for (TIntByteIterator iter = activeChunkSet.iterator(); iter.hasNext();)
 		{
 			iter.advance();
@@ -348,11 +338,7 @@ public class WorldServer extends World
 			this.updatePendingOf(chunk);
 			this.func_147467_a(k, l, chunk);
 			this.theProfiler.endStartSection("tickChunk");
-			//Limits and evenly distributes the lighting update time
-			if (System.nanoTime() - startTime <= 4000000 && doneChunks.add(chunkCoord))
-			{
-				chunk.func_150804_b(false);
-			}
+			chunk.func_150804_b(false);
 			this.theProfiler.endStartSection("thunder");
 			int i1;
 			int j1;

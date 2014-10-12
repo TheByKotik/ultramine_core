@@ -1858,8 +1858,8 @@ public class Minecraft implements IPlayerUsage
 							}
 						}
 					}
-					FMLCommonHandler.instance().fireKeyInput();
 				}
+				FMLCommonHandler.instance().fireKeyInput();
 			}
 
 			for (j = 0; j < 9; ++j)

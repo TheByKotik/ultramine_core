@@ -270,7 +270,6 @@ public class DedicatedServer extends MinecraftServer implements IServer
 			this.theRConThreadMain.startThread();
 		}
 
-		allowPlayerLogins = true;
 		return FMLCommonHandler.instance().handleServerStarting(this);
 	}
 

@@ -46,6 +46,7 @@ public final class ItemStack
 	private EntityItemFrame itemFrame;
 	private static final String __OBFID = "CL_00000043";
 
+	private cpw.mods.fml.common.registry.RegistryDelegate<Item> delegate;
 	public ItemStack(Block p_i1876_1_)
 	{
 		this(p_i1876_1_, 1);
@@ -73,7 +74,7 @@ public final class ItemStack
 
 	public ItemStack(Item p_i1881_1_, int p_i1881_2_, int p_i1881_3_)
 	{
-		this.field_151002_e = p_i1881_1_;
+		func_150996_a(p_i1881_1_);
 		this.stackSize = p_i1881_2_;
 		this.itemDamage = p_i1881_3_;
 
@@ -107,7 +108,7 @@ public final class ItemStack
 
 	public Item getItem()
 	{
-		return this.field_151002_e;
+		return this.delegate != null ? this.delegate.get() : null;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -124,6 +125,7 @@ public final class ItemStack
 
 	public boolean tryPlaceItemIntoWorld(EntityPlayer p_77943_1_, World p_77943_2_, int p_77943_3_, int p_77943_4_, int p_77943_5_, int p_77943_6_, float p_77943_7_, float p_77943_8_, float p_77943_9_)
 	{
+		if (!p_77943_2_.isRemote) return net.minecraftforge.common.ForgeHooks.onPlaceItemIntoWorld(this, p_77943_1_, p_77943_2_, p_77943_3_, p_77943_4_, p_77943_5_, p_77943_6_, p_77943_7_, p_77943_8_, p_77943_9_);
 		boolean flag = this.getItem().onItemUse(this, p_77943_1_, p_77943_2_, p_77943_3_, p_77943_4_, p_77943_5_, p_77943_6_, p_77943_7_, p_77943_8_, p_77943_9_);
 
 		if (flag)
@@ -165,7 +167,7 @@ public final class ItemStack
 
 	public void readFromNBT(NBTTagCompound p_77963_1_)
 	{
-		this.field_151002_e = Item.getItemById(p_77963_1_.getShort("id"));
+		func_150996_a(Item.getItemById(p_77963_1_.getShort("id")));
 		this.stackSize = p_77963_1_.getByte("Count");
 		this.itemDamage = p_77963_1_.getShort("Damage");
 
@@ -748,6 +750,7 @@ public final class ItemStack
 
 	public void func_150996_a(Item p_150996_1_)
 	{
+		this.delegate = p_150996_1_ != null ? p_150996_1_.delegate : null;
 		this.field_151002_e = p_150996_1_;
 	}
 

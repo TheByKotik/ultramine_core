@@ -145,9 +145,20 @@ public class GameRegistry
 	}
 
 
-	public static void addAlias(String alias, String forName, GameRegistry.Type type)
+	/**
+	 * Add a forced persistent substitution alias for the block or item to another block or item. This will have
+	 * the effect of using the substituted block or item instead of the original, where ever it is
+	 * referenced.
+	 *
+	 * @param nameToSubstitute The name to link to (this is the NEW block or item)
+	 * @param type The type (Block or Item)
+	 * @param object a NEW instance that is type compatible with the existing instance
+	 * @throws ExistingSubstitutionException if someone else has already registered an alias either from or to one of the names
+	 * @throws IncompatibleSubstitutionException if the substitution is incompatible
+	 */
+	public static void addSubstitutionAlias(String nameToSubstitute, GameRegistry.Type type, Object object) throws ExistingSubstitutionException
 	{
-
+		GameData.getMain().registerSubstitutionAlias(nameToSubstitute, type, object);
 	}
 
 	/**
@@ -396,7 +407,24 @@ public class GameRegistry
 		}
 	}
 
-	public static enum Type { BLOCK, ITEM }
+	public static enum Type {
+		BLOCK
+		{
+			@Override
+			public FMLControlledNamespacedRegistry<?> getRegistry() {
+				return GameData.getBlockRegistry();
+			}
+		},
+		ITEM
+		{
+			@Override
+			public FMLControlledNamespacedRegistry<?> getRegistry() {
+				return GameData.getItemRegistry();
+			}
+		};
+
+		public abstract FMLControlledNamespacedRegistry<?> getRegistry();
+	}
 	/**
 	 * Look up the mod identifier data for a block.
 	 * Returns null if there is no mod specified mod identifier data, or it is part of a

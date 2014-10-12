@@ -486,7 +486,7 @@ public class ItemRenderer
 				this.renderItem(entityclientplayermp, itemstack, 0, EQUIPPED_FIRST_PERSON);
 				for (int x = 1; x < itemstack.getItem().getRenderPasses(itemstack.getItemDamage()); x++)
 				{
-					int k1 = itemstack.getItem().getColorFromItemStack(itemstack, 1);
+					int k1 = itemstack.getItem().getColorFromItemStack(itemstack, x);
 					f10 = (float)(k1 >> 16 & 255) / 255.0F;
 					f11 = (float)(k1 >> 8 & 255) / 255.0F;
 					f12 = (float)(k1 & 255) / 255.0F;

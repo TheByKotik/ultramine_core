@@ -293,7 +293,7 @@ public class EnchantmentHelper
 	public static int calcItemStackEnchantability(Random p_77514_0_, int p_77514_1_, int p_77514_2_, ItemStack p_77514_3_)
 	{
 		Item item = p_77514_3_.getItem();
-		int k = item.getItemEnchantability();
+		int k = item.getItemEnchantability(p_77514_3_);
 
 		if (k <= 0)
 		{
@@ -346,7 +346,7 @@ public class EnchantmentHelper
 	public static List buildEnchantmentList(Random p_77513_0_, ItemStack p_77513_1_, int p_77513_2_)
 	{
 		Item item = p_77513_1_.getItem();
-		int j = item.getItemEnchantability();
+		int j = item.getItemEnchantability(p_77513_1_);
 
 		if (j <= 0)
 		{
