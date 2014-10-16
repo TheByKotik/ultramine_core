@@ -129,9 +129,7 @@ public class GenLayerBiome extends GenLayer
 	{
 		List<BiomeEntry> biomeList = biomes[type.ordinal()];
 		int totalWeight = WeightedRandom.getTotalWeight(biomeList);
-		int rand = nextInt(totalWeight / 10) * 10;
-		int weight = rand + (BiomeManager.isTypeListModded(type) ? nextInt(Math.min(10, totalWeight - rand)) : 0);
-		
+		int weight = BiomeManager.isTypeListModded(type)?nextInt(totalWeight):nextInt(totalWeight / 10) * 10;
 		return (BiomeEntry)WeightedRandom.getItem(biomeList, weight);
 	}
 }
