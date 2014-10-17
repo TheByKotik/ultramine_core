@@ -440,25 +440,27 @@ public abstract class World implements IBlockAccess
 				if ((p_147465_6_ & 1) != 0)
 				{
 					block1 = chunk.getBlock(p_147465_1_ & 15, p_147465_2_, p_147465_3_ & 15);
-					if (this.captureBlockSnapshots && block1 != null && !this.isRemote)
-					{
-						blockSnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot(this, p_147465_1_, p_147465_2_, p_147465_3_, p_147465_6_);
-						this.capturedBlockSnapshots.add(blockSnapshot);
-					}
+				}
+
+				if (this.captureBlockSnapshots && !this.isRemote)
+				{
+					blockSnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot(this, p_147465_1_, p_147465_2_, p_147465_3_, p_147465_6_);
+					this.capturedBlockSnapshots.add(blockSnapshot);
 				}
 
 				boolean flag = chunk.func_150807_a(p_147465_1_ & 15, p_147465_2_, p_147465_3_ & 15, p_147465_4_, p_147465_5_);
 
-				if (!flag && this.captureBlockSnapshots && block1 != null && !this.isRemote) 
+				if (!flag && blockSnapshot != null)
 				{
 					this.capturedBlockSnapshots.remove(blockSnapshot);
+					blockSnapshot = null;
 				}
 
 				this.theProfiler.startSection("checkLight");
 				this.func_147451_t(p_147465_1_, p_147465_2_, p_147465_3_);
 				this.theProfiler.endSection();
 
-				if (flag && !this.captureBlockSnapshots) // Don't notify clients or update physics while capturing blockstates
+				if (flag && blockSnapshot == null) // Don't notify clients or update physics while capturing blockstates
 				{
 					// Modularize client and physic updates
 					this.markAndNotifyBlock(p_147465_1_, p_147465_2_, p_147465_3_, chunk, block1, p_147465_4_, p_147465_6_);
