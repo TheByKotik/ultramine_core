@@ -106,7 +106,7 @@ public class CoreModManager {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("mcLocation", mcDir);
 			data.put("coremodList", loadPlugins);
-			data.put("runtimeDeobfuscationEnabled", !deobfuscatedEnvironment);
+			data.put("runtimeDeobfuscationEnabled", true);//!deobfuscatedEnvironment); //Mods should assume that we in obf env
 			FMLRelaunchLog.fine("Running coremod plugin %s", name);
 			data.put("coremodLocation", location);
 			coreModInstance.injectData(data);
