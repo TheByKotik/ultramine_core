@@ -130,7 +130,8 @@ public class ChunkProviderServer implements IChunkProvider
 			{
 				chunk = ChunkIOExecutor.syncChunkLoad(this.worldObj, loader, this, par1, par2);
 				chunk.setBindState(ChunkBindState.LEAK);
-				logger.warn("The chunk("+par1+", "+par2+") was loaded sync", new Throwable());
+				if(debugSyncLoad)
+					logger.warn("The chunk("+par1+", "+par2+") was loaded sync", new Throwable());
 			}
 		}
 		else if (chunk == null)
@@ -415,6 +416,7 @@ public class ChunkProviderServer implements IChunkProvider
 	private static final int MAX_SAVE_QUEUE_SIZE = 20;
 	private static final int FULL_SAVE_INTERVAL = 10*60*20; //10 min
 	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
+	private static final boolean debugSyncLoad = Boolean.parseBoolean(System.getProperty("ultramine.debug.chunksyncload"));
 	private final TIntSet possibleSaves = new TIntHashSet();
 	private int lastFullSaveTick;
 	
