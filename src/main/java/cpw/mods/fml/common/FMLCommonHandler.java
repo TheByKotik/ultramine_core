@@ -385,7 +385,7 @@ public class FMLCommonHandler
 		{
 			return;
 		}
-		if (handlerSet.contains(handler))
+		if (handlerSet.size() > 0)//.contains(handler))
 		{
 			return;
 		}

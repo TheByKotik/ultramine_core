@@ -388,7 +388,7 @@ public class GameData {
 		try
 		{
 			String skip = System.getProperty("fml.doNotBackup");
-			if (skip == null || !"true".equals(skip))
+			if (skip != null && "true".equals(skip)) //No backup by default
 			{
 				ZipperUtil.backupWorld();
 			}

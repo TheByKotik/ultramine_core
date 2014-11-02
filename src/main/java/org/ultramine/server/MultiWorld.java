@@ -1,6 +1,7 @@
 package org.ultramine.server;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,7 +29,6 @@ import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldManager;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.WorldServerMulti;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
@@ -47,6 +47,7 @@ public class MultiWorld
 	private final TIntObjectMap<String> dimToNameMap = new TIntObjectHashMap<String>();
 	private final TIntObjectMap<WorldServer> dimToWorldMap = new TIntObjectHashMap<WorldServer>();
 	private final Map<String, WorldServer> nameToWorldMap = new HashMap<String, WorldServer>();
+	private final Set<String> backupDirs = new HashSet<String>();
 	private TIntSet isolatedDataDims;
 
 	public MultiWorld(MinecraftServer server)
@@ -129,20 +130,22 @@ public class MultiWorld
 			if(dim == mainConf.dimension) continue;
 			
 			String name = dimToNameMap.get(dim);
-			WorldConfig conf = name == null ? null : worlds.get(name);
-			WorldServer world;
+			WorldConfig conf;
 			
-			if(conf == null)
+			if(name == null)
 			{
-				log.warn("World with dimension id:%d was loaded bypass worlds configuration. Using global config", dim);
-				world = new WorldServerMulti(server, mainSaveHandler, mainWorldName, dim, mainSettings, mainWorld, server.theProfiler);
+				log.warn("World with dimension id:{} was loaded bypass worlds configuration. Using global config", dim);
+				name = "world_unnamed" + dim;
+				conf = ConfigurationHandler.getWorldsConfig().global;
 			}
 			else
 			{
-				ISaveHandler save = format.getSaveLoader(name, usingPlayerDir && conf.settings.useIsolatedPlayerData);
-				((AnvilSaveHandler)save).setSingleStorage();
-				world = new WorldServer(server, save, name, dim, makeSettings(save, conf), server.theProfiler);
+				conf = worlds.get(name);
 			}
+			
+			ISaveHandler save = format.getSaveLoader(name, usingPlayerDir && conf.settings.useIsolatedPlayerData);
+			((AnvilSaveHandler)save).setSingleStorage();
+			WorldServer world = new WorldServer(server, save, name, dim, makeSettings(save, conf), server.theProfiler);
 			
 			initWorld(world, conf);
 		}
@@ -174,22 +177,21 @@ public class MultiWorld
 		
 		String name = dimToNameMap.get(dim);
 		WorldConfig conf = name == null ? null : ConfigurationHandler.getWorldsConfig().worlds.get(name);
-		WorldServer world;
 		
-		if(conf == null)
+		if(name == null)
 		{
 			log.warn("World with dimension id:%d was loaded bypass worlds configuration. Using global config", dim);
-			WorldServer mainWorld = getWorldByID(0);
-			ISaveHandler mainSaveHandler = mainWorld.getSaveHandler();
-			WorldSettings mainSettings = new WorldSettings(mainWorld.getWorldInfo());
-			world = new WorldServerMulti(server, mainSaveHandler, mainWorld.getWorldInfo().getWorldName(), dim, mainSettings, mainWorld, server.theProfiler);
+			name = "world_dim" + dim;
+			conf = ConfigurationHandler.getWorldsConfig().global;
 		}
 		else
 		{
-			ISaveHandler save = format.getSaveLoader(name, false);
-			((AnvilSaveHandler)save).setSingleStorage();
-			world = new WorldServer(server, save, name, dim, makeSettings(save, conf), server.theProfiler);
+			conf = ConfigurationHandler.getWorldsConfig().worlds.get(name);
 		}
+		
+		ISaveHandler save = format.getSaveLoader(name, false);
+		((AnvilSaveHandler)save).setSingleStorage();
+		WorldServer world = new WorldServer(server, save, name, dim, makeSettings(save, conf), server.theProfiler);
 		
 		initWorld(world, conf);
 	}
@@ -265,6 +267,8 @@ public class MultiWorld
 			nameToWorldMap.put(name + world.provider.dimensionId, world);
 		else
 			nameToWorldMap.put(name, world);
+		
+		backupDirs.add(name);
 	}
 	
 	public WorldServer getWorldByID(int dim)
@@ -285,6 +289,11 @@ public class MultiWorld
 	public Set<String> getAllNames()
 	{
 		return nameToWorldMap.keySet();
+	}
+	
+	public Set<String> getDirsForBackup()
+	{
+		return backupDirs;
 	}
 	
 	public TIntSet getIsolatedDataDims()
