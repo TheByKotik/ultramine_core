@@ -153,3 +153,12 @@ command.debuginfo.description=Some debug information
 
 command.memstat.usage=/memstat
 command.memstat.description=Displays max, current allocated and free memory
+
+command.multiworld.usage=/multiworld <load|unload|goto> <world> or /multiworld list
+command.multiworld.description=All multiworld commands
+command.multiworld.alreadyloaded=Dimension is already loaded
+command.multiworld.notregistered=Dimension is not registered (not exists)
+command.multiworld.notloaded=Dimension is not loaded
+command.multiworld.load.success=Dimension successfuly loaded
+command.multiworld.unload.success=Dimension successfuly unloaded
+command.warplist.list.head=Dimension list:

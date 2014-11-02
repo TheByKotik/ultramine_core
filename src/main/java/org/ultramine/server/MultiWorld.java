@@ -291,6 +291,11 @@ public class MultiWorld
 		return nameToWorldMap.keySet();
 	}
 	
+	public String getNameByID(int id)
+	{
+		return dimToNameMap.get(id);
+	}
+	
 	public Set<String> getDirsForBackup()
 	{
 		return backupDirs;

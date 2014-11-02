@@ -9,9 +9,12 @@ import net.minecraft.util.ChatComponentTranslation;
 import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.DimensionManager;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
+import org.ultramine.server.MultiWorld;
+import org.ultramine.server.Teleporter;
 
 public class TechCommands
 {
@@ -105,5 +108,61 @@ public class TechCommands
 		ctx.sendMessage("Heap max: %sm", Runtime.getRuntime().maxMemory() >> 20);
 		ctx.sendMessage("Heap total: %sm", Runtime.getRuntime().totalMemory() >> 20);
 		ctx.sendMessage("Heap free: %sm", Runtime.getRuntime().freeMemory() >> 20);
+	}
+	
+	@Command(
+			name = "multiworld",
+			aliases = {"mw", "mv"},
+			group = "technical",
+			permissions = {"command.multiworld"},
+			syntax = {
+					"[list]",
+					"[load unload goto] <%world>" //No world validation
+			}
+	)
+	public static void multiworld(CommandContext ctx)
+	{
+		MultiWorld mw = ctx.getServer().getMultiWorld();
+		
+		if(ctx.getAction().equals("list"))
+		{
+			ctx.sendMessage("command.warplist.head=Warp list:");
+			for(int dim : DimensionManager.getStaticDimensionIDs())
+			{
+				String name = mw.getNameByID(dim);
+				ctx.sendMessage(GOLD, "    - %s - %s - %s", dim, name != null ? name : "unnamed", mw.getWorldByID(dim) != null ? "loaded" : "unloaded");
+			}
+			return;
+		}
+		
+		int dim = ctx.get("world").asInt();
+
+		if(!DimensionManager.isDimensionRegistered(dim))
+			ctx.failure("command.multiworld.notregistered");
+		
+		if(ctx.getAction().equals("load"))
+		{
+			if(mw.getWorldByID(dim) != null)
+				ctx.failure("command.multiworld.alreadyloaded");
+			
+			DimensionManager.initDimension(dim);
+			ctx.sendMessage("command.multiworld.load");
+		}
+		else if(ctx.getAction().equals("unload"))
+		{
+			if(mw.getWorldByID(dim) == null)
+				ctx.failure("command.multiworld.notloaded");
+			
+			DimensionManager.unloadWorld(dim);
+			ctx.sendMessage("command.multiworld.unload");
+		}
+		else if(ctx.getAction().equals("goto"))
+		{
+			WorldServer world = mw.getWorldByID(dim);
+			if(world == null)
+				ctx.failure("command.multiworld.notloaded");
+			
+			Teleporter.tpNow(ctx.getSenderAsPlayer(), dim, world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY(), world.getWorldInfo().getSpawnZ());
+		}
 	}
 }
