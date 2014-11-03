@@ -364,6 +364,13 @@ public class ChunkSendManager
 		@Override
 		public void onChunkLoaded(Chunk chunk)
 		{
+			int key = ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition);
+			if(!sending.contains(key))
+			{
+				sendingQueueSize.decrementAndGet();
+				return;
+			}
+			
 			if(chunk.isTerrainPopulated)
 			{
 				chunk.func_150804_b(true);
@@ -375,7 +382,6 @@ public class ChunkSendManager
 				sendingQueueSize.decrementAndGet();
 				((WorldServer)chunk.worldObj).theChunkProviderServer.loadAsyncRadius(chunk.xPosition, chunk.zPosition, 1, IChunkLoadCallback.EMPTY);
 				
-				int key = ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition);
 				int ind = (int)rate*2+1;
 				if(ind < toSend.size()-1)
 					toSend.insert(ind, key);
