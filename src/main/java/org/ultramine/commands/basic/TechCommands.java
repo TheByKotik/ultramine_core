@@ -14,15 +14,22 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
 import org.ultramine.server.MultiWorld;
 import org.ultramine.server.Teleporter;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.functions.GenericIterableFactory;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class TechCommands
 {
+	private static final Logger log = LogManager.getLogger();
+	
 	@Command(
 			name = "id",
 			group = "technical",
@@ -229,7 +236,7 @@ public class TechCommands
 	@Command(
 			name = "clearentity",
 			group = "technical",
-			permissions = {"command.countentity"},
+			permissions = {"command.clearentity"},
 			syntax = {
 					"<int%radius>",
 					"[all mobs items] <int%radius>"
@@ -278,5 +285,59 @@ public class TechCommands
 		}
 		
 		ctx.sendMessage("command.clearentity.success", count, mobcount, itemcount);
+	}
+	
+	private static LagGenerator laghandler;
+	
+	@Command(
+			name = "startlags",
+			group = "technical",
+			permissions = {"command.startlags"},
+			syntax = {
+					"<int%percent>",
+					"[stop]"
+			}
+	)
+	public static void startlags(CommandContext ctx)
+	{
+		if(laghandler != null)
+		{
+			FMLCommonHandler.instance().bus().unregister(laghandler);
+			laghandler = null;
+		}
+		
+		if(ctx.getAction().equals("stop"))
+		{
+			ctx.sendMessage("command.startlags.stop");
+			return;
+		}
+		
+		int percent = ctx.get("percent").asInt(1);
+		FMLCommonHandler.instance().bus().register(laghandler = new LagGenerator(percent));
+		ctx.sendMessage("command.startlags.start", percent);
+		
+	}
+	
+	public static class LagGenerator
+	{
+		private final int percent;
+		private int counter;
+		
+		public LagGenerator(int percent){this.percent = percent;}
+		
+		@SubscribeEvent
+		public void inTick(TickEvent.ServerTickEvent e)
+		{
+			if(e.phase == TickEvent.Phase.START)
+			{
+				if(++counter%600 == 0)
+					log.warn("Startlags command enabled! It loads server by {}%", percent);
+				
+				try
+				{
+					Thread.sleep(percent/2); //100% = 50ms (1 tick)
+				} catch(InterruptedException ignored){}
+			}
+		}
 	}
 }

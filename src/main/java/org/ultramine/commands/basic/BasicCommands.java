@@ -5,6 +5,7 @@ import java.util.Map;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.event.ClickEvent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
@@ -54,8 +55,10 @@ public class BasicCommands
 				group = cmd.getGroup();
 				ctx.sendMessage("%s:", group);
 			}
-			ChatComponentTranslation usage = new ChatComponentTranslation(cmd.getCommandUsage(ctx.getSender()));
+			String usageS = cmd.getCommandUsage(ctx.getSender());
+			ChatComponentTranslation usage = new ChatComponentTranslation(usageS != null ? usageS : '/' + cmd.getCommandName());
 			ChatComponentTranslation desc = new ChatComponentTranslation(cmd.getDescription());
+			usage.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + cmd.getCommandName() + " "));
 			usage.getChatStyle().setColor(YELLOW);
 			desc.getChatStyle().setColor(DARK_AQUA);
 			ctx.sendMessage(DARK_GRAY, YELLOW, "  - %s <- %s", usage, desc);

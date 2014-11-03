@@ -174,3 +174,8 @@ command.countentity.result2=Monsters: %s, Animals: %s, Water: %s, Ambient: %s
 command.clearentity.usage=/clearentity [all|mobs|items] <radius>
 command.clearentity.description=All multiworld commands
 command.clearentity.success=Cleared %s Entity. Mobs: %s, Items: %s
+
+command.startlags.usage=/startlags percents OR /startlags stop
+command.startlags.description=Simulruet server overload on a specified percentage
+command.startlags.start=Start lagging on %s%%
+command.startlags.stop=Stop lagging
