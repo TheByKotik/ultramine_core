@@ -227,7 +227,7 @@ public class LoadController
 		ImmutableBiMap.Builder<ModContainer, Object> builder = ImmutableBiMap.<ModContainer, Object>builder();
 		for (ModContainer mc : activeModList)
 		{
-			if (!mc.isImmutable() && mc.getMod()!=null)
+			if (!mc.isImmutable() && mc.getMod()!=null || mc.getMod() instanceof org.ultramine.server.UltramineServerModContainer)
 			{
 				builder.put(mc, mc.getMod());
 				List<String> packages = mc.getOwnedPackages();
