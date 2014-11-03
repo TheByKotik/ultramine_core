@@ -1,6 +1,9 @@
 package org.ultramine.commands.basic;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -15,6 +18,8 @@ import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
 import org.ultramine.server.MultiWorld;
 import org.ultramine.server.Teleporter;
+
+import cpw.mods.fml.common.functions.GenericIterableFactory;
 
 public class TechCommands
 {
@@ -164,5 +169,114 @@ public class TechCommands
 			
 			Teleporter.tpNow(ctx.getSenderAsPlayer(), dim, world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY(), world.getWorldInfo().getSpawnZ());
 		}
+	}
+
+	@Command(
+			name = "countentity",
+			group = "technical",
+			permissions = {"command.countentity"},
+			syntax = {"<int%radius>"}
+	)
+	public static void countentity(CommandContext ctx)
+	{
+		int radius = ctx.get("radius").asInt();
+		EntityPlayerMP player = ctx.getSenderAsPlayer();
+		
+		double minX = player.posX - radius;
+		double minY = player.posY - radius;
+		double minZ = player.posZ - radius;
+		double maxX = player.posX + radius;
+		double maxY = player.posY + radius;
+		double maxZ = player.posZ + radius;
+		
+		int count = 0;
+		int itemcount = 0;
+		int mobcount = 0;
+		
+		int monsters = 0;
+		int animals = 0;
+		int ambient = 0;
+		int water = 0;
+		
+		for(Entity ent : GenericIterableFactory.newCastingIterable(player.worldObj.loadedEntityList, Entity.class))
+		{
+			if(!ent.isDead && (ent.posX > minX && ent.posX < maxX) && (ent.posY > minY && ent.posY < maxY) && (ent.posZ > minZ && ent.posZ < maxZ))
+			{
+				count ++;
+				if(ent.isEntityLiving() && !ent.isEntityPlayer())
+				{
+					mobcount++;
+					if(ent.isEntityMonster())
+						monsters++;
+					else if(ent.isEntityAnimal())
+						animals++;
+					else if(ent.isEntityAmbient())
+						ambient++;
+					else if(ent.isEntityWater())
+						water++;
+					
+				}
+				else if(ent instanceof EntityItem)
+				{
+					itemcount++;
+				}
+			}
+		}
+		ctx.sendMessage("command.countentity.result1", count, mobcount, itemcount);
+		ctx.sendMessage("command.countentity.result2", monsters, animals, water, ambient);
+	}
+
+	@Command(
+			name = "clearentity",
+			group = "technical",
+			permissions = {"command.countentity"},
+			syntax = {
+					"<int%radius>",
+					"[all mobs items] <int%radius>"
+			}
+	)
+	public static void clearentity(CommandContext ctx)
+	{
+		int radius = ctx.get("radius").asInt();
+		EntityPlayerMP player = ctx.getSenderAsPlayer();
+
+		boolean items = true;
+		boolean mobs = true;
+		if(ctx.getAction().equals("mobs"))
+			items = false;
+		if(ctx.getAction().equals("items"))
+			mobs = false;
+		
+		double minX = player.posX - radius;
+		double minY = player.posY - radius;
+		double minZ = player.posZ - radius;
+		double maxX = player.posX + radius;
+		double maxY = player.posY + radius;
+		double maxZ = player.posZ + radius;
+		
+		int count = 0;
+		int itemcount = 0;
+		int mobcount = 0;
+		
+		for(Entity ent : GenericIterableFactory.newCastingIterable(player.worldObj.loadedEntityList, Entity.class))
+		{
+			if(!ent.isDead && (ent.posX > minX && ent.posX < maxX) && (ent.posY > minY && ent.posY < maxY) && (ent.posZ > minZ && ent.posZ < maxZ))
+			{
+				if(mobs && ent.isEntityLiving() && !ent.isEntityPlayer() && !(ent instanceof EntityVillager))
+				{
+					count ++;
+					mobcount++;
+					ent.setDead();
+				}
+				else if(items && ent instanceof EntityItem)
+				{
+					count ++;
+					itemcount++;
+					ent.setDead();
+				}
+			}
+		}
+		
+		ctx.sendMessage("command.clearentity.success", count, mobcount, itemcount);
 	}
 }

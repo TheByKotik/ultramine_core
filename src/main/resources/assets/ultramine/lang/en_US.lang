@@ -138,6 +138,9 @@ command.dupe.usage=/dupe [count]
 command.dupe.description=Dupe the item in hand
 command.dupe.fail=Get item for dupe to the hand first
 
+command.gm.usage=/gm
+command.gm.description=Toggle gamemode
+
 #Technical commands
 command.id.usage=/id <id>
 command.id.description=Displays information about specified item id
@@ -162,3 +165,12 @@ command.multiworld.notloaded=Dimension is not loaded
 command.multiworld.load.success=Dimension successfuly loaded
 command.multiworld.unload.success=Dimension successfuly unloaded
 command.warplist.list.head=Dimension list:
+
+command.countentity.usage=/countentity <radius>
+command.countentity.description=Specifies the number of Entity radially
+command.countentity.result1=Found %s Entity. Mobs: %s, items: %s
+command.countentity.result2=Monsters: %s, Animals: %s, Water: %s, Ambient: %s
+
+command.clearentity.usage=/clearentity [all|mobs|items] <radius>
+command.clearentity.description=All multiworld commands
+command.clearentity.success=Cleared %s Entity. Mobs: %s, Items: %s

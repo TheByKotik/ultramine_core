@@ -1,5 +1,6 @@
 package org.ultramine.commands.basic;
 
+import java.util.List;
 import java.util.Map;
 
 import static net.minecraft.util.EnumChatFormatting.*;
@@ -8,10 +9,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.storage.WorldInfo;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
+import org.ultramine.commands.IExtendedCommand;
 import org.ultramine.server.Teleporter;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.util.InventoryUtil;
@@ -19,6 +22,46 @@ import org.ultramine.server.util.WarpLocation;
 
 public class BasicCommands
 {
+	@Command(
+			name = "help",
+			group = "player",
+			aliases = {"?"},
+			permissions = {"command.help"},
+			syntax = {
+					"",
+					"<page>"
+			}
+	)
+	public static void help(CommandContext ctx)
+	{
+		@SuppressWarnings("unchecked")
+		List<IExtendedCommand> cmds = (List<IExtendedCommand>)ctx.getServer().getCommandManager().getPossibleCommands(ctx.getSender());
+		int pages = cmds.size()/10 + (cmds.size()%10 == 0 ? 0 : 1);
+		int page = ctx.contains("page") ? ctx.get("page").asString().equals("all") ? -1 : ctx.get("page").asInt(1, pages) -1 : 0;
+		
+		int start = page == -1 ? 0 : page*10;
+		int limit = page == -1 ? cmds.size() : Math.min(cmds.size(), start + 10);
+		
+		ctx.sendMessage("commands.help.header", page+1, pages);
+		
+		String group = "";
+		for(int i = start; i < limit; i++)
+		{
+			IExtendedCommand cmd = cmds.get(i);
+
+			if(!group.equals(cmd.getGroup()))
+			{
+				group = cmd.getGroup();
+				ctx.sendMessage("%s:", group);
+			}
+			ChatComponentTranslation usage = new ChatComponentTranslation(cmd.getCommandUsage(ctx.getSender()));
+			ChatComponentTranslation desc = new ChatComponentTranslation(cmd.getDescription());
+			usage.getChatStyle().setColor(YELLOW);
+			desc.getChatStyle().setColor(DARK_AQUA);
+			ctx.sendMessage(DARK_GRAY, YELLOW, "  - %s <- %s", usage, desc);
+		}
+	}
+	
 	@Command(
 			name = "home",
 			group = "player",
@@ -96,6 +139,7 @@ public class BasicCommands
 	
 	@Command(
 			name = "warp",
+			aliases = {"go", "пойти", "на"},
 			group = "player",
 			permissions = {"command.warp", "command.warp.other"},
 			syntax = {
@@ -312,5 +356,23 @@ public class BasicCommands
 		if(ctx.contains("count"))
 			is.stackSize *= ctx.get("count").asInt();
 		InventoryUtil.addItem(ctx.getSenderAsPlayer().inventory, is);
+	}
+	
+	@Command(
+			name = "gm",
+			group = "admin",
+			permissions = {"command.gm"},
+			syntax = {""}
+	)
+	public static void gm(CommandContext ctx)
+	{
+		EntityPlayerMP player = ctx.getSenderAsPlayer();
+		
+		GameType type = player.theItemInWorldManager.getGameType();
+		GameType newtype = GameType.SURVIVAL;
+		if(type == GameType.SURVIVAL)
+			newtype = GameType.CREATIVE;
+		
+		player.setGameType(newtype);
 	}
 }
