@@ -61,7 +61,7 @@ public class ChunkSendManager
 	
 	private int getViewDistance()
 	{
-		return Math.min(manager.getWorldServer().getViewDistance(), player.getRenderDistance());
+		return Math.min(manager == null ? 10 : manager.getWorldServer().getViewDistance(), player.getRenderDistance());
 	}
 	
 	private void sortSendQueue()

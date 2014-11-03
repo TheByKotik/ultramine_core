@@ -29,6 +29,7 @@ import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldManager;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldServerMulti;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
@@ -119,7 +120,8 @@ public class MultiWorld
 		
 		ISaveFormat format = server.getActiveAnvilConverter();
 		ISaveHandler mainSaveHandler = format.getSaveLoader(mainWorldName, true);
-		WorldSettings mainSettings = makeSettings(mainSaveHandler, mainConf);
+		WorldInfo mainWorldInfo = mainSaveHandler.loadWorldInfo();
+		WorldSettings mainSettings = makeSettings(mainWorldInfo, mainConf);
 		
 		WorldServer mainWorld = new WorldServer(server, mainSaveHandler, mainWorldName, mainConf.dimension, mainSettings, server.theProfiler);
 		
@@ -144,9 +146,17 @@ public class MultiWorld
 				conf = worlds.get(name);
 			}
 			
-			ISaveHandler save = format.getSaveLoader(name, usingPlayerDir && conf.settings.useIsolatedPlayerData);
-			((AnvilSaveHandler)save).setSingleStorage();
-			WorldServer world = new WorldServer(server, save, name, dim, makeSettings(save, conf), server.theProfiler);
+			WorldServer world;
+			if(ConfigurationHandler.getServerConfig().settings.other.splitWorldDirs)
+			{
+				ISaveHandler save = format.getSaveLoader(name, usingPlayerDir && conf.settings.useIsolatedPlayerData);
+				((AnvilSaveHandler)save).setSingleStorage();
+				world = new WorldServer(server, save, name, dim, makeSettings(save.loadWorldInfo(), conf), server.theProfiler);
+			}
+			else
+			{
+				world = new WorldServerMulti(server, mainSaveHandler, mainWorldName, dim, makeSettings(mainWorldInfo, conf), mainWorld, server.theProfiler);
+			}
 			
 			initWorld(world, conf);
 		}
@@ -191,9 +201,20 @@ public class MultiWorld
 			conf = ConfigurationHandler.getWorldsConfig().worlds.get(name);
 		}
 		
-		ISaveHandler save = format.getSaveLoader(name, false);
-		((AnvilSaveHandler)save).setSingleStorage();
-		WorldServer world = new WorldServer(server, save, name, dim, makeSettings(save, conf), server.theProfiler);
+		WorldServer world;
+		if(ConfigurationHandler.getServerConfig().settings.other.splitWorldDirs)
+		{
+			ISaveHandler save = format.getSaveLoader(name, false);
+			((AnvilSaveHandler)save).setSingleStorage();
+			world = new WorldServer(server, save, name, dim, makeSettings(save.loadWorldInfo(), conf), server.theProfiler);
+		}
+		else
+		{
+			WorldServer mainWorld = getWorldByID(0);
+			ISaveHandler mainSaveHandler = mainWorld.getSaveHandler();
+			WorldInfo mainWorldInfo = mainWorld.getWorldInfo();
+			world = new WorldServerMulti(server, mainSaveHandler, mainWorldInfo.getWorldName(), dim, makeSettings(mainWorldInfo, conf), mainWorld, server.theProfiler);
+		}
 		
 		initWorld(world, conf);
 	}
@@ -216,12 +237,11 @@ public class MultiWorld
 	}
 	
 	@SideOnly(Side.SERVER)
-	private WorldSettings makeSettings(ISaveHandler save, WorldConfig conf)
+	private WorldSettings makeSettings(WorldInfo wi, WorldConfig conf)
 	{
-		WorldInfo mainWorldInfo = save.loadWorldInfo();
 		WorldSettings mainSettings;
 
-		if (mainWorldInfo == null)
+		if (wi == null)
 		{
 			mainSettings = new WorldSettings(toSeed(conf.generation.seed), server.getGameType(), conf.generation.generateStructures,
 					server.isHardcore(), WorldType.parseWorldType(conf.generation.levelType));
@@ -229,7 +249,7 @@ public class MultiWorld
 		}
 		else
 		{
-			mainSettings = new WorldSettings(mainWorldInfo);
+			mainSettings = new WorldSettings(wi);
 		}
 		
 		return mainSettings;

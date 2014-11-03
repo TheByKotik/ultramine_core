@@ -70,6 +70,7 @@ public class UltramineServerConfig
 			public boolean hardcore = false;
 			public String resourcePack = "";
 			public boolean enableCommandBlock = false;
+			public boolean splitWorldDirs = true;
 		}
 
 		public static class SpawnLocationsConf
