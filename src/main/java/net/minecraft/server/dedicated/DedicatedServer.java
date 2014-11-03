@@ -140,7 +140,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		else
 		{
 			this.setOnlineMode(settings.settings.authorization.onlineMode);
-			this.setHostname(settings.listen.serverIP);
+			this.setHostname(settings.listen.minecraft.serverIP);
 		}
 
 		this.setCanSpawnAnimals(globalWConf.mobSpawn.spawnAnimals);

@@ -1,5 +1,7 @@
 package net.minecraft.server.management;
 
+import org.ultramine.server.ConfigurationHandler;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +15,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
@@ -40,6 +43,8 @@ public class ItemInWorldManager
 	private int initialBlockDamage;
 	private int durabilityRemainingOnBlock;
 	private static final String __OBFID = "CL_00001442";
+	
+	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
 
 	public ItemInWorldManager(World p_i1524_1_)
 	{
@@ -210,7 +215,7 @@ public class ItemInWorldManager
 			{
 				float f = block.getPlayerRelativeBlockHardness(this.thisPlayerMP, this.thisPlayerMP.worldObj, p_73082_1_, p_73082_2_, p_73082_3_) * (float)(l + 1);
 
-				if (f >= 0.7F)
+				if (f >= 0.7F || !isServer || !ConfigurationHandler.getServerConfig().settings.security.checkBreakSpeed)
 				{
 					this.isDestroyingBlock = false;
 					this.theWorld.destroyBlockInWorldPartially(this.thisPlayerMP.getEntityId(), p_73082_1_, p_73082_2_, p_73082_3_, -1);

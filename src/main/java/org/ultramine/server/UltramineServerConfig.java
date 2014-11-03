@@ -13,13 +13,13 @@ public class UltramineServerConfig
 
 	public static class ListenConf
 	{
-		public String serverIP = "";
 		public MinecraftConf minecraft = new MinecraftConf();
 		public QueryConf query = new QueryConf();
 		public RConConf rcon = new RConConf();
 
 		public static class MinecraftConf
 		{
+			public String serverIP = "";
 			public int port = 25565;
 		}
 
@@ -47,6 +47,7 @@ public class UltramineServerConfig
 		public MessagesConf messages = new MessagesConf();
 		public WatchdogThreadConf	watchdogThread = new WatchdogThreadConf();
 		public SQLServerStorageConf inSQLServerStorage = new SQLServerStorageConf();
+		public SecurityConf security = new SecurityConf();
 
 		public static class AuthorizationConf
 		{
@@ -101,6 +102,11 @@ public class UltramineServerConfig
 			public boolean enabled = false;
 			public String database = "global";
 			public String tablePrefix = "mc_";
+		}
+		
+		public static class SecurityConf
+		{
+			public boolean checkBreakSpeed = true;
 		}
 	}
 
