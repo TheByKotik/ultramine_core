@@ -180,8 +180,8 @@ public class MultiWorld
 		
 		if(name == null)
 		{
-			log.warn("World with dimension id:%d was loaded bypass worlds configuration. Using global config", dim);
-			name = "world_dim" + dim;
+			log.warn("World with dimension id:{} was loaded bypass worlds configuration. Using global config", dim);
+			name = "world_unnamed" + dim;
 			conf = ConfigurationHandler.getWorldsConfig().global;
 		}
 		else
