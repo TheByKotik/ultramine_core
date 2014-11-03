@@ -136,6 +136,7 @@ public class MultiWorld
 			{
 				log.warn("World with dimension id:{} was loaded bypass worlds configuration. Using global config", dim);
 				name = "world_unnamed" + dim;
+				dimToNameMap.put(dim, name);
 				conf = ConfigurationHandler.getWorldsConfig().global;
 			}
 			else
@@ -182,6 +183,7 @@ public class MultiWorld
 		{
 			log.warn("World with dimension id:{} was loaded bypass worlds configuration. Using global config", dim);
 			name = "world_unnamed" + dim;
+			dimToNameMap.put(dim, name);
 			conf = ConfigurationHandler.getWorldsConfig().global;
 		}
 		else
