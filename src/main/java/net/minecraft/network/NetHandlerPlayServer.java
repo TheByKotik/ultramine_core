@@ -143,6 +143,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			this.field_147378_h = (int)this.field_147379_i;
 			this.sendPacket(new S00PacketKeepAlive(this.field_147378_h));
 		}
+		
+		this.serverController.theProfiler.endSection();
 
 		if (this.chatSpamThresholdCount > 0)
 		{
