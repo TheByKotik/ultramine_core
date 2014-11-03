@@ -146,7 +146,7 @@ public class TechCommands
 				ctx.failure("command.multiworld.alreadyloaded");
 			
 			DimensionManager.initDimension(dim);
-			ctx.sendMessage("command.multiworld.load");
+			ctx.sendMessage("command.multiworld.load.success");
 		}
 		else if(ctx.getAction().equals("unload"))
 		{
@@ -154,7 +154,7 @@ public class TechCommands
 				ctx.failure("command.multiworld.notloaded");
 			
 			DimensionManager.unloadWorld(dim);
-			ctx.sendMessage("command.multiworld.unload");
+			ctx.sendMessage("command.multiworld.unload.success");
 		}
 		else if(ctx.getAction().equals("goto"))
 		{
