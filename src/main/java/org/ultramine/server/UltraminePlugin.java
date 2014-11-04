@@ -5,6 +5,8 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import java.io.File;
 import java.util.Map;
 
+import net.minecraft.launchwrapper.LaunchClassLoader;
+
 public class UltraminePlugin implements IFMLLoadingPlugin
 {
 	public static File location;
@@ -12,7 +14,9 @@ public class UltraminePlugin implements IFMLLoadingPlugin
 	@Override
 	public String[] getASMTransformerClass()
 	{
-		return new String[0];
+		return new String[]{
+				"org.ultramine.server.asm.transformers.Compat172BlockSend"
+		};
 	}
 
 	@Override
@@ -31,6 +35,7 @@ public class UltraminePlugin implements IFMLLoadingPlugin
 	public void injectData(Map<String, Object> data)
 	{
 		location = (File)data.get("coremodLocation");
+		((LaunchClassLoader)this.getClass().getClassLoader()).addTransformerExclusion("org.ultramine.server.asm.");
 	}
 
 	@Override
