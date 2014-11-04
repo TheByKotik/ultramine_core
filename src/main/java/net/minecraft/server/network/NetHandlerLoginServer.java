@@ -162,7 +162,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer
 
 						if (NetHandlerLoginServer.this.field_147337_i != null)
 						{
-							NetHandlerLoginServer.logger.info("UUID of player " + NetHandlerLoginServer.this.field_147337_i.getName() + " is " + NetHandlerLoginServer.this.field_147337_i.getId());
+							NetHandlerLoginServer.logger.info("\u00a79[Connect]   \u00a7r User '\u00a79{}\u00a7r' UUID: '{}'", field_147337_i.getName(), field_147337_i.getId());
 							NetHandlerLoginServer.this.field_147328_g = NetHandlerLoginServer.LoginState.READY_TO_ACCEPT;
 						}
 						else if (NetHandlerLoginServer.this.field_147327_f.isSinglePlayer())

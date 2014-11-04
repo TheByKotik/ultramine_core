@@ -167,7 +167,7 @@ public class NetworkDispatcher extends SimpleChannelInboundHandler<Packet> imple
 	private void completeServerSideConnection(ConnectionType type)
 	{
 		this.connectionType = type;
-		FMLLog.info("[%s] Server side %s connection established", Thread.currentThread().getName(), this.connectionType.name().toLowerCase(Locale.ENGLISH));
+		FMLLog.fine("[%s] Server side %s connection established", Thread.currentThread().getName(), this.connectionType.name().toLowerCase(Locale.ENGLISH));
 		this.state = ConnectionState.CONNECTED;
 		FMLCommonHandler.instance().bus().post(new FMLNetworkEvent.ServerConnectionFromClientEvent(manager));
 		scm.initializeConnectionToPlayer(manager, player, serverHandler);

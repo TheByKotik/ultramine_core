@@ -150,7 +150,7 @@ public abstract class ServerConfigurationManager
 			s1 = p_72355_1_.getSocketAddress().toString();
 		}
 
-		logger.info(p_72355_2_.getCommandSenderName() + "[" + s1 + "] logged in with entity id " + p_72355_2_.getEntityId() + " at (" + p_72355_2_.posX + ", " + p_72355_2_.posY + ", " + p_72355_2_.posZ + ")");
+		logger.debug(p_72355_2_.getCommandSenderName() + "[" + s1 + "] logged in with entity id " + p_72355_2_.getEntityId() + " at (" + p_72355_2_.posX + ", " + p_72355_2_.posY + ", " + p_72355_2_.posZ + ")");
 		WorldServer worldserver = this.mcServer.worldServerForDimension(p_72355_2_.dimension);
 		ChunkCoordinates chunkcoordinates = worldserver.getSpawnPoint();
 		this.func_72381_a(p_72355_2_, (EntityPlayerMP)null, worldserver);
@@ -176,7 +176,7 @@ public abstract class ServerConfigurationManager
 		}
 
 		chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.YELLOW);
-		this.sendChatMsg(chatcomponenttranslation);
+		sendPacketToAllPlayers(new S02PacketChat(chatcomponenttranslation, true));
 		this.playerLoggedIn(p_72355_2_);
 		nethandlerplayserver.setPlayerLocation(p_72355_2_.posX, p_72355_2_.posY, p_72355_2_.posZ, p_72355_2_.rotationYaw, p_72355_2_.rotationPitch);
 		this.updateTimeAndWeatherForPlayer(p_72355_2_, worldserver);

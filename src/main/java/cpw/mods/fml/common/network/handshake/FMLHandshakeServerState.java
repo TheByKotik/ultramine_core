@@ -32,12 +32,12 @@ enum FMLHandshakeServerState implements IHandshakeState<FMLHandshakeServerState>
 			// Hello packet first
 			if (msg instanceof FMLHandshakeMessage.ClientHello)
 			{
-				FMLLog.info("Client protocol version %x", ((FMLHandshakeMessage.ClientHello)msg).protocolVersion());
+				FMLLog.fine("Client protocol version %x", ((FMLHandshakeMessage.ClientHello)msg).protocolVersion());
 				return this;
 			}
 
 			FMLHandshakeMessage.ModList client = (FMLHandshakeMessage.ModList)msg;
-			FMLLog.info("Client attempting to join with %d mods : %s", client.modListSize(), client.modListAsString());
+			FMLLog.fine("Client attempting to join with %d mods : %s", client.modListSize(), client.modListAsString());
 			String result = FMLNetworkHandler.checkModList(client, Side.CLIENT);
 			if (result != null)
 			{

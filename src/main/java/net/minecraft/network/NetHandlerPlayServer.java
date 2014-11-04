@@ -638,11 +638,11 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 
 	public void onDisconnect(IChatComponent p_147231_1_)
 	{
-		logger.info(this.playerEntity.getCommandSenderName() + " lost connection: " + p_147231_1_);
+		logger.info("\u00a73[Disconnect]\u00a7r User '\u00a73" + this.playerEntity.getCommandSenderName() + "'\u00a7r lost connection: " + p_147231_1_.getFormattedText());
 		this.serverController.func_147132_au();
 		ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.left", new Object[] {this.playerEntity.func_145748_c_()});
 		chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.YELLOW);
-		this.serverController.getConfigurationManager().sendChatMsg(chatcomponenttranslation);
+		this.serverController.getConfigurationManager().sendPacketToAllPlayers(new S02PacketChat(chatcomponenttranslation, true));
 		this.playerEntity.mountEntityAndWakeUp();
 		this.serverController.getConfigurationManager().playerLoggedOut(this.playerEntity);
 
