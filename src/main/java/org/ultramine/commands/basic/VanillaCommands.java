@@ -1,7 +1,10 @@
 package org.ultramine.commands.basic;
 
+import java.util.List;
+
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.event.ClickEvent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
@@ -13,12 +16,55 @@ import net.minecraft.world.WorldServer;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
+import org.ultramine.commands.IExtendedCommand;
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.Teleporter;
 import org.ultramine.server.util.BasicTypeParser;
 
 public class VanillaCommands
 {
+	@Command(
+			name = "help",
+			group = "player",
+			aliases = {"?"},
+			permissions = {"command.help"},
+			syntax = {
+					"",
+					"<page>"
+			}
+	)
+	public static void help(CommandContext ctx)
+	{
+		@SuppressWarnings("unchecked")
+		List<IExtendedCommand> cmds = (List<IExtendedCommand>)ctx.getServer().getCommandManager().getPossibleCommands(ctx.getSender());
+		int pages = cmds.size()/10 + (cmds.size()%10 == 0 ? 0 : 1);
+		int page = ctx.contains("page") ? ctx.get("page").asString().equals("all") ? -1 : ctx.get("page").asInt(1, pages) -1 : 0;
+		
+		int start = page == -1 ? 0 : page*10;
+		int limit = page == -1 ? cmds.size() : Math.min(cmds.size(), start + 10);
+		
+		ctx.sendMessage("commands.help.header", page+1, pages);
+		
+		String group = "";
+		for(int i = start; i < limit; i++)
+		{
+			IExtendedCommand cmd = cmds.get(i);
+
+			if(!group.equals(cmd.getGroup()))
+			{
+				group = cmd.getGroup();
+				ctx.sendMessage("%s:", group);
+			}
+			String usageS = cmd.getCommandUsage(ctx.getSender());
+			ChatComponentTranslation usage = new ChatComponentTranslation(usageS != null ? usageS : '/' + cmd.getCommandName());
+			ChatComponentTranslation desc = new ChatComponentTranslation(cmd.getDescription());
+			usage.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + cmd.getCommandName() + " "));
+			usage.getChatStyle().setColor(YELLOW);
+			desc.getChatStyle().setColor(DARK_AQUA);
+			ctx.sendMessage(DARK_GRAY, YELLOW, "  - %s <- %s", usage, desc);
+		}
+	}
+	
 	@Command(
 			name = "tp",
 			group = "vanilla",
