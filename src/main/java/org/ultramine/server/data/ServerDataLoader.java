@@ -273,7 +273,7 @@ public class ServerDataLoader
 			else// if(toIs)
 				dataProvider.savePlayer(player.getGameProfile(), nbt);
 
-			loadIsolatedData(player, toDim, toIs, true);
+			loadIsolatedData(player, toDim, toIs);
 		}
 	}
 
@@ -290,11 +290,11 @@ public class ServerDataLoader
 			if(fromIs)
 				dataProvider.savePlayer(oldDim, dead.getGameProfile(), new NBTTagCompound());
 
-			loadIsolatedData(created, newDim, toIs, false);
+			loadIsolatedData(created, newDim, toIs);
 		}
 	}
 	
-	private void loadIsolatedData(final EntityPlayerMP player, final int toDim, final boolean toIs, boolean replaceToNull)
+	private void loadIsolatedData(final EntityPlayerMP player, final int toDim, final boolean toIs)
 	{
 		final GameProfile profile = player.getGameProfile();
 		if(isClient)
@@ -308,8 +308,7 @@ public class ServerDataLoader
 		}
 		else
 		{
-			if(replaceToNull)
-				applyIsolatedData(player, null);
+			applyIsolatedData(player, null); // Replacing old data first
 
 			executor.execute(new Function<Void, NBTTagCompound>()
 			{
