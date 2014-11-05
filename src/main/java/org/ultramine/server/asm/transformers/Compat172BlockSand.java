@@ -8,7 +8,7 @@ import org.objectweb.asm.Opcodes;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
-public class Compat172BlockSend implements IClassTransformer
+public class Compat172BlockSand implements IClassTransformer
 {
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass)
