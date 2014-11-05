@@ -1158,7 +1158,7 @@ public class Block
 	/* ======================================== FORGE START =====================================*/
 	//For ForgeInternal use Only!
 	protected ThreadLocal<EntityPlayer> harvesters = new ThreadLocal();
-	private ThreadLocal<Integer> silk_check_meta = new ThreadLocal(); 
+	private ThreadLocal<Integer> silk_check_meta = new ThreadLocal();
 	/**
 	 * Get a light value for the block at the specified coordinates, normal ranges are between 0 and 15
 	 *
@@ -1326,7 +1326,7 @@ public class Block
 	 * @param x X Position
 	 * @param y Y position
 	 * @param z Z position
-	 * @param willHarvest True if Block.harvestBlock will be called after this, if the return in true. 
+	 * @param willHarvest True if Block.harvestBlock will be called after this, if the return in true.
 	 *        Can be useful to delay the destruction of tile entities till after harvestBlock
 	 * @return True if the block is actually destroyed.
 	 */
@@ -1791,6 +1791,11 @@ public class Block
 	 * @param target The full target the player is looking at
 	 * @return A ItemStack to add to the player's inventory, Null if nothing should be added.
 	 */
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player)
+	{
+		return getPickBlock(target, world, x, y, z);
+	}
+	@Deprecated
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
 		Item item = getItem(world, x, y, z);
@@ -1993,7 +1998,7 @@ public class Block
 		}
 		else if (entity instanceof EntityDragon)
 		{
-			return this != Blocks.obsidian && this != Blocks.end_stone && this != Blocks.bedrock; 
+			return this != Blocks.obsidian && this != Blocks.end_stone && this != Blocks.bedrock;
 		}
 
 		return true;
@@ -2087,7 +2092,7 @@ public class Block
 
 	/**
 	 * Gathers how much experience this block drops when broken.
-	 * 
+	 *
 	 * @param world The world
 	 * @param metadata
 	 * @param fortune
@@ -2130,7 +2135,7 @@ public class Block
 	 * If this block should be notified of weak changes.
 	 * Weak changes are changes 1 block away through a solid block.
 	 * Similar to comparators.
-	 * 
+	 *
 	 * @param world The current world
 	 * @param x X Position
 	 * @param y Y position
@@ -2147,7 +2152,7 @@ public class Block
 	private int[] harvestLevel = new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 	/**
 	 * Sets or removes the tool and level required to harvest this block.
-	 * 
+	 *
 	 * @param toolClass Class
 	 * @param level Harvest level:
 	 *     Wood:    0
@@ -2166,7 +2171,7 @@ public class Block
 
 	/**
 	 * Sets or removes the tool and level required to harvest this block.
-	 * 
+	 *
 	 * @param toolClass Class
 	 * @param level Harvest level:
 	 *     Wood:    0
@@ -2183,9 +2188,9 @@ public class Block
 	}
 
 	/**
-	 * Queries the class of tool required to harvest this block, if null is returned 
+	 * Queries the class of tool required to harvest this block, if null is returned
 	 * we assume that anything can harvest this block.
-	 * 
+	 *
 	 * @param metadata
 	 * @return
 	 */
@@ -2197,7 +2202,7 @@ public class Block
 	/**
 	 * Queries the harvest level of this item stack for the specifred tool class,
 	 * Returns -1 if this tool is not of the specified type
-	 * 
+	 *
 	 * @param stack This item stack instance
 	 * @return Harvest level, or -1 if not the specified tool type.
 	 */
@@ -2207,9 +2212,9 @@ public class Block
 	}
 
 	/**
-	 * Checks if the specified tool type is efficient on this block, 
+	 * Checks if the specified tool type is efficient on this block,
 	 * meaning that it digs at full speed.
-	 * 
+	 *
 	 * @param type
 	 * @param metadata
 	 * @return

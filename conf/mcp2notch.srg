@@ -1,5 +1,5 @@
 PK: net/minecraft/client/main net/minecraft/client/main
-PK: . net/minecraft/src
+PK: net/minecraft/src .
 PK: net/minecraft/realms net/minecraft/realms
 PK: net/minecraft net/minecraft
 PK: net/minecraft/client net/minecraft/client

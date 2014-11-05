@@ -251,8 +251,10 @@ public abstract class GuiContainer extends GuiScreen
 			if (iicon != null)
 			{
 				GL11.glDisable(GL11.GL_LIGHTING);
+				GL11.glEnable(GL11.GL_BLEND); // Forge: Blending needs to be enabled for this.
 				this.mc.getTextureManager().bindTexture(TextureMap.locationItemsTexture);
 				this.drawTexturedModelRectFromIcon(i, j, iicon, 16, 16);
+				GL11.glDisable(GL11.GL_BLEND); // Forge: And clean that up
 				GL11.glEnable(GL11.GL_LIGHTING);
 				flag1 = true;
 			}
