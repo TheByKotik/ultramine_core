@@ -48,6 +48,7 @@ public class MultiWorld
 	private final TIntObjectMap<String> dimToNameMap = new TIntObjectHashMap<String>();
 	private final TIntObjectMap<WorldServer> dimToWorldMap = new TIntObjectHashMap<WorldServer>();
 	private final Map<String, WorldServer> nameToWorldMap = new HashMap<String, WorldServer>();
+	private final TIntObjectMap<WorldConfig> dimToConfigMap = new TIntObjectHashMap<WorldConfig>();
 	private final Set<String> backupDirs = new HashSet<String>();
 	private TIntSet isolatedDataDims;
 
@@ -98,6 +99,7 @@ public class MultiWorld
 				isolatedDataDimsSet.add(conf.dimension);
 			
 			dimToNameMap.put(conf.dimension, ent.getKey());
+			dimToConfigMap.put(conf.dimension, conf);
 		}
 		
 		isolatedDataDims = TCollections.unmodifiableSet(isolatedDataDimsSet);
@@ -316,6 +318,15 @@ public class MultiWorld
 	public String getNameByID(int id)
 	{
 		return dimToNameMap.get(id);
+	}
+	
+	@SideOnly(Side.SERVER)
+	public WorldConfig getConfigByID(int dim)
+	{
+		WorldConfig cfg = dimToConfigMap.get(dim);
+		if(cfg == null)
+			return ConfigurationHandler.getWorldsConfig().global;
+		return cfg;
 	}
 	
 	public Set<String> getDirsForBackup()

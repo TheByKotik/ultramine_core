@@ -20,6 +20,8 @@ import com.google.common.base.Function;
 import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -205,6 +207,7 @@ public class ServerDataLoader
 		}
 	}
 	
+	@SideOnly(Side.SERVER)
 	private void playerLoadCallback(NetworkManager network, EntityPlayerMP player, NetHandlerPlayServer nethandler, NBTTagCompound nbt, PlayerData data, StatisticsFile stats)
 	{
 		if(data != null)
@@ -227,7 +230,7 @@ public class ServerDataLoader
 		}
 		else
 		{
-			String warpName = mgr.getServerInstance().getMultiWorld().getWorldByID(player.dimension).getConfig().settings.reconnectOnWarp;
+			String warpName = mgr.getServerInstance().getMultiWorld().getConfigByID(player.dimension).settings.reconnectOnWarp;
 			if(warpName != null)
 				spawn = getWarp(warpName);
 		}
