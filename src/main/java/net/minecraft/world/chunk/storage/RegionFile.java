@@ -109,8 +109,8 @@ public class RegionFile
 	{
 		if (this.outOfBounds(x, z)) return false;
 
-		try
-		{
+//		try
+//		{
 			int offset = this.getOffset(x, z);
 
 			if (offset == 0) return false;
@@ -120,21 +120,24 @@ public class RegionFile
 
 			if (sectorNumber + numSectors > this.sectorFree.size()) return false;
 
-			this.dataFile.seek((long)(sectorNumber * 4096));
-			int length = this.dataFile.readInt();
-
-			if (length > 4096 * numSectors || length <= 0) return false;
-
-			byte version = this.dataFile.readByte();
-
-			if (version == 1 || version == 2) return true;
-		}
-		catch (IOException ioexception)
-		{
-			return false;
-		}
-
-		return false;
+			//No IO operations in main thread
+//			this.dataFile.seek((long)(sectorNumber * 4096));
+//			int length = this.dataFile.readInt();
+//
+//			if (length > 4096 * numSectors || length <= 0) return false;
+//
+//			byte version = this.dataFile.readByte();
+//
+//			if (version == 1 || version == 2) return true;
+//		}
+//		catch (IOException ioexception)
+//		{
+//			return false;
+//		}
+//
+//		return false;
+		
+		return true;
 	}
 
 	public synchronized DataInputStream getChunkDataInputStream(int p_76704_1_, int p_76704_2_)
