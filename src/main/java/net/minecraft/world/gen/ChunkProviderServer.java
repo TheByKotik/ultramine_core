@@ -130,7 +130,7 @@ public class ChunkProviderServer implements IChunkProvider
 			{
 				chunk = ChunkIOExecutor.syncChunkLoad(this.worldObj, loader, this, par1, par2);
 				chunk.setBindState(ChunkBindState.LEAK);
-				if(debugSyncLoad)
+				if(debugSyncLoad && worldObj.func_73046_m().getTickCounter() > 1)
 					logger.warn("The chunk("+par1+", "+par2+") was loaded sync", new Throwable());
 			}
 		}
