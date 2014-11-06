@@ -58,6 +58,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldInfo;
@@ -2812,7 +2813,15 @@ public abstract class World implements IBlockAccess
 		this.activeChunkSet.clear();
 		this.theProfiler.startSection("buildList");
 		if(isChunkLoaderEnabled())
-			for(ChunkCoordIntPair c : getPersistentChunks().keySet()) activeChunkSet.put(ChunkHash.chunkToKey(c.chunkXPos, c.chunkZPos), (byte)100);
+		{
+			for(ChunkCoordIntPair c : getPersistentChunks().keySet())
+			{
+				if(chunkRoundExists(c.chunkXPos, c.chunkZPos, 1))
+					activeChunkSet.put(ChunkHash.chunkToKey(c.chunkXPos, c.chunkZPos), (byte)100);
+				else
+					((ChunkProviderServer)chunkProvider).loadAsyncRadius(c.chunkXPos, c.chunkZPos, 1, IChunkLoadCallback.EMPTY);
+			}
+		}
 		int i;
 		EntityPlayer entityplayer;
 		int j;
@@ -4113,7 +4122,7 @@ public abstract class World implements IBlockAccess
 	
 	protected boolean isChunkLoaderEnabled()
 	{
-		return true;
+		return false;
 	}
 	
 	public int countEntitiesByType(EnumCreatureType type, int cx, int cz, int radius)
