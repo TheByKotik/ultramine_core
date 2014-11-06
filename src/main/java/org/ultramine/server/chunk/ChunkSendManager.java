@@ -365,13 +365,13 @@ public class ChunkSendManager
 		public void onChunkLoaded(Chunk chunk)
 		{
 			int key = ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition);
-			if(!sending.contains(key))
+			if(!sending.contains(key) || ((WorldServer)chunk.worldObj).getPlayerManager() != manager)
 			{
 				sendingQueueSize.decrementAndGet();
 				return;
 			}
 			
-			if(chunk.isTerrainPopulated)
+			if(chunk.isTerrainPopulated && chunk.worldObj.chunkRoundExists(chunk.xPosition, chunk.zPosition, 1))
 			{
 				chunk.func_150804_b(true);
 				chunk.setBindState(ChunkBindState.PLAYER);
