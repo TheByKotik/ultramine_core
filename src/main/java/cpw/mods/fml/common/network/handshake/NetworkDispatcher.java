@@ -465,7 +465,7 @@ public class NetworkDispatcher extends SimpleChannelInboundHandler<Packet> imple
 		// Stop the epic channel closed spam at close
 		if (!(cause instanceof ClosedChannelException))
 		{
-			FMLLog.log(Level.ERROR, cause, "NetworkDispatcher exception");
+			FMLLog.log(Level.DEBUG, cause, "NetworkDispatcher exception");
 		}
 		super.exceptionCaught(ctx, cause);
 	}
