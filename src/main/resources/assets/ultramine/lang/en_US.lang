@@ -164,7 +164,7 @@ command.multiworld.notregistered=Dimension is not registered (not exists)
 command.multiworld.notloaded=Dimension is not loaded
 command.multiworld.load.success=Dimension successfuly loaded
 command.multiworld.unload.success=Dimension successfuly unloaded
-command.warplist.list.head=Dimension list:
+command.multiworld.list.head=Dimension list:
 
 command.countentity.usage=/countentity <radius>
 command.countentity.description=Specifies the number of Entity radially

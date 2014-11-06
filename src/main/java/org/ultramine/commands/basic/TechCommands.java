@@ -138,7 +138,7 @@ public class TechCommands
 		
 		if(ctx.getAction().equals("list"))
 		{
-			ctx.sendMessage("command.warplist.head=Warp list:");
+			ctx.sendMessage("command.multiworld.list.head");
 			for(int dim : DimensionManager.getStaticDimensionIDs())
 			{
 				String name = mw.getNameByID(dim);
