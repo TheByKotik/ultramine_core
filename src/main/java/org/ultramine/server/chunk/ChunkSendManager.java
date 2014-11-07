@@ -380,7 +380,7 @@ public class ChunkSendManager
 			else
 			{
 				sendingQueueSize.decrementAndGet();
-				((WorldServer)chunk.worldObj).theChunkProviderServer.loadAsyncRadius(chunk.xPosition, chunk.zPosition, 1, IChunkLoadCallback.EMPTY);
+				((WorldServer)chunk.worldObj).theChunkProviderServer.loadAsyncRadius(chunk.xPosition, chunk.zPosition, 2, IChunkLoadCallback.EMPTY);
 				
 				int ind = (int)rate*2+1;
 				if(ind < toSend.size()-1)

@@ -269,9 +269,9 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public void populate(IChunkProvider par1IChunkProvider, int par2, int par3)
 	{
-		Chunk chunk = this.provideChunk(par2, par3);
+		Chunk chunk = this.getChunkIfExists(par2, par3);
 
-		if (!chunk.isTerrainPopulated)
+		if (chunk != null && !chunk.isTerrainPopulated && worldObj.chunkRoundExists(par2, par3, 2))
 		{
 			chunk.func_150809_p();
 
@@ -507,5 +507,13 @@ public class ChunkProviderServer implements IChunkProvider
 				}
 			}
 		}
+	}
+	
+	public void populateChunk(Chunk chunk, int cx, int cz)
+	{
+		final int radius = 2;
+		for(int x = cx - radius; x <= cx + radius; x++)
+			for(int z = cz - radius; z <= cz + radius; z++)
+				populate(this, x, z);
 	}
 }
