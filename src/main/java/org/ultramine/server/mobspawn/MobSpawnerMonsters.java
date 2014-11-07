@@ -52,6 +52,8 @@ public class MobSpawnerMonsters extends MobSpawner
 		int y;
 		if(isDay)
 		{
+			if(topf <= 3)
+				return;
 			op = 0;
 			y = world.rand.nextInt(topf - 2);
 		}
