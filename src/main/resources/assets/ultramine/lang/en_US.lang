@@ -3,6 +3,8 @@ teleporter.fail.cooldownd=You will be able to teleport in %s seconds
 teleporter.delay=You will be teleported in %s seconds
 teleporter.canceled=Teleportation canceled
 
+ultramine.autobroadcast.debugmsg=Server load: %s (Peak: %s), TPS: %s/20, Mobs: %s, Items: %s
+
 #Command generic
 commands.generic.world.invalid=Can't find world '%s'
 commands.generic.itemstack.data=Failed to parse item data: %s
@@ -148,8 +150,8 @@ command.id.description=Displays information about specified item id
 command.uptime.usage=/uptime
 command.uptime.description=Displays server's up time and load information
 command.uptime.msg.up=UP: %s
-command.uptime.msg.load=Load average: %s%% (Pick: %s%%)
-command.uptime.msg.tps=Ticks per second: %s/20 (%s%%)
+command.uptime.msg.load=Load average: %s (Peak: %s)
+command.uptime.msg.tps=Ticks per second: %s/20 (%s)
 
 command.debuginfo.usage=/debuginfo [world/player]
 command.debuginfo.description=Some debug information

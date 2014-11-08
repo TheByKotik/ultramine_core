@@ -407,7 +407,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				
 				long curWait = 0L;
 				long curPickWait = 0L;
-				for (long lastTick = 0L; this.serverRunning; this.serverIsRunning = true)
+				for (long lastTick = System.nanoTime() - TICK_TIME; this.serverRunning; this.serverIsRunning = true)
 				{
 					long curTime = System.nanoTime();
 					long wait = TICK_TIME - (curTime - lastTick);

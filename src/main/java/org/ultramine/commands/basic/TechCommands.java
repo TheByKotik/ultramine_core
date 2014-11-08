@@ -62,11 +62,11 @@ public class TechCommands
 		int load = (int)Math.round((50-downtime)/50*100);
 		int pickload = (int)Math.round((50-pickdowntime)/50*100);
 		int uptime = (int)((System.currentTimeMillis() - ctx.getServer().startTime)/1000);
-		ChatComponentText pickloadcomp = new ChatComponentText(Integer.toString(pickload));
+		ChatComponentText pickloadcomp = new ChatComponentText(Integer.toString(pickload).concat("%"));
 		pickloadcomp.getChatStyle().setColor(pickload >= 200 ? RED : DARK_GREEN);
 		ctx.sendMessage(DARK_GREEN, "command.uptime.msg.up", String.format("%dd %dh %dm %ds", uptime/(60*60*24), uptime/(60*60)%24, uptime/60%60, uptime%60));
-		ctx.sendMessage(load > 100 ? RED : DARK_GREEN, "command.uptime.msg.load", load, pickloadcomp);
-		ctx.sendMessage(tps < 15 ? RED : DARK_GREEN, "command.uptime.msg.tps",  tps, (int)(tps/20*100));
+		ctx.sendMessage(load > 100 ? RED : DARK_GREEN, "command.uptime.msg.load", Integer.toString(load).concat("%"), pickloadcomp);
+		ctx.sendMessage(tps < 15 ? RED : DARK_GREEN, "command.uptime.msg.tps",  tps, Integer.toString((int)(tps/20*100)).concat("%"));
 	}
 	
 	@Command(

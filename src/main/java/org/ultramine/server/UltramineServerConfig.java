@@ -88,8 +88,18 @@ public class UltramineServerConfig
 
 		public static class MessagesConf
 		{
+			public AutoBroacastConf autobroadcast = new AutoBroacastConf();
 			public boolean announcePlayerAchievements = true;
 			public String motd = "A Minecraft Server";
+			
+			public static class AutoBroacastConf
+			{
+				public boolean enabled = false;
+				public int intervalSeconds = 600;
+				public boolean showDebugInfo = false;
+				public String[] messages = new String[0];
+				public boolean showAllMessages = false;
+			}
 		}
 
 		public static class WatchdogThreadConf

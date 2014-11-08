@@ -1,5 +1,6 @@
 package org.ultramine.server;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -313,6 +314,11 @@ public class MultiWorld
 	public Set<String> getAllNames()
 	{
 		return nameToWorldMap.keySet();
+	}
+	
+	public Collection<WorldServer> getLoadedWorlds()
+	{
+		return dimToWorldMap.valueCollection();
 	}
 	
 	public String getNameByID(int id)

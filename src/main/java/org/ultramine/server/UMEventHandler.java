@@ -1,18 +1,24 @@
 package org.ultramine.server;
 
+import org.ultramine.server.UltramineServerConfig.SettingsConf.MessagesConf.AutoBroacastConf;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.WarpLocation;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.functions.GenericIterableFactory;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.WorldServer;
+import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -41,7 +47,67 @@ public class UMEventHandler
 		if(e.phase == TickEvent.Phase.START)
 		{
 			Teleporter.tick();
+			
+			AutoBroacastConf cfg = ConfigurationHandler.getServerConfig().settings.messages.autobroadcast;
+			MinecraftServer server = MinecraftServer.getServer();
+			if(cfg.enabled && server.getTickCounter() % (cfg.intervalSeconds*20) == 0)
+			{
+				if(cfg.showDebugInfo)
+				{
+					double tps = Math.round(server.currentTPS*10)/10d;
+					double downtime = server.currentWait/1000/1000d;
+					double pickdowntime = server.pickWait/1000/1000d;
+					int load = (int)Math.round((50-downtime)/50*100);
+					int pickload = (int)Math.round((50-pickdowntime)/50*100);
+					ChatComponentText loadcomp = new ChatComponentText(Integer.toString(load).concat("%"));
+					ChatComponentText pickloadcomp = new ChatComponentText(Integer.toString(pickload).concat("%"));
+					ChatComponentText tpscomp = new ChatComponentText(Double.toString(tps));
+					loadcomp.getChatStyle().setColor(load > 100 ? RED : DARK_GREEN);
+					pickloadcomp.getChatStyle().setColor(pickload >= 200 ? RED : DARK_GREEN);
+					tpscomp.getChatStyle().setColor(tps < 15 ? RED : DARK_GREEN);
+					
+					int mobcount = 0;
+					int itemcount = 0;
+					
+					for(WorldServer world : server.getMultiWorld().getLoadedWorlds())
+					{
+						for(Entity ent : GenericIterableFactory.newCastingIterable(world.loadedEntityList, Entity.class))
+						{
+							if(ent.isEntityLiving() && !ent.isEntityPlayer())
+								mobcount++;
+							else if(ent instanceof EntityItem)
+								itemcount++;
+						}
+					}
+					
+					ChatComponentTranslation full = new ChatComponentTranslation("ultramine.autobroadcast.debugmsg", loadcomp, pickloadcomp, tpscomp,
+							Integer.toString(mobcount), Integer.toString(itemcount));
+					full.getChatStyle().setColor(YELLOW);
+					
+					server.getConfigurationManager().sendChatMsg(full);
+				}
+				
+				if(cfg.messages.length != 0)
+				{
+					if(cfg.showAllMessages)
+					{
+						for(String msg : cfg.messages)
+							broadcastMessage(msg);
+					}
+					else
+					{
+						broadcastMessage(cfg.messages[server.getTickCounter() % (cfg.intervalSeconds*20*cfg.messages.length) / (cfg.intervalSeconds*20)]);
+					}
+				}
+			}
 		}
+	}
+	
+	private static void broadcastMessage(String msg)
+	{
+		ChatComponentText msgcomp = new ChatComponentText(msg);
+		msgcomp.getChatStyle().setColor(DARK_GREEN);
+		MinecraftServer.getServer().getConfigurationManager().sendChatMsg(msgcomp);
 	}
 	
 	@SubscribeEvent
