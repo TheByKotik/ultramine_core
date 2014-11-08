@@ -148,8 +148,8 @@ command.id.description=Displays information about specified item id
 command.uptime.usage=/uptime
 command.uptime.description=Displays server's up time and load information
 command.uptime.msg.up=UP: %s
-command.uptime.msg.load=Load average: %s
-command.uptime.msg.tps=Ticks per second: %s/20 (%s)
+command.uptime.msg.load=Load average: %s%% (Pick: %s%%)
+command.uptime.msg.tps=Ticks per second: %s/20 (%s%%)
 
 command.debuginfo.usage=/debuginfo [world/player]
 command.debuginfo.description=Some debug information
@@ -172,10 +172,23 @@ command.countentity.result1=Found %s Entity. Mobs: %s, items: %s
 command.countentity.result2=Monsters: %s, Animals: %s, Water: %s, Ambient: %s
 
 command.clearentity.usage=/clearentity [all|mobs|items] <radius>
-command.clearentity.description=All multiworld commands
+command.clearentity.description=Removes Entities radially
 command.clearentity.success=Cleared %s Entity. Mobs: %s, Items: %s
 
 command.startlags.usage=/startlags percents OR /startlags stop
 command.startlags.description=Simulruet server overload on a specified percentage
 command.startlags.start=Start lagging on %s%%
 command.startlags.stop=Stop lagging
+
+command.restart.usage=/restart <delay> OR /restart abort
+command.restart.description=Delayed server restart
+command.restart.abort.success=Restart aborted
+command.restart.abort.fail=Restart has not started yet
+command.restart.success=Restart started
+
+command.javagc.usage=/javaGC
+command.javagc.description=Perform system garbage collector
+command.javagc.success=System GC performed
+
+command.custmsg.usage=/custmsg <player/ALL> <message>
+command.custmsg.description=Sends custom formatted message to player (support colors, use &)

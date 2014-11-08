@@ -139,7 +139,8 @@ public class CommandContext
 			checkSenderPermission(permission, msg);
 	}
 	
-	public void sendMessage(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
+	
+	private IChatComponent formatMessage(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
 	{
 		for(int i = 0; i < args.length; i++)
 		{
@@ -150,7 +151,12 @@ public class CommandContext
 		
 		ChatComponentTranslation comp = new ChatComponentTranslation(msg, args);
 		comp.getChatStyle().setColor(tplColor);
-		sender.addChatMessage(comp);
+		return comp;
+	}
+	
+	public void sendMessage(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
+	{
+		sender.addChatMessage(formatMessage(tplColor, argsColor, msg, args));
 	}
 	
 	public void sendMessage(EnumChatFormatting argsColor, String msg, Object... args)
@@ -160,7 +166,22 @@ public class CommandContext
 	
 	public void sendMessage(String msg, Object... args)
 	{
-		sendMessage(EnumChatFormatting.GOLD, EnumChatFormatting.YELLOW, msg, args);
+		sendMessage(EnumChatFormatting.YELLOW, msg, args);
+	}
+	
+	public void broadcast(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
+	{
+		getServer().getConfigurationManager().sendChatMsg(formatMessage(tplColor, argsColor, msg, args));
+	}
+	
+	public void broadcast(EnumChatFormatting argsColor, String msg, Object... args)
+	{
+		broadcast(EnumChatFormatting.DARK_PURPLE, argsColor, msg, args);
+	}
+	
+	public void broadcast(String msg, Object... args)
+	{
+		broadcast(EnumChatFormatting.DARK_PURPLE, msg, args);
 	}
 
 	public void throwBadUsage()
@@ -343,6 +364,11 @@ public class CommandContext
 		public ItemStack asItemStack()
 		{
 			return BasicTypeParser.parseItemStack(asString());
+		}
+		
+		public int asTimeMills()
+		{
+			return BasicTypeParser.parseTime(asString());
 		}
 	}
 

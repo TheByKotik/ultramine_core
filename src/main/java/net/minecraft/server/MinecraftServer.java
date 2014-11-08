@@ -406,6 +406,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				if(!isSinglePlayer()) WatchdogThread.doStart();
 				
 				long curWait = 0L;
+				long curPickWait = 0L;
 				for (long lastTick = 0L; this.serverRunning; this.serverIsRunning = true)
 				{
 					long curTime = System.nanoTime();
@@ -426,6 +427,13 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 					currentTPS = (currentTPS * 0.95) + (1E9 / (curTime - lastTick) * 0.05);
 					currentWait = (long)(currentWait * 0.95 + curWait * 0.05);
+					if(curWait < curPickWait)
+						curPickWait = curWait;
+					if(tickCounter % 20 == 0)
+					{
+						pickWait = curPickWait;
+						curPickWait = TICK_TIME;
+					}
 					curWait = 0;
 					
 					lastTick = curTime;
@@ -1480,6 +1488,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	public double currentTPS = 20;
 	private long catchupTime = 0;
 	public long currentWait = TICK_TIME;
+	public long pickWait = TICK_TIME;
 	public final long startTime = System.currentTimeMillis();
 	private final MultiWorld multiworld = new MultiWorld(this);
 	private IPermissionManager permissionManager;

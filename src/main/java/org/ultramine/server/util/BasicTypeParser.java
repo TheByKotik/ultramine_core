@@ -169,4 +169,54 @@ public class BasicTypeParser
 		
 		return is;
 	}
+	
+	/**
+	 * Examples - 10, 5s, 24h, 10d7h5m3s<br />
+	 * s - second<br />
+	 * m - minute<br />
+	 * h - hour<br />
+	 * d - day<br />
+	 * @return time mills
+	 */
+	public static int parseTime(String str)
+	{
+		int time = 0;
+		int lastInd = 0;
+		for(int i = 0, s = str.length(); i < s; i++)
+		{
+			char c = str.charAt(i);
+			if("smhd".indexOf(c) != -1)
+			{
+				int t;
+				String s1 = str.substring(lastInd, i);
+				try
+				{
+					t = Integer.parseInt(s1);
+				}
+				catch(NumberFormatException e)
+				{
+					throw new CommandException("commands.generic.num.invalid", s1);
+				}
+				lastInd = i+1;
+				int mod = c == 's' ? 1 : c == 'm' ? 60 : c == 'h' ? 60*60 : c == 'd' ? 60*60*24 : 1;
+				
+				time += t*mod;
+			}
+		}
+		
+		if(lastInd != str.length())
+		{
+			String s1 = str.substring(lastInd, str.length());
+			try
+			{
+				time += Integer.parseInt(s1);
+			}
+			catch(NumberFormatException e)
+			{
+				throw new CommandException("commands.generic.num.invalid", s1);
+			}
+		}
+		
+		return time*1000;
+	}
 }

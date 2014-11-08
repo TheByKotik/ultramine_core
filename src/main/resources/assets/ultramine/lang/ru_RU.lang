@@ -147,9 +147,9 @@ command.id.description=Показывает информацию об указа
 
 command.uptime.usage=/uptime
 command.uptime.description=Показыват информацию о загруженности сервера
-command.uptime.msg.up=UP: %s
-command.uptime.msg.load=Load average: %s
-command.uptime.msg.tps=Ticks per second: %s/20 (%s)
+command.uptime.msg.up=Работает: %s
+command.uptime.msg.load=Загруженность: %s%% (В пике: %s%%)
+command.uptime.msg.tps=Тиков в секунду: %s/20 (%s)
 
 command.debuginfo.usage=/debuginfo [мир/игрок]
 command.debuginfo.description=Некоторая отладочная информация
@@ -179,3 +179,16 @@ command.startlags.usage=/startlags процент ИЛИ /startlags stop
 command.startlags.description=Симулирует определенный процент нагрузки на сервер
 command.startlags.start=Start lagging on %s%%
 command.startlags.stop=Stop lagging
+
+command.restart.usage=/restart <задержка> ИЛИ /restart abort
+command.restart.description=Отложенный перезапуск сервера
+command.restart.abort.success=Растарт отменен
+command.restart.abort.fail=Рестарт еще не запущен
+command.restart.success=Рестарт запущен
+
+command.javagc.usage=/javaGC
+command.javagc.description=Инициировать сборку мусора
+command.javagc.success=Сборка мусора инициирована
+
+command.custmsg.usage=/custmsg <игрок/ALL> <сообщение>
+command.custmsg.description=Отправляет кастомное сообщение игроку (поддерживает цвета)

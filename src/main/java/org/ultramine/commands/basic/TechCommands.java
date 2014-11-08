@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
 import org.ultramine.server.MultiWorld;
+import org.ultramine.server.Restarter;
 import org.ultramine.server.Teleporter;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -57,12 +58,15 @@ public class TechCommands
 	{
 		double tps = Math.round(ctx.getServer().currentTPS*10)/10d;
 		double downtime = ctx.getServer().currentWait/1000/1000d;
+		double pickdowntime = ctx.getServer().pickWait/1000/1000d;
 		int load = (int)Math.round((50-downtime)/50*100);
+		int pickload = (int)Math.round((50-pickdowntime)/50*100);
 		int uptime = (int)((System.currentTimeMillis() - ctx.getServer().startTime)/1000);
+		ChatComponentText pickloadcomp = new ChatComponentText(Integer.toString(pickload));
+		pickloadcomp.getChatStyle().setColor(pickload >= 200 ? RED : DARK_GREEN);
 		ctx.sendMessage(DARK_GREEN, "command.uptime.msg.up", String.format("%dd %dh %dm %ds", uptime/(60*60*24), uptime/(60*60)%24, uptime/60%60, uptime%60));
-		ctx.sendMessage(load > 100 ? RED : DARK_GREEN, "command.uptime.msg.load", Integer.toString(load).concat("%"));
-		ctx.sendMessage(tps < 15 ? RED : DARK_GREEN, "command.uptime.msg.tps",  Double.toString(tps),
-				Integer.toString((int)(tps/20*100)).concat("%"));
+		ctx.sendMessage(load > 100 ? RED : DARK_GREEN, "command.uptime.msg.load", load, pickloadcomp);
+		ctx.sendMessage(tps < 15 ? RED : DARK_GREEN, "command.uptime.msg.tps",  tps, (int)(tps/20*100));
 	}
 	
 	@Command(
@@ -339,5 +343,42 @@ public class TechCommands
 				} catch(InterruptedException ignored){}
 			}
 		}
+	}
+	
+	@Command(
+			name = "restart",
+			group = "technical",
+			permissions = {"command.restart"},
+			syntax = {
+					"[abort]",
+					"<time>"
+			}
+	)
+	public static void restart(CommandContext ctx)
+	{
+		if(ctx.getAction().equals("abort"))
+		{
+			if(Restarter.abort())
+				ctx.broadcast("command.restart.abort.success");
+			else
+				ctx.sendMessage("command.restart.abort.fail");
+		}
+		else
+		{
+			Restarter.restart(ctx.get("time").asTimeMills()/1000);
+			ctx.sendMessage("command.restart.success");
+		}
+	}
+	
+	@Command(
+			name = "javagc",
+			group = "technical",
+			permissions = {"command.javagc"},
+			syntax = {""}
+	)
+	public static void javagc(CommandContext ctx)
+	{
+		System.gc();
+		ctx.sendMessage("command.javagc.success");
 	}
 }

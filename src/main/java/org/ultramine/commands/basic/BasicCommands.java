@@ -5,6 +5,7 @@ import java.util.Map;
 import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.MathHelper;
@@ -332,5 +333,23 @@ public class BasicCommands
 			newtype = GameType.CREATIVE;
 		
 		player.setGameType(newtype);
+	}
+	
+	@Command(
+			name = "custmsg",
+			group = "admin",
+			permissions = {"command.custmsg"},
+			syntax = {
+					"[all] <msg>...",
+					"<player> <msg>..."
+			}
+	)
+	public static void custmsg(CommandContext ctx)
+	{
+		String msg = ctx.get("msg").asString().replace('&', '\u00a7');
+		if(ctx.getAction().equals("all"))
+			ctx.broadcast(WHITE, WHITE, msg);
+		else
+			ctx.get("player").asPlayer().addChatMessage(new ChatComponentText(msg));
 	}
 }
