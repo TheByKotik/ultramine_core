@@ -1,0 +1,181 @@
+#Server core
+teleporter.fail.cooldownd=Вы сможете телепортироваться через %s секунд
+teleporter.delay=Вы будете телепортированы через %s секунд
+teleporter.canceled=Телепортация отменена
+
+#Command generic
+commands.generic.world.invalid=Указанный мир не существует или неинициализирован '%s'
+commands.generic.itemstack.data=Не удалось разобрать предмет: %s
+commands.generic.itemstack.size=Не удалось разобрать количество предметов: %s
+
+#Vanilla replacements
+command.tp.usage=/tp [кого] <к кому> ИЛИ /tp [кого] [мир] <x> <y> <z>
+command.tp.description=Телепортация указанного игрока (или вас) к другому игроку или по координатам
+command.tp.success.player=Телепортирован '%s' к '%s'
+command.tp.success.coordinate=Телепортирован '%s' к [%s](%s, %s, %s)
+
+command.difficulty.usage=/difficulty [мир] <peaceful easy normal hard>
+command.difficulty.description=Изменение сложности игры
+command.difficulty.success=Сложность мира %s изменена с %s на %s
+
+command.msg.usage=/msg <игрок> <сообщение ...>
+command.msg.description=Отправка приватного сообщения игроку
+command.msg.display.outgoing=[я -> %s] %s
+command.msg.display.incoming=[%s -> я] %s
+
+command.reply.usage=/reply <сообщение ...>
+command.reply.description=Отправка приватного сообщения последнему игроку, которому вы отправляли сообщение командой /msg
+command.reply.fail=Сначала используйте команду /msg
+
+# Permissions
+command.pconfig.usage=/pconfig <save|reload>
+command.pconfig.description=Save or reload all permissions configs
+command.pconfig.success.save=Permissions are saved
+command.pconfig.success.reload=Permissions are reloaded
+
+command.pworld.usage=/pworld [world] <add|remove> <permissions ...>
+command.pworld.description=Add or remove permissions to all user in world (current is default)
+command.pworld.success.add=Add permission <%s> to world <%s>
+command.pworld.success.remove=Remove permission <%s> from world <%s>
+command.pworld.success.meta=Set meta <%s> to <%s> in world <%s>
+
+command.puser.usage=/puser [world] <player> <add|remove> <permissions ...> OR /puser [world] <player> meta <key> <value>
+command.puser.description=Add/remove permissions OR set meta for user in world (current is default)
+command.puser.success.add=Add permission <%s> to user <%s> in world <%s>
+command.puser.success.remove=Remove permission <%s> from user <%s> in world <%s>
+command.puser.success.meta=Set meta <%s> to <%s> for user <%s> in world <%s>
+
+command.pgroup.usage=/pgroup <group> <add|remove> <permissions ...> OR /pgroup <group> meta <key> <value>
+command.pgroup.description=Add/remove permissions OR set meta for group
+command.pgroup.success.add=Add permission <%s> to group <%s>
+command.pgroup.success.remove=Remove permission <%s> from group <%s>
+command.pgroup.success.meta=Set meta <%s> to <%s> for group <%s>
+
+#Basic commands
+command.home.usage=/home [название]
+command.home.description=Телепортация на точку дома, устанавливаемую командой /sethome
+command.home.fail.notset=Точка дома не установлена
+command.home.multi.fail=У вас нет прав на использование множества домов
+command.home.other.fail=У нас нет прав на искользование домов других игроков
+
+command.sethome.usage=/sethome [название]
+command.sethome.description=Утанавливает точку телепортации /home
+command.sethome.success=Дом установлен
+command.sethome.multi.fail=У вас нет прав на установку множества домов
+
+command.removehome.usage=/removehome <название>
+command.removehome.description=Удаляет точку дома с указанным названием
+command.removehome.fail=Точка дома с указанным названием не найдена
+command.removehome.success=Дом удален
+
+command.homelist.usage=/homelist
+command.homelist.description=Выводит список ваших домов
+command.homelist.head=Список домов:
+
+command.warp.usage=/warp <название>
+command.warp.description=Телепортирует вас на указанный варп
+command.warp.fail=Варп не найден
+command.warp.noperm.other=У вас нет прав на телепортацию других игроков
+
+command.setwarp.usage=/setwarp <название> [случайный радиус]
+command.setwarp.description=Устанавливает новый варп на текущих координатах
+command.setwarp.fail=Варп с указанным именем уже существует
+command.setwarp.success=Варп установлен
+
+command.resetwarp.usage=/resetwarp <название> [случайный радиус]
+command.resetwarp.description=Устанавливает новый или перезаписывает существующий варп на текущих координатах
+command.resetwarp.success=Варп установлен
+
+command.removewarp.usage=/removewarp <название>
+command.removewarp.description=Удаляет варп с указанным именем
+command.removewarp.fail.spawn=Нельзя удалить варп спавна
+command.removewarp.fail.nowarp=Варп не найден
+command.removewarp.success=Варп удален
+
+command.warplist.usage=/warplist
+command.warplist.description=Выводит список всех публичных варпов
+command.warplist.head=Список варпов:
+
+command.back.usage=/back
+command.back.description=Телепортация в предыдущее расположение
+command.back.fail=Предыдущее расположение не найдено
+
+command.fastwarp.usage=/fastwarp <app|remove> <название>
+command.fastwarp.description=Добавляет фастварп
+command.fastwarp.fail.spawn=Нельзя изменить фастварп спавна
+command.fastwarp.fail.nowarp=Варп с указаным именем не определен; Используйте /setwarp
+command.fastwarp.fail.nofastwarp=Фастварп с указаным именем не определен
+command.fastwarp.fail.already=Фастварп с указаным именем уже установлен
+command.fastwarp.success.add=Фастварп добавлен
+command.fastwarp.success.remove=Фастварп удален
+command.fastwarp.use.description=Телепортация к этой точке
+
+command.setspawn.usage=/setspawn [случайный радиус]
+command.setspawn.description=Устанавливает точку спавна
+command.setspawn.success=Спавн установлен
+
+command.setlocalspawn.usage=/setlocalspawn
+command.setlocalspawn.description=Устанавливает локальный спавн текущего мира (ванильная логика)
+command.setlocalspawn.success=Локальный спавн установлен
+
+command.localspawn.usage=/localspawn
+command.localspawn.description=Телепортация на локальный спавн текущего мира (ванильная логика)
+
+command.heal.usage=/heal [игрок]
+command.heal.description=Восстанавливает здоровье и голод
+command.heal.noperm.other=У вас нет прав на излечение других игроков
+command.heal.success=Вы были излечены
+command.heal.success.other=Игрок %s был излечен
+
+command.dropall.usage=/dropall [игрок]
+command.dropall.description=Выбрасывает все вещи из инвентаря
+command.dropall.noperm.other=У вас нет прав на выбрасывание вещей дргого игрока
+
+command.item.usage=/item <предмет> [количество] ИЛИ /item <игрок> <предмет{NBT с пробелами}>
+command.item.description=Выдает указанный предмет
+
+command.dupe.usage=/dupe [количество]
+command.dupe.description=Дюпает предмет в руке
+command.dupe.fail=Сначала возьмите в руку предмет для дюпа
+
+command.gm.usage=/gm
+command.gm.description=Переключает режим игры
+
+#Technical commands
+command.id.usage=/id <id>
+command.id.description=Показывает информацию об указанном id
+
+command.uptime.usage=/uptime
+command.uptime.description=Показыват информацию о загруженности сервера
+command.uptime.msg.up=UP: %s
+command.uptime.msg.load=Load average: %s
+command.uptime.msg.tps=Ticks per second: %s/20 (%s)
+
+command.debuginfo.usage=/debuginfo [мир/игрок]
+command.debuginfo.description=Некоторая отладочная информация
+
+command.memstat.usage=/memstat
+command.memstat.description=Displays max, current allocated and free memory
+
+command.multiworld.usage=/multiworld <load|unload|goto> <мир> ИЛИ /multiworld list
+command.multiworld.description=Все команды MultiWorld
+command.multiworld.alreadyloaded=Измерение уже загружено
+command.multiworld.notregistered=Измерение на зарегистрировано (не существует)
+command.multiworld.notloaded=Измерение не загружено
+command.multiworld.load.success=Измерение загружено
+command.multiworld.unload.success=Измерение выгружено
+command.multiworld.list.head=Список измерений:
+
+command.countentity.usage=/countentity <радиус>
+command.countentity.description=Подсчитывает количество Entity в радиусе
+command.countentity.result1=Найдено %s Entity. Мобов: %s, Предметов: %s
+command.countentity.result2=Монстров: %s, Животных: %s, Водных: %s, Летающих: %s
+
+command.clearentity.usage=/clearentity [all|mobs|items] <радиус>
+command.clearentity.description=Удаляет Entity по радиусу
+command.clearentity.success=Очищено %s Entity. Мобов: %s, Предметов: %s
+
+command.startlags.usage=/startlags процент ИЛИ /startlags stop
+command.startlags.description=Симулирует определенный процент нагрузки на сервер
+command.startlags.start=Start lagging on %s%%
+command.startlags.stop=Stop lagging
