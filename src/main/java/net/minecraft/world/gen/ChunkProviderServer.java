@@ -41,6 +41,7 @@ import net.minecraftforge.common.chunkio.ChunkIOExecutor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.chunk.CallbackMultiChunkDependentTask;
 import org.ultramine.server.chunk.ChunkBindState;
 import org.ultramine.server.chunk.ChunkGC;
 import org.ultramine.server.chunk.ChunkHash;
@@ -86,7 +87,7 @@ public class ChunkProviderServer implements IChunkProvider
 		if(chunk != null)
 		{
 			chunk.unbind();
-			if(chunk.getBindState().canUnload())
+			if(chunk.canUnload())
 				chunksToUnload.add(ChunkHash.chunkToKey(par1, par2));
 		}
 	}
@@ -358,7 +359,7 @@ public class ChunkProviderServer implements IChunkProvider
 				Chunk chunk = loadedChunkHashMap.get(hash);
 				if(chunk != null)
 				{
-					if(chunk.getBindState().canUnload() && !persistentChunks.contains(chunk.getChunkCoordIntPair()))
+					if(chunk.canUnload() && !persistentChunks.contains(chunk.getChunkCoordIntPair()))
 					{
 						chunk.onChunkUnload();
 						if(chunk.shouldSaveOnUnload())
@@ -442,11 +443,38 @@ public class ChunkProviderServer implements IChunkProvider
 		loadAsync(x, z, IChunkLoadCallback.EMPTY);
 	}
 	
+	/**
+	 * Загружает все чанки в радиусе, callback вызывается для каждого чанка
+	 */
 	public void loadAsyncRadius(int cx, int cz, int radius, IChunkLoadCallback callback)
 	{
 		for(int x = cx - radius; x <= cx + radius; x++)
 			for(int z = cz - radius; z <= cz + radius; z++)
 				loadAsync(x, z, callback);
+	}
+	
+	/**
+	 * Загружает все чанки в радиусе, callback вызывается, когда все чанки загружены
+	 */
+	public void loadAsyncRadiusThenRun(int cx, int cz, int radius, Runnable callback)
+	{
+		loadAsyncRadius(cx, cz, radius, new CallbackMultiChunkDependentTask((radius*2+1)*(radius*2+1), callback));
+	}
+	
+	/**
+	 * Загружает все чанки в радиусе, callback вызывается только для центрального чанка (cx, cz),
+	 * когда все чанки загружены
+	 */
+	public void loadAsyncWithRadius(final int cx, final int cz, int radius, final IChunkLoadCallback callback)
+	{
+		loadAsyncRadiusThenRun(cx, cz, radius, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				callback.onChunkLoaded(loadedChunkHashMap.get(cx, cz));
+			}
+		});
 	}
 	
 	public Chunk getChunkIfExists(int cx, int cz)

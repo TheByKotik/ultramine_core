@@ -48,9 +48,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkBindState;
 import org.ultramine.server.chunk.ChunkHash;
+import org.ultramine.server.chunk.IChunkDependency;
 import org.ultramine.server.chunk.PendingBlockUpdate;
 
-public class Chunk
+public class Chunk implements IChunkDependency
 {
 	private static final Logger logger = LogManager.getLogger();
 	public static boolean isLit;
@@ -1536,6 +1537,7 @@ public class Chunk
 	private TreeSet<PendingBlockUpdate> pendingUpdatesQueue;
 	
 	private ChunkBindState bindState = ChunkBindState.NONE;
+	private List<IChunkDependency> dependencies = new ArrayList<IChunkDependency>(2);
 	private int loadTime;
 	private int unbindTime;
 	private boolean wasActive;
@@ -1599,6 +1601,45 @@ public class Chunk
 	public void setBindState(ChunkBindState bindState)
 	{
 		this.bindState = bindState;
+	}
+	
+	public void addDependency(IChunkDependency dep)
+	{
+		if(!dependencies.contains(dep) && dep != this && dep != null)
+			dependencies.add(dep);
+	}
+	
+	public boolean isDependent()
+	{
+		boolean isdependent = false;
+		
+		for(int i = 0; i < dependencies.size(); i++)
+		{
+			IChunkDependency dep = dependencies.get(i);
+			if(dep.isDependent(this))
+			{
+				isdependent = true; //Не возвращаем значение сразу, проходимся по остальным, удаляем лишнее
+			}
+			else
+			{
+				dependencies.remove(i--);
+				updateUnbindTime();
+			}
+					
+		}
+		
+		return isdependent;
+	}
+	
+	public boolean canUnload()
+	{
+		return !isDependent() && bindState.canUnload();
+	}
+	
+	@Override
+	public boolean isDependent(Chunk chunk)
+	{
+		return !canUnload();
 	}
 	
 	public void unbind()

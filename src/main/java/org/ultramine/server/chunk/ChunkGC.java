@@ -55,6 +55,8 @@ public class ChunkGC
 			List<Chunk> unbound = new ArrayList<Chunk>(all.size() - boundChunks);
 			for(Chunk chunk : all)
 			{
+				if(chunk.isDependent())
+					continue;
 				ChunkBindState state = chunk.getBindState();
 				if(state.canUnload())
 				{

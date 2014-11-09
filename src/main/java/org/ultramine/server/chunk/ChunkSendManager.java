@@ -13,6 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ultramine.server.util.BlockFace;
 import org.ultramine.server.util.ChunkCoordComparator;
 import org.ultramine.server.util.TIntArrayListImpl;
@@ -32,6 +34,7 @@ import net.minecraftforge.event.world.ChunkWatchEvent;
 
 public class ChunkSendManager
 {
+	private static final Logger log = LogManager.getLogger();
 	private static final ExecutorService executor = Executors.newFixedThreadPool(1);
 	private static final int MAX_QUEUE_SIZE = 8;
 	private static final int DEFAULT_RATE = 3;
@@ -274,7 +277,7 @@ public class ChunkSendManager
 			sendingQueueSize.incrementAndGet();
 			int ncx = ChunkHash.keyToX(key);
 			int ncz = ChunkHash.keyToZ(key);
-			manager.getWorldServer().theChunkProviderServer.loadAsync(ncx, ncz, chunkLoadCallback);
+			manager.getWorldServer().theChunkProviderServer.loadAsyncWithRadius(ncx, ncz, 1, chunkLoadCallback);
 		}
 		toSend.remove(0, count);
 	}
@@ -371,22 +374,20 @@ public class ChunkSendManager
 				return;
 			}
 			
-			if(chunk.isTerrainPopulated && chunk.worldObj.chunkRoundExists(chunk.xPosition, chunk.zPosition, 1))
+			if(chunk.isTerrainPopulated)
 			{
 				chunk.func_150804_b(true);
 				chunk.setBindState(ChunkBindState.PLAYER);
 				executor.execute(new CompressAndSendChunkTask(chunk));
 			}
-			else
+			else if(!chunk.worldObj.chunkRoundExists(chunk.xPosition, chunk.zPosition, 2))
 			{
+				((WorldServer)chunk.worldObj).theChunkProviderServer.loadAsyncWithRadius(chunk.xPosition, chunk.zPosition, 2, this);
+			}
+			else //impossible?
+			{
+				log.fatal("Chunk[{}]({}, {}) not populated when loaded {} chunk radius", chunk.worldObj.provider.dimensionId, chunk.xPosition, chunk.zPosition, 2);
 				sendingQueueSize.decrementAndGet();
-				((WorldServer)chunk.worldObj).theChunkProviderServer.loadAsyncRadius(chunk.xPosition, chunk.zPosition, 2, IChunkLoadCallback.EMPTY);
-				
-				int ind = (int)rate*2+1;
-				if(ind < toSend.size()-1)
-					toSend.insert(ind, key);
-				else
-					toSend.add(key);
 				sending.remove(key);
 			}
 		}

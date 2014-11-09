@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.ServerLoadBalancer;
+import org.ultramine.server.chunk.CallbackAddDependency;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 
@@ -2817,9 +2818,15 @@ public abstract class World implements IBlockAccess
 			for(ChunkCoordIntPair c : getPersistentChunks().keySet())
 			{
 				if(chunkRoundExists(c.chunkXPos, c.chunkZPos, 1))
+				{
 					activeChunkSet.put(ChunkHash.chunkToKey(c.chunkXPos, c.chunkZPos), (byte)100);
+				}
 				else
-					((ChunkProviderServer)chunkProvider).loadAsyncRadius(c.chunkXPos, c.chunkZPos, 1, IChunkLoadCallback.EMPTY);
+				{
+					Chunk dep = getChunkIfExists(c.chunkXPos, c.chunkZPos);
+					if(dep != null)
+						((ChunkProviderServer)chunkProvider).loadAsyncRadius(c.chunkXPos, c.chunkZPos, 1, new CallbackAddDependency(dep));
+				}
 			}
 		}
 		int i;
