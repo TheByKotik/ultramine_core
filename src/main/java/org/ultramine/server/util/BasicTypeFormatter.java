@@ -39,7 +39,7 @@ public class BasicTypeFormatter
 		
 		String minN;
 		int mindd = minutes % 10;
-		if(hourdd == 0 || minutes > 4 && minutes < 21)
+		if(minutes == 0 || minutes > 4 && minutes < 21)
 			minN = "минут";
 		else if(mindd == 1)
 			minN = genitive ? "минуту" : "минута";
