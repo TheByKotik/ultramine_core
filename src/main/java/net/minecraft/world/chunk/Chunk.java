@@ -942,6 +942,7 @@ public class Chunk implements IChunkDependency
 		}
 		MinecraftForge.EVENT_BUS.post(new ChunkEvent.Load(this));
 
+		convertTileEntityMap();
 		loadTime = unbindTime = MinecraftServer.getServer().getTickCounter();
 		lastsavePendingCount = pendingUpdatesSet == null ? 0 : pendingUpdatesSet.size();
 	}
@@ -1550,6 +1551,18 @@ public class Chunk implements IChunkDependency
 	private short entityWaterCount;
 	private short entityItemCount;
 	private short entityXPOrbCount;
+	
+	private void convertTileEntityMap()
+	{
+		fastTileEntityMap.clear();
+		@SuppressWarnings("unchecked")
+		Set<Map.Entry<ChunkPosition, TileEntity>> set = (Set<Map.Entry<ChunkPosition, TileEntity>>)chunkTileEntityMap.entrySet();
+		for(Map.Entry<ChunkPosition, TileEntity> ent : set)
+		{
+			ChunkPosition coord = ent.getKey();
+			fastTileEntityMap.put(ChunkHash.chunkCoordToHash(coord.chunkPosX, coord.chunkPosY, coord.chunkPosZ), ent.getValue());
+		}
+	}
 	
 	public PendingBlockUpdate pollPending(long time)
 	{
