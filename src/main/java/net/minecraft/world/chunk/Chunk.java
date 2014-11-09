@@ -1633,13 +1633,13 @@ public class Chunk implements IChunkDependency
 	
 	public boolean canUnload()
 	{
-		return !isDependent() && bindState.canUnload();
+		return bindState.canUnload() && !isDependent();
 	}
 	
 	@Override
 	public boolean isDependent(Chunk chunk)
 	{
-		return !canUnload();
+		return !bindState.canUnload();
 	}
 	
 	public void unbind()
