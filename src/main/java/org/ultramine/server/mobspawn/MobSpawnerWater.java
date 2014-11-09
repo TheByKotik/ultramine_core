@@ -34,7 +34,7 @@ public class MobSpawnerWater extends MobSpawner
 	protected void processChunk(Chunk chunk, int x, int z, int topf)
 	{
 		topf--;
-		if(world.getBlockIfExists(z, topf, x).getMaterial() != Material.water)
+		if(world.getBlockIfExists(x, topf, z).getMaterial() != Material.water)
 			return;
 		int y = topf - world.rand.nextInt(8);
 
