@@ -430,11 +430,14 @@ public class ChunkProviderServer implements IChunkProvider
 		if(chunk != null)
 		{
 			callback.onChunkLoaded(chunk);
-			return;
+		}
+		else if(((AnvilChunkLoader)currentChunkLoader).chunkExists(worldObj, x, z))
+		{
+			ChunkIOExecutor.queueChunkLoad(this.worldObj, (AnvilChunkLoader)currentChunkLoader, this, x, z, callback);
 		}
 		else
 		{
-			ChunkIOExecutor.queueChunkLoad(this.worldObj, (AnvilChunkLoader)currentChunkLoader, this, x, z, callback);
+			callback.onChunkLoaded(originalLoadChunk(x, z));
 		}
 	}
 	
