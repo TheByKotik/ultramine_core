@@ -53,6 +53,7 @@ global: &global
         useIsolatedPlayerData: false
         respawnOnWarp: null
         reconnectOnWarp: null
+    borders: []
     chunkLoading: &global_cl
         viewDistance: 10
         chunkUpdateRadius: 7

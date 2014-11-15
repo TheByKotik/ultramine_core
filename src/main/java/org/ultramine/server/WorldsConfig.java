@@ -14,6 +14,7 @@ public class WorldsConfig
 		public Generation generation;
 		public MobSpawn mobSpawn;
 		public Settings settings;
+		public Border[] borders;
 		public ChunkLoading chunkLoading;
 		public LoadBalancer loadBalancer;
 		
@@ -85,6 +86,14 @@ public class WorldsConfig
 			{
 				NORMAL, NONE, RAIN, THUNDER
 			}
+		}
+		
+		public static class Border
+		{
+			public int x;
+			public int z;
+			public int radius;
+			public boolean round;
 		}
 		
 		public static class ChunkLoading

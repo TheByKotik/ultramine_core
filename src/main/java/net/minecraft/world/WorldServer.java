@@ -73,6 +73,7 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.WorldBorder;
 import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig.Settings.WorldTime;
 import org.ultramine.server.chunk.ChunkHash;
@@ -965,6 +966,7 @@ public class WorldServer extends World
 	
 	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
 	private WorldConfig config;
+	private WorldBorder border;
 	@SideOnly(Side.SERVER)
 	private MobSpawnManager mobSpawner;
 	
@@ -1029,6 +1031,7 @@ public class WorldServer extends World
 	public void setConfig(WorldConfig config)
 	{
 		this.config = config;
+		this.border = new WorldBorder(config.borders);
 		if(isServer && config.mobSpawn.spawnEngine == WorldConfig.MobSpawn.MobSpawnEngine.NEW)
 		{
 			if(mobSpawner == null)
@@ -1051,5 +1054,10 @@ public class WorldServer extends World
 	protected boolean isChunkLoaderEnabled()
 	{
 		return config.chunkLoading.enableChunkLoaders;
+	}
+	
+	public WorldBorder getBorder()
+	{
+		return border;
 	}
 }

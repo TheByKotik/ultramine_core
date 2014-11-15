@@ -17,6 +17,8 @@ import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.WorldServer;
 import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraftforge.event.ServerChatEvent;
@@ -99,6 +101,22 @@ public class UMEventHandler
 						broadcastMessage(cfg.messages[server.getTickCounter() % (cfg.intervalSeconds*20*cfg.messages.length) / (cfg.intervalSeconds*20)]);
 					}
 				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void onPlayerTick(TickEvent.PlayerTickEvent e)
+	{
+		if(e.phase == TickEvent.Phase.END && e.side.isServer())
+		{
+			EntityPlayerMP player = (EntityPlayerMP)e.player;
+			int x = MathHelper.floor_double(player.posX);
+			int z = MathHelper.floor_double(player.posZ);
+			if(!player.getServerForPlayer().getBorder().isInsideBorder(x, z))
+			{
+				ChunkPosition pos = player.getServerForPlayer().getBorder().correctPosition(x, z);
+				player.playerNetServerHandler.setPlayerLocation(pos.chunkPosX, player.lastTickPosY, pos.chunkPosZ, player.rotationYaw, player.rotationPitch);
 			}
 		}
 	}
