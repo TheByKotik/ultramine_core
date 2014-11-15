@@ -28,6 +28,8 @@ public class WorldBorder
 	
 	public boolean isInsideBorder(int x, int z)
 	{
+		if(borders.length == 0)
+			return true;
 		for(OneBorder brd : borders)
 			if(brd.isInsideBorder(x, z))
 				return true;
