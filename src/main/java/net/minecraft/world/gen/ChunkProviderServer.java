@@ -21,6 +21,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.LongHashMap;
@@ -37,7 +38,9 @@ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.chunk.storage.IChunkLoader;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.chunkio.ChunkIOExecutor;
+import net.minecraftforge.event.world.ChunkDataEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -366,6 +369,10 @@ public class ChunkProviderServer implements IChunkProvider
 						{
 							savequeueSize++;
 							safeSaveChunk(chunk);
+						}
+						else
+						{
+							MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Save(chunk, new NBTTagCompound())); //CodeChickenLib memory leak fix
 						}
 						this.safeSaveExtraChunkData(chunk);
 						this.loadedChunkHashMap.remove(hash);
