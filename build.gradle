@@ -116,7 +116,7 @@ project.getExtensions().create(Constants.EXT_NAME_MC, UserExtension, { return pr
 
 task reobf(type: ReobfTask) {
     setExceptorCfg(delayedFile('conf/srg.exc'))
-    setSrg(delayedFile('conf/mcp2srg.srg'))
+    setSrg(delayedFile('conf/mcp2notch.srg'))
     setFieldCsv(delayedFile('conf/fields.csv'))
     setFieldCsv(delayedFile('conf/methods.csv'))
     reobf(tasks.getByName('jar'), new Action<ArtifactSpec>() {
