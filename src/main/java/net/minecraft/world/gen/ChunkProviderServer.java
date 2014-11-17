@@ -8,6 +8,7 @@ import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 
 import java.io.IOException;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -61,6 +62,32 @@ public class ChunkProviderServer implements IChunkProvider
 	public boolean loadChunkOnProvideRequest = true;
 	public ChunkMap loadedChunkHashMap = new ChunkMap();
 	public WorldServer worldObj;
+	public List loadedChunks = new AbstractList() //mods compatibility
+	{
+		@Override
+		public Object get(int ind)
+		{
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public int size()
+		{
+			return loadedChunkHashMap.size();
+		}
+		
+		@Override
+		public Iterator iterator()
+		{
+			return loadedChunkHashMap.valueCollection().iterator();
+		}
+		
+		@Override
+		public Object[] toArray()
+		{
+			return loadedChunkHashMap.valueCollection().toArray();
+		}
+	};
 	private static final String __OBFID = "CL_00001436";
 
 	public ChunkProviderServer(WorldServer par1WorldServer, IChunkLoader par2IChunkLoader, IChunkProvider par3IChunkProvider)
@@ -490,6 +517,11 @@ public class ChunkProviderServer implements IChunkProvider
 	public Chunk getChunkIfExists(int cx, int cz)
 	{
 		return loadedChunkHashMap.get(cx, cz);
+	}
+	
+	public boolean isChunkGenerated(int cx, int cz)
+	{
+		return ((AnvilChunkLoader)currentChunkLoader).chunkExists(worldObj, cx, cz);
 	}
 	
 	public void unbindChunk(int cx, int cz)
