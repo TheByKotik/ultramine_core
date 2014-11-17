@@ -295,7 +295,8 @@ public class MultiWorld
 		else
 			nameToWorldMap.put(name, world);
 		
-		backupDirs.add(name);
+		if(!(world instanceof WorldServerMulti))
+			backupDirs.add(name);
 	}
 	
 	public WorldServer getWorldByID(int dim)
