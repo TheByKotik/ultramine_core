@@ -448,7 +448,7 @@ public class ChunkProviderServer implements IChunkProvider
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
-	private static final int MAX_SAVE_QUEUE_SIZE = 20;
+	private static final int MAX_SAVE_QUEUE_SIZE = 64;
 	private static final int FULL_SAVE_INTERVAL = 10*60*20; //10 min
 	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
 	private static final boolean debugSyncLoad = Boolean.parseBoolean(System.getProperty("ultramine.debug.chunksyncload"));
