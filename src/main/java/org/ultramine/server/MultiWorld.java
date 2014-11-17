@@ -1,5 +1,6 @@
 package org.ultramine.server;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -108,6 +109,7 @@ public class MultiWorld
 		String mainWorldName = dimToNameMap.get(0);
 		if(mainWorldName == null)
 			mainWorldName = "world";
+		server.setFolderName("worlds" + File.separator + mainWorldName);
 		
 		WorldConfig mainConf = worlds.get(mainWorldName);
 		if(mainConf == null)
