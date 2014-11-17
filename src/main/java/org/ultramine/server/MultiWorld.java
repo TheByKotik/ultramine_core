@@ -301,6 +301,15 @@ public class MultiWorld
 		return dimToWorldMap.get(dim);
 	}
 	
+	public WorldServer getOrLoadWorldByID(int dim)
+	{
+		WorldServer world = dimToWorldMap.get(dim);
+		if(world != null)
+			return world;
+		DimensionManager.initDimension(dim);
+		return dimToWorldMap.get(dim);
+	}
+	
 	public WorldServer getWorldByName(String name)
 	{
 		return nameToWorldMap.get(name);

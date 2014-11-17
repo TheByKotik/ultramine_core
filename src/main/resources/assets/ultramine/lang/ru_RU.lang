@@ -194,3 +194,11 @@ command.javagc.success=Сборка мусора инициирована
 
 command.custmsg.usage=/custmsg <игрок/ALL> <сообщение>
 command.custmsg.description=Отправляет кастомное сообщение игроку (поддерживает цвета)
+
+command.genworld.usage=/genworld [чанков за тик] ИЛИ /genworld <RADIUS> <радиус> [чанков за тик] ИЛИ /genworld stop
+command.genworld.description=Генерирует мир по радиусу или в пределах мирового барьера
+command.genworld.already=Генерауия мира уже запущена. Сначала введите "/genworld stop"
+command.genworld.start=Генерация мира остановлена запущена
+command.genworld.stop=Генерация мира остановлена
+command.genworld.complete=Генерация мира завершена (сгенерировано %s чанков)
+command.genworld.process=Генерация мира: сгенерировано %s чанков

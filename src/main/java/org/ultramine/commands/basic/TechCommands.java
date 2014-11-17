@@ -7,8 +7,10 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.MathHelper;
 import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -21,6 +23,7 @@ import org.ultramine.commands.CommandContext;
 import org.ultramine.server.MultiWorld;
 import org.ultramine.server.Restarter;
 import org.ultramine.server.Teleporter;
+import org.ultramine.server.WorldsConfig.WorldConfig.Border;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -380,5 +383,148 @@ public class TechCommands
 	{
 		System.gc();
 		ctx.sendMessage("command.javagc.success");
+	}
+	
+	private static WorldGenerator worldgen;
+	
+	@Command(
+			name = "genworld",
+			group = "technical",
+			permissions = {"command.genworld"},
+			syntax = {
+					"",
+					"[stop]",
+					"<cpt>",
+					"[radius] <radius>",
+					"[radius] <radius> <cpt>"
+			}
+	)
+	public static void genworld(CommandContext ctx)
+	{
+		if(ctx.getAction().equals("stop"))
+		{
+			FMLCommonHandler.instance().bus().unregister(worldgen);
+			worldgen = null;
+			ctx.sendMessage("command.genworld.stop");
+			return;
+		}
+		
+		if(worldgen != null)
+			ctx.failure("command.genworld.already");
+		
+		int dim = ctx.getSenderAsPlayer().worldObj.provider.dimensionId;
+		int radius = ctx.contains("radius") ? ctx.get("radius").asInt(1) : -1;
+		int cpt = ctx.contains("radius") ? ctx.get("radius").asInt(1) : 1;
+		
+		int x = MathHelper.floor_double(ctx.getSenderAsPlayer().posX);
+		int z = MathHelper.floor_double(ctx.getSenderAsPlayer().posZ);
+		
+		worldgen = radius == -1 ? new WorldGenerator(dim, cpt) : new WorldGenerator(dim, x, z, radius, cpt);
+		FMLCommonHandler.instance().bus().register(worldgen);
+		ctx.sendMessage("command.genworld.start");
+	}
+	
+	public static class WorldGenerator
+	{
+		private final int dim;
+		private final int chunksPerTick;
+		private final boolean isBorder;
+		
+		private int borderInd = 0;
+		private int minX = Integer.MIN_VALUE;
+		private int minZ;
+		private int maxX;
+		private int maxZ;
+		
+		private int x;
+		private int z;
+		
+		private int totalGenerated;
+		
+		public WorldGenerator(int dim, int chunksPerTick)
+		{
+			this.isBorder = true;
+			this.dim = dim;
+			this.chunksPerTick = chunksPerTick;
+		}
+		
+		public WorldGenerator(int dim, int chunksPerTick, int centX, int centZ, int radius)
+		{
+			this.isBorder = false;
+			this.dim = dim;
+			this.chunksPerTick = chunksPerTick;
+			
+			minX = (centX - radius) >> 4;
+			minZ = (centZ - radius) >> 4;
+			maxX = (centX + radius) >> 4;
+			maxZ = (centZ + radius) >> 4;
+			
+			x = minX;
+			z = minZ;
+		}
+		
+		@SubscribeEvent
+		public void onTick(TickEvent.ServerTickEvent e)
+		{
+			if(e.phase == TickEvent.Phase.START)
+			{
+				WorldServer world = MinecraftServer.getServer().getMultiWorld().getOrLoadWorldByID(dim);
+				if(world == null)
+					return;
+				Border[] borders = world.getConfig().borders;
+				int counter = 0;
+				l1:
+				while(borderInd < (isBorder ? borders.length : 1))
+				{
+					if(minX == Integer.MIN_VALUE)
+					{
+						Border border = borders[borderInd];
+						
+						minX = (border.x - border.radius) >> 4;
+						minZ = (border.z - border.radius) >> 4;
+						maxX = (border.x + border.radius) >> 4;
+						maxZ = (border.z + border.radius) >> 4;
+						
+						x = minX;
+						z = minZ;
+					}
+					
+					while(x < maxX)
+					{
+						while(z < maxZ)
+						{
+							if(world.getBorder().isChunkInsideBorder(x, z) && !world.theChunkProviderServer.isChunkGenerated(x, z))
+							{
+								if(++counter > chunksPerTick) break l1;
+								
+								world.theChunkProviderServer.provideChunk(x, z);
+								world.theChunkProviderServer.unloadChunksIfNotNearSpawn(x, z);
+							}
+							
+							z++;
+						}
+						
+						if(++x != maxX) z = minZ;
+					}
+					
+					if(x == maxX && z == maxZ)
+					{
+						borderInd++;
+						minX = Integer.MIN_VALUE;
+					}
+				}
+				
+				totalGenerated += counter;
+				if(totalGenerated % 600*chunksPerTick == 0)
+					MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("command.genworld.process", totalGenerated));
+				
+				if(borderInd >= (isBorder ? borders.length : 1))
+				{
+					FMLCommonHandler.instance().bus().unregister(worldgen);
+					worldgen = null;
+					MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("command.genworld.complete", totalGenerated));
+				}
+			}
+		}
 	}
 }
