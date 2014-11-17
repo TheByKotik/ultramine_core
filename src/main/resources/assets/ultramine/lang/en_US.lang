@@ -198,6 +198,7 @@ command.custmsg.description=Sends custom formatted message to player (support co
 command.genworld.usage=/genworld [chunks per tick] OR /genworld <RADIUS> <radius> [chunks per tick] OR /genworld stop
 command.genworld.description=Generateas area radially or inside world border
 command.genworld.already=World is now generating. Type "/genworld stop" before
+command.genworld.noborder=The world don't contains any borders; add border or use radially generation
 command.genworld.start=World generation started
 command.genworld.stop=World generation stopped
 command.genworld.complete=World generation completed (generated %s chunks)

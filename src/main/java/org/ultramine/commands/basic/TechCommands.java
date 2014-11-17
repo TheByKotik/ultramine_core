@@ -412,12 +412,16 @@ public class TechCommands
 		if(worldgen != null)
 			ctx.failure("command.genworld.already");
 		
-		int dim = ctx.getSenderAsPlayer().worldObj.provider.dimensionId;
+		WorldServer world = ctx.getSenderAsPlayer().getServerForPlayer();
+		int dim = world.provider.dimensionId;
 		int radius = ctx.contains("radius") ? ctx.get("radius").asInt(1) : -1;
 		int cpt = ctx.contains("radius") ? ctx.get("radius").asInt(1) : 1;
 		
 		int x = MathHelper.floor_double(ctx.getSenderAsPlayer().posX);
 		int z = MathHelper.floor_double(ctx.getSenderAsPlayer().posZ);
+		
+		if(radius == -1 && world.getConfig().borders.length == 0)
+			ctx.failure("command.genworld.noborder");
 		
 		worldgen = radius == -1 ? new WorldGenerator(dim, cpt) : new WorldGenerator(dim, x, z, radius, cpt);
 		FMLCommonHandler.instance().bus().register(worldgen);
@@ -515,7 +519,7 @@ public class TechCommands
 				}
 				
 				totalGenerated += counter;
-				if(totalGenerated % 600*chunksPerTick == 0)
+				if(totalGenerated % (600*chunksPerTick) == 0)
 					MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("command.genworld.process", totalGenerated));
 				
 				if(borderInd >= (isBorder ? borders.length : 1))

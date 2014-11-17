@@ -198,6 +198,7 @@ command.custmsg.description=Отправляет кастомное сообще
 command.genworld.usage=/genworld [чанков за тик] ИЛИ /genworld <RADIUS> <радиус> [чанков за тик] ИЛИ /genworld stop
 command.genworld.description=Генерирует мир по радиусу или в пределах мирового барьера
 command.genworld.already=Генерауия мира уже запущена. Сначала введите "/genworld stop"
+command.genworld.noborder=Мир не содержит барьера; добавьте барьер или используйте генерацию по радиусу
 command.genworld.start=Генерация мира остановлена запущена
 command.genworld.stop=Генерация мира остановлена
 command.genworld.complete=Генерация мира завершена (сгенерировано %s чанков)
