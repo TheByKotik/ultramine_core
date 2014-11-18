@@ -24,6 +24,7 @@ import org.ultramine.server.MultiWorld;
 import org.ultramine.server.Restarter;
 import org.ultramine.server.Teleporter;
 import org.ultramine.server.WorldsConfig.WorldConfig.Border;
+import org.ultramine.server.chunk.IChunkLoadCallback;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -415,7 +416,7 @@ public class TechCommands
 		WorldServer world = ctx.getSenderAsPlayer().getServerForPlayer();
 		int dim = world.provider.dimensionId;
 		int radius = ctx.contains("radius") ? ctx.get("radius").asInt(1) : -1;
-		int cpt = ctx.contains("radius") ? ctx.get("radius").asInt(1) : 1;
+		int cpt = ctx.contains("cpt") ? ctx.get("cpt").asInt(1) : 1;
 		
 		int x = MathHelper.floor_double(ctx.getSenderAsPlayer().posX);
 		int z = MathHelper.floor_double(ctx.getSenderAsPlayer().posZ);
@@ -472,6 +473,11 @@ public class TechCommands
 		{
 			if(e.phase == TickEvent.Phase.START)
 			{
+				if(MinecraftServer.getServer().getTickCounter() % 600 == 0)
+					MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("command.genworld.process", totalGenerated));
+				
+				if(MinecraftServer.getServer().getTickCounter() % Math.max(1,169/chunksPerTick) != 0)
+					return;
 				WorldServer world = MinecraftServer.getServer().getMultiWorld().getOrLoadWorldByID(dim);
 				if(world == null)
 					return;
@@ -497,30 +503,28 @@ public class TechCommands
 					{
 						while(z < maxZ)
 						{
-							if(world.getBorder().isChunkInsideBorder(x, z) && !world.theChunkProviderServer.isChunkGenerated(x, z))
+							if(world.getBorder().isChunkInsideBorder(x, z))
 							{
-								if(++counter > chunksPerTick) break l1;
+								if(++counter > Math.max(1, chunksPerTick/169)) break l1;
 								
-								world.theChunkProviderServer.provideChunk(x, z);
-								world.theChunkProviderServer.unloadChunksIfNotNearSpawn(x, z);
+								world.theChunkProviderServer.loadAsyncWithRadius(x, z, 6, IChunkLoadCallback.EMPTY);
 							}
 							
-							z++;
+							z += 8;
 						}
 						
-						if(++x != maxX) z = minZ;
+						x += 8;
+						if(x <= maxX) z = minZ;
 					}
 					
-					if(x == maxX && z == maxZ)
+					if(x > maxX && z > maxZ)
 					{
 						borderInd++;
 						minX = Integer.MIN_VALUE;
 					}
 				}
 				
-				totalGenerated += counter;
-				if(totalGenerated % (600*chunksPerTick) == 0)
-					MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("command.genworld.process", totalGenerated));
+				totalGenerated += counter*169;
 				
 				if(borderInd >= (isBorder ? borders.length : 1))
 				{
