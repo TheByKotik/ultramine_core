@@ -20,6 +20,7 @@ import com.google.common.base.Function;
 import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.command.CommandHandler;
@@ -162,6 +163,7 @@ public class ServerDataLoader
 	{
 		if(isClient)
 		{
+			FMLCommonHandler.instance().bus().post(new FMLNetworkEvent.ServerConnectionFromClientEvent(network));
 			NBTTagCompound nbt = mgr.readPlayerDataFromFile(player);
 			player.setData(getDataProvider().loadPlayerData(player.getGameProfile()));
 			StatisticsFile existsStats = mgr.func_152602_a(player);
@@ -197,6 +199,7 @@ public class ServerDataLoader
 				@Override
 				public Void apply(LoadedDataStruct data) //sync
 				{
+					FMLCommonHandler.instance().bus().post(new FMLNetworkEvent.ServerConnectionFromClientEvent(network));
 					if(data.getNBT() != null)
 						player.readFromNBT(data.getNBT());
 					playerLoadCallback(network, player, nethandler, data.getNBT(), data.getPlayerData(), data.getStats());
