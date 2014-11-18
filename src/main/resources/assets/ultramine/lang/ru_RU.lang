@@ -208,5 +208,5 @@ command.chunkdebug.usage=/chunkdebug <start|stop> ИЛИ /chunkdebug <TOP> [aver
 command.chunkdebug.description=Запускает почанковое профилирование или выводит результаты
 command.chunkdebug.start=Почанковое профилирование запущено
 command.chunkdebug.stop=Почанковое профилирование остановлено
-command.chunkdebug.notstart=Почанковое профилирование еще не запущено. Используйте /chunkdebug start
+command.chunkdebug.notstart=Почанковое профилирование еще не запущено. Подождите, пока будет собрана статистика
 command.chunkdebug.top.head=Топ чанков:

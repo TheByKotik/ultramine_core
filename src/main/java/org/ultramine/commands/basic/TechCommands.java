@@ -1,7 +1,5 @@
 package org.ultramine.commands.basic;
 
-import java.util.Arrays;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
@@ -565,22 +563,62 @@ public class TechCommands
 		}
 		else
 		{
-			if(!ChunkProfiler.instance().isEnabled())
-				ctx.failure("command.chunkdebug.notstart");
 			String act2 = ctx.contains("list") ? ctx.get("list").asString() : "average";
 			int count = ctx.contains("count") ? ctx.get("count").asInt(1) : 9;
-			ChunkProfiler.ChunkData[] results;
-			if(act2.startsWith("a"))
-				results = ChunkProfiler.instance().getAverageTop();
-			else// if(act2.startsWith("p"))
-				results = ChunkProfiler.instance().getPeakTop();
 			
-			ctx.sendMessage("command.chunkdebug.top.head");
-			for(int i = 0; i < Math.min(count, results.length); i++)
+			if(!ChunkProfiler.instance().isEnabled())
 			{
-				ChunkProfiler.ChunkData chunk = results[i];
-				ctx.sendMessage(GOLD, "    - [%s](%s, %s) -> %s%% (%s%%)",
-						chunk.getDimension(), chunk.getChunkX() << 4, chunk.getChunkZ() << 4, (chunk.getAverage()/5000)/100d, (chunk.getPeak()/5000)/100d);
+				ctx.sendMessage("command.chunkdebug.notstart");
+				ChunkProfiler.instance().setEnabled(true);
+				FMLCommonHandler.instance().bus().register(new ChunkDebugDelayedDisplay(ctx, act2.startsWith("p"), count));
+			}
+			else
+			{
+				printChunkDebugResults(ctx, act2.startsWith("p"), count);
+			}
+		}
+	}
+	
+	private static void printChunkDebugResults(CommandContext ctx, boolean peak, int count)
+	{
+		ChunkProfiler.ChunkData[] results;
+		if(!peak)
+			results = ChunkProfiler.instance().getAverageTop();
+		else
+			results = ChunkProfiler.instance().getPeakTop();
+		
+		ctx.sendMessage("command.chunkdebug.top.head");
+		for(int i = 0; i < Math.min(count, results.length); i++)
+		{
+			ChunkProfiler.ChunkData chunk = results[i];
+			ctx.sendMessage(GOLD, "    - [%s](%s, %s) -> %s%% (%s%%)",
+					chunk.getDimension(), chunk.getChunkX() << 4, chunk.getChunkZ() << 4, (chunk.getAverage()/5000)/100d, (chunk.getPeak()/5000)/100d);
+		}
+	}
+	
+	public static class ChunkDebugDelayedDisplay
+	{
+		private final CommandContext ctx;
+		private final boolean peak;
+		private final int count;
+		
+		private int tickCounter;
+		
+		public ChunkDebugDelayedDisplay(CommandContext ctx, boolean peak, int count)
+		{
+			this.ctx = ctx;
+			this.peak = peak;
+			this.count = count;
+		}
+		
+		@SubscribeEvent
+		public void inTick(TickEvent.ServerTickEvent e)
+		{
+			if(e.phase == TickEvent.Phase.START && ++tickCounter == 20)
+			{
+				printChunkDebugResults(ctx, peak, count);
+				ChunkProfiler.instance().setEnabled(false);
+				FMLCommonHandler.instance().bus().unregister(this);
 			}
 		}
 	}
