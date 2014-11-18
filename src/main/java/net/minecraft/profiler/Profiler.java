@@ -2,12 +2,16 @@ package net.minecraft.profiler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gnu.trove.map.TObjectLongMap;
+import gnu.trove.map.hash.TObjectLongHashMap;
+import gnu.trove.stack.TLongStack;
+import gnu.trove.stack.array.TLongArrayStack;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,10 +19,10 @@ public class Profiler
 {
 	private static final Logger logger = LogManager.getLogger();
 	private final List sectionList = new ArrayList();
-	private final List timestampList = new ArrayList();
+	private final TLongStack timestampList = new TLongArrayStack();
 	public boolean profilingEnabled;
 	private String profilingSection = "";
-	private final Map profilingMap = new HashMap();
+	private final TObjectLongMap<String> profilingMap = new TObjectLongHashMap<String>();
 	private static final String __OBFID = "CL_00001497";
 
 	public void clearProfiling()
@@ -39,7 +43,7 @@ public class Profiler
 
 			this.profilingSection = this.profilingSection + p_76320_1_;
 			this.sectionList.add(this.profilingSection);
-			this.timestampList.add(Long.valueOf(System.nanoTime()));
+			this.timestampList.push(System.nanoTime());
 		}
 	}
 
@@ -48,17 +52,17 @@ public class Profiler
 		if (this.profilingEnabled)
 		{
 			long i = System.nanoTime();
-			long j = ((Long)this.timestampList.remove(this.timestampList.size() - 1)).longValue();
+			long j = this.timestampList.pop();
 			this.sectionList.remove(this.sectionList.size() - 1);
 			long k = i - j;
 
 			if (this.profilingMap.containsKey(this.profilingSection))
 			{
-				this.profilingMap.put(this.profilingSection, Long.valueOf(((Long)this.profilingMap.get(this.profilingSection)).longValue() + k));
+				this.profilingMap.put(this.profilingSection, this.profilingMap.get(profilingSection) + k);
 			}
 			else
 			{
-				this.profilingMap.put(this.profilingSection, Long.valueOf(k));
+				this.profilingMap.put(this.profilingSection, k);
 			}
 
 			if (k > 100000000L)
@@ -78,8 +82,8 @@ public class Profiler
 		}
 		else
 		{
-			long i = this.profilingMap.containsKey("root") ? ((Long)this.profilingMap.get("root")).longValue() : 0L;
-			long j = this.profilingMap.containsKey(p_76321_1_) ? ((Long)this.profilingMap.get(p_76321_1_)).longValue() : -1L;
+			long i = this.profilingMap.containsKey("root") ? this.profilingMap.get("root") : 0L;
+			long j = this.profilingMap.containsKey(p_76321_1_) ? this.profilingMap.get(p_76321_1_) : -1L;
 			ArrayList arraylist = new ArrayList();
 
 			if (p_76321_1_.length() > 0)
@@ -96,7 +100,7 @@ public class Profiler
 
 				if (s1.length() > p_76321_1_.length() && s1.startsWith(p_76321_1_) && s1.indexOf(".", p_76321_1_.length() + 1) < 0)
 				{
-					k += ((Long)this.profilingMap.get(s1)).longValue();
+					k += this.profilingMap.get(s1);
 				}
 			}
 
@@ -121,7 +125,7 @@ public class Profiler
 
 				if (s2.length() > p_76321_1_.length() && s2.startsWith(p_76321_1_) && s2.indexOf(".", p_76321_1_.length() + 1) < 0)
 				{
-					long l = ((Long)this.profilingMap.get(s2)).longValue();
+					long l = this.profilingMap.get(s2);
 					double d0 = (double)l * 100.0D / (double)k;
 					double d1 = (double)l * 100.0D / (double)i;
 					String s3 = s2.substring(p_76321_1_.length());
@@ -134,7 +138,7 @@ public class Profiler
 			while (iterator1.hasNext())
 			{
 				s2 = (String)iterator1.next();
-				this.profilingMap.put(s2, Long.valueOf(((Long)this.profilingMap.get(s2)).longValue() * 999L / 1000L));
+				this.profilingMap.put(s2, this.profilingMap.get(s2) * 999L / 1000L);
 			}
 
 			if ((float)k > f)
