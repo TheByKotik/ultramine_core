@@ -203,3 +203,10 @@ command.genworld.start=World generation started
 command.genworld.stop=World generation stopped
 command.genworld.complete=World generation completed (generated %s chunks)
 command.genworld.process=World generation: generated %s chunks
+
+command.chunkdebug.usage=/chunkdebug <start|stop> OR /chunkdebug <TOP> [average|peak] [count]
+command.chunkdebug.description=Starts per chunk profiling or displays results
+command.chunkdebug.start=Chunk profiling started
+command.chunkdebug.stop=Chunk profiling stopped
+command.chunkdebug.notstart=Chunk profiling has not started yet. Use /chunkdebug start
+command.chunkdebug.top.head=Chunk top:

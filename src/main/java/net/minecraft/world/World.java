@@ -20,6 +20,8 @@ import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.ServerLoadBalancer;
 import org.ultramine.server.chunk.CallbackAddDependency;
 import org.ultramine.server.chunk.ChunkHash;
+import org.ultramine.server.chunk.ChunkProfiler;
+import org.ultramine.server.chunk.ChunkProfiler.WorldChunkProfiler;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 
 import net.minecraft.block.Block;
@@ -190,6 +192,7 @@ public abstract class World implements IBlockAccess
 		this.worldInfo = new WorldInfo(p_i45368_4_, p_i45368_2_);
 		this.provider = p_i45368_3_;
 		perWorldStorage = new MapStorage((ISaveHandler)null);
+		chunkProfiler = ChunkProfiler.instance().getForWorld(provider.dimensionId);
 	}
 
 	// Broken up so that the WorldClient gets the chance to set the mapstorage object before the dimension initializes
@@ -304,6 +307,8 @@ public abstract class World implements IBlockAccess
 
 		this.calculateInitialSkylight();
 		this.calculateInitialWeather();
+		
+		chunkProfiler = ChunkProfiler.instance().getForWorld(provider.dimensionId);
 	}
 
 	private static MapStorage s_mapStorage;
@@ -1962,8 +1967,10 @@ public abstract class World implements IBlockAccess
 		{
 			TileEntity tileentity = (TileEntity)iterator.next();
 
-			if (!tileentity.isInvalid() && tileentity.hasWorldObj() && activeChunkSet.containsKey(ChunkHash.chunkToKey(tileentity.xCoord >> 4, tileentity.zCoord >> 4)))
+			int key = ChunkHash.chunkToKey(tileentity.xCoord >> 4, tileentity.zCoord >> 4);
+			if (!tileentity.isInvalid() && tileentity.hasWorldObj() && activeChunkSet.containsKey(key))
 			{
+				chunkProfiler.startChunk(key);
 				try
 				{
 					tileentity.updateEntity();
@@ -1984,6 +1991,7 @@ public abstract class World implements IBlockAccess
 						throw new ReportedException(crashreport);
 					}
 				}
+				chunkProfiler.endChunk();
 			}
 
 			if (tileentity.isInvalid())
@@ -2082,6 +2090,7 @@ public abstract class World implements IBlockAccess
 
 		if (canUpdate)
 		{
+			chunkProfiler.startChunk(p_72866_1_);
 			p_72866_1_.lastTickPosX = p_72866_1_.posX;
 			p_72866_1_.lastTickPosY = p_72866_1_.posY;
 			p_72866_1_.lastTickPosZ = p_72866_1_.posZ;
@@ -2170,6 +2179,8 @@ public abstract class World implements IBlockAccess
 					p_72866_1_.riddenByEntity = null;
 				}
 			}
+
+			chunkProfiler.endChunk();
 		}
 	}
 
@@ -4096,6 +4107,7 @@ public abstract class World implements IBlockAccess
 	
 	public static final int MAX_BLOCK_COORD = 500000;//524288;
 	private final ServerLoadBalancer balancer = new ServerLoadBalancer(this);
+	private final WorldChunkProfiler chunkProfiler;
 	
 	public Chunk getChunkIfExists(int cx, int cz)
 	{

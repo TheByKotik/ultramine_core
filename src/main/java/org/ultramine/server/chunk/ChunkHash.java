@@ -20,4 +20,9 @@ public class ChunkHash
 	{
 		return (short)(((x&15)<<12) | ((z&15)<<8) | (y&255));
 	}
+	
+	public static long worldChunkToKey(int dim, int x, int z)
+	{
+		return dim << 32 | (x & 0xffff) << 16 | (z & 0xffff);
+	}
 }

@@ -1,6 +1,7 @@
 package org.ultramine.server;
 
 import org.ultramine.server.UltramineServerConfig.SettingsConf.MessagesConf.AutoBroacastConf;
+import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.WarpLocation;
 
@@ -48,10 +49,12 @@ public class UMEventHandler
 	{
 		if(e.phase == TickEvent.Phase.START)
 		{
+			MinecraftServer server = MinecraftServer.getServer();
+			
 			Teleporter.tick();
+			ChunkProfiler.instance().tick(server.getTickCounter());
 			
 			AutoBroacastConf cfg = ConfigurationHandler.getServerConfig().settings.messages.autobroadcast;
-			MinecraftServer server = MinecraftServer.getServer();
 			if(cfg.enabled && server.getTickCounter() % (cfg.intervalSeconds*20) == 0)
 			{
 				if(cfg.showDebugInfo)

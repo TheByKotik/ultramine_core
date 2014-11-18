@@ -203,3 +203,10 @@ command.genworld.start=Генерация мира остановлена зап
 command.genworld.stop=Генерация мира остановлена
 command.genworld.complete=Генерация мира завершена (сгенерировано %s чанков)
 command.genworld.process=Генерация мира: сгенерировано %s чанков
+
+command.chunkdebug.usage=/chunkdebug <start|stop> ИЛИ /chunkdebug <TOP> [average|peak] [количество]
+command.chunkdebug.description=Запускает почанковое профилирование или выводит результаты
+command.chunkdebug.start=Почанковое профилирование запущено
+command.chunkdebug.stop=Почанковое профилирование остановлено
+command.chunkdebug.notstart=Почанковое профилирование еще не запущено. Используйте /chunkdebug start
+command.chunkdebug.top.head=Топ чанков:

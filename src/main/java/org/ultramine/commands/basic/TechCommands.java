@@ -1,5 +1,7 @@
 package org.ultramine.commands.basic;
 
+import java.util.Arrays;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
@@ -24,6 +26,7 @@ import org.ultramine.server.MultiWorld;
 import org.ultramine.server.Restarter;
 import org.ultramine.server.Teleporter;
 import org.ultramine.server.WorldsConfig.WorldConfig.Border;
+import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -532,6 +535,52 @@ public class TechCommands
 					worldgen = null;
 					MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("command.genworld.complete", totalGenerated));
 				}
+			}
+		}
+	}
+	
+	@Command(
+			name = "chunkdebug",
+			group = "technical",
+			permissions = {"command.chunkdebug"},
+			syntax = {
+					"",
+					"[start stop]",
+					"[top]",
+					"[top] <list average peak>",
+					"[top] <list average peak> <%count>"
+			}
+	)
+	public static void chunkdebug(CommandContext ctx)
+	{
+		if(ctx.getAction().equals("start"))
+		{
+			ChunkProfiler.instance().setEnabled(true);
+			ctx.sendMessage("command.chunkdebug.start");
+		}
+		else if(ctx.getAction().equals("stop"))
+		{
+			ChunkProfiler.instance().setEnabled(false);
+			ctx.sendMessage("command.chunkdebug.stop");
+		}
+		else
+		{
+			if(!ChunkProfiler.instance().isEnabled())
+				ctx.failure("command.chunkdebug.notstart");
+			String act2 = ctx.contains("list") ? ctx.get("list").asString() : "average";
+			int count = ctx.contains("count") ? ctx.get("count").asInt(1) : 9;
+			ChunkProfiler.ChunkData[] results;
+			if(act2.startsWith("a"))
+				results = ChunkProfiler.instance().getAverageTop();
+			else// if(act2.startsWith("p"))
+				results = ChunkProfiler.instance().getPeakTop();
+			
+			ctx.sendMessage("command.chunkdebug.top.head");
+			for(int i = 0; i < Math.min(count, results.length); i++)
+			{
+				ChunkProfiler.ChunkData chunk = results[i];
+				ctx.sendMessage(GOLD, "    - [%s](%s, %s) -> %s%% (%s%%)",
+						chunk.getDimension(), chunk.getChunkX() << 4, chunk.getChunkZ() << 4, (chunk.getAverage()/5000)/100d, (chunk.getPeak()/5000)/100d);
 			}
 		}
 	}
