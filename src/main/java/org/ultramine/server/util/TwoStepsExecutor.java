@@ -32,6 +32,11 @@ public final class TwoStepsExecutor
 		FMLCommonHandler.instance().bus().register(this);
 	}
 	
+	public void unregister()
+	{
+		FMLCommonHandler.instance().bus().unregister(this);
+	}
+	
 	public <P, R> void execute(final Function<P, R> async, final Function<R, Void> sync)
 	{
 		execute(null, async, sync);
@@ -58,14 +63,6 @@ public final class TwoStepsExecutor
 			for(CallbackDataStruct<?> toCall; (toCall = queue.poll()) != null;)
 				toCall.call();
 		}
-	}
-	
-	protected void finalize()
-	{
-		try
-		{
-			FMLCommonHandler.instance().bus().unregister(this);
-		} catch(Throwable ignored){}
 	}
 	
 	private static class CallbackDataStruct<T>
