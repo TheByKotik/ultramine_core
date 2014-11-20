@@ -78,7 +78,7 @@ public class MultiWorld
 		if(!event.world.isRemote)
 		{
 			dimToWorldMap.remove(event.world.provider.dimensionId);
-			nameToWorldMap.remove(event.world.getWorldInfo().getWorldName());
+			nameToWorldMap.remove(resolveNameForDim(event.world.provider.dimensionId));
 		}
 	}
 	
@@ -96,7 +96,8 @@ public class MultiWorld
 		for(Map.Entry<String, WorldConfig> ent : worlds.entrySet())
 		{
 			WorldConfig conf = ent.getValue();
-			DimensionManager.registerDimension(conf.dimension, conf.generation.providerID);
+			if(!DimensionManager.isDimensionRegistered(conf.dimension))
+				DimensionManager.registerDimension(conf.dimension, conf.generation.providerID);
 			if(conf.settings.useIsolatedPlayerData)
 				isolatedDataDimsSet.add(conf.dimension);
 			
@@ -136,19 +137,13 @@ public class MultiWorld
 		{
 			if(dim == mainConf.dimension) continue;
 			
-			String name = dimToNameMap.get(dim);
-			WorldConfig conf;
+			String name = resolveNameForDim(dim);
+			WorldConfig conf = worlds.get(name);
 			
-			if(name == null)
+			if(conf == null)
 			{
 				log.warn("World with dimension id:{} was loaded bypass worlds configuration. Using global config", dim);
-				name = "world_unnamed" + dim;
-				dimToNameMap.put(dim, name);
 				conf = ConfigurationHandler.getWorldsConfig().global;
-			}
-			else
-			{
-				conf = worlds.get(name);
 			}
 			
 			WorldServer world;
@@ -177,12 +172,9 @@ public class MultiWorld
 		for(WorldServer world : server.worldServers)
 		{
 			world.setConfig(conf);
-			String name = world.getWorldInfo().getWorldName();
+			String name = resolveNameForDim(world.provider.dimensionId);
 			dimToWorldMap.put(world.provider.dimensionId, world);
-			if(nameToWorldMap.containsKey(name))
-				nameToWorldMap.put(name + world.provider.dimensionId, world);
-			else
-				nameToWorldMap.put(name, world);
+			nameToWorldMap.put(name, world);
 		}
 	}
 	
@@ -191,19 +183,13 @@ public class MultiWorld
 	{
 		ISaveFormat format = server.getActiveAnvilConverter();
 		
-		String name = dimToNameMap.get(dim);
-		WorldConfig conf = name == null ? null : ConfigurationHandler.getWorldsConfig().worlds.get(name);
+		String name = resolveNameForDim(dim);
+		WorldConfig conf = ConfigurationHandler.getWorldsConfig().worlds.get(name);
 		
-		if(name == null)
+		if(conf == null)
 		{
 			log.warn("World with dimension id:{} was loaded bypass worlds configuration. Using global config", dim);
-			name = "world_unnamed" + dim;
-			dimToNameMap.put(dim, name);
 			conf = ConfigurationHandler.getWorldsConfig().global;
-		}
-		else
-		{
-			conf = ConfigurationHandler.getWorldsConfig().worlds.get(name);
 		}
 		
 		WorldServer world;
@@ -233,12 +219,22 @@ public class MultiWorld
 		conf.chunkLoading = new WorldConfig.ChunkLoading();
 		
 		world.setConfig(conf);
-		String name = world.getWorldInfo().getWorldName();
+		String name = resolveNameForDim(world.provider.dimensionId);
 		dimToWorldMap.put(world.provider.dimensionId, world);
-		if(nameToWorldMap.containsKey(name))
-			nameToWorldMap.put(name + world.provider.dimensionId, world);
-		else
-			nameToWorldMap.put(name, world);
+		nameToWorldMap.put(name, world);
+	}
+	
+	private String resolveNameForDim(int dim)
+	{
+		String name = dimToNameMap.get(dim);
+		
+		if(name == null)
+		{
+			name = "world_unnamed" + dim;
+			dimToNameMap.put(dim, name);
+		}
+		
+		return name;
 	}
 	
 	@SideOnly(Side.SERVER)
@@ -288,12 +284,9 @@ public class MultiWorld
 
 		MinecraftForge.EVENT_BUS.post(new WorldEvent.Load(world));
 		
-		String name = world.getWorldInfo().getWorldName();
+		String name = resolveNameForDim(world.provider.dimensionId);
 		dimToWorldMap.put(world.provider.dimensionId, world);
-		if(nameToWorldMap.containsKey(name))
-			nameToWorldMap.put(name + world.provider.dimensionId, world);
-		else
-			nameToWorldMap.put(name, world);
+		nameToWorldMap.put(name, world);
 		
 		if(!(world instanceof WorldServerMulti))
 			backupDirs.add(name);
