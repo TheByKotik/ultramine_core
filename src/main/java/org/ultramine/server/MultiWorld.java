@@ -1,9 +1,11 @@
 package org.ultramine.server;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,7 +30,9 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldManager;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldServerMulti;
@@ -59,6 +63,13 @@ public class MultiWorld
 		this.server = server;
 	}
 	
+	private void sendDimensionToAll(int dim, int pid)
+	{
+		FMLEmbeddedChannel channel = NetworkRegistry.INSTANCE.getChannel("FORGE", Side.SERVER);
+		channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
+        channel.writeAndFlush(new ForgeMessage.DimensionRegisterMessage(dim, pid == -10 ? 0 : pid));
+	}
+	
 	@SubscribeEvent
 	public void onPlayerLoggedIn(FMLNetworkEvent.ServerConnectionFromClientEvent event)
 	{
@@ -79,6 +90,7 @@ public class MultiWorld
 		{
 			dimToWorldMap.remove(event.world.provider.dimensionId);
 			nameToWorldMap.remove(resolveNameForDim(event.world.provider.dimensionId));
+			((WorldServer)event.world).theChunkProviderServer.setWorldUnloaded();
 		}
 	}
 	
@@ -193,7 +205,15 @@ public class MultiWorld
 		}
 		
 		WorldServer world;
-		if(ConfigurationHandler.getServerConfig().settings.other.splitWorldDirs)
+		if(dim == 0)
+		{
+			ISaveHandler mainSaveHandler = format.getSaveLoader(name, true);
+			WorldInfo mainWorldInfo = mainSaveHandler.loadWorldInfo();
+			WorldSettings mainSettings = makeSettings(mainWorldInfo, conf);
+			
+			world = new WorldServer(server, mainSaveHandler, name, dim, mainSettings, server.theProfiler);
+		}
+		else if(ConfigurationHandler.getServerConfig().settings.other.splitWorldDirs)
 		{
 			ISaveHandler save = format.getSaveLoader(name, false);
 			((AnvilSaveHandler)save).setSingleStorage();
@@ -292,6 +312,79 @@ public class MultiWorld
 			backupDirs.add(name);
 	}
 	
+	@SideOnly(Side.SERVER)
+	public int allocTempDim()
+	{
+		return DimensionManager.getNextFreeDimId();
+	}
+	
+	@SideOnly(Side.SERVER)
+	public WorldServer makeTempWorld()
+	{
+		int dim = allocTempDim();
+		return makeTempWorld("temp_"+dim, dim);
+	}
+	
+	@SideOnly(Side.SERVER)
+	public WorldServer makeTempWorld(String name)
+	{
+		return makeTempWorld(name, allocTempDim());
+	}
+	
+	@SideOnly(Side.SERVER)
+	public WorldServer makeTempWorld(String name, int dim)
+	{
+		if(DimensionManager.isDimensionRegistered(dim))
+			throw new RuntimeException("Dimension "+dim+" already registered (on making temp world)");
+		
+		DimensionManager.registerDimension(dim, 0);
+		dimToNameMap.put(dim, name);
+		ISaveFormat format = server.getActiveAnvilConverter();
+		ISaveHandler save = format.getSaveLoader(name, false);
+		((AnvilSaveHandler)save).setSingleStorage();
+		WorldInfo wi = save.loadWorldInfo();
+		if(wi != null)
+			wi.setWorldName(name);
+		WorldServer world = new WorldServer(server, save, name, dim, makeSettings(wi, ConfigurationHandler.getWorldsConfig().global), server.theProfiler);
+		initWorld(world, ConfigurationHandler.getWorldsConfig().global);
+		backupDirs.remove(name);
+		sendDimensionToAll(dim, 0);
+		return world;
+	}
+	
+	@SideOnly(Side.SERVER)
+	public List<EntityPlayerMP> destroyWorld(WorldServer world)
+	{
+		@SuppressWarnings("unchecked")
+		List<EntityPlayerMP> players = new ArrayList<EntityPlayerMP>(world.playerEntities);
+		for(EntityPlayerMP player : players)
+		{
+			world.removePlayerEntityDangerously(player);
+			player.isDead = false;
+			world.getEntityTracker().removePlayerFromTrackers(player);
+			world.getPlayerManager().removePlayer(player);
+			player.getChunkMgr().setWorldDestroyed();
+			player.setWorld(null);
+			player.theItemInWorldManager.setWorld(null);
+		}
+		world.playerEntities.clear();
+		
+		world.theChunkProviderServer.unloadAllWithoutSave();
+		world.forceUnloadTileEntities();
+		world.theChunkProviderServer.setWorldUnloaded();
+		world.theChunkProviderServer.unloadAllWithoutSave();
+		world.forceUnloadTileEntities();
+		
+		MinecraftForge.EVENT_BUS.post(new WorldEvent.Unload(world));
+		DimensionManager.setWorld(world.provider.dimensionId, null);
+		world.theChunkProviderServer.loadedChunkHashMap.clear();
+		for(Object o : world.loadedTileEntityList)
+			((TileEntity)o).setWorldObj(null);
+		world.loadedTileEntityList.clear();
+		
+		return players;
+	}
+	
 	public WorldServer getWorldByID(int dim)
 	{
 		return dimToWorldMap.get(dim);
@@ -343,6 +436,46 @@ public class MultiWorld
 	public Set<String> getDirsForBackup()
 	{
 		return backupDirs;
+	}
+	
+	public Collection<String> resolveSaveDirs(Collection<String> names)
+	{
+		if(backupDirs.size() == 1)
+			return backupDirs;
+		List<String> dirs = new ArrayList<String>();
+		for(String name : names)
+		{
+			WorldServer world = getWorldByNameOrID(name);
+			if(world != null)
+			{
+				if(!(world instanceof WorldServerMulti))
+					dirs.add(resolveNameForDim(world.provider.dimensionId));
+			}
+			else
+			{
+				if(BasicTypeParser.isInt(name))
+				{
+					int dim = Integer.parseInt(name);
+					if(DimensionManager.isDimensionRegistered(dim))
+						dirs.add(resolveNameForDim(dim));
+				}
+				else
+				{
+					if(new File(server.getWorldsDir(), name).isDirectory())
+						dirs.add(name);
+				}
+			}
+		}
+		
+		return dirs;
+	}
+	
+	public String getSaveDirName(WorldServer world)
+	{
+		if(world instanceof WorldServerMulti)
+			return dimToNameMap.get(0);
+		
+		return dimToNameMap.get(world.provider.dimensionId);
 	}
 	
 	public TIntSet getIsolatedDataDims()

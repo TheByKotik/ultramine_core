@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
@@ -80,9 +81,11 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.IPermissionManager;
+import org.ultramine.server.BackupManager;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.MultiWorld;
 import org.ultramine.server.WatchdogThread;
+import org.ultramine.server.util.GlobalExecutors;
 
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -375,6 +378,14 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			{
 				this.usageSnooper.stopSnooper();
 			}
+			
+			logger.info("Saving other data");
+			try
+			{
+				GlobalExecutors.writingIOExecutor().shutdown();
+				GlobalExecutors.writingIOExecutor().awaitTermination(10000, TimeUnit.MILLISECONDS);
+			}
+			catch(InterruptedException ignored){}
 		}
 	}
 
@@ -1497,6 +1508,11 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	{
 		return multiworld;
 	}
+	
+	public BackupManager getBackupManager()
+	{
+		return null;
+	}
 
 	public IPermissionManager getPermissionManager()
 	{
@@ -1516,5 +1532,12 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	protected File getHomeDirectory()
 	{
 		return getDataDirectory();
+	}
+	
+	public File getBackupDir()
+	{
+		File file = new File(getHomeDirectory(), "backup");
+		file.mkdir();
+		return file;
 	}
 }

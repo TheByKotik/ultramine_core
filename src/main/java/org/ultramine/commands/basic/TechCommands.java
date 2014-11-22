@@ -1,5 +1,11 @@
 package org.ultramine.commands.basic;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
@@ -20,17 +26,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
+import org.ultramine.server.BackupManager;
 import org.ultramine.server.MultiWorld;
 import org.ultramine.server.Restarter;
 import org.ultramine.server.Teleporter;
+import org.ultramine.server.BackupManager.BackupDescriptor;
 import org.ultramine.server.WorldsConfig.WorldConfig.Border;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.chunk.IChunkLoadCallback;
+import org.ultramine.server.util.BasicTypeParser;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.functions.GenericIterableFactory;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TechCommands
 {
@@ -151,7 +162,7 @@ public class TechCommands
 			for(int dim : DimensionManager.getStaticDimensionIDs())
 			{
 				String name = mw.getNameByID(dim);
-				ctx.sendMessage(GOLD, "    - %s - %s - %s", dim, name != null ? name : "unnamed", mw.getWorldByID(dim) != null ? "loaded" : "unloaded");
+				ctx.sendMessage(GOLD, "    - [%s](%s) - %s", dim, name != null ? name : "unnamed", mw.getWorldByID(dim) != null ? "loaded" : "unloaded");
 			}
 			return;
 		}
@@ -620,6 +631,62 @@ public class TechCommands
 				ChunkProfiler.instance().setEnabled(false);
 				FMLCommonHandler.instance().bus().unregister(this);
 			}
+		}
+	}
+	
+	@SideOnly(Side.SERVER)
+	@Command(
+			name = "backup",
+			group = "technical",
+			permissions = {"command.backup"},
+			syntax = {
+					"[make now]",
+					"[make now] <%world>...",
+					"[list]",
+					"[apply] <number>",
+					"[apply] <number> <flags>..."
+			}
+	)
+	public static void backup(CommandContext ctx)
+	{
+		BackupManager mgr = ctx.getServer().getBackupManager();
+		MultiWorld mw = ctx.getServer().getMultiWorld();
+		if(ctx.getAction().equals("make") || ctx.getAction().equals("now"))
+		{
+			Collection<String> worlds = ctx.contains("world") ? mw.resolveSaveDirs(Arrays.asList(ctx.get("world").asStringArray())) : mw.getDirsForBackup();
+			ctx.check(worlds.size() != 0, "command.backup.make.fail");
+			ctx.sendMessage("command.backup.make.started", worlds);
+			mgr.backup(worlds);
+		}
+		else if(ctx.getAction().equals("list"))
+		{
+			List<BackupDescriptor> list = mgr.getBackupList();
+			ctx.sendMessage("command.backup.list.head");
+			for(int i = 0, s = list.size(); i < s; i++)
+			{
+				ctx.sendMessage("    - #%s %s", s-i, list.get(i).getName());
+			}
+		}
+		else if(ctx.getAction().equals("apply"))
+		{
+			String path = ctx.get("number").asString();
+			Map<String, List<String>> flags = ctx.contains("flags") ? ctx.get("flags").asFlags("worlds", "noplayers", "temp", "restart") : new HashMap<String, List<String>>();
+			if(BasicTypeParser.isInt(path))
+			{
+				int num = ctx.get("number").asInt(1);
+				List<BackupDescriptor> list = mgr.getBackupList();
+				ctx.check(num <= list.size(), "command.backup.apply.fail.none");
+				path = list.get(list.size()-num).getName();
+			}
+			
+			if(flags.containsKey("restart"))
+				for(EntityPlayerMP player : GenericIterableFactory.newCastingIterable(ctx.getServer().getConfigurationManager().playerEntityList, EntityPlayerMP.class))
+					player.playerNetServerHandler.kickPlayerFromServer("\u00a75Выполняется бэкап мира\n\u00a7dВы сможете войти через несколько минут");
+			
+			mgr.applyBackup(path, ctx, flags.get("worlds"), !flags.containsKey("noplayers"), flags.containsKey("temp"));
+			
+			if(flags.containsKey("restart"))
+				ctx.getServer().initiateShutdown();
 		}
 	}
 }

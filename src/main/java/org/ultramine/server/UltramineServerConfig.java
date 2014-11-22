@@ -2,6 +2,7 @@ package org.ultramine.server;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UltramineServerConfig
@@ -45,6 +46,7 @@ public class UltramineServerConfig
 		public SpawnLocationsConf spawnLocations = new SpawnLocationsConf();
 		public TeleportationConf teleportation = new TeleportationConf();
 		public MessagesConf messages = new MessagesConf();
+		public AutoBackupConf autobackup = new AutoBackupConf();
 		public WatchdogThreadConf	watchdogThread = new WatchdogThreadConf();
 		public SQLServerStorageConf inSQLServerStorage = new SQLServerStorageConf();
 		public SecurityConf security = new SecurityConf();
@@ -100,6 +102,16 @@ public class UltramineServerConfig
 				public String[] messages = new String[0];
 				public boolean showAllMessages = false;
 			}
+		}
+		
+		public static class AutoBackupConf
+		{
+			public boolean enabled = false;
+			public int interval = 60; //minutes
+			public int maxBackups = 10;
+			public int maxDirSize = 50000; //megabytes
+			public List<String> worlds = null;
+			public boolean notifyPlayers = true;
 		}
 
 		public static class WatchdogThreadConf

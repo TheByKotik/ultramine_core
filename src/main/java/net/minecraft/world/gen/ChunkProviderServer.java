@@ -152,6 +152,8 @@ public class ChunkProviderServer implements IChunkProvider
 		// We can only use the queue for already generated chunks
 		if (chunk == null && loader != null && loader.chunkExists(this.worldObj, par1, par2))
 		{
+			if(isWorldUnloaded())
+				return defaultEmptyChunk;
 			if (runnable != null)
 			{
 				ChunkIOExecutor.queueChunkLoad(this.worldObj, loader, this, par1, par2, runnable);
@@ -353,7 +355,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public boolean unloadQueuedChunks()
 	{
-//		if (!this.worldObj.levelSaving)
+		if (!preventSaving)
 		{
 			if(isServer)
 				chunkGC.onTick();
@@ -452,8 +454,11 @@ public class ChunkProviderServer implements IChunkProvider
 	private static final int FULL_SAVE_INTERVAL = 10*60*20; //10 min
 	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
 	private static final boolean debugSyncLoad = Boolean.parseBoolean(System.getProperty("ultramine.debug.chunksyncload"));
+
 	private final TIntSet possibleSaves = new TIntHashSet();
 	private int lastFullSaveTick;
+	private boolean preventSaving;
+	private boolean isWorldUnloaded;
 	
 	@SideOnly(Side.SERVER)
 	private ChunkGC chunkGC;
@@ -546,6 +551,9 @@ public class ChunkProviderServer implements IChunkProvider
 	
 	public void saveOneChunk(int tick)
 	{
+		if(preventSaving)
+			return;
+		
 		if(tick - lastFullSaveTick >= FULL_SAVE_INTERVAL)
 		{
 			for(TIntObjectIterator<Chunk> it = loadedChunkHashMap.iterator(); it.hasNext();)
@@ -585,5 +593,39 @@ public class ChunkProviderServer implements IChunkProvider
 		for(int x = cx - radius; x <= cx + radius; x++)
 			for(int z = cz - radius; z <= cz + radius; z++)
 				populate(this, x, z);
+	}
+	
+	public void preventSaving()
+	{
+		preventSaving = true;
+	}
+	
+	public void resumeSaving()
+	{
+		preventSaving = false;
+	}
+	
+	public void setWorldUnloaded()
+	{
+		isWorldUnloaded = true;
+	}
+	
+	public boolean isWorldUnloaded()
+	{
+		return isWorldUnloaded;
+	}
+	
+	public void unloadAllWithoutSave()
+	{
+		for(Chunk chunk : loadedChunkHashMap.valueCollection())
+		{
+			chunk.onChunkUnload();
+			MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Save(chunk, new NBTTagCompound()));
+		}
+		
+		loadedChunkHashMap.clear();
+		chunksToUnload.clear();
+		possibleSaves.clear();
+		((AnvilChunkLoader)currentChunkLoader).unsafeRemoveAll();
 	}
 }

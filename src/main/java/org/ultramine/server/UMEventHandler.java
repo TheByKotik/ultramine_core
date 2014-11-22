@@ -10,6 +10,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.functions.GenericIterableFactory;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -45,7 +47,7 @@ public class UMEventHandler
 	}
 	
 	@SubscribeEvent
-	public void onServerTick(TickEvent.ServerTickEvent e)
+	public void onServerTickCommon(TickEvent.ServerTickEvent e)
 	{
 		if(e.phase == TickEvent.Phase.START)
 		{
@@ -53,6 +55,17 @@ public class UMEventHandler
 			
 			Teleporter.tick();
 			ChunkProfiler.instance().tick(server.getTickCounter());
+		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.SERVER)
+	public void onServerTickServer(TickEvent.ServerTickEvent e)
+	{
+		if(e.phase == TickEvent.Phase.START)
+		{
+			MinecraftServer server = MinecraftServer.getServer();
+			server.getBackupManager().tick();
 			
 			AutoBroacastConf cfg = ConfigurationHandler.getServerConfig().settings.messages.autobroadcast;
 			if(cfg.enabled && server.getTickCounter() % (cfg.intervalSeconds*20) == 0)

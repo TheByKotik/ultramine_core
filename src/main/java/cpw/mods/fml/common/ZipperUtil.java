@@ -61,8 +61,14 @@ public class ZipperUtil {
 
 	public static void backupWorld() throws IOException
 	{
-		for(String dirName: FMLCommonHandler.instance().getMinecraftServerInstance().getMultiWorld().getDirsForBackup())
-			backupWorld(dirName);
+		if(FMLCommonHandler.instance().getSide().isServer())
+		{
+			FMLCommonHandler.instance().getMinecraftServerInstance().getBackupManager().backupWorldsSyncUnsafe();
+		}
+		else
+		{
+			backupWorld(FMLCommonHandler.instance().getMinecraftServerInstance().getFolderName());
+		}
 	}
 
 	@Deprecated

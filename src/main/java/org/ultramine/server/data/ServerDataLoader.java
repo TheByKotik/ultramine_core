@@ -138,6 +138,19 @@ public class ServerDataLoader
 		fastWarps.addAll(dataProvider.loadFastWarps());
 	}
 	
+	public void reloadPlayerCache()
+	{
+		if(!dataProvider.isUsingWorldPlayerDir())
+			return; //Database backup is not support now
+		playerDataCache.clear();
+		namedPlayerDataCache.clear();
+		for(PlayerData data : dataProvider.loadAllPlayerData())
+		{
+			playerDataCache.put(data.getProfile().getId(), data);
+			namedPlayerDataCache.put(data.getProfile().getName(), data);
+		}
+	}
+	
 	public void addDefaultWarps()
 	{
 		if(!warps.containsKey("spawn"))
@@ -257,6 +270,36 @@ public class ServerDataLoader
 		else
 			getDataProvider().savePlayer(player.getGameProfile(), nbt);
 		getDataProvider().savePlayerData(player.getData());
+	}
+	
+	public void syncReloadPlayer(EntityPlayerMP player)
+	{
+		GameProfile profile = player.getGameProfile();
+		NBTTagCompound nbt = getDataProvider().loadPlayer(profile);
+		if(nbt != null)
+		{
+			int dim = nbt.getInteger("Dimension");
+			if(dim != 0 && mgr.getServerInstance().getMultiWorld().getIsolatedDataDims().contains(dim))
+				nbt = getDataProvider().loadPlayer(dim, profile);
+		}
+		PlayerData data = playerDataCache.get(player.getGameProfile().getId());
+		if(data == null)
+		{
+			data = getDataProvider().loadPlayerData(profile);
+			playerDataCache.put(data.getProfile().getId(), data);
+			namedPlayerDataCache.put(data.getProfile().getName(), data);
+		}
+		StatisticsFile stats = mgr.func_152602_a(player);
+		if(stats == null)
+		{
+			stats = mgr.loadStatisticsFile_Async(profile);
+			mgr.addStatFile(player.getGameProfile(), stats);
+		}
+		
+		player.readFromNBT(nbt);
+		player.setData(data);
+		player.setStatisticsFile(stats);
+		ForgeEventFactory.firePlayerLoadingEvent(player, ((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getUniqueID().toString());
 	}
 	
 	public void handlePlayerDimensionChange(EntityPlayerMP player, int fromDim, int toDim)

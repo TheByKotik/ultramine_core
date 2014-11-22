@@ -23,9 +23,13 @@ import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.util.BasicTypeParser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CommandContext
 {
@@ -194,6 +198,11 @@ public class CommandContext
 		throw new CommandException(msg);
 	}
 	
+	public void failure(String msg, Object... params)
+	{
+		throw new CommandException(msg, params);
+	}
+	
 	public void check(boolean flag, String msg)
 	{
 		if(!flag)
@@ -278,6 +287,44 @@ public class CommandContext
 			for (int i = num; i < args.length; i++)
 				result[i-num] = new Argument(i, false);
 			return result;
+		}
+		
+		public String[] asStringArray()
+		{
+			if(num >= 0 && last && args.length > num+1)
+				return Arrays.copyOfRange(args, num, args.length);
+			return new String[]{value};
+		}
+		
+		public Map<String, List<String>> asFlags(String... allowedArr)
+		{
+			Set<String> allowed = allowedArr.length == 0 ? null : new HashSet<String>(Arrays.asList(allowedArr));
+			Map<String, List<String>> map = new HashMap<String, List<String>>();
+			String curFlag = null;
+			List<String> curList = new ArrayList<String>(0);
+			for(String s : asStringArray())
+			{
+				if(s.startsWith("-"))
+				{
+					if(curFlag != null)
+					{
+						map.put(curFlag, curList);
+						curList = new ArrayList<String>(0);
+					}
+					
+					curFlag = s.substring(1);
+					if(allowed != null && !allowed.contains(curFlag))
+						failure("###unknown flag %s", curFlag); //TODO
+				}
+				else
+				{
+					curList.add(s);
+				}
+			}
+			if(curFlag != null)
+				map.put(curFlag, curList);
+
+			return map;
 		}
 
 		public int asInt()

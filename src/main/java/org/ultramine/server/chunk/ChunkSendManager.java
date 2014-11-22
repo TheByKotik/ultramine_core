@@ -178,6 +178,11 @@ public class ChunkSendManager
 		removeFrom(manager);
 	}
 	
+	public void setWorldDestroyed()
+	{
+		sendingQueueSize.set(0);
+	}
+	
 	public void update()
 	{
 		if(!toSend.isEmpty())

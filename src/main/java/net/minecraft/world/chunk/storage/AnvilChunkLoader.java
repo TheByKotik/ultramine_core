@@ -511,6 +511,14 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		}
 	}
 	
+	public void unsafeRemoveAll()
+	{
+		synchronized(syncLockObject)
+		{
+			pendingSaves.clear();
+		}
+	}
+	
 	static class PendingChunk
 		{
 			public final ChunkCoordIntPair chunkCoordinate;

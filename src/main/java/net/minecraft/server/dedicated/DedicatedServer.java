@@ -43,6 +43,7 @@ import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.permission.PermissionRepository;
 import org.ultramine.permission.internal.ServerPermissionManager;
+import org.ultramine.server.BackupManager;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.UltramineServerConfig;
@@ -570,6 +571,8 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
+	private final BackupManager backupMgr = new BackupManager(this);
+	
 	@Override
 	protected void loadAllWorlds(String par1Str, String par2Str, long par3, WorldType par5WorldType, String par6Str)
 	{
@@ -592,5 +595,11 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	protected File getHomeDirectory()
 	{
 		return FMLLaunchHandler.getMinecraftHome();
+	}
+	
+	@Override
+	public BackupManager getBackupManager()
+	{
+		return backupMgr;
 	}
 }

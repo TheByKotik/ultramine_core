@@ -17,6 +17,8 @@ class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChu
 
 	// async stuff
 	public net.minecraft.world.chunk.Chunk callStage1(QueuedChunk queuedChunk) throws RuntimeException {
+		if(queuedChunk.provider.isWorldUnloaded())
+			return null;
 		net.minecraft.world.chunk.storage.AnvilChunkLoader loader = queuedChunk.loader;
 		Object[] data = null;
 //		try {
@@ -35,6 +37,8 @@ class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChu
 
 	// sync stuff
 	public void callStage2(QueuedChunk queuedChunk, net.minecraft.world.chunk.Chunk chunk) throws RuntimeException {
+		if(queuedChunk.provider.isWorldUnloaded())
+			return;
 		if(chunk == null) {
 			// If the chunk loading failed just do it synchronously (may generate)
 			queuedChunk.provider.originalLoadChunk(queuedChunk.x, queuedChunk.z);
@@ -55,6 +59,8 @@ class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChu
 	}
 
 	public void callStage3(QueuedChunk queuedChunk, net.minecraft.world.chunk.Chunk chunk, IChunkLoadCallback callback) throws RuntimeException {
+		if(queuedChunk.provider.isWorldUnloaded())
+			return;
 		callback.onChunkLoaded(chunk != null ? chunk : queuedChunk.provider.getChunkIfExists(queuedChunk.x, queuedChunk.z));
 	}
 

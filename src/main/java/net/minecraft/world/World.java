@@ -4160,4 +4160,16 @@ public abstract class World implements IBlockAccess
 		}
 		return count;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void forceUnloadTileEntities()
+	{
+		if (!this.field_147483_b.isEmpty())
+		{
+			for (Object tile : field_147483_b)
+				((TileEntity)tile).onChunkUnload();
+			this.loadedTileEntityList.removeAll(this.field_147483_b);
+			this.field_147483_b.clear();
+		}
+	}
 }

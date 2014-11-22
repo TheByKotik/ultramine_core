@@ -105,6 +105,15 @@ public class ChunkMap
 		return map.size();
 	}
 	
+	public void clear()
+	{
+		for(Chunk chunk : valueCollection())
+			if(isFlatMapable(chunk.xPosition, chunk.zPosition))
+				removeFlat(chunk.xPosition, chunk.zPosition);
+		
+		map.clear();
+	}
+	
 	
 	
 	private void put(int x, int z, int hash, Chunk chunk)

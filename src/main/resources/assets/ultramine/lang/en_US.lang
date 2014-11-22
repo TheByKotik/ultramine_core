@@ -4,6 +4,7 @@ teleporter.delay=You will be teleported in %s seconds
 teleporter.canceled=Teleportation canceled
 
 ultramine.autobroadcast.debugmsg=Server load: %s (Peak: %s), TPS: %s/20, Mobs: %s, Items: %s
+ultramine.autobackup.start=Autobackup started
 
 #Command generic
 commands.generic.world.invalid=Can't find world '%s'
@@ -195,7 +196,7 @@ command.javagc.success=System GC performed
 command.custmsg.usage=/custmsg <player/ALL> <message>
 command.custmsg.description=Sends custom formatted message to player (support colors, use &)
 
-command.genworld.usage=/genworld [chunks per tick] OR /genworld <RADIUS> <radius> [chunks per tick] OR /genworld stop
+command.genworld.usage=/genworld [chunks per tick] OR /genworld radius <radius> [chunks per tick] OR /genworld stop
 command.genworld.description=Generateas area radially or inside world border
 command.genworld.already=World is now generating. Type "/genworld stop" before
 command.genworld.noborder=The world don't contains any borders; add border or use radially generation
@@ -210,3 +211,18 @@ command.chunkdebug.start=Chunk profiling started
 command.chunkdebug.stop=Chunk profiling stopped
 command.chunkdebug.notstart=Chunk profiling has not started yet. Wait for statistics collection
 command.chunkdebug.top.head=Chunk top:
+
+command.backup.usage=/backup make [worlds...] OR /backup list OR /backup apply <number/path> [flags: -noplayers -temp -restart -worlds ...]
+command.backup.description=Makes on applies backup fo all or specified worlds
+command.backup.make.started=Backup started for worlds: %s
+command.backup.make.fail=Nothing to backup
+command.backup.list.head=Backup list
+command.backup.apply.started=Started backup applying for world: %s
+command.backup.apply.fail.none=backup with id %s not found
+command.backup.apply.fail.nofile=Backup file not found for path: %s
+command.backup.apply.fail.zip.read=Failed to read zip file: %s
+command.backup.apply.fail.nothing=Nothing to apply
+command.backup.apply.fail.rmdir=Failed to remove directory of world: %s
+command.backup.apply.fail.zip.unpack=Failed to unpack zip file. It is very VERY bad. May lead to the complete breaking of the world. Please, apply other backup.
+command.backup.apply.success.temp=Backup successfuly applied! Created temp worlds:
+command.backup.apply.success=Backup successfuly applied!
