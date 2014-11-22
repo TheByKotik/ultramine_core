@@ -2,6 +2,9 @@ package net.minecraft.world.chunk;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gnu.trove.iterator.TByteIterator;
+import gnu.trove.list.TByteList;
+import gnu.trove.list.array.TByteArrayList;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 
@@ -84,7 +87,7 @@ public class Chunk implements IChunkDependency
 		this.storageArrays = new ExtendedBlockStorage[16];
 		this.blockBiomeArray = new byte[256];
 		this.precipitationHeightMap = new int[256];
-		this.updateSkylightColumns = new boolean[256];
+		this.updateSkylightColumns = new boolean[0];
 		this.chunkTileEntityMap = new HashMap();
 		this.queuedLightChecks = 4096;
 		this.entityLists = new List[16];
@@ -311,7 +314,7 @@ public class Chunk implements IChunkDependency
 
 	private void propagateSkylightOcclusion(int p_76595_1_, int p_76595_2_)
 	{
-		this.updateSkylightColumns[p_76595_1_ + p_76595_2_ * 16] = true;
+		updateLightCoords.add((byte)(p_76595_1_ + p_76595_2_ * 16));
 		this.isGapLightingUpdated = true;
 	}
 
@@ -321,13 +324,17 @@ public class Chunk implements IChunkDependency
 
 		if (this.worldObj.doChunksNearChunkExist(this.xPosition * 16 + 8, 0, this.zPosition * 16 + 8, 16))
 		{
-			for (int i = 0; i < 16; ++i)
+//			for (int i = 0; i < 16; ++i)
 			{
-				for (int j = 0; j < 16; ++j)
+//				for (int j = 0; j < 16; ++j)
+				for(TByteIterator it = updateLightCoords.iterator(); it.hasNext();)
 				{
-					if (this.updateSkylightColumns[i + j * 16])
+					int coord = it.next() & 0xFF;
+					int i = coord & 0xF;
+					int j = coord >> 4;
+//					if (this.updateSkylightColumns[i + j * 16])
 					{
-						this.updateSkylightColumns[i + j * 16] = false;
+//						this.updateSkylightColumns[i + j * 16] = false;
 						int k = this.getHeightValue(i, j);
 						int l = this.xPosition * 16 + i;
 						int i1 = this.zPosition * 16 + j;
@@ -359,11 +366,14 @@ public class Chunk implements IChunkDependency
 
 						if (p_150803_1_)
 						{
+							it.remove();
 							this.worldObj.theProfiler.endSection();
 							return;
 						}
 					}
 				}
+
+				updateLightCoords.clear();
 			}
 
 			this.isGapLightingUpdated = false;
@@ -1539,6 +1549,7 @@ public class Chunk implements IChunkDependency
 	/* ======================================== ULTRAMINE START =====================================*/
 	
 	private final TShortObjectMap<TileEntity> fastTileEntityMap = new TShortObjectHashMap<TileEntity>();
+	private final TByteList updateLightCoords = new TByteArrayList();
 	
 	private Set<PendingBlockUpdate> pendingUpdatesSet;
 	private TreeSet<PendingBlockUpdate> pendingUpdatesQueue;
