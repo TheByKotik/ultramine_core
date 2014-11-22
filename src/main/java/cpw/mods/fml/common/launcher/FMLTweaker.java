@@ -13,6 +13,7 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.ultramine.server.UltramineSecurityManager;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
@@ -32,7 +33,8 @@ public class FMLTweaker implements ITweaker {
 		System.setProperty("java.net.preferIPv4Stack", "true"); //Lets do this as early as possible. Vanilla does it in Main.main
 		try
 		{
-			System.setSecurityManager(new FMLSecurityManager());
+			FMLSecurityManager mgr = (FMLSecurityManager)(this instanceof FMLServerTweaker ? new UltramineSecurityManager() : new FMLSecurityManager());
+			System.setSecurityManager(mgr);
 		}
 		catch (SecurityException se)
 		{
