@@ -960,6 +960,12 @@ public class Chunk implements IChunkDependency
 
 		for (int i = 0; i < this.entityLists.length; ++i)
 		{
+			for(Iterator it = entityLists[i].iterator(); it.hasNext();)
+			{
+				Entity ent = (Entity)it.next();
+				if(ent.isEntityPlayerMP() || ent.isDead)
+					it.remove();
+			}
 			this.worldObj.unloadEntities(this.entityLists[i]);
 		}
 		MinecraftForge.EVENT_BUS.post(new ChunkEvent.Unload(this));
