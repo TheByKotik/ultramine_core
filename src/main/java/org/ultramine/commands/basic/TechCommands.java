@@ -428,7 +428,7 @@ public class TechCommands
 		WorldServer world = ctx.getSenderAsPlayer().getServerForPlayer();
 		int dim = world.provider.dimensionId;
 		int radius = ctx.contains("radius") ? ctx.get("radius").asInt(1) : -1;
-		int cpt = ctx.contains("cpt") ? ctx.get("cpt").asInt(1) : 1;
+		int cpt = ctx.contains("cpt") ? ctx.get("cpt").asInt(1) : 20;
 		
 		int x = MathHelper.floor_double(ctx.getSenderAsPlayer().posX);
 		int z = MathHelper.floor_double(ctx.getSenderAsPlayer().posZ);
@@ -436,7 +436,7 @@ public class TechCommands
 		if(radius == -1 && world.getConfig().borders.length == 0)
 			ctx.failure("command.genworld.noborder");
 		
-		worldgen = radius == -1 ? new WorldGenerator(dim, cpt) : new WorldGenerator(dim, x, z, radius, cpt);
+		worldgen = radius == -1 ? new WorldGenerator(dim, cpt) : new WorldGenerator(dim, cpt, x, z, radius);
 		FMLCommonHandler.instance().bus().register(worldgen);
 		ctx.sendMessage("command.genworld.start");
 	}

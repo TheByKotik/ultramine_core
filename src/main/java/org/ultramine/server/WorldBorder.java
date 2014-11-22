@@ -39,7 +39,7 @@ public class WorldBorder
 	
 	public boolean isChunkInsideBorder(int cx, int cz)
 	{
-		return isInsideBorder(cx << 4, cz << 4);
+		return isInsideBorder(cx >> 4, cz >> 4);
 	}
 	
 	public ChunkPosition correctPosition(int x, int z)
