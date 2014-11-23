@@ -417,8 +417,8 @@ public class TechCommands
 		if(ctx.getAction().equals("stop"))
 		{
 			FMLCommonHandler.instance().bus().unregister(worldgen);
+			ctx.sendMessage("command.genworld.stop", worldgen.genCurrent, worldgen.genTotal);
 			worldgen = null;
-			ctx.sendMessage("command.genworld.stop");
 			return;
 		}
 		
@@ -456,7 +456,8 @@ public class TechCommands
 		private int x;
 		private int z;
 		
-		private int totalGenerated;
+		private int genCurrent;
+		private int genTotal;
 		
 		public WorldGenerator(int dim, int chunksPerTick)
 		{
@@ -478,6 +479,8 @@ public class TechCommands
 			
 			x = minX;
 			z = minZ;
+			
+			genTotal = (Math.abs(maxX - minX) + 8)*(Math.abs(maxZ - minZ) + 8);
 		}
 		
 		@SubscribeEvent
@@ -486,7 +489,7 @@ public class TechCommands
 			if(e.phase == TickEvent.Phase.START)
 			{
 				if(MinecraftServer.getServer().getTickCounter() % 600 == 0)
-					MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("command.genworld.process", totalGenerated));
+					MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("command.genworld.process", genCurrent, genTotal));
 				
 				if(MinecraftServer.getServer().getTickCounter() % Math.max(1,169/chunksPerTick) != 0)
 					return;
@@ -509,11 +512,13 @@ public class TechCommands
 						
 						x = minX;
 						z = minZ;
+						
+						genTotal = (Math.abs(maxX - minX) + 8)*(Math.abs(maxZ - minZ) + 8);
 					}
 					
-					while(x < maxX)
+					while(x <= maxX)
 					{
-						while(z < maxZ)
+						while(z <= maxZ)
 						{
 							if(world.getBorder().isChunkInsideBorder(x, z))
 							{
@@ -536,13 +541,13 @@ public class TechCommands
 					}
 				}
 				
-				totalGenerated += counter*169;
+				genCurrent += (counter-1)*81;
 				
 				if(borderInd >= (isBorder ? borders.length : 1))
 				{
 					FMLCommonHandler.instance().bus().unregister(worldgen);
 					worldgen = null;
-					MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("command.genworld.complete", totalGenerated));
+					MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("command.genworld.complete", genCurrent, genTotal));
 				}
 			}
 		}

@@ -201,9 +201,9 @@ command.genworld.description=Generateas area radially or inside world border
 command.genworld.already=World is now generating. Type "/genworld stop" before
 command.genworld.noborder=The world don't contains any borders; add border or use radially generation
 command.genworld.start=World generation started
-command.genworld.stop=World generation stopped
-command.genworld.complete=World generation completed (generated %s chunks)
-command.genworld.process=World generation: generated %s chunks
+command.genworld.stop=World generation stopped (generated %s/%s chunks)
+command.genworld.complete=World generation completed (generated %s/%s chunks)
+command.genworld.process=World generation: generated %s/%s chunks
 
 command.chunkdebug.usage=/chunkdebug <start|stop> OR /chunkdebug <TOP> [average|peak] [count]
 command.chunkdebug.description=Starts per chunk profiling or displays results
