@@ -30,6 +30,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.SaveHandler;
@@ -89,6 +90,7 @@ public class FMLCommonHandler
 	private WeakReference<SaveHandler> handlerToCheck;
 	private EventBus eventBus = new EventBus();
 	private volatile CountDownLatch exitLatch = null;
+	private Profiler profiler;
 	/**
 	 * The FML event bus. Subscribe here for FML related events
 	 *
@@ -244,7 +246,9 @@ public class FMLCommonHandler
 
 	public void onPostServerTick()
 	{
+		profiler.startSection("forge_onPostServerTick");
 		bus().post(new TickEvent.ServerTickEvent(Phase.END));
+		profiler.endSection();
 	}
 
 	/**
@@ -252,12 +256,16 @@ public class FMLCommonHandler
 	 */
 	public void onPostWorldTick(World world)
 	{
+		profiler.startSection("forge_onPostWorldTick");
 		bus().post(new TickEvent.WorldTickEvent(Side.SERVER, Phase.END, world));
+		profiler.endSection();
 	}
 
 	public void onPreServerTick()
 	{
+		profiler.startSection("forge_onPreServerTick");
 		bus().post(new TickEvent.ServerTickEvent(Phase.START));
+		profiler.endSection();
 	}
 
 	/**
@@ -265,7 +273,9 @@ public class FMLCommonHandler
 	 */
 	public void onPreWorldTick(World world)
 	{
+		profiler.startSection("forge_onPreWorldTick");
 		bus().post(new TickEvent.WorldTickEvent(Side.SERVER, Phase.START, world));
+		profiler.endSection();
 	}
 
 	public boolean handleServerAboutToStart(MinecraftServer server)
@@ -275,6 +285,7 @@ public class FMLCommonHandler
 
 	public boolean handleServerStarting(MinecraftServer server)
 	{
+		this.profiler = server.theProfiler;
 		return Loader.instance().serverStarting(server);
 	}
 

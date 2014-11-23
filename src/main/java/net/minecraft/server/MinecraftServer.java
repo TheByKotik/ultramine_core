@@ -560,8 +560,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	public void tick()
 	{
 		long i = System.nanoTime();
-		FMLCommonHandler.instance().onPreServerTick();
-		++this.tickCounter;
 
 		if (this.startProfiling)
 		{
@@ -571,6 +569,8 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 		}
 
 		this.theProfiler.startSection("root");
+		FMLCommonHandler.instance().onPreServerTick();
+		++this.tickCounter;
 		this.updateTimeLightAndEntities();
 
 		if (i - this.field_147142_T >= 5000000000L)
@@ -617,8 +617,8 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 		}
 
 		this.theProfiler.endSection();
-		this.theProfiler.endSection();
 		FMLCommonHandler.instance().onPostServerTick();
+		this.theProfiler.endSection();
 	}
 
 	public void updateTimeLightAndEntities()
