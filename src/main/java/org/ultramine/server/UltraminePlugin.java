@@ -14,9 +14,7 @@ public class UltraminePlugin implements IFMLLoadingPlugin
 	@Override
 	public String[] getASMTransformerClass()
 	{
-		return new String[]{
-				"org.ultramine.server.asm.transformers.Compat172BlockSand"
-		};
+		return new String[]{};
 	}
 
 	@Override
