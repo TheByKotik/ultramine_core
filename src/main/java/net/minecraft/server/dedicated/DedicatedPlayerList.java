@@ -38,6 +38,7 @@ public class DedicatedPlayerList extends ServerConfigurationManager
 		this.func_152619_x();
 		this.func_152618_v();
 		this.readWhiteList();
+		this.loadOpsList();
 
 		if (!this.func_152599_k().func_152691_c().exists())
 		{
