@@ -230,7 +230,7 @@ public abstract class World implements IBlockAccess
 		this.lightUpdateBlockList = new int[32768];
 		this.saveHandler = p_i45369_1_;
 		this.theProfiler = p_i45369_5_;
-		this.mapStorage = getMapStorage(p_i45369_1_);
+		this.mapStorage = getMapStorage(p_i45369_1_, p_i45369_4_ != null ? p_i45369_4_.dimensionId : 0);
 		this.worldInfo = p_i45369_1_.loadWorldInfo();
 
 		if (p_i45369_4_ != null)
@@ -315,9 +315,9 @@ public abstract class World implements IBlockAccess
 	private static ISaveHandler s_savehandler;
 	//Provides a solution for different worlds getting different copies of the same data, potentially rewriting the data or causing race conditions/stale data
 	//Buildcraft has suffered from the issue this fixes.  If you load the same data from two different worlds they can get two different copies of the same object, thus the last saved gets final say.
-	private MapStorage getMapStorage(ISaveHandler savehandler)
+	private MapStorage getMapStorage(ISaveHandler savehandler, int dim)
 	{
-		if (s_savehandler != savehandler || s_mapStorage == null)
+		if (dim == 0 && s_savehandler != savehandler || s_mapStorage == null)
 		{
 			s_mapStorage = new MapStorage(savehandler);
 			s_savehandler = savehandler;

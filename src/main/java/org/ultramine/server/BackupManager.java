@@ -272,9 +272,17 @@ public class BackupManager
 				@Override
 				public String apply(String name)
 				{
+					boolean contains = false;
 					for(String s : moveOnly)
-						if(!name.startsWith(s))
-							return null;
+					{
+						if(name.startsWith(s))
+						{
+							contains = true;
+							break;
+						}
+					}
+					if(!contains)
+						return null;
 					if(name.endsWith("/session.lock"))
 						return null;
 					if(!movePlayers && name.contains("/playerdata/"))
@@ -341,7 +349,8 @@ public class BackupManager
 				WorldServer world = server.getMultiWorld().getWorldByID(dim);
 				for(EntityPlayerMP player : it.value())
 				{
-					player.setWorld(world);
+					if(player.worldObj == null)
+						player.setWorld(world);
 					if(movePlayers)
 					{
 						if(server.getMultiWorld().getIsolatedDataDims().contains(dim))

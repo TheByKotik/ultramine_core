@@ -31,6 +31,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldManager;
@@ -353,9 +354,13 @@ public class MultiWorld
 	}
 	
 	@SideOnly(Side.SERVER)
+	@SuppressWarnings("unchecked")
 	public List<EntityPlayerMP> destroyWorld(WorldServer world)
 	{
-		@SuppressWarnings("unchecked")
+		if(world.provider.dimensionId == 0)
+			for(ScorePlayerTeam team : new ArrayList<ScorePlayerTeam>(world.getScoreboard().getTeams()))
+				world.getScoreboard().removeTeam(team);
+		
 		List<EntityPlayerMP> players = new ArrayList<EntityPlayerMP>(world.playerEntities);
 		for(EntityPlayerMP player : players)
 		{

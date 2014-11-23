@@ -135,7 +135,7 @@ public class WorldServer extends World
 			this.mapStorage.setData("scoreboard", scoreboardsavedata);
 		}
 
-		if (!(this instanceof WorldServerMulti)) //Forge: We fix the global mapStorage, which causes us to share scoreboards early. So don't associate the save data with the temporary scoreboard
+		if (provider.dimensionId == 0) //Forge: We fix the global mapStorage, which causes us to share scoreboards early. So don't associate the save data with the temporary scoreboard
 		{
 			scoreboardsavedata.func_96499_a(this.worldScoreboard);
 		}
