@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.ultramine.server.util.AsyncIOUtils;
+
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -125,9 +128,7 @@ public class MapStorage
 					p_75747_1_.writeToNBT(nbttagcompound);
 					NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 					nbttagcompound1.setTag("data", nbttagcompound);
-					FileOutputStream fileoutputstream = new FileOutputStream(file1);
-					CompressedStreamTools.writeCompressed(nbttagcompound1, fileoutputstream);
-					fileoutputstream.close();
+					AsyncIOUtils.safeWriteNBT(file1, nbttagcompound1);
 				}
 			}
 			catch (Exception exception)

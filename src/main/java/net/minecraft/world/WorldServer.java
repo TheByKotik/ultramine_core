@@ -1060,4 +1060,13 @@ public class WorldServer extends World
 	{
 		return border;
 	}
+	
+	public void saveOtherData()
+	{
+		try
+		{
+			saveLevel();
+		} catch (MinecraftException ignored) {}
+		MinecraftForge.EVENT_BUS.post(new WorldEvent.Save(this));
+	}
 }

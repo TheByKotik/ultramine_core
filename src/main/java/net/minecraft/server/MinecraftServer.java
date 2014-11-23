@@ -595,6 +595,9 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			this.serverConfigManager.saveOnePlayerData(tickCounter);
 			for(WorldServer world : worldServers)
 				world.theChunkProviderServer.saveOneChunk(tickCounter);
+			if(tickCounter % 2401 == 0)
+				for(WorldServer world : worldServers)
+					world.saveOtherData();
 			this.theProfiler.endSection();
 //		}
 

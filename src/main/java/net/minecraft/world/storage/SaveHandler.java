@@ -16,8 +16,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.MinecraftException;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.storage.IChunkLoader;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.util.GlobalExecutors;
 
 public class SaveHandler implements ISaveHandler, IPlayerFileData
 {
@@ -161,41 +163,48 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 	public void saveWorldInfoWithPlayer(WorldInfo p_75755_1_, NBTTagCompound p_75755_2_)
 	{
 		NBTTagCompound nbttagcompound1 = p_75755_1_.cloneNBTCompound(p_75755_2_);
-		NBTTagCompound nbttagcompound2 = new NBTTagCompound();
+		final NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 		nbttagcompound2.setTag("Data", nbttagcompound1);
 
 		FMLCommonHandler.instance().handleWorldDataSave(this, p_75755_1_, nbttagcompound2);
 
-		try
+		GlobalExecutors.writingIOExecutor().execute(new Runnable()
 		{
-			File file1 = new File(this.worldDirectory, "level.dat_new");
-			File file2 = new File(this.worldDirectory, "level.dat_old");
-			File file3 = new File(this.worldDirectory, "level.dat");
-			CompressedStreamTools.writeCompressed(nbttagcompound2, new FileOutputStream(file1));
-
-			if (file2.exists())
+			@Override
+			public void run()
 			{
-				file2.delete();
+				try
+				{
+					File file1 = new File(worldDirectory, "level.dat_new");
+					File file2 = new File(worldDirectory, "level.dat_old");
+					File file3 = new File(worldDirectory, "level.dat");
+					CompressedStreamTools.writeCompressed(nbttagcompound2, new FileOutputStream(file1));
+
+					if (file2.exists())
+					{
+						file2.delete();
+					}
+
+					file3.renameTo(file2);
+
+					if (file3.exists())
+					{
+						file3.delete();
+					}
+
+					file1.renameTo(file3);
+
+					if (file1.exists())
+					{
+						file1.delete();
+					}
+				}
+				catch (Exception exception)
+				{
+					exception.printStackTrace();
+				}
 			}
-
-			file3.renameTo(file2);
-
-			if (file3.exists())
-			{
-				file3.delete();
-			}
-
-			file1.renameTo(file3);
-
-			if (file1.exists())
-			{
-				file1.delete();
-			}
-		}
-		catch (Exception exception)
-		{
-			exception.printStackTrace();
-		}
+		});
 	}
 
 	public void saveWorldInfo(WorldInfo p_75761_1_)
