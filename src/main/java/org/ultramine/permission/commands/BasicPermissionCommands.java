@@ -73,6 +73,8 @@ public class BasicPermissionCommands
 			PermissionHandler.getInstance().setWorldMeta(world, key, value);
 			context.notifyAdmins("command.pworld.success.meta", key, value, world);
 		}
+
+		PermissionHandler.getInstance().save();
 	}
 
 
@@ -120,6 +122,8 @@ public class BasicPermissionCommands
 			PermissionHandler.getInstance().setMeta(world, player, key, value);
 			context.notifyAdmins("command.puser.success.meta", key, value, player, world);
 		}
+
+		PermissionHandler.getInstance().save();
 	}
 
 
@@ -159,5 +163,7 @@ public class BasicPermissionCommands
 			PermissionHandler.getInstance().setGroupMeta(group, key, value);
 			context.notifyAdmins("command.pgroup.success.meta", key, value, group);
 		}
+
+		PermissionHandler.getInstance().save();
 	}
 }
