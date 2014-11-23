@@ -9,6 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.profiler.Profiler;
+
 import org.apache.logging.log4j.Level;
 
 import com.google.common.base.Preconditions;
@@ -155,5 +157,34 @@ public class EventBus implements IEventExceptionHandler
 		{
 			FMLLog.log(Level.ERROR, "%d: %s", x, listeners[x]);
 		}
+	}
+	
+	/* ======================================== ULTRAMINE START ===================================== */
+	
+	public boolean postWithProfile(Profiler profiler, Event event)
+	{
+		IEventListener[] listeners = event.getListenerList().getListeners(busID);
+		int index = 0;
+		try
+		{
+			for (; index < listeners.length; index++)
+			{
+				IEventListener listener = listeners[index];
+				String owner = listener instanceof ASMEventHandler ? ((ASMEventHandler)listener).getOwner() : null;
+				if(owner != null)
+					profiler.startSection(owner);
+
+				listener.invoke(event);
+
+				if(owner != null)
+					profiler.endSection();
+			}
+		}
+		catch (Throwable throwable)
+		{
+			exceptionHandler.handleException(this, event, listeners, index, throwable);
+			Throwables.propagate(throwable);
+		}
+		return (event.isCancelable() ? event.isCanceled() : false);
 	}
 }

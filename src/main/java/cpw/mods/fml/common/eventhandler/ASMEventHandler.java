@@ -148,4 +148,11 @@ public class ASMEventHandler implements IEventListener
 	{
 		return readable;
 	}
+	
+	/* ======================================== ULTRAMINE START ===================================== */
+	
+	public String getOwner()
+	{
+		return owner != null ? owner.getModId() : null;
+	}
 }
