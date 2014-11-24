@@ -67,7 +67,7 @@ global: &global
                 higherLimit: 16
             animals:
                 lowerLimit: 4
-                higherLimit: 64
+                higherLimit: 32
             water:
                 lowerLimit: 4
                 higherLimit: 16
