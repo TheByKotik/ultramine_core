@@ -26,6 +26,7 @@ public class WorldsConfig
 			public String levelType = "DEFAULT";
 			public String generatorSettings = "";
 			public boolean generateStructures = true;
+			public boolean disableModGeneration = false;
 		}
 		
 		public static class MobSpawn

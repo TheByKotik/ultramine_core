@@ -311,7 +311,8 @@ public class ChunkProviderServer implements IChunkProvider
 			if (this.currentChunkProvider != null)
 			{
 				this.currentChunkProvider.populate(par1IChunkProvider, par2, par3);
-				GameRegistry.generateWorld(par2, par3, worldObj, currentChunkProvider, par1IChunkProvider);
+				if(!worldObj.getConfig().generation.disableModGeneration)
+					GameRegistry.generateWorld(par2, par3, worldObj, currentChunkProvider, par1IChunkProvider);
 				chunk.setChunkModified();
 			}
 		}
