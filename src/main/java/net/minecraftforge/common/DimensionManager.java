@@ -424,7 +424,8 @@ public class DimensionManager
 		else if (MinecraftServer.getServer() != null)
 		{
 			MinecraftServer srv = MinecraftServer.getServer();
-			SaveHandler saveHandler = (SaveHandler) srv.getActiveAnvilConverter().getSaveLoader(srv.getFolderName(), false);
+			String name = srv.isSinglePlayer() ? srv.getFolderName() : srv.getMultiWorld().getNameByID(0) != null ? srv.getMultiWorld().getNameByID(0) : "world";
+			SaveHandler saveHandler = (SaveHandler) srv.getActiveAnvilConverter().getSaveLoader(name, false);
 			return saveHandler.getWorldDirectory();
 		}
 		else
