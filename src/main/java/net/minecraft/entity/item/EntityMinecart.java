@@ -2,7 +2,9 @@ package net.minecraft.entity.item;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.material.Material;
@@ -251,18 +253,10 @@ public abstract class EntityMinecart extends Entity
 					{
 						this.portalCounter = i;
 						this.timeUntilPortal = this.getPortalCooldown();
-						byte b0;
+						int dim = ((WorldServer)worldObj).getConfig().portals.netherLink;
 
-						if (this.worldObj.provider.dimensionId == -1)
-						{
-							b0 = 0;
-						}
-						else
-						{
-							b0 = -1;
-						}
-
-						this.travelToDimension(b0);
+						if(dim != Integer.MIN_VALUE)
+							this.travelToDimension(dim);
 					}
 
 					this.inPortal = false;

@@ -17,6 +17,7 @@ public class WorldsConfig
 		public Border[] borders;
 		public ChunkLoading chunkLoading;
 		public LoadBalancer loadBalancer;
+		public Portals portals;
 		
 		public static class Generation
 		{
@@ -122,6 +123,12 @@ public class WorldsConfig
 					public int higherLimit;
 				}
 			}
+		}
+		
+		public static class Portals
+		{
+			public int netherLink = Integer.MIN_VALUE;
+			public int enderLink = Integer.MIN_VALUE;
 		}
 	}
 }

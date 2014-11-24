@@ -90,15 +90,22 @@ worlds:
         chunkLoading:
             <<: *global_cl
             chunkCacheSize: 4096
+        portals:
+            netherLink: -1
+            enderLink: 1
     world_nether:
         <<: *global
         dimension: -1
         generation:
             <<: *global_gen
             providerID: -1
+        portals:
+            netherLink: 1
     world_the_end:
         <<: *global
         dimension: 1
         generation:
             <<: *global_gen
             providerID: 1
+        portals:
+            enderLink: 1 #Vanilla logic, ender link is the same as current ender dimension

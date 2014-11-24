@@ -178,12 +178,9 @@ public class MultiWorld
 	@SideOnly(Side.CLIENT)
 	public void handleClientWorldsInit()
 	{
-		WorldConfig conf = new WorldConfig();
-		conf.mobSpawn = new WorldConfig.MobSpawn();
-		conf.settings = new WorldConfig.Settings();
-		conf.chunkLoading = new WorldConfig.ChunkLoading();
 		for(WorldServer world : server.worldServers)
 		{
+			WorldConfig conf = getDefaultClientConfig(world);
 			world.setConfig(conf);
 			String name = resolveNameForDim(world.provider.dimensionId);
 			dimToWorldMap.put(world.provider.dimensionId, world);
@@ -234,11 +231,7 @@ public class MultiWorld
 	@SideOnly(Side.CLIENT)
 	public void onClientInitDimension(WorldServer world)
 	{
-		WorldConfig conf = new WorldConfig();
-		conf.mobSpawn = new WorldConfig.MobSpawn();
-		conf.settings = new WorldConfig.Settings();
-		conf.chunkLoading = new WorldConfig.ChunkLoading();
-		
+		WorldConfig conf = getDefaultClientConfig(world);
 		world.setConfig(conf);
 		String name = resolveNameForDim(world.provider.dimensionId);
 		dimToWorldMap.put(world.provider.dimensionId, world);
@@ -256,6 +249,21 @@ public class MultiWorld
 		}
 		
 		return name;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private WorldConfig getDefaultClientConfig(WorldServer world)
+	{
+		WorldConfig conf = new WorldConfig();
+		conf.mobSpawn = new WorldConfig.MobSpawn();
+		conf.settings = new WorldConfig.Settings();
+		conf.chunkLoading = new WorldConfig.ChunkLoading();
+		conf.portals = new WorldConfig.Portals();
+		
+		conf.portals.netherLink = world.provider.dimensionId == -1 ? 0 : -1;
+		conf.portals.enderLink = world.provider.dimensionId == 1 ? 0 : 1;
+		
+		return conf;
 	}
 	
 	@SideOnly(Side.SERVER)

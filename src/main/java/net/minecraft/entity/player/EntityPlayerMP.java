@@ -451,7 +451,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
 	public void travelToDimension(int p_71027_1_)
 	{
-		if (this.dimension == 1 && p_71027_1_ == 1)
+		int enderLink = ((WorldServer)worldObj).getConfig().portals.enderLink;
+		if (this.dimension == enderLink && p_71027_1_ == enderLink)
 		{
 			this.triggerAchievement(AchievementList.theEnd2);
 			this.worldObj.removeEntity(this);
@@ -460,7 +461,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		}
 		else
 		{
-			if (this.dimension == 0 && p_71027_1_ == 1)
+			if (p_71027_1_ == enderLink)
 			{
 				this.triggerAchievement(AchievementList.theEnd);
 				ChunkCoordinates chunkcoordinates = this.mcServer.worldServerForDimension(p_71027_1_).getEntrancePortalLocation();
@@ -469,8 +470,6 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 				{
 					this.playerNetServerHandler.setPlayerLocation((double)chunkcoordinates.posX, (double)chunkcoordinates.posY, (double)chunkcoordinates.posZ, 0.0F, 0.0F);
 				}
-
-				p_71027_1_ = 1;
 			}
 			else
 			{

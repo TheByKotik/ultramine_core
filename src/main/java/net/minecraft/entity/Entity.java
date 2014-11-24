@@ -349,18 +349,10 @@ public abstract class Entity
 					{
 						this.portalCounter = i;
 						this.timeUntilPortal = this.getPortalCooldown();
-						byte b0;
+						int dim = ((WorldServer)worldObj).getConfig().portals.netherLink;
 
-						if (this.worldObj.provider.dimensionId == -1)
-						{
-							b0 = 0;
-						}
-						else
-						{
-							b0 = -1;
-						}
-
-						this.travelToDimension(b0);
+						if(dim != Integer.MIN_VALUE)
+							this.travelToDimension(dim);
 					}
 
 					this.inPortal = false;
@@ -2037,16 +2029,19 @@ public abstract class Entity
 		if (!this.worldObj.isRemote && !this.isDead)
 		{
 			this.worldObj.theProfiler.startSection("changeDimension");
+			int enderLink = ((WorldServer)worldObj).getConfig().portals.enderLink;
 			MinecraftServer minecraftserver = MinecraftServer.getServer();
 			int j = this.dimension;
 			WorldServer worldserver = minecraftserver.worldServerForDimension(j);
 			WorldServer worldserver1 = minecraftserver.worldServerForDimension(p_71027_1_);
 			this.dimension = p_71027_1_;
 
-			if (j == 1 && p_71027_1_ == 1)
+			if (j == enderLink && p_71027_1_ == enderLink)
 			{
-				worldserver1 = minecraftserver.worldServerForDimension(0);
-				this.dimension = 0;
+//				worldserver1 = minecraftserver.worldServerForDimension(0);
+//				this.dimension = 0;
+				setDead();
+				return;
 			}
 
 			this.worldObj.removeEntity(this);
@@ -2060,7 +2055,7 @@ public abstract class Entity
 			{
 				entity.copyDataFrom(this, true);
 
-				if (j == 1 && p_71027_1_ == 1)
+				if (j == enderLink && p_71027_1_ == enderLink)
 				{
 					ChunkCoordinates chunkcoordinates = worldserver1.getSpawnPoint();
 					chunkcoordinates.posY = this.worldObj.getTopSolidOrLiquidBlock(chunkcoordinates.posX, chunkcoordinates.posZ);
