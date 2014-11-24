@@ -9,15 +9,17 @@ import java.util.List;
 
 public class VanillaCommandWrapper implements IExtendedCommand
 {
-	private ICommand wrappedCommand;
-	private String permission;
-	private String description;
+	private final ICommand wrappedCommand;
+	private final String permission;
+	private final String description;
+	private final String group;
 
-	public VanillaCommandWrapper(ICommand wrappedCommand)
+	public VanillaCommandWrapper(ICommand wrappedCommand, String group)
 	{
 		this.wrappedCommand = wrappedCommand;
-		this.permission = "command.vanilla." + wrappedCommand.getCommandName();
-		this.description = "command." + wrappedCommand.getCommandName() + ".description";
+		this.group = group;
+		this.permission = "command." + group + "." + wrappedCommand.getCommandName();
+		this.description = "command." + wrappedCommand.getCommandName().toLowerCase() + ".description";
 	}
 
 	@Override
@@ -85,6 +87,6 @@ public class VanillaCommandWrapper implements IExtendedCommand
 	@Override
 	public String getGroup()
 	{
-		return "vanilla";
+		return group;
 	}
 }

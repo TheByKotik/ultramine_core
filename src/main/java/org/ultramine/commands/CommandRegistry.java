@@ -7,6 +7,9 @@ import net.minecraft.command.ICommandSender;
 import org.ultramine.commands.syntax.ArgumentsPatternParser;
 import org.ultramine.server.util.TranslitTable;
 
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -46,7 +49,8 @@ public class CommandRegistry
 
 	public IExtendedCommand registerVanillaCommand(ICommand command)
 	{
-		return registerCommand(new VanillaCommandWrapper(command));
+		ModContainer active = Loader.instance().activeModContainer();
+		return registerCommand(new VanillaCommandWrapper(command, active != null ? active.getModId().toLowerCase() : "vanilla"));
 	}
 
 	public void registerCommands(Class<?> cls)
