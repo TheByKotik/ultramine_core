@@ -186,7 +186,13 @@ public class BackupManager
 	{
 		final boolean movePlayers = movePlayersP && server.getConfigurationManager().getDataLoader().getDataProvider().isUsingWorldPlayerDir();
 		File zipFile = new File(server.getBackupDir(), path);
-		if(!zipFile.exists())
+		try
+		{
+			if(!zipFile.getCanonicalPath().startsWith(server.getBackupDir().getCanonicalFile().getParentFile().getParent()))
+				throw new CommandException("command.backup.apply.fail.illegalaccess");
+		}catch(IOException e){throw new RuntimeException(e);}
+		
+		if(!zipFile.exists() || zipFile.isDirectory() || !zipFile.getName().endsWith(".zip"))
 			throw new CommandException("command.backup.apply.fail.nofile", path);
 		
 		final Set<String> moveOnly;
