@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -225,7 +226,9 @@ public abstract class WorldProvider
 	 */
 	public String getSaveFolder()
 	{
-		return (dimensionId == 0 ? null : "DIM" + dimensionId);
+		return (worldObj instanceof WorldServerMulti || MinecraftServer.getServer() == null) ?
+			(dimensionId == 0 ? null : "DIM" + dimensionId) :
+			"../" + MinecraftServer.getServer().getMultiWorld().getNameByID(dimensionId);
 	}
 
 	/**
