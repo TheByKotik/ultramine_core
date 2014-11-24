@@ -103,6 +103,7 @@ public class TechCommands
 			EntityPlayerMP player = ctx.getSenderAsPlayer();
 			Chunk chunk = player.worldObj.getChunkFromChunkCoords(player.chunkCoordX, player.chunkCoordZ);
 			ctx.sendMessage("Chunk: %s %s", chunk.xPosition, chunk.zPosition);
+			ctx.sendMessage("TileEntity: %s", chunk.chunkTileEntityMap.size());
 			ctx.sendMessage("EntityLiving: %s", chunk.getEntityCount());
 			ctx.sendMessage("EntityMonster: %s", chunk.getEntityCountByType(EnumCreatureType.monster));
 			ctx.sendMessage("EntityAnimal: %s", chunk.getEntityCountByType(EnumCreatureType.creature));
@@ -125,6 +126,8 @@ public class TechCommands
 			EntityPlayerMP player = ctx.get("player").asPlayer();
 			ctx.sendMessage("Username: %s", player.getCommandSenderName());
 			ctx.sendMessage("UUID: %s", player.getGameProfile().getId());
+			ctx.sendMessage("Location: [%s](%s, %s, %s)", player.dimension,
+					MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
 			ctx.sendMessage("Chunk send rate: %s", player.getChunkMgr().getRate());
 			ctx.sendMessage("View distance: %s", player.getRenderDistance());
 		}
