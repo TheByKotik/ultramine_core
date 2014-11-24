@@ -255,7 +255,9 @@ public abstract class World implements IBlockAccess
 			this.worldInfo.setWorldName(p_i45369_2_);
 		}
 
+		int providerDim = this.provider.dimensionId;
 		this.provider.registerWorld(this);
+		this.provider.dimensionId = providerDim;
 		this.chunkProvider = this.createChunkProvider();
 
 		if (this instanceof WorldServer)
