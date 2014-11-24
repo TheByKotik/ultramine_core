@@ -10,6 +10,7 @@ import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
+import net.minecraft.util.StatCollector;
 import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldServer;
@@ -56,12 +57,20 @@ public class VanillaCommands
 				ctx.sendMessage("%s:", group);
 			}
 			String usageS = cmd.getCommandUsage(ctx.getSender());
+			String descS = cmd.getDescription();
 			ChatComponentTranslation usage = new ChatComponentTranslation(usageS != null ? usageS : '/' + cmd.getCommandName());
-			ChatComponentTranslation desc = new ChatComponentTranslation(cmd.getDescription());
 			usage.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + cmd.getCommandName() + " "));
 			usage.getChatStyle().setColor(YELLOW);
-			desc.getChatStyle().setColor(DARK_AQUA);
-			ctx.sendMessage(DARK_GRAY, YELLOW, "  - %s <- %s", usage, desc);
+			if(StatCollector.canTranslate(descS))
+			{
+				ChatComponentTranslation desc = new ChatComponentTranslation(descS);
+				desc.getChatStyle().setColor(DARK_AQUA);
+				ctx.sendMessage(DARK_GRAY, YELLOW, "  - %s <- %s", usage, desc);
+			}
+			else
+			{
+				ctx.sendMessage(DARK_GRAY, YELLOW, "  - %s", usage);
+			}
 		}
 	}
 	
