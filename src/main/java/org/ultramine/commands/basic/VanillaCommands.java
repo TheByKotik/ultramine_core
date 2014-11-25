@@ -14,6 +14,7 @@ import net.minecraft.util.StatCollector;
 import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.WorldInfo;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
@@ -171,5 +172,74 @@ public class VanillaCommands
 		ctx.check(name != null, "command.reply.fail");
 		ICommandSender to = name.equalsIgnoreCase("server") ? MinecraftServer.getServer() : MinecraftServer.getServer().getConfigurationManager().func_152612_a(name);
 		sendMessage(ctx.getSender(), to, ctx.get("msg").asString());
+	}
+	
+	@Command(
+			name = "weather",
+			group = "vanilla",
+			permissions = {"command.vanilla.weather"},
+			syntax = {
+					"[clear sun rain thunder]",
+					"[clear sun rain thunder] <nextchange>",
+					"<world> [clear sun rain thunder]",
+					"<world> [clear sun rain thunder] <nextchange>"
+			}
+	)
+	public static void weather(CommandContext ctx)
+	{
+		WorldServer world = ctx.contains("world") ? ctx.get("world").asWorld() : ctx.getSenderAsPlayer().getServerForPlayer();
+		WorldInfo wi = world.getWorldInfo();
+		int nextchange = ctx.contains("nextchange") ? ctx.get("nextchange").asInt(1, 1000000) * 20 : (300 + world.rand.nextInt(600)) * 20;
+		
+		wi.setRainTime(nextchange);
+		wi.setThunderTime(nextchange);
+		if(ctx.getAction().equals("clear") || ctx.getAction().equals("sun"))
+		{
+			wi.setRaining(false);
+			wi.setThundering(false);
+			world.prevRainingStrength = world.rainingStrength = 0F;
+			world.prevThunderingStrength = world.thunderingStrength = 0F;
+			ctx.sendMessage("commands.weather.clear");
+		}
+		else if(ctx.getAction().equals("rain"))
+		{
+			wi.setRaining(true);
+			ctx.sendMessage("commands.weather.rain");
+		}
+		else if(ctx.getAction().equals("thunder"))
+		{
+			wi.setRaining(true);
+			wi.setThundering(true);
+			ctx.sendMessage("commands.weather.thunder");
+		}
+	}
+	
+	@Command(
+			name = "time",
+			group = "vanilla",
+			permissions = {"command.vanilla.time"},
+			syntax = {
+					"<list day night %worldtime>",
+					"[set add] <list day night %worldtime>",
+					"<world> <list day night %worldtime>",
+					"<world> [set add] <list day night %worldtime>",
+			}
+	)
+	public static void time(CommandContext ctx)
+	{
+		WorldServer world = ctx.contains("world") ? ctx.get("world").asWorld() : ctx.getSenderAsPlayer().getServerForPlayer();
+		String timeS = ctx.get("worldtime").asString();
+		int time = timeS.equals("day") ? 1000 : timeS.equals("night") ? 13000 : ctx.get("worldtime").asInt(0);
+		long curTime = world.getWorldInfo().getWorldTime();
+		if(ctx.getAction().isEmpty() || ctx.getAction().equals("set"))
+		{
+			world.setWorldTime(curTime - (curTime % 24000) + 24000 + time);
+			ctx.sendMessage("commands.time.set", time);
+		}
+		else if(ctx.getAction().equals("add"))
+		{
+			world.setWorldTime(curTime + time);
+			ctx.sendMessage("commands.time.added", time);
+		}
 	}
 }

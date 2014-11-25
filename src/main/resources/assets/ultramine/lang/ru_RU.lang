@@ -30,6 +30,12 @@ command.reply.usage=/reply <сообщение ...>
 command.reply.description=Отправка приватного сообщения последнему игроку, которому вы отправляли сообщение командой /msg
 command.reply.fail=Сначала используйте команду /msg
 
+command.weather.usage=/weather [мир] <clear rain thunder> [следующее изменение (секунд)]
+command.weather.description=Устанавливает погоду в текущем или указанном мире
+
+command.time.usage=/time [мир] [add|set] <day|night|время>
+command.time.description=Устанавливает время суток в текущем или указанном мире
+
 # Permissions
 command.pconfig.usage=/pconfig <save|reload>
 command.pconfig.description=Save or reload all permissions configs

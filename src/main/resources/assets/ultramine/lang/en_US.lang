@@ -30,6 +30,12 @@ command.reply.usage=/reply <message ...>
 command.reply.description=Send private message to the last player which you sent message with /msg
 command.reply.fail=Use /msg command first
 
+command.weather.usage=/weather [world] <clear rain thunder> [nextchange]
+command.weather.description=Sets weather in current or specified world
+
+command.time.usage=/time [world] [add|set] <day|night|time>
+command.time.description=Sets time in current or specified world
+
 # Permissions
 command.pconfig.usage=/pconfig <save|reload>
 command.pconfig.description=Save or reload all permissions configs
