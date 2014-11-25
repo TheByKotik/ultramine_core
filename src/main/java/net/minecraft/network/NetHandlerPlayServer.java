@@ -729,7 +729,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 
 			if (s.startsWith("/") || s.length() > 1 && s.charAt(0) == '.' && s.charAt(1) != '.' && s.charAt(1) != '/')
 			{
-				this.handleSlashCommand(s.substring(1));
+				this.handleSlashCommand(s.startsWith("/") ? s : s.substring(1));
 			}
 			else
 			{
