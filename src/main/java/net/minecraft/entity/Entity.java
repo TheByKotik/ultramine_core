@@ -2521,4 +2521,9 @@ public abstract class Entity
 	{
 		return 9216d;//16384.0d;
 	}
+	
+	public void despawnInactive()
+	{
+		
+	}
 }

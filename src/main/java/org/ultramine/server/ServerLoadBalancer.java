@@ -47,8 +47,7 @@ public class ServerLoadBalancer
 		int prior = activeChunkSet.get(ChunkHash.chunkToKey(cx, cz));
 		if(prior == Byte.MAX_VALUE)
 		{
-			if(ent.isEntityLiving())
-				((EntityLiving)ent).despawnInactive();
+			ent.despawnInactive();
 			return false;
 		}
 

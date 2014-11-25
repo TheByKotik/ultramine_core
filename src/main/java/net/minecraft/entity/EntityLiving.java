@@ -1167,6 +1167,7 @@ public abstract class EntityLiving extends EntityLivingBase
 		return EnumCreatureType.monster;
 	}
 	
+	@Override
 	public void despawnInactive()
 	{
 		if(!canDespawn() || ++entityAge <= 600)
