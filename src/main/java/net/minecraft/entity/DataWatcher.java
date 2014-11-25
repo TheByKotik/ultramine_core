@@ -1,7 +1,9 @@
 package net.minecraft.entity;
 
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,12 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ReportedException;
+
 import org.apache.commons.lang3.ObjectUtils;
 
 public class DataWatcher
@@ -200,6 +204,12 @@ public class DataWatcher
 		while (iterator.hasNext())
 		{
 			DataWatcher.WatchableObject watchableobject = (DataWatcher.WatchableObject)iterator.next();
+			if(watchableobject.getObject() == null)
+			{
+				field_151511_a.setDead();
+				FMLLog.warning("Removed entity with broken DataWatcher! Class: %s Object: %s", field_151511_a.getClass(), field_151511_a);
+				continue;
+			}
 			writeWatchableObjectToPacketBuffer(p_151509_1_, watchableobject);
 		}
 
