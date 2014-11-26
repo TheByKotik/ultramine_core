@@ -6,6 +6,11 @@ teleporter.canceled=Телепортация отменена
 ultramine.autobroadcast.debugmsg=Сервер нагружен на %s (В пике - %s), Тиков в секунду: %s/20, Мобов: %s, Предметов: %s
 ultramine.autobackup.start=Выполняется автоматический бэкап мира
 
+ultramine.ability.blockbreak=У вас нет прав на разрушение блоков
+ultramine.ability.blockplace=У вас нет прав на установку блоков
+ultramine.ability.useitem=У вас нет прав на использование предметов
+ultramine.ability.useblock=У вас нет прав на использование блоков
+
 #Command generic
 commands.generic.world.invalid=Указанный мир не существует или неинициализирован '%s'
 commands.generic.itemstack.data=Не удалось разобрать предмет: %s

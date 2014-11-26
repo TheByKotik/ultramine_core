@@ -5,6 +5,7 @@ import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.WarpLocation;
 
+import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.functions.GenericIterableFactory;
@@ -19,6 +20,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
@@ -27,6 +29,8 @@ import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 
 public class UMEventHandler
 {
@@ -171,5 +175,43 @@ public class UMEventHandler
 	public void onPlayerChangedDimension(PlayerChangedDimensionEvent e)
 	{
 		MinecraftServer.getServer().getConfigurationManager().getDataLoader().handlePlayerDimensionChange((EntityPlayerMP)e.player, e.fromDim, e.toDim);
+	}
+	
+	@SideOnly(Side.SERVER)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onBreakEvent(BlockEvent.BreakEvent e)
+	{
+		if(!PermissionHandler.getInstance().has(e.getPlayer(), "ability.player.blockbreak"))
+		{
+			e.setCanceled(true);
+			e.getPlayer().addChatMessage(new ChatComponentTranslation("ultramine.ability.player.blockbreak").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+		}
+	}
+	
+	@SideOnly(Side.SERVER)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onPlaceEvent(BlockEvent.PlaceEvent e)
+	{
+		if(!PermissionHandler.getInstance().has(e.player, "ability.player.blockplace"))
+		{
+			e.setCanceled(true);
+			e.player.addChatMessage(new ChatComponentTranslation("ultramine.ability.player.blockplace").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+		}
+	}
+	
+	@SideOnly(Side.SERVER)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onPlayerInteractEvent(PlayerInteractEvent e)
+	{
+		if(!PermissionHandler.getInstance().has(e.entityPlayer, "ability.player.useitem"))
+		{
+			e.useItem = Event.Result.DENY;
+			e.entityPlayer.addChatMessage(new ChatComponentTranslation("ultramine.ability.player.useitem").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+		}
+		if(!PermissionHandler.getInstance().has(e.entityPlayer, "ability.player.useblock"))
+		{
+			e.useBlock = Event.Result.DENY;
+			e.entityPlayer.addChatMessage(new ChatComponentTranslation("ultramine.ability.player.useblock").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+		}
 	}
 }

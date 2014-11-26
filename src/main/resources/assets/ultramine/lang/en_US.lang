@@ -6,6 +6,11 @@ teleporter.canceled=Teleportation canceled
 ultramine.autobroadcast.debugmsg=Server load: %s (Peak: %s), TPS: %s/20, Mobs: %s, Items: %s
 ultramine.autobackup.start=Autobackup started
 
+ultramine.ability.blockbreak=You don't have permissions to break blocks
+ultramine.ability.blockplace=You don't have permissions to place blocks
+ultramine.ability.useitem=You don't have permissions to use items
+ultramine.ability.useblock=You don't have permissions to use blocks
+
 #Command generic
 commands.generic.world.invalid=Can't find world '%s'
 commands.generic.itemstack.data=Failed to parse item data: %s
