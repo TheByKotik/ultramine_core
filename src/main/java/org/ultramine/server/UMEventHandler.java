@@ -27,6 +27,7 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.WorldServer;
 import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -184,7 +185,7 @@ public class UMEventHandler
 		if(!PermissionHandler.getInstance().has(e.getPlayer(), "ability.player.blockbreak"))
 		{
 			e.setCanceled(true);
-			e.getPlayer().addChatMessage(new ChatComponentTranslation("ultramine.abilityblockbreak").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			e.getPlayer().addChatMessage(new ChatComponentTranslation("ultramine.ability.blockbreak").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 		}
 	}
 	
@@ -217,5 +218,21 @@ public class UMEventHandler
 		
 		if(e.useItem == Event.Result.DENY && e.useBlock == Event.Result.DENY)
 			e.setCanceled(true);
+	}
+	
+	@SideOnly(Side.SERVER)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onLivingAttackEvent(LivingAttackEvent e)
+	{
+		Entity attacker = e.source.getEntity();
+		if(attacker != null && attacker.isEntityPlayerMP())
+		{
+			EntityPlayerMP player = (EntityPlayerMP)attacker;
+			if(!PermissionHandler.getInstance().has(player, "ability.player.attack"))
+			{
+				e.setCanceled(true);
+				player.addChatMessage(new ChatComponentTranslation("ultramine.ability.attack").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			}
+		}
 	}
 }

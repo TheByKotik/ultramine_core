@@ -10,6 +10,7 @@ ultramine.ability.blockbreak=У вас нет прав на разрушение
 ultramine.ability.blockplace=У вас нет прав на установку блоков
 ultramine.ability.useitem=У вас нет прав на использование предметов
 ultramine.ability.useblock=У вас нет прав на использование блоков
+ultramine.ability.attack=У вас нет права наносить урон
 
 #Command generic
 commands.generic.world.invalid=Указанный мир не существует или неинициализирован '%s'
