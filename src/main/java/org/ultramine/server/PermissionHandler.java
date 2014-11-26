@@ -178,6 +178,6 @@ public class PermissionHandler implements IPermissionManager
 
 	private String worldName(ICommandSender player)
 	{
-		return player.getEntityWorld().getWorldInfo().getWorldName();
+		return MinecraftServer.getServer().getMultiWorld().getNameByID(player.getEntityWorld().provider.dimensionId);
 	}
 }
