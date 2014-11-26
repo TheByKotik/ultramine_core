@@ -96,7 +96,7 @@ public class ChunkGC
 		
 		Set<ChunkCoordIntPair> persistentChunks = world.getPersistentChunks().keySet();
 		Collection<Chunk> all = provider.loadedChunkHashMap.valueCollection();
-		List<Chunk> unbound = new ArrayList<Chunk>(all.size() - boundChunks);
+		List<Chunk> unbound = new ArrayList<Chunk>(Math.max(2, all.size() - boundChunks));
 		for(Chunk chunk : all)
 		{
 			if(chunk.isDependent())
