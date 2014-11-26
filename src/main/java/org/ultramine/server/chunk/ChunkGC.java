@@ -48,7 +48,7 @@ public class ChunkGC
 		int timePassed = curTime - lastGCTime;
 		int chunkDiff = chunkCount - lastChunkCount;
 		
-		if(chunkCount > chunkLimit && timePassed > MIN_GC_INTERVAL && unloadQueueSize < MAX_UNLOAD_QUEUE_SIZE && (minChunkDiff == 0 || chunkDiff > minChunkDiff))
+		if(chunkCount > chunkLimit && /*timePassed > MIN_GC_INTERVAL &&*/ unloadQueueSize < MAX_UNLOAD_QUEUE_SIZE && (minChunkDiff == 0 || chunkDiff > minChunkDiff))
 		{
 			List<Chunk> unbound = findChunksForUnload();
 			
