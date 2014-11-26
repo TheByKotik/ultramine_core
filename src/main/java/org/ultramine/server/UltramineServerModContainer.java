@@ -27,6 +27,7 @@ import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import org.ultramine.commands.CommandRegistry;
 import org.ultramine.commands.basic.BasicCommands;
@@ -40,9 +41,13 @@ import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.data.Databases;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerCoreData;
+import org.ultramine.server.tools.ButtonCommand;
 
 public class UltramineServerModContainer extends DummyModContainer
 {
+	@SideOnly(Side.SERVER)
+	private ButtonCommand buttonCommand;
+	
 	public UltramineServerModContainer()
 	{
 		super(new ModMetadata());
@@ -94,6 +99,8 @@ public class UltramineServerModContainer extends DummyModContainer
 	public void serverAboutToStart(FMLServerAboutToStartEvent e)
 	{
 		e.getServer().getMultiWorld().register();
+		if(e.getSide().isServer())
+			buttonCommand = new ButtonCommand(e.getServer());
 	}
 	
 	@Subscribe
@@ -107,6 +114,9 @@ public class UltramineServerModContainer extends DummyModContainer
 		e.registerCommands(TechCommands.class);
 
 		e.getPermissionHandler().createGroup(OpPermissionProxySet.OP_GROUP, "*");
+		
+		if(e.getSide().isServer())
+			buttonCommand.load(e);
 	}
 	
 	@Subscribe
@@ -125,6 +135,9 @@ public class UltramineServerModContainer extends DummyModContainer
 	{
 		MinecraftServer.getServer().getMultiWorld().unregister();
 		ChunkProfiler.instance().setEnabled(false);
+		
+		if(e.getSide().isServer())
+			buttonCommand.unload();
 	}
 	
 	@NetworkCheckHandler

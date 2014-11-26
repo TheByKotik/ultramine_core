@@ -155,6 +155,16 @@ command.dupe.fail=Get item for dupe to the hand first
 command.gm.usage=/gm
 command.gm.description=Toggle gamemode
 
+command.buttoncommand.usage=/buttoncommand <create> <commands ...> OR /buttoncommand <permission> <commands ...> OR /buttoncommand <remove|get>
+command.buttoncommand.description=Binds server command to button or sign in world
+command.buttoncommand.fail.noblock=Button is not selected
+command.buttoncommand.fail.already=Button is already created. Use /buttoncommand remove
+command.buttoncommand.fail.none=ButtonCommand is not created for selected button
+command.buttoncommand.success.create=ButtonCommand has been successfuly created
+command.buttoncommand.success.remove=ButtonCommand has been successfuly removed
+command.buttoncommand.get.head=Command list:
+command.buttoncommand.noperms=You don't have permissions to use this button
+
 #Technical commands
 command.id.usage=/id <id>
 command.id.description=Displays information about specified item id

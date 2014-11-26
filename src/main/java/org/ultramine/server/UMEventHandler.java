@@ -184,7 +184,7 @@ public class UMEventHandler
 		if(!PermissionHandler.getInstance().has(e.getPlayer(), "ability.player.blockbreak"))
 		{
 			e.setCanceled(true);
-			e.getPlayer().addChatMessage(new ChatComponentTranslation("ultramine.ability.player.blockbreak").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			e.getPlayer().addChatMessage(new ChatComponentTranslation("ultramine.abilityblockbreak").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 		}
 	}
 	
@@ -195,7 +195,7 @@ public class UMEventHandler
 		if(!PermissionHandler.getInstance().has(e.player, "ability.player.blockplace"))
 		{
 			e.setCanceled(true);
-			e.player.addChatMessage(new ChatComponentTranslation("ultramine.ability.player.blockplace").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			e.player.addChatMessage(new ChatComponentTranslation("ultramine.ability.blockplace").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 		}
 	}
 	
@@ -206,12 +206,16 @@ public class UMEventHandler
 		if(!PermissionHandler.getInstance().has(e.entityPlayer, "ability.player.useitem"))
 		{
 			e.useItem = Event.Result.DENY;
-			e.entityPlayer.addChatMessage(new ChatComponentTranslation("ultramine.ability.player.useitem").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			if(e.entityPlayer.inventory.getCurrentItem() != null)
+				e.entityPlayer.addChatMessage(new ChatComponentTranslation("ultramine.ability.useitem").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 		}
 		if(!PermissionHandler.getInstance().has(e.entityPlayer, "ability.player.useblock"))
 		{
 			e.useBlock = Event.Result.DENY;
-			e.entityPlayer.addChatMessage(new ChatComponentTranslation("ultramine.ability.player.useblock").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			e.entityPlayer.addChatMessage(new ChatComponentTranslation("ultramine.ability.useblock").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 		}
+		
+		if(e.useItem == Event.Result.DENY && e.useBlock == Event.Result.DENY)
+			e.setCanceled(true);
 	}
 }

@@ -25,4 +25,9 @@ public class ChunkHash
 	{
 		return dim << 32 | (x & 0xffff) << 16 | (z & 0xffff);
 	}
+	
+	public static long blockCoordToHash(int x, int y, int z)
+	{
+		return (long)(x & 0xffffff) | ((long)(z & 0xffffff) << 32) | ((long)(y & 0xff) << 56);
+	}
 }
