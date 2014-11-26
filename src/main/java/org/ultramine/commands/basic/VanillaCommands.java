@@ -197,8 +197,6 @@ public class VanillaCommands
 		{
 			wi.setRaining(false);
 			wi.setThundering(false);
-			world.prevRainingStrength = world.rainingStrength = 0F;
-			world.prevThunderingStrength = world.thunderingStrength = 0F;
 			ctx.sendMessage("commands.weather.clear");
 		}
 		else if(ctx.getAction().equals("rain"))
