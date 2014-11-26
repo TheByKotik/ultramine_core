@@ -199,6 +199,10 @@ command.javagc.usage=/javaGC
 command.javagc.description=Perform system garbage collector
 command.javagc.success=System GC performed
 
+command.chunkgc.usage=/chunkgc
+command.chunkgc.description=Unloads all unused chunks
+command.chunkgc.success=Chunk GC performed
+
 command.custmsg.usage=/custmsg <player/ALL> <message>
 command.custmsg.description=Sends custom formatted message to player (support colors, use &)
 

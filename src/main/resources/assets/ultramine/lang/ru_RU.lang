@@ -199,6 +199,10 @@ command.javagc.usage=/javaGC
 command.javagc.description=Инициировать сборку мусора
 command.javagc.success=Сборка мусора инициирована
 
+command.chunkgc.usage=/chunkgc
+command.chunkgc.description=Выгружает все неиспользуемые чанки
+command.chunkgc.success=Выгрзка чанков инициирована
+
 command.custmsg.usage=/custmsg <игрок/ALL> <сообщение>
 command.custmsg.description=Отправляет кастомное сообщение игроку (поддерживает цвета)
 

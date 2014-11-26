@@ -50,33 +50,7 @@ public class ChunkGC
 		
 		if(chunkCount > chunkLimit && timePassed > MIN_GC_INTERVAL && unloadQueueSize < MAX_UNLOAD_QUEUE_SIZE && (minChunkDiff == 0 || chunkDiff > minChunkDiff))
 		{
-			Set<ChunkCoordIntPair> persistentChunks = world.getPersistentChunks().keySet();
-			Collection<Chunk> all = provider.loadedChunkHashMap.valueCollection();
-			List<Chunk> unbound = new ArrayList<Chunk>(all.size() - boundChunks);
-			for(Chunk chunk : all)
-			{
-				if(chunk.isDependent())
-					continue;
-				ChunkBindState state = chunk.getBindState();
-				if(state.canUnload())
-				{
-					unbound.add(chunk);
-				}
-				else if(state.isLeak() && curTime - chunk.getUnbindTime() > _10_MINUTES)
-				{
-					if(persistentChunks.contains(chunk.getChunkCoordIntPair()))
-					{
-						if(state != ChunkBindState.FORGE)
-							chunk.setBindState(ChunkBindState.FORGE);
-						chunk.updateUnbindTime();
-					}
-					else
-					{
-						chunk.unbind();
-						unbound.add(chunk);
-					}
-				}
-			}
+			List<Chunk> unbound = findChunksForUnload();
 			
 			int unboundLimit = confCacheSize + MAX_CHUNKS_PER_OP + unloadQueueSize;
 			
@@ -104,6 +78,51 @@ public class ChunkGC
 			lastGCTime = curTime;
 			lastChunkCount = provider.loadedChunkHashMap.size() - provider.chunksToUnload.size();
 		}
+	}
+	
+	public void forceCollect()
+	{
+		for(Chunk chunk : findChunksForUnload())
+			provider.chunksToUnload.add(ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition));
+		lastGCTime = world.func_73046_m().getTickCounter();
+		lastChunkCount = provider.loadedChunkHashMap.size() - provider.chunksToUnload.size();
+	}
+	
+	private List<Chunk> findChunksForUnload()
+	{
+		int chunksPerPlayer = (int)Math.pow(world.getViewDistance()*2 + 1, 2);
+		int boundChunks = world.playerEntities.size()*chunksPerPlayer + world.getPersistentChunks().size();
+		int curTime = world.func_73046_m().getTickCounter();
+		
+		Set<ChunkCoordIntPair> persistentChunks = world.getPersistentChunks().keySet();
+		Collection<Chunk> all = provider.loadedChunkHashMap.valueCollection();
+		List<Chunk> unbound = new ArrayList<Chunk>(all.size() - boundChunks);
+		for(Chunk chunk : all)
+		{
+			if(chunk.isDependent())
+				continue;
+			ChunkBindState state = chunk.getBindState();
+			if(state.canUnload())
+			{
+				unbound.add(chunk);
+			}
+			else if(state.isLeak() && curTime - chunk.getUnbindTime() > _10_MINUTES)
+			{
+				if(persistentChunks.contains(chunk.getChunkCoordIntPair()))
+				{
+					if(state != ChunkBindState.FORGE)
+						chunk.setBindState(ChunkBindState.FORGE);
+					chunk.updateUnbindTime();
+				}
+				else
+				{
+					chunk.unbind();
+					unbound.add(chunk);
+				}
+			}
+		}
+		
+		return unbound;
 	}
 	
 	private static class ChunkComparator implements Comparator<Chunk>

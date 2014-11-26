@@ -401,6 +401,20 @@ public class TechCommands
 		ctx.sendMessage("command.javagc.success");
 	}
 	
+	@Command(
+			name = "chunkgc",
+			group = "technical",
+			permissions = {"command.chunkgc"},
+			syntax = {""}
+	)
+	@SideOnly(Side.SERVER)
+	public static void chunkgc(CommandContext ctx)
+	{
+		for(WorldServer world : ctx.getServer().getMultiWorld().getLoadedWorlds())
+			world.theChunkProviderServer.getChunkGC().forceCollect();
+		ctx.sendMessage("command.chunkgc.success");
+	}
+	
 	private static WorldGenerator worldgen;
 	
 	@Command(

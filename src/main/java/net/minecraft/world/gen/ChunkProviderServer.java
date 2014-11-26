@@ -464,6 +464,12 @@ public class ChunkProviderServer implements IChunkProvider
 	@SideOnly(Side.SERVER)
 	private ChunkGC chunkGC;
 	
+	@SideOnly(Side.SERVER)
+	public ChunkGC getChunkGC()
+	{
+		return chunkGC;
+	}
+	
 	public void loadAsync(int x, int z, IChunkLoadCallback callback)
 	{
 		Chunk chunk = loadedChunkHashMap.get(x, z);
