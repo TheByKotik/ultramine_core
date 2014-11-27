@@ -170,6 +170,8 @@ public class ButtonCommand
 	@SubscribeEvent()
 	public void onPlayerInteractEvent(PlayerInteractEvent e)
 	{
+		if(e.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
+			return;
 		ButtomCMDs.ButtomCMD bt = get(e.world.provider.dimensionId, e.x, e.y, e.z);
 		if(bt != null)
 		{
