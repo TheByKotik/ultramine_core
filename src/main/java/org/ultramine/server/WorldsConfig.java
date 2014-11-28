@@ -17,7 +17,7 @@ public class WorldsConfig
 		public Border[] borders;
 		public ChunkLoading chunkLoading;
 		public LoadBalancer loadBalancer;
-		public Portals portals;
+		public Portals portals = new Portals();
 		
 		public static class Generation
 		{
