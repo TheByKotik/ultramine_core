@@ -332,7 +332,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public boolean getAllowNether()
 	{
-		return this.getMultiWorld().getWorldByID(-1) != null;
+		return true;
 	}
 
 	public boolean allowSpawnMonsters()
