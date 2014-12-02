@@ -1,6 +1,7 @@
 package org.ultramine.server;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WorldsConfig
@@ -27,6 +28,7 @@ public class WorldsConfig
 			public String generatorSettings = "";
 			public boolean generateStructures = true;
 			public boolean disableModGeneration = false;
+			public List<String> modGenerationBlackList;
 		}
 		
 		public static class MobSpawn
