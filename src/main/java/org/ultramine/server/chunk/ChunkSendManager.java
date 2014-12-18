@@ -39,7 +39,6 @@ public class ChunkSendManager
 	private static final int MAX_QUEUE_SIZE = 8;
 	private static final int DEFAULT_RATE = 3;
 	private static final double MIN_RATE = 0.2d;
-	private static final double MAX_RATE = 8d;
 	
 	private final EntityPlayerMP player;
 	private PlayerManager manager;
@@ -204,8 +203,12 @@ public class ChunkSendManager
 				else
 					rate -= 0.07;
 			}
-			if(rate < MIN_RATE) rate = MIN_RATE;
-			else if(rate > MAX_RATE) rate = MAX_RATE;
+			
+			int maxRate = manager.getWorldServer().getConfig().chunkLoading.maxSendRate;
+			if(rate < MIN_RATE)
+				rate = MIN_RATE;
+			else if(rate > maxRate)
+				rate = maxRate;
 			
 			if(queueSize == 0 || (queueSize != lastQueueSize && queueSize <= MAX_QUEUE_SIZE))
 			{

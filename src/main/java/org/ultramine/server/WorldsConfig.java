@@ -106,6 +106,7 @@ public class WorldsConfig
 			public int chunkUpdateRadius = 7;
 			public int chunkCacheSize;
 			public boolean enableChunkLoaders = true;
+			public int maxSendRate = 4;
 		}
 		
 		public static class LoadBalancer
