@@ -374,6 +374,7 @@ public class ItemInWorldManager
 		if (!useBlock) useBlock = p_73078_1_.getHeldItem().getItem().doesSneakBypassUse(p_73078_2_, p_73078_4_, p_73078_5_, p_73078_6_, p_73078_1_);
 		boolean result = false;
 
+		p_73078_2_.getEventProxy().startInteract(p_73078_3_, block, p_73078_4_, p_73078_5_, p_73078_6_);
 		if (useBlock)
 		{
 			if (event.useBlock != Event.Result.DENY)
@@ -399,6 +400,7 @@ public class ItemInWorldManager
 			}
 			if (p_73078_3_.stackSize <= 0) ForgeEventFactory.onPlayerDestroyItem(thisPlayerMP, p_73078_3_);
 		}
+		p_73078_2_.getEventProxy().endInteract();
 
 		/* Re-enable if this causes bukkit incompatibility, or re-write client side to only send a single packet per right click.
 		if (par3ItemStack != null && ((!result && event.useItem != Event.Result.DENY) || event.useItem == Event.Result.ALLOW))

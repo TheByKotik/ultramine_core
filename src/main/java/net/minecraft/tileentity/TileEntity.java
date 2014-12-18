@@ -3,6 +3,7 @@ package net.minecraft.tileentity;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -66,6 +67,7 @@ public class TileEntity
 
 	public void readFromNBT(NBTTagCompound p_145839_1_)
 	{
+		if(owner == null && p_145839_1_.hasKey("#")) owner = p_145839_1_.getString("#");
 		this.xCoord = p_145839_1_.getInteger("x");
 		this.yCoord = p_145839_1_.getInteger("y");
 		this.zCoord = p_145839_1_.getInteger("z");
@@ -81,6 +83,7 @@ public class TileEntity
 		}
 		else
 		{
+			if(owner != null) p_145841_1_.setString("#", owner);
 			p_145841_1_.setString("id", s);
 			p_145841_1_.setInteger("x", this.xCoord);
 			p_145841_1_.setInteger("y", this.yCoord);
@@ -369,5 +372,20 @@ public class TileEntity
 			}
 		}
 		return bb;
+	}
+	
+	/* ======================================== ULTRAMINE START ===================================== */
+	
+	private String owner;
+	
+	public final void setObjectOwner(String owner)
+	{
+		if(this.owner == null)
+			this.owner = owner;
+	}
+	
+	public final String getObjectOwner()
+	{
+		return this.owner;
 	}
 }

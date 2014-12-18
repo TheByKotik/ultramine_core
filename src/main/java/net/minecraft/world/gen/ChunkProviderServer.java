@@ -205,7 +205,9 @@ public class ChunkProviderServer implements IChunkProvider
 				{
 					try
 					{
+						isGenerating = true;
 						chunk = this.currentChunkProvider.provideChunk(par1, par2);
+						isGenerating = false;
 					}
 					catch (Throwable throwable)
 					{
@@ -310,10 +312,12 @@ public class ChunkProviderServer implements IChunkProvider
 
 			if (this.currentChunkProvider != null)
 			{
+				isGenerating = true;
 				this.currentChunkProvider.populate(par1IChunkProvider, par2, par3);
 				if(!worldObj.getConfig().generation.disableModGeneration)
 					GameRegistry.generateWorld(par2, par3, worldObj, currentChunkProvider, par1IChunkProvider);
 				chunk.setChunkModified();
+				isGenerating = false;
 			}
 		}
 	}
@@ -460,6 +464,7 @@ public class ChunkProviderServer implements IChunkProvider
 	private int lastFullSaveTick;
 	private boolean preventSaving;
 	private boolean isWorldUnloaded;
+	private boolean isGenerating;
 	
 	@SideOnly(Side.SERVER)
 	private ChunkGC chunkGC;
@@ -634,5 +639,10 @@ public class ChunkProviderServer implements IChunkProvider
 		chunksToUnload.clear();
 		possibleSaves.clear();
 		((AnvilChunkLoader)currentChunkLoader).unsafeRemoveAll();
+	}
+	
+	public boolean isGenerating()
+	{
+		return isGenerating;
 	}
 }

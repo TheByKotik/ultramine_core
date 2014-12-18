@@ -3,12 +3,14 @@ package net.minecraft.entity;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -1300,6 +1302,7 @@ public abstract class Entity
 	{
 		try
 		{
+			if(owner != null) p_70109_1_.setString("#", owner);
 			p_70109_1_.setTag("Pos", this.newDoubleNBTList(new double[] {this.posX, this.posY + (double)this.ySize, this.posZ}));
 			p_70109_1_.setTag("Motion", this.newDoubleNBTList(new double[] {this.motionX, this.motionY, this.motionZ}));
 			p_70109_1_.setTag("Rotation", this.newFloatNBTList(new float[] {this.rotationYaw, this.rotationPitch}));
@@ -1356,6 +1359,7 @@ public abstract class Entity
 	{
 		try
 		{
+			owner = p_70020_1_.hasKey("#") ? p_70020_1_.getString("#") : null;
 			NBTTagList nbttaglist = p_70020_1_.getTagList("Pos", 6);
 			NBTTagList nbttaglist1 = p_70020_1_.getTagList("Motion", 6);
 			NBTTagList nbttaglist2 = p_70020_1_.getTagList("Rotation", 5);
@@ -2471,6 +2475,19 @@ public abstract class Entity
 		}
 	
 	/* ===================================== ULTRAMINE START =====================================*/
+	
+	private String owner;
+	
+	public final void setObjectOwner(String owner)
+	{
+		if(this.owner == null)
+			this.owner = owner;
+	}
+	
+	public final String getObjectOwner()
+	{
+		return this.owner;
+	}
 	
 	public boolean isEntityLiving()
 	{

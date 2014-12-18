@@ -2,6 +2,9 @@ package net.minecraft.entity;
 
 import java.util.Iterator;
 import java.util.List;
+
+import org.ultramine.server.event.UMEventFactory;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -231,7 +234,7 @@ public abstract class EntityHanging extends Entity
 		}
 		else
 		{
-			if (!this.isDead && !this.worldObj.isRemote)
+			if (!this.isDead && !this.worldObj.isRemote && !UMEventFactory.fireHangingBreak(this, p_70097_1_))
 			{
 				this.setDead();
 				this.setBeenAttacked();

@@ -106,6 +106,7 @@ import org.apache.logging.log4j.Logger;
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.chunk.ChunkSendManager;
 import org.ultramine.server.data.player.PlayerData;
+import org.ultramine.server.event.UMEventFactory;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.common.ForgeHooks;
@@ -743,6 +744,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
 	public void closeContainer()
 	{
+		UMEventFactory.fireInventoryClose(this);
 		this.openContainer.onContainerClosed(this);
 		this.openContainer = this.inventoryContainer;
 	}

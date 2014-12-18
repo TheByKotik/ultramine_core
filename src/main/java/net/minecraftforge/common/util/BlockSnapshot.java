@@ -169,7 +169,7 @@ public class BlockSnapshot implements Serializable
 		{
 			if (force)
 			{
-				world.setBlock(x, y, z, getReplacedBlock(), meta, applyPhysics ? 3 : 2);
+				world.setBlockSilently(x, y, z, getReplacedBlock(), meta, applyPhysics ? 3 : 2);
 			}
 			else 
 			{
@@ -202,7 +202,7 @@ public class BlockSnapshot implements Serializable
 		{
 			if (force)
 			{
-				world.setBlock(x, y, z, getReplacedBlock(), meta, applyPhysics ? 3 : 2);
+				world.setBlockSilently(x, y, z, getReplacedBlock(), meta, applyPhysics ? 3 : 2);
 			} 
 			else
 			{

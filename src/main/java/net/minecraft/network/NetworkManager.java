@@ -22,10 +22,14 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.TimeoutException;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.GenericFutureListener;
+
 import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.util.Queue;
+
 import javax.crypto.SecretKey;
+
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.CryptManager;
 import net.minecraft.util.IChatComponent;
@@ -33,11 +37,13 @@ import net.minecraft.util.MessageDeserializer;
 import net.minecraft.util.MessageDeserializer2;
 import net.minecraft.util.MessageSerializer;
 import net.minecraft.util.MessageSerializer2;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
+import org.ultramine.server.event.WorldUpdateObjectType;
 
 public class NetworkManager extends SimpleChannelInboundHandler
 {
@@ -206,11 +212,21 @@ public class NetworkManager extends SimpleChannelInboundHandler
 
 		if (this.netHandler != null)
 		{
+			EntityPlayerMP player = netHandler instanceof NetHandlerPlayServer ? ((NetHandlerPlayServer)netHandler).playerEntity : null;
+			if(player != null)
+			{
+				player.worldObj.getEventProxy().pushState(WorldUpdateObjectType.PLAYER);
+				player.worldObj.getEventProxy().startEntity(player);
+			}
+
 			for (int i = 1000; !this.receivedPacketsQueue.isEmpty() && i >= 0; --i)
 			{
 				Packet packet = (Packet)this.receivedPacketsQueue.poll();
 				packet.processPacket(this.netHandler);
 			}
+
+			if(player != null)
+				player.worldObj.getEventProxy().popState();
 
 			this.netHandler.onNetworkTick();
 		}

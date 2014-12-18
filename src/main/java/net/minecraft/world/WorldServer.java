@@ -78,6 +78,7 @@ import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig.Settings.WorldTime;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.PendingBlockUpdate;
+import org.ultramine.server.event.WorldUpdateObjectType;
 import org.ultramine.server.mobspawn.MobSpawnManager;
 
 public class WorldServer extends World
@@ -364,6 +365,7 @@ public class WorldServer extends World
 
 			if (provider.canDoRainSnowIce(chunk) && this.rand.nextInt(16) == 0)
 			{
+				getEventProxy().pushState(WorldUpdateObjectType.WEATHER);
 				this.updateLCG = this.updateLCG * 3 + 1013904223;
 				i1 = this.updateLCG >> 2;
 				j1 = i1 & 15;
@@ -389,12 +391,14 @@ public class WorldServer extends World
 						this.getBlock(j1 + k, l1 - 1, k1 + l).fillWithRain(this, j1 + k, l1 - 1, k1 + l);
 					}
 				}
+				getEventProxy().popState();
 			}
 
 			this.theProfiler.endStartSection("tickBlocks");
 			ExtendedBlockStorage[] aextendedblockstorage = chunk.getBlockStorageArray();
 			j1 = aextendedblockstorage.length;
 
+			getEventProxy().pushState(WorldUpdateObjectType.BLOCK_RANDOM);
 			for (k1 = 0; k1 < j1; ++k1)
 			{
 				ExtendedBlockStorage extendedblockstorage = aextendedblockstorage[k1];
@@ -414,11 +418,13 @@ public class WorldServer extends World
 						if (block.getTickRandomly())
 						{
 							++i;
+							getEventProxy().startBlock(block, j2 + k, l2 + extendedblockstorage.getYLocation(), k2 + l);
 							block.updateTick(this, j2 + k, l2 + extendedblockstorage.getYLocation(), k2 + l, this.rand);
 						}
 					}
 				}
 			}
+			getEventProxy().popState();
 
 			this.theProfiler.endSection();
 		}
@@ -816,6 +822,7 @@ public class WorldServer extends World
 
 	private void func_147488_Z()
 	{
+		getEventProxy().pushState(WorldUpdateObjectType.BLOCK_EVENT);
 		while (!this.field_147490_S[this.blockEventCacheIndex].isEmpty())
 		{
 			int i = this.blockEventCacheIndex;
@@ -825,6 +832,9 @@ public class WorldServer extends World
 			while (iterator.hasNext())
 			{
 				BlockEventData blockeventdata = (BlockEventData)iterator.next();
+				Block block = getBlockIfExists(blockeventdata.func_151340_a(), blockeventdata.func_151342_b(), blockeventdata.func_151341_c());
+				if(block == blockeventdata.getBlock())
+					getEventProxy().startBlock(block, blockeventdata.func_151340_a(), blockeventdata.func_151342_b(), blockeventdata.func_151341_c());
 
 				if (this.func_147485_a(blockeventdata))
 				{
@@ -834,11 +844,12 @@ public class WorldServer extends World
 
 			this.field_147490_S[i].clear();
 		}
+		getEventProxy().popState();
 	}
 
 	private boolean func_147485_a(BlockEventData p_147485_1_)
 	{
-		Block block = this.getBlock(p_147485_1_.func_151340_a(), p_147485_1_.func_151342_b(), p_147485_1_.func_151341_c());
+		Block block = this.getBlockIfExists(p_147485_1_.func_151340_a(), p_147485_1_.func_151342_b(), p_147485_1_.func_151341_c());
 		return block == p_147485_1_.getBlock() ? block.onBlockEventReceived(this, p_147485_1_.func_151340_a(), p_147485_1_.func_151342_b(), p_147485_1_.func_151341_c(), p_147485_1_.getEventID(), p_147485_1_.getEventParameter()) : false;
 	}
 
@@ -990,16 +1001,19 @@ public class WorldServer extends World
 		int x = chunk.xPosition << 4;
 		int z = chunk.zPosition << 4;
 		
+		getEventProxy().pushState(WorldUpdateObjectType.BLOCK_PENDING);
 		PendingBlockUpdate p;
 		while((p = chunk.pollPending(time)) != null)
 		{
 			updateBlock(x + p.x, p.y, z + p.z, p.getBlock());
 		}
+		getEventProxy().popState();
 	}
 	
 	private void updateBlock(int x, int y, int z, Block block1)
 	{
 		Block block = this.getBlock(x, y, z);
+		getEventProxy().startBlock(block, x, y, z);
 
 		if (block.getMaterial() != Material.air && Block.isEqualTo(block, block1))
 		{

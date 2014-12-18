@@ -23,6 +23,9 @@ import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.chunk.ChunkProfiler.WorldChunkProfiler;
 import org.ultramine.server.chunk.IChunkLoadCallback;
+import org.ultramine.server.event.ServerWorldEventProxy;
+import org.ultramine.server.event.WorldEventProxy;
+import org.ultramine.server.event.WorldUpdateObjectType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHopper;
@@ -65,6 +68,7 @@ import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldInfo;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 
 import com.google.common.collect.ImmutableSetMultimap;
@@ -437,7 +441,17 @@ public abstract class World implements IBlockAccess
 		return this.chunkProvider.provideChunk(p_72964_1_, p_72964_2_);
 	}
 
-	public boolean setBlock(int p_147465_1_, int p_147465_2_, int p_147465_3_, Block p_147465_4_, int p_147465_5_, int p_147465_6_)
+	public boolean setBlockSilently(int x, int y, int z, Block block, int meta, int flags)
+	{
+		return setBlock(x, y, z, block, meta, flags, false);
+	}
+	
+	public boolean setBlock(int x, int y, int z, Block block, int meta, int flags)
+	{
+		return setBlock(x, y, z, block, meta, flags, true);
+	}
+
+	public boolean setBlock(int p_147465_1_, int p_147465_2_, int p_147465_3_, Block p_147465_4_, int p_147465_5_, int p_147465_6_, boolean fireEvent)
 	{
 		if (p_147465_1_ >= -MAX_BLOCK_COORD && p_147465_3_ >= -MAX_BLOCK_COORD && p_147465_1_ < MAX_BLOCK_COORD && p_147465_3_ < MAX_BLOCK_COORD)
 		{
@@ -451,6 +465,8 @@ public abstract class World implements IBlockAccess
 			}
 			else
 			{
+				if(fireEvent && !eventProxy.canChangeBlock(p_147465_1_, p_147465_2_, p_147465_3_, p_147465_4_, p_147465_5_, p_147465_6_))
+					return false;
 				Chunk chunk = this.getChunkFromChunkCoords(p_147465_1_ >> 4, p_147465_3_ >> 4);
 				Block block1 = null;
 				net.minecraftforge.common.util.BlockSnapshot blockSnapshot = null;
@@ -467,6 +483,13 @@ public abstract class World implements IBlockAccess
 				}
 
 				boolean flag = chunk.func_150807_a(p_147465_1_ & 15, p_147465_2_, p_147465_3_ & 15, p_147465_4_, p_147465_5_);
+				
+				if(p_147465_4_.hasTileEntity(p_147465_5_))
+				{
+					TileEntity te = getTileEntity(p_147465_1_, p_147465_2_, p_147465_3_);
+					if(te != null)
+						te.setObjectOwner(eventProxy.getObjectOwner());
+				}
 
 				if (!flag && blockSnapshot != null)
 				{
@@ -712,7 +735,9 @@ public abstract class World implements IBlockAccess
 
 			try
 			{
+				eventProxy.startNeighbor(p_147460_1_, p_147460_2_, p_147460_3_);
 				block.onNeighborBlockChange(this, p_147460_1_, p_147460_2_, p_147460_3_, p_147460_4_);
+				eventProxy.endNeighbor();
 			}
 			catch (Throwable throwable1)
 			{
@@ -1337,6 +1362,10 @@ public abstract class World implements IBlockAccess
 		{
 			flag = true;
 		}
+		else
+		{
+			p_72838_1_.setObjectOwner(eventProxy.getObjectOwner());
+		}
 
 		if (!flag && !chunkExists)
 		{
@@ -1835,9 +1864,11 @@ public abstract class World implements IBlockAccess
 		CrashReport crashreport;
 		CrashReportCategory crashreportcategory;
 
+		eventProxy.pushState(WorldUpdateObjectType.ENTITY_WEATHER);
 		for (i = 0; i < this.weatherEffects.size(); ++i)
 		{
 			entity = (Entity)this.weatherEffects.get(i);
+			eventProxy.startEntity(entity);
 
 			try
 			{
@@ -1874,6 +1905,7 @@ public abstract class World implements IBlockAccess
 				this.weatherEffects.remove(i--);
 			}
 		}
+		eventProxy.popState();
 
 		this.theProfiler.endStartSection("remove");
 		this.loadedEntityList.removeAll(this.unloadedEntityList);
@@ -1900,9 +1932,11 @@ public abstract class World implements IBlockAccess
 		this.unloadedEntityList.clear();
 		this.theProfiler.endStartSection("regular");
 
+		eventProxy.pushState(WorldUpdateObjectType.ENTITY);
 		for (i = 0; i < this.loadedEntityList.size(); ++i)
 		{
 			entity = (Entity)this.loadedEntityList.get(i);
+			eventProxy.startEntity(entity);
 
 			if (entity.ridingEntity != null)
 			{
@@ -1960,14 +1994,17 @@ public abstract class World implements IBlockAccess
 
 			this.theProfiler.endSection();
 		}
+		eventProxy.popState();
 
 		this.theProfiler.endStartSection("blockEntities");
 		this.field_147481_N = true;
 		Iterator iterator = this.loadedTileEntityList.iterator();
 
+		eventProxy.pushState(WorldUpdateObjectType.TILEE_ENTITY);
 		while (iterator.hasNext())
 		{
 			TileEntity tileentity = (TileEntity)iterator.next();
+			eventProxy.startTileEntity(tileentity);
 
 			int key = ChunkHash.chunkToKey(tileentity.xCoord >> 4, tileentity.zCoord >> 4);
 			if (!tileentity.isInvalid() && tileentity.hasWorldObj() && activeChunkSet.containsKey(key))
@@ -2011,6 +2048,7 @@ public abstract class World implements IBlockAccess
 				}
 			}
 		}
+		eventProxy.popState();
 
 		if (!this.field_147483_b.isEmpty())
 		{
@@ -4109,6 +4147,7 @@ public abstract class World implements IBlockAccess
 	
 	public static final int MAX_BLOCK_COORD = 500000;//524288;
 	private final ServerLoadBalancer balancer = new ServerLoadBalancer(this);
+	private final WorldEventProxy eventProxy = FMLCommonHandler.instance().getSide().isServer() && this instanceof WorldServer ? new ServerWorldEventProxy((WorldServer)this) : new WorldEventProxy();
 	private final WorldChunkProfiler chunkProfiler;
 	
 	public Chunk getChunkIfExists(int cx, int cz)
@@ -4173,5 +4212,10 @@ public abstract class World implements IBlockAccess
 			this.loadedTileEntityList.removeAll(this.field_147483_b);
 			this.field_147483_b.clear();
 		}
+	}
+	
+	public WorldEventProxy getEventProxy()
+	{
+		return eventProxy;
 	}
 }
