@@ -181,7 +181,7 @@ public class EntityList
 		}
 		else
 		{
-			logger.warn("Skipping Entity with id " + p_75615_0_.getString("id"));
+			logger.debug("Skipping Entity with id " + p_75615_0_.getString("id"));
 		}
 
 		return entity;

@@ -128,7 +128,7 @@ public class TileEntity
 		}
 		else
 		{
-			logger.warn("Skipping BlockEntity with id " + p_145827_0_.getString("id"));
+			logger.debug("Skipping BlockEntity with id " + p_145827_0_.getString("id"));
 		}
 
 		return tileentity;
