@@ -118,6 +118,7 @@ public class UltramineServerConfig
 		public AutoBroacastConf autobroadcast = new AutoBroacastConf();
 		public AutoDebugInfoConf autoDebugInfo = new AutoDebugInfoConf();
 		public AutoBackupConf autobackup = new AutoBackupConf();
+		public WarpProtectionEntry[] warpProtection = new WarpProtectionEntry[0];
 		
 		public static class AutoBroacastConf
 		{
@@ -141,6 +142,18 @@ public class UltramineServerConfig
 			public int maxDirSize = 50000; //megabytes
 			public List<String> worlds = null;
 			public boolean notifyPlayers = true;
+		}
+		
+		public static class WarpProtectionEntry
+		{
+			public String name;
+			public int radius;
+			public boolean changeBlocks;
+			public boolean useItems;
+			public boolean userBlocks;
+			public boolean pvp;
+			public boolean mobSpawn;
+			public boolean mobDamage;
 		}
 	}
 

@@ -42,6 +42,7 @@ import org.ultramine.server.data.Databases;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerCoreData;
 import org.ultramine.server.tools.ButtonCommand;
+import org.ultramine.server.tools.WarpProtection;
 
 public class UltramineServerModContainer extends DummyModContainer
 {
@@ -116,7 +117,10 @@ public class UltramineServerModContainer extends DummyModContainer
 		e.getPermissionHandler().createGroup(OpPermissionProxySet.OP_GROUP, "*");
 		
 		if(e.getSide().isServer())
+		{
 			buttonCommand.load(e);
+			FMLCommonHandler.instance().bus().register(new WarpProtection());
+		}
 	}
 	
 	@Subscribe
