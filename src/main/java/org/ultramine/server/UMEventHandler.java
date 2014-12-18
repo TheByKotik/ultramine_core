@@ -182,6 +182,8 @@ public class UMEventHandler
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onBreakEvent(BlockEvent.BreakEvent e)
 	{
+		if(!e.getPlayer().isEntityPlayerMP() || ((EntityPlayerMP)e.getPlayer()).playerNetServerHandler == null)
+			return;
 		if(!PermissionHandler.getInstance().has(e.getPlayer(), "ability.player.blockbreak"))
 		{
 			e.setCanceled(true);
@@ -193,6 +195,8 @@ public class UMEventHandler
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onPlaceEvent(BlockEvent.PlaceEvent e)
 	{
+		if(!e.player.isEntityPlayerMP() || ((EntityPlayerMP)e.player).playerNetServerHandler == null)
+			return;
 		if(!PermissionHandler.getInstance().has(e.player, "ability.player.blockplace"))
 		{
 			e.setCanceled(true);
