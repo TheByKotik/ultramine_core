@@ -753,22 +753,25 @@ public abstract class World implements IBlockAccess
 				{
 					l = -1;
 				}
-
-				crashreportcategory.addCrashSectionCallable("Source block type", new Callable()
+				
+				try
 				{
-					private static final String __OBFID = "CL_00000142";
-					public String call()
+					String s;
+					try
 					{
-						try
-						{
-							return String.format("ID #%d (%s // %s)", new Object[] {Integer.valueOf(Block.getIdFromBlock(p_147460_4_)), p_147460_4_.getUnlocalizedName(), p_147460_4_.getClass().getCanonicalName()});
-						}
-						catch (Throwable throwable2)
-						{
-							return "ID #" + Block.getIdFromBlock(p_147460_4_);
-						}
+						s = String.format("ID #%d (%s // %s)", new Object[] {Integer.valueOf(Block.getIdFromBlock(p_147460_4_)), p_147460_4_.getUnlocalizedName(), p_147460_4_.getClass().getCanonicalName()});
 					}
-				});
+					catch (Throwable throwable2)
+					{
+						s = "ID #" + Block.getIdFromBlock(p_147460_4_);
+					}
+					crashreportcategory.addCrashSection("Source block type", s);
+				}
+				catch (Throwable throwable)
+				{
+					crashreportcategory.addCrashSectionThrowable("Source block type", throwable);
+				}
+				
 				CrashReportCategory.func_147153_a(crashreportcategory, p_147460_1_, p_147460_2_, p_147460_3_, block, l);
 				throw new ReportedException(crashreport);
 			}
@@ -1955,7 +1958,11 @@ public abstract class World implements IBlockAccess
 			{
 				try
 				{
+					long startT = System.nanoTime();
 					this.updateEntity(entity);
+					long elapsed = System.nanoTime() - startT;
+					if(elapsed > 20000000)
+						FMLLog.warning("Possible lag source Entity %s %sms", entity, (elapsed/1000000));
 				}
 				catch (Throwable throwable1)
 				{
@@ -1967,6 +1974,8 @@ public abstract class World implements IBlockAccess
 					{
 						FMLLog.severe(crashreport.getCompleteReport());
 						removeEntity(entity);
+						if(entity.isEntityPlayerMP())
+							((EntityPlayerMP)entity).playerNetServerHandler.kickPlayerFromServer("Internal server error");
 					}
 					else
 					{
@@ -2012,7 +2021,12 @@ public abstract class World implements IBlockAccess
 				chunkProfiler.startChunk(key);
 				try
 				{
+					long startT = System.nanoTime();
 					tileentity.updateEntity();
+					long elapsed = System.nanoTime() - startT;
+					if(elapsed > 20000000)
+						FMLLog.warning("Possible lag source TileEntity %s [%s](%s, %s, %s) %sms", tileentity.getClass(), provider.dimensionId,
+								tileentity.xCoord, tileentity.yCoord, tileentity.zCoord, (elapsed/1000000));
 				}
 				catch (Throwable throwable)
 				{
