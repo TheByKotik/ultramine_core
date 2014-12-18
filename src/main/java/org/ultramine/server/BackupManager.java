@@ -34,7 +34,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.commands.CommandContext;
-import org.ultramine.server.UltramineServerConfig.SettingsConf.AutoBackupConf;
+import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoBackupConf;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.util.GlobalExecutors;
 import org.ultramine.server.util.ZipUtil;
@@ -74,7 +74,7 @@ public class BackupManager
 			isBackuping = false;
 		}
 		
-		AutoBackupConf conf = ConfigurationHandler.getServerConfig().settings.autobackup;
+		AutoBackupConf conf = ConfigurationHandler.getServerConfig().tools.autobackup;
 		if(conf.enabled && (System.currentTimeMillis() - lastBackupTime >= conf.interval*60*1000) && !isBackuping)
 		{
 			lastBackupTime = System.currentTimeMillis();

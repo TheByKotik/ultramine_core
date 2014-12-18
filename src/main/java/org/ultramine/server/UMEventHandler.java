@@ -1,6 +1,7 @@
 package org.ultramine.server;
 
-import org.ultramine.server.UltramineServerConfig.SettingsConf.MessagesConf.AutoBroacastConf;
+import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoBroacastConf;
+import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoDebugInfoConf;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.WarpLocation;
@@ -72,54 +73,58 @@ public class UMEventHandler
 			MinecraftServer server = MinecraftServer.getServer();
 			server.getBackupManager().tick();
 			
-			AutoBroacastConf cfg = ConfigurationHandler.getServerConfig().settings.messages.autobroadcast;
+			AutoDebugInfoConf cfg = ConfigurationHandler.getServerConfig().tools.autoDebugInfo;
 			if(cfg.enabled && server.getTickCounter() % (cfg.intervalSeconds*20) == 0)
 			{
-				if(cfg.showDebugInfo)
+				double tps = Math.round(server.currentTPS*10)/10d;
+				double downtime = server.currentWait/1000/1000d;
+				double pickdowntime = server.pickWait/1000/1000d;
+				int load = (int)Math.round((50-downtime)/50*100);
+				int pickload = (int)Math.round((50-pickdowntime)/50*100);
+				ChatComponentText loadcomp = new ChatComponentText(Integer.toString(load).concat("%"));
+				ChatComponentText pickloadcomp = new ChatComponentText(Integer.toString(pickload).concat("%"));
+				ChatComponentText tpscomp = new ChatComponentText(Double.toString(tps));
+				loadcomp.getChatStyle().setColor(load > 100 ? RED : DARK_GREEN);
+				pickloadcomp.getChatStyle().setColor(pickload >= 200 ? RED : DARK_GREEN);
+				tpscomp.getChatStyle().setColor(tps < 15 ? RED : DARK_GREEN);
+				
+				int mobcount = 0;
+				int itemcount = 0;
+				
+				for(WorldServer world : server.getMultiWorld().getLoadedWorlds())
 				{
-					double tps = Math.round(server.currentTPS*10)/10d;
-					double downtime = server.currentWait/1000/1000d;
-					double pickdowntime = server.pickWait/1000/1000d;
-					int load = (int)Math.round((50-downtime)/50*100);
-					int pickload = (int)Math.round((50-pickdowntime)/50*100);
-					ChatComponentText loadcomp = new ChatComponentText(Integer.toString(load).concat("%"));
-					ChatComponentText pickloadcomp = new ChatComponentText(Integer.toString(pickload).concat("%"));
-					ChatComponentText tpscomp = new ChatComponentText(Double.toString(tps));
-					loadcomp.getChatStyle().setColor(load > 100 ? RED : DARK_GREEN);
-					pickloadcomp.getChatStyle().setColor(pickload >= 200 ? RED : DARK_GREEN);
-					tpscomp.getChatStyle().setColor(tps < 15 ? RED : DARK_GREEN);
-					
-					int mobcount = 0;
-					int itemcount = 0;
-					
-					for(WorldServer world : server.getMultiWorld().getLoadedWorlds())
+					for(Entity ent : GenericIterableFactory.newCastingIterable(world.loadedEntityList, Entity.class))
 					{
-						for(Entity ent : GenericIterableFactory.newCastingIterable(world.loadedEntityList, Entity.class))
-						{
-							if(ent.isEntityLiving() && !ent.isEntityPlayer())
-								mobcount++;
-							else if(ent instanceof EntityItem)
-								itemcount++;
-						}
+						if(ent.isEntityLiving() && !ent.isEntityPlayer())
+							mobcount++;
+						else if(ent instanceof EntityItem)
+							itemcount++;
 					}
-					
-					ChatComponentTranslation full = new ChatComponentTranslation("ultramine.autobroadcast.debugmsg", loadcomp, pickloadcomp, tpscomp,
-							Integer.toString(mobcount), Integer.toString(itemcount));
-					full.getChatStyle().setColor(YELLOW);
-					
-					server.getConfigurationManager().sendChatMsg(full);
 				}
 				
-				if(cfg.messages.length != 0)
+				ChatComponentTranslation full = new ChatComponentTranslation("ultramine.autobroadcast.debugmsg", loadcomp, pickloadcomp, tpscomp,
+						Integer.toString(mobcount), Integer.toString(itemcount));
+				full.getChatStyle().setColor(YELLOW);
+				
+				server.addChatMessage(full);
+				for(EntityPlayerMP player : GenericIterableFactory.newCastingIterable(server.getConfigurationManager().playerEntityList, EntityPlayerMP.class))
+					if(PermissionHandler.getInstance().has(player, "show.debuginfo"))
+						player.addChatMessage(full);
+			}
+			
+			AutoBroacastConf msgcfg = ConfigurationHandler.getServerConfig().tools.autobroadcast;
+			if(msgcfg.enabled && server.getTickCounter() % (msgcfg.intervalSeconds*20) == 0)
+			{
+				if(msgcfg.messages.length != 0)
 				{
-					if(cfg.showAllMessages)
+					if(msgcfg.showAllMessages)
 					{
-						for(String msg : cfg.messages)
+						for(String msg : msgcfg.messages)
 							broadcastMessage(msg);
 					}
 					else
 					{
-						broadcastMessage(cfg.messages[server.getTickCounter() % (cfg.intervalSeconds*20*cfg.messages.length) / (cfg.intervalSeconds*20)]);
+						broadcastMessage(msgcfg.messages[server.getTickCounter() % (msgcfg.intervalSeconds*20*msgcfg.messages.length) / (msgcfg.intervalSeconds*20)]);
 					}
 				}
 			}
