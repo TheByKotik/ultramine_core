@@ -235,7 +235,7 @@ public class ChunkSendManager
 		{
 			int key = ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition);
 			
-			if(sending.contains(key) && ((WorldServer)chunk.worldObj).getPlayerManager() == manager)
+			if(sending.remove(key) && ((WorldServer)chunk.worldObj).getPlayerManager() == manager)
 			{
 				manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, true).addPlayer(player);
 				
@@ -255,7 +255,6 @@ public class ChunkSendManager
 				MinecraftForge.EVENT_BUS.post(new ChunkWatchEvent.Watch(chunk.getChunkCoordIntPair(), player));
 				
 				sended.add(key);
-				sending.remove(key);
 			}
 			else
 			{
