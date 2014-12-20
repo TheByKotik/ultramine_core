@@ -330,6 +330,8 @@ public class WorldServer extends World
 			int chunkCoord = iter.key();
 			int chunkX = ChunkHash.keyToX(chunkCoord);
 			int chunkZ = ChunkHash.keyToZ(chunkCoord);
+			int priority = iter.value();
+			int blocksPerChunk = priority < 3 ? 3 : priority < 5 ? 2 : 1;
 			int k = chunkX << 4;
 			int l = chunkZ << 4;
 			
@@ -405,7 +407,7 @@ public class WorldServer extends World
 
 				if (extendedblockstorage != null && extendedblockstorage.getNeedsRandomTick())
 				{
-					for (int i3 = 0; i3 < 3; ++i3)
+					for (int i3 = 0; i3 < blocksPerChunk; ++i3)
 					{
 						this.updateLCG = this.updateLCG * 3 + 1013904223;
 						int i2 = this.updateLCG >> 2;
