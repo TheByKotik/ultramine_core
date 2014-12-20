@@ -119,7 +119,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		if(e.getSide().isServer())
 		{
 			buttonCommand.load(e);
-			FMLCommonHandler.instance().bus().register(new WarpProtection());
+			MinecraftForge.EVENT_BUS.register(new WarpProtection());
 		}
 	}
 	
