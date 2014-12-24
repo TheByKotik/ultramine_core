@@ -45,6 +45,8 @@ public class WarpLocation
 			return this;
 		
 		WorldServer world = MinecraftServer.getServer().getMultiWorld().getWorldByID(dimension);
+		if(world == null)
+			return this;
 		double newX = x + randomRadius*world.rand.nextDouble()*(world.rand.nextBoolean() ? -1 : 1);
 		double newZ = z + randomRadius*world.rand.nextDouble()*(world.rand.nextBoolean() ? -1 : 1);
 		double newY = y;
@@ -56,6 +58,10 @@ public class WarpLocation
 				newY++;
 			while(world.getBlock(intX, MathHelper.floor_double(newY)-1, intZ) == Blocks.air)
 				newY--;
+		}
+		else
+		{
+			return this;
 		}
 		
 		return new WarpLocation(dimension, newX, newY, newZ, yaw, pitch, 0);
