@@ -103,7 +103,7 @@ public class UMEventHandler
 				}
 				
 				ChatComponentTranslation full = new ChatComponentTranslation("ultramine.autobroadcast.debugmsg", loadcomp, pickloadcomp, tpscomp,
-						Integer.toString(mobcount), Integer.toString(itemcount));
+						Integer.toString(mobcount), Integer.toString(itemcount), server.getConfigurationManager().playerEntityList.size());
 				full.getChatStyle().setColor(YELLOW);
 				
 				server.addChatMessage(full);

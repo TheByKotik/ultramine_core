@@ -3,7 +3,7 @@ teleporter.fail.cooldownd=You will be able to teleport in %s seconds
 teleporter.delay=You will be teleported in %s seconds
 teleporter.canceled=Teleportation canceled
 
-ultramine.autobroadcast.debugmsg=Server load: %s (Peak: %s), TPS: %s/20, Mobs: %s, Items: %s
+ultramine.autobroadcast.debugmsg=Server load: %s (Peak: %s), TPS: %s/20, Mobs: %s, Items: %s, Players: %s
 ultramine.autobackup.start=Autobackup started
 
 ultramine.ability.blockbreak=You don't have permissions to break blocks

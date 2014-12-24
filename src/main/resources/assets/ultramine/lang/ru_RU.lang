@@ -3,7 +3,7 @@ teleporter.fail.cooldownd=Вы сможете телепортироваться
 teleporter.delay=Вы будете телепортированы через %s секунд
 teleporter.canceled=Телепортация отменена
 
-ultramine.autobroadcast.debugmsg=Сервер нагружен на %s (В пике - %s), Тиков в секунду: %s/20, Мобов: %s, Предметов: %s
+ultramine.autobroadcast.debugmsg=Сервер нагружен на %s (В пике - %s), Тиков в секунду: %s/20, Мобов: %s, Предметов: %s, Игроков: %s
 ultramine.autobackup.start=Выполняется автоматический бэкап мира
 
 ultramine.ability.blockbreak=У вас нет прав на разрушение блоков
