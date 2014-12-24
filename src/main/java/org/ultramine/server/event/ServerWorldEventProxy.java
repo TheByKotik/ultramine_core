@@ -111,6 +111,12 @@ public class ServerWorldEventProxy extends WorldEventProxy
 	}
 	
 	@Override
+	public WorldUpdateObject getUpdateObject()
+	{
+		return object;
+	}
+	
+	@Override
 	public boolean canChangeBlock(int x, int y, int z, Block block, int meta, int flags)
 	{
 		if(world.theChunkProviderServer.isGenerating())

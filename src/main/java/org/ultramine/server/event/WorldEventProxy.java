@@ -47,6 +47,11 @@ public class WorldEventProxy
 	{
 		return null;
 	}
+	
+	public WorldUpdateObject getUpdateObject()
+	{
+		return null;
+	}
 
 	public boolean canChangeBlock(int x, int y, int z, Block block, int meta, int flags)
 	{
