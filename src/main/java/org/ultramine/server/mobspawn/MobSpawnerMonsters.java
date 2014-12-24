@@ -46,7 +46,7 @@ public class MobSpawnerMonsters extends MobSpawner
 		if(!world.getBlock(x, topf-1, z).isSideSolid(world, x, topf-1, z, ForgeDirection.UP))
 			--topf;
 		int worldTime = (int)(world.getWorldInfo().getWorldTime() % 24000);
-		boolean isDay = worldTime < 14200 || worldTime > 21800;
+		boolean isDay = (worldTime < 14200 || worldTime > 21800) && world.provider.isSurfaceWorld();
 		
 		int op;
 		int y;
@@ -57,7 +57,7 @@ public class MobSpawnerMonsters extends MobSpawner
 			op = 0;
 			y = world.rand.nextInt(topf - 2);
 		}
-		else if(world.rand.nextInt(3) == 0)
+		else if(!world.provider.hasNoSky && world.rand.nextInt(3) == 0)
 		{
 			op = 1;
 			y = topf;
