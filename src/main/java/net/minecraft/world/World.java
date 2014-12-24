@@ -2064,15 +2064,22 @@ public abstract class World implements IBlockAccess
 		}
 		eventProxy.popState();
 
+		theProfiler.startSection("unload");
 		if (!this.field_147483_b.isEmpty())
 		{
 			for (Object tile : field_147483_b)
 			{
-			((TileEntity)tile).onChunkUnload();
+				long startT = System.nanoTime();
+				((TileEntity)tile).onChunkUnload();
+				long elapsed = System.nanoTime() - startT;
+				if(elapsed > 20000000)
+					FMLLog.warning("Possible lag source on unload TileEntity %s [%s](%s, %s, %s) %sms", tile.getClass(), provider.dimensionId,
+							((TileEntity)tile).xCoord, ((TileEntity)tile).yCoord, ((TileEntity)tile).zCoord, (elapsed/1000000));
 			}
 			this.loadedTileEntityList.removeAll(this.field_147483_b);
 			this.field_147483_b.clear();
 		}
+		theProfiler.endSection();
 
 		this.field_147481_N = false;
 
