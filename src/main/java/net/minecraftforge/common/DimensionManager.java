@@ -325,21 +325,23 @@ public class DimensionManager
 			try {
 				if (w != null)
 				{
-					w.saveAllChunks(true, null);
+					w.theChunkProviderServer.unloadAll(true);
+					w.theChunkProviderServer.setWorldUnloaded();
+					w.forceUnloadTileEntities();
+					w.saveOtherData();
 				}
 				else
 				{
 					FMLLog.warning("Unexpected world unload - world %d is already unloaded", id);
 				}
-			} catch (MinecraftException e) {
-				e.printStackTrace();
-			}
+			} //catch (MinecraftException e) {
+				//e.printStackTrace();
+			//}
 			finally
 			{
 				if (w != null)
 				{
 					MinecraftForge.EVENT_BUS.post(new WorldEvent.Unload(w));
-					w.flush();
 					setWorld(id, null);
 				}
 			}

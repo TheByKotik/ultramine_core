@@ -627,18 +627,22 @@ public class ChunkProviderServer implements IChunkProvider
 		return isWorldUnloaded;
 	}
 	
-	public void unloadAllWithoutSave()
+	public void unloadAll(boolean save)
 	{
 		for(Chunk chunk : loadedChunkHashMap.valueCollection())
 		{
 			chunk.onChunkUnload();
-			MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Save(chunk, new NBTTagCompound()));
+			if(save && chunk.shouldSaveOnUnload())
+				safeSaveChunk(chunk);
+			else
+				MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Save(chunk, new NBTTagCompound())); //CodeChickenLib memory leak fix
 		}
 		
 		loadedChunkHashMap.clear();
 		chunksToUnload.clear();
 		possibleSaves.clear();
-		((AnvilChunkLoader)currentChunkLoader).unsafeRemoveAll();
+		if(!save)
+			((AnvilChunkLoader)currentChunkLoader).unsafeRemoveAll();
 	}
 	
 	public boolean isGenerating()

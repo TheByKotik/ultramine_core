@@ -382,10 +382,10 @@ public class MultiWorld
 		}
 		world.playerEntities.clear();
 		
-		world.theChunkProviderServer.unloadAllWithoutSave();
+		world.theChunkProviderServer.unloadAll(false);
 		world.forceUnloadTileEntities();
 		world.theChunkProviderServer.setWorldUnloaded();
-		world.theChunkProviderServer.unloadAllWithoutSave();
+		world.theChunkProviderServer.unloadAll(false);
 		world.forceUnloadTileEntities();
 		
 		MinecraftForge.EVENT_BUS.post(new WorldEvent.Unload(world));
