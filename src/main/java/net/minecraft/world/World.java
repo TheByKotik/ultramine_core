@@ -103,7 +103,7 @@ public abstract class World implements IBlockAccess
 	protected List unloadedEntityList = new ArrayList();
 	public List loadedTileEntityList = new ArrayList();
 	private List addedTileEntityList = new ArrayList();
-	private List field_147483_b = new ArrayList();
+	private Set field_147483_b = new HashSet();
 	public List playerEntities = new ArrayList();
 	public List weatherEffects = new ArrayList();
 	private long cloudColour = 16777215L;
@@ -1911,7 +1911,8 @@ public abstract class World implements IBlockAccess
 		eventProxy.popState();
 
 		this.theProfiler.endStartSection("remove");
-		this.loadedEntityList.removeAll(this.unloadedEntityList);
+		if(unloadedEntityList.size() != 0)
+			this.loadedEntityList.removeAll(new HashSet(unloadedEntityList));
 		int j;
 		int l;
 
