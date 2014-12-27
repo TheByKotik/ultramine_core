@@ -204,7 +204,8 @@ public class DataWatcher
 		while (iterator.hasNext())
 		{
 			DataWatcher.WatchableObject watchableobject = (DataWatcher.WatchableObject)iterator.next();
-			if(watchableobject.getObject() == null)
+			int type = watchableobject.getObjectType();
+			if(type < 7 && type != 5 && watchableobject.getObject() == null)
 			{
 				field_151511_a.setDead();
 				FMLLog.warning("Removed entity with broken DataWatcher! Class: %s Object: %s", field_151511_a.getClass(), field_151511_a);
