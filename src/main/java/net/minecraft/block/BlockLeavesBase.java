@@ -4,6 +4,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class BlockLeavesBase extends Block
 {
@@ -26,5 +28,16 @@ public class BlockLeavesBase extends Block
 	{
 		Block block = p_149646_1_.getBlock(p_149646_2_, p_149646_3_, p_149646_4_);
 		return !this.field_150121_P && block == this ? false : super.shouldSideBeRendered(p_149646_1_, p_149646_2_, p_149646_3_, p_149646_4_, p_149646_5_);
+	}
+	
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+	{
+		if(!world.isRemote && ((WorldServer)world).getConfig().settings.fastLeafDecay)
+		{
+			int meta = world.getBlockMetadata(x, y, z);
+
+			if ((meta & 8) != 0 && (meta & 4) == 0)
+				world.scheduleBlockUpdate(x, y, z, this, 4 + world.rand.nextInt(7));
+		}
 	}
 }

@@ -55,6 +55,7 @@ global: &global
         useIsolatedPlayerData: false
         respawnOnWarp: null
         reconnectOnWarp: null
+        fastLeafDecay: false
     borders: []
     chunkLoading: &global_cl
         viewDistance: 10

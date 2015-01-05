@@ -80,6 +80,7 @@ public class WorldsConfig
 			public boolean useIsolatedPlayerData = false;
 			public String respawnOnWarp = null;
 			public String reconnectOnWarp = null;
+			public boolean fastLeafDecay = false;
 			
 			public enum WorldTime
 			{
