@@ -254,6 +254,7 @@ public class ServerDataLoader
 		{
 			spawn = spawn.randomize();
 			player.setLocationAndAngles(spawn.x, spawn.y, spawn.z, spawn.yaw, spawn.pitch);
+			player.dimension = spawn.dimension;
 		}
 		ForgeEventFactory.firePlayerLoadingEvent(player, ((SaveHandler)mgr.getPlayerNBTLoader()).getPlayerSaveDir(), player.getUniqueID().toString());
 		mgr.initializeConnectionToPlayer_body(network, player, nethandler, nbt);
