@@ -86,6 +86,8 @@ public class UltramineServerConfig
 		{
 			public int cooldown = 60;
 			public int delay = 5;
+			public boolean interWorldHome = true;
+			public boolean interWorldWarp = true;
 		}
 
 		public static class MessagesConf

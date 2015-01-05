@@ -14,6 +14,7 @@ import net.minecraft.world.storage.WorldInfo;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
+import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.Teleporter;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.util.InventoryUtil;
@@ -41,6 +42,8 @@ public class BasicCommands
 		PlayerData data = ctx.contains("dst") ? ctx.get("dst").asPlayerData() : ctx.getSenderAsPlayer().getData();
 		WarpLocation home = data.core().getHome(ctx.contains("name") ? ctx.get("name").asString() : "home");
 		ctx.check(home != null, "command.home.fail.notset");
+		if(home.dimension != target.dimension && !ConfigurationHandler.getServerConfig().settings.teleportation.interWorldHome)
+			ctx.checkSenderPermission("ability.admin.ignoreInterworldHome", "command.home.fail.interworld");
 		Teleporter.tpLater(target, home);
 	}
 	
@@ -113,6 +116,8 @@ public class BasicCommands
 		EntityPlayerMP target = ctx.contains("player") ? ctx.get("player").asPlayer() : ctx.getSenderAsPlayer();
 		WarpLocation warp = ctx.getServerData().getWarp(ctx.get("name").asString());
 		ctx.check(warp != null, "command.warp.fail");
+		if(warp.dimension != target.dimension && !ConfigurationHandler.getServerConfig().settings.teleportation.interWorldWarp)
+			ctx.checkSenderPermission("ability.admin.ignoreInterworldHome", "command.warp.fail.interworld");
 		Teleporter.tpLater(target, warp);
 	}
 	

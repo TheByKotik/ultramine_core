@@ -72,6 +72,7 @@ command.home.description=Телепортация на точку дома, ус
 command.home.fail.notset=Точка дома не установлена
 command.home.multi.fail=У вас нет прав на использование множества домов
 command.home.other.fail=У нас нет прав на искользование домов других игроков
+command.home.fail.interworld=Телепортация в дом между мирами отключена
 
 command.sethome.usage=/sethome [название]
 command.sethome.description=Утанавливает точку телепортации /home
@@ -91,6 +92,7 @@ command.warp.usage=/warp <название>
 command.warp.description=Телепортирует вас на указанный варп
 command.warp.fail=Варп не найден
 command.warp.noperm.other=У вас нет прав на телепортацию других игроков
+command.warp.fail.interworld=Телепортация на варп между мирами отключена
 
 command.setwarp.usage=/setwarp <название> [случайный радиус]
 command.setwarp.description=Устанавливает новый варп на текущих координатах

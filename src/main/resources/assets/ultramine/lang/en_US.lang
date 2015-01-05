@@ -72,6 +72,7 @@ command.home.description=Teleports you to your home, sets with /sethome
 command.home.fail.notset=Home is not set
 command.home.multi.fail=You don't have permissions to use multiple homes
 command.home.other.fail=You don't have permissions to use homes of other players
+command.home.fail.interworld=Interdimensional teleportation to home is disabled
 
 command.sethome.usage=/sethome [name]
 command.sethome.description=Sets your /home teleportation point
@@ -91,6 +92,7 @@ command.warp.usage=/warp <name>
 command.warp.description=Teleports you to specified warp point
 command.warp.fail=Warp not found
 command.warp.noperm.other=You don't have permissions to teleport other players
+command.warp.fail.interworld=Interdimensional teleportation to warp is disabled
 
 command.setwarp.usage=/setwarp <name> [randomradius]
 command.setwarp.description=Sets new warp ar current location
