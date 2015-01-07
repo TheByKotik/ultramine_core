@@ -355,9 +355,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public void onDeath(DamageSource p_70645_1_)
 	{
 		if (ForgeHooks.onLivingDeath(this, p_70645_1_)) return;
-		this.mcServer.getConfigurationManager().sendChatMsg(this.func_110142_aN().func_151521_b());
+		if(p_70645_1_ != DamageSource.command)
+			this.mcServer.getConfigurationManager().sendChatMsg(this.func_110142_aN().func_151521_b());
 
-		if (!this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
+		if (p_70645_1_ != DamageSource.outOfWorld && !this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory") &&
+				!PermissionHandler.getInstance().has(this, "ability.admin.keepinventory"))
 		{
 			captureDrops = true;
 			capturedDrops.clear();

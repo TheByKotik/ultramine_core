@@ -23,6 +23,7 @@ public class DamageSource
 	public static DamageSource wither = (new DamageSource("wither")).setDamageBypassesArmor();
 	public static DamageSource anvil = new DamageSource("anvil");
 	public static DamageSource fallingBlock = new DamageSource("fallingBlock");
+	public static DamageSource command = new DamageSource("command").setDamageBypassesArmor().setDamageAllowedInCreativeMode();
 	private boolean isUnblockable;
 	private boolean isDamageAllowedInCreativeMode;
 	private boolean damageIsAbsolute;
