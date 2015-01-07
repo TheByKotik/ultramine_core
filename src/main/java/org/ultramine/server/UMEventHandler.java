@@ -237,6 +237,8 @@ public class UMEventHandler
 		if(attacker != null && attacker.isEntityPlayerMP())
 		{
 			EntityPlayerMP player = (EntityPlayerMP)attacker;
+			if(player.playerNetServerHandler == null)
+				return;
 			if(!PermissionHandler.getInstance().has(player, "ability.player.attack"))
 			{
 				e.setCanceled(true);
