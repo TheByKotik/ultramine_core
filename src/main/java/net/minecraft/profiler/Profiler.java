@@ -65,7 +65,7 @@ public class Profiler
 				this.profilingMap.put(this.profilingSection, k);
 			}
 
-			if (k > 100000000L)
+			if (k > 50000000L)
 			{
 				logger.warn("Something\'s taking too long! \'" + this.profilingSection + "\' took aprox " + (double)k / 1000000.0D + " ms");
 			}
