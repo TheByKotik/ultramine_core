@@ -70,7 +70,7 @@ public class ServerDataLoader
 	
 	public PlayerData getPlayerData(String username)
 	{
-		return namedPlayerDataCache.get(username);
+		return namedPlayerDataCache.get(username.toLowerCase());
 	}
 	
 	public WarpLocation getWarp(String name)
@@ -132,7 +132,7 @@ public class ServerDataLoader
 		for(PlayerData data : dataProvider.loadAllPlayerData())
 		{
 			playerDataCache.put(data.getProfile().getId(), data);
-			namedPlayerDataCache.put(data.getProfile().getName(), data);
+			namedPlayerDataCache.put(data.getProfile().getName().toLowerCase(), data);
 		}
 		warps.putAll(dataProvider.loadWarps());
 		fastWarps.addAll(dataProvider.loadFastWarps());
