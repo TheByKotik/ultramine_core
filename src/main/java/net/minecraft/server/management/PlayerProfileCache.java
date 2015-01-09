@@ -131,6 +131,7 @@ public class PlayerProfileCache
 				this.field_152661_c.remove(profileentry1.func_152668_a().getName().toLowerCase(Locale.ROOT));
 				this.field_152661_c.put(p_152651_1_.getName().toLowerCase(Locale.ROOT), profileentry);
 				this.field_152663_e.remove(p_152651_1_);
+				this.field_152662_d.put(uuid, profileentry);
 			}
 			else
 			{
