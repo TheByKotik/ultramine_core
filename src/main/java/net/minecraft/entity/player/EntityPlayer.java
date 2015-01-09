@@ -2014,7 +2014,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 			for (net.minecraftforge.common.IExtendedEntityProperties p : this.extendedProperties.values())
 				p.init(this, this.worldObj);
 		}
-		else if (this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
+		else if (p_71049_1_.keepInventoryOnClone)
 		{
 			this.inventory.copyInventory(p_71049_1_.inventory);
 			this.experienceLevel = p_71049_1_.experienceLevel;
@@ -2334,6 +2334,8 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 	}
 	
 	/* ===================================== ULTRAMINE START =====================================*/
+	
+	protected boolean keepInventoryOnClone;
 	
 	@Override
 	public boolean isEntityPlayer()

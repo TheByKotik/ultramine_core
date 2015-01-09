@@ -376,6 +376,10 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 				}
 			}
 		}
+		else
+		{
+			keepInventoryOnClone = true;
+		}
 
 		Collection collection = this.worldObj.getScoreboard().func_96520_a(IScoreObjectiveCriteria.deathCount);
 		Iterator iterator = collection.iterator();
