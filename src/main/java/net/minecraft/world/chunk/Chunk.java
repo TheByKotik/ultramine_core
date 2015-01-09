@@ -3,10 +3,10 @@ package net.minecraft.world.chunk;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gnu.trove.iterator.TByteIterator;
-import gnu.trove.list.TByteList;
-import gnu.trove.list.array.TByteArrayList;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
+import gnu.trove.set.TByteSet;
+import gnu.trove.set.hash.TByteHashSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1111,7 +1111,7 @@ public class Chunk implements IChunkDependency
 	{
 		if (this.isGapLightingUpdated && !this.worldObj.provider.hasNoSky && !p_150804_1_)
 		{
-			this.recheckGaps(this.worldObj.isRemote);
+			this.recheckGaps(true);//this.worldObj.isRemote);
 		}
 
 		this.field_150815_m = true;
@@ -1549,7 +1549,7 @@ public class Chunk implements IChunkDependency
 	/* ======================================== ULTRAMINE START =====================================*/
 	
 	private final TShortObjectMap<TileEntity> fastTileEntityMap = new TShortObjectHashMap<TileEntity>();
-	private final TByteList updateLightCoords = new TByteArrayList();
+	private final TByteSet updateLightCoords = new TByteHashSet();
 	
 	private Set<PendingBlockUpdate> pendingUpdatesSet;
 	private TreeSet<PendingBlockUpdate> pendingUpdatesQueue;
