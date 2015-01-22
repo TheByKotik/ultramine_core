@@ -166,7 +166,7 @@ public class BackupManager
 					String filename = backupWorldDirs(dirs);
 					log.info("World backup completed {}", filename);
 				}
-				catch(IOException e)
+				catch(Throwable e)
 				{
 					log.error("Failed to make backup", e);
 				}

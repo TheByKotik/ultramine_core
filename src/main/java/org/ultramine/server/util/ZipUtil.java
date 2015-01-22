@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -50,6 +51,8 @@ public class ZipUtil
 			while (!queue.isEmpty())
 			{
 				File directory = queue.pop();
+				if(!directory.isDirectory())
+					continue;
 				for (File kid : directory.listFiles())
 				{
 					String name = base.relativize(kid.toURI()).getPath();
@@ -66,6 +69,10 @@ public class ZipUtil
 						{
 							fin = new FileInputStream(kid);
 							IOUtils.copyLarge(fin, zout, buffer);
+						}
+						catch(FileNotFoundException ignored)
+						{
+							
 						}
 						finally
 						{
