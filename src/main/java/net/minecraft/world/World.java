@@ -4170,7 +4170,7 @@ public abstract class World implements IBlockAccess
 	public static final int MAX_BLOCK_COORD = 500000;//524288;
 	private final ServerLoadBalancer balancer = new ServerLoadBalancer(this);
 	private final WorldEventProxy eventProxy = FMLCommonHandler.instance().getSide().isServer() && this instanceof WorldServer ? new ServerWorldEventProxy((WorldServer)this) : new WorldEventProxy();
-	private final WorldChunkProfiler chunkProfiler;
+	protected final WorldChunkProfiler chunkProfiler;
 	
 	public Chunk getChunkIfExists(int cx, int cz)
 	{

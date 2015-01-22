@@ -338,6 +338,7 @@ public class WorldServer extends World
 			this.theProfiler.startSection("getChunk");
 			Chunk chunk = this.getChunkFromChunkCoords(chunkX, chunkZ);
 			chunk.setActive();
+			chunkProfiler.startChunk(chunkCoord);
 			this.theProfiler.endStartSection("updatePending");
 			this.updatePendingOf(chunk);
 			this.func_147467_a(k, l, chunk);
@@ -428,6 +429,7 @@ public class WorldServer extends World
 			}
 			getEventProxy().popState();
 
+			chunkProfiler.endChunk();
 			this.theProfiler.endSection();
 		}
 	}
