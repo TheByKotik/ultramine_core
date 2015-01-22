@@ -115,11 +115,11 @@ public class EntityTrackerEntry
 	{
 		this.playerEntitiesUpdated = false;
 
-		if (!this.isDataInitialized || this.myEntity.getDistanceSq(this.posX, this.posY, this.posZ) > 16.0D)
+		if (!this.isDataInitialized || posX != this.myEntity.chunkCoordX || posZ != this.myEntity.chunkCoordZ)
 		{
-			this.posX = this.myEntity.posX;
+			this.posX = this.myEntity.chunkCoordX;
 			this.posY = this.myEntity.posY;
-			this.posZ = this.myEntity.posZ;
+			this.posZ = this.myEntity.chunkCoordZ;
 			this.isDataInitialized = true;
 			this.playerEntitiesUpdated = true;
 			this.sendEventsToPlayers(p_73122_1_);
