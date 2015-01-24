@@ -101,7 +101,9 @@ public class ItemSword extends Item
 
 	public boolean getIsRepairable(ItemStack p_82789_1_, ItemStack p_82789_2_)
 	{
-		return this.field_150933_b.func_150995_f() == p_82789_2_.getItem() ? true : super.getIsRepairable(p_82789_1_, p_82789_2_);
+		ItemStack mat = this.field_150933_b.getRepairItemStack();
+		if (mat != null && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, p_82789_2_, false)) return true;
+		return super.getIsRepairable(p_82789_1_, p_82789_2_);
 	}
 
 	public Multimap getItemAttributeModifiers()

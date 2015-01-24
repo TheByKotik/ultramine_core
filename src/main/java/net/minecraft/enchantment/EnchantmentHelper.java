@@ -393,7 +393,9 @@ public class EnchantmentHelper
 								{
 									EnchantmentData enchantmentdata1 = (EnchantmentData)iterator1.next();
 
-									if (enchantmentdata1.enchantmentobj.canApplyTogether(Enchantment.enchantmentsList[integer.intValue()]))
+									Enchantment e1 = enchantmentdata1.enchantmentobj;
+									Enchantment e2 = Enchantment.enchantmentsList[integer.intValue()];
+									if (e1.canApplyTogether(e2) && e2.canApplyTogether(e1))  //Forge BugFix: Let Both enchantments veto being together
 									{
 										continue;
 									}

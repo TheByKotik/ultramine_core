@@ -33,7 +33,7 @@ public class GuiSleepMP extends GuiChat
 
 			if (!s.isEmpty())
 			{
-				this.mc.thePlayer.sendChatMessage(s);
+				this.func_146403_a(s); // Forge: fix vanilla not adding messages to the sent list while sleeping
 			}
 
 			this.inputField.setText("");

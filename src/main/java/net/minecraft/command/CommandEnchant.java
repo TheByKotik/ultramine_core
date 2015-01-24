@@ -76,7 +76,7 @@ public class CommandEnchant extends CommandBase
 								{
 									Enchantment enchantment1 = Enchantment.enchantmentsList[short1];
 
-									if (!enchantment1.canApplyTogether(enchantment))
+									if (!enchantment1.canApplyTogether(enchantment) || !enchantment.canApplyTogether(enchantment1)) //Forge BugFix: Let Both enchantments veto being together
 									{
 										throw new CommandException("commands.enchant.cantCombine", new Object[] {enchantment.getTranslatedName(j), enchantment1.getTranslatedName(nbttaglist.getCompoundTagAt(k).getShort("lvl"))});
 									}

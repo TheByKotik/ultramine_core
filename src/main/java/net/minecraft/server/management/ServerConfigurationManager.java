@@ -112,7 +112,7 @@ public abstract class ServerConfigurationManager
 		String s = gameprofile1 == null ? gameprofile.getName() : gameprofile1.getName();
 		playerprofilecache.func_152649_a(gameprofile);
 		NBTTagCompound nbttagcompound = this.readPlayerDataFromFile(p_72355_2_);
-		
+
 		World playerWorld = this.mcServer.worldServerForDimension(p_72355_2_.dimension);
 		if (playerWorld==null)
 		{
@@ -121,7 +121,7 @@ public abstract class ServerConfigurationManager
 			ChunkCoordinates spawnPoint = playerWorld.provider.getRandomizedSpawnPoint();
 			p_72355_2_.setPosition(spawnPoint.posX, spawnPoint.posY, spawnPoint.posZ);
 		}
-		
+
 		p_72355_2_.setWorld(playerWorld);
 		p_72355_2_.theItemInWorldManager.setWorld((WorldServer)p_72355_2_.worldObj);
 		String s1 = "local";
@@ -485,7 +485,7 @@ public abstract class ServerConfigurationManager
 		WorldServer worldserver = this.mcServer.worldServerForDimension(p_72356_1_.dimension);
 		p_72356_1_.dimension = p_72356_2_;
 		WorldServer worldserver1 = this.mcServer.worldServerForDimension(p_72356_1_.dimension);
-		p_72356_1_.playerNetServerHandler.sendPacket(new S07PacketRespawn(p_72356_1_.dimension, p_72356_1_.worldObj.difficultySetting, p_72356_1_.worldObj.getWorldInfo().getTerrainType(), p_72356_1_.theItemInWorldManager.getGameType()));
+		p_72356_1_.playerNetServerHandler.sendPacket(new S07PacketRespawn(p_72356_1_.dimension, worldserver1.difficultySetting, worldserver1.getWorldInfo().getTerrainType(), p_72356_1_.theItemInWorldManager.getGameType())); // Forge: Use new dimensions information
 		worldserver.removePlayerEntityDangerously(p_72356_1_);
 		p_72356_1_.isDead = false;
 		this.transferEntityToWorld(p_72356_1_, j, worldserver, worldserver1, teleporter);

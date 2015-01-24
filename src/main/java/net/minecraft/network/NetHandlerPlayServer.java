@@ -719,7 +719,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			}
 			else
 			{
-				ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation("chat.type.text", new Object[] {this.playerEntity.func_145748_c_(), s});
+				ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation("chat.type.text", new Object[] {this.playerEntity.func_145748_c_(), ForgeHooks.newChatWithLinks(s)}); // Fixes chat links
 				chatcomponenttranslation1 = ForgeHooks.onServerChatEvent(this, s, chatcomponenttranslation1);
 				if (chatcomponenttranslation1 == null) return;
 				this.serverController.getConfigurationManager().sendChatMsgImpl(chatcomponenttranslation1, false);
@@ -1077,20 +1077,20 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			{
 				itemstack = packetbuffer.readItemStackFromBuffer();
 
-				if (itemstack != null)
+				if (itemstack == null)
 				{
-					if (!ItemWritableBook.func_150930_a(itemstack.getTagCompound()))
-					{
-						throw new IOException("Invalid book tag!");
-					}
+					return;
+				}
 
-					itemstack1 = this.playerEntity.inventory.getCurrentItem();
+				if (!ItemWritableBook.func_150930_a(itemstack.getTagCompound()))
+				{
+					throw new IOException("Invalid book tag!");
+				}
 
-					if (itemstack1 == null)
-					{
-						return;
-					}
+				itemstack1 = this.playerEntity.inventory.getCurrentItem();
 
+				if (itemstack1 != null)
+				{
 					if (itemstack.getItem() == Items.writable_book && itemstack.getItem() == itemstack1.getItem())
 					{
 						itemstack1.setTagInfo("pages", itemstack.getTagCompound().getTagList("pages", 8));
@@ -1119,20 +1119,20 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			{
 				itemstack = packetbuffer.readItemStackFromBuffer();
 
-				if (itemstack == null)
+				if (itemstack != null)
 				{
-					return;
-				}
+					if (!ItemEditableBook.validBookTagContents(itemstack.getTagCompound()))
+					{
+						throw new IOException("Invalid book tag!");
+					}
 
-				if (!ItemEditableBook.validBookTagContents(itemstack.getTagCompound()))
-				{
-					throw new IOException("Invalid book tag!");
-				}
+					itemstack1 = this.playerEntity.inventory.getCurrentItem();
 
-				itemstack1 = this.playerEntity.inventory.getCurrentItem();
+					if (itemstack1 == null)
+					{
+						return;
+					}
 
-				if (itemstack1 != null)
-				{
 					if (itemstack.getItem() == Items.written_book && itemstack1.getItem() == Items.writable_book)
 					{
 						itemstack1.setTagInfo("author", new NBTTagString(this.playerEntity.getCommandSenderName()));

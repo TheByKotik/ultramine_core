@@ -68,7 +68,7 @@ public class ContainerRepair extends Container
 				}
 
 				float breakChance = ForgeHooks.onAnvilRepair(p_82870_1_, p_82870_2_, ContainerRepair.this.inputSlots.getStackInSlot(0), ContainerRepair.this.inputSlots.getStackInSlot(1));
-				
+
 				ContainerRepair.this.inputSlots.setInventorySlotContents(0, (ItemStack)null);
 
 				if (ContainerRepair.this.stackSizeToBeUsedInRepair > 0)
@@ -262,7 +262,8 @@ public class ContainerRepair extends Container
 						{
 							int j2 = ((Integer)iterator.next()).intValue();
 
-							if (j2 != i1 && !enchantment.canApplyTogether(Enchantment.enchantmentsList[j2]))
+							Enchantment e2 = Enchantment.enchantmentsList[j2];
+							if (j2 != i1 && !(enchantment.canApplyTogether(e2) && e2.canApplyTogether(enchantment))) //Forge BugFix: Let Both enchantments veto being together
 							{
 								flag1 = false;
 								i += i2;

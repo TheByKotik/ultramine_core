@@ -11400,7 +11400,6 @@ MD: net/minecraft/client/model/ModelDragon/render (Lnet/minecraft/entity/Entity;
 MD: net/minecraft/entity/boss/EntityDragon/canBeCollidedWith ()Z xa/R ()Z
 MD: net/minecraft/server/gui/StatsComponent$1/actionPerformed (Ljava/awt/event/ActionEvent;)V mg/actionPerformed (Ljava/awt/event/ActionEvent;)V
 MD: net/minecraft/world/chunk/EmptyChunk/func_150812_a (IIILnet/minecraft/tileentity/TileEntity;)V apw/a (IIILaor;)V
-MD: net/minecraft/server/management/ServerConfigurationManager/initializeConnectionToPlayer (Lnet/minecraft/network/NetworkManager;Lnet/minecraft/entity/player/EntityPlayerMP;Lnet/minecraft/network/NetHandlerPlayServer;)V oi/a (Lnet/minecraft/network/NetworkManager;Lnet/minecraft/entity/player/EntityPlayerMP;Lnet/minecraft/network/NetHandlerPlayServer;)V
 MD: net/minecraft/entity/EntityLiving/writeEntityToNBT (Lnet/minecraft/nbt/NBTTagCompound;)V sw/b (Ldh;)V
 MD: net/minecraft/network/login/client/C00PacketLoginStart/processPacket (Lnet/minecraft/network/INetHandler;)V jw/a (Lfb;)V
 MD: net/minecraft/tileentity/TileEntityBeacon/isItemValidForSlot (ILnet/minecraft/item/ItemStack;)Z aoq/b (ILadd;)Z

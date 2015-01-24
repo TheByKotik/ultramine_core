@@ -724,6 +724,7 @@ public class WorldServer extends World
 		}
 		else
 		{
+			if (net.minecraftforge.event.ForgeEventFactory.onCreateWorldSpawn(this, p_73052_1_)) return;
 			this.findingSpawnPoint = true;
 			WorldChunkManager worldchunkmanager = this.provider.worldChunkMgr;
 			List list = worldchunkmanager.getBiomesToSpawnIn();
@@ -896,6 +897,7 @@ public class WorldServer extends World
 		Explosion explosion = new Explosion(this, p_72885_1_, p_72885_2_, p_72885_4_, p_72885_6_, p_72885_8_);
 		explosion.isFlaming = p_72885_9_;
 		explosion.isSmoking = p_72885_10_;
+		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(this, explosion)) return explosion;
 		explosion.doExplosionA();
 		explosion.doExplosionB(false);
 

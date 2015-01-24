@@ -112,6 +112,7 @@ public class OreDictionary
 			registerOre("stone",       Blocks.stone);
 			registerOre("cobblestone", Blocks.cobblestone);
 			registerOre("sandstone",   new ItemStack(Blocks.sandstone, 1, WILDCARD_VALUE));
+			registerOre("sand",        new ItemStack(Blocks.sand, 1, WILDCARD_VALUE));
 			registerOre("dye",         new ItemStack(Items.dye, 1, WILDCARD_VALUE));
 			registerOre("record",      Items.record_13);
 			registerOre("record",      Items.record_cat);
@@ -201,8 +202,7 @@ public class OreDictionary
 			new ItemStack(Blocks.jungle_stairs),
 			new ItemStack(Blocks.acacia_stairs),
 			new ItemStack(Blocks.dark_oak_stairs),
-			new ItemStack(Blocks.glass_pane),
-			new ItemStack(Blocks.stained_glass)
+			new ItemStack(Blocks.glass_pane)
 		};
 
 		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
