@@ -1,11 +1,13 @@
 package net.minecraft.world.gen.structure;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Callable;
+
 import net.minecraft.block.Block;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -82,7 +84,7 @@ public abstract class MapGenStructure extends MapGenBase
 		int k = (p_75051_3_ << 4) + 8;
 		int l = (p_75051_4_ << 4) + 8;
 		boolean flag = false;
-		Iterator iterator = this.structureMap.values().iterator();
+		Iterator iterator = new ArrayList(this.structureMap.values()).iterator();
 
 		while (iterator.hasNext())
 		{
