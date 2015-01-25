@@ -30,6 +30,7 @@ import java.util.Queue;
 import javax.crypto.SecretKey;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.client.C0EPacketClickWindow;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.CryptManager;
 import net.minecraft.util.IChatComponent;
@@ -213,16 +214,32 @@ public class NetworkManager extends SimpleChannelInboundHandler
 		if (this.netHandler != null)
 		{
 			EntityPlayerMP player = netHandler instanceof NetHandlerPlayServer ? ((NetHandlerPlayServer)netHandler).playerEntity : null;
+			net.minecraft.profiler.Profiler profiler = null;
 			if(player != null)
 			{
 				player.worldObj.getEventProxy().pushState(WorldUpdateObjectType.PLAYER);
 				player.worldObj.getEventProxy().startEntity(player);
+				profiler = player.worldObj.theProfiler;
 			}
 
 			for (int i = 1000; !this.receivedPacketsQueue.isEmpty() && i >= 0; --i)
 			{
 				Packet packet = (Packet)this.receivedPacketsQueue.poll();
+				if(profiler != null)
+					profiler.startSection(packet.getClass().getSimpleName());
+				long startT = System.nanoTime();
 				packet.processPacket(this.netHandler);
+				long elapsed = System.nanoTime() - startT;
+				if(elapsed > 20000000)
+				{
+					logger.warn("Possible lag source on processiong packet {} from {} {}ms", packet.getClass().getSimpleName(), player, (elapsed/1000000));
+					if(packet instanceof C0EPacketClickWindow && player != null)
+						logger.warn("    Container: " + player.openContainer.getClass().getName());
+					else if(packet instanceof FMLProxyPacket)
+						logger.warn("    Channel: " + ((FMLProxyPacket)packet).channel());
+				}
+				if(profiler != null)
+					profiler.endSection();
 			}
 
 			if(player != null)
