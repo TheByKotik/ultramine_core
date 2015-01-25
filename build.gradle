@@ -1,24 +1,23 @@
 buildscript {
-    repositories {
-        mavenCentral()
-        mavenLocal()
+	repositories {
+		mavenCentral()
+		mavenLocal()
 
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
 
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
 
-        }
-    }
+		}
+	}
 
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-
-    }
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+	}
 }
 
 import net.minecraftforge.gradle.common.Constants
@@ -28,14 +27,38 @@ import net.minecraftforge.gradle.tasks.user.reobf.ReobfTask
 import net.minecraftforge.gradle.user.UserBasePlugin
 import net.minecraftforge.gradle.user.UserExtension
 
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Files;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.MethodNode;
+import cpw.mods.fml.relauncher.SideOnly;
+
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
 compileJava.options.encoding = 'UTF-8'
+
+ext.buildnumber = 0
+if (System.getenv('BUILD_NUMBER') != null)
+	project.buildnumber = System.getenv('BUILD_NUMBER')
+else
+	project.buildnumber = 'indev'
+
+group = 'org.ultramine'
+version = "${minecraft_version}-${buildnumber}"
 
 repositories {
 	maven {
@@ -54,94 +77,283 @@ repositories {
 }
 
 dependencies {
-    compile 'net.minecraft:launchwrapper:1.11'
-    compile 'com.google.code.findbugs:jsr305:1.3.9'
-    compile 'org.ow2.asm:asm-debug-all:5.0.3'
-    compile 'com.typesafe.akka:akka-actor_2.11:2.3.3'
-    compile 'com.typesafe:config:1.2.1'
-    compile 'org.scala-lang:scala-actors-migration_2.11:1.1.0'
-    compile 'org.scala-lang:scala-compiler:2.11.1'
-    compile 'org.scala-lang.plugins:scala-continuations-library_2.11:1.0.2'
-    compile 'org.scala-lang.plugins:scala-continuations-plugin_2.11.1:1.0.2'
-    compile 'org.scala-lang:scala-library:2.11.1'
-    compile 'org.scala-lang:scala-parser-combinators_2.11:1.0.1'
-    compile 'org.scala-lang:scala-reflect:2.11.1'
-    compile 'org.scala-lang:scala-swing_2.11:1.0.1'
-    compile 'org.scala-lang:scala-xml_2.11:1.0.2'
-    compile 'net.sf.jopt-simple:jopt-simple:4.5'
-    compile 'lzma:lzma:0.0.1'
-    compile 'com.mojang:realms:1.3.5'
-    compile 'org.apache.commons:commons-compress:1.8.1'
-    compile 'org.apache.httpcomponents:httpclient:4.3.3'
-    compile 'commons-logging:commons-logging:1.1.3'
-    compile 'org.apache.httpcomponents:httpcore:4.3.2'
-    compile 'java3d:vecmath:1.3.1'
-    compile 'net.sf.trove4j:trove4j:3.0.3'
-    compile 'com.ibm.icu:icu4j-core-mojang:51.2'
-    compile 'com.paulscode:codecjorbis:20101023'
-    compile 'com.paulscode:codecwav:20101023'
-    compile 'com.paulscode:libraryjavasound:20101123'
-    compile 'com.paulscode:librarylwjglopenal:20100824'
-    compile 'com.paulscode:soundsystem:20120107'
-    compile 'io.netty:netty-all:4.0.10.Final'
-    compile 'com.google.guava:guava:16.0'
-    compile 'org.apache.commons:commons-lang3:3.2.1'
-    compile 'commons-io:commons-io:2.4'
-    compile 'commons-codec:commons-codec:1.9'
-    compile 'net.java.jinput:jinput:2.0.5'
-    compile 'net.java.jutils:jutils:1.0.0'
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.mojang:authlib:1.5.16'
-    compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
-    compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
-    compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
-    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
-    compile 'tv.twitch:twitch:5.16'
-	
+	compile 'net.minecraft:launchwrapper:1.11'
+	compile 'com.google.code.findbugs:jsr305:1.3.9'
+	compile 'org.ow2.asm:asm-debug-all:5.0.3'
+	compile 'com.typesafe.akka:akka-actor_2.11:2.3.3'
+	compile 'com.typesafe:config:1.2.1'
+	compile 'org.scala-lang:scala-actors-migration_2.11:1.1.0'
+	compile 'org.scala-lang:scala-compiler:2.11.1'
+	compile 'org.scala-lang.plugins:scala-continuations-library_2.11:1.0.2'
+	compile 'org.scala-lang.plugins:scala-continuations-plugin_2.11.1:1.0.2'
+	compile 'org.scala-lang:scala-library:2.11.1'
+	compile 'org.scala-lang:scala-parser-combinators_2.11:1.0.1'
+	compile 'org.scala-lang:scala-reflect:2.11.1'
+	compile 'org.scala-lang:scala-swing_2.11:1.0.1'
+	compile 'org.scala-lang:scala-xml_2.11:1.0.2'
+	compile 'net.sf.jopt-simple:jopt-simple:4.5'
+	compile 'lzma:lzma:0.0.1'
+	compile 'com.mojang:realms:1.3.5'
+	compile 'org.apache.commons:commons-compress:1.8.1'
+	compile 'org.apache.httpcomponents:httpclient:4.3.3'
+	compile 'commons-logging:commons-logging:1.1.3'
+	compile 'org.apache.httpcomponents:httpcore:4.3.2'
+	compile 'java3d:vecmath:1.3.1'
+	compile 'net.sf.trove4j:trove4j:3.0.3'
+	compile 'com.ibm.icu:icu4j-core-mojang:51.2'
+	compile 'com.paulscode:codecjorbis:20101023'
+	compile 'com.paulscode:codecwav:20101023'
+	compile 'com.paulscode:libraryjavasound:20101123'
+	compile 'com.paulscode:librarylwjglopenal:20100824'
+	compile 'com.paulscode:soundsystem:20120107'
+	compile 'io.netty:netty-all:4.0.10.Final'
+	compile 'com.google.guava:guava:16.0'
+	compile 'org.apache.commons:commons-lang3:3.2.1'
+	compile 'commons-io:commons-io:2.4'
+	compile 'commons-codec:commons-codec:1.9'
+	compile 'net.java.jinput:jinput:2.0.5'
+	compile 'net.java.jutils:jutils:1.0.0'
+	compile 'com.google.code.gson:gson:2.2.4'
+	compile 'com.mojang:authlib:1.5.16'
+	compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
+	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+	compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
+	compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
+	compile 'tv.twitch:twitch:5.16'
+
 	compile 'org.yaml:snakeyaml:1.13'
-    compile 'com.lmax:disruptor:3.2.1'
+	compile 'com.lmax:disruptor:3.2.1'
 	compile 'mysql:mysql-connector-java:5.1.31'
 	compile 'commons-pool:commons-pool:1.6'
 	compile 'commons-dbcp:commons-dbcp:1.4'
 
-    testCompile "org.codehaus.groovy:groovy-all:2.3.0"
-    testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
-    testCompile 'junit:junit:4.5'
+	testCompile "org.codehaus.groovy:groovy-all:2.3.0"
+	testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
+	testCompile 'junit:junit:4.5'
 
-    testRuntime "cglib:cglib-nodep:2.2.2"
-    testRuntime "org.objenesis:objenesis:1.2"
+	testRuntime "cglib:cglib-nodep:2.2.2"
+	testRuntime "org.objenesis:objenesis:1.2"
 }
+
+task processServerResources(type: Copy) {
+	exclude 'assets/minecraft/font'
+	exclude 'assets/minecraft/shaders'
+	exclude 'assets/minecraft/texts'
+	exclude 'assets/minecraft/textures'
+	exclude 'assets/fml/textures'
+}
+
+task processClientResources(type: Copy) {
+	exclude 'org/ultramine/defaults'
+}
+
+task jar_server(type: Jar) {
+	manifest {
+		attributes(
+			'Main-Class': 'cpw.mods.fml.relauncher.ServerLaunchWrapper',
+			'TweakClass': 'cpw.mods.fml.common.launcher.FMLTweaker',
+			'Class-Path': configurations.runtime.collect { 'libraries/' + it.getName() }.join(' ')
+		)
+	}
+}
+
+//
 
 project.getExtensions().create(Constants.EXT_NAME_MC, UserExtension, { return project } as UserBasePlugin)
 
-task reobf(type: ReobfTask) {
-    setExceptorCfg(delayedFile('conf/srg.exc'))
-    setSrg(delayedFile('conf/mcp2notch.srg'))
-    setFieldCsv(delayedFile('conf/fields.csv'))
-    setFieldCsv(delayedFile('conf/methods.csv'))
-    reobf(tasks.getByName('jar'), new Action<ArtifactSpec>() {
-        @Override
-        public void execute(ArtifactSpec arg0)
-        {
-            JavaPluginConvention javaConv = (JavaPluginConvention) getConvention().getPlugins().get("java")
-            arg0.setClasspath(javaConv.getSourceSets().getByName("main").getCompileClasspath())
-        }
-    })
-
-    mustRunAfter("test")
+jar {
+	classifier = 'dev'
 }
-assemble.dependsOn("reobf")
+
+task classesJar(type: Zip) {
+	from sourceSets.main.output.classesDir
+	classifier = 'classes'
+	version = ''
+	destinationDir = new File(buildDir, getName())
+	dependsOn(classes)
+}
+
+task reobf(type: ReobfTask) {
+	setExceptorCfg(delayedFile('conf/srg.exc'))
+	setSrg(delayedFile('conf/mcp2notch.srg'))
+	setFieldCsv(delayedFile('conf/fields.csv'))
+	setFieldCsv(delayedFile('conf/methods.csv'))
+	reobf(classesJar, new Action<ArtifactSpec>() {
+		@Override
+		public void execute(ArtifactSpec spec)
+		{
+			JavaPluginConvention javaConv = (JavaPluginConvention) getConvention().getPlugins().get("java")
+			spec.setClasspath(javaConv.getSourceSets().getByName("main").getCompileClasspath())
+			spec.setArchiveName(null);
+			spec.setClassifier('reobf');
+		}
+	})
+
+	mustRunAfter("test")
+}
+
+task sidesplit(type: SideSplitTask) {
+	sidesplit(reobf)
+}
+
+processServerResources {
+	from sourceSets.main.resources.srcDirs
+	into new File(buildDir, 'resources_server')
+}
+
+processClientResources {
+	from sourceSets.main.resources.srcDirs
+	into new File(buildDir, 'resources_client')
+}
+
+jar_server {
+	from fileTree(sidesplit.getServerClasses()), processServerResources
+	classifier = 'server'
+	dependsOn(sidesplit, processServerResources)
+}
+
+task jar_client(type: Jar) {
+	from fileTree(sidesplit.getClientClasses()), processClientResources
+	classifier = 'client'
+	dependsOn(sidesplit, processClientResources)
+}
+
+assemble.dependsOn(jar_server, jar_client)
+
+publishing {
+	tasks.publish.dependsOn jar
+	publications {
+		mavenJava(MavenPublication) {
+			artifact jar
+		}
+	}
+	repositories {
+		if (project.hasProperty('mavendir')) {
+			maven {
+				url mavendir
+			}
+		}
+	}
+}
 
 task dumpLibs(type: Copy) {
-    into "$buildDir/libs/libs"
-    from configurations.compile
+	into "$buildDir/libs/libraries"
+	from configurations.runtime
 }
 
 def delayedFile(String path) {
-    new DelayedFile(project, path) {
-        @Override
-        File resolveDelayed() {
-            return file(path)
-        }
-    }
+	new DelayedFile(project, path) {
+		@Override
+		File resolveDelayed() {
+			return file(path)
+		}
+	}
+}
+
+class SideSplitTask extends DefaultTask {
+	private static final String SIDEONLY_DESK = Type.getDescriptor(SideOnly.class);
+	private ReobfTask reobf;
+	private File taskDir = new File(getProject().buildDir, getName());
+	private File classes_server = new File(taskDir, "classes_server");
+	private File classes_client = new File(taskDir, "classes_client");
+
+	def sidesplit(ReobfTask reobf) {
+		this.reobf = reobf;
+		getInputs().files({reobf.getObfuscatedFiles()});
+		getOutputs().files(classes_server, classes_client);
+		dependsOn(reobf);
+	}
+
+	def getServerClasses() {
+		classes_server
+	}
+
+	def getClientClasses() {
+		classes_client
+	}
+
+	@TaskAction
+	def doSplit() {
+		File toSplit =  reobf.getObfuscatedFiles().getSingleFile();
+		File toSplitemp = File.createTempFile("tosplit", ".jar", getTemporaryDir());
+		Files.copy(toSplit, toSplitemp);
+
+		classes_server.mkdirs();
+		classes_client.mkdirs();
+		ZipInputStream zipIn = new ZipInputStream(new FileInputStream(toSplitemp));
+		ZipEntry entry = null;
+		while ((entry = zipIn.getNextEntry()) != null) {
+			if(entry.isDirectory())
+				continue;
+			byte[] common = ByteStreams.toByteArray(zipIn);
+			zipIn.closeEntry();
+			if(entry.getName().endsWith('.class')) {
+				byte[] server_cls = processClass(common, 'SERVER');
+				byte[] client_cls = processClass(common, 'CLIENT');
+				if(server_cls != null)
+					addEntry(classes_server, entry, server_cls);
+				if(client_cls != null)
+					addEntry(classes_client, entry, client_cls);
+			} else {
+				addEntry(classes_server, entry, common);
+				addEntry(classes_client, entry, common);
+			}
+		}
+
+		zipIn.close();
+		toSplitemp.delete();
+	}
+	
+	private void addEntry(File dir, ZipEntry entry, byte[] contents) {
+		File file = new File(dir, entry.getName());
+		file.getParentFile().mkdirs();
+		Files.write(contents, file);
+	}
+
+	private byte[] processClass(byte[] input, String side) {
+		ClassNode classNode = new ClassNode();
+		ClassReader classReader = new ClassReader(input);
+		classReader.accept(classNode, 0);
+
+		if(remove((List<AnnotationNode>)classNode.visibleAnnotations, side))
+			return null;
+
+		Iterator<FieldNode> fields = classNode.fields.iterator();
+		while(fields.hasNext()) {
+			FieldNode field = fields.next();
+			if(remove((List<AnnotationNode>)field.visibleAnnotations, side))
+				fields.remove();
+		}
+		Iterator<MethodNode> methods = classNode.methods.iterator();
+		while(methods.hasNext()) {
+			MethodNode method = methods.next();
+			if(remove((List<AnnotationNode>)method.visibleAnnotations, side))
+				methods.remove();
+		}
+
+		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		classNode.accept(writer);
+		return writer.toByteArray();
+	}
+	
+	private boolean remove(List<AnnotationNode> anns, String side) {
+		if(anns == null)
+			return false;
+		for(AnnotationNode ann : anns) {
+			if(ann.desc.equals(SIDEONLY_DESK) && ann.values != null) {
+				for (int x = 0; x < ann.values.size() - 1; x += 2) {
+					Object key = ann.values.get(x);
+					Object value = ann.values.get(x+1);
+					if (key instanceof String && key.equals('value')) {
+						if (value instanceof String[] ) {
+							if (!((String[])value)[1].equals(side)) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
