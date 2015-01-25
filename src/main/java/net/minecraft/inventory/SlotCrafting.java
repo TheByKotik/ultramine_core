@@ -109,6 +109,7 @@ public class SlotCrafting extends Slot
 		FMLCommonHandler.instance().firePlayerCraftingEvent(p_82870_1_, p_82870_2_, craftMatrix);
 		this.onCrafting(p_82870_2_);
 
+		InventoryCrafting.callMatrixChanged = false;
 		for (int i = 0; i < this.craftMatrix.getSizeInventory(); ++i)
 		{
 			ItemStack itemstack1 = this.craftMatrix.getStackInSlot(i);
@@ -141,5 +142,7 @@ public class SlotCrafting extends Slot
 				}
 			}
 		}
+		InventoryCrafting.callMatrixChanged = true;
+		craftMatrix.setInventorySlotContents(0, craftMatrix.getStackInSlot(0));
 	}
 }

@@ -48,16 +48,25 @@ import org.ultramine.server.tools.WarpProtection;
 
 public class UltramineServerModContainer extends DummyModContainer
 {
+	private static UltramineServerModContainer instance;
+	
 	@SideOnly(Side.SERVER)
 	private ButtonCommand buttonCommand;
+	private RecipeCache recipeCache;
 	
 	public UltramineServerModContainer()
 	{
 		super(new ModMetadata());
+		instance = this;
 	    ModMetadata meta = getMetadata();
 		meta.modId		= "UltramineServer";
 		meta.name		= "Ultramine Server";
 		meta.version	= "1.0";
+	}
+	
+	public static UltramineServerModContainer getInstance()
+	{
+		return instance;
 	}
 
 	@Override
@@ -134,6 +143,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		loader.addDefaultWarps();
 		for(String name : loader.getFastWarps())
 			reg.registerCommand(new FastWarpCommand(name));
+		recipeCache = new RecipeCache();
 	}
 	
 	@Subscribe
@@ -177,5 +187,10 @@ public class UltramineServerModContainer extends DummyModContainer
 	public Object getMod()
 	{
 		return this;
+	}
+	
+	public RecipeCache getRecipeCache()
+	{
+		return recipeCache;
 	}
 }

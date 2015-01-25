@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 public class CraftingManager
 {
 	private static final CraftingManager instance = new CraftingManager();
-	private List recipes = new ArrayList();
+	public List recipes = new ArrayList();
 	private static final String __OBFID = "CL_00000090";
 
 	public static final CraftingManager getInstance()

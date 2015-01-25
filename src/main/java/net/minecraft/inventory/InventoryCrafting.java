@@ -75,7 +75,8 @@ public class InventoryCrafting implements IInventory
 			{
 				itemstack = this.stackList[p_70298_1_];
 				this.stackList[p_70298_1_] = null;
-				this.eventHandler.onCraftMatrixChanged(this);
+				if(callMatrixChanged)
+					this.eventHandler.onCraftMatrixChanged(this);
 				return itemstack;
 			}
 			else
@@ -87,7 +88,8 @@ public class InventoryCrafting implements IInventory
 					this.stackList[p_70298_1_] = null;
 				}
 
-				this.eventHandler.onCraftMatrixChanged(this);
+				if(callMatrixChanged)
+					this.eventHandler.onCraftMatrixChanged(this);
 				return itemstack;
 			}
 		}
@@ -100,7 +102,8 @@ public class InventoryCrafting implements IInventory
 	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
 	{
 		this.stackList[p_70299_1_] = p_70299_2_;
-		this.eventHandler.onCraftMatrixChanged(this);
+		if(callMatrixChanged)
+			this.eventHandler.onCraftMatrixChanged(this);
 	}
 
 	public int getInventoryStackLimit()
@@ -123,4 +126,11 @@ public class InventoryCrafting implements IInventory
 	{
 		return true;
 	}
+	
+	public int getWidth()
+	{
+		return inventoryWidth;
+	}
+	
+	public static boolean callMatrixChanged = true;
 }

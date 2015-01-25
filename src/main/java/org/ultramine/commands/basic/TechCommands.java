@@ -30,6 +30,7 @@ import org.ultramine.server.BackupManager;
 import org.ultramine.server.MultiWorld;
 import org.ultramine.server.Restarter;
 import org.ultramine.server.Teleporter;
+import org.ultramine.server.UltramineServerModContainer;
 import org.ultramine.server.BackupManager.BackupDescriptor;
 import org.ultramine.server.WorldsConfig.WorldConfig.Border;
 import org.ultramine.server.chunk.ChunkProfiler;
@@ -710,5 +711,16 @@ public class TechCommands
 			if(flags.containsKey("restart"))
 				ctx.getServer().initiateShutdown();
 		}
+	}
+	
+	@Command(
+			name = "recipecache",
+			group = "technical",
+			permissions = {"command.recipecache"},
+			syntax = {"[clear]"}
+	)
+	public static void recipecache(CommandContext ctx)
+	{
+		UltramineServerModContainer.getInstance().getRecipeCache().clearCache();
 	}
 }

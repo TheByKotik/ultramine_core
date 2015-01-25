@@ -254,3 +254,6 @@ command.backup.apply.fail.rmdir=Failed to remove directory of world: %s
 command.backup.apply.fail.zip.unpack=Failed to unpack zip file. It is very VERY bad. May lead to the complete breaking of the world. Please, apply other backup.
 command.backup.apply.success.temp=Backup successfuly applied! Created temp worlds:
 command.backup.apply.success=Backup successfuly applied!
+
+command.custmsg.usage=/recipecache clear
+command.custmsg.description=Clears crafting recipe cache
