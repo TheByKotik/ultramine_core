@@ -9,7 +9,6 @@ import org.ultramine.server.chunk.ChunkHash;
 import cpw.mods.fml.common.FMLCommonHandler;
 import gnu.trove.map.TIntByteMap;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -28,8 +27,11 @@ public class ServerLoadBalancer
 	{
 		clientLimits.lowerLimit = 32;
 		clientLimits.higherLimit = Integer.MAX_VALUE;
+		clientLimits.updateRadius = 7;
 		infinityLimits.lowerLimit = Integer.MAX_VALUE;
 		infinityLimits.higherLimit = Integer.MAX_VALUE;
+		clientLimits.updateRadius = 99;
+		clientLimits.updateByChunkLoader = true;
 	}
 	
 	public ServerLoadBalancer(World world)
@@ -54,9 +56,14 @@ public class ServerLoadBalancer
 		if(!ent.addedToChunk)
 			return true;
 
+		PerChunkEntityLimits getLimits = getLimits(ent);
+		if(prior == WorldConstants.CL_CHUNK_PRIOR)
+			return getLimits.updateByChunkLoader;
+		if(prior > getLimits.updateRadius)
+			return false;
+	
 		Chunk chunk = world.getChunkFromChunkCoords(cx, cz);
 		int count = chunk.getEntityCountOfSameType(ent);
-		PerChunkEntityLimits getLimits = getLimits(ent);
 		if(count > getLimits.higherLimit)
 		{
 			ent.setDead();

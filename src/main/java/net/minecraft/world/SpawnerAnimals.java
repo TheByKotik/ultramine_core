@@ -55,7 +55,7 @@ public final class SpawnerAnimals
 				EntityPlayer entityplayer = (EntityPlayer)p_77192_1_.playerEntities.get(i);
 				int j = MathHelper.floor_double(entityplayer.posX / 16.0D);
 				k = MathHelper.floor_double(entityplayer.posZ / 16.0D);
-				int b0 = p_77192_1_.getConfig().chunkLoading.chunkUpdateRadius;
+				int b0 = p_77192_1_.getConfig().chunkLoading.chunkActivateRadius;
 
 				for (int l = -b0; l <= b0; ++l)
 				{

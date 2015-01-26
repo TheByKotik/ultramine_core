@@ -104,7 +104,7 @@ public class WorldsConfig
 		public static class ChunkLoading
 		{
 			public int viewDistance  = 10;
-			public int chunkUpdateRadius = 7;
+			public int chunkActivateRadius = 7;
 			public int chunkCacheSize;
 			public boolean enableChunkLoaders = true;
 			public int maxSendRate = 4;
@@ -124,6 +124,8 @@ public class WorldsConfig
 				
 				public static class PerChunkEntityLimits
 				{
+					public int updateRadius;
+					public boolean updateByChunkLoader;
 					public int lowerLimit;
 					public int higherLimit;
 				}

@@ -923,7 +923,7 @@ public class WorldServer extends World
 
 	protected int func_152379_p()
 	{
-		return config.chunkLoading.chunkUpdateRadius;
+		return config.chunkLoading.chunkActivateRadius;
 	}
 
 	public MinecraftServer func_73046_m()

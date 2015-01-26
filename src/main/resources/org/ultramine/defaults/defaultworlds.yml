@@ -59,28 +59,40 @@ global: &global
     borders: []
     chunkLoading: &global_cl
         viewDistance: 10
-        chunkUpdateRadius: 7
+        chunkActivateRadius: 7
         chunkCacheSize: 1024
         enableChunkLoaders: true
         maxSendRate: 4
     loadBalancer:
         limits:
             monsters:
+                updateRadius: 7
+                updateByChunkLoader: true
                 lowerLimit: 16
                 higherLimit: 16
             animals:
+                updateRadius: 7
+                updateByChunkLoader: true
                 lowerLimit: 4
                 higherLimit: 32
             water:
+                updateRadius: 7
+                updateByChunkLoader: true
                 lowerLimit: 4
                 higherLimit: 16
             ambient:
+                updateRadius: 7
+                updateByChunkLoader: true
                 lowerLimit: 16
                 higherLimit: 16
             items:
+                updateRadius: 7
+                updateByChunkLoader: true
                 lowerLimit: 16
                 higherLimit: 1024
             xpOrbs:
+                updateRadius: 7
+                updateByChunkLoader: true
                 lowerLimit: 8
                 higherLimit: 16
 
