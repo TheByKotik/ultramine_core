@@ -27,6 +27,10 @@ public class RecipeCache
 	public RecipeCache()
 	{
 		originList = CraftingManager.getInstance().getRecipeList();
+	}
+	
+	public void installHardOverride()
+	{
 		CraftingManager.getInstance().recipes = newRecipeList;
 	}
 	

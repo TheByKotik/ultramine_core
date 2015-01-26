@@ -52,7 +52,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	
 	@SideOnly(Side.SERVER)
 	private ButtonCommand buttonCommand;
-	private RecipeCache recipeCache;
+	private final RecipeCache recipeCache = new RecipeCache();
 	
 	public UltramineServerModContainer()
 	{
@@ -143,7 +143,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		loader.addDefaultWarps();
 		for(String name : loader.getFastWarps())
 			reg.registerCommand(new FastWarpCommand(name));
-		recipeCache = new RecipeCache();
+//		recipeCache.installHardOverride();
 	}
 	
 	@Subscribe

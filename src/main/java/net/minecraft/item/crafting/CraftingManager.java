@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+
+import org.ultramine.server.UltramineServerModContainer;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -316,6 +319,7 @@ public class CraftingManager
 		}
 		else
 		{
+			/*
 			for (j = 0; j < this.recipes.size(); ++j)
 			{
 				IRecipe irecipe = (IRecipe)this.recipes.get(j);
@@ -325,8 +329,10 @@ public class CraftingManager
 					return irecipe.getCraftingResult(p_82787_1_);
 				}
 			}
+			*/
 
-			return null;
+			IRecipe recipe = UltramineServerModContainer.getInstance().getRecipeCache().findRecipe(p_82787_1_, p_82787_2_);
+			return recipe == null ? null : recipe.getCraftingResult(p_82787_1_);
 		}
 	}
 
