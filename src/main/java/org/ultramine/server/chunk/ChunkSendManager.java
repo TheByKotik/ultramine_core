@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.WorldConstants;
 import org.ultramine.server.util.BlockFace;
 import org.ultramine.server.util.ChunkCoordComparator;
 import org.ultramine.server.util.TIntArrayListImpl;
@@ -387,13 +388,14 @@ public class ChunkSendManager
 				chunk.setBindState(ChunkBindState.PLAYER);
 				executor.execute(new CompressAndSendChunkTask(chunk));
 			}
-			else if(!chunk.worldObj.chunkRoundExists(chunk.xPosition, chunk.zPosition, 2))
+			else if(!chunk.worldObj.chunkRoundExists(chunk.xPosition, chunk.zPosition, WorldConstants.GENCHUNK_PRELOAD_RADIUS))
 			{
-				((WorldServer)chunk.worldObj).theChunkProviderServer.loadAsyncWithRadius(chunk.xPosition, chunk.zPosition, 2, this);
+				((WorldServer)chunk.worldObj).theChunkProviderServer.loadAsyncWithRadius(chunk.xPosition, chunk.zPosition, WorldConstants.GENCHUNK_PRELOAD_RADIUS, this);
 			}
 			else //impossible?
 			{
-				log.fatal("Chunk[{}]({}, {}) not populated when loaded {} chunk radius", chunk.worldObj.provider.dimensionId, chunk.xPosition, chunk.zPosition, 2);
+				log.fatal("Chunk[{}]({}, {}) not populated when loaded {} chunk radius", chunk.worldObj.provider.dimensionId, chunk.xPosition, chunk.zPosition,
+						WorldConstants.GENCHUNK_PRELOAD_RADIUS);
 				sendingQueueSize.decrementAndGet();
 				sending.remove(key);
 			}

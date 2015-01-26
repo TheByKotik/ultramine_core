@@ -1,10 +1,14 @@
 package net.minecraft.command;
 
 import com.google.common.primitives.Doubles;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import org.ultramine.server.WorldConstants;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -13,7 +17,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-import net.minecraft.world.World;
 
 public abstract class CommandBase implements ICommand
 {
@@ -249,7 +252,7 @@ public abstract class CommandBase implements ICommand
 
 	public static double func_110666_a(ICommandSender p_110666_0_, double p_110666_1_, String p_110666_3_)
 	{
-		return func_110665_a(p_110666_0_, p_110666_1_, p_110666_3_, -World.MAX_BLOCK_COORD, World.MAX_BLOCK_COORD);
+		return func_110665_a(p_110666_0_, p_110666_1_, p_110666_3_, -WorldConstants.MAX_BLOCK_COORD, WorldConstants.MAX_BLOCK_COORD);
 	}
 
 	public static double func_110665_a(ICommandSender p_110665_0_, double p_110665_1_, String p_110665_3_, int p_110665_4_, int p_110665_5_)

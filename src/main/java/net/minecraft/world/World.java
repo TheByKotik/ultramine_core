@@ -18,6 +18,10 @@ import java.util.concurrent.Callable;
 
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.ServerLoadBalancer;
+import org.ultramine.server.WorldConstants;
+
+import static org.ultramine.server.WorldConstants.MAX_BLOCK_COORD;
+
 import org.ultramine.server.chunk.CallbackAddDependency;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.ChunkProfiler;
@@ -2891,15 +2895,15 @@ public abstract class World implements IBlockAccess
 		{
 			for(ChunkCoordIntPair c : getPersistentChunks().keySet())
 			{
-				if(chunkRoundExists(c.chunkXPos, c.chunkZPos, 1))
+				if(chunkRoundExists(c.chunkXPos, c.chunkZPos, WorldConstants.CL_LOAD_RADIUS))
 				{
-					activeChunkSet.put(ChunkHash.chunkToKey(c.chunkXPos, c.chunkZPos), (byte)100);
+					activeChunkSet.put(ChunkHash.chunkToKey(c.chunkXPos, c.chunkZPos), (byte)WorldConstants.CL_CHUNK_PRIOR);
 				}
 				else
 				{
 					Chunk dep = getChunkIfExists(c.chunkXPos, c.chunkZPos);
 					if(dep != null)
-						((ChunkProviderServer)chunkProvider).loadAsyncRadius(c.chunkXPos, c.chunkZPos, 1, new CallbackAddDependency(dep));
+						((ChunkProviderServer)chunkProvider).loadAsyncRadius(c.chunkXPos, c.chunkZPos, WorldConstants.CL_LOAD_RADIUS, new CallbackAddDependency(dep));
 				}
 			}
 		}
@@ -4165,10 +4169,9 @@ public abstract class World implements IBlockAccess
 	
 	
 	
-	/* ======================================== ULTRAMINE START =====================================*/
+	/*======================================== ULTRAMINE START =====================================*/
 	
 	
-	public static final int MAX_BLOCK_COORD = 500000;//524288;
 	private final ServerLoadBalancer balancer = new ServerLoadBalancer(this);
 	private final WorldEventProxy eventProxy = FMLCommonHandler.instance().getSide().isServer() && this instanceof WorldServer ? new ServerWorldEventProxy((WorldServer)this) : new WorldEventProxy();
 	protected final WorldChunkProfiler chunkProfiler;
