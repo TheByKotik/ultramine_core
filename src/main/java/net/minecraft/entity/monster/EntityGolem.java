@@ -39,4 +39,12 @@ public abstract class EntityGolem extends EntityCreature implements IAnimals
 	{
 		return false;
 	}
+	
+	/*===================================== ULTRAMINE START =====================================*/
+	
+	@Override
+	public boolean isEntityAnimal()
+	{
+		return true;
+	}
 }
