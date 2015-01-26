@@ -2728,10 +2728,10 @@ public class RenderBlocks
 		double d16 = (double)p_147733_2_ + 0.5D + 0.0625D;
 		double d17 = (double)p_147733_4_ + 0.5D - 0.0625D;
 		double d18 = (double)p_147733_4_ + 0.5D + 0.0625D;
-		boolean flag = flag5 ? ((BlockStainedGlassPane)p_147733_1_).canPaneConnectToBlock(this.blockAccess.getBlock(p_147733_2_, p_147733_3_, p_147733_4_ - 1)) : ((BlockPane)p_147733_1_).canPaneConnectToBlock(this.blockAccess.getBlock(p_147733_2_, p_147733_3_, p_147733_4_ - 1));
-		boolean flag1 = flag5 ? ((BlockStainedGlassPane)p_147733_1_).canPaneConnectToBlock(this.blockAccess.getBlock(p_147733_2_, p_147733_3_, p_147733_4_ + 1)) : ((BlockPane)p_147733_1_).canPaneConnectToBlock(this.blockAccess.getBlock(p_147733_2_, p_147733_3_, p_147733_4_ + 1));
-		boolean flag2 = flag5 ? ((BlockStainedGlassPane)p_147733_1_).canPaneConnectToBlock(this.blockAccess.getBlock(p_147733_2_ - 1, p_147733_3_, p_147733_4_)) : ((BlockPane)p_147733_1_).canPaneConnectToBlock(this.blockAccess.getBlock(p_147733_2_ - 1, p_147733_3_, p_147733_4_));
-		boolean flag3 = flag5 ? ((BlockStainedGlassPane)p_147733_1_).canPaneConnectToBlock(this.blockAccess.getBlock(p_147733_2_ + 1, p_147733_3_, p_147733_4_)) : ((BlockPane)p_147733_1_).canPaneConnectToBlock(this.blockAccess.getBlock(p_147733_2_ + 1, p_147733_3_, p_147733_4_));
+		boolean flag  = ((BlockPane)p_147733_1_).canPaneConnectTo(this.blockAccess, p_147733_2_, p_147733_3_, p_147733_4_ - 1, NORTH);
+		boolean flag1 = ((BlockPane)p_147733_1_).canPaneConnectTo(this.blockAccess, p_147733_2_, p_147733_3_, p_147733_4_ + 1, SOUTH);
+		boolean flag2 = ((BlockPane)p_147733_1_).canPaneConnectTo(this.blockAccess, p_147733_2_ - 1, p_147733_3_, p_147733_4_, WEST );
+		boolean flag3 = ((BlockPane)p_147733_1_).canPaneConnectTo(this.blockAccess, p_147733_2_ + 1, p_147733_3_, p_147733_4_, EAST );
 		double d19 = 0.001D;
 		double d20 = 0.999D;
 		double d21 = 0.001D;

@@ -712,6 +712,8 @@ public abstract class EntityLivingBase extends Entity
 
 	public void heal(float p_70691_1_)
 	{
+		p_70691_1_ = net.minecraftforge.event.ForgeEventFactory.onLivingHeal(this, p_70691_1_);
+		if (p_70691_1_ <= 0) return;
 		float f1 = this.getHealth();
 
 		if (f1 > 0.0F)

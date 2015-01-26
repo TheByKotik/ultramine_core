@@ -402,7 +402,7 @@ public class PlayerManager
 				{
 					int l;
 
-					if (this.numberOfTilesToUpdate == net.minecraftforge.common.ForgeModContainer.clumpingThreshold)
+					if (this.numberOfTilesToUpdate >= net.minecraftforge.common.ForgeModContainer.clumpingThreshold)
 					{
 						i = this.chunkLocation.chunkXPos * 16;
 						j = this.chunkLocation.chunkZPos * 16;
@@ -427,7 +427,7 @@ public class PlayerManager
 					{
 						this.sendToAllPlayersWatchingChunk(new S22PacketMultiBlockChange(this.numberOfTilesToUpdate, this.locationOfBlockChange, PlayerManager.this.theWorldServer.getChunkFromChunkCoords(this.chunkLocation.chunkXPos, this.chunkLocation.chunkZPos)));
 					}
-					
+
 					{ //Forge: Send only the tile entities that are updated, Adding this brace lets us keep the indent and the patch small
 						WorldServer world = PlayerManager.this.theWorldServer;
 						for (i = 0; i < this.numberOfTilesToUpdate; ++i)

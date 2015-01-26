@@ -236,7 +236,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 					{
 						this.updateItemUse(itemstack, 5);
 					}
-	
+
 					if (--this.itemInUseCount == 0 && !this.worldObj.isRemote)
 					{
 						this.onItemUseFinish();
@@ -1449,7 +1449,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
 	public void wakeUpPlayer(boolean p_70999_1_, boolean p_70999_2_, boolean p_70999_3_)
 	{
-		MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.PlayerWakeUpEvent(this));
+		MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.PlayerWakeUpEvent(this, p_70999_1_, p_70999_2_, p_70999_3_));
 		this.setSize(0.6F, 1.8F);
 		this.resetHeight();
 		ChunkCoordinates chunkcoordinates = this.playerLocation;
@@ -2289,7 +2289,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
 	public float eyeHeight;
 	private String displayname;
-	
+
 	/**
 	 * Returns the default eye height of the player
 	 * @return player default eye height

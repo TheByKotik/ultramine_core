@@ -131,7 +131,7 @@ public abstract class ServerConfigurationManager
 		String s = gameprofile1 == null ? gameprofile.getName() : gameprofile1.getName();
 		playerprofilecache.func_152649_a(gameprofile);
 //		NBTTagCompound nbttagcompound = this.readPlayerDataFromFile(p_72355_2_);
-		
+
 		World playerWorld = this.mcServer.worldServerForDimension(p_72355_2_.dimension);
 		if (playerWorld==null)
 		{
@@ -140,7 +140,7 @@ public abstract class ServerConfigurationManager
 			ChunkCoordinates spawnPoint = playerWorld.provider.getRandomizedSpawnPoint();
 			p_72355_2_.setPosition(spawnPoint.posX, spawnPoint.posY, spawnPoint.posZ);
 		}
-		
+
 		p_72355_2_.setWorld(playerWorld);
 		p_72355_2_.theItemInWorldManager.setWorld((WorldServer)p_72355_2_.worldObj);
 		String s1 = "local";

@@ -1576,12 +1576,12 @@ public abstract class World implements IBlockAccess
 		f2 = 1.0F - f2;
 		return (int)(f2 * 11.0F);
 	}
-	
+
 	/**
 	 * The current sun brightness factor for this dimension.
 	 * 0.0f means no light at all, and 1.0f means maximum sunlight.
 	 * Highly recommended for sunlight detection like solar panel.
-	 * 
+	 *
 	 * @return The current brightness factor
 	 * */
 	public float getSunBrightnessFactor(float p_72967_1_)
@@ -1615,7 +1615,7 @@ public abstract class World implements IBlockAccess
 	{
 		return provider.getSunBrightness(p_72971_1_);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public float getSunBrightnessBody(float p_72971_1_)
 	{
@@ -1727,7 +1727,7 @@ public abstract class World implements IBlockAccess
 	{
 		return provider.getCurrentMoonPhaseFactor();
 	}
-	
+
 	public float getCurrentMoonPhaseFactorBody()
 	{
 		return WorldProvider.moonPhaseFactors[this.provider.getMoonPhase(this.worldInfo.getWorldTime())];
@@ -2517,6 +2517,7 @@ public abstract class World implements IBlockAccess
 		Explosion explosion = new Explosion(this, p_72885_1_, p_72885_2_, p_72885_4_, p_72885_6_, p_72885_8_);
 		explosion.isFlaming = p_72885_9_;
 		explosion.isSmoking = p_72885_10_;
+		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(this, explosion)) return explosion;
 		explosion.doExplosionA();
 		explosion.doExplosionB(true);
 		return explosion;
@@ -4005,7 +4006,7 @@ public abstract class World implements IBlockAccess
 			Block block1 = this.getBlock(i1, y, j1);
 
 			block1.onNeighborChange(this, i1, y, j1, p_147453_1_, p_147453_2_, p_147453_3_);
-			if (block1.isNormalCube(this, i1, p_147453_2_, j1))
+			if (block1.isNormalCube(this, i1, y, j1))
 			{
 				i1 += dir.offsetX;
 				y  += dir.offsetY;

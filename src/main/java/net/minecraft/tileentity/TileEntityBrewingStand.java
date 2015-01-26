@@ -12,8 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionHelper;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.brewing.PotionBrewedEvent;
 
 public class TileEntityBrewingStand extends TileEntity implements ISidedInventory
 {
@@ -139,6 +137,7 @@ public class TileEntityBrewingStand extends TileEntity implements ISidedInventor
 
 	private void brewPotions()
 	{
+		if (net.minecraftforge.event.ForgeEventFactory.onPotionAttemptBreaw(brewingItemStacks)) return;
 		if (this.canBrew())
 		{
 			ItemStack itemstack = this.brewingItemStacks[3];
@@ -179,7 +178,7 @@ public class TileEntityBrewingStand extends TileEntity implements ISidedInventor
 					this.brewingItemStacks[3] = null;
 				}
 			}
-			MinecraftForge.EVENT_BUS.post(new PotionBrewedEvent(brewingItemStacks));
+			net.minecraftforge.event.ForgeEventFactory.onPotionBrewed(brewingItemStacks);
 		}
 	}
 

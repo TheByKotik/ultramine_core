@@ -1165,7 +1165,7 @@ public abstract class EntityMinecart extends Entity
 		{
 			return new ItemStack(Items.hopper_minecart);
 		}
-		else if (this instanceof EntityMinecartHopper)
+		else if (this instanceof EntityMinecartCommandBlock)
 		{
 			return new ItemStack(Items.command_block_minecart);
 		}

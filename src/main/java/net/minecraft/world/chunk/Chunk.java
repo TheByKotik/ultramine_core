@@ -1286,7 +1286,7 @@ public class Chunk implements IChunkDependency
 			int y = tileentity.yCoord;
 			int z = tileentity.zCoord & 15;
 			Block block = tileentity.getBlockType();
-			if (block != getBlock(x, y, z) || tileentity.blockMetadata != this.getBlockMetadata(x, y, z))
+			if ((block != getBlock(x, y, z) || tileentity.blockMetadata != this.getBlockMetadata(x, y, z)) && tileentity.shouldRefresh(block, getBlock(x, y, z), tileentity.blockMetadata, this.getBlockMetadata(x, y, z), worldObj, x, y, z))
 			{
 				invalidList.add(tileentity);
 			}
