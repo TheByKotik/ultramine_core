@@ -175,6 +175,34 @@ public class MultiWorld
 		}
 	}
 	
+	@SideOnly(Side.SERVER)
+	public void reloadServerWorlds()
+	{
+		Map<String, WorldConfig> worlds = ConfigurationHandler.getWorldsConfig().worlds;
+		TIntSet isolatedDataDimsSet = new TIntHashSet();
+		
+		for(Map.Entry<String, WorldConfig> ent : worlds.entrySet())
+		{
+			WorldConfig conf = ent.getValue();
+			if(!DimensionManager.isDimensionRegistered(conf.dimension))
+			{
+				DimensionManager.registerDimension(conf.dimension, conf.generation.providerID);
+				dimToNameMap.put(conf.dimension, ent.getKey());
+			}
+			else
+			{
+				WorldServer world = getWorldByID(conf.dimension);
+				if(world != null)
+					applyConfig(world, conf);
+			}
+			if(conf.settings.useIsolatedPlayerData)
+				isolatedDataDimsSet.add(conf.dimension);
+			dimToConfigMap.put(conf.dimension, conf);
+		}
+		
+		isolatedDataDims = TCollections.unmodifiableSet(isolatedDataDimsSet);
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public void handleClientWorldsInit()
 	{
@@ -305,11 +333,7 @@ public class MultiWorld
 		if (!server.isSinglePlayer())
 			world.getWorldInfo().setGameType(server.getGameType());
 		
-		world.difficultySetting = BasicTypeParser.parseDifficulty(ConfigurationHandler.getWorldsConfig().global.settings.difficulty);
-		world.setAllowedSpawnTypes(conf.mobSpawn.spawnMonsters, conf.mobSpawn.spawnAnimals);
-		world.getGameRules().setOrCreateGameRule("doDaylightCycle", Boolean.toString(conf.settings.time != WorldTime.FIXED));
-		world.getGameRules().setOrCreateGameRule("doMobSpawning", Boolean.toString(conf.mobSpawn.spawnEngine != MobSpawnEngine.NONE));
-		world.setConfig(conf);
+		applyConfig(world, conf);
 
 		MinecraftForge.EVENT_BUS.post(new WorldEvent.Load(world));
 		
@@ -319,6 +343,16 @@ public class MultiWorld
 		
 		if(!(world instanceof WorldServerMulti))
 			backupDirs.add(name);
+	}
+	
+	@SideOnly(Side.SERVER)
+	private void applyConfig(WorldServer world, WorldConfig conf)
+	{
+		world.difficultySetting = BasicTypeParser.parseDifficulty(conf.settings.difficulty);
+		world.setAllowedSpawnTypes(conf.mobSpawn.spawnMonsters, conf.mobSpawn.spawnAnimals);
+		world.getGameRules().setOrCreateGameRule("doDaylightCycle", Boolean.toString(conf.settings.time != WorldTime.FIXED));
+		world.getGameRules().setOrCreateGameRule("doMobSpawning", Boolean.toString(conf.mobSpawn.spawnEngine != MobSpawnEngine.NONE));
+		world.setConfig(conf);
 	}
 	
 	@SideOnly(Side.SERVER)

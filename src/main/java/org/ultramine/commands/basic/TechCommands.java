@@ -27,9 +27,11 @@ import org.apache.logging.log4j.Logger;
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
 import org.ultramine.server.BackupManager;
+import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.MultiWorld;
 import org.ultramine.server.Restarter;
 import org.ultramine.server.Teleporter;
+import org.ultramine.server.UltramineServerConfig;
 import org.ultramine.server.UltramineServerModContainer;
 import org.ultramine.server.BackupManager.BackupDescriptor;
 import org.ultramine.server.WorldsConfig.WorldConfig.Border;
@@ -722,5 +724,23 @@ public class TechCommands
 	public static void recipecache(CommandContext ctx)
 	{
 		UltramineServerModContainer.getInstance().getRecipeCache().clearCache();
+	}
+	
+	@SideOnly(Side.SERVER)
+	@Command(
+			name = "reloadcfg",
+			group = "technical",
+			permissions = {"command.reloadcfg"},
+			syntax = {""}
+	)
+	public static void reloadcfg(CommandContext ctx)
+	{
+		ConfigurationHandler.load();
+		UltramineServerConfig cfg = ConfigurationHandler.getServerConfig();
+		MinecraftServer server = ctx.getServer();
+		server.func_143006_e(cfg.settings.player.playerIdleTimeout);
+		server.getConfigurationManager().maxPlayers = cfg.settings.player.maxPlayers;
+		
+		server.getMultiWorld().reloadServerWorlds();
 	}
 }

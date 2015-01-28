@@ -402,7 +402,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	public void saveProperties()
 	{
-		ConfigurationHandler.saveServerConfig();
+		//ConfigurationHandler.saveServerConfig();
 	}
 
 	public String getSettingsFilename()

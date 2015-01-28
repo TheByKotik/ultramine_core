@@ -93,7 +93,7 @@ public abstract class ServerConfigurationManager
 	private final Map field_148547_k;
 	private IPlayerFileData playerNBTManagerObj;
 	private boolean whiteListEnforced;
-	protected int maxPlayers;
+	public int maxPlayers;
 	protected int viewDistance;
 	private WorldSettings.GameType gameType;
 	private boolean commandsAllowedForAll;
