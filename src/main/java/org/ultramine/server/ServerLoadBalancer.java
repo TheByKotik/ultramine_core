@@ -30,8 +30,8 @@ public class ServerLoadBalancer
 		clientLimits.updateRadius = 7;
 		infinityLimits.lowerLimit = Integer.MAX_VALUE;
 		infinityLimits.higherLimit = Integer.MAX_VALUE;
-		clientLimits.updateRadius = 99;
-		clientLimits.updateByChunkLoader = true;
+		infinityLimits.updateRadius = 99;
+		infinityLimits.updateByChunkLoader = true;
 	}
 	
 	public ServerLoadBalancer(World world)
