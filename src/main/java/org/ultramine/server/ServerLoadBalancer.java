@@ -67,8 +67,9 @@ public class ServerLoadBalancer
 			return true;
 	
 		if(prior == WorldConstants.CL_CHUNK_PRIOR)
-			return getLimits.updateByChunkLoader;
-		if(prior > getLimits.updateRadius)
+			if(!getLimits.updateByChunkLoader)
+				return false;
+		else if(prior > getLimits.updateRadius)
 			return false;
 
 		if(count > getLimits.lowerLimit)
