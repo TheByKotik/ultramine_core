@@ -218,13 +218,24 @@ task jar_client(type: Jar) {
 	dependsOn(sidesplit, processClientResources)
 }
 
+task jar_source(type: Jar) {
+	from sourceSets.main.allSource
+	classifier = 'sources'
+}
+
 assemble.dependsOn(jar_server, jar_client)
 
 publishing {
-	tasks.publish.dependsOn jar
+	tasks.publish.dependsOn(jar, jar_source)
 	publications {
 		mavenJava(MavenPublication) {
-			artifact jar
+			from components.java
+			artifacts.matching({
+				it.classifier == "dev"
+			}).all({
+				it.classifier = null
+			})
+			artifact jar_source
 		}
 	}
 	repositories {
