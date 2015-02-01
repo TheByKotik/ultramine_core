@@ -122,6 +122,11 @@ public class Teleporter
 	
 	private boolean update()
 	{
+		if(target.isDead)
+		{
+			target.getData().core().setTeleporter(null);
+			return true;
+		}
 		if(timeEnd - System.currentTimeMillis() <= 0)
 		{
 			doTeleportation(target, dst);
