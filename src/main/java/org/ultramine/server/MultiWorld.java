@@ -26,7 +26,9 @@ import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gnu.trove.TCollections;
+import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
@@ -52,6 +54,7 @@ public class MultiWorld
 {
 	private static final Logger log = LogManager.getLogger();
 	private final MinecraftServer server;
+	private final TIntIntMap provTranslt = new TIntIntHashMap();
 	private final TIntObjectMap<String> dimToNameMap = new TIntObjectHashMap<String>();
 	private final TIntObjectMap<WorldServer> dimToWorldMap = new TIntObjectHashMap<WorldServer>();
 	private final Map<String, WorldServer> nameToWorldMap = new HashMap<String, WorldServer>();
@@ -64,11 +67,16 @@ public class MultiWorld
 		this.server = server;
 	}
 	
+	public void registerProviderTranslation(int src, int dst)
+	{
+		provTranslt.put(src, dst);
+	}
+	
 	private void sendDimensionToAll(int dim, int pid)
 	{
 		FMLEmbeddedChannel channel = NetworkRegistry.INSTANCE.getChannel("FORGE", Side.SERVER);
 		channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
-		channel.writeAndFlush(new ForgeMessage.DimensionRegisterMessage(dim, pid == -10 ? 0 : pid));
+		channel.writeAndFlush(new ForgeMessage.DimensionRegisterMessage(dim, provTranslt.containsKey(pid) ? provTranslt.get(pid) : pid));
 	}
 	
 	@SubscribeEvent
@@ -80,7 +88,7 @@ public class MultiWorld
 		for (int dim : DimensionManager.getStaticDimensionIDs())
 		{
 			int pid = DimensionManager.getProviderType(dim);
-			channel.writeAndFlush(new ForgeMessage.DimensionRegisterMessage(dim, pid == -10 ? 0 : pid));
+			channel.writeAndFlush(new ForgeMessage.DimensionRegisterMessage(dim, provTranslt.containsKey(pid) ? provTranslt.get(pid) : pid));
 		}
 	}
 	
@@ -99,6 +107,7 @@ public class MultiWorld
 	public void handleServerWorldsInit()
 	{
 		DimensionManager.registerProviderType(-10, org.ultramine.server.wempty.WorldProviderEmpty.class, false);
+		registerProviderTranslation(-10, 0);
 		DimensionManager.unregisterDimension(-1);
 		DimensionManager.unregisterDimension(0);
 		DimensionManager.unregisterDimension(1);
