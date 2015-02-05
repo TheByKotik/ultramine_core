@@ -65,14 +65,16 @@ public class ServerLoadBalancer
 
 		if(!ent.addedToChunk)
 			return true;
-	
+
+		int lowerLimit = getLimits.lowerLimit;
+
 		if(prior == WorldConstants.CL_CHUNK_PRIOR)
 			if(!getLimits.updateByChunkLoader)
-				return false;
+				lowerLimit = 1;
 		else if(prior > getLimits.updateRadius)
-			return false;
+			lowerLimit = 1;
 
-		if(count > getLimits.lowerLimit)
+		if(count > lowerLimit)
 		{
 			float rate = (float)getLimits.lowerLimit / (float)count;
 			if(rng.nextFloat() < rate)
