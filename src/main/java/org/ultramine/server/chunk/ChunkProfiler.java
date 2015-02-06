@@ -95,7 +95,7 @@ public class ChunkProfiler
 		
 		public int getDimension()
 		{
-			return (int)(key >>> 32);
+			return (int)(key >> 32);
 		}
 		
 		public int getChunkX()
@@ -191,7 +191,7 @@ public class ChunkProfiler
 		{
 			if(isChunkDebugEnabled)
 			{
-				curChunk = dim << 32 | key;
+				curChunk = (long)dim << 32 | key & 0xFFFFFFFFL;
 				curChunkStart = System.nanoTime();
 			}
 		}

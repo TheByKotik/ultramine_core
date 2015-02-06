@@ -23,7 +23,7 @@ public class ChunkHash
 	
 	public static long worldChunkToKey(int dim, int x, int z)
 	{
-		return dim << 32 | (long)(x & 0xffff) << 16 | (z & 0xffff);
+		return (long)dim << 32 | (long)(x & 0xffff) << 16 | (z & 0xffff);
 	}
 	
 	public static long blockCoordToHash(int x, int y, int z)
