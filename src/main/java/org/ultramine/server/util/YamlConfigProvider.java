@@ -1,19 +1,24 @@
 package org.ultramine.server.util;
 
 import org.apache.commons.io.Charsets;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.introspector.BeanAccess;
+import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.representer.Representer;
 
+import java.beans.IntrospectionException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class YamlConfigProvider
 {
@@ -21,7 +26,18 @@ public class YamlConfigProvider
 	
 	static
 	{
-		PropertyUtils prorutils = new PropertyUtils();
+		PropertyUtils prorutils = new PropertyUtils()
+		{
+			protected Set<Property> createPropertySet(Class<? extends Object> type, BeanAccess bAccess) throws IntrospectionException
+			{
+				Set<Property> properties = new LinkedHashSet<Property>();
+				Collection<Property> props = getPropertiesMap(type, bAccess).values();
+				for(Property property : props)
+					if(property.isReadable() && (false || property.isWritable()))
+						properties.add(property);
+				return properties;
+			}
+		};
 		prorutils.setSkipMissingProperties(true);
 		
 		Constructor constructor = new Constructor();
