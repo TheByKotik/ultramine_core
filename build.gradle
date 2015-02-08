@@ -32,6 +32,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
+import org.apache.commons.io.FileUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Type;
@@ -135,7 +136,7 @@ dependencies {
 	testRuntime "org.objenesis:objenesis:1.2"
 }
 
-task processServerResources(type: Copy) {
+task processServerResources(type: ProcessResources) {
 	exclude 'assets/minecraft/font'
 	exclude 'assets/minecraft/shaders'
 	exclude 'assets/minecraft/texts'
@@ -143,7 +144,7 @@ task processServerResources(type: Copy) {
 	exclude 'assets/fml/textures'
 }
 
-task processClientResources(type: Copy) {
+task processClientResources(type: ProcessResources) {
 	exclude 'org/ultramine/defaults'
 }
 
@@ -291,6 +292,8 @@ class SideSplitTask extends DefaultTask {
 
 		classes_server.mkdirs();
 		classes_client.mkdirs();
+		FileUtils.cleanDirectory(classes_server);
+		FileUtils.cleanDirectory(classes_client);
 		ZipInputStream zipIn = new ZipInputStream(new FileInputStream(toSplitemp));
 		ZipEntry entry = null;
 		while ((entry = zipIn.getNextEntry()) != null) {
