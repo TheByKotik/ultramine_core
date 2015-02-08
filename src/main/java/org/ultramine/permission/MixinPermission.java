@@ -1,25 +1,32 @@
 package org.ultramine.permission;
 
+import org.ultramine.permission.internal.AbstractResolver;
 import org.ultramine.permission.internal.MetaResolver;
 import org.ultramine.permission.internal.PermissionHolder;
-import org.ultramine.permission.internal.PermissionResolver;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class GroupPermission extends PermissionHolder implements IPermission
+public class MixinPermission extends PermissionHolder implements IPermission
 {
 	private final String key;
 	private final List<IDirtyListener> listeners = new ArrayList<IDirtyListener>();
+	private int priority = Integer.MIN_VALUE;
 
-	public GroupPermission(String key)
+	public MixinPermission(String key)
 	{
 		super();
 		this.key = key.toLowerCase();
 	}
+	
+	public MixinPermission(String key, int priority)
+	{
+		this(key);
+		this.priority = priority;
+	}
 
-	public GroupPermission(String key, Map<String, String> meta)
+	public MixinPermission(String key, Map<String, String> meta)
 	{
 		super(meta);
 		this.key = key.toLowerCase();
@@ -32,7 +39,7 @@ public class GroupPermission extends PermissionHolder implements IPermission
 	}
 
 	@Override
-	public void mergePermissionsTo(PermissionResolver resolver)
+	public void mergePermissionsTo(AbstractResolver<Boolean> resolver)
 	{
 		resolver.merge(getPermissionResolver(), getPriority());
 	}
@@ -75,7 +82,7 @@ public class GroupPermission extends PermissionHolder implements IPermission
 
 	private int getPriority()
 	{
-		return getMetaResolver().getInt("priority");
+		return priority != Integer.MIN_VALUE ? priority : getMetaResolver().getInt("priority");
 	}
 
 	@Override

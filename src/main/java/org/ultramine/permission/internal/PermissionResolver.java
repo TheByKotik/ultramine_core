@@ -4,13 +4,7 @@ import java.util.*;
 
 public class PermissionResolver extends Resolver<Boolean>
 {
-	private SortedMap<String, Boolean> wildcards;
-
-	public PermissionResolver()
-	{
-		super();
-		this.wildcards = new TreeMap<String, Boolean>(Collections.reverseOrder());
-	}
+	private final SortedMap<String, Boolean> wildcards = new TreeMap<String, Boolean>(Collections.reverseOrder());
 
 	public static PermissionResolver createInverted(PermissionResolver anotherResolver)
 	{
@@ -33,9 +27,9 @@ public class PermissionResolver extends Resolver<Boolean>
 		if (key == null)
 			return CheckResult.UNRESOLVED;
 
-		key = key.toLowerCase();
-		if (values.containsKey(key))
-			return CheckResult.fromBoolean(values.get(key));
+		Boolean val = values.get(key);
+		if (val != null)
+			return CheckResult.fromBoolean(val);
 
 		if (wildcards.size() > 0)
 		{

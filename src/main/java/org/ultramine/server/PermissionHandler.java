@@ -2,11 +2,11 @@ package org.ultramine.server;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import org.ultramine.permission.GroupPermission;
+
+import org.ultramine.permission.MixinPermission;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.PermissionRepository;
 import org.ultramine.permission.internal.ServerPermissionManager;
-import org.ultramine.permission.internal.UserContainer;
 
 public class PermissionHandler implements IPermissionManager
 {
@@ -75,15 +75,15 @@ public class PermissionHandler implements IPermissionManager
 	}
 
 	@Override
-	public void addToWorld(String world, String permission)
+	public void addToMixin(String group, String permission)
 	{
-		getHandler().addToWorld(world, permission);
+		getHandler().addToMixin(group, permission);
 	}
-
+	
 	@Override
-	public void addToGroup(String group, String permission)
+	public void addToGroup(String group, String world, String permission)
 	{
-		getHandler().addToGroup(group, permission);
+		getHandler().addToGroup(group, world, permission);
 	}
 
 	@Override
@@ -98,15 +98,15 @@ public class PermissionHandler implements IPermissionManager
 	}
 
 	@Override
-	public void removeFromWorld(String world, String permission)
+	public void removeFromMixin(String group, String permission)
 	{
-		getHandler().removeFromWorld(world, permission);
+		getHandler().removeFromMixin(group, permission);
 	}
-
+	
 	@Override
-	public void removeFromGroup(String group, String permission)
+	public void removeFromGroup(String group, String world, String permission)
 	{
-		getHandler().removeFromGroup(group, permission);
+		getHandler().removeFromGroup(group, world, permission);
 	}
 
 	@Override
@@ -127,20 +127,32 @@ public class PermissionHandler implements IPermissionManager
 	}
 
 	@Override
-	public void setWorldMeta(String world, String key, String value)
+	public void setMixinMeta(String group, String key, String value)
 	{
-		getHandler().setWorldMeta(world, key, value);
+		getHandler().setMixinMeta(group, key, value);
 	}
-
+	
 	@Override
-	public void setGroupMeta(String group, String key, String value)
+	public void setGroupMeta(String group, String world, String key, String value)
 	{
-		getHandler().setGroupMeta(group, key, value);
+		getHandler().setGroupMeta(group, world, key, value);
 	}
 
 	public void setMeta(ICommandSender player, String key, String value)
 	{
 		setMeta(worldName(player), player.getCommandSenderName(), key, value);
+	}
+	
+	@Override
+	public void setUserGroup(String user, String group)
+	{
+		getHandler().setUserGroup(user, group);
+	}
+
+	@Override
+	public void setGroupInherits(String group, String parent)
+	{
+		getHandler().setGroupInherits(group, parent);
 	}
 
 	@Override
@@ -161,15 +173,9 @@ public class PermissionHandler implements IPermissionManager
 		return getHandler().getRepository();
 	}
 
-	@Override
-	public UserContainer getWorldContainer(String world)
+	public MixinPermission createGroup(String name, String... permissions)
 	{
-		return getHandler().getWorldContainer(world);
-	}
-
-	public GroupPermission createGroup(String name, String... permissions)
-	{
-		GroupPermission group = new GroupPermission(name);
+		MixinPermission group = new MixinPermission(name);
 		for (String permission : permissions)
 			group.addPermission(getRepository().getPermission(permission));
 		getRepository().registerPermission(group);

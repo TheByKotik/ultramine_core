@@ -2,11 +2,10 @@ package org.ultramine.permission.internal;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import org.ultramine.permission.GroupPermission;
+
+import org.ultramine.permission.MixinPermission;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.PermissionRepository;
-import org.ultramine.permission.User;
-import org.ultramine.permission.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,99 +13,93 @@ import java.util.Map;
 @SideOnly(Side.CLIENT)
 public class ClientPermissionManager implements IPermissionManager
 {
-	private static final String[] DEFAULT_PERMISSIONS = new String[] {
-		"command.vanilla.seed", "command.vanilla.tell", "command.vanilla.help", "command.vanilla.me"
-	};
-
-	private World global;
 	private PermissionRepository permissionRepository;
-	private Map<String, GroupPermission> groups;
+	private Map<String, MixinPermission> groups;
 	private String owner;
 
 	public ClientPermissionManager(String owner, PermissionRepository permissionRepository)
 	{
 		this.permissionRepository = permissionRepository;
-		this.global = new World();
-		this.groups = new HashMap<String, GroupPermission>();
+		this.groups = new HashMap<String, MixinPermission>();
 		this.owner = owner;
-
-		for (String permission : DEFAULT_PERMISSIONS)
-			global.getDefaultGroup().addPermission(permissionRepository.getPermission(permission));
 	}
 
 	@Override
 	public boolean has(String world, String player, String permission)
 	{
-		return player.equalsIgnoreCase(owner) || global.checkUserPermission(player, permission);
+		return player.equalsIgnoreCase(owner);
 	}
 
 	@Override
 	public void add(String world, String player, String permission)
 	{
-		getOrCreateUser(player).addPermission(permissionRepository.getPermission(permission));
+		
 	}
 
 	@Override
-	public void addToWorld(String world, String permission)
+	public void addToMixin(String group, String permission)
 	{
-		global.getDefaultGroup().addPermission(permissionRepository.getPermission(permission));
+		
 	}
 
 	@Override
-	public void addToGroup(String group, String permission)
+	public void addToGroup(String group, String world, String permission)
 	{
-		getOrCreateGroup(group).addPermission(permissionRepository.getPermission(permission));
+		
 	}
 
 	@Override
 	public void remove(String world, String player, String permission)
 	{
-		User user = global.get(player);
-		if (user == null)
-			return;
-
-		user.removePermission(permission);
+		
 	}
 
 	@Override
-	public void removeFromWorld(String world, String permission)
+	public void removeFromMixin(String group, String permission)
 	{
-		global.getDefaultGroup().removePermission(permission);
+		
 	}
 
 	@Override
-	public void removeFromGroup(String group, String permission)
+	public void removeFromGroup(String group, String world, String permission)
 	{
-		GroupPermission groupObj = groups.get(ServerPermissionManager.fixGroupKey(group));
-		groupObj.removePermission(permission);
+		
 	}
 
 	@Override
 	public String getMeta(String world, String player, String key)
 	{
-		User user = global.get(player);
-		if (user == null)
-			return "";
-		else
-			return user.getMeta(key);
+		return "";
 	}
 
 	@Override
 	public void setMeta(String world, String player, String key, String value)
 	{
-		getOrCreateUser(player).setMeta(key, value);
+		
 	}
 
 	@Override
-	public void setWorldMeta(String world, String key, String value)
+	public void setMixinMeta(String group, String key, String value)
 	{
-		global.getDefaultGroup().setMeta(key, value);
+		
 	}
 
 	@Override
-	public void setGroupMeta(String group, String key, String value)
+	public void setGroupMeta(String group, String world, String key, String value)
 	{
-		getOrCreateGroup(group).setMeta(key, value);
+		
+	}
+
+	@Override
+	public void setUserGroup(String user, String group)
+	{
+		
+	}
+
+	@Override
+	public void setGroupInherits(String group, String parent)
+	{
+		
 	}
 
 	@Override
@@ -123,37 +116,5 @@ public class ClientPermissionManager implements IPermissionManager
 	public PermissionRepository getRepository()
 	{
 		return permissionRepository;
-	}
-
-	@Override
-	public UserContainer getWorldContainer(String world)
-	{
-		return global;
-	}
-
-	private User getOrCreateUser(String name)
-	{
-		User user = global.get(name);
-		if (user == null)
-		{
-			user = new User(name);
-			global.add(user);
-		}
-
-		return user;
-	}
-
-	private GroupPermission getOrCreateGroup(String name)
-	{
-		String groupKey = ServerPermissionManager.fixGroupKey(name);
-		GroupPermission group = groups.get(groupKey);
-		if (group == null)
-		{
-			group = new GroupPermission(groupKey);
-			permissionRepository.registerPermission(group);
-			groups.put(groupKey, group);
-		}
-
-		return group;
 	}
 }

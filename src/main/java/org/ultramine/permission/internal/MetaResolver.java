@@ -11,10 +11,7 @@ public class MetaResolver extends Resolver<String>
 
 	public String getString(String key)
 	{
-		if (values.containsKey(key))
-			return values.get(key);
-		else
-			return "";
+		return values.get(key);
 	}
 
 	public int getInt(String key)

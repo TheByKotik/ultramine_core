@@ -1,8 +1,8 @@
 package org.ultramine.permission;
 
+import org.ultramine.permission.internal.AbstractResolver;
 import org.ultramine.permission.internal.CheckResult;
 import org.ultramine.permission.internal.MetaResolver;
-import org.ultramine.permission.internal.PermissionResolver;
 
 public class DummyPermission implements IPermission
 {
@@ -46,7 +46,7 @@ public class DummyPermission implements IPermission
 	}
 
 	@Override
-	public void mergePermissionsTo(PermissionResolver resolver)
+	public void mergePermissionsTo(AbstractResolver<Boolean> resolver)
 	{
 		resolver.merge(getKey(), (Boolean)true, Integer.MAX_VALUE);
 	}

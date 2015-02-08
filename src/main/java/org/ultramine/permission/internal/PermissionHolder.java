@@ -4,7 +4,7 @@ import org.ultramine.permission.IDirtyListener;
 import org.ultramine.permission.IPermission;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +12,7 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 {
 	private boolean dirty;
 
-	private Map<String, IPermission> permissions = new HashMap<String, IPermission>();
+	private Map<String, IPermission> permissions = new LinkedHashMap<String, IPermission>();
 	private PermissionResolver permissionResolver = new PermissionResolver();
 	private MetaResolver metaResolver = new MetaResolver();
 

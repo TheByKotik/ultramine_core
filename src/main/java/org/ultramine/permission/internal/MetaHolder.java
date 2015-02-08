@@ -1,6 +1,6 @@
 package org.ultramine.permission.internal;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class MetaHolder
@@ -9,7 +9,7 @@ public abstract class MetaHolder
 
 	public MetaHolder()
 	{
-		innerMeta = new HashMap<String, String>();
+		innerMeta = new LinkedHashMap<String, String>();
 	}
 
 	public MetaHolder(Map<String, String> meta)
@@ -39,12 +39,12 @@ public abstract class MetaHolder
 
 	public Map<String, String> getInnerMeta()
 	{
-		return new HashMap<String, String>(innerMeta);
+		return new LinkedHashMap<String, String>(innerMeta);
 	}
 
 	public void setInnerMeta(Map<String, String> meta)
 	{
-		innerMeta = new HashMap<String, String>(meta);
+		innerMeta = new LinkedHashMap<String, String>(meta);
 	}
 
 	protected abstract MetaResolver getMetaResolver();

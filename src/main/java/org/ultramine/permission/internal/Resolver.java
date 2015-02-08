@@ -5,15 +5,13 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Resolver<T>
+public class Resolver<T> extends AbstractResolver<T>
 {
-	protected Map<String, T> values;
-	protected TObjectIntHashMap<String> priorities;
+	protected final Map<String, T> values = new HashMap<String, T>();
+	protected final TObjectIntHashMap<String> priorities = new TObjectIntHashMap<String>();
 
 	public Resolver()
 	{
-		values = new HashMap<String, T>();
-		priorities = new TObjectIntHashMap<String>();
 	}
 
 	public void clear()
@@ -22,17 +20,9 @@ public class Resolver<T>
 		priorities.clear();
 	}
 
-	public final void merge(Resolver<T> anotherResolver, int priority)
+	protected Map<String, T> getValues()
 	{
-		if (anotherResolver != null)
-			merge(anotherResolver.values, priority);
-	}
-
-	public final void merge(Map<String, T> newValues, int priority)
-	{
-		for (Map.Entry<String, T> entry : newValues.entrySet())
-			merge(entry.getKey(), entry.getValue(), priority);
-
+		return values;
 	}
 
 	public boolean merge(String key, T value, int priority)

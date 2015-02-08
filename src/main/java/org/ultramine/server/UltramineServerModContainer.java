@@ -37,8 +37,8 @@ import org.ultramine.commands.basic.FastWarpCommand;
 import org.ultramine.commands.basic.TechCommands;
 import org.ultramine.commands.basic.VanillaCommands;
 import org.ultramine.commands.syntax.DefaultCompleters;
+import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.commands.BasicPermissionCommands;
-import org.ultramine.permission.internal.OpPermissionProxySet;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.data.Databases;
 import org.ultramine.server.data.ServerDataLoader;
@@ -124,8 +124,26 @@ public class UltramineServerModContainer extends DummyModContainer
 		e.registerCommands(VanillaCommands.class);
 		e.registerCommands(BasicCommands.class);
 		e.registerCommands(TechCommands.class);
-
-		e.getPermissionHandler().createGroup(OpPermissionProxySet.OP_GROUP, "*");
+		
+		for(String perm : new String[]{
+				"command.help",
+				"command.vanilla.msg",
+				"command.vanilla.me",
+				"command.vanilla.kill",
+				"command.vanilla.list",
+				"ability.player.useblock",
+				"ability.player.useitem",
+				"ability.player.blockplace",
+				"ability.player.blockbreak",
+				"ability.player.attack",
+				})
+		{
+			e.getPermissionHandler().addToGroup(IPermissionManager.DEFAULT_GROUP_NAME, IPermissionManager.GLOBAL_WORLD, perm);
+		}
+		e.getPermissionHandler().setGroupMeta(IPermissionManager.DEFAULT_GROUP_NAME, IPermissionManager.GLOBAL_WORLD, "color", "7");
+		e.getPermissionHandler().addToGroup("admin", IPermissionManager.GLOBAL_WORLD, "*");
+		e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "color", "c");
+		e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "prefix", "&4[admin] ");
 		
 		if(e.getSide().isServer())
 		{
@@ -137,6 +155,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void serverStarted(FMLServerStartedEvent e)
 	{
+		PermissionHandler.getInstance().reload();
 		ServerDataLoader loader = MinecraftServer.getServer().getConfigurationManager().getDataLoader();
 		CommandRegistry reg = ((CommandHandler)MinecraftServer.getServer().getCommandManager()).getRegistry();
 		loader.loadCache();

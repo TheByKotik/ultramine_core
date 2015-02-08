@@ -71,7 +71,6 @@ import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.PermissionHandler;
-import org.ultramine.permission.internal.OpPermissionProxySet;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.util.WarpLocation;

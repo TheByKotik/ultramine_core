@@ -1,8 +1,8 @@
 package org.ultramine.permission;
 
+import org.ultramine.permission.internal.AbstractResolver;
 import org.ultramine.permission.internal.CheckResult;
 import org.ultramine.permission.internal.MetaResolver;
-import org.ultramine.permission.internal.PermissionResolver;
 
 class NegativePermission extends PermissionRepository.ProxyPermission
 {
@@ -33,9 +33,9 @@ class NegativePermission extends PermissionRepository.ProxyPermission
 	}
 
 	@Override
-	public void mergePermissionsTo(final PermissionResolver resolver)
+	public void mergePermissionsTo(final AbstractResolver<Boolean> resolver)
 	{
-		super.mergePermissionsTo(new PermissionResolver()
+		super.mergePermissionsTo(new AbstractResolver<Boolean>()
 		{
 			@Override
 			public boolean merge(String key, Boolean value, int priority)

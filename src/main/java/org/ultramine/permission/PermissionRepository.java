@@ -1,8 +1,8 @@
 package org.ultramine.permission;
 
+import org.ultramine.permission.internal.AbstractResolver;
 import org.ultramine.permission.internal.CheckResult;
 import org.ultramine.permission.internal.MetaResolver;
-import org.ultramine.permission.internal.PermissionResolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,16 +11,19 @@ import java.util.Map;
 
 public class PermissionRepository
 {
-	private Map<String, ProxyPermission> proxyPermissions;
+	private final Map<String, ProxyPermission> proxyPermissions;
+	private final Map<String, IPermissionContainer> proxyContainers;
 
 	public PermissionRepository()
 	{
 		proxyPermissions = new HashMap<String, ProxyPermission>();
+		proxyContainers = new HashMap<String, IPermissionContainer>();
 	}
 
 	public PermissionRepository(PermissionRepository anotherRepository)
 	{
 		proxyPermissions = new HashMap<String, ProxyPermission>(anotherRepository.proxyPermissions);
+		proxyContainers = new HashMap<String, IPermissionContainer>(anotherRepository.proxyContainers);
 	}
 
 	public ProxyPermission getPermission(String key)
@@ -67,6 +70,26 @@ public class PermissionRepository
 	{
 		for (String permission : permissions)
 			getPermission(permission).lock();
+	}
+	
+	public IPermissionContainer getContainer(String name)
+	{
+		IPermissionContainer container = proxyContainers.get(name);
+		if(container == null)
+			proxyContainers.put(name, container = new ProxyContainer(name));
+		return container;
+	}
+	
+	public void registerContainer(String name, IPermissionContainer container)
+	{
+		IPermissionContainer old = proxyContainers.get(name);
+		if(old == null)
+			proxyContainers.put(name, container);
+		else if(old instanceof ProxyContainer)
+			((ProxyContainer)old).link(container);
+		else
+			throw new IllegalArgumentException("Container already registered");
+			
 	}
 
 	public static class ProxyPermission implements IPermission
@@ -117,7 +140,7 @@ public class PermissionRepository
 		}
 
 		@Override
-		public void mergePermissionsTo(PermissionResolver resolver)
+		public void mergePermissionsTo(AbstractResolver<Boolean> resolver)
 		{
 			wrappedPermission.mergePermissionsTo(resolver);
 		}
@@ -179,6 +202,40 @@ public class PermissionRepository
 		public String toString()
 		{
 			return wrappedPermission.toString();
+		}
+	}
+
+	private static class ProxyContainer implements IPermissionContainer
+	{
+		private final String name;
+		private IPermissionContainer wrappedContainer;
+		
+		private ProxyContainer(String name)
+		{
+			this.name = name;
+		}
+	
+		@Override
+		public String getName()
+		{
+			return name;
+		}
+		
+		@Override
+		public CheckResult check(String worldname, String permissionKey)
+		{
+			return wrappedContainer != null ? wrappedContainer.check(worldname, permissionKey) : CheckResult.UNRESOLVED;
+		}
+		
+		@Override
+		public String getMeta(String worldname, String key)
+		{
+			return wrappedContainer != null ? wrappedContainer.getMeta(worldname, key) : null;
+		}
+	
+		private void link(IPermissionContainer container)
+		{
+			this.wrappedContainer = container;
 		}
 	}
 }

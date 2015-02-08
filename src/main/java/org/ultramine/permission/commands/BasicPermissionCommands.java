@@ -2,7 +2,7 @@ package org.ultramine.permission.commands;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
-import org.ultramine.permission.internal.ServerPermissionManager;
+import org.ultramine.permission.IPermissionManager;
 import org.ultramine.server.PermissionHandler;
 
 public class BasicPermissionCommands
@@ -14,113 +14,68 @@ public class BasicPermissionCommands
 			permissions = {"permissions.admin"},
 			syntax = {"[save reload]"}
 	)
-	public static void pcofnig(CommandContext context)
+	public static void pcofnig(CommandContext ctx)
 	{
-		if (context.actionIs("save"))
+		if (ctx.actionIs("save"))
 		{
 			PermissionHandler.getInstance().save();
-			context.notifyAdmins("command.pconfig.success.save");
+			ctx.notifyAdmins("command.pconfig.success.save");
 		}
 		else
 		{
 			PermissionHandler.getInstance().reload();
-			context.notifyAdmins("command.pconfig.success.reload");
+			ctx.notifyAdmins("command.pconfig.success.reload");
 		}
 	}
-
-
-
-	@Command(
-			name = "pworld",
-			group = "permissions",
-			permissions = {"permissions.admin.world"},
-			syntax = {
-					"[add remove] <permission>...",
-					"[meta] <pmeta> <%value>",
-					"<world> [add remove] <permission>...",
-					"<world> [meta] <pmeta> <%value>",
-			}
-	)
-	public static void pworld(CommandContext context)
-	{
-		String world = context.contains("world")
-				? context.get("world").asWorld().getWorldInfo().getWorldName()
-				: ServerPermissionManager.GLOBAL_WORLD;
-
-		context.checkSenderPermissionInWorld(world, "permissions.admin.world");
-
-		if (context.actionIs("add"))
-		{
-			for (CommandContext.Argument arg : context.get("permission").asArray())
-			{
-				PermissionHandler.getInstance().addToWorld(world, arg.asString());
-				context.notifyAdmins("command.pworld.success.add", arg.asString(), world);
-			}
-		}
-		else if (context.actionIs("remove"))
-		{
-			for (CommandContext.Argument arg : context.get("permission").asArray())
-			{
-				PermissionHandler.getInstance().removeFromWorld(world, arg.asString());
-				context.notifyAdmins("command.pworld.success.remove", arg.asString(), world);
-			}
-		}
-		else
-		{
-			String key = context.get("pmeta").asString();
-			String value = context.get("value").asString();
-
-			PermissionHandler.getInstance().setWorldMeta(world, key, value);
-			context.notifyAdmins("command.pworld.success.meta", key, value, world);
-		}
-
-		PermissionHandler.getInstance().save();
-	}
-
 
 	@Command(
 			name = "puser",
 			group = "permissions",
 			permissions = {"permissions.admin.user"},
 			syntax = {
+					"<player> [setgroup] <group>",
 					"<player> [add remove] <permission>...",
 					"<player> [meta] <pmeta> <%value>",
 					"<world> <player> [add remove] <permission>...",
 					"<world> <player> [meta] <pmeta> <%value>"
 			}
 	)
-	public static void puser(CommandContext context)
+	public static void puser(CommandContext ctx)
 	{
-		String player = context.get("player").asString();
-		String world = context.contains("world")
-				? context.get("world").asWorld().getWorldInfo().getWorldName()
-				: ServerPermissionManager.GLOBAL_WORLD;
+		String player = ctx.get("player").asString();
+		String world = ctx.contains("world")
+				? ctx.get("world").asWorld().getWorldInfo().getWorldName()
+				: IPermissionManager.GLOBAL_WORLD;
 
-		context.checkSenderPermissionInWorld(world, "permissions.admin.world");
+		ctx.checkSenderPermissionInWorld(world, "permissions.admin.world");
 
-		if (context.actionIs("add"))
+		if (ctx.actionIs("setgroup"))
 		{
-			for (CommandContext.Argument arg : context.get("permission").asArray())
+			PermissionHandler.getInstance().setUserGroup(player, ctx.get("group").asString());
+		}
+		else if (ctx.actionIs("add"))
+		{
+			for (CommandContext.Argument arg : ctx.get("permission").asArray())
 			{
 				PermissionHandler.getInstance().add(world, player, arg.asString());
-				context.notifyAdmins("command.puser.success.add", arg.asString(), player, world);
+				ctx.notifyAdmins("command.puser.success.add", arg.asString(), player, world);
 			}
 		}
-		else if (context.actionIs("remove"))
+		else if (ctx.actionIs("remove"))
 		{
-			for (CommandContext.Argument arg : context.get("permission").asArray())
+			for (CommandContext.Argument arg : ctx.get("permission").asArray())
 			{
 				PermissionHandler.getInstance().remove(world, player, arg.asString());
-				context.notifyAdmins("command.puser.success.remove", arg.asString(), player, world);
+				ctx.notifyAdmins("command.puser.success.remove", arg.asString(), player, world);
 			}
 		}
 		else
 		{
-			String key = context.get("pmeta").asString();
-			String value = context.get("value").asString();
+			String key = ctx.get("pmeta").asString();
+			String value = ctx.get("value").asString();
 
 			PermissionHandler.getInstance().setMeta(world, player, key, value);
-			context.notifyAdmins("command.puser.success.meta", key, value, player, world);
+			ctx.notifyAdmins("command.puser.success.meta", key, value, player, world);
 		}
 
 		PermissionHandler.getInstance().save();
@@ -128,40 +83,90 @@ public class BasicPermissionCommands
 
 
 	@Command(
-			name = "pgroup",
+			name = "pmixin",
 			group = "permissions",
-			permissions = {"permissions.admin.group"},
+			permissions = {"permissions.admin.mixin"},
 			syntax = {
-					"<group> [add remove] <permission>...",
-					"<group> [meta] <pmeta> <%value>"
+					"<mixin> [add remove] <permission>...",
+					"<mixin> [meta] <pmeta> <%value>"
 			}
 	)
-	public static void pgroup(CommandContext context)
+	public static void pmixin(CommandContext ctx)
 	{
-		String group = context.get("group").asString();
+		String mixin = ctx.get("mixin").asString();
 
-		if (context.actionIs("add"))
+		if (ctx.actionIs("add"))
 		{
-			for (CommandContext.Argument arg : context.get("permission").asArray())
+			for (CommandContext.Argument arg : ctx.get("permission").asArray())
 			{
-				PermissionHandler.getInstance().addToGroup(group, arg.asString());
-				context.notifyAdmins("command.pgroup.success.add", arg.asString(), group);
+				PermissionHandler.getInstance().addToMixin(mixin, arg.asString());
+				ctx.notifyAdmins("command.pgroup.success.add", arg.asString(), mixin);
 			}
 		}
-		else if (context.actionIs("remove"))
+		else if (ctx.actionIs("remove"))
 		{
-			for (CommandContext.Argument arg : context.get("permission").asArray())
+			for (CommandContext.Argument arg : ctx.get("permission").asArray())
 			{
-				PermissionHandler.getInstance().removeFromGroup(group, arg.asString());
-				context.notifyAdmins("command.pgroup.success.remove", arg.asString(), group);
+				PermissionHandler.getInstance().removeFromMixin(mixin, arg.asString());
+				ctx.notifyAdmins("command.pgroup.success.remove", arg.asString(), mixin);
 			}
 		}
 		else
 		{
-			String key = context.get("key").asString();
-			String value = context.get("value").asString();
-			PermissionHandler.getInstance().setGroupMeta(group, key, value);
-			context.notifyAdmins("command.pgroup.success.meta", key, value, group);
+			String key = ctx.get("key").asString();
+			String value = ctx.get("value").asString();
+			PermissionHandler.getInstance().setMixinMeta(mixin, key, value);
+			ctx.notifyAdmins("command.pgroup.success.meta", key, value, mixin);
+		}
+
+		PermissionHandler.getInstance().save();
+	}
+	
+	@Command(
+			name = "pgroup",
+			group = "permissions",
+			permissions = {"permissions.admin.group"},
+			syntax = {
+					"<group> [setparent] <group%parent>",
+					"<group> [add remove] <permission>...",
+					"<group> [meta] <pmeta> <%value>",
+					"<group> <world> [add remove] <permission>...",
+					"<group> <world> [meta] <pmeta> <%value>"
+			}
+	)
+	public static void pgroup(CommandContext ctx)
+	{
+		String group = ctx.get("group").asString();
+		String world = ctx.contains("world")
+				? ctx.getServer().getMultiWorld().getNameByID(ctx.get("world").asWorld().provider.dimensionId)
+				: IPermissionManager.GLOBAL_WORLD;
+
+		if (ctx.actionIs("setparent"))
+		{
+			PermissionHandler.getInstance().setUserGroup(group, ctx.get("parent").asString());
+		}
+		if (ctx.actionIs("add"))
+		{
+			for (CommandContext.Argument arg : ctx.get("permission").asArray())
+			{
+				PermissionHandler.getInstance().addToGroup(group, world, arg.asString());
+				ctx.notifyAdmins("command.pgroup.success.add", arg.asString(), group);
+			}
+		}
+		else if (ctx.actionIs("remove"))
+		{
+			for (CommandContext.Argument arg : ctx.get("permission").asArray())
+			{
+				PermissionHandler.getInstance().removeFromGroup(group, world, arg.asString());
+				ctx.notifyAdmins("command.pgroup.success.remove", arg.asString(), group);
+			}
+		}
+		else
+		{
+			String key = ctx.get("key").asString();
+			String value = ctx.get("value").asString();
+			PermissionHandler.getInstance().setGroupMeta(group, world, key, value);
+			ctx.notifyAdmins("command.pgroup.success.meta", key, value, group);
 		}
 
 		PermissionHandler.getInstance().save();

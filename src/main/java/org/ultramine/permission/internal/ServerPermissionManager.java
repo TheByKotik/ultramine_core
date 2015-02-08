@@ -2,28 +2,34 @@ package org.ultramine.permission.internal;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import org.ultramine.permission.GroupPermission;
+
+import org.ultramine.permission.MixinPermission;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.PermissionRepository;
-import org.ultramine.permission.User;
-import org.ultramine.permission.World;
 import org.ultramine.server.util.YamlConfigProvider;
 
+import com.mysql.jdbc.StringUtils;
+
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.SERVER)
 public class ServerPermissionManager implements IPermissionManager
 {
-	public final static String GLOBAL_WORLD = "global";
-	private final static String GROUPS_CONFIG = "groups.yml";
-	private static final String GROUP_PREFIX = "group.";
+	private static final String GROUPS_CONFIG = "groups.yml";
+	private static final String MIXINS_CONFIG = "mixins.yml";
+	private static final String MIXIN_PREFIX = "mixin.";
 
-	private File configDir;
-	private Map<String, World> worlds;
-	private PermissionRepository permissionRepository;
-	private Map<String, GroupPermission> groups;
+	private final File configDir;
+	private final PermissionRepository permissionRepository;
+	private final Map<String, MixinPermission> mixins = new LinkedHashMap<String, MixinPermission>();
+	private final Map<String, PermUser> groups = new LinkedHashMap<String, PermUser>();
+	private final Map<String, PermUser> users = new LinkedHashMap<String, PermUser>();
+	private final PermUser defaultGroup;
 
 	public ServerPermissionManager(File configDir, PermissionRepository permissionRepository)
 	{
@@ -32,10 +38,7 @@ public class ServerPermissionManager implements IPermissionManager
 			this.configDir.mkdir();
 
 		this.permissionRepository = permissionRepository;
-		this.worlds = new HashMap<String, World>();
-		this.groups = new HashMap<String, GroupPermission>();
-		reloadGroups();
-		reloadWorld(GLOBAL_WORLD);
+		defaultGroup = getOrCreateGroup(DEFAULT_GROUP_NAME);
 	}
 
 	@Override
@@ -45,230 +48,279 @@ public class ServerPermissionManager implements IPermissionManager
 	}
 
 	@Override
-	public UserContainer getWorldContainer(String world)
-	{
-		return worlds.get(world);
-	}
-
-	@Override
 	public boolean has(String world, String player, String permission)
 	{
-		World worldObj  = worlds.get(world);
-		if (worldObj == null)
-			worldObj = worlds.get(GLOBAL_WORLD);
-
-		return worldObj.checkUserPermission(player, permission);
+		PermUser user = users.get(player.toLowerCase());
+		if(user == null)
+			user = defaultGroup;
+		return user.checkUserPermission(world, permission);
 	}
 
 	@Override
 	public void add(String world, String player, String permission)
 	{
-		getOrCreateUser(world, player).addPermission(permissionRepository.getPermission(permission));
+		getOrCreateUser(player).addPermission(world, permissionRepository.getPermission(permission));
 	}
 
 	@Override
-	public void addToWorld(String world, String permission)
+	public void addToMixin(String group, String permission)
 	{
-		getOrCreateWorld(world).getDefaultGroup()
-				.addPermission(permissionRepository.getPermission(permission));
+		getOrCreateMixin(group).addPermission(permissionRepository.getPermission(permission));
 	}
-
+	
 	@Override
-	public void addToGroup(String group, String permission)
+	public void addToGroup(String group, String world, String permission)
 	{
-		getOrCreateGroup(group).addPermission(permissionRepository.getPermission(permission));
+		getOrCreateGroup(group).addPermission(world, permissionRepository.getPermission(permission));
 	}
 
 	@Override
 	public void remove(String world, String player, String permission)
 	{
-		User user = getUser(world, player);
+		PermUser user = users.get(player.toLowerCase());
 		if (user == null)
 			return;
 
-		user.removePermission(permission);
+		user.removePermission(world, permission);
 	}
 
 	@Override
-	public void removeFromWorld(String world, String permission)
+	public void removeFromMixin(String mixin, String permission)
 	{
-		World worldObj = worlds.get(world);
-		if (worldObj == null)
-			return;
-
-		worldObj.getDefaultGroup().removePermission(permission);
-	}
-
-	@Override
-	public void removeFromGroup(String group, String permission)
-	{
-		GroupPermission groupObj = groups.get(fixGroupKey(group));
+		MixinPermission groupObj = mixins.get(fixMixinKey(mixin));
 		if (groupObj == null)
 			return;
 
 		groupObj.removePermission(permission);
 	}
+	
+	@Override
+	public void removeFromGroup(String group, String world, String permission)
+	{
+		getOrCreateGroup(group).removePermission(world, permission);
+	}
 
 	@Override
 	public String getMeta(String world, String player, String key)
 	{
-		World worldObj  = worlds.get(world);
-		if (worldObj == null)
-			worldObj = worlds.get(GLOBAL_WORLD);
+		PermUser user  = users.get(player.toLowerCase());
+		if (user == null)
+			user = defaultGroup;
 
-		return worldObj.getUserMeta(player, key);
+		String meta = user.getMeta(world, key);
+		return meta != null ? meta : "";
 	}
 
+	@Override
+	public void setMixinMeta(String group, String key, String value)
+	{
+		getOrCreateMixin(group).setMeta(key, value);
+	}
+	
+	@Override
+	public void setGroupMeta(String group, String world, String key, String value)
+	{
+		getOrCreateGroup(group).setMeta(world, key, value);
+	}
+	
 	@Override
 	public void setMeta(String world, String player, String key, String value)
 	{
-		getOrCreateUser(world, player).setMeta(key, value);
+		getOrCreateUser(player).setMeta(world, key, value);
 	}
 
 	@Override
-	public void setWorldMeta(String world, String key, String value)
+	public void setUserGroup(String user, String group)
 	{
-		getOrCreateWorld(world).getDefaultGroup().setMeta(key, value);
+		getOrCreateUser(user).setParent(permissionRepository.getContainer(group));
 	}
 
 	@Override
-	public void setGroupMeta(String group, String key, String value)
+	public void setGroupInherits(String group, String parent)
 	{
-		getOrCreateGroup(group).setMeta(key, value);
+		getOrCreateGroup(group).setParent(permissionRepository.getContainer(parent));
 	}
 
 	@Override
 	public void save()
 	{
+		saveMixins();
 		saveGroups();
-		for (String world : worlds.keySet())
-			saveWorld(world);
+		saveUsers();
 	}
 
 	@Override
 	public void reload()
 	{
+		reloadMixins();
 		reloadGroups();
-		for (String world : worlds.keySet())
-			reloadWorld(world);
+		reloadUsers();
 	}
 
-	public World reloadWorld(String name)
+	public void reloadMixins()
 	{
-		World.WorldData data = YamlConfigProvider.getOrCreateConfig(worldFile(name), World.WorldData.class);
-		World world = worlds.get(name);
-		if (world == null)
+		File file = mixinsFile();
+		if(file.exists())
 		{
-			world = new World();
-			worlds.put(name, world);
+			for (MixinPermission mixin : mixins.values())
+			{
+				mixin.clearPermissions();
+				mixin.clearMeta();
+			}
+
+			MixinData data = YamlConfigProvider.getOrCreateConfig(file, MixinData.class);
+			if (data == null || data.mixins == null)
+				return;
+
+			for (Map.Entry<String, HolderData> groupData : data.mixins.entrySet())
+			{
+				MixinPermission mixin = getOrCreateMixin(groupData.getKey());
+				mixin.setInnerMeta(groupData.getValue().meta);
+
+				for (String pKey : groupData.getValue().permissions)
+					mixin.addPermission(permissionRepository.getPermission(pKey));
+			}	
 		}
-
-		world.load(permissionRepository, data);
-
-		if (!name.equals(GLOBAL_WORLD))
-			world.setParentContainer(worlds.get(GLOBAL_WORLD));
-
-		return world;
+		else
+		{
+			saveMixins();
+		}
 	}
 
-	public void saveWorld(String name)
+	public void saveMixins()
 	{
-		World world = worlds.get(name);
-		if (world == null)
-			return;
+		MixinData data = new MixinData();
 
-		YamlConfigProvider.saveConfig(worldFile(name), world.save());
+		for (Map.Entry<String, MixinPermission> group : mixins.entrySet())
+			data.mixins.put(group.getKey(), new HolderData(group.getValue()));
+
+		YamlConfigProvider.saveConfig(mixinsFile(), data);
 	}
 
 	public void reloadGroups()
 	{
-		for (GroupPermission group : groups.values())
+		File file = groupsFile();
+		if(file.exists())
 		{
-			group.clearPermissions();
-			group.clearMeta();
+			for(PermUser group : groups.values())
+				group.clearAll();
+
+			GroupsData data = YamlConfigProvider.getOrCreateConfig(file, GroupsData.class);
+			for(Map.Entry<String, UserData> groupData : data.groups.entrySet())
+				fillContainer(getOrCreateGroup(groupData.getKey()), groupData.getValue());
 		}
-
-		GroupData data = YamlConfigProvider.getOrCreateConfig(groupsFile(), GroupData.class);
-		if (data == null || data.groups == null)
-			return;
-
-		for (Map.Entry<String, World.HolderData> groupData : data.groups.entrySet())
+		else
 		{
-			GroupPermission group = getOrCreateGroup(groupData.getKey());
-			group.setInnerMeta(groupData.getValue().meta);
-
-			for (String pKey : groupData.getValue().permissions)
-				group.addPermission(permissionRepository.getPermission(pKey));
+			saveGroups();
 		}
 	}
-
+	
 	public void saveGroups()
 	{
-		GroupData data = new GroupData();
+		GroupsData data = new GroupsData();
 
-		for (Map.Entry<String, GroupPermission> group : groups.entrySet())
-			data.groups.put(group.getKey(), new World.HolderData(group.getValue()));
+		for (PermUser group : groups.values())
+			data.groups.put(group.getName(), serializeContainer(group));
 
 		YamlConfigProvider.saveConfig(groupsFile(), data);
 	}
-
-	private World getOrCreateWorld(String name)
+	
+	public void saveUsers()
 	{
-		World world = worlds.get(name);
-		if (world == null)
-			world = reloadWorld(name);
+		UsersData data = new UsersData();
 
-		return world;
+		for (PermUser user : users.values())
+			data.users.put(user.getName(), serializeContainer(user));
+
+		YamlConfigProvider.saveConfig(usersFile(), data);
 	}
 
-	private User getUser(String worldName, String userName)
+	public void reloadUsers()
 	{
-		World world  = worlds.get(worldName);
-		if (world == null)
-			return null;
+		for(PermUser user : users.values())
+			user.clearAll();
+		users.clear();
 
-		return world.get(userName);
-	}
-
-	private User getOrCreateUser(String worldName, String userName)
-	{
-		World world  = getOrCreateWorld(worldName);
-
-		User user = world.get(userName);
-		if (user == null)
+		UsersData data = YamlConfigProvider.getOrCreateConfig(usersFile(), UsersData.class);
+		for(Map.Entry<String, UserData> userData : data.users.entrySet())
 		{
-			user = new User(userName);
-			world.add(user);
+			PermUser container = new PermUser(userData.getKey());
+			fillContainer(container, userData.getValue());
+			users.put(userData.getKey().toLowerCase(), container);
 		}
+	}
 
+	private void fillContainer(PermUser container, UserData data)
+	{
+		if(!StringUtils.isNullOrEmpty(data.inherits))
+			container.setParent(permissionRepository.getContainer(data.inherits));
+
+		fillHolder(container.getGlobalHolder(), data.global);
+		for(Map.Entry<String, HolderData> worldData : data.worlds.entrySet())
+			fillHolder(container.getOrCreateWorldHolder(worldData.getKey()), worldData.getValue());
+	}
+
+	private void fillHolder(PermissionHolder holder, HolderData data)
+	{
+		holder.setInnerMeta(data.meta);
+		for (String pKey : data.permissions)
+			holder.addPermission(permissionRepository.getPermission(pKey));
+	}
+	
+	private UserData serializeContainer(PermUser group)
+	{
+		UserData user = new UserData();
+		user.inherits = group.getParentName();
+		user.global = new HolderData(group.getGlobalHolder());
+		for(Map.Entry<String, PermissionHolder> world : group.getInnerWorlds().entrySet())
+			user.worlds.put(world.getKey(), new HolderData(world.getValue()));
 		return user;
 	}
 
-	public static String fixGroupKey(String key)
+	public static String fixMixinKey(String key)
 	{
-		if (key.startsWith(GROUP_PREFIX))
+		if (key.startsWith(MIXIN_PREFIX))
 			return key;
 		else
-			return GROUP_PREFIX + key;
+			return MIXIN_PREFIX + key;
 	}
 
-	private GroupPermission getOrCreateGroup(String name)
+	private MixinPermission getOrCreateMixin(String name)
 	{
-		String groupKey = fixGroupKey(name);
-		GroupPermission group = groups.get(groupKey);
-		if (group == null)
+		String groupKey = fixMixinKey(name);
+		MixinPermission mixin = mixins.get(groupKey);
+		if (mixin == null)
 		{
-			group = new GroupPermission(groupKey);
-			permissionRepository.registerPermission(group);
-			groups.put(groupKey, group);
+			mixin = new MixinPermission(groupKey);
+			permissionRepository.registerPermission(mixin);
+			mixins.put(groupKey, mixin);
 		}
 
-		return group;
+		return mixin;
 	}
 
-	private File worldFile(String name)
+	private PermUser getOrCreateGroup(String name)
 	{
-		return new File(configDir, "users-" + name + ".yml");
+		PermUser container = groups.get(name);
+		if(container == null)
+		{
+			container = new PermUser(name);
+			permissionRepository.registerContainer(name, container);
+			groups.put(name, container);
+		}
+		return container;
+	}
+
+	private PermUser getOrCreateUser(String name)
+	{
+		PermUser container = users.get(name.toLowerCase());
+		if(container == null)
+		{
+			container = new PermUser(name);
+			container.setParent(defaultGroup);
+			users.put(name, container);
+		}
+		return container;
 	}
 
 	private File groupsFile()
@@ -276,8 +328,58 @@ public class ServerPermissionManager implements IPermissionManager
 		return new File(configDir, GROUPS_CONFIG);
 	}
 
-	public static class GroupData
+	private File usersFile()
 	{
-		public Map<String, World.HolderData> groups = new HashMap<String, World.HolderData>();
+		return new File(configDir, "users.yml");
+	}
+
+	private File mixinsFile()
+	{
+		return new File(configDir, MIXINS_CONFIG);
+	}
+
+	public static class HolderData
+	{
+		public Map<String, String> meta;
+		public List<String> permissions;
+
+		public HolderData()
+		{
+			meta = new HashMap<String, String>();
+			permissions = new ArrayList<String>();
+		}
+
+		public HolderData(PermissionHolder holder)
+		{
+			meta = holder.getInnerMeta();
+			permissions = holder.getInnerPermissions();
+		}
+
+		public boolean isEmpty()
+		{
+			return permissions.isEmpty() && meta.isEmpty();
+		}
+	}
+
+	public static class UserData
+	{
+		public String inherits = "";
+		public HolderData global = new HolderData();
+		public Map<String, HolderData> worlds = new LinkedHashMap<String, HolderData>();
+	}
+
+	public static class GroupsData
+	{
+		public Map<String, UserData> groups = new LinkedHashMap<String, UserData>();
+	}
+
+	public static class UsersData
+	{
+		public Map<String, UserData> users = new LinkedHashMap<String, UserData>();
+	}
+
+	public static class MixinData
+	{
+		public Map<String, HolderData> mixins = new LinkedHashMap<String, HolderData>();
 	}
 }
