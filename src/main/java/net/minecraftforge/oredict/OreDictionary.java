@@ -1,5 +1,12 @@
 package net.minecraftforge.oredict;
 
+import gnu.trove.list.TIntList;
+import gnu.trove.list.array.TIntArrayList;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.set.TIntSet;
+import gnu.trove.set.hash.TIntHashSet;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +44,7 @@ public class OreDictionary
 	private static Map<String, Integer>  nameToId = new HashMap<String, Integer>();
 	private static List<ArrayList<ItemStack>> idToStack = Lists.newArrayList(); //ToDo: Unqualify to List when possible {1.8}
 	private static List<ArrayList<ItemStack>> idToStackUn = Lists.newArrayList(); //ToDo: Unqualify to List when possible {1.8}
-	private static Map<Integer, List<Integer>> stackToId = Maps.newHashMap();
+	private static TIntObjectMap<TIntList> stackToId = new TIntObjectHashMap<TIntList>();
 	public static final ArrayList<ItemStack> EMPTY_LIST = new UnmodifiableArrayList(Lists.newArrayList()); //ToDo: Unqualify to List when possible {1.8}
 
 	/**
@@ -298,7 +305,7 @@ public class OreDictionary
 		if (stack == null || stack.getItem() == null) return -1;
 
 		int id = Item.getIdFromItem(stack.getItem());
-		List<Integer> ids = stackToId.get(id); //Try the wildcard first
+		TIntList ids = stackToId.get(id); //Try the wildcard first
 		if (ids == null || ids.size() == 0)
 		{
 			ids = stackToId.get(id | ((stack.getItemDamage() + 1) << 16)); // Mow the Meta specific one, +1 so that meta 0 is significant
@@ -317,19 +324,21 @@ public class OreDictionary
 	{
 		if (stack == null || stack.getItem() == null) return new int[0];
 
-		Set<Integer> set = new HashSet<Integer>();
-
 		int id = Item.getIdFromItem(stack.getItem());
-		List<Integer> ids = stackToId.get(id);
-		if (ids != null) set.addAll(ids);
-		ids = stackToId.get(id | ((stack.getItemDamage() + 1) << 16));
-		if (ids != null) set.addAll(ids);
-
-		Integer[] tmp = set.toArray(new Integer[set.size()]);
-		int[] ret = new int[tmp.length];
-		for (int x = 0; x < tmp.length; x++)
-			ret[x] = tmp[x];
-		return ret;
+		TIntList ids = stackToId.get(id | ((stack.getItemDamage() + 1) << 16));
+		TIntList ids2 = stackToId.get(id);
+		if(ids == null && ids2 == null)
+			return new int[0];
+		else if(ids != null && ids2 == null)
+			return ids.toArray();
+		else if(ids == null && ids2 != null)
+			return ids2.toArray();
+		else
+		{
+			TIntSet set = new TIntHashSet(ids);
+			set.addAll(ids2);
+			return set.toArray();
+		}
 	}
 
 	/**
@@ -457,11 +466,11 @@ public class OreDictionary
 		}
 
 		//Add things to the baked version, and prevent duplicates
-		List<Integer> ids = stackToId.get(hash);
+		TIntList ids = stackToId.get(hash);
 		if (ids != null && ids.contains(oreID)) return;
 		if (ids == null)
 		{
-			ids = Lists.newArrayList();
+			ids = new TIntArrayList(4);
 			stackToId.put(hash, ids);
 		}
 		ids.add(oreID);
@@ -499,10 +508,10 @@ public class OreDictionary
 				{
 					hash |= ((ore.getItemDamage() + 1) << 16); // +1 so meta 0 is significant
 				}
-				List<Integer> ids = stackToId.get(hash);
+				TIntList ids = stackToId.get(hash);
 				if (ids == null)
 				{
-					ids = Lists.newArrayList();
+					ids = new TIntArrayList(4);
 					stackToId.put(hash, ids);
 				}
 				ids.add(id);
