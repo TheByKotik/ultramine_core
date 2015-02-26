@@ -2,11 +2,14 @@ package org.ultramine.server.chunk;
 
 import gnu.trove.TCollections;
 import gnu.trove.iterator.TIntIterator;
+import gnu.trove.map.TIntIntMap;
+import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
@@ -37,8 +40,6 @@ public class ChunkSendManager
 {
 	private static final Logger log = LogManager.getLogger();
 	private static final ExecutorService executor = Executors.newFixedThreadPool(1);
-	private static final int MAX_QUEUE_SIZE = 8;
-	private static final int DEFAULT_RATE = 3;
 	private static final double MIN_RATE = 0.2d;
 	
 	private final EntityPlayerMP player;
@@ -47,15 +48,19 @@ public class ChunkSendManager
 	private int lastViewDistance;
 	
 	private final TIntArrayListImpl toSend = new TIntArrayListImpl(441);
-	private final TIntSet sending = TCollections.synchronizedSet(new TIntHashSet());
+	private final TIntIntMap sending = TCollections.synchronizedMap(new TIntIntHashMap());
+	private final TIntSet sendingSage2 = TCollections.synchronizedSet(new TIntHashSet());
 	private final TIntSet sended = new TIntHashSet();
-	private final Queue<Chunk> toUpdate = Queues.newConcurrentLinkedQueue();
-	private final Queue<Chunk> toUnload = Queues.newConcurrentLinkedQueue();
+	private final Queue<ChunkIdStruct> toUpdate = Queues.newConcurrentLinkedQueue();
+	private final List<ChunkIdStruct> loadedChunksBuffer = new ArrayList<ChunkIdStruct>();
 	private final AtomicInteger sendingQueueSize = new AtomicInteger();
+	private final Object lock = new Object();
 	
 	private int lastQueueSize;
-	private double rate = DEFAULT_RATE;
+	private double rate = 0;
 	private int intervalCounter = 1;
+	private boolean sendedLastTick = false;
+	private int sendIndexCounter;
 	
 	public ChunkSendManager(EntityPlayerMP player)
 	{
@@ -91,11 +96,12 @@ public class ChunkSendManager
 						it.remove();
 				}
 				
-				for(TIntIterator it = sending.iterator(); it.hasNext();)
+				for(int key : sending.keys())
 				{
-					int key = it.next();
 					if(!overlaps(cx, cz, ChunkHash.keyToX(key), ChunkHash.keyToZ(key), curView))
-						it.remove();
+					{
+						cancelSending(key);
+					}
 				}
 				
 				for(TIntIterator it = sended.iterator(); it.hasNext();)
@@ -116,7 +122,7 @@ public class ChunkSendManager
 					for (int z = cz - curView; z <= cz + curView; ++z)
 					{
 						int key = ChunkHash.chunkToKey(x, z);
-						if(!toSend.contains(key) && !sended.contains(key) && !sending.contains(key))
+						if(!toSend.contains(key) && !sended.contains(key) && !sending.containsKey(key))
 						{
 							toSend.add(key);
 						}
@@ -151,6 +157,8 @@ public class ChunkSendManager
 		
 		sortSendQueue();
 		
+		if(rate == 0)
+			rate = Math.max(manager.getWorldServer().getConfig().chunkLoading.maxSendRate/2, 1);
 		sendChunks(Math.max(1, (int)rate));
 	}
 	
@@ -160,7 +168,11 @@ public class ChunkSendManager
 		if(this.manager != manager) throw new IllegalStateException();
 		
 		toSend.clear();
-		sending.clear();
+		
+		for(int key : sending.keys())
+		{
+			cancelSending(key);
+		}
 		
 		for(TIntIterator it = sended.iterator(); it.hasNext();)
 		{
@@ -168,8 +180,8 @@ public class ChunkSendManager
 			PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(ChunkHash.keyToX(key), ChunkHash.keyToZ(key), false);
 			if (pi != null) pi.removePlayer(player);
 		}
-		
 		sended.clear();
+		
 		this.manager = null;
 	}
 	
@@ -188,36 +200,41 @@ public class ChunkSendManager
 		if(!toSend.isEmpty())
 		{
 			int queueSize = sendingQueueSize.get();
-			
-			if(queueSize == 0)
-			{
-				rate += 0.14;
-			}
-			else if(queueSize < DEFAULT_RATE)
-			{
-				rate += 0.07;
-			}
-			else if(queueSize > lastQueueSize)
-			{
-				if(queueSize > MAX_QUEUE_SIZE)
-					rate -= 0.14;
-				else
-					rate -= 0.07;
-			}
-			
 			int maxRate = manager.getWorldServer().getConfig().chunkLoading.maxSendRate;
-			if(rate < MIN_RATE)
-				rate = MIN_RATE;
-			else if(rate > maxRate)
-				rate = maxRate;
+			int maxQueueSize = maxRate*2;
 			
-			if(queueSize == 0 || (queueSize != lastQueueSize && queueSize <= MAX_QUEUE_SIZE))
+			if(sendedLastTick)
+			{
+				if(queueSize == 0)
+				{
+					rate += 0.14;
+				}
+				else if(queueSize < maxRate)
+				{
+					rate += 0.07;
+				}
+				else if(queueSize > maxRate && queueSize > lastQueueSize)
+				{
+					if(queueSize > maxQueueSize)
+						rate -= 0.14;
+					else
+						rate -= 0.07;
+				}
+				
+				if(rate < MIN_RATE)
+					rate = MIN_RATE;
+				else if(rate > maxRate)
+					rate = maxRate;
+			}
+			
+			if(queueSize <= maxQueueSize)
 			{
 				lastQueueSize = queueSize;
+				sendedLastTick = true;
 			
 				if(rate >= 1)
 				{
-					sendChunks((int)rate);
+					sendChunks((int)Math.round(rate));
 				}
 				else
 				{
@@ -231,24 +248,30 @@ public class ChunkSendManager
 				
 			}
 		}
-		
-		for(Chunk chunk; (chunk = toUpdate.poll()) != null;)
+		else
 		{
+			sendedLastTick = false;
+		}
+		
+		for(ChunkIdStruct chunkId; (chunkId = toUpdate.poll()) != null;)
+		{
+			Chunk chunk = chunkId.chunk;
 			int key = ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition);
 			
-			if(sending.remove(key) && ((WorldServer)chunk.worldObj).getPlayerManager() == manager)
+			if(sending.get(key) == chunkId.id)
 			{
+				sending.remove(key);
+				sendingSage2.remove(key);
 				manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, true).addPlayer(player);
 				
-				List<?> tes = manager.getWorldServer().func_147486_a(chunk.xPosition * 16, 0, chunk.zPosition * 16, chunk.xPosition * 16 + 15, 256, chunk.zPosition * 16 + 15);
-				for(Object o : tes)
+				for(Object o : chunk.chunkTileEntityMap.values())
 				{
 					TileEntity te = (TileEntity)o;
-					Packet packet = te.getDescriptionPacket();
-
-					if (packet != null)
+					if(!te.isInvalid())
 					{
-						player.playerNetServerHandler.sendPacket(packet);
+						Packet packet = te.getDescriptionPacket();
+						if (packet != null)
+							player.playerNetServerHandler.sendPacket(packet);
 					}
 				}
 				
@@ -259,19 +282,10 @@ public class ChunkSendManager
 			}
 			else
 			{
-				player.playerNetServerHandler.sendPacket(S21PacketChunkData.makeForUnload(chunk));
-				
 				PlayerManager.PlayerInstance pi = ((WorldServer)chunk.worldObj).getPlayerManager().getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, false);
 				if (pi == null)
 					((WorldServer)chunk.worldObj).theChunkProviderServer.unbindChunk(chunk);
 			}
-		}
-		
-		for(Chunk chunk; (chunk = toUnload.poll()) != null;)
-		{
-			PlayerManager.PlayerInstance pi = ((WorldServer)chunk.worldObj).getPlayerManager().getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, false);
-			if (pi == null)
-				((WorldServer)chunk.worldObj).theChunkProviderServer.unbindChunk(chunk);
 		}
 	}
 	
@@ -281,11 +295,12 @@ public class ChunkSendManager
 		for(int i = 0; i < count; i++)
 		{
 			int key = toSend.get(i);
-			sending.add(key);
+			int curID = ++sendIndexCounter;
+			sending.put(key, curID);
 			sendingQueueSize.incrementAndGet();
 			int ncx = ChunkHash.keyToX(key);
 			int ncz = ChunkHash.keyToZ(key);
-			manager.getWorldServer().theChunkProviderServer.loadAsyncWithRadius(ncx, ncz, 1, chunkLoadCallback);
+			manager.getWorldServer().theChunkProviderServer.loadAsyncWithRadius(ncx, ncz, 1, new ChukLoadCallback(curID));
 		}
 		toSend.remove(0, count);
 	}
@@ -334,7 +349,7 @@ public class ChunkSendManager
 								}
 								else
 								{
-									sending.remove(key);
+									cancelSending(key);
 								}
 							}
 						}
@@ -365,18 +380,47 @@ public class ChunkSendManager
 		return movX >= -radius && movX <= radius ? movZ >= -radius && movZ <= radius : false;
 	}
 	
+	private void cancelSending(int key)
+	{
+		synchronized(lock)
+		{
+			sending.remove(key);
+			if(sendingSage2.remove(key))
+				player.playerNetServerHandler.netManager.scheduleOutboundPacket(S21PacketChunkData.makeForUnload(ChunkHash.keyToX(key), ChunkHash.keyToZ(key)));
+		}
+	}
+	
 	public double getRate()
 	{
 		return rate;
 	}
 	
-	private IChunkLoadCallback chunkLoadCallback = new IChunkLoadCallback()
+	private static class ChunkIdStruct
 	{
+		public Chunk chunk;
+		public int id;
+		
+		public ChunkIdStruct(Chunk chunk, int id)
+		{
+			this.chunk = chunk;
+			this.id = id;
+		}
+	}
+	
+	private class ChukLoadCallback implements IChunkLoadCallback
+	{
+		private int id;
+		
+		public ChukLoadCallback(int id)
+		{
+			this.id = id;
+		}
+		
 		@Override
 		public void onChunkLoaded(Chunk chunk)
 		{
 			int key = ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition);
-			if(!sending.contains(key) || ((WorldServer)chunk.worldObj).getPlayerManager() != manager)
+			if(sending.get(key) != id)
 			{
 				sendingQueueSize.decrementAndGet();
 				return;
@@ -386,7 +430,7 @@ public class ChunkSendManager
 			{
 				chunk.func_150804_b(true);
 				chunk.setBindState(ChunkBindState.PLAYER);
-				executor.execute(new CompressAndSendChunkTask(chunk));
+				executor.execute(new CompressAndSendChunkTask(new ChunkIdStruct(chunk, id)));
 			}
 			else if(!chunk.worldObj.chunkRoundExists(chunk.xPosition, chunk.zPosition, WorldConstants.GENCHUNK_PRELOAD_RADIUS))
 			{
@@ -404,19 +448,42 @@ public class ChunkSendManager
 	
 	private class CompressAndSendChunkTask implements Runnable
 	{
-		private final Chunk chunk;
+		private final ChunkIdStruct chunkId;
+		private final S21PacketChunkData packet;
 		
-		public CompressAndSendChunkTask(Chunk chunk)
+		public CompressAndSendChunkTask(ChunkIdStruct chunkId)
 		{
-			this.chunk = chunk;
+			this.chunkId = chunkId;
+			this.packet = S21PacketChunkData.makeForSend(chunkId.chunk); //must be sync
+		}
+		
+		private boolean checkActual()
+		{
+			if(sending.get(ChunkHash.chunkToKey(chunkId.chunk.xPosition, chunkId.chunk.zPosition)) != chunkId.id)
+			{
+				sendingQueueSize.decrementAndGet();
+				toUpdate.add(chunkId);
+				return false;
+			}
+			
+			return true;
 		}
 		
 		@Override
 		public void run()
 		{
-			if(sending.contains(ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition)))
+			if(!checkActual())
+				return;
+			
+			packet.deflate();
+			
+			//Нужно одновременно отправить чанк и добавить его в список sendingSage2, чтобы можно было корректно отменить отправку:
+			//(Если чанк есть в списке sendingSage2, посылать пакет на отгрузку. В ином случае просто удалиь из списка sending)
+			synchronized(lock)
 			{
-				player.playerNetServerHandler.netManager.scheduleOutboundPacket(S21PacketChunkData.makeDeflated(chunk),
+				if(!checkActual())
+					return;
+				player.playerNetServerHandler.netManager.scheduleOutboundPacket(packet,
 					new GenericFutureListener<Future<Void>>()
 					{
 						@Override
@@ -425,14 +492,10 @@ public class ChunkSendManager
 							sendingQueueSize.decrementAndGet();
 						}
 					});
+				sendingSage2.add(ChunkHash.chunkToKey(chunkId.chunk.xPosition, chunkId.chunk.zPosition));
+			}
 				
-				toUpdate.add(chunk);
-			}
-			else
-			{
-				sendingQueueSize.decrementAndGet();
-				toUnload.add(chunk);
-			}
+			toUpdate.add(chunkId);
 		}
 	}
 }

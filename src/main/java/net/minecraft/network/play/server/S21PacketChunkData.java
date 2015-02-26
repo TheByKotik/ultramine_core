@@ -47,17 +47,17 @@ public class S21PacketChunkData extends Packet
 		this.deflateGate = new Semaphore(1);
 	}
 	
-	private S21PacketChunkData(Chunk p_i45196_1_) //for unload
+	private S21PacketChunkData(int cx, int cz) //for unload
 	{
-		this.field_149284_a = p_i45196_1_.xPosition;
-		this.field_149282_b = p_i45196_1_.zPosition;
+		this.field_149284_a = cx;
+		this.field_149282_b = cz;
 		this.field_149279_g = true;
 		
 		this.field_149285_h = unloadSequence.length;
 		this.field_149281_e = unloadSequence;
 	}
 
-	private void deflate()
+	public void deflate()
 	{
 		Deflater deflater = new Deflater(7);
 		try
@@ -310,15 +310,18 @@ public class S21PacketChunkData extends Packet
 			private static final String __OBFID = "CL_00001305";
 		}
 	
-	public static S21PacketChunkData makeDeflated(Chunk chunk)
+	public static S21PacketChunkData makeForSend(Chunk chunk)
 	{
-		S21PacketChunkData pkt = new S21PacketChunkData(chunk, true, 65535);
-		pkt.deflate();
-		return pkt;
+		return new S21PacketChunkData(chunk, true, 65535);
 	}
 	
 	public static S21PacketChunkData makeForUnload(Chunk chunk)
 	{
-		return new S21PacketChunkData(chunk);
+		return new S21PacketChunkData(chunk.xPosition, chunk.zPosition);
+	}
+	
+	public static S21PacketChunkData makeForUnload(int cx, int cz)
+	{
+		return new S21PacketChunkData(cx, cz);
 	}
 }
