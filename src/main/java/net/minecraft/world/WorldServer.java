@@ -610,6 +610,7 @@ public class WorldServer extends World
 			this.pendingTickListEntriesTreeSet = new TreeSet();
 		}
 
+		setConfig(MinecraftServer.getServer().getMultiWorld().getConfigByID(provider.dimensionId));
 		this.createSpawnPosition(p_72963_1_);
 		super.initialize(p_72963_1_);
 	}

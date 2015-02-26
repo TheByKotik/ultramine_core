@@ -480,7 +480,6 @@ public class MultiWorld
 		return dimToNameMap.get(id);
 	}
 	
-	@SideOnly(Side.SERVER)
 	public WorldConfig getConfigByID(int dim)
 	{
 		WorldConfig cfg = dimToConfigMap.get(dim);
