@@ -213,6 +213,8 @@ public class UMEventHandler
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onPlayerInteractEvent(PlayerInteractEvent e)
 	{
+		if(!e.entityPlayer.isEntityPlayerMP() || ((EntityPlayerMP)e.entityPlayer).playerNetServerHandler == null)
+			return;
 		if(!PermissionHandler.getInstance().has(e.entityPlayer, "ability.player.useitem"))
 		{
 			e.useItem = Event.Result.DENY;
