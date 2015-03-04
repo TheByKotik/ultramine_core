@@ -44,6 +44,7 @@ import org.ultramine.server.data.Databases;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerCoreData;
 import org.ultramine.server.tools.ButtonCommand;
+import org.ultramine.server.tools.ItemBlocker;
 import org.ultramine.server.tools.WarpProtection;
 
 public class UltramineServerModContainer extends DummyModContainer
@@ -52,6 +53,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	
 	@SideOnly(Side.SERVER)
 	private ButtonCommand buttonCommand;
+	private ItemBlocker itemBlocker;
 	private final RecipeCache recipeCache = new RecipeCache();
 	
 	public UltramineServerModContainer()
@@ -112,7 +114,10 @@ public class UltramineServerModContainer extends DummyModContainer
 	{
 		e.getServer().getMultiWorld().register();
 		if(e.getSide().isServer())
+		{
 			buttonCommand = new ButtonCommand(e.getServer());
+			itemBlocker = new ItemBlocker();
+		}
 	}
 	
 	@Subscribe
@@ -148,6 +153,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		if(e.getSide().isServer())
 		{
 			buttonCommand.load(e);
+			itemBlocker.load();
 			MinecraftForge.EVENT_BUS.register(new WarpProtection());
 		}
 	}
@@ -211,5 +217,10 @@ public class UltramineServerModContainer extends DummyModContainer
 	public RecipeCache getRecipeCache()
 	{
 		return recipeCache;
+	}
+	
+	public void reloadToolsCfg()
+	{
+		itemBlocker.reload();
 	}
 }

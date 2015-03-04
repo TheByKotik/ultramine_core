@@ -170,6 +170,40 @@ public class BasicTypeParser
 		return is;
 	}
 	
+	public static ItemStack parseStackType(String str)
+	{
+		int ind = str.lastIndexOf(':');
+		String itemS;
+		int data;
+		if(ind == -1)
+		{
+			itemS = str;
+			data = 0;
+		}
+		else
+		{
+			itemS = str.substring(0, ind);
+			String dataS = str.substring(ind+1, str.length());
+			if(dataS.equals("*"))
+			{
+				data = Short.MAX_VALUE;
+			}
+			else
+			{
+				try
+				{
+					data = Integer.parseInt(dataS);
+				}
+				catch(NumberFormatException e)
+				{
+					throw new CommandException("commands.generic.itemstack.data", dataS);
+				}
+			}
+		}
+		
+		return new ItemStack(CommandBase.getItemByText(null, itemS), 1, data);
+	}
+	
 	/**
 	 * Examples - 10, 5s, 24h, 10d7h5m3s<br />
 	 * s - second<br />

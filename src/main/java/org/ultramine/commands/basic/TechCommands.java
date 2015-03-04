@@ -742,5 +742,6 @@ public class TechCommands
 		server.getConfigurationManager().maxPlayers = cfg.settings.player.maxPlayers;
 		
 		server.getMultiWorld().reloadServerWorlds();
+		UltramineServerModContainer.getInstance().reloadToolsCfg();
 	}
 }

@@ -6,6 +6,10 @@ teleporter.canceled=Телепортация отменена
 ultramine.autobroadcast.debugmsg=Сервер нагружен на %s (В пике - %s), Тиков в секунду: %s/20, Мобов: %s, Предметов: %s, Игроков: %s
 ultramine.autobackup.start=Выполняется автоматический бэкап мира
 
+ultramine.tools.itemblocker.useitem=Использование данного предмета запрещено сервером
+ultramine.tools.itemblocker.useblock=Использование данного блока запрещено сервером
+ultramine.tools.itemblocker.rmitem=Данный предмет запрещен сервером
+
 ultramine.ability.blockbreak=У вас нет прав на разрушение блоков
 ultramine.ability.blockplace=У вас нет прав на установку блоков
 ultramine.ability.useitem=У вас нет прав на использование предметов

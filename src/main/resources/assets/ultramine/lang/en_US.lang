@@ -6,6 +6,10 @@ teleporter.canceled=Teleportation canceled
 ultramine.autobroadcast.debugmsg=Server load: %s (Peak: %s), TPS: %s/20, Mobs: %s, Items: %s, Players: %s
 ultramine.autobackup.start=Autobackup started
 
+ultramine.tools.itemblocker.useitem=Use of this item is forbidden by server
+ultramine.tools.itemblocker.useblock=Use of this block is forbidden by server
+ultramine.tools.itemblocker.rmitem=This item is forbidden by server
+
 ultramine.ability.blockbreak=You don't have permissions to break blocks
 ultramine.ability.blockplace=You don't have permissions to place blocks
 ultramine.ability.useitem=You don't have permissions to use items
