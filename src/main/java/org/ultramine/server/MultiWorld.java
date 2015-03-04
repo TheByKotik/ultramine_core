@@ -292,6 +292,7 @@ public class MultiWorld
 	private WorldConfig getDefaultClientConfig(WorldServer world)
 	{
 		WorldConfig conf = new WorldConfig();
+		conf.generation = new WorldConfig.Generation();
 		conf.mobSpawn = new WorldConfig.MobSpawn();
 		conf.settings = new WorldConfig.Settings();
 		conf.chunkLoading = new WorldConfig.ChunkLoading();
