@@ -301,6 +301,7 @@ public class ServerPermissionManager implements IPermissionManager
 
 	private PermUser getOrCreateGroup(String name)
 	{
+		name = name.toLowerCase();
 		PermUser container = groups.get(name);
 		if(container == null)
 		{
@@ -313,7 +314,8 @@ public class ServerPermissionManager implements IPermissionManager
 
 	private PermUser getOrCreateUser(String name)
 	{
-		PermUser container = users.get(name.toLowerCase());
+		name = name.toLowerCase();
+		PermUser container = users.get(name);
 		if(container == null)
 		{
 			container = new PermUser(name);
