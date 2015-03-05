@@ -4173,7 +4173,7 @@ public abstract class World implements IBlockAccess
 	
 	
 	private final ServerLoadBalancer balancer = new ServerLoadBalancer(this);
-	private final WorldEventProxy eventProxy = FMLCommonHandler.instance().getSide().isServer() && this instanceof WorldServer ? new ServerWorldEventProxy((WorldServer)this) : new WorldEventProxy();
+	protected WorldEventProxy eventProxy = new WorldEventProxy();
 	protected final WorldChunkProfiler chunkProfiler;
 	
 	public Chunk getChunkIfExists(int cx, int cz)

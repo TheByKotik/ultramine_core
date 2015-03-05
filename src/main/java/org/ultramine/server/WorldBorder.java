@@ -5,6 +5,10 @@ import net.minecraft.world.ChunkPosition;
 
 import org.ultramine.server.WorldsConfig.WorldConfig.Border;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+@SideOnly(Side.SERVER)
 public class WorldBorder
 {
 	private final OneBorder[] borders;
@@ -59,6 +63,7 @@ public class WorldBorder
 		return found.correctPosition(x, z);
 	}
 	
+	@SideOnly(Side.SERVER)
 	private static class OneBorder
 	{
 		private final int x;

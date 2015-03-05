@@ -78,6 +78,7 @@ import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig.Settings.WorldTime;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.PendingBlockUpdate;
+import org.ultramine.server.event.ServerWorldEventProxy;
 import org.ultramine.server.event.WorldUpdateObjectType;
 import org.ultramine.server.mobspawn.MobSpawnManager;
 
@@ -1056,13 +1057,22 @@ public class WorldServer extends World
 	public void setConfig(WorldConfig config)
 	{
 		this.config = config;
-		this.border = new WorldBorder(config.borders);
-		if(isServer && config.mobSpawn.spawnEngine == WorldConfig.MobSpawn.MobSpawnEngine.NEW)
+		if(isServer)
+			initOnServer();
+	}
+	
+	@SideOnly(Side.SERVER)
+	private void initOnServer()
+	{
+		if(config.mobSpawn.spawnEngine == WorldConfig.MobSpawn.MobSpawnEngine.NEW)
 		{
 			if(mobSpawner == null)
 				mobSpawner = new MobSpawnManager(this);
 			mobSpawner.configure(config);
 		}
+		
+		this.border = new WorldBorder(config.borders);
+		this.eventProxy = new ServerWorldEventProxy(this);
 	}
 	
 	public WorldConfig getConfig()
@@ -1081,6 +1091,7 @@ public class WorldServer extends World
 		return config.chunkLoading.enableChunkLoaders;
 	}
 	
+	@SideOnly(Side.SERVER)
 	public WorldBorder getBorder()
 	{
 		return border;

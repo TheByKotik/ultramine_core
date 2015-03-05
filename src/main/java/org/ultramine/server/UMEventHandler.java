@@ -132,7 +132,8 @@ public class UMEventHandler
 	}
 	
 	@SubscribeEvent
-	public void onPlayerTick(TickEvent.PlayerTickEvent e)
+	@SideOnly(Side.SERVER)
+	public void onPlayerTickServer(TickEvent.PlayerTickEvent e)
 	{
 		if(e.phase == TickEvent.Phase.END && e.side.isServer())
 		{
