@@ -264,9 +264,10 @@ public class ChunkSendManager
 				sendingSage2.remove(key);
 				manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, true).addPlayer(player);
 				
-				for(Object o : chunk.chunkTileEntityMap.values())
+				@SuppressWarnings("unchecked")
+				List<TileEntity> tes = new ArrayList<TileEntity>(chunk.chunkTileEntityMap.values());
+				for(TileEntity te : tes)
 				{
-					TileEntity te = (TileEntity)o;
 					if(!te.isInvalid())
 					{
 						Packet packet = te.getDescriptionPacket();
