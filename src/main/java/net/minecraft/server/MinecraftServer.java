@@ -378,14 +378,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			{
 				this.usageSnooper.stopSnooper();
 			}
-			
-			logger.info("Saving other data");
-			try
-			{
-				GlobalExecutors.writingIOExecutor().shutdown();
-				GlobalExecutors.writingIOExecutor().awaitTermination(10000, TimeUnit.MILLISECONDS);
-			}
-			catch(InterruptedException ignored){}
 		}
 	}
 

@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.ServerCommand;
@@ -49,6 +50,7 @@ import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.UltramineServerConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.util.BasicTypeParser;
+import org.ultramine.server.util.GlobalExecutors;
 
 @SideOnly(Side.SERVER)
 public class DedicatedServer extends MinecraftServer implements IServer
@@ -583,6 +585,24 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		
 		getConfigurationManager().setPlayerManager(new WorldServer[]{ getMultiWorld().getWorldByID(0) });
 		initialWorldChunkLoad();
+	}
+	
+	@Override
+	public void stopServer()
+	{
+		super.stopServer();
+		
+		field_155771_h.info("Saving other data");
+		try
+		{
+			GlobalExecutors.cachedExecutor().shutdown();
+			if(!GlobalExecutors.cachedExecutor().awaitTermination(10000, TimeUnit.MILLISECONDS))
+				field_155771_h.info("Global cached executor did not terminated cleanly");
+			GlobalExecutors.writingIOExecutor().shutdown();
+			if(!GlobalExecutors.writingIOExecutor().awaitTermination(10000, TimeUnit.MILLISECONDS))
+				field_155771_h.info("Global writing IO executor did not terminated cleanly");
+		}
+		catch(InterruptedException ignored){}
 	}
 	
 	@Override
