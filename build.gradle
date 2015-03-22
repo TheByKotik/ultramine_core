@@ -22,6 +22,7 @@ buildscript {
 
 import net.minecraftforge.gradle.common.Constants
 import net.minecraftforge.gradle.delayed.DelayedFile
+import net.minecraftforge.gradle.delayed.DelayedString
 import net.minecraftforge.gradle.tasks.user.reobf.ArtifactSpec
 import net.minecraftforge.gradle.tasks.user.reobf.ReobfTask
 import net.minecraftforge.gradle.user.UserBasePlugin
@@ -175,6 +176,7 @@ task classesJar(type: Zip) {
 }
 
 task reobf(type: ReobfTask) {
+	setMcVersion(delayedString(minecraft_version));
 	setExceptorCfg(delayedFile('conf/srg.exc'))
 	setSrg(delayedFile('conf/mcp2notch.srg'))
 	setFieldCsv(delayedFile('conf/fields.csv'))
@@ -258,6 +260,15 @@ def delayedFile(String path) {
 		@Override
 		File resolveDelayed() {
 			return file(path)
+		}
+	}
+}
+
+def delayedString(String str) {
+	new DelayedString(project, str) {
+		@Override
+		String resolveDelayed() {
+			return str
 		}
 	}
 }
