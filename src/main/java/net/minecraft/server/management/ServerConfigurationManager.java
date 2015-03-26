@@ -14,6 +14,7 @@ import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -301,6 +302,7 @@ public abstract class ServerConfigurationManager
 	{
 		this.sendPacketToAllPlayers(new S38PacketPlayerListItem(par1EntityPlayerMP.getCommandSenderName(), true, 1000));
 		this.playerEntityList.add(par1EntityPlayerMP);
+		usernameToPlayerMap.put(par1EntityPlayerMP.getGameProfile().getName().toLowerCase(), par1EntityPlayerMP);
 		final WorldServer worldserver = this.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
 		
 		
@@ -337,6 +339,7 @@ public abstract class ServerConfigurationManager
 		worldserver.removeEntity(p_72367_1_);
 		worldserver.getPlayerManager().removePlayer(p_72367_1_);
 		this.playerEntityList.remove(p_72367_1_);
+		usernameToPlayerMap.remove(p_72367_1_.getGameProfile().getName().toLowerCase());
 		this.field_148547_k.remove(p_72367_1_.getUniqueID());
 		this.sendPacketToAllPlayers(new S38PacketPlayerListItem(p_72367_1_.getCommandSenderName(), false, 9999));
 	}
@@ -761,21 +764,7 @@ public abstract class ServerConfigurationManager
 
 	public EntityPlayerMP func_152612_a(String p_152612_1_)
 	{
-		Iterator iterator = this.playerEntityList.iterator();
-		EntityPlayerMP entityplayermp;
-
-		do
-		{
-			if (!iterator.hasNext())
-			{
-				return null;
-			}
-
-			entityplayermp = (EntityPlayerMP)iterator.next();
-		}
-		while (!entityplayermp.getCommandSenderName().equalsIgnoreCase(p_152612_1_));
-
-		return entityplayermp;
+		return usernameToPlayerMap.get(p_152612_1_.toLowerCase());
 	}
 
 	public List findPlayers(ChunkCoordinates p_82449_1_, int p_82449_2_, int p_82449_3_, int p_82449_4_, int p_82449_5_, int p_82449_6_, int p_82449_7_, Map p_82449_8_, String p_82449_9_, String p_82449_10_, World p_82449_11_)
@@ -1162,6 +1151,7 @@ public abstract class ServerConfigurationManager
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
+	private final Map<String, EntityPlayerMP> usernameToPlayerMap = new HashMap<String, EntityPlayerMP>();
 	private final ServerDataLoader serverDataLoader = new ServerDataLoader(this);
 	
 	public ServerDataLoader getDataLoader()
@@ -1181,5 +1171,10 @@ public abstract class ServerConfigurationManager
 		{
 			writePlayerData((EntityPlayerMP)playerEntityList.get(ind));
 		}
+	}
+	
+	public EntityPlayerMP getPlayerByUsername(String username)
+	{
+		return usernameToPlayerMap.get(username.toLowerCase());
 	}
 }
