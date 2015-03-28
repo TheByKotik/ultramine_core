@@ -196,6 +196,7 @@ public class MultiWorld
 			if(!DimensionManager.isDimensionRegistered(conf.dimension))
 			{
 				DimensionManager.registerDimension(conf.dimension, conf.generation.providerID);
+				sendDimensionToAll(conf.dimension, conf.generation.providerID);
 				dimToNameMap.put(conf.dimension, ent.getKey());
 			}
 			else
