@@ -5,8 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 public class InventoryUtil
@@ -14,7 +17,7 @@ public class InventoryUtil
 	public static boolean isStacksEquals(ItemStack is1, ItemStack is2)
 	{
 		return
-				is1 == null && is2 == null || is1 != null && is1.isItemEqual(is2) &&
+				is1 == null && is2 == null || is1 != null && is2 != null && is1.isItemEqual(is2) &&
 				(is1.stackTagCompound == null && is2.stackTagCompound != null ? false : is1.stackTagCompound == null || is1.stackTagCompound.equals(is2.stackTagCompound));
 	}
 	
@@ -23,7 +26,8 @@ public class InventoryUtil
 		for(int i = 0; i < inv.getSizeInventory(); i++)
 		{
 			ItemStack is = inv.getStackInSlot(i);
-			if(isStacksEquals(is, item)) return true;
+			if(isStacksEquals(is, item))
+				return true;
 		}
 
 		return false;
@@ -34,7 +38,8 @@ public class InventoryUtil
 		for(int i = 0; i < inv.getSizeInventory(); i++)
 		{
 			ItemStack is = inv.getStackInSlot(i);
-			if(isStacksEquals(is, item)) return i;
+			if(isStacksEquals(is, item))
+				return i;
 		}
 
 		return -1;
@@ -44,183 +49,184 @@ public class InventoryUtil
 	{
 		for(int i = 0; i < inv.getSizeInventory(); i++)
 		{
-			if(inv.getStackInSlot(i) == null) return i;
+			if(inv.getStackInSlot(i) == null)
+				return i;
 		}
 
 		return -1;
 	}
 
-	private static int firstPartial(IInventory inv, ItemStack filteredItem)
+	public static int firstPartial(IInventory inv, ItemStack filteredItem)
 	{
 		if(filteredItem == null)
-		{
 			return -1;
-		}
+		
 		for(int i = 0; i < inv.getSizeInventory(); i++)
 		{
 			ItemStack cItem = inv.getStackInSlot(i);
 			if(cItem != null && cItem.stackSize < cItem.getMaxStackSize() && isStacksEquals(cItem, filteredItem))
-			{
 				return i;
-			}
 		}
+		
 		return -1;
 	}
 
 	public static List<ItemStack> removeItem(IInventory inv, ItemStack... items)
 	{
-		List<ItemStack> ret = new LinkedList<ItemStack>();
+		List<ItemStack> ret = null;
 		for(ItemStack item : items)
 		{
-			ret.addAll(removeItem(inv, item));
+			ItemStack leftover = removeItem(inv, item);
+			if(leftover != null)
+			{
+				if(ret == null)
+					ret = new LinkedList<ItemStack>();
+				ret.add(leftover);
+			}
 		}
-		return ret;
+		return ret == null ? Collections.<ItemStack>emptyList() : ret;
 	}
 	
-	public static List<ItemStack> removeItem(IInventory inv, ItemStack item)
+	public static ItemStack removeItem(IInventory inv, ItemStack is)
 	{
-		List<ItemStack> leftover = null;
+		int toDelete = is.stackSize;
 
-		// TODO: optimization
-
-		int toDelete = item.stackSize;
-
-		while(true)
+		for(int i = 0, s = inv.getSizeInventory(); i < s; i++)
 		{
-			int first = first(inv, item);
-
-			// Drat! we don't have this type in the inventory
-			if(first == -1)
+			ItemStack it = inv.getStackInSlot(i);
+			if(it != null)
 			{
-				item.stackSize = toDelete;
-				if(leftover == null)
-					leftover = new LinkedList<ItemStack>();
-				leftover.add(item);
-				break;
-			}
-			else
-			{
-				ItemStack itemStack = inv.getStackInSlot(first);
-				int amount = itemStack.stackSize;
+				int amount = it.stackSize;
 
 				if(amount <= toDelete)
 				{
 					toDelete -= amount;
-					// clear the slot, all used up
-					inv.setInventorySlotContents(first, null);
+					inv.setInventorySlotContents(i, null);
+					if(toDelete == 0)
+						break;
 				}
 				else
 				{
-					// split the stack and store
-					itemStack.stackSize = amount - toDelete;
-					inv.setInventorySlotContents(first, itemStack);
+					it.stackSize = amount - toDelete;
+					inv.setInventorySlotContents(i, it);
 					toDelete = 0;
+					break;
 				}
-			}
-
-			// Bail when done
-			if(toDelete <= 0)
-			{
-				break;
 			}
 		}
 		
-		if(leftover == null)
-			leftover = Collections.emptyList();
-		return leftover;
+		is.stackSize = toDelete;
+		if(toDelete == 0)
+			is = null;
+		return is;
 	}
 	
 	public static List<ItemStack> addItem(IInventory inv, ItemStack... items)
 	{
-		List<ItemStack> ret = new LinkedList<ItemStack>();
+		List<ItemStack> ret = null;
 		for(ItemStack item : items)
 		{
-			ret.addAll(addItem(inv, item));
+			ItemStack leftover = addItem(inv, item);
+			if(leftover != null)
+			{
+				if(ret == null)
+					ret = new LinkedList<ItemStack>();
+				ret.add(leftover);
+			}
 		}
-		return ret;
+		return ret == null ? Collections.<ItemStack>emptyList() : ret;
+	}
+	
+	public static void addItem(EntityPlayer player, ItemStack item)
+	{
+		ItemStack ret = addItem(player.inventory, item);
+		if(ret != null)
+			dropItem(player.worldObj, player.posX, player.posY, player.posZ, item);
 	}
 
-	public static List<ItemStack> addItem(IInventory inv, ItemStack item)
+	public static ItemStack addItem(IInventory inv, ItemStack is)
 	{
-		List<ItemStack> leftover = null;
-
-		int maxSize = Math.min(inv.getInventoryStackLimit(), item.getMaxStackSize());
-
-		while(true)
+		return addItem(inv, is, true, true);
+	}
+	
+	public static ItemStack addItem(IInventory inv, ItemStack is, boolean checkValid, boolean markDirty)
+	{
+		if(is == null)
+			return null;
+		int oldCount = is.stackSize;
+		int maxSize = Math.min(inv.getInventoryStackLimit(), is.getMaxStackSize());
+		if(maxSize > 1)
 		{
-			// Do we already have a stack of it?
-			int firstPartial = firstPartial(inv, item);
-
-			// Drat! no partial stack
-			if(firstPartial == -1)
+			for(int i = 0, s = inv.getSizeInventory(); i < s; i++)
 			{
-				// Find a free spot!
-				int firstFree = firstEmpty(inv);
-
-				if(firstFree == -1)
+				ItemStack it = inv.getStackInSlot(i);
+				if(it != null && it.stackSize < maxSize && isStacksEquals(is, it) && (!checkValid || inv.isItemValidForSlot(i, is)))
 				{
-					// No space at all!
-					if(leftover == null)
-						leftover = new LinkedList<ItemStack>();
-					leftover.add(item);
-					break;
-				}
-				else
-				{
-					// More than a single stack!
-					if(item.stackSize > maxSize)
+					int free = maxSize - it.stackSize;
+					if(is.stackSize > free)
 					{
-						ItemStack stack = item.splitStack(maxSize);
-						inv.setInventorySlotContents(firstFree, stack);
+						is.stackSize -= free;
+						it.stackSize = maxSize;
 					}
 					else
 					{
-						// Just store it
-						inv.setInventorySlotContents(firstFree, item);
+						it.stackSize = it.stackSize + is.stackSize;
+						is.stackSize = 0;
+						is = null;
 						break;
 					}
 				}
 			}
-			else
+		}
+		
+		if(is != null)
+		{
+			for(int i = 0, s = inv.getSizeInventory(); i < s; i++)
 			{
-				// So, apparently it might only partially fit, well lets do just that
-				ItemStack partialItem = inv.getStackInSlot(firstPartial);
-
-				int amount = item.stackSize;
-				int partialAmount = partialItem.stackSize;
-				int maxAmount = partialItem.getMaxStackSize();
-
-				// Check if it fully fits
-				if(amount + partialAmount <= maxAmount)
+				if(inv.getStackInSlot(i) == null && (!checkValid || inv.isItemValidForSlot(i, is)))
 				{
-					partialItem.stackSize = (amount + partialAmount);
-					break;
+					if(is.stackSize <= maxSize)
+					{
+						inv.setInventorySlotContents(i, is.copy());
+						is.stackSize = 0;
+						is = null;
+						break;
+					}
+					else
+					{
+						ItemStack to = is.copy();
+						to.stackSize = maxSize;
+						is.stackSize -= maxSize;
+						inv.setInventorySlotContents(i, to);
+					}
 				}
-
-				// It fits partially
-				partialItem.stackSize = maxAmount;
-				item.stackSize = (amount + partialAmount - maxAmount);
 			}
 		}
 		
-		if(leftover == null)
-			leftover = Collections.emptyList();
-		return leftover;
+		if(markDirty && (is == null || is.stackSize != oldCount))
+			inv.markDirty();
+		return is;
 	}
 
-	public static void dropItem(World world, double x, double y, double z, ItemStack item)
+	public static void dropItem(World world, int x, int y, int z, ItemStack is)
 	{
-		if(item == null)
+		if(is == null)
 			return;
-		double var7 = world.rand.nextDouble() * 0.8D + 0.1D;
-		double var9 = world.rand.nextDouble() * 0.8D + 0.1D;
-		double var11 = world.rand.nextDouble() * 0.8D + 0.1D;
-		EntityItem var14 = new EntityItem(world, x + var7, y + var9, z + var11, item);
-		double var15 = 0.05D;
-		var14.motionX = world.rand.nextGaussian() * var15;
-		var14.motionY = world.rand.nextGaussian() * var15 + 0.2D;
-		var14.motionZ = world.rand.nextGaussian() * var15;
-		world.spawnEntityInWorld(var14);
+		double rx = world.rand.nextDouble() * 0.8D + 0.1D;
+		double ry = world.rand.nextDouble() * 0.8D + 0.1D;
+		double rz = world.rand.nextDouble() * 0.8D + 0.1D;
+		dropItem(world, x + rx, y + ry, z + rz, is);
+	}
+
+	public static void dropItem(World world, double x, double y, double z, ItemStack is)
+	{
+		if(is == null)
+			return;
+		EntityItem entity = new EntityItem(world, x, y, z, is.copy());
+		entity.motionX = world.rand.nextGaussian() * 0.05D;
+		entity.motionY = world.rand.nextGaussian() * 0.05D + 0.2D;
+		entity.motionZ = world.rand.nextGaussian() * 0.05D;
+		world.spawnEntityInWorld(entity);
 	}
 
 	public static void dropItemFixed(World world, double x, double y, double z, ItemStack item)
@@ -232,5 +238,75 @@ public class InventoryUtil
 		double var11 = world.rand.nextDouble() * 0.8D + 0.1D;
 		EntityItem var14 = new EntityItem(world, x + var7, y + var9, z + var11, item);
 		world.spawnEntityInWorld(var14);
+	}
+	
+	public static void dropAll(World world, IInventory inv, int x, int y, int z)
+	{
+		for(int i = 0, s = inv.getSizeInventory(); i < s; i++)
+		{
+			ItemStack is = inv.getStackInSlot(i);
+			if(is != null)
+			{
+				dropItem(world, x, y, z, is);
+				inv.setInventorySlotContents(i, null);
+			}
+		}
+	}
+
+	public static int countItems(IInventory inv, ItemStack is)
+	{
+		int ret = 0;
+		for(int i = 0, s = inv.getSizeInventory(); i < s; i++)
+		{
+			ItemStack it = inv.getStackInSlot(i);
+			if(it != null && isStacksEquals(it, is))
+				ret += it.stackSize;
+		}
+		return ret;
+	}
+	
+	public static boolean containsAmount(IInventory inv, ItemStack is, int amount)
+	{
+		int counted = 0;
+		for(int i = 0, s = inv.getSizeInventory(); i < s; i++)
+		{
+			ItemStack it = inv.getStackInSlot(i);
+			if(it != null && isStacksEquals(it, is))
+			{
+				counted += it.stackSize;
+				if(counted >= amount)
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static void readInventoryFromNBT(ItemStack[] inv, NBTTagList list)
+	{
+		for(int i = 0; i < list.tagCount(); i++)
+		{
+			NBTTagCompound nbt = list.getCompoundTagAt(i);
+			int slot = nbt.getByte("Slot") & 0xff;
+
+			if(slot >= 0 && slot < inv.length)
+				inv[slot] = ItemStack.loadItemStackFromNBT(nbt);
+		}
+	}
+
+	public static NBTTagList writeInventorytoNBT(ItemStack[] inv)
+	{
+		NBTTagList list = new NBTTagList();
+		for(int i = 0; i < inv.length; i++)
+		{
+			if(inv[i] != null)
+			{
+				NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setByte("Slot", (byte)i);
+				inv[i].writeToNBT(nbt);
+				list.appendTag(nbt);
+			}
+		}
+		return list;
 	}
 }
