@@ -3,6 +3,8 @@ package org.ultramine.server.data.player;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.ultramine.economy.Account;
+import org.ultramine.economy.PlayerAccount;
 import org.ultramine.server.Teleporter;
 import org.ultramine.server.util.WarpLocation;
 
@@ -11,13 +13,20 @@ import net.minecraft.nbt.NBTTagList;
 
 public class PlayerCoreData extends PlayerDataExtension
 {
-	private Map<String, WarpLocation> homes = new HashMap<String, WarpLocation>();
+	private final Map<String, WarpLocation> homes = new HashMap<String, WarpLocation>();
+	private final PlayerAccount account;
 	
 	//undatabased
 	private Teleporter teleporter;
 	private long nextTeleportationTime;
 	private WarpLocation lastLocation;
 	private String lastMessagedPlayer;
+	
+	public PlayerCoreData(PlayerData data)
+	{
+		super(data);
+		this.account = new PlayerAccount(data);
+	}
 	
 	public WarpLocation getHome(String name)
 	{
@@ -32,6 +41,11 @@ public class PlayerCoreData extends PlayerDataExtension
 	public Map<String, WarpLocation> getHomes()
 	{
 		return homes;
+	}
+	
+	public Account getAccount()
+	{
+		return account;
 	}
 	
 	public Teleporter getTeleporter()
@@ -86,6 +100,10 @@ public class PlayerCoreData extends PlayerDataExtension
 			homeList.appendTag(nbt1);
 		}
 		nbt.setTag("homes", homeList);
+		
+		NBTTagCompound accnbt = new NBTTagCompound();
+		account.writeToNBT(accnbt);
+		nbt.setTag("acc", accnbt);
 	}
 	
 	@Override
@@ -97,5 +115,7 @@ public class PlayerCoreData extends PlayerDataExtension
 			NBTTagCompound nbt1 = homeList.getCompoundTagAt(i);
 			homes.put(nbt1.getString("k"), WarpLocation.getFromNBT(nbt1.getCompoundTag("v")));
 		}
+		
+		account.readFromNBT(nbt.getCompoundTag("acc"));
 	}
 }

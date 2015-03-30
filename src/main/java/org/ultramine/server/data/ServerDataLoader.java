@@ -147,7 +147,7 @@ public class ServerDataLoader
 		for(PlayerData data : dataProvider.loadAllPlayerData())
 		{
 			playerDataCache.put(data.getProfile().getId(), data);
-			namedPlayerDataCache.put(data.getProfile().getName(), data);
+			namedPlayerDataCache.put(data.getProfile().getName().toLowerCase(), data);
 		}
 	}
 	
@@ -230,7 +230,7 @@ public class ServerDataLoader
 		{
 			player.setData(data);
 			playerDataCache.put(data.getProfile().getId(), data);
-			namedPlayerDataCache.put(data.getProfile().getName(), data);
+			namedPlayerDataCache.put(data.getProfile().getName().toLowerCase(), data);
 		}
 		else
 		{
@@ -273,6 +273,12 @@ public class ServerDataLoader
 		getDataProvider().savePlayerData(player.getData());
 	}
 	
+	public void savePlayerData(PlayerData data)
+	{
+		if(mgr.getPlayerByUsername(data.getProfile().getName()) == null) //only if offline
+			getDataProvider().savePlayerData(data);
+	}
+	
 	public void syncReloadPlayer(EntityPlayerMP player)
 	{
 		GameProfile profile = player.getGameProfile();
@@ -288,7 +294,7 @@ public class ServerDataLoader
 		{
 			data = getDataProvider().loadPlayerData(profile);
 			playerDataCache.put(data.getProfile().getId(), data);
-			namedPlayerDataCache.put(data.getProfile().getName(), data);
+			namedPlayerDataCache.put(data.getProfile().getName().toLowerCase(), data);
 		}
 		StatisticsFile stats = mgr.func_152602_a(player);
 		if(stats == null)

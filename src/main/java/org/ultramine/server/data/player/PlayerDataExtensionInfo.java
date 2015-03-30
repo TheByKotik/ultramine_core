@@ -1,16 +1,27 @@
 package org.ultramine.server.data.player;
 
+import java.lang.reflect.Constructor;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PlayerDataExtensionInfo
 {
-	private Class<? extends PlayerDataExtension> clazz;
-	private String nbtTagName;
+	private final Class<? extends PlayerDataExtension> clazz;
+	private final Constructor<? extends PlayerDataExtension> constructor;
+	private final String nbtTagName;
 	
 	public PlayerDataExtensionInfo(Class<? extends PlayerDataExtension> clazz, String nbtTagName)
 	{
 		this.clazz = clazz;
 		this.nbtTagName = nbtTagName;
+		try
+		{
+			this.constructor = clazz.getConstructor(PlayerData.class);
+		}
+		catch(NoSuchMethodException e)
+		{
+			throw new RuntimeException("Bad PlayerDataExtension class " + clazz.getName(), e);
+		}
 	}
 	
 	public Class<? extends PlayerDataExtension> getExtClass()
@@ -23,11 +34,11 @@ public class PlayerDataExtensionInfo
 		return nbtTagName;
 	}
 	
-	private PlayerDataExtension makeNew()
+	private PlayerDataExtension makeNew(PlayerData pdata)
 	{
 		try
 		{
-			return clazz.newInstance();
+			return constructor.newInstance(pdata);
 		}
 		catch(Exception e)
 		{
@@ -35,9 +46,9 @@ public class PlayerDataExtensionInfo
 		}
 	}
 	
-	public PlayerDataExtension createFromNBT(NBTTagCompound nbt)
+	public PlayerDataExtension createFromNBT(PlayerData pdata, NBTTagCompound nbt)
 	{
-		PlayerDataExtension data = makeNew();
+		PlayerDataExtension data = makeNew(pdata);
 		if(nbt != null)
 			data.readFromNBT(nbt.getCompoundTag(nbtTagName));
 		return data;

@@ -1,5 +1,6 @@
 package org.ultramine.server;
 
+import org.ultramine.economy.PlayerHoldingsEvent;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoBroacastConf;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoDebugInfoConf;
 import org.ultramine.server.chunk.ChunkProfiler;
@@ -248,5 +249,12 @@ public class UMEventHandler
 				player.addChatMessage(new ChatComponentTranslation("ultramine.ability.attack").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 			}
 		}
+	}
+	
+	@SideOnly(Side.SERVER)
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onHGoldingsCreate(PlayerHoldingsEvent.CreateEvent e)
+	{
+		e.holdings.setBalance(ConfigurationHandler.getServerConfig().tools.economy.startBalance);
 	}
 }

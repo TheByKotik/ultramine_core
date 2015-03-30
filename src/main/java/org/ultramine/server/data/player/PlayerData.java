@@ -4,15 +4,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.ultramine.server.data.ServerDataLoader;
+
 import com.mojang.authlib.GameProfile;
 
 public class PlayerData
 {
-	private GameProfile profile;
+	private final ServerDataLoader loader;
 	private final Map<Class<? extends PlayerDataExtension>, PlayerDataExtension> data = new HashMap<Class<? extends PlayerDataExtension>, PlayerDataExtension>();
-	private final PlayerCoreData coreData;
+	private PlayerCoreData coreData;
+	
+	private GameProfile profile;
 
-	public PlayerData(List<PlayerDataExtension> list)
+	public PlayerData(ServerDataLoader loader)
+	{
+		this.loader = loader;
+	}
+	
+	public void loadExtensions(List<PlayerDataExtension> list)
 	{
 		for(PlayerDataExtension o : list)
 			data.put(o.getClass(), o);
@@ -37,5 +46,10 @@ public class PlayerData
 	public PlayerCoreData core()
 	{
 		return coreData;
+	}
+	
+	public void save()
+	{
+		loader.savePlayerData(this);
 	}
 }

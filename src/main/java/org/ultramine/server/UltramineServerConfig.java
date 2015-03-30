@@ -121,6 +121,7 @@ public class UltramineServerConfig
 		public AutoDebugInfoConf autoDebugInfo = new AutoDebugInfoConf();
 		public AutoBackupConf autobackup = new AutoBackupConf();
 		public WarpProtectionEntry[] warpProtection = new WarpProtectionEntry[0];
+		public EconomyConf economy = new EconomyConf();
 		
 		public static class AutoBroacastConf
 		{
@@ -156,6 +157,11 @@ public class UltramineServerConfig
 			public boolean pvp;
 			public boolean mobSpawn;
 			public boolean mobDamage;
+		}
+		
+		public static class EconomyConf
+		{
+			public double startBalance = 30;
 		}
 	}
 

@@ -596,15 +596,16 @@ public class JDBCDataProvider implements IDataProvider
 
 	private PlayerData readPlayerData(NBTTagCompound nbt)
 	{
+		PlayerData pdata = new PlayerData(mgr.getDataLoader());
 		List<PlayerDataExtensionInfo> infos = mgr.getDataLoader().getDataExtProviders();
 		List<PlayerDataExtension> data = new ArrayList<PlayerDataExtension>(infos.size());
 
 		for(PlayerDataExtensionInfo info : infos)
 		{
-			data.add(info.createFromNBT(nbt));
+			data.add(info.createFromNBT(pdata, nbt));
 		}
-
-		PlayerData pdata = new PlayerData(data);
+		
+		pdata.loadExtensions(data);
 		if(nbt != null && nbt.hasKey("id") && nbt.hasKey("name"))
 			pdata.setProfile(new GameProfile(UUID.fromString(nbt.getString("id")), nbt.getString("name")));
 		return pdata;

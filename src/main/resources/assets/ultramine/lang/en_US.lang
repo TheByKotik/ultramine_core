@@ -70,6 +70,35 @@ command.pgroup.success.add=Add permission <%s> to group <%s>
 command.pgroup.success.remove=Remove permission <%s> from group <%s>
 command.pgroup.success.meta=Set meta <%s> to <%s> for group <%s>
 
+#Economy commands
+economy.fail.currency=Specified currency is not exists
+economy.fail.negativeamount=Amount must be greater than zero
+economy.fail.notenough=Your account is not enough money to carry out this operation
+
+command.pay.usage=/pay <player> [currency] <amount>
+command.pay.description=Transfers specified amount to the account of another player
+command.pay.sended=You are transferred to the account of the player %s amount of %s
+command.pay.received=Received %s from the player %s
+
+command.money.usage=/money [player] [currency]
+command.money.description=Displays information about your account or account of another player
+command.money.info=On account of the player %s is %s
+
+command.mgive.usage=/mgive <player> [currency] <amount>
+command.mgive.description=Gives specified amount to the player's account
+command.mgive.sended=Вы выдали игроку %s сумму в %s
+command.mgive.received=Вам выдано %s
+
+command.mset.usage=/mset <player> [currency] <amount>
+command.mset.description=Sets the specified account balance for player
+command.mset.sended=You has been changed balance of player %s account from %s to %s
+command.mset.received=Your account balance is changed from %s to %s
+
+command.msub.usage=/msub <player> [currency] <amount>
+command.msub.description=Confiscates player's account specified amount
+command.msub.sendedYou confiscated %s from the players account %s
+command.msub.received=With your account confiscated %s
+
 #Basic commands
 command.home.usage=/home [name]
 command.home.description=Teleports you to your home, sets with /sethome

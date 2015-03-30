@@ -37,6 +37,7 @@ import org.ultramine.commands.basic.FastWarpCommand;
 import org.ultramine.commands.basic.TechCommands;
 import org.ultramine.commands.basic.VanillaCommands;
 import org.ultramine.commands.syntax.DefaultCompleters;
+import org.ultramine.economy.EconomyCommands;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.commands.BasicPermissionCommands;
 import org.ultramine.server.chunk.ChunkProfiler;
@@ -129,6 +130,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		e.registerCommands(VanillaCommands.class);
 		e.registerCommands(BasicCommands.class);
 		e.registerCommands(TechCommands.class);
+		e.registerCommands(EconomyCommands.class);
 		
 		for(String perm : new String[]{
 				"command.help",

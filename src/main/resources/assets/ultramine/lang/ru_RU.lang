@@ -70,6 +70,35 @@ command.pgroup.success.add=Add permission <%s> to group <%s>
 command.pgroup.success.remove=Remove permission <%s> from group <%s>
 command.pgroup.success.meta=Set meta <%s> to <%s> for group <%s>
 
+#Economy commands
+economy.fail.currency=Указанная валюта не существует
+economy.fail.negativeamount=Сумма должна быть больше нуля
+economy.fail.notenough=На вашем счету недостаточно средств для совершения данной операции
+
+command.pay.usage=/pay <игрок> [валюта] <сумма>
+command.pay.description=Перечисляет указанную сумму на счет другого игрока
+command.pay.sended=Вы перечислили на счет игрока %s сумму в %s
+command.pay.received=Получено %s от игрока %s
+
+command.money.usage=/money [игрок] [валюта]
+command.money.description=Показывает информацию о вашем счете или счете другого игрока
+command.money.info=На счету игрока %s находится %s
+
+command.mgive.usage=/mgive <игрок> [валюта] <сумма>
+command.mgive.description=Выдает игроку указанную сумму
+command.mgive.sended=Вы выдали игроку %s сумму в %s
+command.mgive.received=Вам выдано %s
+
+command.mset.usage=/mset <игрок> [валюта] <сумма>
+command.mset.description=Устанавливает указанный  баланс на счету игрока
+command.mset.sended=Вы изменили баланс счета игрока %s с %s до %s
+command.mset.received=Баланс вашего счета изменен с %s до %s
+
+command.msub.usage=/msub <игрок> [валюта] <сумма>
+command.msub.description=Конфискует со счета игрока указанную сумму
+command.msub.sended=Вы конфисковали %s со счета игрока %s
+command.msub.received=С вашего счета конфисковано %s
+
 #Basic commands
 command.home.usage=/home [название]
 command.home.description=Телепортация на точку дома, устанавливаемую командой /sethome

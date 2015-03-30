@@ -187,6 +187,21 @@ public class CommandContext
 	{
 		broadcast(EnumChatFormatting.DARK_PURPLE, msg, args);
 	}
+	
+	public void sendMessage(ICommandSender to, EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
+	{
+		to.addChatMessage(formatMessage(tplColor, argsColor, msg, args));
+	}
+	
+	public void sendMessage(ICommandSender to, EnumChatFormatting argsColor, String msg, Object... args)
+	{
+		sendMessage(to, EnumChatFormatting.GOLD, argsColor, msg, args);
+	}
+	
+	public void sendMessage(ICommandSender to, String msg, Object... args)
+	{
+		sendMessage(to, EnumChatFormatting.YELLOW, msg, args);
+	}
 
 	public void throwBadUsage()
 	{
