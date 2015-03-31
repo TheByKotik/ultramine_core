@@ -1,5 +1,11 @@
 package org.ultramine.server.util;
 
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
+
 public class BasicTypeFormatter
 {
 	public static String formatTime(long timeMills)
@@ -60,5 +66,19 @@ public class BasicTypeFormatter
 				(hours > 0 ? hours + " " + hourN + " " : "") +
 				(minutes > 0 ? minutes + " " + minN + " " : "") +
 				(printSec && (seconds != 0 || minutes == 0 && hours == 0 && days == 0) ? seconds + " " + secN : "");
+	}
+	
+	public static IChatComponent formatMessage(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
+	{
+		for(int i = 0; i < args.length; i++)
+		{
+			Object o = args[i];
+			if(!(o instanceof IChatComponent))
+				args[i] = new ChatComponentText(o.toString()).setChatStyle(new ChatStyle().setColor(argsColor));
+		}
+		
+		ChatComponentTranslation comp = new ChatComponentTranslation(msg, args);
+		comp.getChatStyle().setColor(tplColor);
+		return comp;
 	}
 }

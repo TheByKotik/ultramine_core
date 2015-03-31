@@ -33,6 +33,7 @@ import net.minecraft.stats.StatisticsFile;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ForgeEventFactory;
 
 public class ServerDataLoader
@@ -412,6 +413,39 @@ public class ServerDataLoader
 	public List<PlayerDataExtensionInfo> getDataExtProviders()
 	{
 		return dataExtinfos;
+	}
+	
+	public void loadOffline(final GameProfile profile, final Function<EntityPlayerMP, Void> callback)
+	{
+		executor.execute(new Function<Void, NBTTagCompound>()
+		{
+			@Override
+			public NBTTagCompound apply(Void input) //async
+			{
+				return getDataProvider().loadPlayer(profile);
+			}
+		}, new Function<NBTTagCompound, Void>()
+		{
+			@Override
+			public Void apply(NBTTagCompound nbt) //sync
+			{
+				EntityPlayerMP player = mgr.getPlayerByUsername(profile.getName());
+				if(player == null)
+				{
+					player = new FakePlayer(mgr.getServerInstance().getMultiWorld().getWorldByID(0), profile);
+					player.readFromNBT(nbt);
+				}
+				callback.apply(player);
+				return null;
+			}
+		});
+	}
+	
+	public void saveOfflinePlayer(FakePlayer player)
+	{
+		NBTTagCompound nbt = new NBTTagCompound();
+		player.writeToNBT(nbt);
+		getDataProvider().savePlayer(player.getGameProfile(), nbt);
 	}
 	
 	private static class LoadedDataStruct

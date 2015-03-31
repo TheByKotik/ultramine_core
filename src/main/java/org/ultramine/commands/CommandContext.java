@@ -11,9 +11,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
@@ -21,6 +18,7 @@ import net.minecraft.world.WorldServer;
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerData;
+import org.ultramine.server.util.BasicTypeFormatter;
 import org.ultramine.server.util.BasicTypeParser;
 
 import java.util.ArrayList;
@@ -144,23 +142,9 @@ public class CommandContext
 	}
 	
 	
-	private IChatComponent formatMessage(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
-	{
-		for(int i = 0; i < args.length; i++)
-		{
-			Object o = args[i];
-			if(!(o instanceof IChatComponent))
-				args[i] = new ChatComponentText(o.toString()).setChatStyle(new ChatStyle().setColor(argsColor));
-		}
-		
-		ChatComponentTranslation comp = new ChatComponentTranslation(msg, args);
-		comp.getChatStyle().setColor(tplColor);
-		return comp;
-	}
-	
 	public void sendMessage(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
 	{
-		sender.addChatMessage(formatMessage(tplColor, argsColor, msg, args));
+		sender.addChatMessage(BasicTypeFormatter.formatMessage(tplColor, argsColor, msg, args));
 	}
 	
 	public void sendMessage(EnumChatFormatting argsColor, String msg, Object... args)
@@ -175,7 +159,7 @@ public class CommandContext
 	
 	public void broadcast(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
 	{
-		getServer().getConfigurationManager().sendChatMsg(formatMessage(tplColor, argsColor, msg, args));
+		getServer().getConfigurationManager().sendChatMsg(BasicTypeFormatter.formatMessage(tplColor, argsColor, msg, args));
 	}
 	
 	public void broadcast(EnumChatFormatting argsColor, String msg, Object... args)
@@ -190,7 +174,7 @@ public class CommandContext
 	
 	public void sendMessage(ICommandSender to, EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
 	{
-		to.addChatMessage(formatMessage(tplColor, argsColor, msg, args));
+		to.addChatMessage(BasicTypeFormatter.formatMessage(tplColor, argsColor, msg, args));
 	}
 	
 	public void sendMessage(ICommandSender to, EnumChatFormatting argsColor, String msg, Object... args)
@@ -388,6 +372,11 @@ public class CommandContext
 			if(data == null)
 				throw new PlayerNotFoundException();
 			return data;
+		}
+		
+		public OfflinePlayer asOfflinePlayer()
+		{
+			return new OfflinePlayer(getServer(), asPlayerData());
 		}
 		
 		public WorldServer asWorld()

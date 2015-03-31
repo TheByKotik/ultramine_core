@@ -1,7 +1,6 @@
 package org.ultramine.economy;
 
 import static net.minecraft.util.EnumChatFormatting.*;
-import net.minecraft.entity.player.EntityPlayerMP;
 
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
@@ -27,9 +26,7 @@ public class EconomyCommands
 		double amount = ctx.get("amount").asDouble();
 		from.transactChecked(to, amount);
 		ctx.sendMessage(DARK_GREEN, GREEN, "command.pay.sended", ctx.get("player").asString(), cur.format(amount));
-		EntityPlayerMP maybeOnline = ctx.getServer().getConfigurationManager().getPlayerByUsername(ctx.get("player").asString());
-		if(maybeOnline != null)
-			ctx.sendMessage(maybeOnline, DARK_GREEN, GREEN, "command.pay.received", cur.format(amount), ctx.getSenderAsPlayer().func_145748_c_());
+		ctx.get("player").asOfflinePlayer().sendMessage(DARK_GREEN, GREEN, "command.pay.received", cur.format(amount), ctx.getSenderAsPlayer().func_145748_c_());
 	}
 	
 	@Command(
@@ -72,9 +69,7 @@ public class EconomyCommands
 		to.subtract(amount); //result may be negative
 		from.add(amount);
 		ctx.sendMessage(DARK_GREEN, GREEN, "command.msub.sended", cur.format(amount), ctx.get("player").asString());
-		EntityPlayerMP maybeOnline = ctx.getServer().getConfigurationManager().getPlayerByUsername(ctx.get("player").asString());
-		if(maybeOnline != null)
-			ctx.sendMessage(maybeOnline, DARK_GREEN, GREEN, "command.msub.received", cur.format(amount));
+		ctx.get("player").asOfflinePlayer().sendMessage(DARK_GREEN, GREEN, "command.msub.received", cur.format(amount));
 	}
 	
 	@Command(
@@ -94,9 +89,7 @@ public class EconomyCommands
 		double amount = ctx.get("amount").asDouble();
 		holdings.add(amount);
 		ctx.sendMessage(DARK_GREEN, GREEN, "command.mgive.sended", ctx.get("player").asString(), cur.format(amount));
-		EntityPlayerMP maybeOnline = ctx.getServer().getConfigurationManager().getPlayerByUsername(ctx.get("player").asString());
-		if(maybeOnline != null)
-			ctx.sendMessage(maybeOnline, DARK_GREEN, GREEN, "command.mgive.received", cur.format(amount));
+		ctx.get("player").asOfflinePlayer().sendMessage(DARK_GREEN, GREEN, "command.mgive.received", cur.format(amount));
 	}
 	
 	@Command(
@@ -117,8 +110,6 @@ public class EconomyCommands
 		double last = holdings.getBalance();
 		holdings.setBalance(amount);
 		ctx.sendMessage(DARK_GREEN, GREEN, "command.mset.sended", ctx.get("player").asString(), cur.format(last), cur.format(amount));
-		EntityPlayerMP maybeOnline = ctx.getServer().getConfigurationManager().getPlayerByUsername(ctx.get("player").asString());
-		if(maybeOnline != null)
-			ctx.sendMessage(maybeOnline, DARK_GREEN, GREEN, "command.mset.received", cur.format(last), cur.format(amount));
+		ctx.get("player").asOfflinePlayer().sendMessage(DARK_GREEN, GREEN, "command.mset.received", cur.format(last), cur.format(amount));
 	}
 }
