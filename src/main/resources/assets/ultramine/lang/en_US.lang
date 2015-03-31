@@ -201,6 +201,13 @@ command.buttoncommand.success.remove=ButtonCommand has been successfuly removed
 command.buttoncommand.get.head=Command list:
 command.buttoncommand.noperms=You don't have permissions to use this button
 
+command.openinv.usage=/openinv <player>
+command.openinv.description=Opens the player's inventory
+command.openinv.fail.dead=The player is dead (has no inventory)
+
+command.openender.usage=/openender <player>
+command.openender.description=Opens the player's ender chest
+
 #Technical commands
 command.id.usage=/id <id>
 command.id.description=Displays information about specified item id

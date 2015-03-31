@@ -201,6 +201,13 @@ command.buttoncommand.success.remove=ButtonCommand был успешно уда�
 command.buttoncommand.get.head=Список команд:
 command.buttoncommand.noperms=У вас нет прав для использования данной кнопки
 
+command.openinv.usage=/openinv <игрок>
+command.openinv.description=Открывает инвентарь указанного игрока
+command.openinv.fail.dead=Игрок мертв (инвентаря нет)
+
+command.openender.usage=/openender <игрок>
+command.openender.description=Открывает сундук края указанного игрока
+
 #Technical commands
 command.id.usage=/id <id>
 command.id.description=Показывает информацию об указанном id

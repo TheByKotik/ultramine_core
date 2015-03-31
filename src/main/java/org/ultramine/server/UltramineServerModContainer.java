@@ -9,6 +9,24 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 
+import org.ultramine.commands.CommandRegistry;
+import org.ultramine.commands.basic.BasicCommands;
+import org.ultramine.commands.basic.FastWarpCommand;
+import org.ultramine.commands.basic.OpenInvCommands;
+import org.ultramine.commands.basic.TechCommands;
+import org.ultramine.commands.basic.VanillaCommands;
+import org.ultramine.commands.syntax.DefaultCompleters;
+import org.ultramine.economy.EconomyCommands;
+import org.ultramine.permission.IPermissionManager;
+import org.ultramine.permission.commands.BasicPermissionCommands;
+import org.ultramine.server.chunk.ChunkProfiler;
+import org.ultramine.server.data.Databases;
+import org.ultramine.server.data.ServerDataLoader;
+import org.ultramine.server.data.player.PlayerCoreData;
+import org.ultramine.server.tools.ButtonCommand;
+import org.ultramine.server.tools.ItemBlocker;
+import org.ultramine.server.tools.WarpProtection;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -30,23 +48,6 @@ import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import org.ultramine.commands.CommandRegistry;
-import org.ultramine.commands.basic.BasicCommands;
-import org.ultramine.commands.basic.FastWarpCommand;
-import org.ultramine.commands.basic.TechCommands;
-import org.ultramine.commands.basic.VanillaCommands;
-import org.ultramine.commands.syntax.DefaultCompleters;
-import org.ultramine.economy.EconomyCommands;
-import org.ultramine.permission.IPermissionManager;
-import org.ultramine.permission.commands.BasicPermissionCommands;
-import org.ultramine.server.chunk.ChunkProfiler;
-import org.ultramine.server.data.Databases;
-import org.ultramine.server.data.ServerDataLoader;
-import org.ultramine.server.data.player.PlayerCoreData;
-import org.ultramine.server.tools.ButtonCommand;
-import org.ultramine.server.tools.ItemBlocker;
-import org.ultramine.server.tools.WarpProtection;
 
 public class UltramineServerModContainer extends DummyModContainer
 {
@@ -131,6 +132,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		e.registerCommands(BasicCommands.class);
 		e.registerCommands(TechCommands.class);
 		e.registerCommands(EconomyCommands.class);
+		e.registerCommands(OpenInvCommands.class);
 		
 		for(String perm : new String[]{
 				"command.help",
