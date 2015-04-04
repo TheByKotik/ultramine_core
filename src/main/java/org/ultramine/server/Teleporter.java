@@ -40,6 +40,14 @@ public class Teleporter
 		doTeleportation(target, dst);
 	}
 	
+	public static void tpLaterOrNow(EntityPlayerMP target, WarpLocation dst, boolean now)
+	{
+		if(now)
+			tpNow(target, dst);
+		else
+			tpLater(target, dst);
+	}
+	
 	public static void tpLater(EntityPlayerMP target, WarpLocation dst)
 	{
 		long timeto = target.getData().core().getNextTeleportationTime() - System.currentTimeMillis();

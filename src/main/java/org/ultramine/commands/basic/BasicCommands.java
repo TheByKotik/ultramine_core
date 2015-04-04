@@ -44,7 +44,7 @@ public class BasicCommands
 		ctx.check(home != null, "command.home.fail.notset");
 		if(home.dimension != target.dimension && !ConfigurationHandler.getServerConfig().settings.teleportation.interWorldHome)
 			ctx.checkSenderPermission("ability.admin.ignoreInterworldHome", "command.home.fail.interworld");
-		Teleporter.tpLater(target, home);
+		Teleporter.tpLaterOrNow(target, home, ctx.contains("target"));
 	}
 	
 	@Command(
@@ -106,19 +106,18 @@ public class BasicCommands
 			permissions = {"command.basic.warp", "command.basic.warp.other"},
 			syntax = {
 					"<warp%name>",
-					"<player> <warp%name>"
+					"<player%target> <warp%name>"
 			}
 	)
 	public static void warp(CommandContext ctx)
 	{
-		if(ctx.contains("player"))
-			ctx.checkSenderPermission("command.warp.other", "command.warp.noperm.other");
-		EntityPlayerMP target = ctx.contains("player") ? ctx.get("player").asPlayer() : ctx.getSenderAsPlayer();
+		ctx.checkPermissionIfArg("target", "command.warp.other", "command.warp.noperm.other");
+		EntityPlayerMP target = ctx.contains("target") ? ctx.get("target").asPlayer() : ctx.getSenderAsPlayer();
 		WarpLocation warp = ctx.getServerData().getWarp(ctx.get("name").asString());
 		ctx.check(warp != null, "command.warp.fail");
 		if(warp.dimension != target.dimension && !ConfigurationHandler.getServerConfig().settings.teleportation.interWorldWarp)
 			ctx.checkSenderPermission("ability.admin.ignoreInterworldHome", "command.warp.fail.interworld");
-		Teleporter.tpLater(target, warp);
+		Teleporter.tpLaterOrNow(target, warp, ctx.contains("target"));
 	}
 	
 	@Command(
