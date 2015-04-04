@@ -13,6 +13,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.functions.GenericIterableFactory;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
@@ -256,5 +257,17 @@ public class UMEventHandler
 	public void onHGoldingsCreate(PlayerHoldingsEvent.CreateEvent e)
 	{
 		e.holdings.setBalance(ConfigurationHandler.getServerConfig().tools.economy.startBalance);
+	}
+	
+	private boolean firstPlayer = true;
+	@SideOnly(Side.SERVER)
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public void onPlayerLoggedIn(FMLNetworkEvent.ServerConnectionFromClientEvent e)
+	{
+		if(firstPlayer)
+		{
+			firstPlayer = false;
+			UltramineServerModContainer.getInstance().getRecipeCache().clearCache();
+		}
 	}
 }

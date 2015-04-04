@@ -172,7 +172,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		loader.addDefaultWarps();
 		for(String name : loader.getFastWarps())
 			reg.registerCommand(new FastWarpCommand(name));
-//		recipeCache.installHardOverride();
+		getRecipeCache().clearCache();
 	}
 	
 	@Subscribe

@@ -1,8 +1,6 @@
 package org.ultramine.server;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,7 +17,6 @@ import net.minecraft.world.World;
 public class RecipeCache
 {
 	private final List<IRecipe> originList;
-	private final CachedRecipe cachedRecipe = new CachedRecipe();
 	private final Map<RecipeKey, IRecipe> cache = new HashMap<RecipeKey, IRecipe>();
 	private final Set<RecipeKey> noRecipeSet = new HashSet<RecipeKey>();
 	
@@ -27,11 +24,6 @@ public class RecipeCache
 	public RecipeCache()
 	{
 		originList = CraftingManager.getInstance().getRecipeList();
-	}
-	
-	public void installHardOverride()
-	{
-		CraftingManager.getInstance().recipes = newRecipeList;
 	}
 	
 	public IRecipe findRecipe(InventoryCrafting inv, World world)
@@ -79,101 +71,6 @@ public class RecipeCache
 		cache.clear();
 		noRecipeSet.clear();
 	}
-	
-	private List<IRecipe> newRecipeList = new ArrayList<IRecipe>()
-	{
-		private static final long serialVersionUID = 1L;
-		
-		{
-			super.add(cachedRecipe);
-		}
-		
-		@Override
-		public boolean addAll(Collection<? extends IRecipe> add)
-		{
-			for(IRecipe recipe : add)
-				originList.add(recipe);
-			noRecipeSet.clear();
-			return true;
-		}
-		
-		@Override
-		public boolean removeAll(Collection<?> rem)
-		{
-			throw new UnsupportedOperationException();
-		}
-		
-		@Override
-		public IRecipe remove(int ind)
-		{
-			return cachedRecipe.removeLastFound();
-		}
-		
-		@Override
-		public boolean remove(Object recipe)
-		{
-			if(recipe == this)
-			{
-				return cachedRecipe.removeLastFound() != null;
-			}
-			else
-			{
-				boolean rem = originList.remove(recipe);
-				if(rem)
-					cache.clear();
-				return rem;
-			}
-		}
-		
-		@Override
-		public boolean add(IRecipe recipe)
-		{
-			originList.add(recipe);
-			noRecipeSet.clear();
-			return true;
-		}
-	};
-	
-	private class CachedRecipe implements IRecipe
-	{
-		private IRecipe lastFound;
-		
-		@Override
-		public boolean matches(InventoryCrafting inv, World world)
-		{
-			lastFound = findRecipe(inv, world);
-			return lastFound != null;
-		}
-
-		@Override
-		public ItemStack getCraftingResult(InventoryCrafting inv)
-		{
-			return lastFound != null ? lastFound.getCraftingResult(inv) : null;
-		}
-
-		@Override
-		public int getRecipeSize()
-		{
-			return 9;
-		}
-
-		@Override
-		public ItemStack getRecipeOutput()
-		{
-			return null;
-		}
-		
-		public IRecipe removeLastFound()
-		{
-			if(lastFound != null)
-			{
-				originList.remove(lastFound);
-				cache.clear();
-			}
-			
-			return lastFound;
-		}
-	};
 	
 	private static class RecipeKey implements Comparable<RecipeKey>
 	{
