@@ -298,5 +298,10 @@ command.backup.apply.fail.zip.unpack=Не удалось распаковать 
 command.backup.apply.success.temp=Бэкап успешно применен! Созданы временные миры:
 command.backup.apply.success=Бэкап успешно применен!
 
-command.custmsg.usage=/recipecache clear
-command.custmsg.description=Очищает кэш рецептов крафта
+command.recipecache.usage=/recipecache clear
+command.recipecache.description=Очищает кэш рецептов крафта
+command.recipecache.clear.success=Кэш рецептов крафта успешно очищен
+
+command.reloadcfg.usage=/reloadcfg
+command.reloadcfg.description=Перезагружает конфигурацию UltraMine сервера (из директории /settings)
+command.reloadcfg.success=Серверная конфигурация успешно перезагружена

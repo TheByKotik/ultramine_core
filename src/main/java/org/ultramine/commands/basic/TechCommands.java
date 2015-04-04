@@ -724,6 +724,7 @@ public class TechCommands
 	public static void recipecache(CommandContext ctx)
 	{
 		UltramineServerModContainer.getInstance().getRecipeCache().clearCache();
+		ctx.sendMessage("command.recipecache.clear.success");
 	}
 	
 	@SideOnly(Side.SERVER)
@@ -743,5 +744,7 @@ public class TechCommands
 		
 		server.getMultiWorld().reloadServerWorlds();
 		UltramineServerModContainer.getInstance().reloadToolsCfg();
+		
+		ctx.sendMessage("command.reloadcfg.success");
 	}
 }

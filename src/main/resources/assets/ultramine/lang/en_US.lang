@@ -298,5 +298,10 @@ command.backup.apply.fail.zip.unpack=Failed to unpack zip file. It is very VERY 
 command.backup.apply.success.temp=Backup successfuly applied! Created temp worlds:
 command.backup.apply.success=Backup successfuly applied!
 
-command.custmsg.usage=/recipecache clear
-command.custmsg.description=Clears crafting recipe cache
+command.recipecache.usage=/recipecache clear
+command.recipecache.description=Clears crafting recipe cache
+command.recipecache.clear.success=Crafting recipe cache successfully cleared
+
+command.reloadcfg.usage=/reloadcfg
+command.reloadcfg.description=Reloads UltraMine server configuration (in /settings directory)
+command.reloadcfg.success=Server configuration successfully reloaded
