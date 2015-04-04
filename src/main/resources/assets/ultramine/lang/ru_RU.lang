@@ -27,6 +27,9 @@ command.tp.description=Телепортация указанного игрок�
 command.tp.success.player=Телепортирован '%s' к '%s'
 command.tp.success.coordinate=Телепортирован '%s' к [%s](%s, %s, %s)
 
+command.tphere.usage=/tphere [кого]
+command.tphere.description=Телепортация указанного игрока к вам
+
 command.difficulty.usage=/difficulty [мир] <peaceful easy normal hard>
 command.difficulty.description=Изменение сложности игры
 command.difficulty.success=Сложность мира %s изменена с %s на %s

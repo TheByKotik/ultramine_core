@@ -217,6 +217,18 @@ public class BasicCommands
 	}
 	
 	@Command(
+			name = "tphere",
+			group = "player",
+			permissions = {"command.player.tphere"},
+			syntax = {"<player%target>"}
+	)
+	public static void tphere(CommandContext ctx)
+	{
+		Teleporter.tpNow(ctx.get("target").asPlayer(), ctx.getSenderAsPlayer());
+		ctx.sendMessage("command.tp.success.player", ctx.get("target").asPlayer().func_145748_c_(), ctx.getSenderAsPlayer().func_145748_c_());
+	}
+	
+	@Command(
 			name = "setspawn",
 			group = "admin",
 			permissions = {"command.admin.setspawn"},
