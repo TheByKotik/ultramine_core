@@ -53,7 +53,7 @@ public class TechCommands
 	@Command(
 			name = "id",
 			group = "technical",
-			permissions = {"command.id"},
+			permissions = {"command.technical.id"},
 			syntax = {"<%id>"}
 	)
 	public static void id(CommandContext ctx)
@@ -71,7 +71,7 @@ public class TechCommands
 			name = "uptime",
 			aliases = {"ticks", "lagometer"},
 			group = "technical",
-			permissions = {"command.uptime"}
+			permissions = {"command.technical.uptime"}
 	)
 	public static void uptime(CommandContext ctx)
 	{
@@ -91,7 +91,7 @@ public class TechCommands
 	@Command(
 			name = "debuginfo",
 			group = "technical",
-			permissions = {"command.debuginfo"},
+			permissions = {"command.technical.debuginfo"},
 			syntax = {
 					"",
 					"[chunk]",
@@ -139,7 +139,7 @@ public class TechCommands
 	@Command(
 			name = "memstat",
 			group = "technical",
-			permissions = {"command.memstat"}
+			permissions = {"command.technical.memstat"}
 	)
 	public static void memstat(CommandContext ctx)
 	{
@@ -152,7 +152,7 @@ public class TechCommands
 			name = "multiworld",
 			aliases = {"mw", "mv"},
 			group = "technical",
-			permissions = {"command.multiworld"},
+			permissions = {"command.technical.multiworld"},
 			syntax = {
 					"[list]",
 					"[load unload goto] <%world>" //No world validation
@@ -207,7 +207,7 @@ public class TechCommands
 	@Command(
 			name = "countentity",
 			group = "technical",
-			permissions = {"command.countentity"},
+			permissions = {"command.technical.countentity"},
 			syntax = {"<int%radius>"}
 	)
 	public static void countentity(CommandContext ctx)
@@ -262,7 +262,7 @@ public class TechCommands
 	@Command(
 			name = "clearentity",
 			group = "technical",
-			permissions = {"command.clearentity"},
+			permissions = {"command.technical.clearentity"},
 			syntax = {
 					"<int%radius>",
 					"[all mobs items] <int%radius>"
@@ -318,7 +318,7 @@ public class TechCommands
 	@Command(
 			name = "startlags",
 			group = "technical",
-			permissions = {"command.startlags"},
+			permissions = {"command.technical.startlags"},
 			syntax = {
 					"<int%percent>",
 					"[stop]"
@@ -370,7 +370,7 @@ public class TechCommands
 	@Command(
 			name = "restart",
 			group = "technical",
-			permissions = {"command.restart"},
+			permissions = {"command.technical.restart"},
 			syntax = {
 					"[abort]",
 					"<time>"
@@ -395,7 +395,7 @@ public class TechCommands
 	@Command(
 			name = "javagc",
 			group = "technical",
-			permissions = {"command.javagc"},
+			permissions = {"command.technical.javagc"},
 			syntax = {""}
 	)
 	public static void javagc(CommandContext ctx)
@@ -407,7 +407,7 @@ public class TechCommands
 	@Command(
 			name = "chunkgc",
 			group = "technical",
-			permissions = {"command.chunkgc"},
+			permissions = {"command.technical.chunkgc"},
 			syntax = {""}
 	)
 	@SideOnly(Side.SERVER)
@@ -576,7 +576,7 @@ public class TechCommands
 	@Command(
 			name = "chunkdebug",
 			group = "technical",
-			permissions = {"command.chunkdebug"},
+			permissions = {"command.technical.chunkdebug"},
 			syntax = {
 					"",
 					"[start stop]",
@@ -663,7 +663,7 @@ public class TechCommands
 	@Command(
 			name = "backup",
 			group = "technical",
-			permissions = {"command.backup"},
+			permissions = {"command.technical.backup"},
 			syntax = {
 					"[make now]",
 					"[make now] <%world>...",
@@ -718,7 +718,7 @@ public class TechCommands
 	@Command(
 			name = "recipecache",
 			group = "technical",
-			permissions = {"command.recipecache"},
+			permissions = {"command.technical.recipecache"},
 			syntax = {"[clear]"}
 	)
 	public static void recipecache(CommandContext ctx)
@@ -730,7 +730,7 @@ public class TechCommands
 	@Command(
 			name = "reloadcfg",
 			group = "technical",
-			permissions = {"command.reloadcfg"},
+			permissions = {"command.technical.reloadcfg"},
 			syntax = {""}
 	)
 	public static void reloadcfg(CommandContext ctx)
