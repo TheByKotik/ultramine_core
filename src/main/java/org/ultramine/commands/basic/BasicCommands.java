@@ -101,7 +101,7 @@ public class BasicCommands
 	
 	@Command(
 			name = "warp",
-			aliases = {"go", "пойти", "на"},
+			aliases = {"go", "пойти", "на", "в"},
 			group = "player",
 			permissions = {"command.basic.warp", "command.basic.warp.other"},
 			syntax = {
