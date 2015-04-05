@@ -92,9 +92,10 @@ public class BlockEndPortal extends BlockContainer
 
 	public void onBlockAdded(World p_149726_1_, int p_149726_2_, int p_149726_3_, int p_149726_4_)
 	{
-		if (!field_149948_a)
+		if (!field_149948_a && !p_149726_1_.isRemote)
 		{
-			if (p_149726_1_.provider.dimensionId != 0)
+			int endlink = ((WorldServer)p_149726_1_).getConfig().portals.enderLink;
+			if(endlink == Integer.MIN_VALUE || endlink == p_149726_1_.provider.dimensionId)
 			{
 				p_149726_1_.setBlockToAir(p_149726_2_, p_149726_3_, p_149726_4_);
 			}
