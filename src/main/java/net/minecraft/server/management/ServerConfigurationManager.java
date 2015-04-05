@@ -513,6 +513,7 @@ public abstract class ServerConfigurationManager
 		worldserver.getPlayerManager().addPlayer(entityplayermp1);
 		worldserver.spawnEntityInWorld(entityplayermp1);
 		this.playerEntityList.add(entityplayermp1);
+		usernameToPlayerMap.put(entityplayermp1.getGameProfile().getName().toLowerCase(), entityplayermp1);
 		entityplayermp1.addSelfToInternalCraftingInventory();
 		entityplayermp1.setHealth(entityplayermp1.getHealth());
 		FMLCommonHandler.instance().firePlayerRespawnEvent(entityplayermp1);
