@@ -15,6 +15,7 @@ import org.ultramine.server.UltramineServerConfig.ToolsConf.WarpProtectionEntry;
 import org.ultramine.server.util.WarpLocation;
 
 import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -107,7 +108,7 @@ public class WarpProtection
 			{
 				WarpLocation warp = MinecraftServer.getServer().getConfigurationManager().getDataLoader().getWarp(warpConf.name);
 				if(warp != null && isInside(warp, e.world.provider.dimensionId, MathHelper.floor_double(e.x), MathHelper.floor_double(e.z), warpConf.radius))
-					e.setCanceled(true);
+					e.setResult(Result.DENY);
 			}
 		}
 	}
