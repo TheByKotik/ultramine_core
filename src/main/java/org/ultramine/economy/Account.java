@@ -21,8 +21,8 @@ public abstract class Account
 		if(hlds == null)
 		{
 			hlds = new Holdings(this, cur);
-			onHoldingsCreate(hlds);
 			holdings.put(cur, hlds);
+			onHoldingsCreate(hlds);
 		}
 		return hlds;
 	}
