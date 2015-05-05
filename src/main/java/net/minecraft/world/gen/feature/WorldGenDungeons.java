@@ -94,7 +94,7 @@ public class WorldGenDungeons extends WorldGenerator
 				{
 					if (l1 < 3)
 					{
-						label101:
+						label197:
 						{
 							i2 = p_76484_3_ + p_76484_2_.nextInt(l * 2 + 1) - l;
 							int j2 = p_76484_5_ + p_76484_2_.nextInt(i1 * 2 + 1) - i1;
@@ -133,7 +133,7 @@ public class WorldGenDungeons extends WorldGenerator
 										WeightedRandomChestContent.generateChestContents(p_76484_2_, ChestGenHooks.getItems(DUNGEON_CHEST, p_76484_2_), tileentitychest, ChestGenHooks.getCount(DUNGEON_CHEST, p_76484_2_));
 									}
 
-									break label101;
+									break label197;
 								}
 							}
 

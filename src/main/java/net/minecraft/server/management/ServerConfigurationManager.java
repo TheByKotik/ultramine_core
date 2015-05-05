@@ -62,8 +62,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.demo.DemoWorldManager;
 import net.minecraft.world.storage.IPlayerFileData;
+import net.minecraft.world.storage.SaveHandler;
 import net.minecraftforge.common.chunkio.ChunkIOExecutor;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -266,6 +266,19 @@ public abstract class ServerConfigurationManager
 		return nbttagcompound1;
 	}
 
+	public NBTTagCompound getPlayerNBT(EntityPlayerMP player)
+	{
+		// Hacky method to allow loading the NBT for a player prior to login
+		NBTTagCompound nbttagcompound = this.mcServer.worldServers[0].getWorldInfo().getPlayerNBTTagCompound();
+		if (player.getCommandSenderName().equals(this.mcServer.getServerOwner()) && nbttagcompound != null)
+		{
+			return nbttagcompound;
+		}
+		else
+		{
+			return ((SaveHandler)this.playerNBTManagerObj).getPlayerNBT(player);
+		}
+	}
 	protected void writePlayerData(EntityPlayerMP p_72391_1_)
 	{
 		if (p_72391_1_.playerNetServerHandler == null) return;

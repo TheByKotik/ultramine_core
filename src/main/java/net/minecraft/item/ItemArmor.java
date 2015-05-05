@@ -286,15 +286,12 @@ public class ItemArmor extends Item
 
 		public Item func_151685_b()
 		{
-			switch (this)
-			{
-				case CLOTH:   return Items.leather;
-				case CHAIN:   return Items.iron_ingot;
-				case GOLD:    return Items.gold_ingot;
-				case IRON:    return Items.iron_ingot;
-				case DIAMOND: return Items.diamond;
-				default:      return customCraftingMaterial;
-			}
+			return this == CLOTH ? Items.leather :
+				(this == CHAIN ? Items.iron_ingot :
+				(this == GOLD ? Items.gold_ingot :
+				(this == IRON ? Items.iron_ingot :
+				(this == DIAMOND ? Items.diamond :
+				 customCraftingMaterial))));
 		}
 	}
 }

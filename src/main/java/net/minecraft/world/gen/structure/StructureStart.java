@@ -101,7 +101,8 @@ public abstract class StructureStart
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i)
 		{
-			this.components.add(MapGenStructureIO.func_143032_b(nbttaglist.getCompoundTagAt(i), p_143020_1_));
+			StructureComponent tmp = MapGenStructureIO.func_143032_b(nbttaglist.getCompoundTagAt(i), p_143020_1_);
+			if (tmp != null) this.components.add(tmp); //Forge: Prevent NPEs further down the line when a component can't be loaded.
 		}
 
 		this.func_143017_b(p_143020_2_);

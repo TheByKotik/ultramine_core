@@ -29,6 +29,7 @@ public class NBTTagIntArray extends NBTBase
 
 	void func_152446_a(DataInput p_152446_1_, int p_152446_2_, NBTSizeTracker p_152446_3_) throws IOException
 	{
+		p_152446_3_.func_152450_a(32); //Forge: Count the length as well
 		int j = p_152446_1_.readInt();
 		p_152446_3_.func_152450_a((long)(32 * j));
 		this.intArray = new int[j];

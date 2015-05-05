@@ -153,6 +153,7 @@ public class CompressedStreamTools
 	private static NBTBase func_152455_a(DataInput p_152455_0_, int p_152455_1_, NBTSizeTracker p_152455_2_) throws IOException
 	{
 		byte b0 = p_152455_0_.readByte();
+		p_152455_2_.func_152450_a(8); // Forge: Count everything!
 
 		if (b0 == 0)
 		{
@@ -160,7 +161,8 @@ public class CompressedStreamTools
 		}
 		else
 		{
-			p_152455_0_.readUTF();
+			NBTSizeTracker.readUTF(p_152455_2_, p_152455_0_.readUTF()); //Forge: Count this string.
+			p_152455_2_.func_152450_a(32); //Forge: 4 extra bytes for the object allocation.
 			NBTBase nbtbase = NBTBase.func_150284_a(b0);
 
 			try

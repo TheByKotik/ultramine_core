@@ -37,6 +37,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import cpw.mods.fml.common.LoaderState.ModState;
+import cpw.mods.fml.common.ProgressManager.ProgressBar;
 import cpw.mods.fml.common.event.FMLEvent;
 import cpw.mods.fml.common.event.FMLLoadEvent;
 import cpw.mods.fml.common.event.FMLModDisabledEvent;
@@ -182,10 +183,13 @@ public class LoadController
 		{
 			modObjectList = buildModObjectList();
 		}
+		ProgressBar bar = ProgressManager.push(stateEvent.description(), activeModList.size());
 		for (ModContainer mc : activeModList)
 		{
+			bar.step(mc.getName());
 			sendEventToModContainer(stateEvent, mc);
 		}
+		ProgressManager.pop(bar);
 	}
 
 	private void sendEventToModContainer(FMLEvent stateEvent, ModContainer mc)

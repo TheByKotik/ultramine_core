@@ -1823,7 +1823,7 @@ public abstract class World implements IBlockAccess
 
 				if (ForgeModContainer.removeErroringEntities)
 				{
-					FMLLog.severe(crashreport.getCompleteReport());
+					FMLLog.getLogger().log(org.apache.logging.log4j.Level.ERROR, crashreport.getCompleteReport());
 					removeEntity(entity);
 				}
 				else
@@ -1894,7 +1894,7 @@ public abstract class World implements IBlockAccess
 
 					if (ForgeModContainer.removeErroringEntities)
 					{
-						FMLLog.severe(crashreport.getCompleteReport());
+						FMLLog.getLogger().log(org.apache.logging.log4j.Level.ERROR, crashreport.getCompleteReport());
 						removeEntity(entity);
 					}
 					else
@@ -1945,7 +1945,7 @@ public abstract class World implements IBlockAccess
 					tileentity.func_145828_a(crashreportcategory);
 					if (ForgeModContainer.removeErroringTileEntities)
 					{
-						FMLLog.severe(crashreport.getCompleteReport());
+						FMLLog.getLogger().log(org.apache.logging.log4j.Level.ERROR, crashreport.getCompleteReport());
 						tileentity.invalidate();
 						setBlockToAir(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord);
 					}
