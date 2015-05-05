@@ -7,10 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -20,29 +19,29 @@ import net.minecraftforge.common.MinecraftForge;
 /**
  * Register simple items that contain fluids here. Useful for buckets, bottles, and things that have
  * ID/metadata mappings.
- * 
+ *
  * For more complex items, use {@link IFluidContainerItem} instead.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public abstract class FluidContainerRegistry
 {
-	// Holder object that implements HashCode for an ItemStack, 
-	// the local maps are not guaranteed to have the same internal generic structure, 
+	// Holder object that implements HashCode for an ItemStack,
+	// the local maps are not guaranteed to have the same internal generic structure,
 	// but the external interface for checking ItemStacks will still exist.
 	private static class ContainerKey
 	{
 		ItemStack container;
-		FluidStack fluid;
+		FluidStack stack;
 		private ContainerKey(ItemStack container)
 		{
 			this.container = container;
 		}
-		private ContainerKey(ItemStack container, FluidStack fluid)
+		private ContainerKey(ItemStack container, FluidStack stack)
 		{
 			this(container);
-			this.fluid = fluid;
+			this.stack = stack;
 		}
 		@Override
 		public int hashCode()
@@ -50,8 +49,8 @@ public abstract class FluidContainerRegistry
 			int code = 1;
 			code = 31*code + container.getItem().hashCode();
 			code = 31*code + container.getItemDamage();
-			if (fluid != null)
-				code = 31*code + fluid.fluidID;
+			if (stack != null)
+				code = 31*code + stack.getFluid().hashCode();
 			return code;
 		}
 		@Override
@@ -61,10 +60,10 @@ public abstract class FluidContainerRegistry
 			ContainerKey ck = (ContainerKey)o;
 			if (container.getItem() != ck.container.getItem()) return false;
 			if (container.getItemDamage() != ck.container.getItemDamage()) return false;
-			if (fluid == null && ck.fluid != null) return false;
-			if (fluid != null && ck.fluid == null) return false;
-			if (fluid == null && ck.fluid == null) return true;
-			if (fluid.fluidID != ck.fluid.fluidID) return false;
+			if (stack == null && ck.stack != null) return false;
+			if (stack != null && ck.stack == null) return false;
+			if (stack == null && ck.stack == null) return true;
+			if (stack.getFluid() != ck.stack.getFluid()) return false;
 			return true;
 		}
 	}
@@ -89,7 +88,7 @@ public abstract class FluidContainerRegistry
 
 	/**
 	 * Register a new fluid containing item.
-	 * 
+	 *
 	 * @param stack
 	 *            FluidStack containing the type and amount of the fluid stored in the item.
 	 * @param filledContainer
@@ -106,14 +105,14 @@ public abstract class FluidContainerRegistry
 	/**
 	 * Register a new fluid containing item. The item is assumed to hold 1000 mB of fluid. Also
 	 * registers the Fluid if possible.
-	 * 
+	 *
 	 * @param fluid
 	 *            Fluid type that is stored in the item.
 	 * @param filledContainer
 	 *            ItemStack representing the container when it is full.
 	 * @param emptyContainer
 	 *            ItemStack representing the container when it is empty.
-	 * @return True if container was successfully registered; false if it already is.
+	 * @return True if container was successfully registered; false if it already is, or an invalid parameter was passed.
 	 */
 	public static boolean registerFluidContainer(Fluid fluid, ItemStack filledContainer, ItemStack emptyContainer)
 	{
@@ -126,12 +125,12 @@ public abstract class FluidContainerRegistry
 
 	/**
 	 * Register a new fluid containing item that does not have an empty container.
-	 * 
+	 *
 	 * @param stack
 	 *            FluidStack containing the type and amount of the fluid stored in the item.
 	 * @param filledContainer
 	 *            ItemStack representing the container when it is full.
-	 * @return True if container was successfully registered; false if it already is.
+	 * @return True if container was successfully registered; false if it already is, or an invalid parameter was passed.
 	 */
 	public static boolean registerFluidContainer(FluidStack stack, ItemStack filledContainer)
 	{
@@ -141,12 +140,12 @@ public abstract class FluidContainerRegistry
 	/**
 	 * Register a new fluid containing item that does not have an empty container. The item is
 	 * assumed to hold 1000 mB of fluid. Also registers the Fluid if possible.
-	 * 
+	 *
 	 * @param fluid
 	 *            Fluid type that is stored in the item.
 	 * @param filledContainer
 	 *            ItemStack representing the container when it is full.
-	 * @return True if container was successfully registered; false if it already is.
+	 * @return True if container was successfully registered; false if it already is, or an invalid parameter was passed.
 	 */
 	public static boolean registerFluidContainer(Fluid fluid, ItemStack filledContainer)
 	{
@@ -159,15 +158,20 @@ public abstract class FluidContainerRegistry
 
 	/**
 	 * Register a new fluid containing item.
-	 * 
+	 *
 	 * @param data
 	 *            See {@link FluidContainerData}.
-	 * @return True if container was successfully registered; false if it already is.
+	 * @return True if container was successfully registered; false if it already is, or an invalid parameter was passed.
 	 */
 	public static boolean registerFluidContainer(FluidContainerData data)
 	{
-		if (isFilledContainer(data.filledContainer))
+		if (isFilledContainer(data.filledContainer) || data.filledContainer == null)
 		{
+			return false;
+		}
+		if (data.fluid == null || data.fluid.getFluid() == null)
+		{
+			FMLLog.bigWarning("Invalid registration attempt for a fluid container item %s has occurred. The registration has been denied to prevent crashes. The mod responsible for the registration needs to correct this.", data.filledContainer.getItem().getUnlocalizedName(data.filledContainer));
 			return false;
 		}
 		containerFluidMap.put(new ContainerKey(data.filledContainer), data);
@@ -184,7 +188,7 @@ public abstract class FluidContainerRegistry
 
 	/**
 	 * Determines the fluid type and amount inside a container.
-	 * 
+	 *
 	 * @param container
 	 *            The fluid container.
 	 * @return FluidStack representing stored fluid.
@@ -202,9 +206,9 @@ public abstract class FluidContainerRegistry
 
 	/**
 	 * Attempts to fill an empty container with a fluid.
-	 * 
+	 *
 	 * NOTE: Returns null on fail, NOT the empty container.
-	 * 
+	 *
 	 * @param fluid
 	 *            FluidStack containing the type and amount of fluid to fill.
 	 * @param container
@@ -228,7 +232,7 @@ public abstract class FluidContainerRegistry
 
 	/**
 	 * Attempts to empty a full container.
-	 * 
+	 *
 	 * @param container
 	 *            ItemStack representing the full container.
 	 * @return Empty container if successful, otherwise null.
@@ -251,7 +255,7 @@ public abstract class FluidContainerRegistry
 
 	/**
 	 * Determines the capacity of a full container.
-	 * 
+	 *
 	 * @param container
 	 *            The full container.
 	 * @return The containers capacity, or 0 if the ItemStack does not represent
@@ -264,7 +268,7 @@ public abstract class FluidContainerRegistry
 
 	/**
 	 * Determines the capacity of a container.
-	 * 
+	 *
 	 * @param fluid
 	 *            FluidStack containing the type of fluid the capacity should be
 	 *            determined for (ignored for full containers).
@@ -361,7 +365,6 @@ public abstract class FluidContainerRegistry
 		public final ItemStack filledContainer;
 		public final ItemStack emptyContainer;
 
-		
 		public FluidContainerData(FluidStack stack, ItemStack filledContainer, ItemStack emptyContainer)
 		{
 			this(stack, filledContainer, emptyContainer, false);

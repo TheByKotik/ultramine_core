@@ -2,6 +2,7 @@ package net.minecraft.client.network;
 
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -234,7 +235,7 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 	public void handleJoinGame(S01PacketJoinGame p_147282_1_)
 	{
 		this.gameController.playerController = new PlayerControllerMP(this.gameController, this);
-		this.clientWorldController = new WorldClient(this, new WorldSettings(0L, p_147282_1_.func_149198_e(), false, p_147282_1_.func_149195_d(), p_147282_1_.func_149196_i()), p_147282_1_.func_149194_f(), p_147282_1_.func_149192_g(), this.gameController.mcProfiler);
+		this.clientWorldController = new WorldClient(this, new WorldSettings(0L, p_147282_1_.func_149198_e(), false, p_147282_1_.func_149195_d(), p_147282_1_.func_149196_i()), NetworkDispatcher.get(getNetworkManager()).getOverrideDimension(p_147282_1_), p_147282_1_.func_149192_g(), this.gameController.mcProfiler);
 		this.clientWorldController.isRemote = true;
 		this.gameController.loadWorld(this.clientWorldController);
 		this.gameController.thePlayer.dimension = p_147282_1_.func_149194_f();

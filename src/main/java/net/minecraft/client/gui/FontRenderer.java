@@ -26,15 +26,15 @@ import org.lwjgl.opengl.GL11;
 public class FontRenderer implements IResourceManagerReloadListener
 {
 	private static final ResourceLocation[] unicodePageLocations = new ResourceLocation[256];
-	private int[] charWidth = new int[256];
+	protected int[] charWidth = new int[256];
 	public int FONT_HEIGHT = 9;
 	public Random fontRandom = new Random();
-	private byte[] glyphWidth = new byte[65536];
+	protected byte[] glyphWidth = new byte[65536];
 	private int[] colorCode = new int[32];
-	private final ResourceLocation locationFontTexture;
+	protected final ResourceLocation locationFontTexture;
 	private final TextureManager renderEngine;
-	private float posX;
-	private float posY;
+	protected float posX;
+	protected float posY;
 	private boolean unicodeFlag;
 	private boolean bidiFlag;
 	private float red;
@@ -54,7 +54,7 @@ public class FontRenderer implements IResourceManagerReloadListener
 		this.locationFontTexture = p_i1035_2_;
 		this.renderEngine = p_i1035_3_;
 		this.unicodeFlag = p_i1035_4_;
-		p_i1035_3_.bindTexture(this.locationFontTexture);
+		bindTexture(this.locationFontTexture);
 
 		for (int i = 0; i < 32; ++i)
 		{
@@ -102,7 +102,7 @@ public class FontRenderer implements IResourceManagerReloadListener
 
 		try
 		{
-			bufferedimage = ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(this.locationFontTexture).getInputStream());
+			bufferedimage = ImageIO.read(getResourceInputStream(this.locationFontTexture));
 		}
 		catch (IOException ioexception)
 		{
@@ -167,7 +167,7 @@ public class FontRenderer implements IResourceManagerReloadListener
 	{
 		try
 		{
-			InputStream inputstream = Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("font/glyph_sizes.bin")).getInputStream();
+			InputStream inputstream = getResourceInputStream(new ResourceLocation("font/glyph_sizes.bin"));
 			inputstream.read(this.glyphWidth);
 		}
 		catch (IOException ioexception)
@@ -181,12 +181,12 @@ public class FontRenderer implements IResourceManagerReloadListener
 		return p_78278_2_ == 32 ? 4.0F : ("\u00c0\u00c1\u00c2\u00c8\u00ca\u00cb\u00cd\u00d3\u00d4\u00d5\u00da\u00df\u00e3\u00f5\u011f\u0130\u0131\u0152\u0153\u015e\u015f\u0174\u0175\u017e\u0207\u0000\u0000\u0000\u0000\u0000\u0000\u0000 !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u0000\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u03b2\u0393\u03c0\u03a3\u03c3\u03bc\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u2205\u2208\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u0000".indexOf(p_78278_2_) != -1 && !this.unicodeFlag ? this.renderDefaultChar(p_78278_1_, p_78278_3_) : this.renderUnicodeChar(p_78278_2_, p_78278_3_));
 	}
 
-	private float renderDefaultChar(int p_78266_1_, boolean p_78266_2_)
+	protected float renderDefaultChar(int p_78266_1_, boolean p_78266_2_)
 	{
 		float f = (float)(p_78266_1_ % 16 * 8);
 		float f1 = (float)(p_78266_1_ / 16 * 8);
 		float f2 = p_78266_2_ ? 1.0F : 0.0F;
-		this.renderEngine.bindTexture(this.locationFontTexture);
+		bindTexture(this.locationFontTexture);
 		float f3 = (float)this.charWidth[p_78266_1_] - 0.01F;
 		GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
 		GL11.glTexCoord2f(f / 128.0F, f1 / 128.0F);
@@ -213,10 +213,10 @@ public class FontRenderer implements IResourceManagerReloadListener
 
 	private void loadGlyphTexture(int p_78257_1_)
 	{
-		this.renderEngine.bindTexture(this.getUnicodePageLocation(p_78257_1_));
+		bindTexture(this.getUnicodePageLocation(p_78257_1_));
 	}
 
-	private float renderUnicodeChar(char p_78277_1_, boolean p_78277_2_)
+	protected float renderUnicodeChar(char p_78277_1_, boolean p_78277_2_)
 	{
 		if (this.glyphWidth[p_78277_1_] == 0)
 		{
@@ -260,7 +260,7 @@ public class FontRenderer implements IResourceManagerReloadListener
 
 	public int drawString(String p_85187_1_, int p_85187_2_, int p_85187_3_, int p_85187_4_, boolean p_85187_5_)
 	{
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		enableAlpha();
 		this.resetStyles();
 		int l;
 
@@ -332,7 +332,7 @@ public class FontRenderer implements IResourceManagerReloadListener
 
 					k = this.colorCode[j];
 					this.textColor = k;
-					GL11.glColor4f((float)(k >> 16) / 255.0F, (float)(k >> 8 & 255) / 255.0F, (float)(k & 255) / 255.0F, this.alpha);
+					setColor((float)(k >> 16) / 255.0F, (float)(k >> 8 & 255) / 255.0F, (float)(k & 255) / 255.0F, this.alpha);
 				}
 				else if (j == 16)
 				{
@@ -361,7 +361,7 @@ public class FontRenderer implements IResourceManagerReloadListener
 					this.strikethroughStyle = false;
 					this.underlineStyle = false;
 					this.italicStyle = false;
-					GL11.glColor4f(this.red, this.blue, this.green, this.alpha);
+					setColor(this.red, this.blue, this.green, this.alpha);
 				}
 
 				++i;
@@ -420,6 +420,15 @@ public class FontRenderer implements IResourceManagerReloadListener
 					++f;
 				}
 
+				doDraw(f);
+			}
+		}
+	}
+
+	protected void doDraw(float f)
+	{
+		{
+			{
 				Tessellator tessellator;
 
 				if (this.strikethroughStyle)
@@ -492,7 +501,7 @@ public class FontRenderer implements IResourceManagerReloadListener
 			this.blue = (float)(p_78258_4_ >> 8 & 255) / 255.0F;
 			this.green = (float)(p_78258_4_ & 255) / 255.0F;
 			this.alpha = (float)(p_78258_4_ >> 24 & 255) / 255.0F;
-			GL11.glColor4f(this.red, this.blue, this.green, this.alpha);
+			setColor(this.red, this.blue, this.green, this.alpha);
 			this.posX = (float)p_78258_2_;
 			this.posY = (float)p_78258_3_;
 			this.renderStringAtPos(p_78258_1_, p_78258_5_);
@@ -828,5 +837,25 @@ public class FontRenderer implements IResourceManagerReloadListener
 	public boolean getBidiFlag()
 	{
 		return this.bidiFlag;
+	}
+
+	protected void setColor(float r, float g, float b, float a)
+	{
+		GL11.glColor4f(r, g, b, a);
+	}
+
+	protected void enableAlpha()
+	{
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+	}
+
+	protected void bindTexture(ResourceLocation location)
+	{
+		renderEngine.bindTexture(location);
+	}
+
+	protected InputStream getResourceInputStream(ResourceLocation location) throws IOException
+	{
+		return Minecraft.getMinecraft().getResourceManager().getResource(location).getInputStream();
 	}
 }

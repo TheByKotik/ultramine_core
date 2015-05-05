@@ -10,6 +10,7 @@ import java.io.IOException;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.StartupQuery;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -328,6 +329,24 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 	public String getWorldDirectoryName()
 	{
 		return this.saveDirectoryName;
+	}
+
+	public NBTTagCompound getPlayerNBT(EntityPlayerMP player)
+	{
+		try
+		{
+			File file1 = new File(this.playersDirectory, player.getUniqueID().toString() + ".dat");
+
+			if (file1.exists() && file1.isFile())
+			{
+				return CompressedStreamTools.readCompressed(new FileInputStream(file1));
+			}
+		}
+		catch (Exception exception)
+		{
+			logger.warn("Failed to load player data for " + player.getCommandSenderName());
+		}
+		return null;
 	}
 	
 	public File getPlayerSaveDir()

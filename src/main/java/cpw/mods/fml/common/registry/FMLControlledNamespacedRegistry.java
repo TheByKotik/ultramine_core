@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +17,7 @@ import net.minecraft.util.RegistryNamespaced;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterators;
 
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.functions.GenericIterableFactory;
@@ -95,6 +97,8 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 		this.minId = registry.minId;
 		this.aliases.clear();
 		this.aliases.putAll(registry.aliases);
+		this.activeSubstitutions.clear();
+
 		underlyingIntegerMap = new ObjectIntIdentityMap();
 		registryObjects.clear();
 
@@ -102,6 +106,7 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 		{
 			addObjectRaw(registry.getId(thing), registry.getNameForObject(thing), thing);
 		}
+		this.activeSubstitutions.putAll(registry.activeSubstitutions);
 	}
 
 	// public api
@@ -128,7 +133,7 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 	public void putObject(Object objName, Object obj)
 	{
 		String name = (String) objName;
-		I thing = superType.cast(obj);
+		I thing = cast(obj);
 
 		if (name == null) throw new NullPointerException("Can't use a null-name for the registry.");
 		if (name.isEmpty()) throw new IllegalArgumentException("Can't use an empty name for the registry.");
@@ -224,9 +229,19 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 	 */
 	public I getRaw(int id)
 	{
-		return superType.cast(super.getObjectById(id));
+		return cast(super.getObjectById(id));
 	}
 
+	/**
+	 * superType.cast appears to be expensive. Skip it for speed?
+	 * @param obj
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private I cast(Object obj)
+	{
+		return (I)(obj);
+	}
 	/**
 	 * Get the object identified by the specified name.
 	 *
@@ -235,7 +250,7 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 	 */
 	public I getRaw(String name)
 	{
-		I ret = superType.cast(super.getObject(name));
+		I ret = cast(super.getObject(name));
 
 		if (ret == null) // no match, try aliases recursively
 		{
@@ -298,10 +313,13 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 		return containsKey(itemName);
 	}
 
+	/*
+	 * This iterator is used by FML to visit the actual block sets, it should use the super.iterator method instead
+	 * Compare #iterator()
+	 */
 	public Iterable<I> typeSafeIterable()
 	{
-		Iterable<?> self = this;
-		return GenericIterableFactory.newCastingIterable(self, superType);
+		return GenericIterableFactory.newCastingIterable(super.iterator(), superType);
 	}
 
 	// internal
@@ -461,7 +479,7 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 			FMLLog.severe("The substitution of %s has already occured. You cannot duplicate substitutions", nameToReplace);
 			throw new ExistingSubstitutionException(nameToReplace, toReplace);
 		}
-		I replacement = superType.cast(toReplace);
+		I replacement = cast(toReplace);
 		I original = getRaw(nameToReplace);
 		if (original == null)
 		{
@@ -493,5 +511,16 @@ public class FMLControlledNamespacedRegistry<I> extends RegistryNamespaced {
 			persistentSubstitutions = GameData.getMain().getPersistentSubstitutionMap(superType);
 		}
 		return persistentSubstitutions;
+	}
+
+	/*
+	 * This iterator is used by some regular MC methods to visit all blocks, we need to include substitutions
+	 * Compare #typeSafeIterable()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Iterator<I> iterator()
+	{
+		return Iterators.concat(super.iterator(),getPersistentSubstitutions().values().iterator());
 	}
 }

@@ -1133,20 +1133,20 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 			{
 				itemstack = packetbuffer.readItemStackFromBuffer();
 
-				if (itemstack != null)
+				if (itemstack == null)
 				{
-					if (!ItemEditableBook.validBookTagContents(itemstack.getTagCompound()))
-					{
-						throw new IOException("Invalid book tag!");
-					}
+					return;
+				}
 
-					itemstack1 = this.playerEntity.inventory.getCurrentItem();
+				if (!ItemEditableBook.validBookTagContents(itemstack.getTagCompound()))
+				{
+					throw new IOException("Invalid book tag!");
+				}
 
-					if (itemstack1 == null)
-					{
-						return;
-					}
+				itemstack1 = this.playerEntity.inventory.getCurrentItem();
 
+				if (itemstack1 != null)
+				{
 					if (itemstack.getItem() == Items.written_book && itemstack1.getItem() == Items.writable_book)
 					{
 						itemstack1.setTagInfo("author", new NBTTagString(this.playerEntity.getCommandSenderName()));

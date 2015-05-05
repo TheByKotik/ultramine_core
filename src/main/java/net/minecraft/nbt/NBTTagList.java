@@ -43,11 +43,13 @@ public class NBTTagList extends NBTBase
 		{
 			p_152446_3_.func_152450_a(8L);
 			this.tagType = p_152446_1_.readByte();
+			p_152446_3_.func_152450_a(32); //Forge: Count the length as well
 			int j = p_152446_1_.readInt();
 			this.tagList = new ArrayList();
 
 			for (int k = 0; k < j; ++k)
 			{
+				p_152446_3_.func_152450_a(32); //Forge: 4 extra bytes for the object allocation.
 				NBTBase nbtbase = NBTBase.func_150284_a(this.tagType);
 				nbtbase.func_152446_a(p_152446_1_, p_152446_2_ + 1, p_152446_3_);
 				this.tagList.add(nbtbase);

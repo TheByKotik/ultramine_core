@@ -285,6 +285,20 @@ public abstract class ServerConfigurationManager
 		return nbttagcompound1;
 	}
 
+	public NBTTagCompound getPlayerNBT(EntityPlayerMP player)
+	{
+		// Hacky method to allow loading the NBT for a player prior to login
+		NBTTagCompound nbttagcompound = this.mcServer.worldServers[0].getWorldInfo().getPlayerNBTTagCompound();
+		if (player.getCommandSenderName().equals(this.mcServer.getServerOwner()) && nbttagcompound != null)
+		{
+			return nbttagcompound;
+		}
+		else
+		{
+			return this.getDataLoader().getDataProvider().loadPlayer(player.getGameProfile());
+		}
+	}
+
 	protected void writePlayerData(EntityPlayerMP p_72391_1_)
 	{
 		if (p_72391_1_.playerNetServerHandler == null) return;

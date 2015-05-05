@@ -13,6 +13,7 @@
 package cpw.mods.fml.common;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,6 +36,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultiset;
@@ -50,9 +52,19 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
 import com.google.common.collect.TreeMultimap;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 import cpw.mods.fml.common.LoaderState.ModState;
+import cpw.mods.fml.common.MetadataCollection.ArtifactVersionAdapter;
 import cpw.mods.fml.common.ModContainer.Disableable;
+import cpw.mods.fml.common.ProgressManager.ProgressBar;
 import cpw.mods.fml.common.discovery.ModDiscoverer;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLLoadEvent;
@@ -70,6 +82,7 @@ import cpw.mods.fml.common.toposort.ModSortingException.SortingExceptionData;
 import cpw.mods.fml.common.toposort.TopologicalSort;
 import cpw.mods.fml.common.versioning.ArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionParser;
+import cpw.mods.fml.relauncher.ModListHelper;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -152,6 +165,7 @@ public class Loader
 	private ImmutableMap<String, String> fmlBrandingProperties;
 	private File forcedModFile;
 	private ModDiscoverer discoverer;
+	private ProgressBar progressBar;
 
 	public static Loader instance()
 	{
@@ -182,7 +196,7 @@ public class Loader
 		if (!mccversion.equals(MC_VERSION))
 		{
 			FMLLog.severe("This version of FML is built for Minecraft %s, we have detected Minecraft %s in your minecraft jar file", mccversion, MC_VERSION);
-			throw new LoaderException();
+			throw new LoaderException(String.format("This version of FML is built for Minecraft %s, we have detected Minecraft %s in your minecraft jar file", mccversion, MC_VERSION));
 		}
 
 		minecraft = new MinecraftDummyContainer(MC_VERSION);
@@ -335,8 +349,9 @@ public class Loader
 		discoverer.findClasspathMods(modClassLoader);
 		FMLLog.fine("Minecraft jar mods loaded successfully");
 
+		FMLLog.getLogger().log(Level.INFO, "Found {} mods from the command line. Injecting into mod discoverer",ModListHelper.additionalMods.size());
 		FMLLog.info("Searching %s for mods", canonicalModsDir.getAbsolutePath());
-		discoverer.findModDirMods(canonicalModsDir);
+		discoverer.findModDirMods(canonicalModsDir, ModListHelper.additionalMods.values().toArray(new File[0]));
 		File versionSpecificModsDir = new File(canonicalModsDir,mccversion);
 		if (versionSpecificModsDir.isDirectory())
 		{
@@ -418,7 +433,7 @@ public class Loader
 			if (!dirMade)
 			{
 				FMLLog.severe("Unable to create the mod directory %s", canonicalModsPath);
-				throw new LoaderException();
+				throw new LoaderException(String.format("Unable to create the mod directory %s", canonicalModsPath));
 			}
 			FMLLog.info("Mod directory created successfully");
 		}
@@ -446,6 +461,8 @@ public class Loader
 			FMLLog.severe("Attempting to load configuration from %s, which is not a directory", canonicalConfigPath);
 			throw new LoaderException();
 		}
+
+		readInjectedDependencies();
 	}
 
 	public List<ModContainer> getModList()
@@ -460,6 +477,8 @@ public class Loader
 	 */
 	public void loadMods()
 	{
+		progressBar = ProgressManager.push("Loading", 7);
+		progressBar.step("Constructing Mods");
 		initializeLoader();
 		mods = Lists.newArrayList();
 		namedMods = Maps.newHashMap();
@@ -499,6 +518,7 @@ public class Loader
 		{
 			FMLLog.fine("No user mod signature data found");
 		}
+		progressBar.step("Initializing mods Phase 1");
 		modController.transition(LoaderState.PREINITIALIZATION, false);
 	}
 
@@ -513,6 +533,7 @@ public class Loader
 		modController.distributeStateMessage(LoaderState.PREINITIALIZATION, discoverer.getASMTable(), canonicalConfigDir);
 		ObjectHolderRegistry.INSTANCE.applyObjectHolders();
 		modController.transition(LoaderState.INITIALIZATION, false);
+		progressBar.step("Initializing Minecraft Engine");
 	}
 
 	private void disableRequestedMods()
@@ -676,7 +697,7 @@ public class Loader
 		if (parseFailure)
 		{
 			FMLLog.log(Level.WARN, "Unable to parse dependency string %s", dependencyString);
-			throw new LoaderException();
+			throw new LoaderException(String.format("Unable to parse dependency string %s", dependencyString));
 		}
 	}
 
@@ -687,17 +708,21 @@ public class Loader
 
 	public void initializeMods()
 	{
+		progressBar.step("Initializing mods Phase 2");
 		// Mod controller should be in the initialization state here
 		modController.distributeStateMessage(LoaderState.INITIALIZATION);
+		progressBar.step("Initializing mods Phase 3");
 		modController.transition(LoaderState.POSTINITIALIZATION, false);
 		modController.distributeStateMessage(FMLInterModComms.IMCEvent.class);
 		modController.distributeStateMessage(LoaderState.POSTINITIALIZATION);
+		progressBar.step("Finishing up");
 		modController.transition(LoaderState.AVAILABLE, false);
 		modController.distributeStateMessage(LoaderState.AVAILABLE);
 		GameData.freezeData();
 		// Dump the custom registry data map, if necessary
 		GameData.dumpRegistry(minecraftDir);
 		FMLLog.info("Forge Mod Loader has successfully loaded %d mod%s", mods.size(), mods.size() == 1 ? "" : "s");
+		progressBar.step("Completing Minecraft initialization");
 	}
 
 	public ICrashCallable getCallableCrashInformation()
@@ -975,5 +1000,64 @@ public class Loader
 		{
 			FMLLog.log(Level.INFO, e, "An error occurred writing the fml mod states file, your disabled change won't persist");
 		}
+	}
+
+	public void loadingComplete()
+	{
+		ProgressManager.pop(progressBar);
+		progressBar = null;
+	}
+
+	private ListMultimap<String,ArtifactVersion> injectedBefore = ArrayListMultimap.create();
+	private ListMultimap<String,ArtifactVersion> injectedAfter = ArrayListMultimap.create();
+
+	private void readInjectedDependencies()
+	{
+		File injectedDepFile = new File(getConfigDir(),"injectedDependencies.json");
+		if (!injectedDepFile.exists())
+		{
+			FMLLog.getLogger().log(Level.DEBUG, "File {} not found. No dependencies injected", injectedDepFile.getAbsolutePath());
+			return;
+		}
+		JsonParser parser = new JsonParser();
+		JsonElement injectedDeps;
+		try
+		{
+			injectedDeps = parser.parse(new FileReader(injectedDepFile));
+			for (JsonElement el : injectedDeps.getAsJsonArray())
+			{
+				JsonObject jo = el.getAsJsonObject();
+				String modId = jo.get("modId").getAsString();
+				JsonArray deps = jo.get("deps").getAsJsonArray();
+				for (JsonElement dep : deps)
+				{
+					JsonObject depObj = dep.getAsJsonObject();
+					String type = depObj.get("type").getAsString();
+					if (type.equals("before")) {
+						injectedBefore.put(modId, VersionParser.parseVersionReference(depObj.get("target").getAsString()));
+					} else if (type.equals("after")) {
+						injectedAfter.put(modId, VersionParser.parseVersionReference(depObj.get("target").getAsString()));
+					} else {
+						FMLLog.getLogger().log(Level.ERROR, "Invalid dependency type {}", type);
+						throw new RuntimeException("Unable to parse type");
+					}
+				}
+			}
+		} catch (Exception e)
+		{
+			FMLLog.getLogger().log(Level.ERROR, "Unable to parse {} - skipping", injectedDepFile);
+			FMLLog.getLogger().throwing(Level.ERROR, e);
+			return;
+		}
+		FMLLog.getLogger().log(Level.DEBUG, "Loaded {} injected dependencies on modIds: {}", injectedBefore.size(), injectedBefore.keySet());
+	}
+
+	List<ArtifactVersion> getInjectedBefore(String modId)
+	{
+		return injectedBefore.get(modId);
+	}
+	List<ArtifactVersion> getInjectedAfter(String modId)
+	{
+		return injectedAfter.get(modId);
 	}
 }

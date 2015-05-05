@@ -225,25 +225,11 @@ public class PlayerProfileCache
 	{
 		List list = null;
 		BufferedReader bufferedreader = null;
-		label81:
 		{
 			try
 			{
 				bufferedreader = Files.newReader(this.field_152665_g, Charsets.UTF_8);
 				list = (List)this.field_152660_b.fromJson(bufferedreader, field_152666_h);
-				break label81;
-			}
-			catch (FileNotFoundException filenotfoundexception)
-			{
-				;
-			}
-			finally
-			{
-				IOUtils.closeQuietly(bufferedreader);
-			}
-
-			return;
-		}
 
 		if (list != null)
 		{
@@ -269,6 +255,20 @@ public class PlayerProfileCache
 				}
 			}
 		}
+			}
+			catch (FileNotFoundException filenotfoundexception)
+			{
+				;
+			}
+			catch (com.google.gson.JsonParseException parsefail)
+			{
+				// No op - the cache can quietly rebuild if it's junk
+			}
+			finally
+			{
+				IOUtils.closeQuietly(bufferedreader);
+			}
+		}
 	}
 
 	public void func_152658_c()
@@ -284,11 +284,11 @@ public class PlayerProfileCache
 		}
 		catch (FileNotFoundException filenotfoundexception)
 		{
-			return;
+			;
 		}
 		catch (IOException ioexception)
 		{
-			;
+			return;
 		}
 		finally
 		{

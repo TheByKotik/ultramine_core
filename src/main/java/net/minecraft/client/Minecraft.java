@@ -240,7 +240,7 @@ public class Minecraft implements IPlayerUsage
 	private IReloadableResourceManager mcResourceManager;
 	private final IMetadataSerializer metadataSerializer_ = new IMetadataSerializer();
 	private List defaultResourcePacks = Lists.newArrayList();
-	private DefaultResourcePack mcDefaultResourcePack;
+	public DefaultResourcePack mcDefaultResourcePack;
 	private ResourcePackRepository mcResourcePackRepository;
 	private LanguageManager mcLanguageManager;
 	private IStream field_152353_at;
@@ -481,7 +481,7 @@ public class Minecraft implements IPlayerUsage
 		this.renderEngine = new TextureManager(this.mcResourceManager);
 		this.mcResourceManager.registerReloadListener(this.renderEngine);
 		this.field_152350_aA = new SkinManager(this.renderEngine, new File(this.fileAssets, "skins"), this.field_152355_az);
-		this.loadScreen();
+		cpw.mods.fml.client.SplashProgress.drawVanillaScreen();
 		this.mcSoundHandler = new SoundHandler(this.mcResourceManager, this.gameSettings);
 		this.mcResourceManager.registerReloadListener(this.mcSoundHandler);
 		this.mcMusicTicker = new MusicTicker(this);
@@ -498,7 +498,10 @@ public class Minecraft implements IPlayerUsage
 		this.mcResourceManager.registerReloadListener(this.standardGalacticFontRenderer);
 		this.mcResourceManager.registerReloadListener(new GrassColorReloadListener());
 		this.mcResourceManager.registerReloadListener(new FoliageColorReloadListener());
+		cpw.mods.fml.common.ProgressManager.ProgressBar bar= cpw.mods.fml.common.ProgressManager.push("Rendering Setup", 9);
+		bar.step("Loading Render Manager");
 		RenderManager.instance.itemRenderer = new ItemRenderer(this);
+		bar.step("Loading Entity Renderer");
 		this.entityRenderer = new EntityRenderer(this, this.mcResourceManager);
 		this.mcResourceManager.registerReloadListener(this.entityRenderer);
 		AchievementList.openInventory.setStatStringFormatter(new IStatStringFormat()
@@ -516,6 +519,7 @@ public class Minecraft implements IPlayerUsage
 				}
 			}
 		});
+		bar.step("Loading GL properties");
 		this.mouseHelper = new MouseHelper();
 		this.checkGLError("Pre startup");
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -530,14 +534,21 @@ public class Minecraft implements IPlayerUsage
 		GL11.glLoadIdentity();
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		this.checkGLError("Startup");
+		bar.step("Render Global instance");
 		this.renderGlobal = new RenderGlobal(this);
+		bar.step("Building Blocks Texture");
 		this.textureMapBlocks = new TextureMap(0, "textures/blocks");
+		bar.step("Anisotropy and Mipmaps");
 		this.textureMapBlocks.setAnisotropicFiltering(this.gameSettings.anisotropicFiltering);
 		this.textureMapBlocks.setMipmapLevels(this.gameSettings.mipmapLevels);
+		bar.step("Loading Blocks Texture");
 		this.renderEngine.loadTextureMap(TextureMap.locationBlocksTexture, this.textureMapBlocks);
+		bar.step("Loading Items Texture");
 		this.renderEngine.loadTextureMap(TextureMap.locationItemsTexture, new TextureMap(1, "textures/items"));
+		bar.step("Viewport");
 		GL11.glViewport(0, 0, this.displayWidth, this.displayHeight);
 		this.effectRenderer = new EffectRenderer(this.theWorld, this.renderEngine);
+		cpw.mods.fml.common.ProgressManager.pop(bar);
 		FMLClientHandler.instance().finishMinecraftLoading();
 		this.checkGLError("Post startup");
 		this.ingameGUI = new net.minecraftforge.client.GuiIngameForge(this);
@@ -551,7 +562,7 @@ public class Minecraft implements IPlayerUsage
 			this.displayGuiScreen(new GuiMainMenu());
 		}
 
-		this.renderEngine.deleteTexture(this.field_152354_ay);
+		cpw.mods.fml.client.SplashProgress.clearVanillaResources(renderEngine, field_152354_ay);
 		this.field_152354_ay = null;
 		this.loadingScreen = new LoadingScreenRenderer(this);
 
@@ -690,7 +701,7 @@ public class Minecraft implements IPlayerUsage
 		this.displayHeight = displaymode.getHeight();
 	}
 
-	private void loadScreen() throws LWJGLException
+	public void loadScreen() throws LWJGLException
 	{
 		ScaledResolution scaledresolution = new ScaledResolution(this, this.displayWidth, this.displayHeight);
 		int i = scaledresolution.getScaleFactor();
@@ -1525,7 +1536,7 @@ public class Minecraft implements IPlayerUsage
 		}
 	}
 
-	private void resize(int p_71370_1_, int p_71370_2_)
+	public void resize(int p_71370_1_, int p_71370_2_)
 	{
 		this.displayWidth = p_71370_1_ <= 0 ? 1 : p_71370_1_;
 		this.displayHeight = p_71370_2_ <= 0 ? 1 : p_71370_2_;

@@ -48,7 +48,7 @@ public class NBTTagCompound extends NBTBase
 			while ((b0 = func_152447_a(p_152446_1_, p_152446_3_)) != 0)
 			{
 				String s = func_152448_b(p_152446_1_, p_152446_3_);
-				p_152446_3_.func_152450_a((long)(16 * s.length()));
+				NBTSizeTracker.readUTF(p_152446_3_, s); // Forge: Correctly read String length including header.
 				NBTBase nbtbase = func_152449_a(b0, s, p_152446_1_, p_152446_2_ + 1, p_152446_3_);
 				this.tagMap.put(s, nbtbase);
 			}
@@ -379,6 +379,7 @@ public class NBTTagCompound extends NBTBase
 
 	private static byte func_152447_a(DataInput p_152447_0_, NBTSizeTracker p_152447_1_) throws IOException
 	{
+		p_152447_1_.func_152450_a(8);
 		return p_152447_0_.readByte();
 	}
 
@@ -389,6 +390,7 @@ public class NBTTagCompound extends NBTBase
 
 	static NBTBase func_152449_a(byte p_152449_0_, String p_152449_1_, DataInput p_152449_2_, int p_152449_3_, NBTSizeTracker p_152449_4_)
 	{
+		p_152449_4_.func_152450_a(32); //Forge: 4 extra bytes for the object allocation.
 		NBTBase nbtbase = NBTBase.func_150284_a(p_152449_0_);
 
 		try

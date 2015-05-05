@@ -100,6 +100,7 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 		this.listAnimatedSprites.clear();
 		int j = Integer.MAX_VALUE;
 		ForgeHooksClient.onTextureStitchedPre(this);
+		cpw.mods.fml.common.ProgressManager.ProgressBar bar = cpw.mods.fml.common.ProgressManager.push("Texture stitching", this.mapRegisteredSprites.size());
 		Iterator iterator = this.mapRegisteredSprites.entrySet().iterator();
 		TextureAtlasSprite textureatlassprite;
 
@@ -109,6 +110,7 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 			ResourceLocation resourcelocation = new ResourceLocation((String)entry.getKey());
 			textureatlassprite = (TextureAtlasSprite)entry.getValue();
 			ResourceLocation resourcelocation1 = this.completeResourceLocation(resourcelocation, 0);
+			bar.step(resourcelocation1.getResourcePath());
 
 			if (textureatlassprite.hasCustomLoader(p_110571_1_, resourcelocation))
 			{
@@ -170,12 +172,14 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 			}
 			catch (RuntimeException runtimeexception)
 			{
-				logger.error("Unable to parse metadata from " + resourcelocation1, runtimeexception);
+				//logger.error("Unable to parse metadata from " + resourcelocation1, runtimeexception);
+				cpw.mods.fml.client.FMLClientHandler.instance().trackBrokenTexture(resourcelocation1, runtimeexception.getMessage());
 				continue;
 			}
 			catch (IOException ioexception1)
 			{
-				logger.error("Using missing texture, unable to load " + resourcelocation1, ioexception1);
+				//logger.error("Using missing texture, unable to load " + resourcelocation1, ioexception1);
+				cpw.mods.fml.client.FMLClientHandler.instance().trackMissingTexture(resourcelocation1);
 				continue;
 			}
 
@@ -183,6 +187,7 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 			stitcher.addSprite(textureatlassprite);
 		}
 
+		cpw.mods.fml.common.ProgressManager.pop(bar);
 		int i1 = MathHelper.calculateLogBaseTwo(j);
 
 		if (i1 < this.mipmapLevels)
@@ -192,10 +197,12 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 		}
 
 		Iterator iterator1 = this.mapRegisteredSprites.values().iterator();
+		bar = cpw.mods.fml.common.ProgressManager.push("Mipmap generation", this.mapRegisteredSprites.size());
 
 		while (iterator1.hasNext())
 		{
 			final TextureAtlasSprite textureatlassprite1 = (TextureAtlasSprite)iterator1.next();
+			bar.step(textureatlassprite1.getIconName());
 
 			try
 			{
@@ -236,9 +243,12 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 
 		this.missingImage.generateMipmaps(this.mipmapLevels);
 		stitcher.addSprite(this.missingImage);
+		cpw.mods.fml.common.ProgressManager.pop(bar);
+		bar = cpw.mods.fml.common.ProgressManager.push("Texture creation", 3);
 
 		try
 		{
+			bar.step("Stitching");
 			stitcher.doStitch();
 		}
 		catch (StitcherException stitcherexception)
@@ -247,10 +257,12 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 		}
 
 		logger.info("Created: {}x{} {}-atlas", new Object[] {Integer.valueOf(stitcher.getCurrentWidth()), Integer.valueOf(stitcher.getCurrentHeight()), this.basePath});
+		bar.step("Allocating GL texture");
 		TextureUtil.allocateTextureImpl(this.getGlTextureId(), this.mipmapLevels, stitcher.getCurrentWidth(), stitcher.getCurrentHeight(), (float)this.anisotropicFiltering);
 		HashMap hashmap = Maps.newHashMap(this.mapRegisteredSprites);
 		Iterator iterator2 = stitcher.getStichSlots().iterator();
 
+		bar.step("Uploading GL texture");
 		while (iterator2.hasNext())
 		{
 			textureatlassprite = (TextureAtlasSprite)iterator2.next();
@@ -289,6 +301,7 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 			textureatlassprite.copyFrom(this.missingImage);
 		}
 		ForgeHooksClient.onTextureStitchedPost(this);
+		cpw.mods.fml.common.ProgressManager.pop(bar);
 	}
 
 	private ResourceLocation completeResourceLocation(ResourceLocation p_147634_1_, int p_147634_2_)

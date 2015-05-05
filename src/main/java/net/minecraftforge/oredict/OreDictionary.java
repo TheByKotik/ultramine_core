@@ -357,6 +357,44 @@ public class OreDictionary
 	}
 
 	/**
+	 * Retrieves the List of items that are registered to this ore type at this instant.
+	 * If the flag is TRUE, then it will create the list as empty if it did not exist.
+	 * 
+	 * This option should be used by modders who are doing blanket scans in postInit.
+	 * It greatly reduces clutter in the OreDictionary is the responsible and proper
+	 * way to use the dictionary in a large number of cases.
+	 * 
+	 * The other function above is utilized in OreRecipe and is required for the
+	 * operation of that code.
+	 * 
+	 * @param name The ore name, directly calls getOreID if the flag is TRUE
+	 * @param alwaysCreateEntry Flag - should a new entry be created if empty
+	 * @return An arraylist containing ItemStacks registered for this ore
+	 */
+	public static List<ItemStack> getOres(String name, boolean alwaysCreateEntry)
+	{
+		if (alwaysCreateEntry) {
+			return getOres(getOreID(name));
+		}
+		return nameToId.get(name) != null ? getOres(getOreID(name)) : EMPTY_LIST;
+	}
+
+	/**
+	 * Returns whether or not an oreName exists in the dictionary.
+	 * This function can be used to safely query the Ore Dictionary without
+	 * adding needless clutter to the underlying map structure.
+	 * 
+	 * Please use this when possible and appropriate.
+	 * 
+	 * @param name The ore name
+	 * @return Whether or not that name is in the Ore Dictionary.
+	 */
+	public static boolean doesOreNameExist(String name)
+	{
+		return nameToId.get(name) != null;
+	}
+
+	/**
 	 * Retrieves a list of all unique ore names that are already registered.
 	 *
 	 * @return All unique ore names that are currently registered.
@@ -456,7 +494,12 @@ public class OreDictionary
 	 */
 	private static void registerOreImpl(String name, ItemStack ore)
 	{
-		if ("Unknown".equals(name)) return; //prevent bad IDs.
+		if (name == null || name.isEmpty() || "Unknown".equals(name)) return; //prevent bad IDs.
+		if (ore == null || ore.getItem() == null)
+		{
+			FMLLog.bigWarning("Invalid registration attempt for an Ore Dictionary item with name %s has occurred. The registration has been denied to prevent crashes. The mod responsible for the registration needs to correct this.", name);
+			return; //prevent bad ItemStacks.
+		}
 
 		int oreID = getOreID(name);
 		int hash = Item.getIdFromItem(ore.getItem());

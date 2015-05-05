@@ -95,6 +95,7 @@ public class SimpleReloadableResourceManager implements IReloadableResourceManag
 	public void reloadResources(List p_110541_1_)
 	{
 		this.clearResources();
+		cpw.mods.fml.common.ProgressManager.ProgressBar resReload = cpw.mods.fml.common.ProgressManager.push("Loading Resources", p_110541_1_.size()+1);
 		logger.info("Reloading ResourceManager: " + joinerResourcePacks.join(Iterables.transform(p_110541_1_, new Function()
 		{
 			private static final String __OBFID = "CL_00001092";
@@ -112,26 +113,35 @@ public class SimpleReloadableResourceManager implements IReloadableResourceManag
 		while (iterator.hasNext())
 		{
 			IResourcePack iresourcepack = (IResourcePack)iterator.next();
+			resReload.step(iresourcepack.getPackName());
 			this.reloadResourcePack(iresourcepack);
 		}
 
+		resReload.step("Reloading listeners");
 		this.notifyReloadListeners();
+		cpw.mods.fml.common.ProgressManager.pop(resReload);
 	}
 
 	public void registerReloadListener(IResourceManagerReloadListener p_110542_1_)
 	{
 		this.reloadListeners.add(p_110542_1_);
+		cpw.mods.fml.common.ProgressManager.ProgressBar resReload = cpw.mods.fml.common.ProgressManager.push("Loading Resource", 1);
+		resReload.step(p_110542_1_.getClass());
 		p_110542_1_.onResourceManagerReload(this);
+		cpw.mods.fml.common.ProgressManager.pop(resReload);
 	}
 
 	private void notifyReloadListeners()
 	{
 		Iterator iterator = this.reloadListeners.iterator();
 
+		cpw.mods.fml.common.ProgressManager.ProgressBar resReload = cpw.mods.fml.common.ProgressManager.push("Reloading", this.reloadListeners.size());
 		while (iterator.hasNext())
 		{
 			IResourceManagerReloadListener iresourcemanagerreloadlistener = (IResourceManagerReloadListener)iterator.next();
+			resReload.step(iresourcemanagerreloadlistener.getClass());
 			iresourcemanagerreloadlistener.onResourceManagerReload(this);
 		}
+		cpw.mods.fml.common.ProgressManager.pop(resReload);
 	}
 }

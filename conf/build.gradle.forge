@@ -56,8 +56,8 @@ dependencies
     compile 'com.paulscode:librarylwjglopenal:20100824'
     compile 'com.paulscode:soundsystem:20120107'
     compile 'io.netty:netty-all:4.0.10.Final'
-    compile 'com.google.guava:guava:16.0'
-    compile 'org.apache.commons:commons-lang3:3.2.1'
+    compile 'com.google.guava:guava:17.0'
+    compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'commons-io:commons-io:2.4'
     compile 'commons-codec:commons-codec:1.9'
     compile 'net.java.jinput:jinput:2.0.5'
@@ -80,26 +80,30 @@ sourceSets
         java
         {
             srcDir 'src/main/java/'
-            srcDir '/var/lib/jenkins/jobs/CleanForge/workspace/src/main/java/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge-1.7.10/workspace/src/main/java/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge-1.7.10/workspace/eclipse/Clean/src/main/start/'
         }
         resources
         {
             srcDir 'src/main/resources/'
-            srcDir '/var/lib/jenkins/jobs/CleanForge/workspace/src/main/resources/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge-1.7.10/workspace/src/main/resources/'
         }
     }
     test
     {
         java
         {
-            srcDir '/var/lib/jenkins/jobs/CleanForge/workspace/src/test/java/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge-1.7.10/workspace/src/test/java/'
         }
         resources
         {
-            srcDir '/var/lib/jenkins/jobs/CleanForge/workspace/src/test/resources/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge-1.7.10/workspace/src/test/resources/'
         }
     }
 }
+
+jar { exclude 'GradleStart*', 'net/minecraftforge/gradle/**' }
+
 def links = []
 def dupes = []
 eclipse.project.file.withXml { provider ->

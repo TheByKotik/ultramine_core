@@ -32,7 +32,7 @@ public class NBTTagString extends NBTBase
 	void func_152446_a(DataInput p_152446_1_, int p_152446_2_, NBTSizeTracker p_152446_3_) throws IOException
 	{
 		this.data = p_152446_1_.readUTF();
-		p_152446_3_.func_152450_a((long)(16 * this.data.length()));
+		NBTSizeTracker.readUTF(p_152446_3_, data); // Forge: Correctly read String length including header.
 	}
 
 	public byte getId()

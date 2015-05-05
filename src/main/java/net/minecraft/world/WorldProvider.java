@@ -207,11 +207,11 @@ public abstract class WorldProvider
 	private IRenderHandler skyRenderer = null;
 	private IRenderHandler cloudRenderer = null;
 	private IRenderHandler weatherRenderer = null;
-	
+
 	/**
 	 * Sets the providers current dimension ID, used in default getSaveFolder()
 	 * Added to allow default providers to be registered for multiple dimensions.
-	 * 
+	 *
 	 * @param dim Dimension ID
 	 */
 	public void setDimension(int dim)
@@ -263,7 +263,7 @@ public abstract class WorldProvider
 		else if (this instanceof WorldProviderHell)
 		{
 			return "Leaving the Nether";
-		} 
+		}
 		return null;
 	}
 
@@ -326,7 +326,7 @@ public abstract class WorldProvider
 		int spawnFuzz = terrainType.getSpawnFuzz();
 		int spawnFuzzHalf = spawnFuzz / 2;
 
-		if (!hasNoSky && !isAdventure)
+		if (!hasNoSky && !isAdventure && net.minecraftforge.common.ForgeModContainer.defaultHasSpawnFuzz)
 		{
 			chunkcoordinates.posX += this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
 			chunkcoordinates.posZ += this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
@@ -335,10 +335,10 @@ public abstract class WorldProvider
 
 		return chunkcoordinates;
 	}
-	
+
 	/**
 	 * Determine if the cusor on the map should 'spin' when rendered, like it does for the player in the nether.
-	 * 
+	 *
 	 * @param entity The entity holding the map, playername, or frame-ENTITYID
 	 * @param x X Position
 	 * @param y Y Position
@@ -352,7 +352,7 @@ public abstract class WorldProvider
 
 	/**
 	 * Determines the dimension the player will be respawned in, typically this brings them back to the overworld.
-	 * 
+	 *
 	 * @param player The player that is respawning
 	 * @return The dimension to respawn the player in
 	 */
@@ -372,20 +372,20 @@ public abstract class WorldProvider
 	{
 		return worldObj.skylightSubtracted < 4;
 	}
-	
+
 	/**
 	 * The current sun brightness factor for this dimension.
 	 * 0.0f means no light at all, and 1.0f means maximum sunlight.
 	 * This will be used for the "calculateSkylightSubtracted"
 	 * which is for Sky light value calculation.
-	 * 
+	 *
 	 * @return The current brightness factor
 	 * */
 	public float getSunBrightnessFactor(float par1)
 	{
 		return worldObj.getSunBrightnessFactor(par1);
 	}
-	
+
 	/**
 	 * Calculates the current moon phase factor.
 	 * This factor is effective for slimes.
@@ -416,7 +416,7 @@ public abstract class WorldProvider
 	{
 		return worldObj.getSunBrightnessBody(par1);
 	}
-	
+
 	/**
 	 * Gets the Star Brightness for rendering sky.
 	 * */
