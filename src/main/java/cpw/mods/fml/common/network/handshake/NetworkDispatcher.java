@@ -154,6 +154,10 @@ public class NetworkDispatcher extends SimpleChannelInboundHandler<Packet> imple
 
 		// Return the dimension the player is in, so it can be pre-sent to the client in the ServerHello v2 packet
 		// Requires some hackery to the serverconfigmanager and stuff for this to work
+		
+		//Disabled by UltraMine - no IO operations in main thread
+		return 0;
+		/*
 		NBTTagCompound playerNBT = scm.getPlayerNBT(player);
 		if (playerNBT!=null)
 		{
@@ -163,6 +167,7 @@ public class NetworkDispatcher extends SimpleChannelInboundHandler<Packet> imple
 		{
 			return 0;
 		}
+		*/
 	}
 
 	void clientListenForServerHandshake()
