@@ -179,8 +179,6 @@ task reobf(type: ReobfTask) {
 	setMcVersion(delayedString(minecraft_version));
 	setExceptorCfg(delayedFile('conf/srg.exc'))
 	setSrg(delayedFile('conf/mcp2notch.srg'))
-	setFieldCsv(delayedFile('conf/fields.csv'))
-	setFieldCsv(delayedFile('conf/methods.csv'))
 	reobf(classesJar, new Action<ArtifactSpec>() {
 		@Override
 		public void execute(ArtifactSpec spec)
