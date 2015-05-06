@@ -116,7 +116,7 @@ worlds:
             <<: *global_gen
             providerID: -1
         portals:
-            netherLink: 1
+            netherLink: 0
     world_the_end:
         <<: *global
         dimension: 1
