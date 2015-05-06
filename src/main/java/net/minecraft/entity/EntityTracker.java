@@ -203,6 +203,7 @@ public class EntityTracker
 		}
 		catch (Throwable throwable)
 		{
+			p_72785_1_.setDead(); //kill duplicated entity
 			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Adding entity to track");
 			CrashReportCategory crashreportcategory = crashreport.makeCategory("Entity To Track");
 			crashreportcategory.addCrashSection("Tracking range", p_72785_2_ + " blocks");
