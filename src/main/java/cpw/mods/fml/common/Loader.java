@@ -1060,4 +1060,9 @@ public class Loader
 	{
 		return injectedAfter.get(modId);
 	}
+
+	public final LoaderState getLoaderState()
+	{
+		return modController != null ? modController.getState() : LoaderState.NOINIT;
+	}
 }

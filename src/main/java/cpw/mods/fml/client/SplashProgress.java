@@ -106,7 +106,7 @@ public class SplashProgress
 
 	public static void start()
 	{
-		File configFile = new File(Loader.instance().getConfigDir(),"splash.properties");
+		File configFile = new File(Minecraft.getMinecraft().mcDataDir, "config/splash.properties");
 		FileReader r = null;
 		config = new Properties();
 		try
@@ -126,8 +126,8 @@ public class SplashProgress
 		// Enable if we have the flag, and there's either no optifine, or optifine has added a key to the blackboard ("optifine.ForgeSplashCompatible")
 		// Optifine authors - add this key to the blackboard if you feel your modifications are now compatible with this code.
 		enabled =            getBool("enabled",      true) && ( (!FMLClientHandler.instance().hasOptifine()) || Launch.blackboard.containsKey("optifine.ForgeSplashCompatible"));
-		rotate =             getBool("rotate",       true);
-		logoOffset =         getInt("logoOffset",    10);
+		rotate =             getBool("rotate",       false);
+		logoOffset =         getInt("logoOffset",    0);
 		backgroundColor =    getHex("background",    0xFFFFFF);
 		fontColor =          getHex("font",          0x000000);
 		barBorderColor =     getHex("barBorder",     0xC0C0C0);
@@ -136,7 +136,7 @@ public class SplashProgress
 
 		final ResourceLocation fontLoc = new ResourceLocation(getString("fontTexture", "textures/font/ascii.png"));
 		final ResourceLocation logoLoc = new ResourceLocation(getString("logoTexture", "textures/gui/title/mojang.png"));
-		final ResourceLocation forgeLoc = new ResourceLocation(getString("forgeTexture", "fml:textures/gui/forge.png"));
+		final ResourceLocation forgeLoc = new ResourceLocation(getString("forgeTexture", "fml:textures/gui/forge.gif"));
 
 		File miscPackFile = new File(Minecraft.getMinecraft().mcDataDir, getString("resourcePackPath", "resources"));
 
@@ -534,9 +534,12 @@ public class SplashProgress
 				height = images[0].getHeight();
 				while((size / width) * (size / height) < frames) size *= 2;
 				this.size = size;
-				name = glGenTextures();
 				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, name);
+				synchronized(SplashProgress.class)
+				{
+					name = glGenTextures();
+					glBindTexture(GL_TEXTURE_2D, name);
+				}
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size, size, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, (IntBuffer)null);
