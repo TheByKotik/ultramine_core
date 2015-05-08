@@ -1,5 +1,7 @@
 package org.ultramine.commands.basic;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.commands.Command;
@@ -38,6 +41,7 @@ import org.ultramine.server.WorldsConfig.WorldConfig.Border;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 import org.ultramine.server.util.BasicTypeParser;
+import org.ultramine.server.util.WarpLocation;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -155,7 +159,7 @@ public class TechCommands
 			permissions = {"command.technical.multiworld"},
 			syntax = {
 					"[list]",
-					"[load unload goto] <%world>" //No world validation
+					"[load unload hold goto destroy delete] <%world>" //No world validation
 			}
 	)
 	public static void multiworld(CommandContext ctx)
@@ -174,33 +178,76 @@ public class TechCommands
 		}
 		
 		int dim = ctx.get("world").asInt();
+		WorldServer world = mw.getWorldByID(dim);
 
 		if(!DimensionManager.isDimensionRegistered(dim))
 			ctx.failure("command.multiworld.notregistered");
 		
 		if(ctx.getAction().equals("load"))
 		{
-			if(mw.getWorldByID(dim) != null)
+			if(world != null)
 				ctx.failure("command.multiworld.alreadyloaded");
 			
+			mw.unholdDimension(dim); //if was held
 			DimensionManager.initDimension(dim);
 			ctx.sendMessage("command.multiworld.load.success");
 		}
-		else if(ctx.getAction().equals("unload"))
+		else if(ctx.getAction().equals("unload") || ctx.getAction().equals("hold"))
 		{
-			if(mw.getWorldByID(dim) == null)
+			if(world == null)
 				ctx.failure("command.multiworld.notloaded");
 			
+			movePlayersOut(world);
+			if(ctx.getAction().equals("hold"))
+				mw.holdDimension(dim);
 			DimensionManager.unloadWorld(dim);
-			ctx.sendMessage("command.multiworld.unload.success");
+			ctx.sendMessage("command.multiworld."+ctx.getAction()+".success");
 		}
 		else if(ctx.getAction().equals("goto"))
 		{
-			WorldServer world = mw.getWorldByID(dim);
 			if(world == null)
 				ctx.failure("command.multiworld.notloaded");
 			
 			Teleporter.tpNow(ctx.getSenderAsPlayer(), dim, world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY(), world.getWorldInfo().getSpawnZ());
+		}
+		else if(ctx.getAction().equals("destroy") || ctx.getAction().equals("delete"))
+		{
+			if(world == null && !ctx.getAction().equals("delete"))
+				ctx.failure("command.multiworld.notloaded");
+			
+			if(world != null)
+			{
+				movePlayersOut(world);
+				mw.destroyWorld(world);
+			}
+			
+			mw.holdDimension(dim);
+			
+			if(ctx.getAction().equals("delete"))
+			{
+				try
+				{
+					FileUtils.cleanDirectory(new File(ctx.getServer().getWorldsDir(), world != null ? mw.getSaveDirName(world) : mw.getNameByID(dim)));
+				}
+				catch(IOException e)
+				{
+					throw new RuntimeException(e);
+				}
+			}
+			ctx.sendMessage("command.multiworld."+ctx.getAction()+".success");
+			
+		}
+	}
+	
+	private static void movePlayersOut(WorldServer world)
+	{
+		WarpLocation spawn = world.func_73046_m().getConfigurationManager().getDataLoader().getWarp("spawn");
+		for(EntityPlayerMP player : GenericIterableFactory.newCastingIterable(world.playerEntities, EntityPlayerMP.class))
+		{
+			if(player.dimension == spawn.dimension)
+				player.playerNetServerHandler.kickPlayerFromServer("The world has been unloaded");
+			else
+				Teleporter.tpNow(player, spawn);
 		}
 	}
 

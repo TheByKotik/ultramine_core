@@ -60,6 +60,7 @@ public class MultiWorld
 	private final Map<String, WorldServer> nameToWorldMap = new HashMap<String, WorldServer>();
 	private final TIntObjectMap<WorldConfig> dimToConfigMap = new TIntObjectHashMap<WorldConfig>();
 	private final Set<String> backupDirs = new HashSet<String>();
+	private final TIntSet holdDims = new TIntHashSet();
 	private TIntSet isolatedDataDims;
 
 	public MultiWorld(MinecraftServer server)
@@ -229,6 +230,8 @@ public class MultiWorld
 	@SideOnly(Side.SERVER)
 	public void initDimension(int dim)
 	{
+		if(holdDims.contains(dim))
+			return;
 		ISaveFormat format = server.getActiveAnvilConverter();
 		
 		String name = resolveNameForDim(dim);
@@ -441,6 +444,16 @@ public class MultiWorld
 		world.loadedTileEntityList.clear();
 		
 		return players;
+	}
+	
+	public void holdDimension(int dim)
+	{
+		holdDims.add(dim);
+	}
+	
+	public boolean unholdDimension(int dim)
+	{
+		return holdDims.remove(dim);
 	}
 	
 	public WorldServer getWorldByID(int dim)

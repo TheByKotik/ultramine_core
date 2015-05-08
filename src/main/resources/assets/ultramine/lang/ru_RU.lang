@@ -227,13 +227,16 @@ command.debuginfo.description=Некоторая отладочная инфор
 command.memstat.usage=/memstat
 command.memstat.description=Displays max, current allocated and free memory
 
-command.multiworld.usage=/multiworld <load|unload|goto> <мир> ИЛИ /multiworld list
+command.multiworld.usage=/multiworld <load|unload|hold|destroy|delete|goto> <мир> ИЛИ /multiworld list
 command.multiworld.description=Все команды MultiWorld
 command.multiworld.alreadyloaded=Измерение уже загружено
 command.multiworld.notregistered=Измерение на зарегистрировано (не существует)
 command.multiworld.notloaded=Измерение не загружено
 command.multiworld.load.success=Измерение загружено
 command.multiworld.unload.success=Измерение выгружено
+command.multiworld.hold.success=Измерение выгружено и заморожено
+command.multiworld.destroy.success=Измерение разрушено
+command.multiworld.delete.success=Измерение удалено
 command.multiworld.list.head=Список измерений:
 
 command.countentity.usage=/countentity <радиус>
