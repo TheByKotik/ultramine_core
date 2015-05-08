@@ -56,8 +56,10 @@ public class WarpLocation
 		{
 			while(world.getBlock(intX, MathHelper.floor_double(newY), intZ) != Blocks.air)
 				newY++;
-			while(world.getBlock(intX, MathHelper.floor_double(newY)-1, intZ) == Blocks.air)
+			while(world.getBlock(intX, MathHelper.floor_double(newY)-1, intZ) == Blocks.air && newY > 0)
 				newY--;
+			if(newY == 0)
+				newY = 255;
 		}
 		else
 		{
