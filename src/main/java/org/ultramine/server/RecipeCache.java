@@ -19,6 +19,7 @@ public class RecipeCache
 	private final List<IRecipe> originList;
 	private final Map<RecipeKey, IRecipe> cache = new HashMap<RecipeKey, IRecipe>();
 	private final Set<RecipeKey> noRecipeSet = new HashSet<RecipeKey>();
+	private boolean enabled;
 	
 	@SuppressWarnings("unchecked")
 	public RecipeCache()
@@ -26,8 +27,15 @@ public class RecipeCache
 		originList = CraftingManager.getInstance().getRecipeList();
 	}
 	
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
+	}
+	
 	public IRecipe findRecipe(InventoryCrafting inv, World world)
 	{
+		if(!enabled)
+			return originalSearch(inv, world);
 		RecipeKey key = new RecipeKeyBuilder(inv).build();
 		if(key.width == 0)
 			return null;
@@ -43,13 +51,11 @@ public class RecipeCache
 		}
 		else
 		{
-			for(IRecipe recipe : originList)
+			IRecipe recipe = originalSearch(inv, world);
+			if(recipe != null)
 			{
-				if (recipe.matches(inv, world))
-				{
-					addToCache(key, recipe);
-					return recipe;
-				}
+				addToCache(key, recipe);
+				return recipe;
 			}
 		}
 		
@@ -64,6 +70,19 @@ public class RecipeCache
 		if(cache.size() >= 1048576)
 			cache.clear();
 		cache.put(key, recipe);
+	}
+	
+	private IRecipe originalSearch(InventoryCrafting inv, World world)
+	{
+		for(IRecipe recipe : originList)
+		{
+			if (recipe.matches(inv, world))
+			{
+				return recipe;
+			}
+		}
+		
+		return null;
 	}
 	
 	public void clearCache()

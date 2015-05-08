@@ -73,6 +73,7 @@ public class UltramineServerConfig
 			public String resourcePack = "";
 			public boolean enableCommandBlock = false;
 			public boolean splitWorldDirs = true;
+			public boolean recipeCacheEnabled = true;
 		}
 
 		public static class SpawnLocationsConf

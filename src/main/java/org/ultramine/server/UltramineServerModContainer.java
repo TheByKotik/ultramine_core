@@ -173,6 +173,8 @@ public class UltramineServerModContainer extends DummyModContainer
 		for(String name : loader.getFastWarps())
 			reg.registerCommand(new FastWarpCommand(name));
 		getRecipeCache().clearCache();
+		if(e.getSide().isServer())
+			getRecipeCache().setEnabled(ConfigurationHandler.getServerConfig().settings.other.recipeCacheEnabled);
 	}
 	
 	@Subscribe
@@ -225,6 +227,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	
 	public void reloadToolsCfg()
 	{
+		getRecipeCache().setEnabled(ConfigurationHandler.getServerConfig().settings.other.recipeCacheEnabled);
 		itemBlocker.reload();
 	}
 }
