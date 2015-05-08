@@ -201,8 +201,11 @@ public class TextureUtil
 
 	public static void allocateTextureImpl(int p_147946_0_, int p_147946_1_, int p_147946_2_, int p_147946_3_, float p_147946_4_)
 	{
+		synchronized(cpw.mods.fml.client.SplashProgress.class)
+		{
 		deleteTexture(p_147946_0_);
 		bindTexture(p_147946_0_);
+		}
 
 		if (OpenGlHelper.anisotropicFilteringSupported)
 		{

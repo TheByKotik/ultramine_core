@@ -352,4 +352,9 @@ public class LoadController
 	{
 		return accessibleManager.getStackClasses();
 	}
+
+	LoaderState getState()
+	{
+		return state;
+	}
 }
