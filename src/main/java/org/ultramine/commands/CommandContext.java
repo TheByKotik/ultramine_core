@@ -394,12 +394,18 @@ public class CommandContext
 
 		public double asCoordinate(double original)
 		{
-			return CommandBase.func_110666_a(sender, original, value);
+			String val = value;
+			if(!Character.isDigit(val.charAt(value.length()-1)) && val.length() > 1)
+				val = val.substring(0, value.length()-1);
+			return CommandBase.func_110666_a(sender, original, val);
 		}
 
 		public double asCoordinate(double original, int minBound, int maxBound)
 		{
-			return CommandBase.func_110665_a(sender, original, value, minBound, maxBound);
+			String val = value;
+			if(!Character.isDigit(val.charAt(value.length()-1)) && val.length() > 1)
+				val = val.substring(0, value.length()-1);
+			return CommandBase.func_110665_a(sender, original, val, minBound, maxBound);
 		}
 
 		public Item asItem()
