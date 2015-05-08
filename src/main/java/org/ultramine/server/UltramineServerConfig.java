@@ -61,7 +61,6 @@ public class UltramineServerConfig
 			public int playerIdleTimeout = 0;
 			public int gamemode = 0;
 			public int maxPlayers = 20;
-			public boolean allowFlight = false;
 			public boolean forceGamemode = false;
 			public boolean whiteList = false;
 		}
@@ -112,6 +111,7 @@ public class UltramineServerConfig
 		
 		public static class SecurityConf
 		{
+			public boolean allowFlight = false;
 			public boolean checkBreakSpeed = true;
 		}
 	}
