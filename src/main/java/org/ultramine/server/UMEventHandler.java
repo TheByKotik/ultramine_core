@@ -38,6 +38,17 @@ import net.minecraftforge.event.world.BlockEvent;
 
 public class UMEventHandler
 {
+	@SideOnly(Side.SERVER)
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void checkChatPermission(ServerChatEvent e)
+	{
+		if(!PermissionHandler.getInstance().has(e.player, "ability.player.chat"))
+		{
+			e.setCanceled(true);
+			e.player.addChatMessage(new ChatComponentTranslation("ultramine.ability.chat").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+		}
+	}
+	
 	@SubscribeEvent
 	public void onServerChat(ServerChatEvent e)
 	{

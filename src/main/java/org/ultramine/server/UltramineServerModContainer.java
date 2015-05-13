@@ -145,6 +145,7 @@ public class UltramineServerModContainer extends DummyModContainer
 				"ability.player.blockplace",
 				"ability.player.blockbreak",
 				"ability.player.attack",
+				"ability.player.chat",
 				"command.fastwarp.spawn",
 				})
 		{

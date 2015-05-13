@@ -15,6 +15,7 @@ ultramine.ability.blockplace=You don't have permissions to place blocks
 ultramine.ability.useitem=You don't have permissions to use items
 ultramine.ability.useblock=You don't have permissions to use blocks
 ultramine.ability.attack=You don't have permissions to damage entities
+ultramine.ability.chat=You don't have permissions to chat
 
 #Command generic
 commands.generic.world.invalid=Can't find world '%s'
