@@ -59,7 +59,12 @@ public class VanillaCommands
 				group = cmd.getGroup();
 				ctx.sendMessage("%s:", group);
 			}
-			String usageS = cmd.getCommandUsage(ctx.getSender());
+			String usageS = null;
+			try
+			{
+				usageS = cmd.getCommandUsage(ctx.getSender());
+			}
+			catch (Throwable e) {}
 			String descS = cmd.getDescription();
 			ChatComponentTranslation usage = new ChatComponentTranslation(usageS != null ? usageS : '/' + cmd.getCommandName());
 			usage.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + cmd.getCommandName() + " "));
