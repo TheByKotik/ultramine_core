@@ -31,7 +31,7 @@ public class VanillaCommands
 			name = "help",
 			group = "player",
 			aliases = {"?"},
-			permissions = {"command.help"},
+			permissions = {"command.vanilla.help"},
 			syntax = {
 					"",
 					"<page>"

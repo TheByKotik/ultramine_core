@@ -47,7 +47,7 @@ public class FastWarpCommand implements IExtendedCommand
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender sender)
 	{
-		return sender instanceof EntityPlayerMP && PermissionHandler.getInstance().has(sender, "command."+name);
+		return sender instanceof EntityPlayerMP && PermissionHandler.getInstance().has(sender, "command.fastwarp."+name);
 	}
 
 	@Override

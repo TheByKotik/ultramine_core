@@ -135,7 +135,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		e.registerCommands(OpenInvCommands.class);
 		
 		for(String perm : new String[]{
-				"command.help",
+				"command.vanilla.help",
 				"command.vanilla.msg",
 				"command.vanilla.me",
 				"command.vanilla.kill",
@@ -145,6 +145,7 @@ public class UltramineServerModContainer extends DummyModContainer
 				"ability.player.blockplace",
 				"ability.player.blockbreak",
 				"ability.player.attack",
+				"command.fastwarp.spawn",
 				})
 		{
 			e.getPermissionHandler().addToGroup(IPermissionManager.DEFAULT_GROUP_NAME, IPermissionManager.GLOBAL_WORLD, perm);
