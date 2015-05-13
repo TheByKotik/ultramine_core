@@ -193,7 +193,7 @@ public class EntityTracker
 		{
 			if (this.trackedEntityIDs.containsItem(p_72785_1_.getEntityId()))
 			{
-				throw new IllegalStateException("Entity is already tracked!");
+				throw new IllegalStateException("Entity is already tracked! Entity: " + p_72785_1_ + ", Class: " + p_72785_1_.getClass() + ", ID: " + p_72785_1_.getEntityId());
 			}
 
 			EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(p_72785_1_, p_72785_2_, p_72785_3_, p_72785_4_);
