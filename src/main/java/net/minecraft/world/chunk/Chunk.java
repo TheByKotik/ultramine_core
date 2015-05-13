@@ -1712,6 +1712,7 @@ public class Chunk implements IChunkDependency
 	
 	private void onEntityAdd(Entity e)
 	{
+		wasActive = true; //Handling case where added entity to inactive chunk (wasActive && hasEntities) condition should be true
 		if(e.isEntityLiving() && !e.isEntityPlayerMP())
 		{
 			entityLivingCount++;
