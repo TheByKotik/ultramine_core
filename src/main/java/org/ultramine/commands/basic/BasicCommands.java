@@ -89,7 +89,7 @@ public class BasicCommands
 	@Command(
 			name = "homelist",
 			group = "player",
-			permissions = {"command.basic.home.multi"},
+			permissions = {"command.basic.homelist"},
 			isUsableFromServer = false
 	)
 	public static void homelist(CommandContext ctx)
