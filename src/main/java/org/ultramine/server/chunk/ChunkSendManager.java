@@ -262,7 +262,16 @@ public class ChunkSendManager
 			{
 				sending.remove(key);
 				sendingSage2.remove(key);
-				manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, true).addPlayer(player);
+				try
+				{
+					manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, true).addPlayer(player);
+				}
+				catch (IllegalStateException e)
+				{
+					// in some cases chunk may be sended 2 times. It's not a big problem, I think. Just ignore it
+					log.debug(e);
+					continue;
+				}
 				
 				@SuppressWarnings("unchecked")
 				List<TileEntity> tes = new ArrayList<TileEntity>(chunk.chunkTileEntityMap.values());
