@@ -89,11 +89,11 @@ public class BasicCommands
 	@Command(
 			name = "homelist",
 			group = "player",
-			permissions = {"command.basic.home.multi"}
+			permissions = {"command.basic.home.multi"},
+			isUsableFromServer = false
 	)
 	public static void homelist(CommandContext ctx)
 	{
-		ctx.getSenderAsPlayer();
 		ctx.sendMessage("command.homelist.head");
 		for(Map.Entry<String, WarpLocation> ent : ctx.getSenderAsPlayer().getData().core().getHomes().entrySet())
 			ctx.sendMessage(GOLD, "    - %s [%s](%s, %s, %s)", ent.getKey(), ent.getValue().dimension, (int)ent.getValue().x, (int)ent.getValue().y, (int)ent.getValue().z);
@@ -174,7 +174,6 @@ public class BasicCommands
 	)
 	public static void warplist(CommandContext ctx)
 	{
-		ctx.getSenderAsPlayer();
 		ctx.sendMessage("command.warplist.head");
 		for(Map.Entry<String, WarpLocation> ent : ctx.getServerData().getWarps().entrySet())
 			ctx.sendMessage(GOLD, "    - %s [%s](%s, %s, %s)", ent.getKey(), ent.getValue().dimension, (int)ent.getValue().x, (int)ent.getValue().y, (int)ent.getValue().z);
