@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ultramine.commands.basic.FastWarpCommand;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.data.player.PlayerData;
@@ -38,6 +40,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 public class ServerDataLoader
 {
+	private static final Logger log = LogManager.getLogger();
 	private static final boolean isClient = FMLCommonHandler.instance().getSide().isClient();
 	private final TwoStepsExecutor executor = isClient ? null : new TwoStepsExecutor("PlayerData loader #%d");
 	private final ServerConfigurationManager mgr;
@@ -130,11 +133,7 @@ public class ServerDataLoader
 		dataProvider.init();
 		if(!isClient) executor.register();
 		
-		for(PlayerData data : dataProvider.loadAllPlayerData())
-		{
-			playerDataCache.put(data.getProfile().getId(), data);
-			namedPlayerDataCache.put(data.getProfile().getName().toLowerCase(), data);
-		}
+		loadAllPlayerData();
 		warps.putAll(dataProvider.loadWarps());
 		fastWarps.addAll(dataProvider.loadFastWarps());
 	}
@@ -145,10 +144,20 @@ public class ServerDataLoader
 			return; //Database backup is not support now
 		playerDataCache.clear();
 		namedPlayerDataCache.clear();
+		loadAllPlayerData();
+	}
+	
+	private void loadAllPlayerData()
+	{
 		for(PlayerData data : dataProvider.loadAllPlayerData())
 		{
 			playerDataCache.put(data.getProfile().getId(), data);
-			namedPlayerDataCache.put(data.getProfile().getName().toLowerCase(), data);
+			String lusername = data.getProfile().getName().toLowerCase();
+			if(namedPlayerDataCache.containsKey(lusername))
+				log.warn("Duplicate username in UltraMine player data for different UUID. username: '{}', UUID1: '{}', UUID2: '{}'",
+						lusername, namedPlayerDataCache.get(lusername), data.getProfile().getId());
+			else
+				namedPlayerDataCache.put(lusername, data);
 		}
 	}
 	
