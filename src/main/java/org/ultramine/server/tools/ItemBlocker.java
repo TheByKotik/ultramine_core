@@ -118,6 +118,8 @@ public class ItemBlocker
 				 {
 					 for(Slot slot :  GenericIterableFactory.newCastingIterable(player.openContainer.inventorySlots, Slot.class))
 					 {
+						if(slot.getSlotIndex() >= slot.inventory.getSizeInventory())
+							continue; //Fix for some broken containers
 						ItemStack is = slot.getStack();
 						BlockingSettings set = getBlockingSettings(player.dimension, is);
 						if(set != null && set.rmItem)
