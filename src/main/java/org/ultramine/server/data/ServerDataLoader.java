@@ -155,7 +155,7 @@ public class ServerDataLoader
 			String lusername = data.getProfile().getName().toLowerCase();
 			if(namedPlayerDataCache.containsKey(lusername))
 				log.warn("Duplicate username in UltraMine player data for different UUID. username: '{}', UUID1: '{}', UUID2: '{}'",
-						lusername, namedPlayerDataCache.get(lusername), data.getProfile().getId());
+						lusername, namedPlayerDataCache.get(lusername).getProfile().getId(), data.getProfile().getId());
 			else
 				namedPlayerDataCache.put(lusername, data);
 		}
