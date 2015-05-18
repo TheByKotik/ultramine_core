@@ -108,7 +108,7 @@ public class ItemBlocker
 	}
 	
 	@SubscribeEvent
-	public void onEntityItemPickup(TickEvent.ServerTickEvent e)
+	public void onServerTick(TickEvent.ServerTickEvent e)
 	{
 		if(e.phase == TickEvent.Phase.END)
 		{
@@ -118,7 +118,7 @@ public class ItemBlocker
 				 {
 					 for(Slot slot :  GenericIterableFactory.newCastingIterable(player.openContainer.inventorySlots, Slot.class))
 					 {
-						if(slot.getSlotIndex() >= slot.inventory.getSizeInventory())
+						if(slot.inventory == null || slot.getSlotIndex() >= slot.inventory.getSizeInventory())
 							continue; //Fix for some broken containers
 						ItemStack is = slot.getStack();
 						BlockingSettings set = getBlockingSettings(player.dimension, is);
