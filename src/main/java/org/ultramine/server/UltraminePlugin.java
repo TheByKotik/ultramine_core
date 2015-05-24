@@ -15,7 +15,8 @@ public class UltraminePlugin implements IFMLLoadingPlugin
 	public String[] getASMTransformerClass()
 	{
 		return new String[]{
-				"org.ultramine.server.asm.transformers.TrigMathTransformer"
+				"org.ultramine.server.asm.transformers.TrigMathTransformer",
+				"org.ultramine.server.asm.transformers.PrintStackTraceTransformer",
 		};
 	}
 

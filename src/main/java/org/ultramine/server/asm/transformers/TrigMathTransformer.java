@@ -19,12 +19,12 @@ public class TrigMathTransformer implements IClassTransformer
 {
 	private static final Logger log = LogManager.getLogger();
 	
-	private static String TRIGMATH_TYPE = "org/ultramine/server/util/TrigMath";
-	private static String MATH_TYPE = "java/lang/Math";
-	private static String ATAN2_NAME = "atan2";
-	private static String ATAN2_DESC = "(DD)D";
-	private static String ATAN_NAME = "atan";
-	private static String ATAN_DESC = "(D)D";
+	private static final String TRIGMATH_TYPE = "org/ultramine/server/util/TrigMath";
+	private static final String MATH_TYPE = "java/lang/Math";
+	private static final String ATAN2_NAME = "atan2";
+	private static final String ATAN2_DESC = "(DD)D";
+	private static final String ATAN_NAME = "atan";
+	private static final String ATAN_DESC = "(D)D";
 	
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass)
