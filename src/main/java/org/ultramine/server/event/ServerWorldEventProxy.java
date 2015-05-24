@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -28,9 +29,16 @@ public class ServerWorldEventProxy extends WorldEventProxy
 	}
 	
 	@Override
+	public World getWorld()
+	{
+		return world;
+	}
+	
+	@Override
 	public void pushState(WorldUpdateObjectType state)
 	{
 		object.setType(state);
+		current = this;
 	}
 	
 	@Override
@@ -39,6 +47,7 @@ public class ServerWorldEventProxy extends WorldEventProxy
 		object.setType(WorldUpdateObjectType.UNKNOWN);
 		object.setEntity(null);
 		object.setTileEntity(null);
+		current = null;
 	}
 	
 	@Override

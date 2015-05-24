@@ -4,9 +4,22 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class WorldEventProxy
 {
+	protected static WorldEventProxy current;
+	
+	public static WorldEventProxy getCurrent()
+	{
+		return current;
+	}
+	
+	public World getWorld()
+	{
+		return null;
+	}
+	
 	public void pushState(WorldUpdateObjectType state)
 	{
 	}
