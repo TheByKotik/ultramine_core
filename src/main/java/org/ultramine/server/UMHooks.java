@@ -46,7 +46,7 @@ public class UMHooks
 				break;
 			case TILEE_ENTITY:
 				TileEntity te = obj.getTileEntity();
-				log.warn("On entity update [{}]({}, {}, {}). Class: {}", dim, te.xCoord, te.yCoord, te.zCoord, te.getClass().getName());
+				log.warn("On TileEntity update [{}]({}, {}, {}). Class: {}", dim, te.xCoord, te.yCoord, te.zCoord, te.getClass().getName());
 				break;
 			case WEATHER:
 				log.warn("On weather action at world [{}]", dim);
