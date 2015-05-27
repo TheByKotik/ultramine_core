@@ -48,7 +48,13 @@ public class ServerLoadBalancer
 		int cz = MathHelper.floor_double(ent.posZ) >> 4;
 
 		PerChunkEntityLimits getLimits = getLimits(ent);
-		Chunk chunk = world.getChunkFromChunkCoords(cx, cz);
+		Chunk chunk = world.getChunkIfExists(cx, cz);
+		if(chunk == null)
+		{
+			if(!ent.forceSpawn)
+				ent.setDead();
+			return false;
+		}
 		int count = chunk.getEntityCountOfSameType(ent);
 		if(count > getLimits.higherLimit)
 		{
