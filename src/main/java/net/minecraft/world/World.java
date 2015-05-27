@@ -2184,9 +2184,11 @@ public abstract class World implements IBlockAccess
 
 			this.theProfiler.startSection("chunkCheck");
 
-			if (Double.isNaN(p_72866_1_.posX) || Double.isInfinite(p_72866_1_.posX))
+			if (Double.isNaN(p_72866_1_.posX) || p_72866_1_.posX > WorldConstants.MAX_BLOCK_COORD || p_72866_1_.posX < -WorldConstants.MAX_BLOCK_COORD)
 			{
-				p_72866_1_.posX = p_72866_1_.lastTickPosX;
+				FMLLog.warning("Removed out of world entity %s", p_72866_1_);
+				p_72866_1_.setDead();
+				return;
 			}
 
 			if (Double.isNaN(p_72866_1_.posY) || Double.isInfinite(p_72866_1_.posY))
@@ -2194,9 +2196,11 @@ public abstract class World implements IBlockAccess
 				p_72866_1_.posY = p_72866_1_.lastTickPosY;
 			}
 
-			if (Double.isNaN(p_72866_1_.posZ) || Double.isInfinite(p_72866_1_.posZ))
+			if (Double.isNaN(p_72866_1_.posZ) || p_72866_1_.posZ > WorldConstants.MAX_BLOCK_COORD || p_72866_1_.posZ < -WorldConstants.MAX_BLOCK_COORD)
 			{
-				p_72866_1_.posZ = p_72866_1_.lastTickPosZ;
+				FMLLog.warning("Removed out of world entity %s", p_72866_1_);
+				p_72866_1_.setDead();
+				return;
 			}
 
 			if (Double.isNaN((double)p_72866_1_.rotationPitch) || Double.isInfinite((double)p_72866_1_.rotationPitch))
