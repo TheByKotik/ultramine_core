@@ -1390,14 +1390,14 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			}
 
 			dedicatedserver.startServerThread();
-			Runtime.getRuntime().addShutdownHook(new Thread("Server Shutdown Thread")
-			{
-				private static final String __OBFID = "CL_00001806";
-				public void run()
-				{
-					dedicatedserver.stopServer();
-				}
-			});
+//			Runtime.getRuntime().addShutdownHook(new Thread("Server Shutdown Thread")
+//			{
+//				private static final String __OBFID = "CL_00001806";
+//				public void run()
+//				{
+//					dedicatedserver.stopServer();
+//				}
+//			});
 		}
 		catch (Exception exception)
 		{
