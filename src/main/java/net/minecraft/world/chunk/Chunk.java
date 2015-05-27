@@ -802,8 +802,9 @@ public class Chunk implements IChunkDependency
 
 		if (i != this.xPosition || j != this.zPosition)
 		{
-			logger.warn("Wrong location! " + p_76612_1_ + " (at " + i + ", " + j + " instead of " + this.xPosition + ", " + this.zPosition + ")");
-			Thread.dumpStack();
+			logger.warn("Wrong location! " + p_76612_1_ + " (at " + i + ", " + j + " instead of " + this.xPosition + ", " + this.zPosition + ")", new Throwable());
+			p_76612_1_.setDead();
+			return;
 		}
 
 		int k = MathHelper.floor_double(p_76612_1_.posY / 16.0D);
