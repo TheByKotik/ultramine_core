@@ -18,6 +18,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraft.world.WorldServer;
@@ -793,5 +794,44 @@ public class TechCommands
 		UltramineServerModContainer.getInstance().reloadToolsCfg();
 		
 		ctx.sendMessage("command.reloadcfg.success");
+	}
+	
+	@Command(
+			name = "entitylist",
+			group = "technical",
+			permissions = {"command.technical.entitylist"},
+			syntax = {""}
+	)
+	public static void entitylist(CommandContext ctx)
+	{
+		for(WorldServer world : ctx.getServer().getMultiWorld().getLoadedWorlds())
+		{
+			for(Entity ent : GenericIterableFactory.newCastingIterable(world.loadedEntityList, Entity.class))
+			{
+				ctx.sendMessage("[%s](%s, %s, %s) ID: %s, Class: %s, Entity: %s", world.provider.dimensionId, ent.posX, ent.posY, ent.posZ, ent.getEntityId(), ent.getClass(), ent);
+			}
+		}
+	}
+	
+	@Command(
+			name = "killentity",
+			group = "technical",
+			permissions = {"command.technical.killentity"},
+			syntax = {"<%id>"}
+	)
+	public static void killentity(CommandContext ctx)
+	{
+		int id = ctx.get("id").asInt();
+		for(WorldServer world : ctx.getServer().getMultiWorld().getLoadedWorlds())
+		{
+			for(Entity ent : GenericIterableFactory.newCastingIterable(world.loadedEntityList, Entity.class))
+			{
+				if(ent.getEntityId() == id)
+				{
+					ent.attackEntityFrom(DamageSource.outOfWorld, 10000f);
+					ent.setDead();
+				}
+			}
+		}
 	}
 }

@@ -309,3 +309,9 @@ command.recipecache.clear.success=Кэш рецептов крафта успе�
 command.reloadcfg.usage=/reloadcfg
 command.reloadcfg.description=Перезагружает конфигурацию UltraMine сервера (из директории /settings)
 command.reloadcfg.success=Серверная конфигурация успешно перезагружена
+
+command.reloadcfg.usage=/entitylist
+command.reloadcfg.description=Показывает список всех загруженных Entity во всех мирах
+
+command.reloadcfg.usage=/killentity <id>
+command.reloadcfg.description=Убивает Entity с указанным ID

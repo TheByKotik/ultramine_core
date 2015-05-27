@@ -309,3 +309,9 @@ command.recipecache.clear.success=Crafting recipe cache successfully cleared
 command.reloadcfg.usage=/reloadcfg
 command.reloadcfg.description=Reloads UltraMine server configuration (in /settings directory)
 command.reloadcfg.success=Server configuration successfully reloaded
+
+command.reloadcfg.usage=/entitylist
+command.reloadcfg.description=Displays list of all loaded entities in all worlds
+
+command.reloadcfg.usage=/killentity <id>
+command.reloadcfg.description=Kills entity with specified ID
