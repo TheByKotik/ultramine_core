@@ -599,7 +599,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 			if(!GlobalExecutors.cachedExecutor().awaitTermination(10000, TimeUnit.MILLISECONDS))
 				field_155771_h.info("Global cached executor did not terminated cleanly");
 			GlobalExecutors.writingIOExecutor().shutdown();
-			if(!GlobalExecutors.writingIOExecutor().awaitTermination(10000, TimeUnit.MILLISECONDS))
+			if(!GlobalExecutors.writingIOExecutor().awaitTermination(60000, TimeUnit.MILLISECONDS))
 				field_155771_h.info("Global writing IO executor did not terminated cleanly");
 		}
 		catch(InterruptedException ignored){}
