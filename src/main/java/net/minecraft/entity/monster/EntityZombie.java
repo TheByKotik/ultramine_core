@@ -266,6 +266,7 @@ public class EntityZombie extends EntityMob
 					int j1 = j + MathHelper.getRandomIntegerInRange(this.rand, 7, 40) * MathHelper.getRandomIntegerInRange(this.rand, -1, 1);
 					int k1 = k + MathHelper.getRandomIntegerInRange(this.rand, 7, 40) * MathHelper.getRandomIntegerInRange(this.rand, -1, 1);
 
+					if (worldObj.blockExists(i1, j1, k1))
 					if (World.doesBlockHaveSolidTopSurface(this.worldObj, i1, j1 - 1, k1) && this.worldObj.getBlockLightValue(i1, j1, k1) < 10)
 					{
 						entityzombie.setPosition((double)i1, (double)j1, (double)k1);
