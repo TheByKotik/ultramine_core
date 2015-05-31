@@ -1,4 +1,4 @@
-package org.ultramine.server.wempty;
+package org.ultramine.server.world;
 
 import java.util.List;
 

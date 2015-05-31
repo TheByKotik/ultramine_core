@@ -83,9 +83,9 @@ import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.server.BackupManager;
 import org.ultramine.server.ConfigurationHandler;
-import org.ultramine.server.MultiWorld;
 import org.ultramine.server.WatchdogThread;
 import org.ultramine.server.util.GlobalExecutors;
+import org.ultramine.server.world.MultiWorld;
 
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;

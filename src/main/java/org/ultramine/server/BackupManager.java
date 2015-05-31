@@ -38,6 +38,7 @@ import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoBackupConf;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.util.GlobalExecutors;
 import org.ultramine.server.util.ZipUtil;
+import org.ultramine.server.world.WorldDescriptor;
 
 import com.google.common.base.Function;
 
@@ -195,7 +196,7 @@ public class BackupManager
 		if(!zipFile.exists() || zipFile.isDirectory() || !zipFile.getName().endsWith(".zip"))
 			throw new CommandException("command.backup.apply.fail.nofile", path);
 		
-		final Set<String> moveOnly;
+		Set<String> moveOnly;
 		try
 		{
 			Set<String> available = ZipUtil.getRootFiles(zipFile);
@@ -228,7 +229,9 @@ public class BackupManager
 			{
 				if(!moveOnly.contains(server.getMultiWorld().getSaveDirName(world)))
 						continue;
-				List<EntityPlayerMP> players = server.getMultiWorld().destroyWorld(world);
+				WorldDescriptor desc = server.getMultiWorld().getDescFromWorld(world);
+				List<EntityPlayerMP> players = desc.extractPlayer();
+				desc.destroyWorld();
 				dimToPlayerMap.put(world.provider.dimensionId, players);
 			}
 			
@@ -273,13 +276,16 @@ public class BackupManager
 		
 		try
 		{
+			final List<String> moveOnlyPaths = new ArrayList<String>(moveOnly.size());
+			for(String s : moveOnly)
+				moveOnlyPaths.add(s + '/');
 			ZipUtil.unzip(zipFile, server.getWorldsDir(), new Function<String, String>()
 			{
 				@Override
 				public String apply(String name)
 				{
 					boolean contains = false;
-					for(String s : moveOnly)
+					for(String s : moveOnlyPaths)
 					{
 						if(name.startsWith(s))
 						{

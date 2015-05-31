@@ -1,17 +1,17 @@
 package org.ultramine.server;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class WorldsConfig
 {
 	public WorldConfig global = new WorldConfig();
-	public Map<String, WorldConfig> worlds = new HashMap<String, WorldConfig>();
+	public List<WorldConfig> worlds = new ArrayList<WorldConfig>();
 	
 	public static class WorldConfig
 	{
 		public int dimension;
+		public String name;
 		public Generation generation;
 		public MobSpawn mobSpawn;
 		public Settings settings;

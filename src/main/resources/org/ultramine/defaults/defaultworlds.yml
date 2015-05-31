@@ -97,9 +97,9 @@ global: &global
                 higherLimit: 16
 
 worlds:
-    world:
-        <<: *global
+    -   <<: *global
         dimension: 0
+        name: 'world'
         generation:
             <<: *global_gen
             providerID: 0
@@ -109,17 +109,17 @@ worlds:
         portals:
             netherLink: -1
             enderLink: 1
-    world_nether:
-        <<: *global
+    -   <<: *global
         dimension: -1
+        name: 'world_nether'
         generation:
             <<: *global_gen
             providerID: -1
         portals:
             netherLink: 0
-    world_the_end:
-        <<: *global
+    -   <<: *global
         dimension: 1
+        name: 'world_the_end'
         generation:
             <<: *global_gen
             providerID: 1
