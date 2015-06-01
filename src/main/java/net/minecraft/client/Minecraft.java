@@ -566,12 +566,12 @@ public class Minecraft implements IPlayerUsage
 		this.field_152354_ay = null;
 		this.loadingScreen = new LoadingScreenRenderer(this);
 
+		FMLClientHandler.instance().onInitializationComplete();
 		if (this.gameSettings.fullScreen && !this.fullscreen)
 		{
 			this.toggleFullscreen();
 		}
 
-		FMLClientHandler.instance().onInitializationComplete();
 		try
 		{
 			Display.setVSyncEnabled(this.gameSettings.enableVsync);
