@@ -93,6 +93,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		{
 			ConfigurationHandler.load();
 			Databases.init();
+			MinecraftServer.getServer().getMultiWorld().preloadConfigs();
 		}
 	}
 	

@@ -94,23 +94,8 @@ public class MultiWorld
 	}
 	
 	@SideOnly(Side.SERVER)
-	public void handleServerWorldsInit()
+	public void preloadConfigs()
 	{
-		DimensionManager.registerProviderType(-10, org.ultramine.server.world.WorldProviderEmpty.class, false);
-		registerProviderTranslation(-10, 0);
-		DimensionManager.unregisterDimension(-1);
-		DimensionManager.unregisterDimension(0);
-		DimensionManager.unregisterDimension(1);
-		
-		for(int dim : DimensionManager.getStaticDimensionIDs())
-		{
-			WorldDescriptor desc = getOrCreateDescriptor(dim);
-			desc.setState(WorldState.UNLOADED);
-			desc.setConfig(ConfigurationHandler.getWorldsConfig().global);
-		}
-		
-		//
-		
 		TIntSet isolatedDataDimsSet = new TIntHashSet();
 		checkDuplicates(ConfigurationHandler.getWorldsConfig().worlds);
 		for(WorldConfig config : ConfigurationHandler.getWorldsConfig().worlds)
@@ -120,12 +105,39 @@ public class MultiWorld
 				desc.setName(config.name);
 			
 			desc.setConfig(config);
-			if(desc.getState() == WorldState.UNREGISTERED)
-				desc.register();
 			if(config.settings.useIsolatedPlayerData)
 				isolatedDataDimsSet.add(config.dimension);
 		}
 		isolatedDataDims = TCollections.unmodifiableSet(isolatedDataDimsSet);
+	}
+	
+	@SideOnly(Side.SERVER)
+	public void handleServerWorldsInit()
+	{
+		DimensionManager.registerProviderType(-10, org.ultramine.server.world.WorldProviderEmpty.class, false);
+		registerProviderTranslation(-10, 0);
+		DimensionManager.unregisterDimension(-1);
+		DimensionManager.unregisterDimension(0);
+		DimensionManager.unregisterDimension(1);
+		
+		//Dims added by mods only (already registered)
+		for(int dim : DimensionManager.getStaticDimensionIDs())
+		{
+			WorldDescriptor desc = getOrCreateDescriptor(dim);
+			desc.setState(WorldState.UNLOADED);
+			if(desc.getConfig() == null)
+				desc.setConfig(ConfigurationHandler.getWorldsConfig().global);
+		}
+		
+		//
+		
+		//register worlds.yml world (may redefine)
+		for(WorldConfig config : ConfigurationHandler.getWorldsConfig().worlds)
+		{
+			WorldDescriptor desc = getOrCreateDescriptor(config.dimension);
+			if(desc.getState() == WorldState.UNREGISTERED)
+				desc.register();
+		}
 		
 		WorldDescriptor overDesc = getDescByID(0);
 		if(overDesc == null)
@@ -354,7 +366,8 @@ public class MultiWorld
 	
 	public String getNameByID(int id)
 	{
-		return getDescByID(id).getName();
+		WorldDescriptor desc = getDescByID(id);
+		return desc == null ? null : desc.getName();
 	}
 	
 	public WorldConfig getConfigByID(int dim)
