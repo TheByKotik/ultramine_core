@@ -89,6 +89,7 @@ import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.JsonSerializableSet;
 import net.minecraft.util.MathHelper;
@@ -107,6 +108,7 @@ import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.chunk.ChunkSendManager;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.event.UMEventFactory;
+import org.ultramine.server.util.BasicTypeParser;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.common.ForgeHooks;
@@ -1020,6 +1022,18 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public boolean hasPermission(String permission)
 	{
 		return PermissionHandler.getInstance().has(this, permission);
+	}
+	
+	public String getMeta(String key)
+	{
+		return PermissionHandler.getInstance().getMeta(this, key);
+	}
+	
+	public String getTabListName()
+	{
+		String meta = getMeta("tablistcolor");
+		EnumChatFormatting color = meta.isEmpty() ? null : BasicTypeParser.parseColor(meta);
+		return color == null ? getCommandSenderName() : color.toString() + getCommandSenderName();
 	}
 	
 	/**

@@ -314,7 +314,7 @@ public abstract class ServerConfigurationManager
 
 	public void playerLoggedIn(final EntityPlayerMP par1EntityPlayerMP)
 	{
-		this.sendPacketToAllPlayers(new S38PacketPlayerListItem(par1EntityPlayerMP.getCommandSenderName(), true, 1000));
+		this.sendPacketToAllPlayers(new S38PacketPlayerListItem(par1EntityPlayerMP.getTabListName(), true, 1000));
 		this.playerEntityList.add(par1EntityPlayerMP);
 		usernameToPlayerMap.put(par1EntityPlayerMP.getGameProfile().getName().toLowerCase(), par1EntityPlayerMP);
 		final WorldServer worldserver = this.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
@@ -328,7 +328,7 @@ public abstract class ServerConfigurationManager
 		for (int i = 0; i < this.playerEntityList.size(); ++i)
 		{
 			EntityPlayerMP entityplayermp1 = (EntityPlayerMP)this.playerEntityList.get(i);
-			par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S38PacketPlayerListItem(entityplayermp1.getCommandSenderName(), true, entityplayermp1.ping));
+			par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S38PacketPlayerListItem(entityplayermp1.getTabListName(), true, entityplayermp1.ping));
 		}
 	}
 
@@ -355,7 +355,7 @@ public abstract class ServerConfigurationManager
 		this.playerEntityList.remove(p_72367_1_);
 		usernameToPlayerMap.remove(p_72367_1_.getGameProfile().getName().toLowerCase());
 		this.field_148547_k.remove(p_72367_1_.getUniqueID());
-		this.sendPacketToAllPlayers(new S38PacketPlayerListItem(p_72367_1_.getCommandSenderName(), false, 9999));
+		this.sendPacketToAllPlayers(new S38PacketPlayerListItem(p_72367_1_.getTabListName(), false, 9999));
 	}
 
 	public String allowUserToConnect(SocketAddress p_148542_1_, GameProfile p_148542_2_)
@@ -675,7 +675,7 @@ public abstract class ServerConfigurationManager
 		if (this.playerPingIndex < this.playerEntityList.size())
 		{
 			EntityPlayerMP entityplayermp = (EntityPlayerMP)this.playerEntityList.get(this.playerPingIndex);
-			this.sendPacketToAllPlayers(new S38PacketPlayerListItem(entityplayermp.getCommandSenderName(), true, entityplayermp.ping));
+			this.sendPacketToAllPlayers(new S38PacketPlayerListItem(entityplayermp.getTabListName(), true, entityplayermp.ping));
 		}
 	}
 
