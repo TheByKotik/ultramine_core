@@ -36,8 +36,8 @@ public class BasicCommands
 	)
 	public static void home(CommandContext ctx)
 	{
-		ctx.checkPermissionIfArg("name", "command.home.multi", "command.home.multi.fail");
-		ctx.checkPermissionIfArg("dst", "command.home.other", "command.home.other.fail");
+		ctx.checkPermissionIfArg("name", "command.basic.home.multi", "command.basic.home.multi.fail");
+		ctx.checkPermissionIfArg("dst", "command.basic.home.other", "command.basic.home.other.fail");
 		EntityPlayerMP target = ctx.contains("target") ? ctx.get("target").asPlayer() : ctx.getSenderAsPlayer();
 		PlayerData data = ctx.contains("dst") ? ctx.get("dst").asPlayerData() : ctx.getSenderAsPlayer().getData();
 		WarpLocation home = data.core().getHome(ctx.contains("name") ? ctx.get("name").asString() : "home");
@@ -61,8 +61,8 @@ public class BasicCommands
 	)
 	public static void sethome(CommandContext ctx)
 	{
-		ctx.checkPermissionIfArg("name", "command.sethome.multi", "command.home.multi.fail");
-		ctx.checkPermissionIfArg("target", "command.sethome.other", "command.home.other.fail");
+		ctx.checkPermissionIfArg("name", "command.basic.sethome.multi", "command.home.multi.fail");
+		ctx.checkPermissionIfArg("target", "command.basic.sethome.other", "command.home.other.fail");
 		PlayerData data = ctx.contains("target") ? ctx.get("target").asPlayerData() : ctx.getSenderAsPlayer().getData();
 		WarpLocation dst = ctx.contains("dst") ? ctx.getServerData().getWarp(ctx.get("dst").asString()) : WarpLocation.getFromPlayer(ctx.getSenderAsPlayer());
 		ctx.check(dst != null, "command.warp.fail");
@@ -111,7 +111,7 @@ public class BasicCommands
 	)
 	public static void warp(CommandContext ctx)
 	{
-		ctx.checkPermissionIfArg("target", "command.warp.other", "command.warp.noperm.other");
+		ctx.checkPermissionIfArg("target", "command.basic.warp.other", "command.warp.noperm.other");
 		EntityPlayerMP target = ctx.contains("target") ? ctx.get("target").asPlayer() : ctx.getSenderAsPlayer();
 		WarpLocation warp = ctx.getServerData().getWarp(ctx.get("name").asString());
 		ctx.check(warp != null, "command.warp.fail");
@@ -274,7 +274,7 @@ public class BasicCommands
 	)
 	public static void heal(CommandContext ctx)
 	{
-		ctx.checkPermissionIfArg("player", "command.heal.other", "command.heal.noperm.other");
+		ctx.checkPermissionIfArg("player", "command.admin.heal.other", "command.heal.noperm.other");
 		EntityPlayerMP player = ctx.contains("player") ? ctx.get("player").asPlayer() : ctx.getSenderAsPlayer();
 		player.setHealth(player.getMaxHealth());
 		player.getFoodStats().addStats(20, 0.5F);
@@ -291,7 +291,7 @@ public class BasicCommands
 	)
 	public static void dropall(CommandContext ctx)
 	{
-		ctx.checkPermissionIfArg("player", "command.dropall.other", "command.dropall.noperm.other");
+		ctx.checkPermissionIfArg("player", "command.admin.dropall.other", "command.dropall.noperm.other");
 		EntityPlayerMP player = ctx.contains("player") ? ctx.get("player").asPlayer() : ctx.getSenderAsPlayer();
 		player.inventory.dropAllItems();
 	}
