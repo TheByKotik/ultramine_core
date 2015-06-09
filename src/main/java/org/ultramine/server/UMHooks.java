@@ -16,49 +16,56 @@ public class UMHooks
 	public static void printStackTrace(Throwable t)
 	{
 		log.warn("Direct Throwable.printStackTrace() call");
-		WorldEventProxy wep = WorldEventProxy.getCurrent();
-		if(wep != null)
+		if(Thread.currentThread().getName().equals("Server thread"))
 		{
-			int dim = wep.getWorld().provider.dimensionId;
-			WorldUpdateObject obj = wep.getUpdateObject();
-			switch(obj.getType())
+			WorldEventProxy wep = WorldEventProxy.getCurrent();
+			if(wep != null)
 			{
-			case BLOCK_EVENT:
-				log.warn("On block event update [{}]({}, {}, {})", dim, obj.getX(), obj.getY(), obj.getZ());
-				break;
-			case BLOCK_PENDING:
-				log.warn("On block pending update [{}]({}, {}, {})", dim, obj.getX(), obj.getY(), obj.getZ());
-				break;
-			case BLOCK_RANDOM:
-				log.warn("On block random update [{}]({}, {}, {})", dim, obj.getX(), obj.getY(), obj.getZ());
-				break;
-			case ENTITY:
-				Entity ent = obj.getEntity();
-				log.warn("On entity update [{}]({}, {}, {}). Entity: {}, Class: {}", dim, ent.posX, ent.posY, ent.posZ, ent, ent.getClass().getName());
-				break;
-			case ENTITY_WEATHER:
-				Entity went = obj.getEntity();
-				log.warn("On weather entity update [{}]({}, {}, {}). Entity: {}, Class: {}", dim, went.posX, went.posY, went.posZ, went, went.getClass().getName());
-				break;
-			case PLAYER:
-				EntityPlayer player = (EntityPlayer)obj.getEntity();
-				log.warn("On player packet [{}]({}, {}, {}). Entity: {}", dim, player.posX, player.posY, player.posZ, player);
-				break;
-			case TILEE_ENTITY:
-				TileEntity te = obj.getTileEntity();
-				log.warn("On TileEntity update [{}]({}, {}, {}). Class: {}", dim, te.xCoord, te.yCoord, te.zCoord, te.getClass().getName());
-				break;
-			case WEATHER:
-				log.warn("On weather action at world [{}]", dim);
-				break;
-			case UNKNOWN:
-				log.warn("On unknown action at world [{}]", dim);
-				break;
+				int dim = wep.getWorld().provider.dimensionId;
+				WorldUpdateObject obj = wep.getUpdateObject();
+				switch(obj.getType())
+				{
+				case BLOCK_EVENT:
+					log.warn("On block event update [{}]({}, {}, {})", dim, obj.getX(), obj.getY(), obj.getZ());
+					break;
+				case BLOCK_PENDING:
+					log.warn("On block pending update [{}]({}, {}, {})", dim, obj.getX(), obj.getY(), obj.getZ());
+					break;
+				case BLOCK_RANDOM:
+					log.warn("On block random update [{}]({}, {}, {})", dim, obj.getX(), obj.getY(), obj.getZ());
+					break;
+				case ENTITY:
+					Entity ent = obj.getEntity();
+					log.warn("On entity update [{}]({}, {}, {}). Entity: {}, Class: {}", dim, ent.posX, ent.posY, ent.posZ, ent, ent.getClass().getName());
+					break;
+				case ENTITY_WEATHER:
+					Entity went = obj.getEntity();
+					log.warn("On weather entity update [{}]({}, {}, {}). Entity: {}, Class: {}", dim, went.posX, went.posY, went.posZ, went, went.getClass().getName());
+					break;
+				case PLAYER:
+					EntityPlayer player = (EntityPlayer)obj.getEntity();
+					log.warn("On player packet [{}]({}, {}, {}). Entity: {}", dim, player.posX, player.posY, player.posZ, player);
+					break;
+				case TILEE_ENTITY:
+					TileEntity te = obj.getTileEntity();
+					log.warn("On TileEntity update [{}]({}, {}, {}). Class: {}", dim, te.xCoord, te.yCoord, te.zCoord, te.getClass().getName());
+					break;
+				case WEATHER:
+					log.warn("On weather action at world [{}]", dim);
+					break;
+				case UNKNOWN:
+					log.warn("On unknown action at world [{}]", dim);
+					break;
+				}
+			}
+			else
+			{
+				log.warn("On unknown action");
 			}
 		}
 		else
 		{
-			log.warn("On unknown action");
+			log.warn("On unknown action in thread " + Thread.currentThread().getName());
 		}
 
 		log.warn("Invoked here", new Throwable("stacktrace"));
