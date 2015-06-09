@@ -47,7 +47,6 @@ public class ServerLoadBalancer
 		int cx = MathHelper.floor_double(ent.posX) >> 4;
 		int cz = MathHelper.floor_double(ent.posZ) >> 4;
 
-		PerChunkEntityLimits getLimits = getLimits(ent);
 		Chunk chunk = world.getChunkIfExists(cx, cz);
 		if(chunk == null)
 		{
@@ -55,8 +54,10 @@ public class ServerLoadBalancer
 				ent.setDead();
 			return false;
 		}
+		
 		int count = chunk.getEntityCountOfSameType(ent);
-		if(count > getLimits.higherLimit)
+		PerChunkEntityLimits limits = getLimits(ent);
+		if(count > limits.higherLimit)
 		{
 			ent.setDead();
 			return false;
@@ -72,17 +73,17 @@ public class ServerLoadBalancer
 		if(!ent.addedToChunk)
 			return true;
 
-		int lowerLimit = getLimits.lowerLimit;
+		int lowerLimit = limits.lowerLimit;
 
 		if(prior == WorldConstants.CL_CHUNK_PRIOR)
-			if(!getLimits.updateByChunkLoader)
+			if(!limits.updateByChunkLoader)
 				lowerLimit = 1;
-		else if(prior > getLimits.updateRadius)
+		else if(prior > limits.updateRadius)
 			lowerLimit = 1;
 
 		if(count > lowerLimit)
 		{
-			float rate = (float)getLimits.lowerLimit / (float)count;
+			float rate = (float)limits.lowerLimit / (float)count;
 			if(rng.nextFloat() < rate)
 				return true;
 			return false;
