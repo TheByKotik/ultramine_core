@@ -394,7 +394,7 @@ public class BasicCommands
 			name = "commandmute",
 			aliases= {"cmdmute", "hardmute"},
 			group = "admin",
-			permissions = {"command.admin.mute"},
+			permissions = {"command.admin.commandmute"},
 			syntax = {
 					"<player>",
 					"<player> <time>"
@@ -410,5 +410,20 @@ public class BasicCommands
 			ctx.broadcast("command.commandmute.broadcast", data.getProfile().getName(), BasicTypeFormatter.formatTime(time, true));
 		else
 			ctx.broadcast("command.commandmute.broadcast.forever", data.getProfile().getName());
+	}
+	
+	@Command(
+			name = "unmute",
+			group = "admin",
+			permissions = {"command.admin.unmute"},
+			syntax = {"<player>"}
+	)
+	public static void unmute(CommandContext ctx)
+	{
+		PlayerData data = ctx.get("player").asPlayerData();
+		ctx.check(data.core().isMuted(), "command.unmute.fail");
+		data.core().unmute();
+		ctx.get("player").asOfflinePlayer().sendMessage(GREEN, GREEN, "command.unmute.notify");
+		ctx.sendMessage("command.unmute.success", data.getProfile().getName());
 	}
 }

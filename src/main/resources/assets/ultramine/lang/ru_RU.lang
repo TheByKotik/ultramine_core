@@ -331,3 +331,9 @@ command.commandmute.broadcast=Игроку %s запрещено писать в
 command.commandmute.broadcast.forever=Игроку %s навсегда запрещено писать в чат и выполнять команды
 ultramine.ability.command.muted=Возможность выполнять команды была заблокирована на %s
 ultramine.ability.command.muted.forever=Возможность выполнять команды была заблокирована навсегда
+
+command.commandmute.usage=/unmute <игрок>
+command.commandmute.description=Возвращает право писать в чат
+command.unmute.fail=Указанный игрок не замьючен
+command.unmute.notify=Вам возвращено право писать в чат
+command.unmute.success=Игроку %s теперь разрешено писать в чат

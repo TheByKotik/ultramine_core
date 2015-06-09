@@ -331,3 +331,9 @@ command.commandmute.broadcast=The player %s forbidden to write in chat and execu
 command.commandmute.broadcast.forever=The player %s forbidden to write in chat and execute commands forever
 ultramine.ability.command.muted=You don't have ability to execute commands. You will be unmuted in %s
 ultramine.ability.command.muted.forever=You has been muted forever. You don't have ability to execute commands
+
+command.commandmute.usage=/unmute <player>
+command.commandmute.description=Unmutes the player
+command.unmute.fail=The player is not muted
+command.unmute.notify=You has been unmuted
+command.unmute.success=Player %s has been unmuted
