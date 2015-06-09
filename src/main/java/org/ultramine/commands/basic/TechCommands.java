@@ -408,7 +408,7 @@ public class TechCommands
 		}
 		else
 		{
-			Restarter.restart(ctx.get("time").asTimeMills()/1000);
+			Restarter.restart((int)(ctx.get("time").asTimeMills()/1000));
 			ctx.sendMessage("command.restart.success");
 		}
 	}

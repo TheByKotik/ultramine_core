@@ -315,3 +315,19 @@ command.reloadcfg.description=Displays list of all loaded entities in all worlds
 
 command.reloadcfg.usage=/killentity <id>
 command.reloadcfg.description=Kills entity with specified ID
+
+command.mute.usage=/mute <player> [time]
+command.mute.description=Removes the ability to write in chat
+command.mute.notify=You has been muted
+command.mute.broadcast=The player %s forbidden to write in chat %s
+command.mute.broadcast.forever=The player %s forbidden to write in chat forever
+ultramine.ability.chat.muted=You has been muted. You will be unmuted in %s
+ultramine.ability.chat.muted.forever=You has been muted forever
+
+command.commandmute.usage=/commandmute <player> [time]
+command.commandmute.description=Removes the ability to write in chat and execute commands
+command.commandmute.notify=You have taken away the right to write in chat and execute commands
+command.commandmute.broadcast=The player %s forbidden to write in chat and execute commands %s
+command.commandmute.broadcast.forever=The player %s forbidden to write in chat and execute commands forever
+ultramine.ability.command.muted=You don't have ability to execute commands. You will be unmuted in %s
+ultramine.ability.command.muted.forever=You has been muted forever. You don't have ability to execute commands

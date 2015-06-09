@@ -212,20 +212,20 @@ public class BasicTypeParser
 	 * d - day<br />
 	 * @return time mills
 	 */
-	public static int parseTime(String str)
+	public static long parseTime(String str)
 	{
-		int time = 0;
+		long time = 0;
 		int lastInd = 0;
 		for(int i = 0, s = str.length(); i < s; i++)
 		{
 			char c = str.charAt(i);
 			if("smhd".indexOf(c) != -1)
 			{
-				int t;
+				long t;
 				String s1 = str.substring(lastInd, i);
 				try
 				{
-					t = Integer.parseInt(s1);
+					t = Long.parseLong(s1);
 				}
 				catch(NumberFormatException e)
 				{
@@ -243,7 +243,7 @@ public class BasicTypeParser
 			String s1 = str.substring(lastInd, str.length());
 			try
 			{
-				time += Integer.parseInt(s1);
+				time += Long.parseLong(s1);
 			}
 			catch(NumberFormatException e)
 			{
@@ -251,6 +251,6 @@ public class BasicTypeParser
 			}
 		}
 		
-		return time*1000;
+		return time*1000L;
 	}
 }

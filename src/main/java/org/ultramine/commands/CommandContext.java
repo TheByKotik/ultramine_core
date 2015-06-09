@@ -423,7 +423,7 @@ public class CommandContext
 			return BasicTypeParser.parseItemStack(asString());
 		}
 		
-		public int asTimeMills()
+		public long asTimeMills()
 		{
 			return BasicTypeParser.parseTime(asString());
 		}

@@ -17,6 +17,7 @@ import org.ultramine.commands.CommandContext;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.Teleporter;
 import org.ultramine.server.data.player.PlayerData;
+import org.ultramine.server.util.BasicTypeFormatter;
 import org.ultramine.server.util.InventoryUtil;
 import org.ultramine.server.util.WarpLocation;
 
@@ -366,5 +367,48 @@ public class BasicCommands
 			ctx.broadcast(WHITE, WHITE, msg);
 		else
 			ctx.get("player").asPlayer().addChatMessage(new ChatComponentText(msg));
+	}
+	
+	@Command(
+			name = "mute",
+			group = "admin",
+			permissions = {"command.admin.mute"},
+			syntax = {
+					"<player>",
+					"<player> <time>"
+			}
+	)
+	public static void mute(CommandContext ctx)
+	{
+		long time = ctx.contains("time") ? ctx.get("time").asTimeMills() : Long.MAX_VALUE;
+		PlayerData data = ctx.get("player").asPlayerData();
+		data.core().mute(time);
+		ctx.get("player").asOfflinePlayer().sendMessage(RED, RED, "command.mute.notify");
+		if(time != Long.MAX_VALUE)
+			ctx.broadcast("command.mute.broadcast", data.getProfile().getName(), BasicTypeFormatter.formatTime(time, true));
+		else
+			ctx.broadcast("command.mute.broadcast.forever", data.getProfile().getName());
+	}
+	
+	@Command(
+			name = "commandmute",
+			aliases= {"cmdmute", "hardmute"},
+			group = "admin",
+			permissions = {"command.admin.mute"},
+			syntax = {
+					"<player>",
+					"<player> <time>"
+			}
+	)
+	public static void commandmute(CommandContext ctx)
+	{
+		long time = ctx.contains("time") ? ctx.get("time").asTimeMills() : Long.MAX_VALUE;
+		PlayerData data = ctx.get("player").asPlayerData();
+		data.core().mute(time, true);
+		ctx.get("player").asOfflinePlayer().sendMessage(RED, RED, "command.commandmute.notify");
+		if(time != Long.MAX_VALUE)
+			ctx.broadcast("command.commandmute.broadcast", data.getProfile().getName(), BasicTypeFormatter.formatTime(time, true));
+		else
+			ctx.broadcast("command.commandmute.broadcast.forever", data.getProfile().getName());
 	}
 }

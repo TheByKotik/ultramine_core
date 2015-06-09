@@ -4,6 +4,8 @@ import org.ultramine.economy.PlayerHoldingsEvent;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoBroacastConf;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoDebugInfoConf;
 import org.ultramine.server.chunk.ChunkProfiler;
+import org.ultramine.server.data.player.PlayerCoreData;
+import org.ultramine.server.util.BasicTypeFormatter;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.WarpLocation;
 
@@ -29,6 +31,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.WorldServer;
 import static net.minecraft.util.EnumChatFormatting.*;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -42,10 +45,25 @@ public class UMEventHandler
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void checkChatPermission(ServerChatEvent e)
 	{
+		PlayerCoreData data = e.player.getData().core();
 		if(!PermissionHandler.getInstance().has(e.player, "ability.player.chat"))
 		{
 			e.setCanceled(true);
 			e.player.addChatMessage(new ChatComponentTranslation("ultramine.ability.chat").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+		}
+		else if(data.isMuted())
+		{
+			e.setCanceled(true);
+			if(data.getUnmuteTime() != Long.MAX_VALUE)
+			{
+				e.player.addChatMessage(new ChatComponentTranslation("ultramine.ability.chat.muted",
+						BasicTypeFormatter.formatTime(data.getUnmuteTime() - System.currentTimeMillis(), true))
+						.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			}
+			else
+			{
+				e.player.addChatMessage(new ChatComponentTranslation("ultramine.ability.chat.muted.forever").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			}
 		}
 	}
 	
@@ -63,6 +81,29 @@ public class UMEventHandler
 		msg.getChatStyle().setColor(color != null ? color : EnumChatFormatting.WHITE);
 		
 		e.component = new ChatComponentTranslation("%s%s%s\u00A77: %s", prefix, username, postfix, msg);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onServerCommand(CommandEvent e)
+	{
+		if(e.sender instanceof EntityPlayerMP)
+		{
+			EntityPlayerMP player = (EntityPlayerMP)e.sender;
+			if(player.playerNetServerHandler != null && player.getData() != null && player.getData().core().isCommandsMuted())
+			{
+				e.setCanceled(true);
+				if(player.getData().core().getUnmuteTime() != Long.MAX_VALUE)
+				{
+					player.addChatMessage(new ChatComponentTranslation("ultramine.ability.command.muted",
+							BasicTypeFormatter.formatTime(player.getData().core().getUnmuteTime() - System.currentTimeMillis(), true))
+							.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+				}
+				else
+				{
+					player.addChatMessage(new ChatComponentTranslation("ultramine.ability.command.muted.forever").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+				}
+			}
+		}
 	}
 	
 	@SubscribeEvent

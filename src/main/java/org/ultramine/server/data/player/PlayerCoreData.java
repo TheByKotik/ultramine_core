@@ -15,6 +15,8 @@ public class PlayerCoreData extends PlayerDataExtension
 {
 	private final Map<String, WarpLocation> homes = new HashMap<String, WarpLocation>();
 	private final PlayerAccount account;
+	private long unmuteTime;
+	private boolean commandsMuted;
 	
 	//undatabased
 	private Teleporter teleporter;
@@ -88,6 +90,52 @@ public class PlayerCoreData extends PlayerDataExtension
 		this.lastMessagedPlayer = lastMessagedPlayer;
 	}
 	
+	public void mute(long time)
+	{
+		if(time == Long.MAX_VALUE)
+			this.unmuteTime = Long.MAX_VALUE;
+		else
+			this.unmuteTime = System.currentTimeMillis() + time;
+	}
+	
+	public void mute(long time, boolean commandsMuted)
+	{
+		mute(time);
+		this.commandsMuted = commandsMuted;
+	}
+	
+	public void unmute()
+	{
+		this.unmuteTime = 0;
+		this.commandsMuted = false;
+	}
+	
+	public boolean isMuted()
+	{
+		if(unmuteTime == 0)
+			return false;
+		else if(unmuteTime == Long.MAX_VALUE)
+			return true;
+		else if(System.currentTimeMillis() <= unmuteTime)
+			return true;
+		else
+		{
+			unmuteTime = 0;
+			commandsMuted = false;
+			return false;
+		}
+	}
+	
+	public long getUnmuteTime()
+	{
+		return unmuteTime;
+	}
+	
+	public boolean isCommandsMuted()
+	{
+		return isMuted() && commandsMuted;
+	}
+	
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
@@ -104,6 +152,8 @@ public class PlayerCoreData extends PlayerDataExtension
 		NBTTagCompound accnbt = new NBTTagCompound();
 		account.writeToNBT(accnbt);
 		nbt.setTag("acc", accnbt);
+		nbt.setLong("m", unmuteTime);
+		nbt.setBoolean("mc", commandsMuted);
 	}
 	
 	@Override
@@ -117,5 +167,7 @@ public class PlayerCoreData extends PlayerDataExtension
 		}
 		
 		account.readFromNBT(nbt.getCompoundTag("acc"));
+		unmuteTime = nbt.getLong("m");
+		commandsMuted = nbt.getBoolean("mc");
 	}
 }
