@@ -16,8 +16,10 @@ import net.minecraft.world.WorldServerMulti;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
+import net.minecraft.world.chunk.storage.RegionFileCache;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.ISaveHandler;
+import net.minecraft.world.storage.ThreadedFileIOBase;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -329,6 +331,13 @@ public class WorldDescriptor
 	{
 		if(state.isLoaded())
 			destroyWorld();
+		
+		try
+		{
+			ThreadedFileIOBase.threadedIOInstance.waitForFinish();
+		} catch (InterruptedException ignored){}
+
+		RegionFileCache.clearRegionFileReferences();
 		
 		try
 		{
