@@ -134,7 +134,7 @@ public abstract class World implements IBlockAccess
 	private final Calendar theCalendar = Calendar.getInstance();
 	protected Scoreboard worldScoreboard = new Scoreboard();
 	public boolean isRemote;
-	protected TIntByteMap activeChunkSet = new TIntByteHashMap(512, 0.75F, 0, Byte.MAX_VALUE);//XXX
+	protected TIntByteMap activeChunkSet = new TIntByteHashMap(512, 0.5F, 0, Byte.MAX_VALUE);//XXX
 	private int ambientTickCountdown;
 	protected boolean spawnHostileMobs;
 	protected boolean spawnPeacefulMobs;
