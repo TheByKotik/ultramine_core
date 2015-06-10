@@ -2186,7 +2186,7 @@ public abstract class World implements IBlockAccess
 
 			if (Double.isNaN(p_72866_1_.posX) || p_72866_1_.posX > WorldConstants.MAX_BLOCK_COORD || p_72866_1_.posX < -WorldConstants.MAX_BLOCK_COORD)
 			{
-				FMLLog.warning("Removed out of world entity %s", p_72866_1_);
+				FMLLog.severe("Removed out of world entity %s", p_72866_1_);
 				p_72866_1_.setDead();
 				return;
 			}
@@ -2198,7 +2198,7 @@ public abstract class World implements IBlockAccess
 
 			if (Double.isNaN(p_72866_1_.posZ) || p_72866_1_.posZ > WorldConstants.MAX_BLOCK_COORD || p_72866_1_.posZ < -WorldConstants.MAX_BLOCK_COORD)
 			{
-				FMLLog.warning("Removed out of world entity %s", p_72866_1_);
+				FMLLog.severe("Removed out of world entity %s", p_72866_1_);
 				p_72866_1_.setDead();
 				return;
 			}
