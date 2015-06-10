@@ -106,7 +106,7 @@ public class DataWatcher
 
 	private DataWatcher.WatchableObject getWatchedObject(int p_75691_1_)
 	{
-		this.lock.readLock().lock();
+//		this.lock.readLock().lock();
 		DataWatcher.WatchableObject watchableobject;
 
 		try
@@ -121,7 +121,7 @@ public class DataWatcher
 			throw new ReportedException(crashreport);
 		}
 
-		this.lock.readLock().unlock();
+//		this.lock.readLock().unlock();
 		return watchableobject;
 	}
 
