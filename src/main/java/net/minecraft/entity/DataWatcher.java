@@ -3,6 +3,8 @@ package net.minecraft.entity;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class DataWatcher
 	private final Entity field_151511_a;
 	private boolean isBlank = true;
 	private static final HashMap dataTypes = new HashMap();
-	private final Map watchedObjects = new HashMap();
+	private final TIntObjectMap watchedObjects = new TIntObjectHashMap();
 	private boolean objectChanged;
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	private static final String __OBFID = "CL_00001559";
@@ -49,7 +51,7 @@ public class DataWatcher
 		{
 			throw new IllegalArgumentException("Data value id is too big with " + p_75682_1_ + "! (Max is " + 31 + ")");
 		}
-		else if (this.watchedObjects.containsKey(Integer.valueOf(p_75682_1_)))
+		else if (this.watchedObjects.containsKey(p_75682_1_))
 		{
 			throw new IllegalArgumentException("Duplicate id value for " + p_75682_1_ + "!");
 		}
@@ -57,7 +59,7 @@ public class DataWatcher
 		{
 			DataWatcher.WatchableObject watchableobject = new DataWatcher.WatchableObject(integer.intValue(), p_75682_1_, p_75682_2_);
 			this.lock.writeLock().lock();
-			this.watchedObjects.put(Integer.valueOf(p_75682_1_), watchableobject);
+			this.watchedObjects.put(p_75682_1_, watchableobject);
 			this.lock.writeLock().unlock();
 			this.isBlank = false;
 		}
@@ -67,7 +69,7 @@ public class DataWatcher
 	{
 		DataWatcher.WatchableObject watchableobject = new DataWatcher.WatchableObject(p_82709_2_, p_82709_1_, (Object)null);
 		this.lock.writeLock().lock();
-		this.watchedObjects.put(Integer.valueOf(p_82709_1_), watchableobject);
+		this.watchedObjects.put(p_82709_1_, watchableobject);
 		this.lock.writeLock().unlock();
 		this.isBlank = false;
 	}
@@ -109,7 +111,7 @@ public class DataWatcher
 
 		try
 		{
-			watchableobject = (DataWatcher.WatchableObject)this.watchedObjects.get(Integer.valueOf(p_75691_1_));
+			watchableobject = (DataWatcher.WatchableObject)this.watchedObjects.get(p_75691_1_);
 		}
 		catch (Throwable throwable)
 		{
@@ -170,7 +172,7 @@ public class DataWatcher
 		if (this.objectChanged)
 		{
 			this.lock.readLock().lock();
-			Iterator iterator = this.watchedObjects.values().iterator();
+			Iterator iterator = this.watchedObjects.valueCollection().iterator();
 
 			while (iterator.hasNext())
 			{
@@ -199,7 +201,7 @@ public class DataWatcher
 	public void func_151509_a(PacketBuffer p_151509_1_) throws IOException
 	{
 		this.lock.readLock().lock();
-		Iterator iterator = this.watchedObjects.values().iterator();
+		Iterator iterator = this.watchedObjects.valueCollection().iterator();
 
 		while (iterator.hasNext())
 		{
@@ -224,7 +226,7 @@ public class DataWatcher
 		this.lock.readLock().lock();
 		DataWatcher.WatchableObject watchableobject;
 
-		for (Iterator iterator = this.watchedObjects.values().iterator(); iterator.hasNext(); arraylist.add(watchableobject))
+		for (Iterator iterator = this.watchedObjects.valueCollection().iterator(); iterator.hasNext(); arraylist.add(watchableobject))
 		{
 			watchableobject = (DataWatcher.WatchableObject)iterator.next();
 
@@ -329,7 +331,7 @@ public class DataWatcher
 		while (iterator.hasNext())
 		{
 			DataWatcher.WatchableObject watchableobject = (DataWatcher.WatchableObject)iterator.next();
-			DataWatcher.WatchableObject watchableobject1 = (DataWatcher.WatchableObject)this.watchedObjects.get(Integer.valueOf(watchableobject.getDataValueId()));
+			DataWatcher.WatchableObject watchableobject1 = (DataWatcher.WatchableObject)this.watchedObjects.get(watchableobject.getDataValueId());
 
 			if (watchableobject1 != null)
 			{
