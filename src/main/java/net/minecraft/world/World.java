@@ -2018,11 +2018,11 @@ public abstract class World implements IBlockAccess
 		while (iterator.hasNext())
 		{
 			TileEntity tileentity = (TileEntity)iterator.next();
-			eventProxy.startTileEntity(tileentity);
 
 			int key = ChunkHash.chunkToKey(tileentity.xCoord >> 4, tileentity.zCoord >> 4);
 			if (!tileentity.isInvalid() && tileentity.hasWorldObj() && activeChunkSet.containsKey(key))
 			{
+				eventProxy.startTileEntity(tileentity);
 				chunkProfiler.startChunk(key);
 				try
 				{
