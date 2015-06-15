@@ -742,6 +742,11 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 		float f = (float)(p_147281_1_.func_149028_l() * 360) / 256.0F;
 		float f1 = (float)(p_147281_1_.func_149030_m() * 360) / 256.0F;
 		EntityLivingBase entitylivingbase = (EntityLivingBase)EntityList.createEntityByID(p_147281_1_.func_149025_e(), this.gameController.theWorld);
+		if (entitylivingbase == null)
+		{
+			cpw.mods.fml.common.FMLLog.info("Server attempted to spawn an unknown entity using ID: {0} at ({1}, {2}, {3}) Skipping!", p_147281_1_.func_149025_e(), d0, d1, d2);
+			return;
+		}
 		entitylivingbase.serverPosX = p_147281_1_.func_149023_f();
 		entitylivingbase.serverPosY = p_147281_1_.func_149034_g();
 		entitylivingbase.serverPosZ = p_147281_1_.func_149029_h();
