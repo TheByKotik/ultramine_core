@@ -95,7 +95,7 @@ public class SimpleReloadableResourceManager implements IReloadableResourceManag
 	public void reloadResources(List p_110541_1_)
 	{
 		this.clearResources();
-		cpw.mods.fml.common.ProgressManager.ProgressBar resReload = cpw.mods.fml.common.ProgressManager.push("Loading Resources", p_110541_1_.size()+1);
+		cpw.mods.fml.common.ProgressManager.ProgressBar resReload = cpw.mods.fml.common.ProgressManager.push("Loading Resources", p_110541_1_.size()+1, true);
 		logger.info("Reloading ResourceManager: " + joinerResourcePacks.join(Iterables.transform(p_110541_1_, new Function()
 		{
 			private static final String __OBFID = "CL_00001092";

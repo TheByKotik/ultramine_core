@@ -498,7 +498,7 @@ public class Minecraft implements IPlayerUsage
 		this.mcResourceManager.registerReloadListener(this.standardGalacticFontRenderer);
 		this.mcResourceManager.registerReloadListener(new GrassColorReloadListener());
 		this.mcResourceManager.registerReloadListener(new FoliageColorReloadListener());
-		cpw.mods.fml.common.ProgressManager.ProgressBar bar= cpw.mods.fml.common.ProgressManager.push("Rendering Setup", 9);
+		cpw.mods.fml.common.ProgressManager.ProgressBar bar= cpw.mods.fml.common.ProgressManager.push("Rendering Setup", 9, true);
 		bar.step("Loading Render Manager");
 		RenderManager.instance.itemRenderer = new ItemRenderer(this);
 		bar.step("Loading Entity Renderer");
