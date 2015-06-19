@@ -36,6 +36,7 @@ import org.apache.logging.log4j.Logger;
 @SideOnly(Side.CLIENT)
 public class TextureMap extends AbstractTexture implements ITickableTextureObject, IIconRegister
 {
+	private static final boolean ENABLE_SKIP = Boolean.parseBoolean(System.getProperty("fml.skipFirstTextureLoad", "true"));
 	private static final Logger logger = LogManager.getLogger();
 	public static final ResourceLocation locationBlocksTexture = new ResourceLocation("textures/atlas/blocks.png");
 	public static final ResourceLocation locationItemsTexture = new ResourceLocation("textures/atlas/items.png");
@@ -48,12 +49,18 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 	private int anisotropicFiltering = 1;
 	private final TextureAtlasSprite missingImage = new TextureAtlasSprite("missingno");
 	private static final String __OBFID = "CL_00001058";
+	private boolean skipFirst = false;
 
 	public TextureMap(int p_i1281_1_, String p_i1281_2_)
+	{
+		this(p_i1281_1_, p_i1281_2_, false);
+	}
+	public TextureMap(int p_i1281_1_, String p_i1281_2_, boolean skipFirst)
 	{
 		this.textureType = p_i1281_1_;
 		this.basePath = p_i1281_2_;
 		this.registerIcons();
+		this.skipFirst = skipFirst && ENABLE_SKIP;
 	}
 
 	private void initMissingImage()
@@ -100,11 +107,11 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 		this.listAnimatedSprites.clear();
 		int j = Integer.MAX_VALUE;
 		ForgeHooksClient.onTextureStitchedPre(this);
-		cpw.mods.fml.common.ProgressManager.ProgressBar bar = cpw.mods.fml.common.ProgressManager.push("Texture stitching", this.mapRegisteredSprites.size());
+		cpw.mods.fml.common.ProgressManager.ProgressBar bar = cpw.mods.fml.common.ProgressManager.push("Texture Loading", skipFirst ? 0 : this.mapRegisteredSprites.size());
 		Iterator iterator = this.mapRegisteredSprites.entrySet().iterator();
 		TextureAtlasSprite textureatlassprite;
 
-		while (iterator.hasNext())
+		while (!skipFirst && iterator.hasNext())
 		{
 			Entry entry = (Entry)iterator.next();
 			ResourceLocation resourcelocation = new ResourceLocation((String)entry.getKey());
@@ -197,9 +204,9 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 		}
 
 		Iterator iterator1 = this.mapRegisteredSprites.values().iterator();
-		bar = cpw.mods.fml.common.ProgressManager.push("Mipmap generation", this.mapRegisteredSprites.size());
+		bar = cpw.mods.fml.common.ProgressManager.push("Mipmap generation", skipFirst ? 0 : this.mapRegisteredSprites.size());
 
-		while (iterator1.hasNext())
+		while (!skipFirst && iterator1.hasNext())
 		{
 			final TextureAtlasSprite textureatlassprite1 = (TextureAtlasSprite)iterator1.next();
 			bar.step(textureatlassprite1.getIconName());
@@ -244,6 +251,7 @@ public class TextureMap extends AbstractTexture implements ITickableTextureObjec
 		this.missingImage.generateMipmaps(this.mipmapLevels);
 		stitcher.addSprite(this.missingImage);
 		cpw.mods.fml.common.ProgressManager.pop(bar);
+		skipFirst = false;
 		bar = cpw.mods.fml.common.ProgressManager.push("Texture creation", 3);
 
 		try
