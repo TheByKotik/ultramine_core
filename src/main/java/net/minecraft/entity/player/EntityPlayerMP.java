@@ -508,7 +508,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public void onItemPickup(Entity p_71001_1_, int p_71001_2_)
 	{
 		super.onItemPickup(p_71001_1_, p_71001_2_);
-		this.openContainer.detectAndSendChanges();
+//		this.openContainer.detectAndSendChanges();
 	}
 
 	public EntityPlayer.EnumStatus sleepInBedAt(int p_71018_1_, int p_71018_2_, int p_71018_3_)
