@@ -162,12 +162,15 @@ public class TextureManager implements ITickable, IResourceManagerReloadListener
 
 	public void onResourceManagerReload(IResourceManager p_110549_1_)
 	{
+		cpw.mods.fml.common.ProgressManager.ProgressBar bar = cpw.mods.fml.common.ProgressManager.push("Reloading Texture Manager", this.mapTextureObjects.keySet().size(), true);
 		Iterator iterator = this.mapTextureObjects.entrySet().iterator();
 
 		while (iterator.hasNext())
 		{
 			Entry entry = (Entry)iterator.next();
+			bar.step(entry.getKey().toString());
 			this.loadTexture((ResourceLocation)entry.getKey(), (ITextureObject)entry.getValue());
 		}
+		cpw.mods.fml.common.ProgressManager.pop(bar);
 	}
 }

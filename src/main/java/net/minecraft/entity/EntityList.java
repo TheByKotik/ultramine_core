@@ -84,6 +84,7 @@ public class EntityList
 
 	public static void addMapping(Class p_75618_0_, String p_75618_1_, int p_75618_2_)
 	{
+		if (p_75618_2_ < 0 || p_75618_2_ > 255) throw new IllegalArgumentException("Attempted to register a entity with invalid ID: " + p_75618_2_ + " Name: " + p_75618_1_ + " Class: " + p_75618_0_);
 		if (stringToClassMapping.containsKey(p_75618_1_))
 		{
 			throw new IllegalArgumentException("ID is already registered: " + p_75618_1_);

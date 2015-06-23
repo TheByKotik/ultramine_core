@@ -60,6 +60,7 @@ public class Stitcher
 	public void doStitch()
 	{
 		Stitcher.Holder[] aholder = (Stitcher.Holder[])this.setStitchHolders.toArray(new Stitcher.Holder[this.setStitchHolders.size()]);
+		cpw.mods.fml.common.ProgressManager.ProgressBar bar = cpw.mods.fml.common.ProgressManager.push("Texture stitching", aholder.length);
 		Arrays.sort(aholder);
 		Stitcher.Holder[] aholder1 = aholder;
 		int i = aholder.length;
@@ -67,6 +68,7 @@ public class Stitcher
 		for (int j = 0; j < i; ++j)
 		{
 			Stitcher.Holder holder = aholder1[j];
+			bar.step(holder.getAtlasSprite().getIconName());
 
 			if (!this.allocateSlot(holder))
 			{
@@ -80,6 +82,7 @@ public class Stitcher
 			this.currentWidth = MathHelper.roundUpToPowerOfTwo(this.currentWidth);
 			this.currentHeight = MathHelper.roundUpToPowerOfTwo(this.currentHeight);
 		}
+		cpw.mods.fml.common.ProgressManager.pop(bar);
 	}
 
 	public List getStichSlots()
