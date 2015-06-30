@@ -94,7 +94,7 @@ public class InventoryUtil
 		for(int i = 0, s = inv.getSizeInventory(); i < s; i++)
 		{
 			ItemStack it = inv.getStackInSlot(i);
-			if(it != null)
+			if(it != null && isStacksEquals(it, is))
 			{
 				int amount = it.stackSize;
 
