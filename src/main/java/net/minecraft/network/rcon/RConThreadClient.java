@@ -44,9 +44,9 @@ public class RConThreadClient extends RConThreadBase
 
 	public void run()
 	{
-		while (true)
+		try
 		{
-			try
+			while (true)
 			{
 				if (!this.running)
 				{
@@ -113,26 +113,24 @@ public class RConThreadClient extends RConThreadBase
 					}
 				}
 			}
+		}
 			catch (SocketTimeoutException sockettimeoutexception)
 			{
-				break;
+				return;
 			}
 			catch (IOException ioexception)
 			{
-				break;
+				return;
 			}
 			catch (Exception exception1)
 			{
 				field_164005_h.error("Exception whilst parsing RCON input", exception1);
-				break;
+				return;
 			}
 			finally
 			{
 				this.closeSocket();
 			}
-
-			return;
-		}
 	}
 
 	private void sendResponse(int p_72654_1_, int p_72654_2_, String p_72654_3_) throws IOException
@@ -170,6 +168,7 @@ public class RConThreadClient extends RConThreadBase
 
 	private void closeSocket()
 	{
+		this.running = false;
 		if (null != this.clientSocket)
 		{
 			try
