@@ -677,8 +677,8 @@ public class GameData {
 
 			try
 			{
-				String skip = System.getProperty("fml.doNotBackup");
-				if (skip == null || !"true".equals(skip))
+				String dob = System.getProperty("fml.doBackup");
+				if (dob != null && "true".equals(dob))
 				{
 					ZipperUtil.backupWorld();
 				}
