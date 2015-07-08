@@ -56,20 +56,22 @@ command.pconfig.description=Save or reload all permissions configs
 command.pconfig.success.save=Permissions are saved
 command.pconfig.success.reload=Permissions are reloaded
 
-command.pworld.usage=/pworld [world] <add|remove> <permissions ...>
-command.pworld.description=Add or remove permissions to all user in world (current is default)
-command.pworld.success.add=Add permission <%s> to world <%s>
-command.pworld.success.remove=Remove permission <%s> from world <%s>
-command.pworld.success.meta=Set meta <%s> to <%s> in world <%s>
+command.pmixin.usage=/pmixin <mixin> <add|remove> <permissions ...> OR /pmixin <mixin> meta <key> <value>
+command.pmixin.description=Add or remove permissions to specified mixin
+command.pmixin.success.add=Add permission <%s> to mixin <%s>
+command.pmixin.success.remove=Remove permission <%s> from mixin <%s>
+command.pmixin.success.meta=Set meta <%s> to <%s> for mixin <%s>
 
 command.puser.usage=/puser [world] <player> <add|remove> <permissions ...> OR /puser [world] <player> meta <key> <value>
 command.puser.description=Add/remove permissions OR set meta for user in world (current is default)
+command.puser.success.group=Player <%s> added to group <%s>
 command.puser.success.add=Add permission <%s> to user <%s> in world <%s>
 command.puser.success.remove=Remove permission <%s> from user <%s> in world <%s>
 command.puser.success.meta=Set meta <%s> to <%s> for user <%s> in world <%s>
 
 command.pgroup.usage=/pgroup <group> <add|remove> <permissions ...> OR /pgroup <group> meta <key> <value>
 command.pgroup.description=Add/remove permissions OR set meta for group
+command.pgroup.success.parent=Set parent <%s> for group <%s>
 command.pgroup.success.add=Add permission <%s> to group <%s>
 command.pgroup.success.remove=Remove permission <%s> from group <%s>
 command.pgroup.success.meta=Set meta <%s> to <%s> for group <%s>
