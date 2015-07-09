@@ -179,7 +179,8 @@ public class S21PacketChunkData extends Packet
 			p_149269_0_.sendUpdates = true;
 		}
 
-		if(aextendedblockstorage[0] == null) aextendedblockstorage[0] = new ExtendedBlockStorage(0, true);
+		if(aextendedblockstorage[0] == null)
+			aextendedblockstorage[0] = new ExtendedBlockStorage(0, true);
 
 		int l;
 
@@ -189,7 +190,7 @@ public class S21PacketChunkData extends Packet
 			{
 				extracted.field_150280_b |= 1 << l;
 
-				if (aextendedblockstorage[l].getBlockMSBArray() != null)
+				if (true/*aextendedblockstorage[l].getBlockMSBArray() != null*/)
 				{
 					extracted.field_150281_c |= 1 << l;
 					++k;
@@ -201,9 +202,8 @@ public class S21PacketChunkData extends Packet
 		{
 			if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
 			{
-				byte[] abyte1 = aextendedblockstorage[l].getBlockLSBArray();
-				System.arraycopy(abyte1, 0, abyte, j, abyte1.length);
-				j += abyte1.length;
+				aextendedblockstorage[l].getSlot().copyLSB(abyte, j);
+				j += 4096;
 			}
 		}
 
@@ -213,9 +213,8 @@ public class S21PacketChunkData extends Packet
 		{
 			if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
 			{
-				nibblearray = aextendedblockstorage[l].getMetadataArray();
-				System.arraycopy(nibblearray.data, 0, abyte, j, nibblearray.data.length);
-				j += nibblearray.data.length;
+				aextendedblockstorage[l].getSlot().copyBlockMetadata(abyte, j);
+				j += 2048;
 			}
 		}
 
@@ -223,9 +222,8 @@ public class S21PacketChunkData extends Packet
 		{
 			if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
 			{
-				nibblearray = aextendedblockstorage[l].getBlocklightArray();
-				System.arraycopy(nibblearray.data, 0, abyte, j, nibblearray.data.length);
-				j += nibblearray.data.length;
+				aextendedblockstorage[l].getSlot().copyBlocklight(abyte, j);
+				j += 2048;
 			}
 		}
 
@@ -235,9 +233,8 @@ public class S21PacketChunkData extends Packet
 			{
 				if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && (p_149269_2_ & 1 << l) != 0)
 				{
-					nibblearray = aextendedblockstorage[l].getSkylightArray();
-					System.arraycopy(nibblearray.data, 0, abyte, j, nibblearray.data.length);
-					j += nibblearray.data.length;
+					aextendedblockstorage[l].getSlot().copySkylight(abyte, j);
+					j += 2048;
 				}
 			}
 		}
@@ -246,11 +243,10 @@ public class S21PacketChunkData extends Packet
 		{
 			for (l = 0; l < aextendedblockstorage.length; ++l)
 			{
-				if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty()) && aextendedblockstorage[l].getBlockMSBArray() != null && (p_149269_2_ & 1 << l) != 0)
+				if (aextendedblockstorage[l] != null && (l == 0 || !p_149269_1_ || !aextendedblockstorage[l].isEmpty())/* && aextendedblockstorage[l].getBlockMSBArray() != null*/ && (p_149269_2_ & 1 << l) != 0)
 				{
-					nibblearray = aextendedblockstorage[l].getBlockMSBArray();
-					System.arraycopy(nibblearray.data, 0, abyte, j, nibblearray.data.length);
-					j += nibblearray.data.length;
+					aextendedblockstorage[l].getSlot().copyMSB(abyte, j);
+					j += 2048;
 				}
 			}
 		}

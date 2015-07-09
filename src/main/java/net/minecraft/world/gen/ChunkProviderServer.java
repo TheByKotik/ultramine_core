@@ -410,6 +410,7 @@ public class ChunkProviderServer implements IChunkProvider
 						}
 						this.safeSaveExtraChunkData(chunk);
 						this.loadedChunkHashMap.remove(hash);
+						chunk.free();
 					}
 				}
 				
@@ -636,6 +637,7 @@ public class ChunkProviderServer implements IChunkProvider
 				safeSaveChunk(chunk);
 			else
 				MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Save(chunk, new NBTTagCompound())); //CodeChickenLib memory leak fix
+			chunk.free();
 		}
 		
 		loadedChunkHashMap.clear();
@@ -643,6 +645,14 @@ public class ChunkProviderServer implements IChunkProvider
 		possibleSaves.clear();
 		if(!save)
 			((AnvilChunkLoader)currentChunkLoader).unsafeRemoveAll();
+	}
+	
+	public void free()
+	{
+		for(Chunk chunk : loadedChunkHashMap.valueCollection())
+			chunk.free();
+		loadedChunkHashMap.clear();
+		setWorldUnloaded();
 	}
 	
 	public boolean isGenerating()

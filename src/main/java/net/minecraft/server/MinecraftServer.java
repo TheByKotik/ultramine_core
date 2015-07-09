@@ -370,6 +370,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				WorldServer[] tmp = worldServers;
 				for (WorldServer world : tmp)
 				{
+					world.theChunkProviderServer.free();
 					DimensionManager.setWorld(world.provider.dimensionId, null);
 				}
 			}

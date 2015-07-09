@@ -36,6 +36,7 @@ import org.ultramine.server.BackupManager.BackupDescriptor;
 import org.ultramine.server.WorldsConfig.WorldConfig.Border;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.chunk.IChunkLoadCallback;
+import org.ultramine.server.chunk.OffHeapChunkStorage;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.world.MultiWorld;
 import org.ultramine.server.world.WorldDescriptor;
@@ -147,6 +148,8 @@ public class TechCommands
 		ctx.sendMessage("Heap max: %sm", Runtime.getRuntime().maxMemory() >> 20);
 		ctx.sendMessage("Heap total: %sm", Runtime.getRuntime().totalMemory() >> 20);
 		ctx.sendMessage("Heap free: %sm", Runtime.getRuntime().freeMemory() >> 20);
+		ctx.sendMessage("Off-Heap chunk total: %sm", OffHeapChunkStorage.instance().getTotalMemory() >> 20);
+		ctx.sendMessage("Off-Heap chunk used: %sm", OffHeapChunkStorage.instance().getUsedMemory() >> 20);
 	}
 	
 	@Command(
