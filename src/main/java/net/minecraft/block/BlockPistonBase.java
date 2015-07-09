@@ -213,14 +213,14 @@ public class BlockPistonBase extends Block
 					}
 				}
 
-				if (!flag1 && block.getMaterial() != Material.air && canPushBlock(block, p_149696_1_, j1, k1, l1, false) && (block.getMobilityFlag() == 0 || block == Blocks.piston || block == Blocks.sticky_piston))
+				if (!flag1 && block.getMaterial() != Material.air && canPushBlock(block, p_149696_1_, j1, k1, l1, false) && (block.getMobilityFlag() == 0 || block == Blocks.piston || block == Blocks.sticky_piston) && p_149696_1_.setBlockToAir(j1, k1, l1))
 				{
 					p_149696_2_ += Facing.offsetsXForSide[p_149696_6_];
 					p_149696_3_ += Facing.offsetsYForSide[p_149696_6_];
 					p_149696_4_ += Facing.offsetsZForSide[p_149696_6_];
 					p_149696_1_.setBlock(p_149696_2_, p_149696_3_, p_149696_4_, Blocks.piston_extension, i2, 3);
 					p_149696_1_.setTileEntity(p_149696_2_, p_149696_3_, p_149696_4_, BlockPistonMoving.getTileEntity(block, i2, p_149696_6_, false, false));
-					p_149696_1_.setBlockToAir(j1, k1, l1);
+//					p_149696_1_.setBlockToAir(j1, k1, l1); //moved up into if expression
 				}
 				else if (!flag1)
 				{
