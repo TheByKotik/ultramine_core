@@ -457,6 +457,18 @@ public class ServerDataLoader
 		getDataProvider().savePlayer(player.getGameProfile(), nbt);
 	}
 	
+	public GameProfile internGameProfile(GameProfile profile)
+	{
+		PlayerData data = profile.getId() != null ? playerDataCache.get(profile.getId()) : namedPlayerDataCache.get(profile.getName().toLowerCase());
+		return data != null ? data.getProfile() : profile;
+	}
+	
+	public GameProfile internGameProfile(UUID id, String username)
+	{
+		PlayerData data = id != null ? playerDataCache.get(id) : namedPlayerDataCache.get(username.toLowerCase());
+		return data != null ? data.getProfile() : new GameProfile(id, username);
+	}
+	
 	private static class LoadedDataStruct
 	{
 		private final NBTTagCompound nbt;

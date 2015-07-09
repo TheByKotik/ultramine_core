@@ -2,6 +2,8 @@ package org.ultramine.server.event;
 
 import org.ultramine.server.chunk.ChunkHash;
 
+import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gnu.trove.list.TLongList;
@@ -94,7 +96,7 @@ public class ServerWorldEventProxy extends WorldEventProxy
 	}
 	
 	@Override
-	public String getObjectOwner()
+	public GameProfile getObjectOwner()
 	{
 		switch(object.getType())
 		{
@@ -110,7 +112,7 @@ public class ServerWorldEventProxy extends WorldEventProxy
 		case ENTITY_WEATHER:
 			break;
 		case PLAYER:
-			return ((EntityPlayer)object.getEntity()).getGameProfile().getName();
+			return ((EntityPlayer)object.getEntity()).getGameProfile();
 		case TILEE_ENTITY:
 			return object.getTileEntity().getObjectOwner();
 		case UNKNOWN:

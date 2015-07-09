@@ -1,5 +1,7 @@
 package org.ultramine.server.event;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -131,7 +133,7 @@ public class WorldUpdateObject
 		return intz;
 	}
 	
-	public String getOwner()
+	public GameProfile getOwner()
 	{
 		switch(type)
 		{
@@ -141,11 +143,11 @@ public class WorldUpdateObject
 			
 			break;
 		case ENTITY:
-			return entity.isEntityPlayerMP() ? ((EntityPlayer)entity).getGameProfile().getName() : entity.getObjectOwner();
+			return entity.isEntityPlayerMP() ? ((EntityPlayer)entity).getGameProfile() : entity.getObjectOwner();
 		case ENTITY_WEATHER:
 			break;
 		case PLAYER:
-			return ((EntityPlayer)getEntity()).getGameProfile().getName();
+			return ((EntityPlayer)getEntity()).getGameProfile();
 		case TILEE_ENTITY:
 			return getTileEntity().getObjectOwner();
 		case UNKNOWN:

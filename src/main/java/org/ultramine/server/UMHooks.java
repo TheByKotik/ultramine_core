@@ -1,13 +1,19 @@
 package org.ultramine.server;
 
+import java.util.UUID;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.event.WorldEventProxy;
 import org.ultramine.server.event.WorldUpdateObject;
+
+import com.mojang.authlib.GameProfile;
 
 public class UMHooks
 {
@@ -70,5 +76,27 @@ public class UMHooks
 
 		log.error("Invoked here", new Throwable("stacktrace"));
 		log.error("Original stacktrace", t);
+	}
+	
+	public static GameProfile readObjectOwner(NBTTagCompound nbt)
+	{
+		UUID id = nbt.hasKey("$") ? new UUID(nbt.getLong("$"), nbt.getLong("%")) : null;
+		String username = nbt.hasKey("#") ? nbt.getString("#") : null;
+		if(id != null || username != null && !username.isEmpty())
+			return MinecraftServer.getServer().getConfigurationManager().getDataLoader().internGameProfile(id, username);
+		return null;
+	}
+	
+	public static void writeObjectOwner(NBTTagCompound nbt, GameProfile owner)
+	{
+		UUID id = owner.getId();
+		String username = owner.getName();
+		if(id != null)
+		{
+			nbt.setLong("$", id.getMostSignificantBits());
+			nbt.setLong("%", id.getLeastSignificantBits());
+		}
+		if(username != null)
+			nbt.setString("#", username);
 	}
 }

@@ -22,6 +22,9 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.UMHooks;
+
+import com.mojang.authlib.GameProfile;
 
 public class TileEntity
 {
@@ -67,7 +70,7 @@ public class TileEntity
 
 	public void readFromNBT(NBTTagCompound p_145839_1_)
 	{
-		if(owner == null && p_145839_1_.hasKey("#")) owner = p_145839_1_.getString("#");
+		if(owner == null) owner = UMHooks.readObjectOwner(p_145839_1_);
 		this.xCoord = p_145839_1_.getInteger("x");
 		this.yCoord = p_145839_1_.getInteger("y");
 		this.zCoord = p_145839_1_.getInteger("z");
@@ -83,7 +86,7 @@ public class TileEntity
 		}
 		else
 		{
-			if(owner != null) p_145841_1_.setString("#", owner);
+			if(owner != null) UMHooks.writeObjectOwner(p_145841_1_, owner);
 			p_145841_1_.setString("id", s);
 			p_145841_1_.setInteger("x", this.xCoord);
 			p_145841_1_.setInteger("y", this.yCoord);
@@ -376,15 +379,15 @@ public class TileEntity
 	
 	/* ======================================== ULTRAMINE START ===================================== */
 	
-	private String owner;
+	private GameProfile owner;
 	
-	public final void setObjectOwner(String owner)
+	public final void setObjectOwner(GameProfile owner)
 	{
 		if(this.owner == null)
 			this.owner = owner;
 	}
 	
-	public final String getObjectOwner()
+	public final GameProfile getObjectOwner()
 	{
 		return this.owner;
 	}
