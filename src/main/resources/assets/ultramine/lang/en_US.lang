@@ -198,7 +198,7 @@ command.gm.usage=/gm
 command.gm.description=Toggle gamemode
 
 command.buttoncommand.usage=/buttoncommand <create> <commands ...> OR /buttoncommand <permission> <commands ...> OR /buttoncommand <remove|get>
-command.buttoncommand.description=Binds server command to button or sign in world
+command.buttoncommand.description=Binds server command to any block
 command.buttoncommand.fail.noblock=Button is not selected
 command.buttoncommand.fail.already=Button is already created. Use /buttoncommand remove
 command.buttoncommand.fail.none=ButtonCommand is not created for selected button

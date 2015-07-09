@@ -13,6 +13,7 @@ import org.ultramine.commands.CommandContext;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.chunk.ChunkHash;
+import org.ultramine.server.event.SetBlockEvent;
 import org.ultramine.server.util.MinecraftUtil;
 import org.ultramine.server.util.YamlConfigProvider;
 
@@ -21,9 +22,7 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
@@ -31,7 +30,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
 
 @SideOnly(Side.SERVER)
 public class ButtonCommand
@@ -140,9 +138,6 @@ public class ButtonCommand
 		EntityPlayerMP player = ctx.getSenderAsPlayer();
 		MovingObjectPosition obj = MinecraftUtil.getMovingObjectPosition(player);
 		ctx.check(obj.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK, "command.buttoncommand.fail.noblock");
-		Block block = player.worldObj.getBlock(obj.blockX, obj.blockY, obj.blockZ);
-		System.out.println(Block.blockRegistry.getNameForObject(block));
-		ctx.check(block == Blocks.stone_button || block == Blocks.wooden_button || block == Blocks.standing_sign || block == Blocks.wall_sign, "command.buttoncommand.fail.noblock");
 		if(ctx.getAction().startsWith("c") || ctx.getAction().startsWith("p"))
 		{
 			ctx.check(!instance.exists(player.dimension, obj.blockX, obj.blockY, obj.blockZ), "command.buttoncommand.fail.already");
@@ -189,10 +184,9 @@ public class ButtonCommand
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOW)
-	public void onBreakEvent(BlockEvent.BreakEvent e)
+	public void onBreakEvent(SetBlockEvent e)
 	{
-		if(e.block == Blocks.stone_button || e.block == Blocks.wooden_button || e.block == Blocks.standing_sign || e.block == Blocks.wall_sign)
-			remove(e.world.provider.dimensionId, e.x, e.y, e.z);
+		remove(e.world.provider.dimensionId, e.x, e.y, e.z);
 	}
 	
 	public static class ButtomCMDs
