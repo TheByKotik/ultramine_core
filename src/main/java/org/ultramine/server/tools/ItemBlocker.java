@@ -83,6 +83,9 @@ public class ItemBlocker
 			return;
 		}
 		
+		if(e.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
+			return;
+		
 		set = getBlockingSettings(e.entityPlayer.dimension, Block.getIdFromBlock(e.world.getBlock(e.x, e.y, e.z)), e.world.getBlockMetadata(e.x, e.y, e.z));
 		if(set != null && set.useBlock)
 		{
