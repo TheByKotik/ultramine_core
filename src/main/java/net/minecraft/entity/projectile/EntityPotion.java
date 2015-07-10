@@ -110,6 +110,9 @@ public class EntityPotion extends EntityThrowable
 							{
 								d1 = 1.0D;
 							}
+							
+							if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new org.ultramine.server.event.EntityPotionApplyEffectEvent(this, entitylivingbase, list)))
+								continue;
 
 							Iterator iterator1 = list.iterator();
 
