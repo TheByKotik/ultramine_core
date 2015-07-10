@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import org.ultramine.server.UMHooks;
+import org.ultramine.server.event.EntitySetFireEvent;
 
 import com.mojang.authlib.GameProfile;
 
@@ -463,6 +464,9 @@ public abstract class Entity
 	public void setFire(int p_70015_1_)
 	{
 		int j = p_70015_1_ * 20;
+		EntitySetFireEvent event = new EntitySetFireEvent(this, j);
+		if(MinecraftForge.EVENT_BUS.post(event)) return;
+		j = event.fireTicks;
 		j = EnchantmentProtection.getFireTimeForEntity(this, j);
 
 		if (this.fire < j)
