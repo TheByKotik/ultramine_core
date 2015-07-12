@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.minecraft.world.storage.ThreadedFileIOBase;
+
 public class RegionFileCache
 {
 	private static final Map regionsByFilename = new HashMap();
@@ -43,6 +45,14 @@ public class RegionFileCache
 
 	public static synchronized void clearRegionFileReferences()
 	{
+		if(!Thread.currentThread().getName().equals("File IO Thread"))
+		{
+			try
+			{
+				ThreadedFileIOBase.threadedIOInstance.waitForFinish();
+			} catch (InterruptedException ignored){}
+		}
+
 		Iterator iterator = regionsByFilename.values().iterator();
 
 		while (iterator.hasNext())

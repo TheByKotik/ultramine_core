@@ -348,11 +348,12 @@ public class RegionFile
 		this.dataFile.writeInt(p_76713_3_);
 	}
 
-	public void close() throws IOException
+	public synchronized void close() throws IOException
 	{
 		if (this.dataFile != null)
 		{
 			this.dataFile.close();
+			dataFile = null;
 		}
 	}
 
