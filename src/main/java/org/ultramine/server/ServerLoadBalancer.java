@@ -83,7 +83,7 @@ public class ServerLoadBalancer
 
 		if(count > lowerLimit)
 		{
-			float rate = (float)limits.lowerLimit / (float)count;
+			float rate = (float)lowerLimit / (float)count;
 			if(rng.nextFloat() < rate)
 				return true;
 			return false;
