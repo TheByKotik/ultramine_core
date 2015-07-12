@@ -525,11 +525,23 @@ public class WorldServer extends World
 		return false;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List getPendingBlockUpdates(Chunk p_72920_1_, boolean p_72920_2_)
 	{
-		//Данный метод вызывался только при сохранении чанка. Теперь он не может вызываться нигде, совместимость не предусмотрена.
-		logger.warn("Called deprecated method getPendingBlockUpdates", new Throwable());
-		return null;
+		//Данный метод вызывался только при сохранении чанка. Выполняем преобразование для совместимости с модами
+		Set<PendingBlockUpdate> set = p_72920_1_.getPendingUpdatesForSave();
+		if(set == null)
+			return null;
+		int xadd = p_72920_1_.xPosition << 4;
+		int zadd = p_72920_1_.zPosition << 4;
+		List<NextTickListEntry> list = new ArrayList<NextTickListEntry>(set.size());
+		for(PendingBlockUpdate pbu : set)
+		{
+			NextTickListEntry ent = new NextTickListEntry(pbu.x + xadd, pbu.y, pbu.z + zadd, pbu.getBlock());
+			ent.setScheduledTime(pbu.scheduledTime).setPriority(pbu.priority);
+			list.add(ent);
+		}
+		return list;
 	}
 
 	public void updateEntityWithOptionalForce(Entity p_72866_1_, boolean p_72866_2_)
