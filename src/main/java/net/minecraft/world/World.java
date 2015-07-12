@@ -735,7 +735,9 @@ public abstract class World implements IBlockAccess
 	{
 		if (!this.isRemote)
 		{
-			Block block = this.getBlock(p_147460_1_, p_147460_2_, p_147460_3_);
+			Block block = this.getBlockIfExists(p_147460_1_, p_147460_2_, p_147460_3_);
+			if(block == Blocks.air)
+				return;
 
 			try
 			{
@@ -4011,7 +4013,7 @@ public abstract class World implements IBlockAccess
 			int i1 = p_147453_1_ + dir.offsetX;
 			int y  = p_147453_2_ + dir.offsetY;
 			int j1 = p_147453_3_ + dir.offsetZ;
-			Block block1 = this.getBlock(i1, y, j1);
+			Block block1 = this.getBlockIfExists(i1, y, j1);
 
 			block1.onNeighborChange(this, i1, y, j1, p_147453_1_, p_147453_2_, p_147453_3_);
 			if (block1.isNormalCube(this, i1, y, j1))
