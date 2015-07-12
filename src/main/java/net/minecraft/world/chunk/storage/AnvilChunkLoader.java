@@ -212,6 +212,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 	{
 		AnvilChunkLoader.PendingChunk pendingchunk = null;
 		Object object = this.syncLockObject;
+		int key;
 
 		synchronized (this.syncLockObject)
 		{
@@ -223,7 +224,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			TIntObjectIterator<PendingChunk> it = pendingSaves.iterator();
 			it.advance();
 			pendingchunk = it.value();
-			it.remove();
+			key = it.key();
 		}
 
 		if (pendingchunk != null)
@@ -235,6 +236,11 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			catch (Exception exception)
 			{
 				exception.printStackTrace();
+			}
+			
+			synchronized (this.syncLockObject)
+			{
+				pendingSaves.remove(key);
 			}
 		}
 
