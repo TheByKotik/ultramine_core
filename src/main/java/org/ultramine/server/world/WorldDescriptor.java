@@ -324,6 +324,7 @@ public class WorldDescriptor
 		for(Object o : world.loadedTileEntityList)
 			((TileEntity)o).setWorldObj(null);
 		world.loadedTileEntityList.clear();
+		dispose();
 	}
 	
 	@SideOnly(Side.SERVER)
@@ -331,13 +332,8 @@ public class WorldDescriptor
 	{
 		if(state.isLoaded())
 			destroyWorld();
-		
-		try
-		{
-			ThreadedFileIOBase.threadedIOInstance.waitForFinish();
-		} catch (InterruptedException ignored){}
-
-		RegionFileCache.clearRegionFileReferences();
+		else
+			dispose();
 		
 		try
 		{
@@ -347,6 +343,16 @@ public class WorldDescriptor
 		{
 			throw new RuntimeException(e);
 		}
+	}
+	
+	private void dispose()
+	{
+		try
+		{
+			ThreadedFileIOBase.threadedIOInstance.waitForFinish();
+		} catch (InterruptedException ignored){}
+
+		RegionFileCache.clearRegionFileReferences();
 	}
 	
 	private void movePlayersOut()
