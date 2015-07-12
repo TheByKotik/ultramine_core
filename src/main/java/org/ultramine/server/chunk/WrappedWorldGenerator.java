@@ -9,12 +9,12 @@ import net.minecraft.world.chunk.IChunkProvider;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.ModContainer;
 
-public class WrappedModGenerator implements IWorldGenerator
+public class WrappedWorldGenerator implements IWorldGenerator
 {
 	private final IWorldGenerator wrapped;
 	private final ModContainer owner;
 	
-	public WrappedModGenerator(IWorldGenerator wrapped, ModContainer owner)
+	public WrappedWorldGenerator(IWorldGenerator wrapped, ModContainer owner)
 	{
 		this.wrapped = wrapped;
 		this.owner = owner;
@@ -35,6 +35,6 @@ public class WrappedModGenerator implements IWorldGenerator
 	
 	public boolean equals(Object o)
 	{
-		return o instanceof WrappedModGenerator && ((WrappedModGenerator)o).wrapped.equals(wrapped) || wrapped.equals(o);
+		return o instanceof WrappedWorldGenerator && ((WrappedWorldGenerator)o).wrapped.equals(wrapped) || wrapped.equals(o);
 	}
 }

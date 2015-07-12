@@ -41,7 +41,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import org.apache.logging.log4j.Level;
-import org.ultramine.server.chunk.WrappedModGenerator;
+import org.ultramine.server.chunk.WrappedWorldGenerator;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
@@ -77,7 +77,7 @@ public class GameRegistry
 	 */
 	public static void registerWorldGenerator(IWorldGenerator generator, int modGenerationWeight)
 	{
-		generator = new WrappedModGenerator(generator, Loader.instance().activeModContainer());
+		generator = new WrappedWorldGenerator(generator, Loader.instance().activeModContainer());
 		worldGenerators.add(generator);
 		worldGeneratorIndex.put(generator, modGenerationWeight);
 		if (sortedGeneratorList != null)
