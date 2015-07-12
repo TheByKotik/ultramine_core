@@ -76,10 +76,14 @@ public class ServerLoadBalancer
 		int lowerLimit = limits.lowerLimit;
 
 		if(prior == WorldConstants.CL_CHUNK_PRIOR)
+		{
 			if(!limits.updateByChunkLoader)
 				lowerLimit = 1;
+		}
 		else if(prior > limits.updateRadius)
+		{
 			lowerLimit = 1;
+		}
 
 		if(count > lowerLimit)
 		{
