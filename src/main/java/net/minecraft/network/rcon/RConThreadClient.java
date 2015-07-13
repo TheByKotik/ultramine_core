@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +29,14 @@ public class RConThreadClient extends RConThreadBase
 	{
 		super(p_i1537_1_, "RCON Client");
 		this.clientSocket = p_i1537_2_;
+		
+		List<String> whitelist = ConfigurationHandler.getServerConfig().listen.rcon.whitelist;
+		if(whitelist != null && !whitelist.isEmpty() && !whitelist.contains(p_i1537_2_.getInetAddress().toString().replace("/", "")))
+		{
+			this.logWarning("Rcon connection from not whitelisted address: " + p_i1537_2_.getInetAddress());
+			closeSocket();
+			return;
+		}
 
 		try
 		{
@@ -35,11 +44,18 @@ public class RConThreadClient extends RConThreadBase
 		}
 		catch (Exception exception)
 		{
-			this.running = false;
+			closeSocket();
 		}
 
 		this.rconPassword = ConfigurationHandler.getServerConfig().listen.rcon.password;
-		this.logInfo("Rcon connection from: " + p_i1537_2_.getInetAddress());
+		this.logDebug("Rcon connection from: " + p_i1537_2_.getInetAddress());
+	}
+	
+	public synchronized void startThread()
+	{
+		if(clientSocket == null)
+			return;
+		super.startThread();
 	}
 
 	public void run()

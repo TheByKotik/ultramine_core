@@ -36,6 +36,7 @@ public class UltramineServerConfig
 			public boolean enabled = false;
 			public int port = 25565;
 			public String password = "";
+			public List<String> whitelist = null;
 		}
 	}
 
