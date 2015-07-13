@@ -2910,6 +2910,8 @@ public abstract class World implements IBlockAccess
 					Chunk dep = getChunkIfExists(c.chunkXPos, c.chunkZPos);
 					if(dep != null)
 						((ChunkProviderServer)chunkProvider).loadAsyncRadius(c.chunkXPos, c.chunkZPos, WorldConstants.CL_LOAD_RADIUS, new CallbackAddDependency(dep));
+					else
+						((ChunkProviderServer)chunkProvider).loadAsync(c.chunkXPos, c.chunkZPos);
 				}
 			}
 		}
