@@ -1946,7 +1946,6 @@ public abstract class World implements IBlockAccess
 		for (i = 0; i < this.loadedEntityList.size(); ++i)
 		{
 			entity = (Entity)this.loadedEntityList.get(i);
-			eventProxy.startEntity(entity);
 
 			if (entity.ridingEntity != null)
 			{
@@ -2158,6 +2157,7 @@ public abstract class World implements IBlockAccess
 
 		if (canUpdate)
 		{
+			eventProxy.startEntity(p_72866_1_);
 			chunkProfiler.startChunk(p_72866_1_);
 			p_72866_1_.lastTickPosX = p_72866_1_.posX;
 			p_72866_1_.lastTickPosY = p_72866_1_.posY;
