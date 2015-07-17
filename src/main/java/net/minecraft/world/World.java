@@ -4023,7 +4023,7 @@ public abstract class World implements IBlockAccess
 				i1 += dir.offsetX;
 				y  += dir.offsetY;
 				j1 += dir.offsetZ;
-				Block block2 = this.getBlock(i1, y, j1);
+				Block block2 = this.getBlockIfExists(i1, y, j1);
 
 				if (block2.getWeakChanges(this, i1, y, j1))
 				{
