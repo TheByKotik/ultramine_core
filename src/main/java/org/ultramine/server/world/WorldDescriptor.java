@@ -199,7 +199,6 @@ public class WorldDescriptor
 		
 		setWorld(world);
 		initWorld();
-		setState(WorldState.LOADED);
 	}
 	
 	@SideOnly(Side.SERVER)
@@ -239,6 +238,7 @@ public class WorldDescriptor
 		world.addWorldAccess(new WorldManager(server, world));
 		world.getWorldInfo().setGameType(server.getGameType());
 		applyConfig();
+		setState(WorldState.LOADED);
 		MinecraftForge.EVENT_BUS.post(new WorldEvent.Load(world));
 	}
 	
