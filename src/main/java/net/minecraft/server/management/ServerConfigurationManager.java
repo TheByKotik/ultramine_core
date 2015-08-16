@@ -541,6 +541,11 @@ public abstract class ServerConfigurationManager
 
 	public void transferPlayerToDimension(EntityPlayerMP p_72356_1_, int p_72356_2_, Teleporter teleporter)
 	{
+		org.ultramine.server.event.PreDimChangeEvent event = new org.ultramine.server.event.PreDimChangeEvent(p_72356_1_, p_72356_2_, teleporter);
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
+		p_72356_2_ = event.getDimTo();
+		teleporter = event.getTeleporter();
+
 		int j = p_72356_1_.dimension;
 		WorldServer worldserver = this.mcServer.worldServerForDimension(p_72356_1_.dimension);
 		p_72356_1_.dimension = p_72356_2_;
