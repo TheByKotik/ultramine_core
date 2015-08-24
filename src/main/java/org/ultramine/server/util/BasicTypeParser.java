@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class BasicTypeParser
 {
@@ -105,14 +106,28 @@ public class BasicTypeParser
 	
 	public static ItemStack parseItemStack(String str)
 	{
+		return parseItemStack(str, false);
+	}
+	
+	public static ItemStack parseItemStack(String str, boolean allowNBT)
+	{
+		return parseItemStack(str, false, -1, allowNBT);
+	}
+	
+	public static ItemStack parseItemStack(String str, boolean allowWildcardData, int size, boolean allowNBT)
+	{
 		int len = str.length();
+		int ind3 = str.indexOf('{');
 		int ind1 = str.indexOf(':');
 		int ind4 = str.indexOf(':', ind1+1);
 		int ind2 = str.indexOf('*');
-		int ind3 = str.indexOf('{');
 		if(ind3 != -1 && ind1 > ind3) ind1 = -1;
 		if(ind3 != -1 && ind2 > ind3) ind2 = -1;
-		if(ind4 != -1 && ind4 != -1 && (ind4 < ind3 || ind3 == -1)) ind1 = ind4;
+		if(ind4 != -1 && (ind4 < ind3 || ind3 == -1)) ind1 = ind4;
+		if(ind1+1 == ind2) {
+			ind2 = str.indexOf('*', ind2+1);
+			if(ind3 != -1 && ind2 > ind3) ind2 = -1;
+		}
 		boolean hasData = ind1 != -1;
 		boolean hasSize = ind2 != -1;
 		boolean hasNBT = ind3 != -1;
@@ -120,25 +135,23 @@ public class BasicTypeParser
 		int dataEndInd = hasSize ? ind2 : hasNBT ? ind3 : len;
 		int sizeEndInd = hasNBT ? ind3 : len;
 		int data = 0;
-		int size = -1;
 		NBTTagCompound nbt = null;
 		int endInd;
-		Item item = CommandBase.getItemByText(null, str.substring(0, endInd = idEndInd));
 		if(hasData)
 		{
-			String dataS = str.substring(endInd+1, endInd = dataEndInd);
-			try
-			{
+			String dataS = str.substring(ind1+1, dataEndInd).trim();
+			if(dataS.equals("*") && allowWildcardData)
+				data = OreDictionary.WILDCARD_VALUE;
+			else if(isUnsignedInt(dataS))
 				data = Integer.parseInt(dataS);
-			}
-			catch(NumberFormatException e)
-			{
-				throw new CommandException("commands.generic.itemstack.data", dataS);
-			}
+			else
+				idEndInd = dataEndInd;
 		}
-		if(hasSize)
+		Item item = CommandBase.getItemByText(null, str.substring(0, idEndInd).trim());
+		endInd = dataEndInd;
+		if(hasSize && size == -1)
 		{
-			String sizeS = str.substring(endInd+1, endInd = sizeEndInd);
+			String sizeS = str.substring(endInd+1, endInd = sizeEndInd).trim();
 			try
 			{
 				size = Integer.parseInt(sizeS);
@@ -148,11 +161,11 @@ public class BasicTypeParser
 				throw new CommandException("commands.generic.itemstack.size", sizeS);
 			}
 		}
-		if(hasNBT)
+		if(hasNBT && allowNBT)
 		{
 			try
 			{
-				NBTBase nbtbase = JsonToNBT.func_150315_a(str.substring(endInd, len));
+				NBTBase nbtbase = JsonToNBT.func_150315_a(str.substring(endInd, len).trim());
 				if(nbtbase instanceof NBTTagCompound)
 					nbt = (NBTTagCompound)nbtbase;
 			}
@@ -172,36 +185,7 @@ public class BasicTypeParser
 	
 	public static ItemStack parseStackType(String str)
 	{
-		int ind = str.lastIndexOf(':');
-		String itemS;
-		int data;
-		if(ind == -1)
-		{
-			itemS = str;
-			data = 0;
-		}
-		else
-		{
-			itemS = str.substring(0, ind);
-			String dataS = str.substring(ind+1, str.length());
-			if(dataS.equals("*"))
-			{
-				data = Short.MAX_VALUE;
-			}
-			else
-			{
-				try
-				{
-					data = Integer.parseInt(dataS);
-				}
-				catch(NumberFormatException e)
-				{
-					throw new CommandException("commands.generic.itemstack.data", dataS);
-				}
-			}
-		}
-		
-		return new ItemStack(CommandBase.getItemByText(null, itemS), 1, data);
+		return parseItemStack(str, true, 1, true);
 	}
 	
 	/**
