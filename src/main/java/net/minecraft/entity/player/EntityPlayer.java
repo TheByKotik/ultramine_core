@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
+import org.ultramine.server.util.MinecraftUtil;
+
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
@@ -1872,6 +1875,19 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
 	public void addExperienceLevel(int p_82242_1_)
 	{
+		if(p_82242_1_ < 0 && true)
+		{
+			int xp = MinecraftUtil.countXPCostForLevel(experienceLevel);
+			xp += (MinecraftUtil.countXPCostForLevel(experienceLevel + 1) - xp) * experience;
+			xp -= MinecraftUtil.countXPCostForLevel(-p_82242_1_);
+			experienceLevel = 0;
+			experience = 0.0F;
+			experienceTotal = 0;
+			if(xp > 0)
+				addExperience(xp);
+			return;
+		}
+		
 		this.experienceLevel += p_82242_1_;
 
 		if (this.experienceLevel < 0)

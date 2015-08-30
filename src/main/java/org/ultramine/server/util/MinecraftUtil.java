@@ -27,4 +27,26 @@ public class MinecraftUtil
         Vec3 var23 = var13.addVector((double)var18 * var21, (double)var17 * var21, (double)var20 * var21);
         return player.worldObj.rayTraceBlocks(var13, var23, true);
 	}
+	
+	public static int countXPCostForLevel(int level)
+	{
+		if(level < 17)
+		{
+			return 17*level;
+		}
+		else if(level < 30)
+		{
+			int cost = 17*level;
+			for(int i = 0; i < level - 15; i++)
+				cost += i*3;
+			return cost + level/18;
+		}
+		else
+		{
+			int cost = 826;
+			for(int i = 0; i < level - 30; i++)
+				cost += 62 + i*7;
+			return cost;
+		}
+	}
 }
