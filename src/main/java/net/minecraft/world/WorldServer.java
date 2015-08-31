@@ -1001,6 +1001,7 @@ public class WorldServer extends World
 	
 	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
 	private WorldConfig config;
+	@SideOnly(Side.SERVER)
 	private WorldBorder border;
 	@SideOnly(Side.SERVER)
 	private MobSpawnManager mobSpawner;
