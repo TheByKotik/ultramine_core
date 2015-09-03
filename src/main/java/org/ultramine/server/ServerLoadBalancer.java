@@ -51,7 +51,10 @@ public class ServerLoadBalancer
 		if(chunk == null)
 		{
 			if(!ent.forceSpawn)
+			{
+				world.getEventProxy().startEntity(ent);
 				ent.setDead();
+			}
 			return false;
 		}
 		
@@ -59,6 +62,7 @@ public class ServerLoadBalancer
 		PerChunkEntityLimits limits = getLimits(ent);
 		if(count > limits.higherLimit)
 		{
+			world.getEventProxy().startEntity(ent);
 			ent.setDead();
 			return false;
 		}

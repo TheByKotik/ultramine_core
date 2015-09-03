@@ -1183,7 +1183,10 @@ public abstract class EntityLiving extends EntityLivingBase
 			double square = distX*distX + distY*distY + distZ*distZ;
 
 			if (square > getEntityDespawnDistance())
+			{
+				worldObj.getEventProxy().startEntity(this);
 				setDead();
+			}
 		}
 	}
 }
