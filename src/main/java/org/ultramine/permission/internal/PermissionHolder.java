@@ -98,6 +98,12 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 		super.removeMeta(key);
 		makeDirty();
 	}
+	
+	public void setInnerMeta(Map<String, String> meta)
+	{
+		super.setInnerMeta(meta);
+		makeDirty();
+	}
 
 	@Override
 	public void clearMeta()
@@ -134,7 +140,7 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 
 	@Override
 	protected MetaResolver getMetaResolver()
-	{
+	{System.out.println(isDirty());
 		if (isDirty())
 			calculate();
 
