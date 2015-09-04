@@ -140,7 +140,7 @@ public class PermissionHolder extends MetaHolder implements IDirtyListener
 
 	@Override
 	protected MetaResolver getMetaResolver()
-	{System.out.println(isDirty());
+	{
 		if (isDirty())
 			calculate();
 
