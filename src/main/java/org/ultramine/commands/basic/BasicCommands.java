@@ -52,7 +52,7 @@ public class BasicCommands
 			name = "sethome",
 			group = "player",
 			aliases = {"здесьдом"},
-			permissions = {"command.basic.home", "command.basic.sethome.multi", "command.basic.sethome.other"},
+			permissions = {"command.basic.sethome", "command.basic.sethome.multi", "command.basic.sethome.other"},
 			syntax = {
 					"",
 					"<%name>",
@@ -75,7 +75,7 @@ public class BasicCommands
 			name = "removehome",
 			group = "player",
 			aliases = {"rmhome"},
-			permissions = {"command.basic.home.multi"},
+			permissions = {"command.basic.removehome"},
 			syntax = {"<%name>"}
 	)
 	public static void removehome(CommandContext ctx)
