@@ -1,5 +1,6 @@
 package org.ultramine.server;
 
+import org.ultramine.economy.CurrencyRegistry;
 import org.ultramine.economy.PlayerHoldingsEvent;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoBroacastConf;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoDebugInfoConf;
@@ -306,9 +307,10 @@ public class UMEventHandler
 	
 	@SideOnly(Side.SERVER)
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onHGoldingsCreate(PlayerHoldingsEvent.CreateEvent e)
+	public void onHoldingsCreate(PlayerHoldingsEvent.CreateEvent e)
 	{
-		e.holdings.setBalance(ConfigurationHandler.getServerConfig().tools.economy.startBalance);
+		if(e.holdings.getCurrency() == CurrencyRegistry.GSC)
+			e.holdings.setBalance(ConfigurationHandler.getServerConfig().tools.economy.startBalance);
 	}
 	
 	private boolean firstPlayer = true;
