@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -14,6 +15,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.RconCommandQueue;
 
 @SideOnly(Side.SERVER)
 public class RConThreadClient extends RConThreadBase
@@ -21,7 +23,7 @@ public class RConThreadClient extends RConThreadBase
 	private static final Logger field_164005_h = LogManager.getLogger();
 	private boolean loggedIn;
 	private Socket clientSocket;
-	private byte[] buffer = new byte[1460];
+	private byte[] buffer = new byte[4096];
 	private String rconPassword;
 	private static final String __OBFID = "CL_00001804";
 
@@ -62,6 +64,7 @@ public class RConThreadClient extends RConThreadBase
 	{
 		try
 		{
+			DataInputStream data = new DataInputStream(new BufferedInputStream(this.clientSocket.getInputStream()));
 			while (true)
 			{
 				if (!this.running)
@@ -69,20 +72,18 @@ public class RConThreadClient extends RConThreadBase
 					break;
 				}
 
-				BufferedInputStream bufferedinputstream = new BufferedInputStream(this.clientSocket.getInputStream());
-				int i = bufferedinputstream.read(this.buffer, 0, 1460);
+				int size = Integer.reverseBytes(data.readInt());
+				data.readFully(this.buffer, 0, size);
+				int i = size;
 
 				if (10 > i)
 				{
 					return;
 				}
 
-				byte b0 = 0;
-				int j = RConUtils.getBytesAsLEInt(this.buffer, 0, i);
-
-				if (j == i - 4)
+				if (true)
 				{
-					int i1 = b0 + 4;
+					int i1 = 0;
 					int k = RConUtils.getBytesAsLEInt(this.buffer, i1, i);
 					i1 += 4;
 					int l = RConUtils.getRemainingBytesAsLEInt(this.buffer, i1);
@@ -97,11 +98,11 @@ public class RConThreadClient extends RConThreadBase
 
 								try
 								{
-									this.sendMultipacketResponse(k, this.server.handleRConCommand(s1));
+									this.sendMultipacketResponse(k, RconCommandQueue.instance().request(s1).await());
 								}
 								catch (Exception exception)
 								{
-									this.sendMultipacketResponse(k, "Error executing: " + s1 + " (" + exception.getMessage() + ")");
+									this.sendMultipacketResponse(k, "Error executing: " + s1 + " (" + exception.toString() + ")");
 								}
 
 								continue;
@@ -130,23 +131,23 @@ public class RConThreadClient extends RConThreadBase
 				}
 			}
 		}
-			catch (SocketTimeoutException sockettimeoutexception)
-			{
-				return;
-			}
-			catch (IOException ioexception)
-			{
-				return;
-			}
-			catch (Exception exception1)
-			{
-				field_164005_h.error("Exception whilst parsing RCON input", exception1);
-				return;
-			}
-			finally
-			{
-				this.closeSocket();
-			}
+		catch (SocketTimeoutException sockettimeoutexception)
+		{
+			return;
+		}
+		catch (IOException ioexception)
+		{
+			return;
+		}
+		catch (Exception exception1)
+		{
+			field_164005_h.error("Exception whilst parsing RCON input", exception1);
+			return;
+		}
+		finally
+		{
+			this.closeSocket();
+		}
 	}
 
 	private void sendResponse(int p_72654_1_, int p_72654_2_, String p_72654_3_) throws IOException
