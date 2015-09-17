@@ -1,13 +1,14 @@
 package org.ultramine.economy;
 
 import net.minecraft.command.CommandException;
+import net.minecraft.util.MathHelper;
 
 public class Holdings
 {
 	private final Account acc;
 	private final Currency cur;
 	
-	private double balance;
+	private long balance;
 
 	Holdings(Account acc, Currency cur)
 	{
@@ -18,7 +19,18 @@ public class Holdings
 	Holdings(Account acc, Currency cur, double balance)
 	{
 		this(acc, cur);
-		this.balance = balance;
+		this.balance = (int)(balance*100);
+	}
+	
+	Holdings(Account acc, Currency cur, long balanceInternal)
+	{
+		this(acc, cur);
+		this.balance = balanceInternal;
+	}
+	
+	long getBalanceInternal()
+	{
+		return this.balance;
 	}
 
 	public Account getAccount()
@@ -33,17 +45,17 @@ public class Holdings
 
 	public double getBalance()
 	{
-		return balance;
+		return balance / 100.0d;
 	}
 	
 	void setBalanceSilently(double balance)
 	{
-		this.balance = balance;
+		this.balance = (int)(balance*100);
 	}
 
 	public void setBalance(double balance)
 	{
-		this.balance = balance;
+		this.balance = (int)(balance*100);
 		acc.onHoldingsChange(this);
 	}
 
@@ -51,7 +63,7 @@ public class Holdings
 	{
 		if(amount <= 0.0d)
 			throw new CommandException("economy.fail.negativeamount");
-		this.balance += amount;
+		this.balance += MathHelper.floor_double(amount*100);
 		acc.onHoldingsChange(this);
 	}
 
@@ -59,13 +71,13 @@ public class Holdings
 	{
 		if(amount <= 0.0d)
 			throw new CommandException("economy.fail.negativeamount");
-		this.balance -= amount;
+		this.balance -= MathHelper.ceiling_double_int(amount*100);
 		acc.onHoldingsChange(this);
 	}
 	
 	public void subtractChecked(double amount)
 	{
-		if((balance - amount) < 0.0d)
+		if((balance - MathHelper.ceiling_double_int(amount*100)) < 0L)
 			throw new CommandException("economy.fail.notenough");
 		subtract(amount);
 	}
@@ -84,22 +96,17 @@ public class Holdings
 
 	public boolean isNegative()
 	{
-		return this.balance < 0.0;
+		return this.balance < 0L;
 	}
 
 	public boolean hasEnough(double amount)
 	{
-		return amount <= this.balance;
+		return MathHelper.ceiling_double_int(amount*100) <= this.balance;
 	}
 
 	public boolean hasOver(double amount)
 	{
-		return amount < this.balance;
-	}
-
-	public boolean hasUnder(double amount)
-	{
-		return amount > this.balance;
+		return MathHelper.ceiling_double_int(amount*100) < this.balance;
 	}
 	
 	public void transact(Holdings to, double amount)
