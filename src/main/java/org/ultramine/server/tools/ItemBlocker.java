@@ -124,6 +124,11 @@ public class ItemBlocker
 						if(slot.inventory == null || slot.getSlotIndex() >= slot.inventory.getSizeInventory())
 							continue; //Fix for some broken containers
 						ItemStack is = slot.getStack();
+						if(is.getItem() == null)
+						{//Fix for broken items
+							slot.putStack(null);
+							continue;
+						}
 						BlockingSettings set = getBlockingSettings(player.dimension, is);
 						if(set != null && set.rmItem)
 						{
