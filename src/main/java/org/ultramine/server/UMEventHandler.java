@@ -66,6 +66,11 @@ public class UMEventHandler
 				e.player.addChatMessage(new ChatComponentTranslation("ultramine.ability.chat.muted.forever").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 			}
 		}
+		else if(e.player.isHidden())
+		{
+			e.setCanceled(true);
+			e.player.addChatMessage(new ChatComponentTranslation("ultramine.hidden.chat").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+		}
 	}
 	
 	@SubscribeEvent

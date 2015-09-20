@@ -642,7 +642,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 		this.serverController.func_147132_au();
 		ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.left", new Object[] {this.playerEntity.func_145748_c_()});
 		chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.YELLOW);
-		this.serverController.getConfigurationManager().sendPacketToAllPlayers(new S02PacketChat(chatcomponenttranslation, true));
+		if(!playerEntity.isHidden() && !playerEntity.hasPermission(MinecraftPermissions.HIDE_JOIN_MESSAGE))
+			this.serverController.getConfigurationManager().sendPacketToAllPlayers(new S02PacketChat(chatcomponenttranslation, true));
 		this.playerEntity.mountEntityAndWakeUp();
 		this.serverController.getConfigurationManager().playerLoggedOut(this.playerEntity);
 

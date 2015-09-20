@@ -18,6 +18,7 @@ import org.ultramine.commands.basic.VanillaCommands;
 import org.ultramine.commands.syntax.DefaultCompleters;
 import org.ultramine.economy.EconomyCommands;
 import org.ultramine.permission.IPermissionManager;
+import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.permission.commands.BasicPermissionCommands;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.data.Databases;
@@ -154,7 +155,9 @@ public class UltramineServerModContainer extends DummyModContainer
 		}
 		e.getPermissionHandler().setGroupMeta(IPermissionManager.DEFAULT_GROUP_NAME, IPermissionManager.GLOBAL_WORLD, "color", "7");
 		e.getPermissionHandler().addToGroup("admin", IPermissionManager.GLOBAL_WORLD, "*");
+		e.getPermissionHandler().addToGroup("admin", IPermissionManager.GLOBAL_WORLD, "^"+MinecraftPermissions.HIDE_JOIN_MESSAGE);
 		e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "color", "c");
+		e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "tablistcolor", "c");
 		e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "prefix", "&4[admin] ");
 		
 		if(e.getSide().isServer())

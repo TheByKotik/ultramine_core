@@ -171,7 +171,7 @@ public abstract class EntityLivingBase extends Entity
 					block = this.worldObj.getBlock(i, j - 1, k);
 				}
 			}
-			else if (!this.worldObj.isRemote && this.fallDistance > 3.0F)
+			else if (!this.worldObj.isRemote && this.fallDistance > 3.0F && (!isEntityPlayerMP() || !((EntityPlayerMP)this).isHidden()))
 			{
 				this.worldObj.playAuxSFX(2006, i, j, k, MathHelper.ceiling_float_int(this.fallDistance - 3.0F));
 			}

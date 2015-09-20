@@ -1,6 +1,8 @@
 package net.minecraft.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
 public class ContainerChest extends Container
@@ -8,12 +10,16 @@ public class ContainerChest extends Container
 	private IInventory lowerChestInventory;
 	private int numRows;
 	private static final String __OBFID = "CL_00001742";
+	
+	private final boolean notifyInventory;
 
 	public ContainerChest(IInventory p_i1806_1_, IInventory p_i1806_2_)
 	{
 		this.lowerChestInventory = p_i1806_2_;
 		this.numRows = p_i1806_2_.getSizeInventory() / 9;
-		p_i1806_2_.openInventory();
+		notifyInventory = !(p_i1806_1_ instanceof InventoryPlayer && ((InventoryPlayer)p_i1806_1_).player.isEntityPlayerMP() && ((EntityPlayerMP)((InventoryPlayer)p_i1806_1_).player).isHidden());
+		if(notifyInventory)
+			p_i1806_2_.openInventory();
 		int i = (this.numRows - 4) * 18;
 		int j;
 		int k;
@@ -83,7 +89,8 @@ public class ContainerChest extends Container
 	public void onContainerClosed(EntityPlayer p_75134_1_)
 	{
 		super.onContainerClosed(p_75134_1_);
-		this.lowerChestInventory.closeInventory();
+		if(notifyInventory)
+			this.lowerChestInventory.closeInventory();
 	}
 
 	public IInventory getLowerChestInventory()

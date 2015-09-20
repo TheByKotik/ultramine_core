@@ -65,6 +65,7 @@ import net.minecraft.network.play.server.S2FPacketSetSlot;
 import net.minecraft.network.play.server.S30PacketWindowItems;
 import net.minecraft.network.play.server.S31PacketWindowProperty;
 import net.minecraft.network.play.server.S36PacketSignEditorOpen;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.network.play.server.S39PacketPlayerAbilities;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.potion.PotionEffect;
@@ -1039,7 +1040,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	/**
 	 * Переносит игрока в другой мир без использования порталов. Обратите
 	 * внимение: сначала нужно установить координаты назначения
-	 * <code>setPlayerLocation()</code>, а потом уже переносить в другой мир.
+	 * <code>setPosition()</code>, а потом уже переносить в другой мир.
 	 */
 	public void transferToDimension(int dim)
 	{
@@ -1052,5 +1053,30 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public void setStatisticsFile(StatisticsFile stats)
 	{
 		this.field_147103_bO = stats;
+	}
+	
+	public void hide()
+	{
+		if(!isHidden())
+		{
+			getData().core().setHidden(true);
+			((WorldServer)worldObj).getEntityTracker().hidePlayer(this);
+			mcServer.getConfigurationManager().sendPacketToAllPlayers(new S38PacketPlayerListItem(getTabListName(), false, 9999));
+		}
+	}
+	
+	public void show()
+	{
+		if(isHidden())
+		{
+			getData().core().setHidden(false);
+			((WorldServer)worldObj).getEntityTracker().showPlayer(this);
+			mcServer.getConfigurationManager().sendPacketToAllPlayers(new S38PacketPlayerListItem(getTabListName(), true, ping));
+		}
+	}
+	
+	public boolean isHidden()
+	{
+		return getData().core().isHidden();
 	}
 }

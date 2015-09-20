@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -176,7 +177,8 @@ public abstract class ServerConfigurationManager
 		}
 
 		chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.YELLOW);
-		sendPacketToAllPlayers(new S02PacketChat(chatcomponenttranslation, true));
+		if(!p_72355_2_.isHidden() && !p_72355_2_.hasPermission(MinecraftPermissions.HIDE_JOIN_MESSAGE))
+			sendPacketToAllPlayers(new S02PacketChat(chatcomponenttranslation, true));
 		this.playerLoggedIn(p_72355_2_);
 		nethandlerplayserver.setPlayerLocation(p_72355_2_.posX, p_72355_2_.posY, p_72355_2_.posZ, p_72355_2_.rotationYaw, p_72355_2_.rotationPitch);
 		this.updateTimeAndWeatherForPlayer(p_72355_2_, worldserver);
@@ -314,7 +316,17 @@ public abstract class ServerConfigurationManager
 
 	public void playerLoggedIn(final EntityPlayerMP par1EntityPlayerMP)
 	{
-		this.sendPacketToAllPlayers(new S38PacketPlayerListItem(par1EntityPlayerMP.getTabListName(), true, 1000));
+		if(!par1EntityPlayerMP.isHidden())
+			this.sendPacketToAllPlayers(new S38PacketPlayerListItem(par1EntityPlayerMP.getTabListName(), true, 1000));
+		else
+		{
+			for(Object o : playerEntityList)
+			{
+				EntityPlayerMP p = (EntityPlayerMP)o;
+				if(p.hasPermission(MinecraftPermissions.SEE_INVISIBLE_PLAYERS))
+					p.playerNetServerHandler.sendPacket(new S38PacketPlayerListItem(par1EntityPlayerMP.getTabListName(), true, 1000));
+			}
+		}
 		this.playerEntityList.add(par1EntityPlayerMP);
 		usernameToPlayerMap.put(par1EntityPlayerMP.getGameProfile().getName().toLowerCase(), par1EntityPlayerMP);
 		final WorldServer worldserver = this.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
@@ -325,11 +337,16 @@ public abstract class ServerConfigurationManager
 		worldserver.spawnEntityInWorld(par1EntityPlayerMP);
 		func_72375_a(par1EntityPlayerMP, (WorldServer)null);
 
+		boolean seeInvisible = par1EntityPlayerMP.hasPermission(MinecraftPermissions.SEE_INVISIBLE_PLAYERS);
 		for (int i = 0; i < this.playerEntityList.size(); ++i)
 		{
 			EntityPlayerMP entityplayermp1 = (EntityPlayerMP)this.playerEntityList.get(i);
-			par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S38PacketPlayerListItem(entityplayermp1.getTabListName(), true, entityplayermp1.ping));
+			if(!entityplayermp1.isHidden() || seeInvisible)
+				par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S38PacketPlayerListItem(entityplayermp1.getTabListName(), true, entityplayermp1.ping));
 		}
+		
+		if(par1EntityPlayerMP.isHidden())
+			CommandBase.func_152374_a(par1EntityPlayerMP, null, 1, "ultramine.notify.loggedhidden");
 	}
 
 	public void updatePlayerPertinentChunks(EntityPlayerMP p_72358_1_)
@@ -680,7 +697,17 @@ public abstract class ServerConfigurationManager
 		if (this.playerPingIndex < this.playerEntityList.size())
 		{
 			EntityPlayerMP entityplayermp = (EntityPlayerMP)this.playerEntityList.get(this.playerPingIndex);
-			this.sendPacketToAllPlayers(new S38PacketPlayerListItem(entityplayermp.getTabListName(), true, entityplayermp.ping));
+			if(!entityplayermp.isHidden())
+				this.sendPacketToAllPlayers(new S38PacketPlayerListItem(entityplayermp.getTabListName(), true, entityplayermp.ping));
+			else
+			{
+				for(Object o : playerEntityList)
+				{
+					EntityPlayerMP p = (EntityPlayerMP)o;
+					if(p.hasPermission(MinecraftPermissions.SEE_INVISIBLE_PLAYERS))
+						p.playerNetServerHandler.sendPacket(new S38PacketPlayerListItem(entityplayermp.getTabListName(), true, entityplayermp.ping));
+				}
+			}
 		}
 	}
 
@@ -707,25 +734,28 @@ public abstract class ServerConfigurationManager
 
 	public String func_152609_b(boolean p_152609_1_)
 	{
-		String s = "";
-		ArrayList arraylist = Lists.newArrayList(this.playerEntityList);
+		StringBuilder sb = new StringBuilder(512);
 
-		for (int i = 0; i < arraylist.size(); ++i)
+		for (int i = 0; i < playerEntityList.size(); ++i)
 		{
-			if (i > 0)
+			EntityPlayerMP player = (EntityPlayerMP)playerEntityList.get(i);
+			if(!player.isHidden())
 			{
-				s = s + ", ";
-			}
+				if (i > 0)
+				{
+					sb.append(", ");
+				}
 
-			s = s + ((EntityPlayerMP)arraylist.get(i)).getCommandSenderName();
+				sb.append(player.getCommandSenderName());
 
-			if (p_152609_1_)
-			{
-				s = s + " (" + ((EntityPlayerMP)arraylist.get(i)).getUniqueID().toString() + ")";
+				if (p_152609_1_)
+				{
+					sb.append(" (").append(player.getUniqueID().toString()).append(")");
+				}
 			}
 		}
 
-		return s;
+		return sb.toString();
 	}
 
 	public String[] getAllUsernames()

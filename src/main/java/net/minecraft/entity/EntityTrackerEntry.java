@@ -56,6 +56,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.storage.MapData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.permission.MinecraftPermissions;
 
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 
@@ -355,6 +356,8 @@ public class EntityTrackerEntry
 			{
 				if (!this.trackingPlayers.contains(p_73117_1_) && (this.isPlayerWatchingThisChunk(p_73117_1_) || this.myEntity.forceSpawn))
 				{
+					if(myEntity.isEntityPlayerMP() && ((EntityPlayerMP)myEntity).isHidden() && !p_73117_1_.hasPermission(MinecraftPermissions.SEE_INVISIBLE_PLAYERS))
+						return;
 					this.trackingPlayers.add(p_73117_1_);
 					Packet packet = this.func_151260_c();
 					p_73117_1_.playerNetServerHandler.sendPacket(packet);

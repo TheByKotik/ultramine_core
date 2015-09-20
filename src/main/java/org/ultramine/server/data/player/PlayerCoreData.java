@@ -17,6 +17,7 @@ public class PlayerCoreData extends PlayerDataExtension
 	private final PlayerAccount account;
 	private long unmuteTime;
 	private boolean commandsMuted;
+	private boolean hidden;
 	
 	//undatabased
 	private Teleporter teleporter;
@@ -136,6 +137,16 @@ public class PlayerCoreData extends PlayerDataExtension
 		return isMuted() && commandsMuted;
 	}
 	
+	public boolean isHidden()
+	{
+		return hidden;
+	}
+	
+	public void setHidden(boolean hidden)
+	{
+		this.hidden = hidden;
+	}
+	
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
@@ -154,6 +165,7 @@ public class PlayerCoreData extends PlayerDataExtension
 		nbt.setTag("acc", accnbt);
 		nbt.setLong("m", unmuteTime);
 		nbt.setBoolean("mc", commandsMuted);
+		nbt.setBoolean("h", hidden);
 	}
 	
 	@Override
@@ -169,5 +181,6 @@ public class PlayerCoreData extends PlayerDataExtension
 		account.readFromNBT(nbt.getCompoundTag("acc"));
 		unmuteTime = nbt.getLong("m");
 		commandsMuted = nbt.getBoolean("mc");
+		hidden = nbt.getBoolean("h");
 	}
 }

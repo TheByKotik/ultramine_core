@@ -29,6 +29,7 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -792,7 +793,8 @@ public abstract class Entity
 							f = 1.0F;
 						}
 
-						this.playSound(this.getSwimSound(), f, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4F);
+						if(!isEntityPlayerMP() || !((EntityPlayerMP)this).isHidden())
+							this.playSound(this.getSwimSound(), f, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4F);
 					}
 
 					this.func_145780_a(j1, k, l, block);
@@ -886,6 +888,8 @@ public abstract class Entity
 
 	protected void func_145780_a(int p_145780_1_, int p_145780_2_, int p_145780_3_, Block p_145780_4_)
 	{
+		if(isEntityPlayerMP() && ((EntityPlayerMP)this).isHidden())
+			return;
 		Block.SoundType soundtype = p_145780_4_.stepSound;
 
 		if (this.worldObj.getBlock(p_145780_1_, p_145780_2_ + 1, p_145780_3_) == Blocks.snow_layer)

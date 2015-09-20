@@ -117,6 +117,11 @@ public class CommandContext
 	{
 		CommandBase.func_152373_a(sender, null, messageKey, messageArgs);
 	}
+	
+	public void notifyOtherAdmins(String messageKey, Object... messageArgs)
+	{
+		CommandBase.func_152374_a(sender, null, 1, messageKey, messageArgs);
+	}
 
 	public void checkSenderPermission(String permission)
 	{

@@ -17,6 +17,9 @@ ultramine.ability.useblock=У вас нет прав на использован
 ultramine.ability.attack=У вас нет права наносить урон
 ultramine.ability.chat=У вас нет прав писать в чате
 
+ultramine.notify.loggedhidden=Присоединился к игре невидимым
+ultramine.hidden.chat=Вы не можете писать в чат в невидимости
+
 #Command generic
 commands.generic.world.invalid=Указанный мир не существует или неинициализирован '%s'
 commands.generic.itemstack.data=Не удалось разобрать предмет: %s
@@ -339,3 +342,10 @@ command.unmute.description=Возвращает право писать в ча�
 command.unmute.fail=Указанный игрок не замьючен
 command.unmute.notify=Вам возвращено право писать в чат
 command.unmute.success=Игроку %s теперь разрешено писать в чат
+
+command.unmute.usage=/vanish
+command.unmute.description=Делает вас невидимым для других игроков
+command.unmute.success.hide=Вы в невидимости
+command.unmute.success.show=Теперь вас видно
+command.unmute.notify.hide=зашел в невидимость
+command.unmute.notify.show=вышел из невидимости

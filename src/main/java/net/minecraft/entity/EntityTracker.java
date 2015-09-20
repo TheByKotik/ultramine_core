@@ -38,6 +38,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.permission.MinecraftPermissions;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
 
@@ -335,6 +336,55 @@ public class EntityTracker
 			if (entitytrackerentry.myEntity != p_85172_1_ && entitytrackerentry.myEntity.chunkCoordX == p_85172_2_.xPosition && entitytrackerentry.myEntity.chunkCoordZ == p_85172_2_.zPosition)
 			{
 				entitytrackerentry.tryStartWachingThis(p_85172_1_);
+			}
+		}
+	}
+	
+	/*===================================== ULTRAMINE START =====================================*/
+	
+	public EntityTrackerEntry findPlayerTracker(EntityPlayerMP player)
+	{
+		for(Object o : trackedEntities)
+		{
+			EntityTrackerEntry ent = (EntityTrackerEntry)o;
+			if(ent.myEntity == player)
+				return ent;
+		}
+		
+		return null;
+	}
+	
+	public void hidePlayer(EntityPlayerMP player)
+	{
+		EntityTrackerEntry playerTracker = findPlayerTracker(player);
+		if(playerTracker != null)
+		{
+			for(Object o : trackedEntities)
+			{
+				EntityTrackerEntry ent = (EntityTrackerEntry)o;
+				if(ent.myEntity.isEntityPlayerMP())
+				{
+					EntityPlayerMP watcher = (EntityPlayerMP)ent.myEntity;
+					if(!watcher.hasPermission(MinecraftPermissions.SEE_INVISIBLE_PLAYERS))
+						playerTracker.removePlayerFromTracker(watcher);
+				}
+			}
+		}
+	}
+	
+	public void showPlayer(EntityPlayerMP player)
+	{
+		EntityTrackerEntry playerTracker = findPlayerTracker(player);
+		if(playerTracker != null)
+		{
+			for(Object o : trackedEntities)
+			{
+				EntityTrackerEntry ent = (EntityTrackerEntry)o;
+				if(ent.myEntity.isEntityPlayerMP())
+				{
+					EntityPlayerMP watcher = (EntityPlayerMP)ent.myEntity;
+					playerTracker.tryStartWachingThis(watcher);
+				}
 			}
 		}
 	}

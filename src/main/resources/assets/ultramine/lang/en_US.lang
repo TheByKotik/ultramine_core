@@ -17,6 +17,9 @@ ultramine.ability.useblock=You don't have permissions to use blocks
 ultramine.ability.attack=You don't have permissions to damage entities
 ultramine.ability.chat=You don't have permissions to chat
 
+ultramine.notify.loggedhidden=Joined the server in invisibility
+ultramine.hidden.chat=You can't write to chat in invisibility
+
 #Command generic
 commands.generic.world.invalid=Can't find world '%s'
 commands.generic.itemstack.data=Failed to parse item data: %s
@@ -339,3 +342,10 @@ command.unmute.description=Unmutes the player
 command.unmute.fail=The player is not muted
 command.unmute.notify=You has been unmuted
 command.unmute.success=Player %s has been unmuted
+
+command.unmute.usage=/vanish
+command.unmute.description=Makes you invisible for other players
+command.unmute.success.hide=Now you're invisible
+command.unmute.success.show=Now you're visible
+command.unmute.notify.hide=became invisible
+command.unmute.notify.show=became visible

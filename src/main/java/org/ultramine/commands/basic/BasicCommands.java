@@ -426,4 +426,28 @@ public class BasicCommands
 		ctx.get("player").asOfflinePlayer().sendMessage(GREEN, GREEN, "command.unmute.notify");
 		ctx.sendMessage("command.unmute.success", data.getProfile().getName());
 	}
+	
+	@Command(
+			name = "vanish",
+			group = "admin",
+			aliases = {"hide"},
+			permissions = {"command.admin.vanish"},
+			syntax = {""}
+	)
+	public static void vanish(CommandContext ctx)
+	{
+		EntityPlayerMP player = ctx.getSenderAsPlayer();
+		if(player.isHidden())
+		{
+			player.show();
+			ctx.sendMessage("command.unmute.success.show");
+			ctx.notifyOtherAdmins("command.unmute.notify.show");
+		}
+		else
+		{
+			player.hide();
+			ctx.sendMessage("command.unmute.success.hide");
+			ctx.notifyOtherAdmins("command.unmute.notify.hide");
+		}
+	}
 }
