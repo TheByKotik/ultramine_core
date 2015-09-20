@@ -124,6 +124,8 @@ public class ItemBlocker
 						if(slot.inventory == null || slot.getSlotIndex() >= slot.inventory.getSizeInventory())
 							continue; //Fix for some broken containers
 						ItemStack is = slot.getStack();
+						if(is == null)
+							continue;
 						if(is.getItem() == null)
 						{//Fix for broken items
 							slot.putStack(null);
