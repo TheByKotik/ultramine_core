@@ -92,12 +92,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.server.PermissionHandler;
+import org.ultramine.server.event.PlayerSneakingEvent;
+import org.ultramine.server.event.PlayerSwingItemEvent;
 
 public class NetHandlerPlayServer implements INetHandlerPlayServer
 {
@@ -760,6 +763,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 
 		if (p_147350_1_.func_149421_d() == 1)
 		{
+			MinecraftForge.EVENT_BUS.post(new PlayerSwingItemEvent(playerEntity));
 			this.playerEntity.swingItem();
 		}
 	}
@@ -770,6 +774,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 
 		if (p_147357_1_.func_149513_d() == 1)
 		{
+			MinecraftForge.EVENT_BUS.post(new PlayerSneakingEvent(playerEntity));
 			this.playerEntity.setSneaking(true);
 		}
 		else if (p_147357_1_.func_149513_d() == 2)
