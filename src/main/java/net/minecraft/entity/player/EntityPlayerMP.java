@@ -1077,6 +1077,6 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	
 	public boolean isHidden()
 	{
-		return getData().core().isHidden();
+		return getData() != null && getData().core().isHidden();
 	}
 }
