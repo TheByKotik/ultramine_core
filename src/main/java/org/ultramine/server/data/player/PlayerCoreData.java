@@ -13,6 +13,8 @@ import net.minecraft.nbt.NBTTagList;
 
 public class PlayerCoreData extends PlayerDataExtension
 {
+	private long firstLoginTime = System.currentTimeMillis();
+	private long lastLoginTime = firstLoginTime;
 	private final Map<String, WarpLocation> homes = new HashMap<String, WarpLocation>();
 	private final PlayerAccount account;
 	private long unmuteTime;
@@ -29,6 +31,21 @@ public class PlayerCoreData extends PlayerDataExtension
 	{
 		super(data);
 		this.account = new PlayerAccount(data);
+	}
+	
+	public long getFirstLoginTime()
+	{
+		return firstLoginTime;
+	}
+	
+	public long getLastLoginTime()
+	{
+		return lastLoginTime;
+	}
+	
+	public void onLogin()
+	{
+		this.lastLoginTime = System.currentTimeMillis();
 	}
 	
 	public WarpLocation getHome(String name)
@@ -150,6 +167,8 @@ public class PlayerCoreData extends PlayerDataExtension
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
+		nbt.setLong("flt", firstLoginTime);
+		nbt.setLong("llt", lastLoginTime);
 		NBTTagList homeList = new NBTTagList();
 		for(Map.Entry<String, WarpLocation> ent : homes.entrySet())
 		{
@@ -171,6 +190,9 @@ public class PlayerCoreData extends PlayerDataExtension
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
+		if(nbt.hasKey("flt"))
+			firstLoginTime = nbt.getLong("flt");
+		lastLoginTime = nbt.getLong("llt");
 		NBTTagList homeList = nbt.getTagList("homes", 10);
 		for(int i = 0, s = homeList.tagCount(); i < s; i++)
 		{
