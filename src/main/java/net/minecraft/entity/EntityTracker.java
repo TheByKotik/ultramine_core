@@ -66,7 +66,7 @@ public class EntityTracker
 
 		if (p_72786_1_ instanceof EntityPlayerMP)
 		{
-			this.addEntityToTracker(p_72786_1_, 512, 2);
+			this.addEntityToTracker(p_72786_1_, 512, 1);
 			EntityPlayerMP entityplayermp = (EntityPlayerMP)p_72786_1_;
 			Iterator iterator = this.trackedEntities.iterator();
 
