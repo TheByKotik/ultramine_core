@@ -81,6 +81,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.IPermissionManager;
+import org.ultramine.sceduler.Scheduler;
 import org.ultramine.server.BackupManager;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.WatchdogThread;
@@ -1506,6 +1507,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	public final long startTime = System.currentTimeMillis();
 	private final MultiWorld multiworld = new MultiWorld(this);
 	private IPermissionManager permissionManager;
+	private final Scheduler scheduler = new Scheduler();
 	
 	public MultiWorld getMultiWorld()
 	{
@@ -1525,6 +1527,11 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	protected void setPermissionManager(IPermissionManager permissionManager)
 	{
 		this.permissionManager = permissionManager;
+	}
+	
+	public Scheduler getScheduler()
+	{
+		return scheduler;
 	}
 	
 	public File getWorldsDir()

@@ -165,6 +165,7 @@ public class UltramineServerModContainer extends DummyModContainer
 			buttonCommand.load(e);
 			itemBlocker.load();
 			MinecraftForge.EVENT_BUS.register(new WarpProtection());
+			e.getServer().getScheduler().start();
 		}
 	}
 	
@@ -190,7 +191,10 @@ public class UltramineServerModContainer extends DummyModContainer
 		ChunkProfiler.instance().setEnabled(false);
 		
 		if(e.getSide().isServer())
+		{
 			buttonCommand.unload();
+			MinecraftServer.getServer().getScheduler().stop();
+		}
 	}
 	
 	@Subscribe
