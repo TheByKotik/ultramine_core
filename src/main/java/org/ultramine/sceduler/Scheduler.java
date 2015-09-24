@@ -23,7 +23,7 @@ public class Scheduler
 
 	public Scheduler()
 	{
-		scheduleSync("* * * * *", new Runnable(){public void run(){System.out.println(Thread.currentThread().getName());}});
+		
 	}
 	
 	public void start()
