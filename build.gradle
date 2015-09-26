@@ -125,9 +125,9 @@ dependencies {
 
 	compile 'org.yaml:snakeyaml:1.13'
 	compile 'com.lmax:disruptor:3.2.1'
-	compile 'mysql:mysql-connector-java:5.1.31'
-	compile 'commons-pool:commons-pool:1.6'
-	compile 'commons-dbcp:commons-dbcp:1.4'
+	compile 'org.apache.commons:commons-dbcp2:2.1.1'
+	
+	runtime 'mysql:mysql-connector-java:5.1.31'
 
 	testCompile "org.codehaus.groovy:groovy-all:2.3.0"
 	testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"

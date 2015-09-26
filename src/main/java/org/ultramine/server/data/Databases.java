@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.UltramineServerConfig;
 
@@ -30,7 +30,9 @@ public class Databases
 			ds.setUsername(info.username);
 			ds.setPassword(info.password);
 			if(info.maxConnections > 0)
-				ds.setMaxActive(info.maxConnections);
+				ds.setMaxIdle(info.maxConnections);
+			ds.setTestWhileIdle(true);
+			ds.setTestOnBorrow(false);
 			
 			databases.put(ent.getKey(), ds);
 		}

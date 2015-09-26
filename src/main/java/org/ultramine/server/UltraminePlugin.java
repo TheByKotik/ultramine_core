@@ -36,7 +36,12 @@ public class UltraminePlugin implements IFMLLoadingPlugin
 	public void injectData(Map<String, Object> data)
 	{
 		location = (File)data.get("coremodLocation");
-		((LaunchClassLoader)this.getClass().getClassLoader()).addTransformerExclusion("org.ultramine.server.asm.");
+		LaunchClassLoader cl = (LaunchClassLoader)this.getClass().getClassLoader();
+		cl.addTransformerExclusion("org.ultramine.server.asm.");
+		
+		cl.addTransformerExclusion("org.apache.commons.dbcp2.");
+		cl.addTransformerExclusion("org.apache.commons.pool2.");
+		cl.addTransformerExclusion("org.apache.commons.logging.");
 	}
 
 	@Override
