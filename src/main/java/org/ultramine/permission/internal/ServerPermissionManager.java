@@ -4,11 +4,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import org.ultramine.permission.MixinPermission;
+import org.apache.commons.lang3.StringUtils;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.PermissionRepository;
 import org.ultramine.server.util.YamlConfigProvider;
-
-import com.mysql.jdbc.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -252,7 +251,7 @@ public class ServerPermissionManager implements IPermissionManager
 
 	private void fillContainer(PermUser container, UserData data)
 	{
-		if(!StringUtils.isNullOrEmpty(data.inherits))
+		if(!StringUtils.isEmpty(data.inherits))
 			container.setParent(permissionRepository.getContainer(data.inherits));
 
 		fillHolder(container.getGlobalHolder(), data.global);
