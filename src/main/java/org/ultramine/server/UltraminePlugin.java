@@ -39,6 +39,8 @@ public class UltraminePlugin implements IFMLLoadingPlugin
 		LaunchClassLoader cl = (LaunchClassLoader)this.getClass().getClassLoader();
 		cl.addTransformerExclusion("org.ultramine.server.asm.");
 		
+		cl.addTransformerExclusion("org.yaml.snakeyaml.");
+		cl.addTransformerExclusion("com.lmax.disruptor.");
 		cl.addTransformerExclusion("org.apache.commons.dbcp2.");
 		cl.addTransformerExclusion("org.apache.commons.pool2.");
 		cl.addTransformerExclusion("org.apache.commons.logging.");

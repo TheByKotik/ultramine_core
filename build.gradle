@@ -109,8 +109,8 @@ dependencies {
 	compile 'com.paulscode:librarylwjglopenal:20100824'
 	compile 'com.paulscode:soundsystem:20120107'
 	compile 'io.netty:netty-all:4.0.10.Final'
-	compile 'com.google.guava:guava:16.0'
-	compile 'org.apache.commons:commons-lang3:3.2.1'
+	compile 'com.google.guava:guava:17.0'
+	compile 'org.apache.commons:commons-lang3:3.3.2'
 	compile 'commons-io:commons-io:2.4'
 	compile 'commons-codec:commons-codec:1.9'
 	compile 'net.java.jinput:jinput:2.0.5'
@@ -123,7 +123,7 @@ dependencies {
 	compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
 	compile 'tv.twitch:twitch:5.16'
 
-	compile 'org.yaml:snakeyaml:1.13'
+	compile 'org.yaml:snakeyaml:1.16'
 	compile 'com.lmax:disruptor:3.2.1'
 	compile 'org.apache.commons:commons-dbcp2:2.1.1'
 	
