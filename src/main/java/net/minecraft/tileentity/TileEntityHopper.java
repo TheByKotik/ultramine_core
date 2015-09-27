@@ -186,8 +186,9 @@ public class TileEntityHopper extends TileEntity implements IHopper
 
 			if (!this.func_145888_j())
 			{
-				this.func_145896_c(16); //UM 0->16 if no work has been done, we should set DOUBLE cooldown, not zero
-				this.func_145887_i();
+				this.func_145896_c(0);
+				if(!this.func_145887_i())
+					this.func_145896_c(16); //UM 0->16 if no work has been done, we should set DOUBLE cooldown, not zero
 			}
 		}
 	}
