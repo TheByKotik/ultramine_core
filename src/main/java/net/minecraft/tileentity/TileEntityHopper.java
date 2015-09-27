@@ -186,7 +186,7 @@ public class TileEntityHopper extends TileEntity implements IHopper
 
 			if (!this.func_145888_j())
 			{
-				this.func_145896_c(0);
+				this.func_145896_c(16); //UM 0->16 if no work has been done, we should set DOUBLE cooldown, not zero
 				this.func_145887_i();
 			}
 		}
@@ -512,7 +512,8 @@ public class TileEntityHopper extends TileEntity implements IHopper
 	{
 		ItemStack itemstack1 = p_145899_0_.getStackInSlot(p_145899_2_);
 
-		if (func_145885_a(p_145899_0_, p_145899_1_, p_145899_2_, p_145899_3_))
+		boolean canMerge = itemstack1 == null || func_145894_a(itemstack1, p_145899_1_); //optimized validity check
+		if (canMerge && func_145885_a(p_145899_0_, p_145899_1_, p_145899_2_, p_145899_3_))
 		{
 			boolean flag = false;
 
@@ -531,7 +532,7 @@ public class TileEntityHopper extends TileEntity implements IHopper
 				}
 				flag = true;
 			}
-			else if (func_145894_a(itemstack1, p_145899_1_))
+			else if (canMerge)
 			{
 				//Forge: BUGFIX: Again, make things respect max stack sizes.
 				int max = Math.min(p_145899_1_.getMaxStackSize(), p_145899_0_.getInventoryStackLimit());
