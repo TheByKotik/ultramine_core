@@ -24,6 +24,7 @@ import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.data.Databases;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerCoreData;
+import org.ultramine.server.event.ForgeModIdMappingEvent;
 import org.ultramine.server.tools.ButtonCommand;
 import org.ultramine.server.tools.ItemBlocker;
 import org.ultramine.server.tools.WarpProtection;
@@ -200,6 +201,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void remap(FMLModIdMappingEvent e)
 	{
+		MinecraftForge.EVENT_BUS.post(new ForgeModIdMappingEvent(e));
 		FurnaceRecipes.smelting().remap();
 	}
 	
@@ -220,7 +222,8 @@ public class UltramineServerModContainer extends DummyModContainer
 	{
 		return ImmutableList.of(
 			"org.ultramine.server",
-			"org.ultramine.commands"
+			"org.ultramine.commands",
+			"org.ultramine.server.util"
 		);
 	}
 

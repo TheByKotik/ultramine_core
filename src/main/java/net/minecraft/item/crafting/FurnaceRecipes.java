@@ -1,12 +1,11 @@
 package net.minecraft.item.crafting;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.ultramine.server.util.ItemStackHashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -18,18 +17,8 @@ import net.minecraft.item.ItemStack;
 public class FurnaceRecipes
 {
 	private static final FurnaceRecipes smeltingBase = new FurnaceRecipes();
-	private Map smeltingList = new HashMap()
-	{
-		public Object put(Object o1, Object o2)
-		{
-			ItemStack input = (ItemStack) o1;
-			ItemStack output = (ItemStack) o2;
-			fastMap.put((Item.getIdFromItem(input.getItem()) << 16) | (input.getItemDamage() & 0xFFFF), output);
-			return super.put(o1, o2);
-		}
-	};
+	private Map smeltingList = new ItemStackHashMap<Object>(false);
 	private Map experienceList = new HashMap();
-	private TIntObjectMap<ItemStack> fastMap = new TIntObjectHashMap<ItemStack>();
 	private static final String __OBFID = "CL_00000085";
 
 	public static FurnaceRecipes smelting()
@@ -92,11 +81,7 @@ public class FurnaceRecipes
 
 	public ItemStack getSmeltingResult(ItemStack p_151395_1_)
 	{
-		int idPart = Item.getIdFromItem(p_151395_1_.getItem()) << 16;
-		ItemStack ret = fastMap.get(idPart | (p_151395_1_.getItemDamage() & 0xFFFF));
-		if(ret == null)
-			ret = fastMap.get(idPart | 32767);
-		return ret;
+		return (ItemStack)smeltingList.get(p_151395_1_);//It's ItemStackHashMap
 		/*
 		Iterator iterator = this.smeltingList.entrySet().iterator();
 		Entry entry;
@@ -150,11 +135,6 @@ public class FurnaceRecipes
 	
 	public void remap()
 	{
-		Map<ItemStack, ItemStack> map = (Map<ItemStack, ItemStack>)smeltingList;
-		for(Entry<ItemStack, ItemStack> ent : map.entrySet())
-		{
-			ItemStack input = ent.getKey();
-			fastMap.put((Item.getIdFromItem(input.getItem()) << 16) | (input.getItemDamage() & 0xFFFF), ent.getValue());
-		}
+		((ItemStackHashMap<Object>)smeltingList).remap();
 	}
 }
