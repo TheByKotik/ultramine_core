@@ -55,6 +55,7 @@ public class UltramineServerModContainer extends DummyModContainer
 {
 	private static UltramineServerModContainer instance;
 	
+	private LoadController controller;
 	@SideOnly(Side.SERVER)
 	private ButtonCommand buttonCommand;
 	private ItemBlocker itemBlocker;
@@ -78,6 +79,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Override
 	public boolean registerBus(EventBus bus, LoadController controller)
 	{
+		this.controller = controller;
 		bus.register(this);
 		return true;
 	}
@@ -91,110 +93,159 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void preInit(FMLPreInitializationEvent e)
 	{
-		if(e.getSide().isServer())
+		try
 		{
-			ConfigurationHandler.load();
-			Databases.init();
-			MinecraftServer.getServer().getMultiWorld().preloadConfigs();
+			if(e.getSide().isServer())
+			{
+				ConfigurationHandler.load();
+				Databases.init();
+				MinecraftServer.getServer().getMultiWorld().preloadConfigs();
+			}
+		}
+		catch (Throwable t)
+		{
+			controller.errorOccurred(this, t);
 		}
 	}
 	
 	@Subscribe
 	public void init(FMLInitializationEvent e)
 	{
-		UMEventHandler handler = new UMEventHandler();
-		MinecraftForge.EVENT_BUS.register(handler);
-		FMLCommonHandler.instance().bus().register(handler);
+		try
+		{
+			UMEventHandler handler = new UMEventHandler();
+			MinecraftForge.EVENT_BUS.register(handler);
+			FMLCommonHandler.instance().bus().register(handler);
+		}
+		catch (Throwable t)
+		{
+			controller.errorOccurred(this, t);
+		}
 	}
 
 	@Subscribe
 	public void postInit(FMLPostInitializationEvent e)
 	{
-		if(e.getSide().isServer())
-			ConfigurationHandler.saveServerConfig();
+		try
+		{
+			if(e.getSide().isServer())
+				ConfigurationHandler.saveServerConfig();
+		}
+		catch (Throwable t)
+		{
+			controller.errorOccurred(this, t);
+		}
 	}
 	
 	@Subscribe
 	public void serverAboutToStart(FMLServerAboutToStartEvent e)
 	{
-		e.getServer().getMultiWorld().register();
-		if(e.getSide().isServer())
+		try
 		{
-			buttonCommand = new ButtonCommand(e.getServer());
-			itemBlocker = new ItemBlocker();
+			e.getServer().getMultiWorld().register();
+			if(e.getSide().isServer())
+			{
+				buttonCommand = new ButtonCommand(e.getServer());
+				itemBlocker = new ItemBlocker();
+			}
+		}
+		catch (Throwable t)
+		{
+			controller.errorOccurred(this, t);
 		}
 	}
 	
 	@Subscribe
 	public void serverStarting(FMLServerStartingEvent e)
 	{
-		e.getServer().getConfigurationManager().getDataLoader().registerPlayerDataExt(PlayerCoreData.class, "core");
-		e.registerArgumentHandlers(DefaultCompleters.class);
-		e.registerCommands(BasicPermissionCommands.class);
-		e.registerCommands(VanillaCommands.class);
-		e.registerCommands(BasicCommands.class);
-		e.registerCommands(TechCommands.class);
-		e.registerCommands(EconomyCommands.class);
-		e.registerCommands(OpenInvCommands.class);
-		
-		for(String perm : new String[]{
-				"command.vanilla.help",
-				"command.vanilla.msg",
-				"command.vanilla.me",
-				"command.vanilla.kill",
-				"command.vanilla.list",
-				"ability.player.useblock",
-				"ability.player.useitem",
-				"ability.player.blockplace",
-				"ability.player.blockbreak",
-				"ability.player.attack",
-				"ability.player.chat",
-				"command.fastwarp.spawn",
-				})
+		try
 		{
-			e.getPermissionHandler().addToGroup(IPermissionManager.DEFAULT_GROUP_NAME, IPermissionManager.GLOBAL_WORLD, perm);
+			e.getServer().getConfigurationManager().getDataLoader().registerPlayerDataExt(PlayerCoreData.class, "core");
+			e.registerArgumentHandlers(DefaultCompleters.class);
+			e.registerCommands(BasicPermissionCommands.class);
+			e.registerCommands(VanillaCommands.class);
+			e.registerCommands(BasicCommands.class);
+			e.registerCommands(TechCommands.class);
+			e.registerCommands(EconomyCommands.class);
+			e.registerCommands(OpenInvCommands.class);
+			
+			for(String perm : new String[]{
+					"command.vanilla.help",
+					"command.vanilla.msg",
+					"command.vanilla.me",
+					"command.vanilla.kill",
+					"command.vanilla.list",
+					"ability.player.useblock",
+					"ability.player.useitem",
+					"ability.player.blockplace",
+					"ability.player.blockbreak",
+					"ability.player.attack",
+					"ability.player.chat",
+					"command.fastwarp.spawn",
+					})
+			{
+				e.getPermissionHandler().addToGroup(IPermissionManager.DEFAULT_GROUP_NAME, IPermissionManager.GLOBAL_WORLD, perm);
+			}
+			e.getPermissionHandler().setGroupMeta(IPermissionManager.DEFAULT_GROUP_NAME, IPermissionManager.GLOBAL_WORLD, "color", "7");
+			e.getPermissionHandler().addToGroup("admin", IPermissionManager.GLOBAL_WORLD, "*");
+			e.getPermissionHandler().addToGroup("admin", IPermissionManager.GLOBAL_WORLD, "^"+MinecraftPermissions.HIDE_JOIN_MESSAGE);
+			e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "color", "c");
+			e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "tablistcolor", "c");
+			e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "prefix", "&4[admin] ");
+			
+			if(e.getSide().isServer())
+			{
+				buttonCommand.load(e);
+				itemBlocker.load();
+				MinecraftForge.EVENT_BUS.register(new WarpProtection());
+				e.getServer().getScheduler().start();
+			}
 		}
-		e.getPermissionHandler().setGroupMeta(IPermissionManager.DEFAULT_GROUP_NAME, IPermissionManager.GLOBAL_WORLD, "color", "7");
-		e.getPermissionHandler().addToGroup("admin", IPermissionManager.GLOBAL_WORLD, "*");
-		e.getPermissionHandler().addToGroup("admin", IPermissionManager.GLOBAL_WORLD, "^"+MinecraftPermissions.HIDE_JOIN_MESSAGE);
-		e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "color", "c");
-		e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "tablistcolor", "c");
-		e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "prefix", "&4[admin] ");
-		
-		if(e.getSide().isServer())
+		catch (Throwable t)
 		{
-			buttonCommand.load(e);
-			itemBlocker.load();
-			MinecraftForge.EVENT_BUS.register(new WarpProtection());
-			e.getServer().getScheduler().start();
+			controller.errorOccurred(this, t);
 		}
 	}
 	
 	@Subscribe
 	public void serverStarted(FMLServerStartedEvent e)
 	{
-		PermissionHandler.getInstance().reload();
-		ServerDataLoader loader = MinecraftServer.getServer().getConfigurationManager().getDataLoader();
-		CommandRegistry reg = ((CommandHandler)MinecraftServer.getServer().getCommandManager()).getRegistry();
-		loader.loadCache();
-		loader.addDefaultWarps();
-		for(String name : loader.getFastWarps())
-			reg.registerCommand(new FastWarpCommand(name));
-		getRecipeCache().clearCache();
-		if(e.getSide().isServer())
-			getRecipeCache().setEnabled(ConfigurationHandler.getServerConfig().settings.other.recipeCacheEnabled);
+		try
+		{
+			PermissionHandler.getInstance().reload();
+			ServerDataLoader loader = MinecraftServer.getServer().getConfigurationManager().getDataLoader();
+			CommandRegistry reg = ((CommandHandler)MinecraftServer.getServer().getCommandManager()).getRegistry();
+			loader.loadCache();
+			loader.addDefaultWarps();
+			for(String name : loader.getFastWarps())
+				reg.registerCommand(new FastWarpCommand(name));
+			getRecipeCache().clearCache();
+			if(e.getSide().isServer())
+				getRecipeCache().setEnabled(ConfigurationHandler.getServerConfig().settings.other.recipeCacheEnabled);
+		}
+		catch (Throwable t)
+		{
+			controller.errorOccurred(this, t);
+		}
 	}
 	
 	@Subscribe
 	public void serverStopped(FMLServerStoppedEvent e)
 	{
-		MinecraftServer.getServer().getMultiWorld().unregister();
-		ChunkProfiler.instance().setEnabled(false);
-		
-		if(e.getSide().isServer())
+		try
 		{
-			buttonCommand.unload();
-			MinecraftServer.getServer().getScheduler().stop();
+			MinecraftServer.getServer().getMultiWorld().unregister();
+			ChunkProfiler.instance().setEnabled(false);
+			
+			if(e.getSide().isServer())
+			{
+				buttonCommand.unload();
+				MinecraftServer.getServer().getScheduler().stop();
+			}
+		}
+		catch (Throwable t)
+		{
+			controller.errorOccurred(this, t);
 		}
 	}
 	
