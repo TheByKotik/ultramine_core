@@ -21,8 +21,8 @@ public class EconomyCommands
 	{
 		Currency cur = ctx.contains("currency") ? CurrencyRegistry.getCurrency(ctx.get("currency").asString()) : CurrencyRegistry.GSC;
 		ctx.check(cur != null, "economy.fail.currency");
-		Holdings from = ctx.getSenderAsPlayer().getData().core().getAccount().getHoldingsOf(cur);
-		Holdings to = ctx.get("player").asPlayerData().core().getAccount().getHoldingsOf(cur);
+		IHoldings from = ctx.getSenderAsPlayer().getData().core().getAccount().getHoldingsOf(cur);
+		IHoldings to = ctx.get("player").asPlayerData().core().getAccount().getHoldingsOf(cur);
 		double amount = ctx.get("amount").asDouble();
 		from.transactChecked(to, amount);
 		ctx.sendMessage(DARK_GREEN, GREEN, "command.pay.sended", ctx.get("player").asString(), cur.format(amount));
@@ -44,7 +44,7 @@ public class EconomyCommands
 		ctx.checkPermissionIfArg("player", "command.economy.money.other", "command.money.other.fail.perm");
 		Currency cur = ctx.contains("currency") ? CurrencyRegistry.getCurrency(ctx.get("currency").asString()) :CurrencyRegistry.GSC;
 		ctx.check(cur != null, "economy.fail.currency");
-		Holdings holdings = (ctx.contains("player") ? ctx.get("player").asPlayerData() : ctx.getSenderAsPlayer().getData()).core().getAccount().getHoldingsOf(cur);
+		IHoldings holdings = (ctx.contains("player") ? ctx.get("player").asPlayerData() : ctx.getSenderAsPlayer().getData()).core().getAccount().getHoldingsOf(cur);
 		ctx.sendMessage(DARK_GREEN, GREEN, "command.money.info", holdings.getAccount().getName(), cur.format(holdings.getBalance()));
 	}
 	
@@ -62,8 +62,8 @@ public class EconomyCommands
 	{
 		Currency cur = ctx.contains("currency") ? CurrencyRegistry.getCurrency(ctx.get("currency").asString()) : CurrencyRegistry.GSC;
 		ctx.check(cur != null, "economy.fail.currency");
-		Holdings from = ctx.getSenderAsPlayer().getData().core().getAccount().getHoldingsOf(cur);
-		Holdings to = ctx.get("player").asPlayerData().core().getAccount().getHoldingsOf(cur);
+		IHoldings from = ctx.getSenderAsPlayer().getData().core().getAccount().getHoldingsOf(cur);
+		IHoldings to = ctx.get("player").asPlayerData().core().getAccount().getHoldingsOf(cur);
 		double amount = ctx.get("amount").asDouble();
 		ctx.check(amount > 0.0d, "economy.fail.negativeamount");
 		to.subtract(amount); //result may be negative
@@ -85,7 +85,7 @@ public class EconomyCommands
 	{
 		Currency cur = ctx.contains("currency") ? CurrencyRegistry.getCurrency(ctx.get("currency").asString()) : CurrencyRegistry.GSC;
 		ctx.check(cur != null, "economy.fail.currency");
-		Holdings holdings = ctx.get("player").asPlayerData().core().getAccount().getHoldingsOf(cur);
+		IHoldings holdings = ctx.get("player").asPlayerData().core().getAccount().getHoldingsOf(cur);
 		double amount = ctx.get("amount").asDouble();
 		holdings.add(amount);
 		ctx.sendMessage(DARK_GREEN, GREEN, "command.mgive.sended", ctx.get("player").asString(), cur.format(amount));
@@ -105,7 +105,7 @@ public class EconomyCommands
 	{
 		Currency cur = ctx.contains("currency") ? CurrencyRegistry.getCurrency(ctx.get("currency").asString()) : CurrencyRegistry.GSC;
 		ctx.check(cur != null, "economy.fail.currency");
-		Holdings holdings = ctx.get("player").asPlayerData().core().getAccount().getHoldingsOf(cur);
+		IHoldings holdings = ctx.get("player").asPlayerData().core().getAccount().getHoldingsOf(cur);
 		double amount = ctx.get("amount").asDouble(); //may be negative
 		double last = holdings.getBalance();
 		holdings.setBalance(amount);

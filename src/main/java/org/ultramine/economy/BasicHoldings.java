@@ -1,28 +1,29 @@
 package org.ultramine.economy;
 
 import net.minecraft.command.CommandException;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 
-public class Holdings
+public class BasicHoldings implements IHoldings
 {
 	private final Account acc;
 	private final Currency cur;
 	
 	private long balance;
 
-	Holdings(Account acc, Currency cur)
+	public BasicHoldings(Account acc, Currency cur)
 	{
 		this.acc = acc;
 		this.cur = cur;
 	}
 	
-	Holdings(Account acc, Currency cur, double balance)
+	public BasicHoldings(Account acc, Currency cur, double balance)
 	{
 		this(acc, cur);
 		this.balance = (int)(balance*100);
 	}
 	
-	Holdings(Account acc, Currency cur, long balanceInternal)
+	public BasicHoldings(Account acc, Currency cur, long balanceInternal)
 	{
 		this(acc, cur);
 		this.balance = balanceInternal;
@@ -33,32 +34,38 @@ public class Holdings
 		return this.balance;
 	}
 
+	@Override
 	public Account getAccount()
 	{
 		return acc;
 	}
 
+	@Override
 	public Currency getCurrency()
 	{
 		return cur;
 	}
 
+	@Override
 	public double getBalance()
 	{
 		return balance / 100.0d;
 	}
-	
-	void setBalanceSilently(double balance)
+
+	@Override
+	public void setBalanceSilently(double balance)
 	{
 		this.balance = (int)(balance*100);
 	}
 
+	@Override
 	public void setBalance(double balance)
 	{
 		this.balance = (int)(balance*100);
 		acc.onHoldingsChange(this);
 	}
 
+	@Override
 	public void add(double amount)
 	{
 		if(amount <= 0.0d)
@@ -67,6 +74,7 @@ public class Holdings
 		acc.onHoldingsChange(this);
 	}
 
+	@Override
 	public void subtract(double amount)
 	{
 		if(amount <= 0.0d)
@@ -74,7 +82,8 @@ public class Holdings
 		this.balance -= MathHelper.ceiling_double_int(amount*100);
 		acc.onHoldingsChange(this);
 	}
-	
+
+	@Override
 	public void subtractChecked(double amount)
 	{
 		if((balance - MathHelper.ceiling_double_int(amount*100)) < 0L)
@@ -82,42 +91,61 @@ public class Holdings
 		subtract(amount);
 	}
 
+	@Override
 	public void divide(double amount)
 	{
 		this.balance /= amount;
 		acc.onHoldingsChange(this);
 	}
 
+	@Override
 	public void multiply(double amount)
 	{
 		this.balance *= amount;
 		acc.onHoldingsChange(this);
 	}
 
+	@Override
 	public boolean isNegative()
 	{
 		return this.balance < 0L;
 	}
 
+	@Override
 	public boolean hasEnough(double amount)
 	{
 		return MathHelper.ceiling_double_int(amount*100) <= this.balance;
 	}
 
+	@Override
 	public boolean hasOver(double amount)
 	{
 		return MathHelper.ceiling_double_int(amount*100) < this.balance;
 	}
-	
-	public void transact(Holdings to, double amount)
+
+	@Override
+	public void transact(IHoldings to, double amount)
 	{
 		this.subtract(amount);
 		to.add(amount);
 	}
-	
-	public void transactChecked(Holdings to, double amount)
+
+	@Override
+	public void transactChecked(IHoldings to, double amount)
 	{
 		this.subtractChecked(amount);
 		to.add(amount);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		nbt.setLong("b", this.balance);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		this.balance = nbt.getLong("b");
 	}
 }

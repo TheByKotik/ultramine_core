@@ -20,14 +20,14 @@ public class PlayerAccount extends Account
 	}
 
 	@Override
-	protected void onHoldingsChange(Holdings holdings)
+	public void onHoldingsChange(IHoldings holdings)
 	{
 		MinecraftForge.EVENT_BUS.post(new PlayerHoldingsEvent.ChangeEvent(holdings, data));
 		data.save();
 	}
 
 	@Override
-	protected void onHoldingsCreate(Holdings holdings)
+	public void onHoldingsCreate(IHoldings holdings)
 	{
 		MinecraftForge.EVENT_BUS.post(new PlayerHoldingsEvent.CreateEvent(holdings, data));
 	}

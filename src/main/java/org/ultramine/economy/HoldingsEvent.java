@@ -4,9 +4,9 @@ import cpw.mods.fml.common.eventhandler.Event;
 
 public class HoldingsEvent extends Event
 {
-	public final Holdings holdings;
+	public final IHoldings holdings;
 
-	protected HoldingsEvent(Holdings holdings)
+	protected HoldingsEvent(IHoldings holdings)
 	{
 		this.holdings = holdings;
 	}

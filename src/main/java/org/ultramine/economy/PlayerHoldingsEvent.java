@@ -6,7 +6,7 @@ public class PlayerHoldingsEvent extends HoldingsEvent
 {
 	public final PlayerData player;
 	
-	protected PlayerHoldingsEvent(Holdings holdings, PlayerData player)
+	protected PlayerHoldingsEvent(IHoldings holdings, PlayerData player)
 	{
 		super(holdings);
 		this.player = player;
@@ -14,7 +14,7 @@ public class PlayerHoldingsEvent extends HoldingsEvent
 	
 	public static class CreateEvent extends PlayerHoldingsEvent
 	{
-		public CreateEvent(Holdings holdings, PlayerData player)
+		public CreateEvent(IHoldings holdings, PlayerData player)
 		{
 			super(holdings, player);
 		}
@@ -22,7 +22,7 @@ public class PlayerHoldingsEvent extends HoldingsEvent
 	
 	public static class ChangeEvent extends PlayerHoldingsEvent
 	{
-		public ChangeEvent(Holdings holdings, PlayerData player)
+		public ChangeEvent(IHoldings holdings, PlayerData player)
 		{
 			super(holdings, player);
 		}
