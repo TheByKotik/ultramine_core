@@ -78,12 +78,12 @@ public class ItemStackHashSet implements Set<ItemStack>
 	
 	public boolean contains(Block block, int meta)
 	{
-		return contains(Block.getIdFromBlock(block));
+		return contains(Block.getIdFromBlock(block), meta);
 	}
 	
 	public boolean contains(Item item, int meta)
 	{
-		return contains(Item.getIdFromItem(item));
+		return contains(Item.getIdFromItem(item), meta);
 	}
 	
 	@Override
