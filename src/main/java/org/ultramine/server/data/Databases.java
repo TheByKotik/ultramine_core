@@ -33,6 +33,7 @@ public class Databases
 				ds.setMaxIdle(info.maxConnections);
 			ds.setTestWhileIdle(true);
 			ds.setTestOnBorrow(false);
+			ds.setValidationQueryTimeout(1);
 			
 			databases.put(ent.getKey(), ds);
 		}
