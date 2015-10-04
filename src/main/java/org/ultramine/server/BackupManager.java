@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -57,6 +58,7 @@ public class BackupManager
 	private long lastBackupTime;
 	private boolean isBackuping;
 	private AtomicBoolean backupCompleted = new AtomicBoolean(false);
+	private AtomicReference<Runnable> backupApplied = new AtomicReference<Runnable>();
 	
 	public BackupManager(MinecraftServer server)
 	{
@@ -72,6 +74,14 @@ public class BackupManager
 			for(WorldServer world : server.getMultiWorld().getLoadedWorlds())
 				world.theChunkProviderServer.resumeSaving();
 
+			isBackuping = false;
+		}
+		
+		Runnable run = backupApplied.get();
+		if(run != null)
+		{
+			backupApplied.set(null);
+			run.run();
 			isBackuping = false;
 		}
 		
@@ -183,10 +193,13 @@ public class BackupManager
 	}
 	
 	//Адовы костыли с CommandContext и CommandException. Нужна универсальность без привязки к системе команд
-	public void applyBackup(String path, CommandContext ctx, List<String> moveOnlyList, boolean movePlayersP, final boolean makeTemp) throws CommandException
+	public void applyBackup(String path, final CommandContext ctx, List<String> moveOnlyList, boolean movePlayersP, final boolean makeTemp) throws CommandException
 	{
+		if(isBackuping)
+			throw new IllegalStateException("Already backuping");
+		isBackuping = true;
 		final boolean movePlayers = movePlayersP && server.getConfigurationManager().getDataLoader().getDataProvider().isUsingWorldPlayerDir();
-		File zipFile = new File(server.getBackupDir(), path);
+		final File zipFile = new File(server.getBackupDir(), path);
 		try
 		{
 			if(!zipFile.getCanonicalPath().startsWith(server.getBackupDir().getCanonicalFile().getParentFile().getParent()))
@@ -196,7 +209,7 @@ public class BackupManager
 		if(!zipFile.exists() || zipFile.isDirectory() || !zipFile.getName().endsWith(".zip"))
 			throw new CommandException("command.backup.apply.fail.nofile", path);
 		
-		Set<String> moveOnly;
+		final Set<String> moveOnly;
 		try
 		{
 			Set<String> available = ZipUtil.getRootFiles(zipFile);
@@ -221,165 +234,187 @@ public class BackupManager
 		else if(ctx != null)
 			ctx.sendMessage("command.backup.apply.started", moveOnly);
 		
-		TIntObjectMap<List<EntityPlayerMP>> dimToPlayerMap = new TIntObjectHashMap<List<EntityPlayerMP>>();
-		if(!makeTemp)
+		final Runnable afterUnpack = new Runnable()
 		{
-			List<WorldServer> worlds = new ArrayList<WorldServer>(server.getMultiWorld().getLoadedWorlds());
-			for(WorldServer world : worlds)
+			@Override
+			public void run()
 			{
-				if(!moveOnly.contains(server.getMultiWorld().getSaveDirName(world)))
-						continue;
-				WorldDescriptor desc = server.getMultiWorld().getDescFromWorld(world);
-				List<EntityPlayerMP> players = desc.extractPlayer();
-				desc.destroyWorld();
-				dimToPlayerMap.put(world.provider.dimensionId, players);
-			}
-			
-			try
-			{
-				ThreadedFileIOBase.threadedIOInstance.waitForFinish();
-			} catch (InterruptedException ignored){}
-
-			RegionFileCache.clearRegionFileReferences();
-			
-			for(WorldServer world : worlds)
-			{
-				String saveDir = server.getMultiWorld().getSaveDirName(world);
-				if(!moveOnly.contains(saveDir))
-					continue;
-				try
+				if(makeTemp)
 				{
-					if(movePlayers)
+					if(ctx != null)
+						ctx.sendMessage("command.backup.apply.success.temp");
+					for(File file : server.getWorldsDir().listFiles())
 					{
-						FileUtils.deleteDirectory(new File(server.getWorldsDir(), saveDir));
-					}
-					else
-					{
-						for(File file : new File(server.getWorldsDir(), saveDir).listFiles())
+						String name = file.getName();
+						if(name.startsWith("unpack_"))
 						{
-							if(!file.getName().equals("playerdata"))
-								FileUtils.forceDelete(file);
+							int dim = server.getMultiWorld().allocTempDim();
+							name = "temp_"+dim+"_"+name.substring(7);
+							file.renameTo(new File(server.getWorldsDir(), name));
+							server.getMultiWorld().makeTempWorld(name, dim);
+							if(ctx != null)
+								ctx.sendMessage("    - [%s](%s)", dim, name);
 						}
 					}
+				}
+				else
+				{
+					TIntObjectMap<List<EntityPlayerMP>> dimToPlayerMap = new TIntObjectHashMap<List<EntityPlayerMP>>();
+					
+					List<WorldServer> worlds = new ArrayList<WorldServer>(server.getMultiWorld().getLoadedWorlds());
+					for(WorldServer world : worlds)
+					{
+						if(!moveOnly.contains(server.getMultiWorld().getSaveDirName(world)))
+								continue;
+						WorldDescriptor desc = server.getMultiWorld().getDescFromWorld(world);
+						List<EntityPlayerMP> players = desc.extractPlayer();
+						desc.destroyWorld();
+						dimToPlayerMap.put(world.provider.dimensionId, players);
+					}
+					
+					try
+					{
+						ThreadedFileIOBase.threadedIOInstance.waitForFinish();
+					} catch (InterruptedException ignored){}
+
+					RegionFileCache.clearRegionFileReferences();
+					
+					for(String world : moveOnly)
+					{
+						try
+						{
+							File unpacked = new File(server.getWorldsDir(), "unpack_"+world);
+							if(!unpacked.exists())
+								continue;
+							File worldDir = new File(server.getWorldsDir(), world);
+							if(movePlayers)
+							{
+								if(worldDir.exists())
+									FileUtils.deleteDirectory(worldDir);
+								FileUtils.moveDirectory(unpacked, worldDir);
+							}
+							else
+							{
+								if(worldDir.exists())
+								{
+									for(File file : worldDir.listFiles())
+									{
+										if(!file.getName().equals("playerdata"))
+											FileUtils.forceDelete(file);
+									}
+								}
+								else
+								{
+									worldDir.mkdir();
+								}
+								for(File file : unpacked.listFiles())
+								{
+									if(!file.getName().equals("playerdata"))
+										FileUtils.moveToDirectory(file, worldDir, false);
+								}
+								FileUtils.deleteDirectory(unpacked);
+							}
+						}
+						catch(IOException e)
+						{
+							log.warn("Failed to delete or rename world directory ("+world+") on backup applying", e);
+							if(ctx != null)
+								ctx.sendMessage(EnumChatFormatting.RED, "command.backup.apply.fail.rmdir", world);
+						}
+					}
+					
+					boolean backOverworld = dimToPlayerMap.containsKey(0);
+					if(backOverworld)
+						server.getMultiWorld().initDimension(0); //overworld first
+					for(TIntObjectIterator<List<EntityPlayerMP>> it = dimToPlayerMap.iterator(); it.hasNext();)
+					{
+						it.advance();
+						int dim = it.key();
+						if(dim != 0)
+							DimensionManager.initDimension(dim);
+					}
+					
+					ServerDataLoader loader = server.getConfigurationManager().getDataLoader();
+					if(movePlayers && backOverworld) //global player data reload
+					{
+						loader.reloadPlayerCache();
+						for(EntityPlayerMP player : GenericIterableFactory.newCastingIterable(server.getConfigurationManager().playerEntityList, EntityPlayerMP.class))
+							reloadPlayer(player);
+					}
+					
+					for(TIntObjectIterator<List<EntityPlayerMP>> it = dimToPlayerMap.iterator(); it.hasNext();)
+					{
+						it.advance();
+						int dim = it.key();
+						WorldServer world = server.getMultiWorld().getWorldByID(dim);
+						for(EntityPlayerMP player : it.value())
+						{
+							if(player.worldObj == null)
+								player.setWorld(world);
+							if(movePlayers)
+							{
+								if(server.getMultiWorld().getIsolatedDataDims().contains(dim))
+									reloadPlayer(player);
+							}
+							else
+							{
+								world.spawnEntityInWorld(player);
+								world.getPlayerManager().addPlayer(player);
+								player.theItemInWorldManager.setWorld(world);
+							}
+						}
+					}
+					
+					if(ctx != null)
+						ctx.sendMessage("command.backup.apply.success");
+				}
+			}
+		};
+		
+		GlobalExecutors.cachedExecutor().execute(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
+					final List<String> moveOnlyPaths = new ArrayList<String>(moveOnly.size());
+					for(String s : moveOnly)
+						moveOnlyPaths.add(s + '/');
+					ZipUtil.unzip(zipFile, server.getWorldsDir(), new Function<String, String>()
+					{
+						@Override
+						public String apply(String name)
+						{
+							boolean contains = false;
+							for(String s : moveOnlyPaths)
+							{
+								if(name.startsWith(s))
+								{
+									contains = true;
+									break;
+								}
+							}
+							if(!contains)
+								return null;
+							if(name.endsWith("/session.lock"))
+								return null;
+							if(!movePlayers && name.contains("/playerdata/"))
+								return null;
+							return "unpack_" + name;
+						}
+					});
+					
+					backupApplied.set(afterUnpack);
 				}
 				catch(IOException e)
 				{
-					log.warn("Failed to delete world directory ("+saveDir+") on backup apply", e);
+					log.error("Failed to apply backup (unpack or write files)", e);
 					if(ctx != null)
-						ctx.sendMessage(EnumChatFormatting.RED, "command.backup.apply.fail.rmdir", saveDir);
+						ctx.sendMessage(EnumChatFormatting.RED, "command.backup.apply.fail.zip.unpack");
 				}
 			}
-			
-			for(EntityPlayerMP player : GenericIterableFactory.newCastingIterable(server.getConfigurationManager().playerEntityList, EntityPlayerMP.class))
-				player.playerNetServerHandler.sendPacket(new S00PacketKeepAlive((int)(System.nanoTime() / 1000000L))); //prevent disconnect
-		}
-		
-		try
-		{
-			final List<String> moveOnlyPaths = new ArrayList<String>(moveOnly.size());
-			for(String s : moveOnly)
-				moveOnlyPaths.add(s + '/');
-			ZipUtil.unzip(zipFile, server.getWorldsDir(), new Function<String, String>()
-			{
-				@Override
-				public String apply(String name)
-				{
-					boolean contains = false;
-					for(String s : moveOnlyPaths)
-					{
-						if(name.startsWith(s))
-						{
-							contains = true;
-							break;
-						}
-					}
-					if(!contains)
-						return null;
-					if(name.endsWith("/session.lock"))
-						return null;
-					if(!movePlayers && name.contains("/playerdata/"))
-						return null;
-					if(makeTemp)
-						name = "unpack_" + name;
-					return name;
-				}
-			});
-		}
-		catch(IOException e)
-		{
-			log.error("Failed to apply backup (unpack or write files)! May lead to major bugs!", e);
-			if(ctx != null)
-				ctx.sendMessage(EnumChatFormatting.RED, "command.backup.apply.fail.zip.unpack");
-		}
-		
-		for(EntityPlayerMP player : GenericIterableFactory.newCastingIterable(server.getConfigurationManager().playerEntityList, EntityPlayerMP.class))
-			player.playerNetServerHandler.sendPacket(new S00PacketKeepAlive((int)(System.nanoTime() / 1000000L))); //prevent disconnect
-		
-		if(makeTemp)
-		{
-			if(ctx != null)
-				ctx.sendMessage("command.backup.apply.success.temp");
-			for(File file : server.getWorldsDir().listFiles())
-			{
-				String name = file.getName();
-				if(name.startsWith("unpack_"))
-				{
-					int dim = server.getMultiWorld().allocTempDim();
-					name = "temp_"+dim+"_"+name.substring(7);
-					file.renameTo(new File(server.getWorldsDir(), name));
-					server.getMultiWorld().makeTempWorld(name, dim);
-					if(ctx != null)
-						ctx.sendMessage("    - [%s](%s)", dim, name);
-				}
-			}
-		}
-		else
-		{
-			boolean backOverworld = dimToPlayerMap.containsKey(0);
-			if(backOverworld)
-				server.getMultiWorld().initDimension(0); //overworld first
-			for(TIntObjectIterator<List<EntityPlayerMP>> it = dimToPlayerMap.iterator(); it.hasNext();)
-			{
-				it.advance();
-				int dim = it.key();
-				if(dim != 0)
-					DimensionManager.initDimension(dim);
-			}
-			
-			ServerDataLoader loader = server.getConfigurationManager().getDataLoader();
-			if(movePlayers && backOverworld) //global player data reload
-			{
-				loader.reloadPlayerCache();
-				for(EntityPlayerMP player : GenericIterableFactory.newCastingIterable(server.getConfigurationManager().playerEntityList, EntityPlayerMP.class))
-					reloadPlayer(player);
-			}
-			
-			for(TIntObjectIterator<List<EntityPlayerMP>> it = dimToPlayerMap.iterator(); it.hasNext();)
-			{
-				it.advance();
-				int dim = it.key();
-				WorldServer world = server.getMultiWorld().getWorldByID(dim);
-				for(EntityPlayerMP player : it.value())
-				{
-					if(player.worldObj == null)
-						player.setWorld(world);
-					if(movePlayers)
-					{
-						if(server.getMultiWorld().getIsolatedDataDims().contains(dim))
-							reloadPlayer(player);
-					}
-					else
-					{
-						world.spawnEntityInWorld(player);
-						world.getPlayerManager().addPlayer(player);
-						player.theItemInWorldManager.setWorld(world);
-					}
-				}
-			}
-			
-			if(ctx != null)
-				ctx.sendMessage("command.backup.apply.success");
-		}
+		});
 	}
 	
 	private void reloadPlayer(EntityPlayerMP player)
