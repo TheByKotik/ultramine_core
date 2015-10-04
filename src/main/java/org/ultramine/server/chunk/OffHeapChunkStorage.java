@@ -57,7 +57,7 @@ public class OffHeapChunkStorage
 	
 	public long getTotalMemory()
 	{
-		return slots*SLOT_SIZE;
+		return (long)slots*SLOT_SIZE;
 	}
 	
 	public long getUsedMemory()
