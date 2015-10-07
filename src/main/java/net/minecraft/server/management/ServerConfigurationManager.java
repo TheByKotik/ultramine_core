@@ -507,7 +507,6 @@ public abstract class ServerConfigurationManager
 		entityplayermp1.setEntityId(p_72368_1_.getEntityId());
 		WorldServer worldserver = this.mcServer.worldServerForDimension(p_72368_1_.dimension);
 		this.func_72381_a(entityplayermp1, p_72368_1_, worldserver);
-		getDataLoader().handleRespawn(p_72368_1_, entityplayermp1, oldDim, p_72368_2_);
 		ChunkCoordinates chunkcoordinates1;
 
 		if (chunkcoordinates != null)
@@ -521,9 +520,12 @@ public abstract class ServerConfigurationManager
 			}
 			else
 			{
+				p_72368_2_ = spawn.dimension;
+				entityplayermp1.dimension = p_72368_2_;
 				entityplayermp1.playerNetServerHandler.sendPacket(new S2BPacketChangeGameState(0, 0.0F));
 			}
 		}
+		getDataLoader().handleRespawn(p_72368_1_, entityplayermp1, oldDim, p_72368_2_);
 
 		if(getServerInstance().isSinglePlayer())
 		{
