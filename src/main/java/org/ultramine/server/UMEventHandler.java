@@ -29,10 +29,13 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.WorldServer;
 import static net.minecraft.util.EnumChatFormatting.*;
+
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -81,7 +84,7 @@ public class UMEventHandler
 		String postfix = PermissionHandler.getInstance().getMeta(e.player, "postfix").replace('&', '\u00A7');
 		
 		ChatComponentStyle username = (ChatComponentStyle) e.player.func_145748_c_();
-		ChatComponentStyle msg = new ChatComponentText(e.message);
+		IChatComponent msg = ForgeHooks.newChatWithLinks(e.message);
 		
 		username.getChatStyle().setColor(BasicTypeParser.parseColor(PermissionHandler.getInstance().getMeta(e.player, "color")));
 		EnumChatFormatting color = BasicTypeParser.parseColor(PermissionHandler.getInstance().getMeta(e.player, "textcolor"));
