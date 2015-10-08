@@ -10,12 +10,14 @@ import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.common.ForgeHooks;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ultramine.commands.Command;
@@ -143,7 +145,7 @@ public class VanillaCommands
 	
 	private static void sendMessage(ICommandSender from, ICommandSender to, String message)
 	{
-		ChatComponentStyle msg = new ChatComponentText(message);
+		IChatComponent msg = ForgeHooks.newChatWithLinks(message);
 		msg.getChatStyle().setColor(BasicTypeParser.parseColor(PermissionHandler.getInstance().getMeta(from, "textcolor")));
 		
 		from.addChatMessage(new ChatComponentTranslation("command.msg.display.outgoing", to.func_145748_c_(), msg).setChatStyle(new ChatStyle().setColor(GOLD)));
