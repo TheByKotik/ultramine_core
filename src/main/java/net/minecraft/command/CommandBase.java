@@ -17,6 +17,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.common.ForgeHooks;
 
 public abstract class CommandBase implements ICommand
 {
@@ -210,7 +211,7 @@ public abstract class CommandBase implements ICommand
 				chatcomponenttext.appendText(" ");
 			}
 
-			Object object = new ChatComponentText(p_147176_1_[j]);
+			Object object = ForgeHooks.newChatWithLinks(p_147176_1_[j]);
 
 			if (p_147176_3_)
 			{
