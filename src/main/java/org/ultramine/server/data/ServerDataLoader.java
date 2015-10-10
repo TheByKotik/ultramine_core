@@ -412,6 +412,7 @@ public class ServerDataLoader
 		player.prevPosZ = player.lastTickPosZ = player.posZ = z;
 		player.prevRotationYaw = player.rotationYaw = yaw;
 		player.prevRotationPitch = player.rotationPitch = pitch;
+		player.setGameType(player.theItemInWorldManager.getGameType());
 	}
 
 	public void registerPlayerDataExt(Class<? extends PlayerDataExtension> clazz, String nbtTagName)
