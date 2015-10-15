@@ -222,6 +222,8 @@ public class ServerDataLoader
 				@Override
 				public Void apply(LoadedDataStruct data) //sync
 				{
+					if(!network.channel().isOpen())
+						return null;
 					FMLCommonHandler.instance().bus().post(new FMLNetworkEvent.ServerConnectionFromClientEvent(network));
 					if(data.getNBT() != null)
 						player.readFromNBT(data.getNBT());
