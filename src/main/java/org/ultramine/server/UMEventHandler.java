@@ -17,7 +17,6 @@ import cpw.mods.fml.common.functions.GenericIterableFactory;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
@@ -50,6 +49,8 @@ public class UMEventHandler
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void checkChatPermission(ServerChatEvent e)
 	{
+		if(e.player.playerNetServerHandler == null || e.player.getData() == null)
+			return;
 		PlayerCoreData data = e.player.getData().core();
 		if(!PermissionHandler.getInstance().has(e.player, "ability.player.chat"))
 		{
@@ -80,6 +81,8 @@ public class UMEventHandler
 	@SubscribeEvent
 	public void onServerChat(ServerChatEvent e)
 	{
+		if(e.player.playerNetServerHandler == null || e.player.getData() == null)
+			return;
 		String prefix = PermissionHandler.getInstance().getMeta(e.player, "prefix").replace('&', '\u00A7');
 		String postfix = PermissionHandler.getInstance().getMeta(e.player, "postfix").replace('&', '\u00A7');
 		
