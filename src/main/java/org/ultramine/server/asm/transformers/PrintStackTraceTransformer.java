@@ -61,7 +61,7 @@ public class PrintStackTraceTransformer implements IClassTransformer
 				}
 			}
 		}
-		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		ClassWriter writer = new ClassWriter(0);
 		classNode.accept(writer);
 		return writer.toByteArray();
 	}
