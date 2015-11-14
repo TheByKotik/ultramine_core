@@ -88,15 +88,8 @@ public class Teleporter
 	{
 		player.getData().core().setLastLocation(WarpLocation.getFromPlayer(player));
 		
-		if(player.dimension != dimension)
-		{
-			player.setPositionAndRotation(x, y, z, yaw, pitch);
-			player.transferToDimension(dimension);
-		}
-		else
-		{
-			player.playerNetServerHandler.setPlayerLocation(x, y, z, yaw, pitch);
-		}
+		if(!player.setWorldPositionAndRotation(dimension, x, y, z, yaw, pitch))
+			player.addChatMessage(new ChatComponentTranslation("teleporter.fail.dim").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 		
 		if(isServer)
 		{

@@ -1,5 +1,6 @@
 #Server core
 teleporter.fail.cooldownd=You will be able to teleport in %s seconds
+teleporter.fail.dim=Failed to teleport: the world is not exists or was held
 teleporter.delay=You will be teleported in %s seconds
 teleporter.canceled=Teleportation canceled
 

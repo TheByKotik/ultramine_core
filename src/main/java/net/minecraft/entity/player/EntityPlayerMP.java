@@ -461,6 +461,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
 	public void travelToDimension(int p_71027_1_)
 	{
+		if(mcServer.worldServerForDimension(p_71027_1_) == null)
+			return;
 		int enderLink = ((WorldServer)worldObj).getConfig().portals.enderLink;
 		if (this.dimension == enderLink && p_71027_1_ == enderLink)
 		{
@@ -1048,6 +1050,58 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		this.lastExperience = -1;
 		this.lastHealth = -1.0F;
 		this.lastFoodLevel = -1;
+	}
+	
+	/** Safe transferToDimension and setPosition */
+	public boolean setWorldPosition(int dim, double x, double y, double z)
+	{
+		if(dim == this.dimension)
+		{
+			playerNetServerHandler.setPlayerLocation(x, y, z, this.rotationYaw, this.rotationPitch);
+			return true;
+		}
+		if(mcServer.worldServerForDimension(dim) == null)
+			return false;
+		int lastDim = this.dimension;
+		double lastX = this.posX;
+		double lastY = this.posY;
+		double lastZ = this.posZ;
+		setPosition(x, y, z);
+		try {
+			transferToDimension(dim);
+		} catch (RuntimeException e) {
+			setPosition(lastX, lastY, lastZ);
+			this.dimension = lastDim;
+			throw e;
+		}
+		return true;
+	}
+	
+	/** Safe transferToDimension and setPositionAndRotation */
+	public boolean setWorldPositionAndRotation(int dim, double x, double y, double z, float yaw, float pitch)
+	{
+		if(dim == this.dimension)
+		{
+			playerNetServerHandler.setPlayerLocation(x, y, z, yaw, pitch);
+			return true;
+		}
+		if(mcServer.worldServerForDimension(dim) == null)
+			return false;
+		int lastDim = this.dimension;
+		double lastX = this.posX;
+		double lastY = this.posY;
+		double lastZ = this.posZ;
+		float lastYaw = this.rotationYaw;
+		float lastPitch = this.rotationPitch;
+		setPositionAndRotation(x, y, z, yaw, pitch);
+		try {
+			transferToDimension(dim);
+		} catch (RuntimeException e) {
+			setPositionAndRotation(lastX, lastY, lastZ, lastYaw, lastPitch);
+			this.dimension = lastDim;
+			throw e;
+		}
+		return true;
 	}
 	
 	public void setStatisticsFile(StatisticsFile stats)
