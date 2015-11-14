@@ -43,7 +43,7 @@ public class RegionFileCache
 		}
 	}
 
-	public static synchronized void clearRegionFileReferences()
+	public static void clearRegionFileReferences()
 	{
 		if(!Thread.currentThread().getName().equals("File IO Thread"))
 		{
@@ -53,6 +53,8 @@ public class RegionFileCache
 			} catch (InterruptedException ignored){}
 		}
 
+		synchronized(RegionFileCache.class)
+		{
 		Iterator iterator = regionsByFilename.values().iterator();
 
 		while (iterator.hasNext())
@@ -73,6 +75,7 @@ public class RegionFileCache
 		}
 
 		regionsByFilename.clear();
+		}
 	}
 
 	public static DataInputStream getChunkInputStream(File p_76549_0_, int p_76549_1_, int p_76549_2_)
