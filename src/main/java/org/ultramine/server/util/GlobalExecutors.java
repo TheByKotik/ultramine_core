@@ -3,13 +3,20 @@ package org.ultramine.server.util;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class GlobalExecutors
 {
-	private static final ExecutorService io = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("UM IO #%d").setDaemon(true).build());
-	private static final ExecutorService cached = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("UM cached  #%d").setDaemon(true).build());
+	private static final ExecutorService writing = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("UM IO writing #%d").setDaemon(true).build());
+	private static final ExecutorService cached = new ThreadPoolExecutor(
+			2, Integer.MAX_VALUE,
+			60L, TimeUnit.SECONDS,
+			new SynchronousQueue<Runnable>(),
+			new ThreadFactoryBuilder().setNameFormat("UM IO cached  #%d").setDaemon(true).build());
 	private static final Executor sync = new SyncServerExecutor();
 
 	/**
@@ -17,9 +24,15 @@ public class GlobalExecutors
 	 * единственный поток, т.к. при сохранениее не требуется наискорейшее
 	 * выполнение задачи.
 	 */
+	public static ExecutorService writingIO()
+	{
+		return writing;
+	}
+	
+	@Deprecated
 	public static ExecutorService writingIOExecutor()
 	{
-		return io;
+		return writing;
 	}
 
 	/**
@@ -27,6 +40,12 @@ public class GlobalExecutors
 	 * количество потоков по мере необходимости. При остановке сервер не ожидает
 	 * окончания выполнения задач
 	 */
+	public static ExecutorService cachedIO()
+	{
+		return cached;
+	}
+
+	@Deprecated
 	public static ExecutorService cachedExecutor()
 	{
 		return cached;

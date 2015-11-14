@@ -157,7 +157,7 @@ public class BackupManager
 			world.theChunkProviderServer.preventSaving();
 		}
 		
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()
@@ -370,7 +370,7 @@ public class BackupManager
 			}
 		};
 		
-		GlobalExecutors.cachedExecutor().execute(new Runnable()
+		GlobalExecutors.cachedIO().execute(new Runnable()
 		{
 			@Override
 			public void run()

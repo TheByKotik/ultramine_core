@@ -200,7 +200,7 @@ public class JDBCDataProvider implements IDataProvider
 	@Override
 	public void savePlayer(final int dim, final GameProfile player, final NBTTagCompound nbt)
 	{
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()
@@ -309,7 +309,7 @@ public class JDBCDataProvider implements IDataProvider
 		
 		final GameProfile player = data.getProfile();
 		
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()
@@ -382,7 +382,7 @@ public class JDBCDataProvider implements IDataProvider
 	@Override
 	public void saveWarp(final String name, final WarpLocation warp)
 	{
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()
@@ -423,7 +423,7 @@ public class JDBCDataProvider implements IDataProvider
 	@Override
 	public void removeWarp(final String name)
 	{
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()
@@ -480,7 +480,7 @@ public class JDBCDataProvider implements IDataProvider
 	@Override
 	public void saveFastWarp(final String name)
 	{
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()
@@ -509,7 +509,7 @@ public class JDBCDataProvider implements IDataProvider
 	@Override
 	public void removeFastWarp(final String name)
 	{
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()

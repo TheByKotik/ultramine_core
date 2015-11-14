@@ -13,6 +13,6 @@ public class ScheduledAsyncTask extends ScheduledTask
 	@Override
 	void launch()
 	{
-		GlobalExecutors.cachedExecutor().execute(task);
+		GlobalExecutors.cachedIO().execute(task);
 	}
 }

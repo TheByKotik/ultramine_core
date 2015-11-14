@@ -153,7 +153,7 @@ public class NetHandlerLoginServer implements INetHandlerLoginServer
 			this.field_147335_k = p_147315_1_.func_149300_a(privatekey);
 			this.field_147328_g = NetHandlerLoginServer.LoginState.AUTHENTICATING;
 			this.field_147333_a.enableEncryption(this.field_147335_k);
-			GlobalExecutors.cachedExecutor().execute(new Runnable()
+			GlobalExecutors.cachedIO().execute(new Runnable()
 			{
 				private static final String __OBFID = "CL_00001459";
 				public void run()

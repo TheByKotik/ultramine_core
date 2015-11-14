@@ -437,7 +437,7 @@ public class WorldDescriptor
 		}
 		else
 		{
-			return CompletableFuture.runAsync(() -> worldLoader.doAsyncLoadPhase(), GlobalExecutors.cachedExecutor()).thenRunAsync(() -> {
+			return CompletableFuture.runAsync(() -> worldLoader.doAsyncLoadPhase(), GlobalExecutors.cachedIO()).thenRunAsync(() -> {
 				WorldServer world = worldLoader.doLoad();
 				
 				setWorld(world);
@@ -487,7 +487,7 @@ public class WorldDescriptor
 			if(getState().isLoaded())
 				destroyWorld(save);
 			setState(targetState);
-		}).thenRunAsync(() -> dispose(), GlobalExecutors.cachedExecutor());
+		}).thenRunAsync(() -> dispose(), GlobalExecutors.cachedIO());
 	}
 	
 	@SideOnly(Side.SERVER)
@@ -514,9 +514,9 @@ public class WorldDescriptor
 	private CompletableFuture<Void> deleteLater0()
 	{
 		if(state.isLoaded())
-			return downgradeLater(false, WorldState.HELD).thenRunAsync(() -> clearWorldDir(), GlobalExecutors.cachedExecutor());
+			return downgradeLater(false, WorldState.HELD).thenRunAsync(() -> clearWorldDir(), GlobalExecutors.cachedIO());
 		else
-			return CompletableFuture.runAsync(() -> clearWorldDir(), GlobalExecutors.cachedExecutor());
+			return CompletableFuture.runAsync(() -> clearWorldDir(), GlobalExecutors.cachedIO());
 	}
 	
 	@SideOnly(Side.SERVER)

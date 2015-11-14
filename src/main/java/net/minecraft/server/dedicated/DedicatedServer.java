@@ -595,11 +595,11 @@ public class DedicatedServer extends MinecraftServer implements IServer
 		field_155771_h.info("Saving other data");
 		try
 		{
-			GlobalExecutors.cachedExecutor().shutdown();
-			if(!GlobalExecutors.cachedExecutor().awaitTermination(10000, TimeUnit.MILLISECONDS))
+			GlobalExecutors.cachedIO().shutdown();
+			if(!GlobalExecutors.cachedIO().awaitTermination(10000, TimeUnit.MILLISECONDS))
 				field_155771_h.info("Global cached executor did not terminated cleanly");
-			GlobalExecutors.writingIOExecutor().shutdown();
-			if(!GlobalExecutors.writingIOExecutor().awaitTermination(60000, TimeUnit.MILLISECONDS))
+			GlobalExecutors.writingIO().shutdown();
+			if(!GlobalExecutors.writingIO().awaitTermination(60000, TimeUnit.MILLISECONDS))
 				field_155771_h.info("Global writing IO executor did not terminated cleanly");
 		}
 		catch(InterruptedException ignored){}

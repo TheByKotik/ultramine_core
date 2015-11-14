@@ -169,7 +169,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 
 		FMLCommonHandler.instance().handleWorldDataSave(this, p_75755_1_, nbttagcompound2);
 
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()

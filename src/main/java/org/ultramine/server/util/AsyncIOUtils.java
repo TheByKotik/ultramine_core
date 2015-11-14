@@ -18,7 +18,7 @@ public class AsyncIOUtils
 	
 	public static void writeString(final File file, final String data)
 	{
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()
@@ -37,7 +37,7 @@ public class AsyncIOUtils
 	
 	public static void writeBytes(final File file, final byte[] data)
 	{
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()
@@ -56,7 +56,7 @@ public class AsyncIOUtils
 	
 	public static void safeWriteNBT(final File file, final NBTTagCompound nbt)
 	{
-		GlobalExecutors.writingIOExecutor().execute(new Runnable()
+		GlobalExecutors.writingIO().execute(new Runnable()
 		{
 			@Override
 			public void run()
