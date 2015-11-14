@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S00PacketKeepAlive;
 import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
