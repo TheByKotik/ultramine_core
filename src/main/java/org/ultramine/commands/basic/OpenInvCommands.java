@@ -16,8 +16,6 @@ import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
 import org.ultramine.commands.OfflinePlayer;
 
-import com.google.common.base.Function;
-
 public class OpenInvCommands
 {
 	@Command(
@@ -30,17 +28,11 @@ public class OpenInvCommands
 	{
 		final EntityPlayerMP sender = ctx.getSenderAsPlayer();
 		final OfflinePlayer offline = ctx.get("player").asOfflinePlayer();
-		offline.loadPlayer(new Function<EntityPlayerMP, Void>()
-		{
-			@Override
-			public Void apply(EntityPlayerMP player)
-			{
-				if(player.isDead)
-					ctx.sendMessage("command.openinv.fail.dead");
-				else
-					sender.displayGUIChest(new PlayerWrappedInventory(ctx.getServer(), player.inventory, player instanceof FakePlayer ? offline : null));
-				return null;
-			}
+		offline.loadPlayer(player -> {
+			if(player.isDead)
+				ctx.sendMessage("command.openinv.fail.dead");
+			else
+				sender.displayGUIChest(new PlayerWrappedInventory(ctx.getServer(), player.inventory, player instanceof FakePlayer ? offline : null));
 		});
 	}
 	
@@ -54,20 +46,14 @@ public class OpenInvCommands
 	{
 		final EntityPlayerMP sender = ctx.getSenderAsPlayer();
 		final OfflinePlayer offline = ctx.get("player").asOfflinePlayer();
-		offline.loadPlayer(new Function<EntityPlayerMP, Void>()
-		{
-			@Override
-			public Void apply(EntityPlayerMP player)
-			{
-				InventoryEnderChest inv = player.getInventoryEnderChest();
-				WrappedTileEntityEnderChest tile = new WrappedTileEntityEnderChest(sender, player, player instanceof FakePlayer ? offline : null);
-		        inv.func_146031_a(tile);
-		        if(player instanceof FakePlayer)
-		        	inv.func_110134_a(tile);
-				
-				sender.displayGUIChest(inv);
-				return null;
-			}
+		offline.loadPlayer(player -> {
+			InventoryEnderChest inv = player.getInventoryEnderChest();
+			WrappedTileEntityEnderChest tile = new WrappedTileEntityEnderChest(sender, player, player instanceof FakePlayer ? offline : null);
+	        inv.func_146031_a(tile);
+	        if(player instanceof FakePlayer)
+	        	inv.func_110134_a(tile);
+			
+			sender.displayGUIChest(inv);
 		});
 	}
 

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,6 @@ import org.ultramine.server.data.player.PlayerDataExtensionInfo;
 import org.ultramine.server.util.TwoStepsExecutor;
 import org.ultramine.server.util.WarpLocation;
 
-import com.google.common.base.Function;
 import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -201,36 +201,24 @@ public class ServerDataLoader
 			final boolean loadData = !playerDataCache.containsKey(player.getGameProfile().getId());
 			final StatisticsFile loadedStats = mgr.func_152602_a(player);
 			final TIntSet isolatedDataDims = mgr.getServerInstance().getMultiWorld().getIsolatedDataDims();
-			executor.execute(new Function<Void, LoadedDataStruct>()
-			{
-				@Override
-				public LoadedDataStruct apply(Void input) //async
+			executor.execute(() -> {
+				NBTTagCompound nbt = getDataProvider().loadPlayer(profile);
+				if(nbt != null)
 				{
-					NBTTagCompound nbt = getDataProvider().loadPlayer(profile);
-					if(nbt != null)
-					{
-						int dim = nbt.getInteger("Dimension");
-						if(dim != 0 && isolatedDataDims.contains(dim))
-							nbt = getDataProvider().loadPlayer(dim, profile);
-					}
-					PlayerData data = loadData ? getDataProvider().loadPlayerData(profile) : null;
-					StatisticsFile stats = loadedStats != null ? loadedStats : mgr.loadStatisticsFile_Async(profile);
-					return new LoadedDataStruct(nbt, data, stats);
+					int dim = nbt.getInteger("Dimension");
+					if(dim != 0 && isolatedDataDims.contains(dim))
+						nbt = getDataProvider().loadPlayer(dim, profile);
 				}
-			}, new Function<LoadedDataStruct, Void>()
-			{
-				@Override
-				public Void apply(LoadedDataStruct data) //sync
-				{
-					if(!network.channel().isOpen())
-						return null;
-					FMLCommonHandler.instance().bus().post(new FMLNetworkEvent.ServerConnectionFromClientEvent(network));
-					if(data.getNBT() != null)
-						player.readFromNBT(data.getNBT());
-					playerLoadCallback(network, player, nethandler, data.getNBT(), data.getPlayerData(), data.getStats());
-					
-					return null;
-				}
+				PlayerData data = loadData ? getDataProvider().loadPlayerData(profile) : null;
+				StatisticsFile stats = loadedStats != null ? loadedStats : mgr.loadStatisticsFile_Async(profile);
+				return new LoadedDataStruct(nbt, data, stats);
+			}, data -> {
+				if(!network.channel().isOpen())
+					return;
+				FMLCommonHandler.instance().bus().post(new FMLNetworkEvent.ServerConnectionFromClientEvent(network));
+				if(data.getNBT() != null)
+					player.readFromNBT(data.getNBT());
+				playerLoadCallback(network, player, nethandler, data.getNBT(), data.getPlayerData(), data.getStats());
 			});
 		}
 	}
@@ -375,25 +363,14 @@ public class ServerDataLoader
 		{
 			applyIsolatedData(player, null); // Replacing old data first
 
-			executor.execute(new Function<Void, NBTTagCompound>()
-			{
-				@Override
-				public NBTTagCompound apply(Void input) //async
-				{
-					if(toIs)
-						return dataProvider.loadPlayer(toDim, profile);
-					else// if(fromIs)
-						return dataProvider.loadPlayer(profile);
-				}
-			}, new Function<NBTTagCompound, Void>()
-			{
-				@Override
-				public Void apply(NBTTagCompound nbt) //sync
-				{
-					player.inventory.dropAllItems();
-					applyIsolatedData(player, nbt);
-					return null;
-				}
+			executor.execute(() -> {
+				if(toIs)
+					return dataProvider.loadPlayer(toDim, profile);
+				else// if(fromIs)
+					return dataProvider.loadPlayer(profile);
+			}, nbt -> {
+				player.inventory.dropAllItems();
+				applyIsolatedData(player, nbt);
 			});
 		}
 	}
@@ -427,29 +404,18 @@ public class ServerDataLoader
 		return dataExtinfos;
 	}
 	
-	public void loadOffline(final GameProfile profile, final Function<EntityPlayerMP, Void> callback)
+	public void loadOffline(final GameProfile profile, final Consumer<EntityPlayerMP> callback)
 	{
-		executor.execute(new Function<Void, NBTTagCompound>()
-		{
-			@Override
-			public NBTTagCompound apply(Void input) //async
+		executor.execute(() -> {
+			return getDataProvider().loadPlayer(profile);
+		}, nbt -> {
+			EntityPlayerMP player = mgr.getPlayerByUsername(profile.getName());
+			if(player == null)
 			{
-				return getDataProvider().loadPlayer(profile);
+				player = new FakePlayer(mgr.getServerInstance().getMultiWorld().getWorldByID(0), profile);
+				player.readFromNBT(nbt);
 			}
-		}, new Function<NBTTagCompound, Void>()
-		{
-			@Override
-			public Void apply(NBTTagCompound nbt) //sync
-			{
-				EntityPlayerMP player = mgr.getPlayerByUsername(profile.getName());
-				if(player == null)
-				{
-					player = new FakePlayer(mgr.getServerInstance().getMultiWorld().getWorldByID(0), profile);
-					player.readFromNBT(nbt);
-				}
-				callback.apply(player);
-				return null;
-			}
+			callback.accept(player);
 		});
 	}
 	

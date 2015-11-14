@@ -1,9 +1,10 @@
 package org.ultramine.commands;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.util.BasicTypeFormatter;
-
-import com.google.common.base.Function;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -32,14 +33,23 @@ public class OfflinePlayer
 		return mgr.getPlayerByUsername(data.getProfile().getName());
 	}
 	
-	public void loadPlayer(Function<EntityPlayerMP, Void> callback)
+	public void loadPlayer(Consumer<EntityPlayerMP> callback)
 	{
 		EntityPlayerMP exists = getIfOnline();
 		if(exists != null)
-			callback.apply(exists);
+			callback.accept(exists);
 		else
 			mgr.getDataLoader().loadOffline(data.getProfile(), callback);
-			
+	}
+	
+	public CompletableFuture<EntityPlayerMP> loadPlayer()
+	{
+		EntityPlayerMP exists = getIfOnline();
+		if(exists != null)
+			return CompletableFuture.completedFuture(exists);
+		CompletableFuture<EntityPlayerMP> ret = new CompletableFuture<>();
+		mgr.getDataLoader().loadOffline(data.getProfile(), player -> ret.complete(player));
+		return ret;
 	}
 	
 	//Totally unsafe...
