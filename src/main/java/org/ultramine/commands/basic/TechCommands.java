@@ -160,6 +160,7 @@ public class TechCommands
 		ctx.sendMessage("Heap free: %sm", Runtime.getRuntime().freeMemory() >> 20);
 		ctx.sendMessage("Off-Heap chunk total: %sm", OffHeapChunkStorage.instance().getTotalMemory() >> 20);
 		ctx.sendMessage("Off-Heap chunk used: %sm", OffHeapChunkStorage.instance().getUsedMemory() >> 20);
+		ctx.sendMessage("Threads: %s", Thread.activeCount());
 	}
 	
 	@Command(
