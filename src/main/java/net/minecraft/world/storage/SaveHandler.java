@@ -49,7 +49,7 @@ public class SaveHandler implements ISaveHandler, IPlayerFileData
 		this.setSessionLock();
 	}
 
-	private void setSessionLock()
+	protected void setSessionLock()
 	{
 		try
 		{

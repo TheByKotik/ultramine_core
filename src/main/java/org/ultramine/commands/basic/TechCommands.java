@@ -1,11 +1,14 @@
 package org.ultramine.commands.basic;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
@@ -18,7 +21,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-import static net.minecraft.util.EnumChatFormatting.*;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 
@@ -33,13 +35,18 @@ import org.ultramine.server.Teleporter;
 import org.ultramine.server.UltramineServerConfig;
 import org.ultramine.server.UltramineServerModContainer;
 import org.ultramine.server.BackupManager.BackupDescriptor;
+import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig.Border;
+import org.ultramine.server.WorldsConfig.WorldConfig.ImportFrom;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 import org.ultramine.server.chunk.OffHeapChunkStorage;
 import org.ultramine.server.util.BasicTypeParser;
+import org.ultramine.server.util.GlobalExecutors;
 import org.ultramine.server.world.MultiWorld;
 import org.ultramine.server.world.WorldDescriptor;
+import org.ultramine.server.world.WorldState;
+import org.ultramine.server.world.imprt.ZipFileChunkLoader;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -47,6 +54,9 @@ import cpw.mods.fml.common.functions.GenericIterableFactory;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import static net.minecraft.util.EnumChatFormatting.*;
+import static org.ultramine.server.world.WorldState.*;
 
 public class TechCommands
 {
@@ -159,7 +169,9 @@ public class TechCommands
 			permissions = {"command.technical.multiworld"},
 			syntax = {
 					"[list]",
-					"[load unload hold goto destroy delete] <%world>" //No world validation
+					"[import] <%file>",
+					"[import] <%file> <%path>",
+					"[load unload hold destroy delete wipe unregister drop goto] <%world>" //No world validation
 			}
 	)
 	public static void multiworld(CommandContext ctx)
@@ -171,8 +183,28 @@ public class TechCommands
 			ctx.sendMessage("command.multiworld.list.head");
 			for(WorldDescriptor desc : mw.getAllDescs())
 			{
-				ctx.sendMessage(GOLD, "    - [%s](%s) - %s", desc.getDimension(), desc.getName(), desc.getState());
+				ctx.sendMessage(GOLD, "    - [%s](%s) - %s", desc.getDimension(), desc.getName(), worldStateColor(desc.getState()));
 			}
+			return;
+		}
+		else if(ctx.getAction().equals("import"))
+		{
+			String filename = ctx.get("file").asString();
+			String pathInArchive = ctx.contains("path") ? ctx.get("path").asString() : null;
+			File file = new File(ctx.getServer().getHomeDirectory(), filename);			
+			if(!file.exists())
+				throw new CommandException("command.multiworld.import.fail.nofile", filename);
+			if(file.isFile())
+				ZipFileChunkLoader.checkZipFile(file, pathInArchive);
+			int dim = mw.allocTempDim();
+			WorldDescriptor desc = mw.makeTempWorld(MultiWorld.getTempWorldName(dim)+"_"+file.getName(), dim);
+			WorldConfig config = desc.getConfig();
+			config.importFrom = new ImportFrom();
+			config.importFrom.file = filename;
+			config.importFrom.pathInArchive = pathInArchive;
+			config.generation.providerID = -10;
+			config.generation.disableModGeneration = true;
+			ctx.sendMessage("command.multiworld.import.success");
 			return;
 		}
 		
@@ -186,21 +218,52 @@ public class TechCommands
 			if(desc.getState().isLoaded())
 				ctx.failure("command.multiworld.alreadyloaded");
 			
-			desc.forceLoad();
-			ctx.sendMessage("command.multiworld.load.success");
+			ctx.sendMessage("command.multiworld.load.start");
+			handle(desc.forceLoadLater(), ctx, "command.multiworld.load.success", "command.multiworld.load.fail");
 		}
 		else if(ctx.getAction().equals("unload"))
 		{
 			if(!desc.getState().isLoaded())
 				ctx.failure("command.multiworld.notloaded");
 			
-			desc.unload();
-			ctx.sendMessage("command.multiworld.unload.success");
+			ctx.sendMessage("command.multiworld.unload.start");
+			handle(desc.unloadLater(true), ctx, "command.multiworld.unload.success", "command.multiworld.unload.fail");
 		}
 		else if(ctx.getAction().equals("hold"))
 		{
-			desc.hold();
-			ctx.sendMessage("command.multiworld.hold.success");
+			if(desc.getState() == HELD)
+				ctx.failure("command.multiworld.heldalready");
+			ctx.sendMessage("command.multiworld.hold.start");
+			handle(desc.holdLater(true), ctx, "command.multiworld.hold.success", "command.multiworld.hold.fail");
+		}
+		else if(ctx.getAction().equals("destroy"))
+		{
+			if(!desc.getState().isLoaded())
+				ctx.failure("command.multiworld.notloaded");
+			
+			ctx.sendMessage("command.multiworld.destroy.start");
+			handle(desc.holdLater(false), ctx, "command.multiworld.destroy.success", "command.multiworld.destroy.fail");
+			
+		}
+		else if(ctx.getAction().equals("delete"))
+		{
+			ctx.sendMessage("command.multiworld.delete.start");
+			handle(desc.deleteLater(), ctx, "command.multiworld.delete.success", "command.multiworld.delete.fail");
+		}
+		else if(ctx.getAction().equals("wipe"))
+		{
+			ctx.sendMessage("command.multiworld.wipe.start");
+			handle(desc.wipeLater(), ctx, "command.multiworld.wipe.success", "command.multiworld.wipe.fail");
+		}
+		else if(ctx.getAction().equals("unregister"))
+		{
+			desc.unregister();
+			ctx.sendMessage("command.multiworld.unregister.success");
+		}
+		else if(ctx.getAction().equals("drop"))
+		{
+			desc.drop();
+			ctx.sendMessage("command.multiworld.drop.success");
 		}
 		else if(ctx.getAction().equals("goto"))
 		{
@@ -210,22 +273,23 @@ public class TechCommands
 			WorldServer world = desc.getWorld();
 			Teleporter.tpNow(ctx.getSenderAsPlayer(), desc.getDimension(), world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY(), world.getWorldInfo().getSpawnZ());
 		}
-		else if(ctx.getAction().equals("destroy"))
-		{
-			if(!desc.getState().isLoaded())
-				ctx.failure("command.multiworld.notloaded");
-			
-			desc.destroyWorld();
-			desc.hold();
-			ctx.sendMessage("command.multiworld.destroy.success");
-			
-		}
-		else if(ctx.getAction().equals("delete"))
-		{
-			desc.deleteWorld();
-			desc.hold();
-			ctx.sendMessage("command.multiworld.delete.success");
-		}
+	}
+	
+	private static ChatComponentText worldStateColor(WorldState state)
+	{
+		ChatComponentText comp = new ChatComponentText(state.toString());
+		comp.getChatStyle().setColor(state == UNREGISTERED ? DARK_RED : state == HELD ? RED : state == AVAILABLE ? YELLOW : state == LOADED ? DARK_GREEN : WHITE);
+		return comp;
+	}
+	
+	private static void handle(CompletableFuture<Void> future, CommandContext ctx, String success, String fail)
+	{
+		future.whenCompleteAsync((v, e) -> {
+			if(e == null)
+				ctx.sendMessage(success);
+			else
+				ctx.sendMessage(RED, RED, fail, e.toString());
+		}, GlobalExecutors.nextTick());
 	}
 
 	@Command(

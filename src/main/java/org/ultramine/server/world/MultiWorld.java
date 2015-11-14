@@ -28,6 +28,7 @@ import org.apache.logging.log4j.Logger;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.util.BasicTypeParser;
+import org.ultramine.server.util.ConfigUtil;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -124,9 +125,9 @@ public class MultiWorld
 		for(int dim : DimensionManager.getStaticDimensionIDs())
 		{
 			WorldDescriptor desc = getOrCreateDescriptor(dim);
-			desc.setState(WorldState.UNLOADED);
+			desc.setState(WorldState.AVAILABLE);
 			if(desc.getConfig() == null)
-				desc.setConfig(ConfigurationHandler.getWorldsConfig().global);
+				desc.setConfig(cloneGlobalConfig());
 		}
 		
 		//
@@ -142,11 +143,11 @@ public class MultiWorld
 		WorldDescriptor overDesc = getDescByID(0);
 		if(overDesc == null)
 			throw new RuntimeException("WorldDescriptor for OverWorld (dimension = 0) not found!");
-		overDesc.weakLoad();
+		overDesc.weakLoadNow();
 		
 		for(WorldDescriptor desc : nameToWorldMap.values())
 			if(desc.getDimension() != 0)
-				desc.weakLoad();
+				desc.weakLoadNow();
 		
 		serverLoaded = true;
 	}
@@ -180,11 +181,11 @@ public class MultiWorld
 		if(desc == null && DimensionManager.isDimensionRegistered(dim))
 		{
 			desc = getOrCreateDescriptor(dim);
-			desc.setState(WorldState.UNLOADED);
-			desc.setConfig(ConfigurationHandler.getWorldsConfig().global);
+			desc.setState(WorldState.AVAILABLE);
+			desc.setConfig(cloneGlobalConfig());
 		}
 		if(desc != null)
-			desc.weakLoad();
+			desc.weakLoadNow();
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -219,6 +220,12 @@ public class MultiWorld
 		conf.portals.enderLink = dim == 1 ? 0 : 1;
 		
 		return conf;
+	}
+
+	@SideOnly(Side.SERVER)
+	static WorldConfig cloneGlobalConfig()
+	{
+		return ConfigUtil.deepClone(ConfigurationHandler.getWorldsConfig().global);
 	}
 	
 	private void checkDuplicates(List<WorldConfig> list)
@@ -268,6 +275,22 @@ public class MultiWorld
 		nameToWorldMap.remove(oldName);
 		nameToWorldMap.put(newName, desc);
 	}
+
+	/** @return A random string from "000000" to "zzzzzz" */
+	@SideOnly(Side.SERVER)
+	private static String genRandomMark()
+	{
+		String rnd = Long.toString(System.nanoTime() % 0x81bf0fffL, Character.MAX_RADIX);
+		if(rnd.length() != 6)
+			return new StringBuilder("000000").replace(6-rnd.length(), 6, rnd).toString();
+		return rnd;
+	}
+	
+	@SideOnly(Side.SERVER)
+	public static String getTempWorldName(int dim)
+	{
+		return "temp_"+genRandomMark()+"_"+dim;
+	}
 	
 	@SideOnly(Side.SERVER)
 	public int allocTempDim()
@@ -284,7 +307,7 @@ public class MultiWorld
 	public WorldDescriptor makeTempWorld()
 	{
 		int dim = allocTempDim();
-		return makeTempWorld("temp_"+dim, dim);
+		return makeTempWorld(getTempWorldName(dim), dim);
 	}
 	
 	@SideOnly(Side.SERVER)
@@ -300,7 +323,8 @@ public class MultiWorld
 			throw new RuntimeException("WorldDescriptor for dimension "+dim+" already registered (on making temp world)");
 		
 		WorldDescriptor desc = getOrCreateDescriptor(dim, name);
-		desc.setConfig(ConfigurationHandler.getWorldsConfig().global);
+		desc.setConfig(cloneGlobalConfig());
+		desc.setTemp(true);
 
 		return desc;
 	}
@@ -374,7 +398,7 @@ public class MultiWorld
 	{
 		WorldDescriptor desc = getDescByID(dim);
 		if(desc == null)
-			return server.isSinglePlayer() ? getDefaultClientConfig(dim) : ConfigurationHandler.getWorldsConfig().global;
+			return server.isSinglePlayer() ? getDefaultClientConfig(dim) : cloneGlobalConfig();
 		return desc.getConfig();
 	}
 	
@@ -386,7 +410,7 @@ public class MultiWorld
 		List<String> dirs = new ArrayList<String>();
 		for(WorldDescriptor desc : nameToWorldMap.values())
 		{
-			if(desc.getState() == WorldState.LOADED || desc.getState() == WorldState.UNLOADED)
+			if(!desc.isTemp() && desc.getDirectory().isDirectory())
 				dirs.add(desc.getName());
 		}
 		
@@ -435,5 +459,11 @@ public class MultiWorld
 		MinecraftForge.EVENT_BUS.unregister(this);
 		dimToWorldMap.clear();
 		nameToWorldMap.clear();
+	}
+	
+	void dropDesc(WorldDescriptor desc)
+	{
+		dimToWorldMap.remove(desc.getDimension());
+		nameToWorldMap.remove(desc.getName());
 	}
 }

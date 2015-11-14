@@ -28,6 +28,8 @@ import org.ultramine.server.event.ForgeModIdMappingEvent;
 import org.ultramine.server.tools.ButtonCommand;
 import org.ultramine.server.tools.ItemBlocker;
 import org.ultramine.server.tools.WarpProtection;
+import org.ultramine.server.util.GlobalExecutors;
+import org.ultramine.server.util.SyncServerExecutor;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
@@ -130,6 +132,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		{
 			if(e.getSide().isServer())
 				ConfigurationHandler.saveServerConfig();
+			((SyncServerExecutor)GlobalExecutors.nextTick()).register();
 		}
 		catch (Throwable t)
 		{

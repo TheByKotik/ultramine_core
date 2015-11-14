@@ -712,7 +712,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	public void startServerThread()
 	{
 		StartupQuery.reset();
-		(new Thread("Server thread")
+		(serverThread = new Thread("Server thread")
 		{
 			private static final String __OBFID = "CL_00001418";
 			public void run()
@@ -1505,9 +1505,15 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	public long currentWait = TICK_TIME;
 	public long pickWait = TICK_TIME;
 	public final long startTime = System.currentTimeMillis();
+	private Thread serverThread;
 	private final MultiWorld multiworld = new MultiWorld(this);
 	private IPermissionManager permissionManager;
 	private final Scheduler scheduler = new Scheduler();
+	
+	public Thread getServerThread()
+	{
+		return serverThread;
+	}
 	
 	public MultiWorld getMultiWorld()
 	{
@@ -1539,7 +1545,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 		return anvilFile;
 	}
 	
-	protected File getHomeDirectory()
+	public File getHomeDirectory()
 	{
 		return getDataDirectory();
 	}

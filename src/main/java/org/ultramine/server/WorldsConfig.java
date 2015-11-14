@@ -12,6 +12,7 @@ public class WorldsConfig
 	{
 		public int dimension;
 		public String name;
+		public ImportFrom importFrom;
 		public Generation generation;
 		public MobSpawn mobSpawn;
 		public Settings settings;
@@ -19,6 +20,12 @@ public class WorldsConfig
 		public ChunkLoading chunkLoading;
 		public LoadBalancer loadBalancer;
 		public Portals portals = new Portals();
+		
+		public static class ImportFrom
+		{
+			public String file;
+			public String pathInArchive;
+		}
 		
 		public static class Generation
 		{

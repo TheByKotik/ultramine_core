@@ -1,6 +1,5 @@
 package org.ultramine.server.util;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.Closeable;
 import java.io.File;
@@ -8,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Arrays;
@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
@@ -96,14 +95,15 @@ public class ZipUtil
 	
 	public static void unzip(File zipfile, File outDir, Function<String, String> filter) throws IOException
 	{
-		ZipInputStream zip = null;
+		ZipFile zip = null;
 		try
 		{
-			zip = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipfile)));
+			zip = new ZipFile(zipfile);
 			
 			byte[] buffer = new byte[65536];
-			for(ZipEntry ze = zip.getNextEntry(); ze != null; ze = zip.getNextEntry())
+			for (Enumeration<? extends ZipEntry> e = zip.entries(); e.hasMoreElements();)
 			{
+				ZipEntry ze = e.nextElement();
 				String name = ze.getName();
 				if(filter != null)
 					name = filter.apply(name);
@@ -117,14 +117,16 @@ public class ZipUtil
 				else
 				{
 					FileOutputStream fout = null;
+					InputStream inp = null;
 					try
 					{
 						fout = new FileOutputStream(target);
-						IOUtils.copyLarge(zip, fout, buffer);
+						IOUtils.copyLarge(inp = zip.getInputStream(ze), fout, buffer);
 					}
 					finally
 					{
 						IOUtils.closeQuietly(fout);
+						IOUtils.closeQuietly(inp);
 					}
 				}
 			}
@@ -152,6 +154,20 @@ public class ZipUtil
 		finally
 		{
 			IOUtils.closeQuietly(zip);
+		}
+		
+		return set;
+	}
+	
+	public static Set<String> getRootFiles(ZipFile zip)
+	{
+		Set<String> set = new HashSet<String>();
+		for (Enumeration<? extends ZipEntry> e = zip.entries(); e.hasMoreElements();)
+		{
+			ZipEntry ze = e.nextElement();
+			String name = ze.getName();
+			if(ze.isDirectory())
+				set.add(name.substring(0, name.indexOf('/')));
 		}
 		
 		return set;

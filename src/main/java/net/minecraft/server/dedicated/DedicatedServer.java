@@ -612,7 +612,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	}
 	
 	@Override
-	protected File getHomeDirectory()
+	public File getHomeDirectory()
 	{
 		return FMLLaunchHandler.getMinecraftHome();
 	}

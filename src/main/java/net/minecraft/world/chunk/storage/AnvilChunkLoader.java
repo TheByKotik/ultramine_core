@@ -38,9 +38,9 @@ import cpw.mods.fml.common.FMLLog;
 public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 {
 	private static final Logger logger = LogManager.getLogger();
-	private final TIntObjectHashMap<PendingChunk> pendingSaves = new TIntObjectHashMap<PendingChunk>();
-	private Object syncLockObject = new Object();
-	public final File chunkSaveLocation;
+	protected final TIntObjectHashMap<PendingChunk> pendingSaves = new TIntObjectHashMap<PendingChunk>();
+	protected Object syncLockObject = new Object();
+	public File chunkSaveLocation;
 	private static final String __OBFID = "CL_00000384";
 
 	public AnvilChunkLoader(File par1File)
@@ -56,7 +56,12 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 				return true;
 		}
 
-		return RegionFileCache.createOrLoadRegionFile(this.chunkSaveLocation, i, j).chunkExists(i & 31, j & 31);
+		return isChunkExistsInFile(i, j);
+	}
+	
+	protected boolean isChunkExistsInFile(int cx, int cz)
+	{
+		return RegionFileCache.createOrLoadRegionFile(this.chunkSaveLocation, cx, cz).chunkExists(cx & 31, cz & 31);
 	}
 
 	public Chunk loadChunk(World par1World, int par2, int par3) throws IOException
@@ -92,7 +97,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
         if (nbttagcompound == null)
         {
-            DataInputStream datainputstream = RegionFileCache.getChunkInputStream(this.chunkSaveLocation, par2, par3);
+            DataInputStream datainputstream = getChunkInputStream(par2, par3);
 
             if (datainputstream == null)
             {
@@ -120,6 +125,11 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
         return data;
     }
+	
+	protected DataInputStream getChunkInputStream(int cz, int cx)
+	{
+		return RegionFileCache.getChunkInputStream(this.chunkSaveLocation, cz, cx);
+	}
 
 	protected Chunk checkedReadChunkFromNBT(World par1World, int par2, int par3, NBTTagCompound par4NBTTagCompound)
 	{
@@ -247,11 +257,16 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		return true;
 	}
 
-	private void writeChunkNBTTags(AnvilChunkLoader.PendingChunk par1AnvilChunkLoaderPending) throws IOException
+	protected void writeChunkNBTTags(AnvilChunkLoader.PendingChunk par1AnvilChunkLoaderPending) throws IOException
 	{
-		DataOutputStream dataoutputstream = RegionFileCache.getChunkOutputStream(this.chunkSaveLocation, par1AnvilChunkLoaderPending.chunkCoordinate.chunkXPos, par1AnvilChunkLoaderPending.chunkCoordinate.chunkZPos);
+		DataOutputStream dataoutputstream = getChunkOutputStream(par1AnvilChunkLoaderPending);
 		CompressedStreamTools.write(par1AnvilChunkLoaderPending.nbtTags, dataoutputstream);
 		dataoutputstream.close();
+	}
+	
+	protected DataOutputStream getChunkOutputStream(AnvilChunkLoader.PendingChunk pending)
+	{
+		return RegionFileCache.getChunkOutputStream(this.chunkSaveLocation, pending.chunkCoordinate.chunkXPos, pending.chunkCoordinate.chunkZPos);
 	}
 
 	public void saveExtraChunkData(World par1World, Chunk par2Chunk) {}
@@ -267,7 +282,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 //		}
 	}
 
-	private void writeChunkToNBT(Chunk par1Chunk, World par2World, NBTTagCompound par3NBTTagCompound)
+	protected void writeChunkToNBT(Chunk par1Chunk, World par2World, NBTTagCompound par3NBTTagCompound)
 	{
 		par3NBTTagCompound.setByte("V", (byte)1);
 		par3NBTTagCompound.setInteger("xPos", par1Chunk.xPosition);
@@ -394,7 +409,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		}
 	}
 
-	private Chunk readChunkFromNBT(World par1World, NBTTagCompound par2NBTTagCompound)
+	protected Chunk readChunkFromNBT(World par1World, NBTTagCompound par2NBTTagCompound)
 	{
 		int i = par2NBTTagCompound.getInteger("xPos");
 		int j = par2NBTTagCompound.getInteger("zPos");
@@ -533,7 +548,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		}
 	}
 	
-	static class PendingChunk
+	protected static class PendingChunk
 		{
 			public final ChunkCoordIntPair chunkCoordinate;
 			public final NBTTagCompound nbtTags;

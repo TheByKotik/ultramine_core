@@ -267,8 +267,8 @@ public class BackupManager
 						if(!moveOnly.contains(server.getMultiWorld().getSaveDirName(world)))
 								continue;
 						WorldDescriptor desc = server.getMultiWorld().getDescFromWorld(world);
-						List<EntityPlayerMP> players = desc.extractPlayer();
-						desc.destroyWorld();
+						List<EntityPlayerMP> players = desc.extractPlayers();
+						desc.unloadNow(false);
 						dimToPlayerMap.put(world.provider.dimensionId, players);
 					}
 					

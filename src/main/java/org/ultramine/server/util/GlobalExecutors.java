@@ -1,5 +1,6 @@
 package org.ultramine.server.util;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -9,6 +10,7 @@ public class GlobalExecutors
 {
 	private static final ExecutorService io = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("UM IO #%d").setDaemon(true).build());
 	private static final ExecutorService cached = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("UM cached  #%d").setDaemon(true).build());
+	private static final Executor sync = new SyncServerExecutor();
 
 	/**
 	 * Обрабатывает задачи на сохранение чего-либо на диск/в БД. Используется
@@ -28,5 +30,13 @@ public class GlobalExecutors
 	public static ExecutorService cachedExecutor()
 	{
 		return cached;
+	}
+	
+	/**
+	 * Выполняет задачи в основном потоке сервера, на следующем тике
+	 */
+	public static Executor nextTick()
+	{
+		return sync;
 	}
 }
