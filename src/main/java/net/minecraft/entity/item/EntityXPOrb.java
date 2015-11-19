@@ -239,8 +239,9 @@ public class EntityXPOrb extends Entity
 	
 	/*===================================== ULTRAMINE START =====================================*/
 	
-	public boolean isEntityXPOrb()
+	@Override
+	public org.ultramine.server.EntityType computeEntityType()
 	{
-		return true;
+		return org.ultramine.server.EntityType.XP_ORB;
 	}
 }

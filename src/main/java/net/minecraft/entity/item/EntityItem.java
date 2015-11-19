@@ -458,13 +458,13 @@ public class EntityItem extends Entity
 	/*===================================== ULTRAMINE START =====================================*/
 	
 	@Override
-	public boolean isEntityItem()
+	public org.ultramine.server.EntityType computeEntityType()
 	{
-		return true;
+		return org.ultramine.server.EntityType.ITEM;
 	}
 	
 	@Override
-	public void despawnInactive()
+	public void updateInactive()
 	{
 		if (++age >= lifespan)
 		{

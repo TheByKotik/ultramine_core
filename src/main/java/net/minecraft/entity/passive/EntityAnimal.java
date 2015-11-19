@@ -382,12 +382,4 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimals
 			super.handleHealthUpdate(p_70103_1_);
 		}
 	}
-	
-	/*===================================== ULTRAMINE START =====================================*/
-	
-	@Override
-	public boolean isEntityAnimal()
-	{
-		return true;
-	}
 }

@@ -734,8 +734,8 @@ public class EntityVillager extends EntityAgeable implements IMerchant, INpc
 	/*===================================== ULTRAMINE START =====================================*/
 	
 	@Override
-	public boolean isEntityAnimal()
+	public org.ultramine.server.EntityType computeEntityType()
 	{
-		return true;
+		return org.ultramine.server.EntityType.ANIMAL;
 	}
 }

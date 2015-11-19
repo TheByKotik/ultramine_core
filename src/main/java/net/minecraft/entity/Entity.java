@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
+import org.ultramine.server.EntityType;
 import org.ultramine.server.UMHooks;
 import org.ultramine.server.event.EntitySetFireEvent;
 
@@ -2488,6 +2489,7 @@ public abstract class Entity
 	
 	/* ===================================== ULTRAMINE START =====================================*/
 	
+	private final EntityType cachedEntityType = computeEntityType();
 	private GameProfile owner;
 	
 	public final void setObjectOwner(GameProfile owner)
@@ -2516,34 +2518,49 @@ public abstract class Entity
 		return false;
 	}
 	
-	public boolean isEntityMonster()
+	protected EntityType computeEntityType()
 	{
-		return this instanceof net.minecraft.entity.monster.IMob;
+		return
+			isCreatureType(EnumCreatureType.monster,		false) ? EntityType.MONSTER : 
+			isCreatureType(EnumCreatureType.creature,		false) ? EntityType.ANIMAL : 
+			isCreatureType(EnumCreatureType.ambient,		false) ? EntityType.AMBIENT : 
+			isCreatureType(EnumCreatureType.waterCreature,	false) ? EntityType.WATER : 
+			EntityType.OTHER;
 	}
 	
-	public boolean isEntityAnimal()
+	public final EntityType getEntityType()
 	{
-		return false;
+		return cachedEntityType;
 	}
 	
-	public boolean isEntityAmbient()
+	public final boolean isEntityMonster()
 	{
-		return false;
+		return getEntityType() == EntityType.MONSTER;
 	}
 	
-	public boolean isEntityWater()
+	public final boolean isEntityAnimal()
 	{
-		return false;
+		return getEntityType() == EntityType.ANIMAL;
 	}
 	
-	public boolean isEntityItem()
+	public final boolean isEntityAmbient()
 	{
-		return false;
+		return getEntityType() == EntityType.AMBIENT;
 	}
 	
-	public boolean isEntityXPOrb()
+	public final boolean isEntityWater()
 	{
-		return false;
+		return getEntityType() == EntityType.WATER;
+	}
+	
+	public final boolean isEntityItem()
+	{
+		return getEntityType() == EntityType.ITEM;
+	}
+	
+	public final boolean isEntityXPOrb()
+	{
+		return getEntityType() == EntityType.XP_ORB;
 	}
 	
 	public double getEntityDespawnDistance()
@@ -2551,7 +2568,7 @@ public abstract class Entity
 		return 9216d;//16384.0d;
 	}
 	
-	public void despawnInactive()
+	public void updateInactive()
 	{
 		
 	}

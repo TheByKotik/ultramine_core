@@ -1168,7 +1168,7 @@ public abstract class EntityLiving extends EntityLivingBase
 	}
 	
 	@Override
-	public void despawnInactive()
+	public void updateInactive()
 	{
 		if(!canDespawn() || ++entityAge <= 600)
 			return;

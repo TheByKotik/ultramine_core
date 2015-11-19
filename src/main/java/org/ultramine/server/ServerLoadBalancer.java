@@ -1,6 +1,6 @@
 package org.ultramine.server;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.ultramine.server.WorldsConfig.WorldConfig.LoadBalancer.Limits;
 import org.ultramine.server.WorldsConfig.WorldConfig.LoadBalancer.Limits.PerChunkEntityLimits;
@@ -19,7 +19,6 @@ public class ServerLoadBalancer
 	private static final boolean isClient = FMLCommonHandler.instance().getSide().isClient();
 	private static final PerChunkEntityLimits clientLimits = new PerChunkEntityLimits();
 	private static final PerChunkEntityLimits infinityLimits = new PerChunkEntityLimits();
-	private static final Random rng = new Random();
 	private final World world;
 	private final TIntByteMap activeChunkSet;
 	
@@ -70,7 +69,7 @@ public class ServerLoadBalancer
 		int prior = activeChunkSet.get(ChunkHash.chunkToKey(cx, cz));
 		if(prior == Byte.MAX_VALUE)
 		{
-			ent.despawnInactive();
+			ent.updateInactive();
 			return false;
 		}
 
@@ -91,10 +90,7 @@ public class ServerLoadBalancer
 
 		if(count > lowerLimit)
 		{
-			float rate = (float)lowerLimit / (float)count;
-			if(rng.nextFloat() < rate)
-				return true;
-			return false;
+			return ThreadLocalRandom.current().nextInt(count) < lowerLimit;
 		}
 
 		return true;
@@ -106,13 +102,15 @@ public class ServerLoadBalancer
 			return clientLimits;
 		Limits limits = ((WorldServer)e.worldObj).getConfig().loadBalancer.limits;
 		
-		if(e.isEntityMonster())			return limits.monsters;
-		else if(e.isEntityAnimal())		return limits.animals;
-		else if(e.isEntityAmbient())	return limits.ambient;
-		else if(e.isEntityWater())		return limits.water;
-		else if(e.isEntityItem())		return limits.items;
-		else if(e.isEntityXPOrb())		return limits.xpOrbs;
-		
-		return infinityLimits;
+		switch(e.getEntityType())
+		{
+		case MONSTER:	return limits.monsters;
+		case ANIMAL:	return limits.animals;
+		case AMBIENT:	return limits.ambient;
+		case WATER:		return limits.water;
+		case ITEM:		return limits.items;
+		case XP_ORB:	return limits.xpOrbs;
+		default: 		return infinityLimits;
+		}
 	}
 }

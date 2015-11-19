@@ -49,6 +49,7 @@ import net.minecraftforge.event.world.ChunkEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.EntityType;
 import org.ultramine.server.chunk.ChunkBindState;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.IChunkDependency;
@@ -1707,33 +1708,35 @@ public class Chunk implements IChunkDependency
 	{
 		wasActive = true; //Handling case where added entity to inactive chunk (wasActive && hasEntities) condition should be true
 		if(e.isEntityLiving() && !e.isEntityPlayerMP())
-		{
 			entityLivingCount++;
-			if(e.isEntityMonster())			++entityMonsterCount;
-			else if(e.isEntityAnimal())		++entityAnimalCount;
-			else if(e.isEntityAmbient())	++entityAmbientCount;
-			else if(e.isEntityWater())		++entityWaterCount;
+		
+		switch(e.getEntityType())
+		{
+		case MONSTER:	++entityMonsterCount; break;
+		case ANIMAL:	++entityAnimalCount; break;
+		case AMBIENT:	++entityAmbientCount; break;
+		case WATER:		++entityWaterCount; break;
+		case ITEM:		++entityItemCount; break;
+		case XP_ORB:	++entityXPOrbCount; break;
+		default: break;
 		}
-		else if(e.isEntityItem())
-			++entityItemCount;
-		else if(e.isEntityXPOrb())
-			++entityXPOrbCount;
 	}
 	
 	private void onEntityRemove(Entity e)
 	{
 		if(e.isEntityLiving() && !e.isEntityPlayerMP())
-		{
 			entityLivingCount--;
-			if(e.isEntityMonster())			--entityMonsterCount;
-			else if(e.isEntityAnimal())		--entityAnimalCount;
-			else if(e.isEntityAmbient())	--entityAmbientCount;
-			else if(e.isEntityWater())		--entityWaterCount;
+		
+		switch(e.getEntityType())
+		{
+		case MONSTER:	--entityMonsterCount; break;
+		case ANIMAL:	--entityAnimalCount; break;
+		case AMBIENT:	--entityAmbientCount; break;
+		case WATER:		--entityWaterCount; break;
+		case ITEM:		--entityItemCount; break;
+		case XP_ORB:	--entityXPOrbCount; break;
+		default: break;
 		}
-		else if(e.isEntityItem())
-			--entityItemCount;
-		else if(e.isEntityXPOrb())
-			--entityXPOrbCount;
 	}
 	
 	private void resetEntityCounters()
@@ -1769,16 +1772,23 @@ public class Chunk implements IChunkDependency
 		}
 	}
 	
+	public int getEntityCountByType(EntityType type)
+	{
+		switch(type)
+		{
+		case MONSTER:	return entityMonsterCount;
+		case ANIMAL:	return entityAnimalCount;
+		case AMBIENT:	return entityAmbientCount;
+		case WATER:		return entityWaterCount;
+		case ITEM:		return entityItemCount;
+		case XP_ORB:	return entityXPOrbCount;
+		default: 		return 0;
+		}
+	}
+	
 	public int getEntityCountOfSameType(Entity e)
 	{
-		if(e.isEntityMonster())			return entityMonsterCount;
-		else if(e.isEntityAnimal())		return entityAnimalCount;
-		else if(e.isEntityAmbient())	return entityAmbientCount;
-		else if(e.isEntityWater())		return entityWaterCount;
-		else if(e.isEntityItem())		return entityItemCount;
-		else if(e.isEntityXPOrb())		return entityXPOrbCount;
-		
-		return 0;
+		return getEntityCountByType(e.getEntityType());
 	}
 	
 	public void free()
