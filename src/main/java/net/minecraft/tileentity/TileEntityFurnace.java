@@ -304,6 +304,9 @@ public class TileEntityFurnace extends TileEntity implements ISidedInventory
 		}
 		else
 		{
+			int moddedBurnTime = net.minecraftforge.event.ForgeEventFactory.getFuelBurnTime(p_145952_0_);
+			if (moddedBurnTime >= 0) return moddedBurnTime;
+			
 			Item item = p_145952_0_.getItem();
 
 			if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air)

@@ -80,24 +80,24 @@ sourceSets
         java
         {
             srcDir 'src/main/java/'
-            srcDir '/var/lib/jenkins/jobs/CleanForge-1.7.10/workspace/src/main/java/'
-            srcDir '/var/lib/jenkins/jobs/CleanForge-1.7.10/workspace/eclipse/Clean/src/main/start/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge_1.7.10/workspace/src/main/java/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge_1.7.10/workspace/eclipse/Clean/src/main/start/'
         }
         resources
         {
             srcDir 'src/main/resources/'
-            srcDir '/var/lib/jenkins/jobs/CleanForge-1.7.10/workspace/src/main/resources/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge_1.7.10/workspace/src/main/resources/'
         }
     }
     test
     {
         java
         {
-            srcDir '/var/lib/jenkins/jobs/CleanForge-1.7.10/workspace/src/test/java/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge_1.7.10/workspace/src/test/java/'
         }
         resources
         {
-            srcDir '/var/lib/jenkins/jobs/CleanForge-1.7.10/workspace/src/test/resources/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge_1.7.10/workspace/src/test/resources/'
         }
     }
 }
