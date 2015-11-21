@@ -30,71 +30,68 @@ public class PingResponseHandler extends ChannelInboundHandlerAdapter
 
 		try
 		{
-			try
+			if (bytebuf.readUnsignedByte() != 254)
 			{
-				if (bytebuf.readUnsignedByte() != 254)
-				{
-					return;
-				}
-
-				InetSocketAddress inetsocketaddress = (InetSocketAddress)p_channelRead_1_.channel().remoteAddress();
-				MinecraftServer minecraftserver = this.field_151257_b.func_151267_d();
-				int i = bytebuf.readableBytes();
-				String s;
-
-				switch (i)
-				{
-					case 0:
-						logger.debug("Ping: (<1.3.x) from {}:{}", new Object[] {inetsocketaddress.getAddress(), Integer.valueOf(inetsocketaddress.getPort())});
-						s = String.format("%s\u00a7%d\u00a7%d", new Object[] {minecraftserver.getMOTD(), Integer.valueOf(minecraftserver.getCurrentPlayerCount()), Integer.valueOf(minecraftserver.getMaxPlayers())});
-						this.func_151256_a(p_channelRead_1_, this.func_151255_a(s));
-						break;
-					case 1:
-						if (bytebuf.readUnsignedByte() != 1)
-						{
-							return;
-						}
-
-						logger.debug("Ping: (1.4-1.5.x) from {}:{}", new Object[] {inetsocketaddress.getAddress(), Integer.valueOf(inetsocketaddress.getPort())});
-						s = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] {Integer.valueOf(127), minecraftserver.getMinecraftVersion(), minecraftserver.getMOTD(), Integer.valueOf(minecraftserver.getCurrentPlayerCount()), Integer.valueOf(minecraftserver.getMaxPlayers())});
-						this.func_151256_a(p_channelRead_1_, this.func_151255_a(s));
-						break;
-					default:
-						boolean flag1 = bytebuf.readUnsignedByte() == 1;
-						flag1 &= bytebuf.readUnsignedByte() == 250;
-						flag1 &= "MC|PingHost".equals(new String(bytebuf.readBytes(bytebuf.readShort() * 2).array(), Charsets.UTF_16BE));
-						int j = bytebuf.readUnsignedShort();
-						flag1 &= bytebuf.readUnsignedByte() >= 73;
-						flag1 &= 3 + bytebuf.readBytes(bytebuf.readShort() * 2).array().length + 4 == j;
-						flag1 &= bytebuf.readInt() <= 65535;
-						flag1 &= bytebuf.readableBytes() == 0;
-
-						if (!flag1)
-						{
-							return;
-						}
-
-						logger.debug("Ping: (1.6) from {}:{}", new Object[] {inetsocketaddress.getAddress(), Integer.valueOf(inetsocketaddress.getPort())});
-						String s1 = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] {Integer.valueOf(127), minecraftserver.getMinecraftVersion(), minecraftserver.getMOTD(), Integer.valueOf(minecraftserver.getCurrentPlayerCount()), Integer.valueOf(minecraftserver.getMaxPlayers())});
-						ByteBuf bytebuf1 = this.func_151255_a(s1);
-
-						try
-						{
-							this.func_151256_a(p_channelRead_1_, bytebuf1);
-						}
-						finally
-						{
-							bytebuf1.release();
-						}
-				}
-
-				bytebuf.release();
-				flag = false;
+				return;
 			}
-			catch (RuntimeException runtimeexception)
+
+			InetSocketAddress inetsocketaddress = (InetSocketAddress)p_channelRead_1_.channel().remoteAddress();
+			MinecraftServer minecraftserver = this.field_151257_b.func_151267_d();
+			int i = bytebuf.readableBytes();
+			String s;
+
+			switch (i)
 			{
-				;
+				case 0:
+					logger.debug("Ping: (<1.3.x) from {}:{}", new Object[] {inetsocketaddress.getAddress(), Integer.valueOf(inetsocketaddress.getPort())});
+					s = String.format("%s\u00a7%d\u00a7%d", new Object[] {minecraftserver.getMOTD(), Integer.valueOf(minecraftserver.getCurrentPlayerCount()), Integer.valueOf(minecraftserver.getMaxPlayers())});
+					this.func_151256_a(p_channelRead_1_, this.func_151255_a(s));
+					break;
+				case 1:
+					if (bytebuf.readUnsignedByte() != 1)
+					{
+						return;
+					}
+
+					logger.debug("Ping: (1.4-1.5.x) from {}:{}", new Object[] {inetsocketaddress.getAddress(), Integer.valueOf(inetsocketaddress.getPort())});
+					s = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] {Integer.valueOf(127), minecraftserver.getMinecraftVersion(), minecraftserver.getMOTD(), Integer.valueOf(minecraftserver.getCurrentPlayerCount()), Integer.valueOf(minecraftserver.getMaxPlayers())});
+					this.func_151256_a(p_channelRead_1_, this.func_151255_a(s));
+					break;
+				default:
+					boolean flag1 = bytebuf.readUnsignedByte() == 1;
+					flag1 &= bytebuf.readUnsignedByte() == 250;
+					flag1 &= "MC|PingHost".equals(new String(bytebuf.readBytes(bytebuf.readShort() * 2).array(), Charsets.UTF_16BE));
+					int j = bytebuf.readUnsignedShort();
+					flag1 &= bytebuf.readUnsignedByte() >= 73;
+					flag1 &= 3 + bytebuf.readBytes(bytebuf.readShort() * 2).array().length + 4 == j;
+					flag1 &= bytebuf.readInt() <= 65535;
+					flag1 &= bytebuf.readableBytes() == 0;
+
+					if (!flag1)
+					{
+						return;
+					}
+
+					logger.debug("Ping: (1.6) from {}:{}", new Object[] {inetsocketaddress.getAddress(), Integer.valueOf(inetsocketaddress.getPort())});
+					String s1 = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] {Integer.valueOf(127), minecraftserver.getMinecraftVersion(), minecraftserver.getMOTD(), Integer.valueOf(minecraftserver.getCurrentPlayerCount()), Integer.valueOf(minecraftserver.getMaxPlayers())});
+					ByteBuf bytebuf1 = this.func_151255_a(s1);
+
+					try
+					{
+						this.func_151256_a(p_channelRead_1_, bytebuf1);
+					}
+					finally
+					{
+						bytebuf1.release();
+					}
 			}
+
+			bytebuf.release();
+			flag = false;
+		}
+		catch (RuntimeException runtimeexception)
+		{
+			;
 		}
 		finally
 		{
