@@ -1,12 +1,5 @@
 package net.minecraft.world.gen;
 
-import gnu.trove.iterator.TIntIterator;
-import gnu.trove.iterator.TIntObjectIterator;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.set.TIntSet;
-import gnu.trove.set.hash.TIntHashSet;
-
 import java.io.IOException;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -42,6 +35,10 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.chunkio.ChunkIOExecutor;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import net.openhft.koloboke.collect.IntCursor;
+import net.openhft.koloboke.collect.map.IntObjCursor;
+import net.openhft.koloboke.collect.set.IntSet;
+import net.openhft.koloboke.collect.set.hash.HashIntSets;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +52,7 @@ import org.ultramine.server.chunk.IChunkLoadCallback;
 public class ChunkProviderServer implements IChunkProvider
 {
 	private static final Logger logger = LogManager.getLogger();
-	public TIntSet chunksToUnload = new TIntHashSet();
+	public IntSet chunksToUnload = HashIntSets.newMutableSet();
 	private Chunk defaultEmptyChunk;
 	public IChunkProvider currentChunkProvider;
 	public IChunkLoader currentChunkLoader;
@@ -390,9 +387,9 @@ public class ChunkProviderServer implements IChunkProvider
 			Set<ChunkCoordIntPair> persistentChunks = worldObj.getPersistentChunks().keySet();
 			int savequeueSize = ((AnvilChunkLoader)currentChunkLoader).getSaveQueueSize();
 			
-			for(TIntIterator it = chunksToUnload.iterator(); it.hasNext() && savequeueSize < MAX_SAVE_QUEUE_SIZE;)
+			for(IntCursor it = chunksToUnload.cursor(); it.moveNext() && savequeueSize < MAX_SAVE_QUEUE_SIZE;)
 			{
-				int hash = it.next();
+				int hash = it.elem();
 				Chunk chunk = loadedChunkHashMap.get(hash);
 				if(chunk != null)
 				{
@@ -461,7 +458,7 @@ public class ChunkProviderServer implements IChunkProvider
 	private static final boolean isServer = FMLCommonHandler.instance().getSide().isServer();
 	private static final boolean debugSyncLoad = Boolean.parseBoolean(System.getProperty("ultramine.debug.chunksyncload"));
 
-	private final TIntSet possibleSaves = new TIntHashSet();
+	private final IntSet possibleSaves = HashIntSets.newMutableSet();
 	private int lastFullSaveTick;
 	private boolean preventSaving;
 	private boolean isWorldUnloaded;
@@ -569,9 +566,8 @@ public class ChunkProviderServer implements IChunkProvider
 		
 		if(tick - lastFullSaveTick >= FULL_SAVE_INTERVAL)
 		{
-			for(TIntObjectIterator<Chunk> it = loadedChunkHashMap.iterator(); it.hasNext();)
+			for(IntObjCursor<Chunk> it = loadedChunkHashMap.iterator(); it.moveNext();)
 			{
-				it.advance();
 				int key = it.key();
 				if(it.value().needsSaving(false) && !chunksToUnload.contains(key))
 					possibleSaves.add(key);
@@ -584,9 +580,9 @@ public class ChunkProviderServer implements IChunkProvider
 		{
 			int count = Math.min(10, Math.max(1, possibleSaves.size()/(FULL_SAVE_INTERVAL - tick + lastFullSaveTick)));
 			
-			for(TIntIterator it = possibleSaves.iterator(); it.hasNext();)
+			for(IntCursor it = possibleSaves.cursor(); it.moveNext();)
 			{
-				int key = it.next();
+				int key = it.elem();
 				it.remove();
 				Chunk chunk = loadedChunkHashMap.get(key);
 				if(chunk != null && chunk.needsSaving(false) && !chunksToUnload.contains(key))

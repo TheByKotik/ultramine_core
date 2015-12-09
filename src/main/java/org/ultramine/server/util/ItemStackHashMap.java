@@ -8,17 +8,17 @@ import java.util.TreeMap;
 import org.ultramine.server.event.ForgeModIdMappingEvent;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.openhft.koloboke.collect.map.IntObjMap;
+import net.openhft.koloboke.collect.map.hash.HashIntObjMaps;
 
 public class ItemStackHashMap<V> implements Map<ItemStack, V>
 {
 	private final Map<ItemStack, V> map = new TreeMap<ItemStack, V>(ItemStackComparator.INSTANCE);
-	private final TIntObjectMap<V> fastMap = new TIntObjectHashMap<V>();
+	private final IntObjMap<V> fastMap = HashIntObjMaps.newMutableMap();
 	private boolean hasWildcard = false;
 	
 	public ItemStackHashMap()

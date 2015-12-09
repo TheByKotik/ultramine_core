@@ -2,8 +2,6 @@ package net.minecraft.client.multiplayer;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gnu.trove.iterator.TIntIterator;
-import gnu.trove.set.hash.TIntHashSet;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,6 +39,9 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.SaveHandlerMP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
+import net.openhft.koloboke.collect.IntCursor;
+import net.openhft.koloboke.collect.set.hash.HashIntSet;
+import net.openhft.koloboke.collect.set.hash.HashIntSets;
 
 @SideOnly(Side.CLIENT)
 public class WorldClient extends World
@@ -51,7 +52,7 @@ public class WorldClient extends World
 	private Set entityList = new HashSet();
 	private Set entitySpawnQueue = new HashSet();
 	private final Minecraft mc = Minecraft.getMinecraft();
-	private final TIntHashSet previousActiveChunkSet = new TIntHashSet(512);
+	private final HashIntSet previousActiveChunkSet = HashIntSets.newMutableSet();
 	private static final String __OBFID = "CL_00000882";
 
 	public WorldClient(NetHandlerPlayClient p_i45063_1_, WorldSettings p_i45063_2_, int p_i45063_3_, EnumDifficulty p_i45063_4_, Profiler p_i45063_5_)
@@ -117,9 +118,9 @@ public class WorldClient extends World
 		}
 
 		int i = 0;
-		for (TIntIterator iter = activeChunkSet.keySet().iterator(); iter.hasNext();)
+		for (IntCursor iter = activeChunkSet.keySet().cursor(); iter.moveNext();)
 		{
-			int chunkCoord = iter.next();
+			int chunkCoord = iter.elem();
 
 			if (!this.previousActiveChunkSet.contains(chunkCoord))
 			{

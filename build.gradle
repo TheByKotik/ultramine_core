@@ -126,7 +126,9 @@ dependencies {
 	compile 'org.yaml:snakeyaml:1.16'
 	compile 'com.lmax:disruptor:3.2.1'
 	compile 'org.apache.commons:commons-dbcp2:2.1.1'
+	compile 'net.openhft:koloboke-api-jdk8:0.6.8'
 	
+	runtime 'net.openhft:koloboke-impl-jdk8:0.6.8'
 	runtime 'mysql:mysql-connector-java:5.1.31'
 
 	testCompile "org.codehaus.groovy:groovy-all:2.3.0"

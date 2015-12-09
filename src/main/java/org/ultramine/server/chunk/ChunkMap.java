@@ -3,12 +3,11 @@ package org.ultramine.server.chunk;
 import java.util.Collection;
 
 import net.minecraft.world.chunk.Chunk;
+import net.openhft.koloboke.collect.map.IntObjCursor;
+import net.openhft.koloboke.collect.map.IntObjMap;
+import net.openhft.koloboke.collect.map.hash.HashIntObjMaps;
 
 import org.ultramine.server.chunk.ChunkHash;
-
-import gnu.trove.iterator.TIntObjectIterator;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class ChunkMap
 {
@@ -17,7 +16,7 @@ public class ChunkMap
 	
 	private final Chunk[] flatMap = new Chunk[FLAT_MAP_SIZE*FLAT_MAP_SIZE];
 	
-	private final TIntObjectMap<Chunk> map = new TIntObjectHashMap<Chunk>();
+	private final IntObjMap<Chunk> map = HashIntObjMaps.newMutableMap();
 	
 	public void put(int x, int z, Chunk chunk)
 	{
@@ -90,14 +89,14 @@ public class ChunkMap
 		return map.containsKey(hash);
 	}
 	
-	public TIntObjectIterator<Chunk> iterator()
+	public IntObjCursor<Chunk> iterator()
 	{
-		return map.iterator();
+		return map.cursor();
 	}
 	
 	public Collection<Chunk> valueCollection()
 	{
-		return map.valueCollection();
+		return map.values();
 	}
 	
 	public int size()

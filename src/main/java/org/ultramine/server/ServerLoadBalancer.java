@@ -7,12 +7,12 @@ import org.ultramine.server.WorldsConfig.WorldConfig.LoadBalancer.Limits.PerChun
 import org.ultramine.server.chunk.ChunkHash;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import gnu.trove.map.TIntByteMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.openhft.koloboke.collect.map.IntByteMap;
 
 public class ServerLoadBalancer
 {
@@ -20,7 +20,7 @@ public class ServerLoadBalancer
 	private static final PerChunkEntityLimits clientLimits = new PerChunkEntityLimits();
 	private static final PerChunkEntityLimits infinityLimits = new PerChunkEntityLimits();
 	private final World world;
-	private final TIntByteMap activeChunkSet;
+	private final IntByteMap activeChunkSet;
 	
 	static
 	{

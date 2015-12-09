@@ -5,9 +5,6 @@ import com.google.common.collect.Lists;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gnu.trove.iterator.TIntByteIterator;
-import gnu.trove.set.TIntSet;
-import gnu.trove.set.hash.TIntHashSet;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -70,6 +67,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.WorldEvent;
+import net.openhft.koloboke.collect.map.IntByteCursor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -325,9 +323,8 @@ public class WorldServer extends World
 		int i = 0;
 		int j = 0;
 
-		for (TIntByteIterator iter = activeChunkSet.iterator(); iter.hasNext();)
+		for (IntByteCursor iter = activeChunkSet.cursor(); iter.moveNext();)
 		{
-			iter.advance();
 			int chunkCoord = iter.key();
 			int chunkX = ChunkHash.keyToX(chunkCoord);
 			int chunkZ = ChunkHash.keyToZ(chunkCoord);

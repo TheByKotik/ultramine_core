@@ -9,17 +9,17 @@ import java.util.Set;
 import org.ultramine.server.event.ForgeModIdMappingEvent;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import gnu.trove.set.TIntSet;
-import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.openhft.koloboke.collect.set.IntSet;
+import net.openhft.koloboke.collect.set.hash.HashIntSets;
 
 public class ItemStackHashSet implements Set<ItemStack>
 {
 	private final List<ItemStack> list = new ArrayList<ItemStack>();
-	private final TIntSet fastSet = new TIntHashSet();
+	private final IntSet fastSet = HashIntSets.newMutableSet();
 	private boolean hasWildcard = false;
 	
 	public ItemStackHashSet()
@@ -60,7 +60,7 @@ public class ItemStackHashSet implements Set<ItemStack>
 	
 	private boolean removeFastMap(ItemStack is)
 	{
-		return fastSet.remove(Item.getIdFromItem(is.getItem()) | (is.getItemDamage() << 16));
+		return fastSet.removeInt(Item.getIdFromItem(is.getItem()) | (is.getItemDamage() << 16));
 	}
 	
 	public boolean contains(int id, int meta)

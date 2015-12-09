@@ -9,7 +9,6 @@ import org.ultramine.server.chunk.ChunkHash;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gnu.trove.iterator.TIntByteIterator;
 import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;
 import net.minecraft.block.Block;
@@ -23,6 +22,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.openhft.koloboke.collect.map.IntByteCursor;
 
 @SideOnly(Side.SERVER)
 public abstract class MobSpawner
@@ -59,9 +59,8 @@ public abstract class MobSpawner
 	{
 		listIndex = 0;
 		chunks.clear();
-		for(TIntByteIterator it = world.getActiveChunkSet().iterator(); it.hasNext();)
+		for(IntByteCursor it = world.getActiveChunkSet().cursor(); it.moveNext();)
 		{
-			it.advance();
 			int prior = it.value();
 			if(prior >= set.minRadius && prior <= set.maxRadius)
 				chunks.add(it.key());

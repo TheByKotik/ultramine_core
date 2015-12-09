@@ -35,6 +35,9 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkWatchEvent;
+import net.openhft.koloboke.collect.IntCursor;
+import net.openhft.koloboke.collect.set.IntSet;
+import net.openhft.koloboke.collect.set.hash.HashIntSets;
 
 public class ChunkSendManager
 {
@@ -50,7 +53,7 @@ public class ChunkSendManager
 	private final TIntArrayListImpl toSend = new TIntArrayListImpl(441);
 	private final TIntIntMap sending = TCollections.synchronizedMap(new TIntIntHashMap());
 	private final TIntSet sendingSage2 = TCollections.synchronizedSet(new TIntHashSet());
-	private final TIntSet sended = new TIntHashSet();
+	private final IntSet sended = HashIntSets.newMutableSet();
 	private final Queue<ChunkIdStruct> toUpdate = Queues.newConcurrentLinkedQueue();
 	private final List<ChunkIdStruct> loadedChunksBuffer = new ArrayList<ChunkIdStruct>();
 	private final AtomicInteger sendingQueueSize = new AtomicInteger();
@@ -104,9 +107,9 @@ public class ChunkSendManager
 					}
 				}
 				
-				for(TIntIterator it = sended.iterator(); it.hasNext();)
+				for(IntCursor it = sended.cursor(); it.moveNext();)
 				{
-					int key = it.next();
+					int key = it.elem();
 					if(!overlaps(cx, cz, ChunkHash.keyToX(key), ChunkHash.keyToZ(key), curView))
 					{
 						PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(ChunkHash.keyToX(key), ChunkHash.keyToZ(key), false);
@@ -174,9 +177,9 @@ public class ChunkSendManager
 			cancelSending(key);
 		}
 		
-		for(TIntIterator it = sended.iterator(); it.hasNext();)
+		for(IntCursor it = sended.cursor(); it.moveNext();)
 		{
-			int key = it.next();
+			int key = it.elem();
 			PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(ChunkHash.keyToX(key), ChunkHash.keyToZ(key), false);
 			if (pi != null) pi.removePlayer(player);
 		}
@@ -355,7 +358,7 @@ public class ChunkSendManager
 								{
 									PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(x - movX, z - movZ, false);
 									if(pi != null) pi.removePlayer(player);
-									sended.remove(key);
+									sended.removeInt(key);
 								}
 								else
 								{

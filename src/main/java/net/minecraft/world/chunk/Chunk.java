@@ -2,11 +2,6 @@ package net.minecraft.world.chunk;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gnu.trove.iterator.TByteIterator;
-import gnu.trove.map.TShortObjectMap;
-import gnu.trove.map.hash.TShortObjectHashMap;
-import gnu.trove.set.TByteSet;
-import gnu.trove.set.hash.TByteHashSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +41,11 @@ import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.openhft.koloboke.collect.ByteCursor;
+import net.openhft.koloboke.collect.map.ShortObjMap;
+import net.openhft.koloboke.collect.map.hash.HashShortObjMaps;
+import net.openhft.koloboke.collect.set.ByteSet;
+import net.openhft.koloboke.collect.set.hash.HashByteSets;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -328,9 +328,9 @@ public class Chunk implements IChunkDependency
 //			for (int i = 0; i < 16; ++i)
 			{
 //				for (int j = 0; j < 16; ++j)
-				for(TByteIterator it = updateLightCoords.iterator(); it.hasNext();)
+				for(ByteCursor it = updateLightCoords.cursor(); it.moveNext();)
 				{
-					int coord = it.next() & 0xFF;
+					int coord = it.elem() & 0xFF;
 					int i = coord & 0xF;
 					int j = coord >> 4;
 //					if (this.updateSkylightColumns[i + j * 16])
@@ -1542,8 +1542,8 @@ public class Chunk implements IChunkDependency
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 	
-	private final TShortObjectMap<TileEntity> fastTileEntityMap = new TShortObjectHashMap<TileEntity>();
-	private final TByteSet updateLightCoords = new TByteHashSet();
+	private final ShortObjMap<TileEntity> fastTileEntityMap = HashShortObjMaps.newMutableMap();
+	private final ByteSet updateLightCoords = HashByteSets.newMutableSet();
 	
 	private Set<PendingBlockUpdate> pendingUpdatesSet;
 	private TreeSet<PendingBlockUpdate> pendingUpdatesQueue;

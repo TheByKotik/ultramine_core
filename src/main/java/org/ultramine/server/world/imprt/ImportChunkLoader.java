@@ -8,19 +8,19 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.MinecraftException;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.chunk.storage.RegionFile;
 import net.minecraft.world.storage.ThreadedFileIOBase;
+import net.openhft.koloboke.collect.map.IntObjMap;
+import net.openhft.koloboke.collect.map.hash.HashIntObjMaps;
 
 public abstract class ImportChunkLoader extends AnvilChunkLoader
 {
 	private static final Logger log = LogManager.getLogger();
-	protected final TIntObjectMap<RegionFile> regionCache = new TIntObjectHashMap<RegionFile>();
+	protected final IntObjMap<RegionFile> regionCache = HashIntObjMaps.newUpdatableMap();
 	protected final File tempDir;
 	protected volatile boolean closed;
 	
@@ -70,7 +70,7 @@ public abstract class ImportChunkLoader extends AnvilChunkLoader
 				ThreadedFileIOBase.threadedIOInstance.waitForFinish();
 			} catch (InterruptedException interruptedexception) {}
 			
-			for(RegionFile region : regionCache.valueCollection())
+			for(RegionFile region : regionCache.values())
 				try{region.close();}catch(IOException igrored){}
 			regionCache.clear();
 		}

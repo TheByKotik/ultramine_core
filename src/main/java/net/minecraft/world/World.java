@@ -2,8 +2,6 @@ package net.minecraft.world;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gnu.trove.map.TIntByteMap;
-import gnu.trove.map.hash.TIntByteHashMap;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,6 +86,8 @@ import net.minecraftforge.common.WorldSpecificSaveHandler;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.openhft.koloboke.collect.map.IntByteMap;
+import net.openhft.koloboke.collect.map.hash.HashIntByteMaps;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraft.entity.EnumCreatureType;
 
@@ -134,7 +134,7 @@ public abstract class World implements IBlockAccess
 	private final Calendar theCalendar = Calendar.getInstance();
 	protected Scoreboard worldScoreboard = new Scoreboard();
 	public boolean isRemote;
-	protected TIntByteMap activeChunkSet = new TIntByteHashMap(512, 0.5F, 0, Byte.MAX_VALUE);//XXX
+	protected IntByteMap activeChunkSet = HashIntByteMaps.getDefaultFactory().withDefaultValue(Byte.MAX_VALUE).withDefaultExpectedSize(1024).newUpdatableMap();
 	private int ambientTickCountdown;
 	protected boolean spawnHostileMobs;
 	protected boolean spawnPeacefulMobs;
@@ -4209,9 +4209,14 @@ public abstract class World implements IBlockAccess
 		return activeChunkSet.size();
 	}
 	
-	public TIntByteMap getActiveChunkSet()
+	public IntByteMap getActiveChunkSet()
 	{
 		return activeChunkSet;
+	}
+	
+	public boolean isChunkActive(int cx, int cz)
+	{
+		return activeChunkSet.containsKey(ChunkHash.chunkToKey(cx, cz));
 	}
 	
 	protected boolean isChunkLoaderEnabled()
