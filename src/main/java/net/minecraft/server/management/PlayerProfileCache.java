@@ -283,11 +283,11 @@ public class PlayerProfileCache
 		}
 		catch (FileNotFoundException filenotfoundexception)
 		{
-			;
+			return;
 		}
 		catch (IOException ioexception)
 		{
-			return;
+			;
 		}
 		finally
 		{
