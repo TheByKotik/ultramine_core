@@ -44,7 +44,7 @@ public class ChunkGC
 		
 		int curTime = world.func_73046_m().getTickCounter();
 		int unloadQueueSize = provider.chunksToUnload.size();
-		int chunkCount = provider.loadedChunkHashMap.size() - unloadQueueSize;
+		int chunkCount = provider.chunkMap.size() - unloadQueueSize;
 		int timePassed = curTime - lastGCTime;
 		int chunkDiff = chunkCount - lastChunkCount;
 		
@@ -76,7 +76,7 @@ public class ChunkGC
 			}
 			
 			lastGCTime = curTime;
-			lastChunkCount = provider.loadedChunkHashMap.size() - provider.chunksToUnload.size();
+			lastChunkCount = provider.chunkMap.size() - provider.chunksToUnload.size();
 		}
 	}
 	
@@ -85,7 +85,7 @@ public class ChunkGC
 		for(Chunk chunk : findChunksForUnload())
 			provider.chunksToUnload.add(ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition));
 		lastGCTime = world.func_73046_m().getTickCounter();
-		lastChunkCount = provider.loadedChunkHashMap.size() - provider.chunksToUnload.size();
+		lastChunkCount = provider.chunkMap.size() - provider.chunksToUnload.size();
 	}
 	
 	private List<Chunk> findChunksForUnload()
@@ -95,7 +95,7 @@ public class ChunkGC
 		int curTime = world.func_73046_m().getTickCounter();
 		
 		Set<ChunkCoordIntPair> persistentChunks = world.getPersistentChunks().keySet();
-		Collection<Chunk> all = provider.loadedChunkHashMap.valueCollection();
+		Collection<Chunk> all = provider.chunkMap.valueCollection();
 		List<Chunk> unbound = new ArrayList<Chunk>(Math.max(2, all.size() - boundChunks));
 		for(Chunk chunk : all)
 		{
