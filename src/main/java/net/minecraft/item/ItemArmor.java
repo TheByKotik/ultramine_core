@@ -40,7 +40,7 @@ public class ItemArmor extends Item
 			if (list.size() > 0)
 			{
 				EntityLivingBase entitylivingbase = (EntityLivingBase)list.get(0);
-				int l = entitylivingbase instanceof EntityPlayer ? 1 : 0;
+				int l = 0;// Forge: We fix the indexes. Mojang Stop hard coding this!
 				int i1 = EntityLiving.getArmorPosition(p_82487_2_);
 				ItemStack itemstack1 = p_82487_2_.copy();
 				itemstack1.stackSize = 1;
