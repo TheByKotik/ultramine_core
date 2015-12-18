@@ -751,7 +751,7 @@ public class FMLClientHandler implements IFMLSidedHandler
 			boolean moddedClientAllowed = true;
 			if (!Strings.isNullOrEmpty(serverDescription))
 			{
-				moddedClientAllowed = !serverDescription.endsWith(":NOFML??r");
+				moddedClientAllowed = !serverDescription.endsWith(":NOFML\u00a7r");
 			}
 			serverDataTag.put(data, new ExtendedServerListData("VANILLA", false, ImmutableMap.<String,String>of(), !moddedClientAllowed));
 		}
@@ -812,7 +812,7 @@ public class FMLClientHandler implements IFMLSidedHandler
 
 	public String fixDescription(String description)
 	{
-		return description.endsWith(":NOFML??r") ? description.substring(0, description.length() - 8)+"??r" : description;
+		return description.endsWith(":NOFML\u00a7r") ? description.substring(0, description.length() - 8)+"\u00a7r" : description;
 	}
 
 	public void connectToServerAtStartup(String host, int port)
