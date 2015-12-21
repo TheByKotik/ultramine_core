@@ -1,4 +1,4 @@
-package org.ultramine.sceduler.pattern;
+package org.ultramine.scheduler.pattern;
 
 /**
  * <p>

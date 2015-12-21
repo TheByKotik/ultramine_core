@@ -1,6 +1,6 @@
-package org.ultramine.sceduler;
+package org.ultramine.scheduler;
 
-import org.ultramine.sceduler.pattern.SchedulingPattern;
+import org.ultramine.scheduler.pattern.SchedulingPattern;
 
 public class ScheduledSyncTask extends ScheduledTask
 {

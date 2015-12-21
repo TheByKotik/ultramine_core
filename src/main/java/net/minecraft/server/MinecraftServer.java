@@ -81,7 +81,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.IPermissionManager;
-import org.ultramine.sceduler.Scheduler;
+import org.ultramine.scheduler.Scheduler;
 import org.ultramine.server.BackupManager;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.WatchdogThread;

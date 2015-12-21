@@ -1,10 +1,10 @@
-package org.ultramine.sceduler;
+package org.ultramine.scheduler;
 
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.ultramine.sceduler.pattern.SchedulingPattern;
+import org.ultramine.scheduler.pattern.SchedulingPattern;
 
 import com.google.common.collect.Queues;
 

@@ -1,6 +1,6 @@
-package org.ultramine.sceduler;
+package org.ultramine.scheduler;
 
-import org.ultramine.sceduler.pattern.SchedulingPattern;
+import org.ultramine.scheduler.pattern.SchedulingPattern;
 import org.ultramine.server.util.GlobalExecutors;
 
 public class ScheduledAsyncTask extends ScheduledTask
