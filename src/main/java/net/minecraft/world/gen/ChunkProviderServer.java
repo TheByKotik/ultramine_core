@@ -42,6 +42,7 @@ import net.openhft.koloboke.collect.set.hash.HashIntSets;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.WorldConstants;
 import org.ultramine.server.chunk.CallbackMultiChunkDependentTask;
 import org.ultramine.server.chunk.ChunkBindState;
 import org.ultramine.server.chunk.ChunkGC;
@@ -306,7 +307,7 @@ public class ChunkProviderServer implements IChunkProvider
 	{
 		Chunk chunk = this.getChunkIfExists(par2, par3);
 
-		if (chunk != null && !chunk.isTerrainPopulated && worldObj.chunkRoundExists(par2, par3, 2))
+		if (chunk != null && !chunk.isTerrainPopulated && worldObj.chunkRoundExists(par2, par3, WorldConstants.GENCHUNK_PRELOAD_RADIUS))
 		{
 			chunk.func_150809_p();
 
@@ -602,7 +603,7 @@ public class ChunkProviderServer implements IChunkProvider
 	
 	public void populateChunk(Chunk chunk, int cx, int cz)
 	{
-		final int radius = 2;
+		final int radius = WorldConstants.GENCHUNK_PRELOAD_RADIUS;
 		for(int x = cx - radius; x <= cx + radius; x++)
 			for(int z = cz - radius; z <= cz + radius; z++)
 				populate(this, x, z);
