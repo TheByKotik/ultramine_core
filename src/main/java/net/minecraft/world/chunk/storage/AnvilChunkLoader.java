@@ -1,13 +1,12 @@
 package net.minecraft.world.chunk.storage;
 
-import gnu.trove.iterator.TIntObjectIterator;
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -26,19 +25,25 @@ import net.minecraft.world.storage.IThreadedFileIO;
 import net.minecraft.world.storage.ThreadedFileIOBase;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import net.openhft.koloboke.collect.map.IntObjCursor;
+import net.openhft.koloboke.collect.map.IntObjMap;
+import net.openhft.koloboke.collect.map.hash.HashIntObjMaps;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.PendingBlockUpdate;
+import org.ultramine.server.util.VanillaChunkCoordIntPairSet;
 
 import cpw.mods.fml.common.FMLLog;
 
 public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 {
 	private static final Logger logger = LogManager.getLogger();
-	protected final TIntObjectHashMap<PendingChunk> pendingSaves = new TIntObjectHashMap<PendingChunk>();
+	protected final IntObjMap<PendingChunk> pendingSaves = HashIntObjMaps.newMutableMap();
+	private final List<PendingChunk> chunksToRemove = new ArrayList<PendingChunk>(); //mods compatibility
+	private final Set<ChunkCoordIntPair> pendingAnvilChunksCoordinates = new VanillaChunkCoordIntPairSet(pendingSaves.keySet()); //mods compatibility
 	protected Object syncLockObject = new Object();
 	public File chunkSaveLocation;
 	private static final String __OBFID = "CL_00000384";
@@ -52,7 +57,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 	{
 		synchronized(syncLockObject)
 		{
-			if (pendingSaves.contains(ChunkHash.chunkToKey(i, j)))
+			if (pendingSaves.containsKey(ChunkHash.chunkToKey(i, j)))
 				return true;
 		}
 
@@ -212,7 +217,17 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 
 			int hash = ChunkHash.chunkToKey(par1ChunkCoordIntPair.chunkXPos, par1ChunkCoordIntPair.chunkZPos);
 			
-			pendingSaves.put(hash, new PendingChunk(par1ChunkCoordIntPair, par2NBTTagCompound));
+			PendingChunk pendingChunk = new PendingChunk(par1ChunkCoordIntPair, par2NBTTagCompound);
+			if(pendingSaves.put(hash, pendingChunk) != null)
+			{
+				for(int i = 0, s = chunksToRemove.size(); i < s; i++)
+					if(chunksToRemove.get(i).chunkCoordinate.equals(par1ChunkCoordIntPair))
+					{
+						chunksToRemove.set(i, pendingChunk);
+						return;
+					}
+			}
+			chunksToRemove.add(pendingChunk);
 			//this.pendingAnvilChunksCoordinates.add(par1ChunkCoordIntPair);
 			ThreadedFileIOBase.threadedIOInstance.queueIO(this);
 		}
@@ -231,8 +246,8 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 				return false;
 			}
 
-			TIntObjectIterator<PendingChunk> it = pendingSaves.iterator();
-			it.advance();
+			IntObjCursor<PendingChunk> it = pendingSaves.cursor();
+			it.moveNext();
 			pendingchunk = it.value();
 			key = it.key();
 		}
@@ -251,6 +266,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			synchronized (this.syncLockObject)
 			{
 				pendingSaves.remove(key);
+				chunksToRemove.remove(pendingchunk);
 			}
 		}
 
@@ -545,6 +561,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 		synchronized(syncLockObject)
 		{
 			pendingSaves.clear();
+			chunksToRemove.clear();
 		}
 	}
 	
