@@ -204,9 +204,10 @@ public class ChunkProviderServer implements IChunkProvider
 				{
 					try
 					{
+						boolean lastIsGenerating = isGenerating;
 						isGenerating = true;
 						chunk = this.currentChunkProvider.provideChunk(par1, par2);
-						isGenerating = false;
+						isGenerating = lastIsGenerating;
 					}
 					catch (Throwable throwable)
 					{
@@ -311,12 +312,13 @@ public class ChunkProviderServer implements IChunkProvider
 
 			if (this.currentChunkProvider != null)
 			{
+				boolean lastIsGenerating = isGenerating;
 				isGenerating = true;
 				this.currentChunkProvider.populate(par1IChunkProvider, par2, par3);
 				if(!worldObj.getConfig().generation.disableModGeneration)
 					GameRegistry.generateWorld(par2, par3, worldObj, currentChunkProvider, par1IChunkProvider);
 				chunk.setChunkModified();
-				isGenerating = false;
+				isGenerating = lastIsGenerating;
 			}
 		}
 	}
