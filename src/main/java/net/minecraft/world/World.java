@@ -28,6 +28,7 @@ import org.ultramine.server.chunk.IChunkLoadCallback;
 import org.ultramine.server.event.ServerWorldEventProxy;
 import org.ultramine.server.event.WorldEventProxy;
 import org.ultramine.server.event.WorldUpdateObjectType;
+import org.ultramine.server.util.VanillaChunkCoordIntPairSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHopper;
@@ -134,7 +135,8 @@ public abstract class World implements IBlockAccess
 	private final Calendar theCalendar = Calendar.getInstance();
 	protected Scoreboard worldScoreboard = new Scoreboard();
 	public boolean isRemote;
-	protected IntByteMap activeChunkSet = HashIntByteMaps.getDefaultFactory().withDefaultValue(Byte.MAX_VALUE).withDefaultExpectedSize(1024).newUpdatableMap();
+	protected IntByteMap activeChunks = HashIntByteMaps.getDefaultFactory().withDefaultValue(Byte.MAX_VALUE).withDefaultExpectedSize(1024).newUpdatableMap();
+	protected Set<ChunkCoordIntPair> activeChunkSet = new VanillaChunkCoordIntPairSet(activeChunks.keySet());
 	private int ambientTickCountdown;
 	protected boolean spawnHostileMobs;
 	protected boolean spawnPeacefulMobs;
@@ -2021,7 +2023,7 @@ public abstract class World implements IBlockAccess
 			TileEntity tileentity = (TileEntity)iterator.next();
 
 			int key = ChunkHash.chunkToKey(tileentity.xCoord >> 4, tileentity.zCoord >> 4);
-			if (!tileentity.isInvalid() && tileentity.hasWorldObj() && activeChunkSet.containsKey(key))
+			if (!tileentity.isInvalid() && tileentity.hasWorldObj() && activeChunks.containsKey(key))
 			{
 				eventProxy.startTileEntity(tileentity);
 				chunkProfiler.startChunk(key);
@@ -2895,7 +2897,7 @@ public abstract class World implements IBlockAccess
 
 	protected void setActivePlayerChunksAndCheckLight()
 	{
-		this.activeChunkSet.clear();
+		this.activeChunks.clear();
 		this.theProfiler.startSection("buildList");
 		if(isChunkLoaderEnabled())
 		{
@@ -2903,7 +2905,7 @@ public abstract class World implements IBlockAccess
 			{
 				if(chunkRoundExists(c.chunkXPos, c.chunkZPos, WorldConstants.CL_LOAD_RADIUS))
 				{
-					activeChunkSet.put(ChunkHash.chunkToKey(c.chunkXPos, c.chunkZPos), (byte)WorldConstants.CL_CHUNK_PRIOR);
+					activeChunks.put(ChunkHash.chunkToKey(c.chunkXPos, c.chunkZPos), (byte)WorldConstants.CL_CHUNK_PRIOR);
 				}
 				else
 				{
@@ -2940,7 +2942,7 @@ public abstract class World implements IBlockAccess
 						int priority = Math.max(Math.abs(i1), Math.abs(j1));
 						//Chunk chunk = this.chunkProvider.provideChunk(cx, cy);
 						//if(priority > 1) priority -= Math.min(priority-2, (int)(this.getTotalWorldTime() - chunk.lastActiveOrBindTick)/20);
-						activeChunkSet.put(key, (byte)Math.min(priority, activeChunkSet.get(key)));
+						activeChunks.put(key, (byte)Math.min(priority, activeChunks.get(key)));
 					}
 				}
 			}
@@ -4206,17 +4208,17 @@ public abstract class World implements IBlockAccess
 	
 	public int getActiveChunkSetSize()
 	{
-		return activeChunkSet.size();
+		return activeChunks.size();
 	}
 	
 	public IntByteMap getActiveChunkSet()
 	{
-		return activeChunkSet;
+		return activeChunks;
 	}
 	
 	public boolean isChunkActive(int cx, int cz)
 	{
-		return activeChunkSet.containsKey(ChunkHash.chunkToKey(cx, cz));
+		return activeChunks.containsKey(ChunkHash.chunkToKey(cx, cz));
 	}
 	
 	protected boolean isChunkLoaderEnabled()

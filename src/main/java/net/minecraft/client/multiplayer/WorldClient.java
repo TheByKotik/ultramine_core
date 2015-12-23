@@ -110,15 +110,15 @@ public class WorldClient extends World
 	protected void func_147456_g()
 	{
 		super.func_147456_g();
-		this.previousActiveChunkSet.retainAll(this.activeChunkSet.keySet());
+		this.previousActiveChunkSet.retainAll(this.activeChunks.keySet());
 
-		if (this.previousActiveChunkSet.size() == this.activeChunkSet.size())
+		if (this.previousActiveChunkSet.size() == this.activeChunks.size())
 		{
 			this.previousActiveChunkSet.clear();
 		}
 
 		int i = 0;
-		for (IntCursor iter = activeChunkSet.keySet().cursor(); iter.moveNext();)
+		for (IntCursor iter = activeChunks.keySet().cursor(); iter.moveNext();)
 		{
 			int chunkCoord = iter.elem();
 

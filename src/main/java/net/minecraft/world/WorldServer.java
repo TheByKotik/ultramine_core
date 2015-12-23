@@ -323,7 +323,7 @@ public class WorldServer extends World
 		int i = 0;
 		int j = 0;
 
-		for (IntByteCursor iter = activeChunkSet.cursor(); iter.moveNext();)
+		for (IntByteCursor iter = activeChunks.cursor(); iter.moveNext();)
 		{
 			int chunkCoord = iter.key();
 			int chunkX = ChunkHash.keyToX(chunkCoord);
