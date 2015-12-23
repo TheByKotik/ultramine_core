@@ -43,7 +43,7 @@ public class ChunkGC
 		int chunkLimit = boundChunks + confCacheSize + MAX_CHUNKS_PER_OP;
 		
 		int curTime = world.func_73046_m().getTickCounter();
-		int unloadQueueSize = provider.chunksToUnload.size();
+		int unloadQueueSize = provider.unloadQueue.size();
 		int chunkCount = provider.chunkMap.size() - unloadQueueSize;
 		int timePassed = curTime - lastGCTime;
 		int chunkDiff = chunkCount - lastChunkCount;
@@ -62,7 +62,7 @@ public class ChunkGC
 				for(int i = 0, s = Math.min(unbound.size(), MAX_CHUNKS_PER_OP); i < s; i++)
 				{
 					Chunk chunk = unbound.get(i);
-					provider.chunksToUnload.add(ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition));
+					provider.unloadQueue.add(ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition));
 				}
 				
 				if(unbound.size() - Math.min(unbound.size(), MAX_CHUNKS_PER_OP) > unboundLimit)
@@ -76,16 +76,16 @@ public class ChunkGC
 			}
 			
 			lastGCTime = curTime;
-			lastChunkCount = provider.chunkMap.size() - provider.chunksToUnload.size();
+			lastChunkCount = provider.chunkMap.size() - provider.unloadQueue.size();
 		}
 	}
 	
 	public void forceCollect()
 	{
 		for(Chunk chunk : findChunksForUnload())
-			provider.chunksToUnload.add(ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition));
+			provider.unloadQueue.add(ChunkHash.chunkToKey(chunk.xPosition, chunk.zPosition));
 		lastGCTime = world.func_73046_m().getTickCounter();
-		lastChunkCount = provider.chunkMap.size() - provider.chunksToUnload.size();
+		lastChunkCount = provider.chunkMap.size() - provider.unloadQueue.size();
 	}
 	
 	private List<Chunk> findChunksForUnload()

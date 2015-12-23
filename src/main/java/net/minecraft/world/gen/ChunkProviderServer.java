@@ -50,11 +50,13 @@ import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.ChunkMap;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 import org.ultramine.server.util.VanillaChunkHashMap;
+import org.ultramine.server.util.VanillaChunkHashSet;
 
 public class ChunkProviderServer implements IChunkProvider
 {
 	private static final Logger logger = LogManager.getLogger();
-	public IntSet chunksToUnload = HashIntSets.newMutableSet();
+	public IntSet unloadQueue = HashIntSets.newMutableSet();
+	public Set<Long> chunksToUnload = new VanillaChunkHashSet(unloadQueue); //mods compatibility
 	private Chunk defaultEmptyChunk;
 	public IChunkProvider currentChunkProvider;
 	public IChunkLoader currentChunkLoader;
@@ -118,7 +120,7 @@ public class ChunkProviderServer implements IChunkProvider
 		{
 			chunk.unbind();
 			if(chunk.canUnload())
-				chunksToUnload.add(ChunkHash.chunkToKey(par1, par2));
+				unloadQueue.add(ChunkHash.chunkToKey(par1, par2));
 		}
 	}
 
@@ -140,7 +142,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public Chunk loadChunk(int par1, int par2, Runnable runnable)
 	{
-		this.chunksToUnload.removeInt(ChunkHash.chunkToKey(par1, par2));
+		this.unloadQueue.removeInt(ChunkHash.chunkToKey(par1, par2));
 		Chunk chunk = chunkMap.get(par1, par2);
 		AnvilChunkLoader loader = null;
 
@@ -184,7 +186,7 @@ public class ChunkProviderServer implements IChunkProvider
 	public Chunk originalLoadChunk(int par1, int par2)
 	{
 		int k = ChunkHash.chunkToKey(par1, par2);
-		this.chunksToUnload.removeInt(k);
+		this.unloadQueue.removeInt(k);
 		Chunk chunk = (Chunk)this.chunkMap.get(par1, par2);
 
 		if (chunk == null)
@@ -392,7 +394,7 @@ public class ChunkProviderServer implements IChunkProvider
 			Set<ChunkCoordIntPair> persistentChunks = worldObj.getPersistentChunks().keySet();
 			int savequeueSize = ((AnvilChunkLoader)currentChunkLoader).getSaveQueueSize();
 			
-			for(IntCursor it = chunksToUnload.cursor(); it.moveNext() && savequeueSize < MAX_SAVE_QUEUE_SIZE;)
+			for(IntCursor it = unloadQueue.cursor(); it.moveNext() && savequeueSize < MAX_SAVE_QUEUE_SIZE;)
 			{
 				int hash = it.elem();
 				Chunk chunk = chunkMap.get(hash);
@@ -435,7 +437,7 @@ public class ChunkProviderServer implements IChunkProvider
 
 	public String makeString()
 	{
-		return "ServerChunkCache: " + this.chunkMap.size() + " Drop: " + this.chunksToUnload.size();
+		return "ServerChunkCache: " + this.chunkMap.size() + " Drop: " + this.unloadQueue.size();
 	}
 
 	public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int par2, int par3, int par4)
@@ -574,7 +576,7 @@ public class ChunkProviderServer implements IChunkProvider
 			for(IntObjCursor<Chunk> it = chunkMap.iterator(); it.moveNext();)
 			{
 				int key = it.key();
-				if(it.value().needsSaving(false) && !chunksToUnload.contains(key))
+				if(it.value().needsSaving(false) && !unloadQueue.contains(key))
 					possibleSaves.add(key);
 			}
 			
@@ -590,7 +592,7 @@ public class ChunkProviderServer implements IChunkProvider
 				int key = it.elem();
 				it.remove();
 				Chunk chunk = chunkMap.get(key);
-				if(chunk != null && chunk.needsSaving(false) && !chunksToUnload.contains(key))
+				if(chunk != null && chunk.needsSaving(false) && !unloadQueue.contains(key))
 				{
 					safeSaveChunk(chunk);
 					chunk.isModified = false;
@@ -642,7 +644,7 @@ public class ChunkProviderServer implements IChunkProvider
 		}
 		
 		chunkMap.clear();
-		chunksToUnload.clear();
+		unloadQueue.clear();
 		possibleSaves.clear();
 		if(!save)
 			((AnvilChunkLoader)currentChunkLoader).unsafeRemoveAll();
