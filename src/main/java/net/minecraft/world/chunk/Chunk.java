@@ -15,6 +15,9 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.Callable;
 
+import gnu.trove.iterator.TByteIterator;
+import gnu.trove.set.TByteSet;
+import gnu.trove.set.hash.TByteHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -41,11 +44,8 @@ import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.world.ChunkEvent;
-import net.openhft.koloboke.collect.ByteCursor;
 import net.openhft.koloboke.collect.map.ShortObjMap;
 import net.openhft.koloboke.collect.map.hash.HashShortObjMaps;
-import net.openhft.koloboke.collect.set.ByteSet;
-import net.openhft.koloboke.collect.set.hash.HashByteSets;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -328,9 +328,9 @@ public class Chunk implements IChunkDependency
 //			for (int i = 0; i < 16; ++i)
 			{
 //				for (int j = 0; j < 16; ++j)
-				for(ByteCursor it = updateLightCoords.cursor(); it.moveNext();)
+				for(TByteIterator it = updateLightCoords.iterator(); it.hasNext();)
 				{
-					int coord = it.elem() & 0xFF;
+					int coord = it.next() & 0xFF;
 					int i = coord & 0xF;
 					int j = coord >> 4;
 //					if (this.updateSkylightColumns[i + j * 16])
@@ -1543,7 +1543,7 @@ public class Chunk implements IChunkDependency
 	/* ======================================== ULTRAMINE START =====================================*/
 	
 	private final ShortObjMap<TileEntity> fastTileEntityMap = HashShortObjMaps.newMutableMap();
-	private final ByteSet updateLightCoords = HashByteSets.newMutableSet();
+	private final TByteSet updateLightCoords = new TByteHashSet();
 	
 	private Set<PendingBlockUpdate> pendingUpdatesSet;
 	private TreeSet<PendingBlockUpdate> pendingUpdatesQueue;
