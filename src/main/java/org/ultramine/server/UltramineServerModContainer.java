@@ -70,7 +70,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	    ModMetadata meta = getMetadata();
 		meta.modId		= "UltramineServer";
 		meta.name		= "Ultramine Server";
-		meta.version	= "1.0";
+		meta.version	= "@version@";
 	}
 	
 	public static UltramineServerModContainer getInstance()

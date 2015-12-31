@@ -8,13 +8,4 @@
 
 #Gradle
 build/
-/.gradle
-
-#Forge SDK
-/eclipse
-/CREDITS-fml.txt
-/forge-1.7.2-10.12.0.1057-changelog.txt
-/LICENSE-fml.txt
-/MinecraftForge-Credits.txt
-/MinecraftForge-License.txt
-/README.txt
+.gradle
