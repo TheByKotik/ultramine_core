@@ -125,7 +125,7 @@ public class CommandContext
 
 	public void checkSenderPermission(String permission)
 	{
-		checkSenderPermission(permission, "commands.generic.permission");
+		checkSenderPermission(permission, "command.generic.permission");
 	}
 	
 	public void checkSenderPermission(String permission, String msg)
@@ -137,7 +137,7 @@ public class CommandContext
 	public void checkSenderPermissionInWorld(String world, String permission)
 	{
 		if (!senderIsServer() && !PermissionHandler.getInstance().has(world, sender.getCommandSenderName(), permission))
-			throw new CommandException("commands.generic.permission");
+			throw new CommandException("command.generic.permission");
 	}
 	
 	public void checkPermissionIfArg(String arg, String permission, String msg)
@@ -388,7 +388,7 @@ public class CommandContext
 		{
 			WorldServer world = MinecraftServer.getServer().getMultiWorld().getWorldByNameOrID(value);
 			if(world == null)
-				throw new CommandException("commands.generic.world.invalid", value);
+				throw new CommandException("command.generic.world.invalid", value);
 			return world;
 		}
 

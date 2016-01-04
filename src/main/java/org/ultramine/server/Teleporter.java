@@ -53,7 +53,7 @@ public class Teleporter
 		long timeto = target.getData().core().getNextTeleportationTime() - System.currentTimeMillis();
 		if(timeto > 0 && !target.hasPermission("admin.abilities.skipteleportcooldown"))
 		{
-			target.addChatMessage(new ChatComponentTranslation("teleporter.fail.cooldownd", timeto/1000).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			target.addChatMessage(new ChatComponentTranslation("ultramine.teleporter.fail.cooldownd", timeto/1000).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 			return;
 		}
 		
@@ -89,7 +89,7 @@ public class Teleporter
 		player.getData().core().setLastLocation(WarpLocation.getFromPlayer(player));
 		
 		if(!player.setWorldPositionAndRotation(dimension, x, y, z, yaw, pitch))
-			player.addChatMessage(new ChatComponentTranslation("teleporter.fail.dim").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			player.addChatMessage(new ChatComponentTranslation("ultramine.teleporter.fail.dim").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 		
 		if(isServer)
 		{
@@ -117,7 +117,7 @@ public class Teleporter
 		this.dst = dst;
 		int delay = ConfigurationHandler.getServerConfig().settings.teleportation.delay;
 		timeEnd = System.currentTimeMillis() + delay*1000;
-		target.addChatMessage(new ChatComponentTranslation("teleporter.delay", delay).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GOLD)));
+		target.addChatMessage(new ChatComponentTranslation("ultramine.teleporter.delay", delay).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GOLD)));
 		
 	}
 	
@@ -141,7 +141,7 @@ public class Teleporter
 	{
 		teleporters.remove(this);
 		target.getData().core().setTeleporter(null);
-		target.addChatMessage(new ChatComponentTranslation("teleporter.canceled").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+		target.addChatMessage(new ChatComponentTranslation("ultramine.teleporter.canceled").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 		
 	}
 }

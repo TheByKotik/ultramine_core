@@ -2,12 +2,16 @@ package org.ultramine.server;
 
 import java.util.UUID;
 
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.IChatComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.event.WorldEventProxy;
@@ -98,5 +102,38 @@ public class UMHooks
 		}
 		if(username != null)
 			nbt.setString("#", username);
+	}
+
+	public static IChatComponent onChatSend(EntityPlayerMP player, IChatComponent msg)
+	{
+		if(msg instanceof ChatComponentTranslation)
+			return onChatSend(player, (ChatComponentTranslation) msg);
+		return msg;
+	}
+
+	public static IChatComponent onChatSend(EntityPlayerMP player, ChatComponentTranslation msg)
+	{
+		String key = msg.getKey();
+		Object[] oldArgs = msg.getFormatArgs();
+		Object[] newArgs = new Object[oldArgs.length];
+		boolean argsChanged = false;
+		for(int i = 0; i < oldArgs.length; i++)
+		{
+			Object o = oldArgs[i];
+			Object o1 = o;
+			if(o instanceof ChatComponentTranslation)
+				o1 = onChatSend(player, (ChatComponentTranslation)o);
+			newArgs[i] = o1;
+			if(o != o1)
+				argsChanged = true;
+		}
+		if(!argsChanged && !key.startsWith("ultramine.") && !key.startsWith("command.")) //TODO add api for all
+			return msg;
+		String translated = LanguageRegistry.instance().getStringLocalization(key, player.getTranslator());
+		if(translated.isEmpty())
+			translated = LanguageRegistry.instance().getStringLocalization(key, "en_US");
+		ChatComponentTranslation text = new ChatComponentTranslation(translated.isEmpty() ? key : translated, newArgs);
+		text.setChatStyle(msg.getChatStyle());
+		return text;
 	}
 }

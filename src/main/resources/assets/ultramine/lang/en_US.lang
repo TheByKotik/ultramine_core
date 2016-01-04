@@ -1,8 +1,8 @@
 #Server core
-teleporter.fail.cooldownd=You will be able to teleport in %s seconds
-teleporter.fail.dim=Failed to teleport: the world is not exists or was held
-teleporter.delay=You will be teleported in %s seconds
-teleporter.canceled=Teleportation canceled
+ultramine.teleporter.fail.cooldownd=You will be able to teleport in %s seconds
+ultramine.teleporter.fail.dim=Failed to teleport: the world is not exists or was held
+ultramine.teleporter.delay=You will be teleported in %s seconds
+ultramine.teleporter.canceled=Teleportation canceled
 
 ultramine.autobroadcast.debugmsg=Server load: %s (Peak: %s), TPS: %s/20, Mobs: %s, Items: %s, Players: %s
 ultramine.autobackup.start=Autobackup started
@@ -22,9 +22,9 @@ ultramine.notify.loggedhidden=Joined the server in invisibility
 ultramine.hidden.chat=You can't write to chat in invisibility
 
 #Command generic
-commands.generic.world.invalid=Can't find world '%s'
-commands.generic.itemstack.data=Failed to parse item data: %s
-commands.generic.itemstack.size=Failed to parse stack size: %s
+command.generic.world.invalid=Can't find world '%s'
+command.generic.itemstack.data=Failed to parse item data: %s
+command.generic.itemstack.size=Failed to parse stack size: %s
 
 #Vanilla replacements
 command.tp.usage=/tp [target player] <destination player> OR /tp [target player] [world] <x> <y> <z>

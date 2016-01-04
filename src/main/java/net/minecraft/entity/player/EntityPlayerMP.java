@@ -106,6 +106,7 @@ import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.PermissionHandler;
+import org.ultramine.server.UMHooks;
 import org.ultramine.server.chunk.ChunkSendManager;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.event.UMEventFactory;
@@ -820,7 +821,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
 	public void addChatComponentMessage(IChatComponent p_146105_1_)
 	{
-		this.playerNetServerHandler.sendPacket(new S02PacketChat(p_146105_1_));
+		this.playerNetServerHandler.sendPacket(new S02PacketChat(UMHooks.onChatSend(this, p_146105_1_)));
 	}
 
 	protected void onItemUseFinish()
@@ -902,7 +903,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
 	public void addChatMessage(IChatComponent p_145747_1_)
 	{
-		this.playerNetServerHandler.sendPacket(new S02PacketChat(p_145747_1_));
+		this.playerNetServerHandler.sendPacket(new S02PacketChat(UMHooks.onChatSend(this, p_145747_1_)));
 	}
 
 	public boolean canCommandSenderUseCommand(int p_70003_1_, String p_70003_2_)
@@ -1009,6 +1010,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public int getRenderDistance()
 	{
 		return renderDistance;
+	}
+
+	public String getTranslator()
+	{
+		return translator;
 	}
 	
 	public PlayerData getData()
