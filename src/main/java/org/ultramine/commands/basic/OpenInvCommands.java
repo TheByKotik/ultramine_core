@@ -20,7 +20,7 @@ public class OpenInvCommands
 {
 	@Command(
 			name = "openinv",
-			group = "admin",
+			group = "basic",
 			permissions = {"command.admin.openinv"},
 			syntax = {"<player>"}
 	)
@@ -38,7 +38,7 @@ public class OpenInvCommands
 	
 	@Command(
 			name = "openender",
-			group = "admin",
+			group = "basic",
 			permissions = {"command.admin.openender"},
 			syntax = {"<player>"}
 	)

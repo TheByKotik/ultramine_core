@@ -25,7 +25,7 @@ public class BasicCommands
 {
 	@Command(
 			name = "home",
-			group = "player",
+			group = "basic",
 			aliases = {"дом", "хата"},
 			permissions = {"command.basic.home", "command.basic.home.multi", "command.basic.home.other"},
 			syntax = {
@@ -50,7 +50,7 @@ public class BasicCommands
 	
 	@Command(
 			name = "sethome",
-			group = "player",
+			group = "basic",
 			aliases = {"здесьдом"},
 			permissions = {"command.basic.sethome", "command.basic.sethome.multi", "command.basic.sethome.other"},
 			syntax = {
@@ -73,7 +73,7 @@ public class BasicCommands
 	
 	@Command(
 			name = "removehome",
-			group = "player",
+			group = "basic",
 			aliases = {"rmhome"},
 			permissions = {"command.basic.removehome"},
 			syntax = {"<%name>"}
@@ -89,7 +89,7 @@ public class BasicCommands
 	
 	@Command(
 			name = "homelist",
-			group = "player",
+			group = "basic",
 			permissions = {"command.basic.homelist"},
 			isUsableFromServer = false
 	)
@@ -103,7 +103,7 @@ public class BasicCommands
 	@Command(
 			name = "warp",
 			aliases = {"go", "пойти", "на", "в"},
-			group = "player",
+			group = "basic",
 			permissions = {"command.basic.warp", "command.basic.warp.other"},
 			syntax = {
 					"<warp%name>",
@@ -123,7 +123,7 @@ public class BasicCommands
 	
 	@Command(
 			name = "setwarp",
-			group = "player",
+			group = "basic",
 			permissions = {"command.basic.setwarp"},
 			syntax = {"<%name>", "<%name> <%radius>"}
 	)
@@ -139,8 +139,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "resetwarp",
-			group = "admin",
-			permissions = {"command.admin.resetwarp"},
+			group = "basic",
+			permissions = {"command.basic.resetwarp"},
 			syntax = {"<%name>", "<%name> <%radius>"}
 	)
 	public static void resetwarp(CommandContext ctx)
@@ -154,9 +154,9 @@ public class BasicCommands
 	
 	@Command(
 			name = "removewarp",
-			group = "admin",
+			group = "basic",
 			aliases = {"rmwarp"},
-			permissions = {"command.admin.removewarp"},
+			permissions = {"command.basic.removewarp"},
 			syntax = {"<%name>"}
 	)
 	public static void removewarp(CommandContext ctx)
@@ -170,7 +170,7 @@ public class BasicCommands
 	
 	@Command(
 			name = "warplist",
-			group = "player",
+			group = "basic",
 			permissions = {"command.basic.warplist"}
 	)
 	public static void warplist(CommandContext ctx)
@@ -182,7 +182,7 @@ public class BasicCommands
 	
 	@Command(
 			name = "back",
-			group = "player",
+			group = "basic",
 			permissions = {"command.basic.back"}
 	)
 	public static void back(CommandContext ctx)
@@ -194,8 +194,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "fastwarp",
-			group = "admin",
-			permissions = {"command.admin.fastwarp"},
+			group = "basic",
+			permissions = {"command.basic.fastwarp"},
 			syntax = {"[add remove] <%name>"}
 	)
 	public static void fastwarp(CommandContext ctx)
@@ -217,8 +217,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "tphere",
-			group = "player",
-			permissions = {"command.player.tphere"},
+			group = "basic",
+			permissions = {"command.basic.tphere"},
 			syntax = {"<player%target>"}
 	)
 	public static void tphere(CommandContext ctx)
@@ -229,8 +229,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "setspawn",
-			group = "admin",
-			permissions = {"command.admin.setspawn"},
+			group = "basic",
+			permissions = {"command.basic.setspawn"},
 			syntax = {"", "<%radius>"}
 	)
 	public static void setspawn(CommandContext ctx)
@@ -244,8 +244,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "setlocalspawn",
-			group = "admin",
-			permissions = {"command.admin.setlocalspawn"}
+			group = "basic",
+			permissions = {"command.basic.setlocalspawn"}
 	)
 	public static void setlocalspawn(CommandContext ctx)
 	{
@@ -257,8 +257,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "localspawn",
-			group = "admin",
-			permissions = {"command.admin.localspawn"}
+			group = "basic",
+			permissions = {"command.basic.localspawn"}
 	)
 	public static void localspawn(CommandContext ctx)
 	{
@@ -269,8 +269,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "heal",
-			group = "admin",
-			permissions = {"command.admin.heal", "command.admin.heal.other"},
+			group = "basic",
+			permissions = {"command.basic.heal", "command.basic.heal.other"},
 			syntax = {"", "<player>"}
 	)
 	public static void heal(CommandContext ctx)
@@ -286,8 +286,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "dropall",
-			group = "admin",
-			permissions = {"command.admin.dropall"},
+			group = "basic",
+			permissions = {"command.basic.dropall"},
 			syntax = {"", "<player>"}
 	)
 	public static void dropall(CommandContext ctx)
@@ -299,9 +299,9 @@ public class BasicCommands
 	
 	@Command(
 			name = "item",
-			group = "admin",
+			group = "basic",
 			aliases = {"i"},
-			permissions = {"command.admin.item"},
+			permissions = {"command.basic.item"},
 			syntax = {
 					"<item>",
 					"<item> <int%size>",
@@ -319,8 +319,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "dupe",
-			group = "admin",
-			permissions = {"command.admin.dupe"},
+			group = "basic",
+			permissions = {"command.basic.dupe"},
 			syntax = {"", "<%count>"}
 	)
 	public static void dupe(CommandContext ctx)
@@ -335,8 +335,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "gm",
-			group = "admin",
-			permissions = {"command.admin.gm"},
+			group = "basic",
+			permissions = {"command.basic.gm"},
 			syntax = {""}
 	)
 	public static void gm(CommandContext ctx)
@@ -353,8 +353,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "custmsg",
-			group = "admin",
-			permissions = {"command.admin.custmsg"},
+			group = "basic",
+			permissions = {"command.basic.custmsg"},
 			syntax = {
 					"[all] <msg>...",
 					"<player> <msg>..."
@@ -371,8 +371,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "mute",
-			group = "admin",
-			permissions = {"command.admin.mute"},
+			group = "basic",
+			permissions = {"command.basic.mute"},
 			syntax = {
 					"<player>",
 					"<player> <time>"
@@ -393,8 +393,8 @@ public class BasicCommands
 	@Command(
 			name = "commandmute",
 			aliases= {"cmdmute", "hardmute"},
-			group = "admin",
-			permissions = {"command.admin.commandmute"},
+			group = "basic",
+			permissions = {"command.basic.commandmute"},
 			syntax = {
 					"<player>",
 					"<player> <time>"
@@ -414,8 +414,8 @@ public class BasicCommands
 	
 	@Command(
 			name = "unmute",
-			group = "admin",
-			permissions = {"command.admin.unmute"},
+			group = "basic",
+			permissions = {"command.basic.unmute"},
 			syntax = {"<player>"}
 	)
 	public static void unmute(CommandContext ctx)
@@ -429,9 +429,9 @@ public class BasicCommands
 	
 	@Command(
 			name = "vanish",
-			group = "admin",
+			group = "basic",
 			aliases = {"hide"},
-			permissions = {"command.admin.vanish"},
+			permissions = {"command.basic.vanish"},
 			syntax = {""}
 	)
 	public static void vanish(CommandContext ctx)

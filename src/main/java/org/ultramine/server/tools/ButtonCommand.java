@@ -125,7 +125,7 @@ public class ButtonCommand
 	@Command(
 			name = "buttoncommand",
 			aliases = {"bc"},
-			group = "admin",
+			group = "basic",
 			permissions = {"command.buttoncommand"},
 			syntax = {
 					"[create c] <commands>...",
