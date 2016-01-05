@@ -1991,7 +1991,7 @@ public abstract class EntityPlayer extends EntityLivingBase implements ICommandS
 
 	protected int getExperiencePoints(EntityPlayer p_70693_1_)
 	{
-		if (this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
+		if (keepInventoryOnClone)
 		{
 			return 0;
 		}
