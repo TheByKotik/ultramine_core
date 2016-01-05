@@ -28,6 +28,7 @@ import org.ultramine.server.chunk.IChunkLoadCallback;
 import org.ultramine.server.event.ServerWorldEventProxy;
 import org.ultramine.server.event.WorldEventProxy;
 import org.ultramine.server.event.WorldUpdateObjectType;
+import org.ultramine.server.internal.LambdaHolder;
 import org.ultramine.server.util.VanillaChunkCoordIntPairSet;
 
 import net.minecraft.block.Block;
@@ -1913,9 +1914,10 @@ public abstract class World implements IBlockAccess
 
 			if (entity.isDead)
 			{
-				this.weatherEffects.remove(i--);
+//				this.weatherEffects.remove(i--);
 			}
 		}
+		weatherEffects.removeIf(LambdaHolder.ENTITY_REMOVAL_PREDICATE);
 		eventProxy.popState();
 
 		this.theProfiler.endStartSection("remove");
@@ -2005,12 +2007,13 @@ public abstract class World implements IBlockAccess
 					this.getChunkFromChunkCoords(j, l).removeEntity(entity);
 				}
 
-				this.loadedEntityList.remove(i--);
+//				this.loadedEntityList.remove(i--);
 				this.onEntityRemoved(entity);
 			}
 
 			this.theProfiler.endSection();
 		}
+		loadedEntityList.removeIf(LambdaHolder.ENTITY_REMOVAL_PREDICATE);
 		eventProxy.popState();
 
 		this.theProfiler.endStartSection("blockEntities");
@@ -2057,7 +2060,7 @@ public abstract class World implements IBlockAccess
 
 			if (tileentity.isInvalid())
 			{
-				iterator.remove();
+//				iterator.remove();
 
 				if (this.chunkExists(tileentity.xCoord >> 4, tileentity.zCoord >> 4))
 				{
@@ -2070,6 +2073,7 @@ public abstract class World implements IBlockAccess
 				}
 			}
 		}
+		loadedTileEntityList.removeIf(LambdaHolder.TILE_ENTITY_REMOVAL_PREDICATE);
 		eventProxy.popState();
 
 		theProfiler.startSection("unload");
