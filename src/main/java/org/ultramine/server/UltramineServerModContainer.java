@@ -222,9 +222,11 @@ public class UltramineServerModContainer extends DummyModContainer
 			loader.addDefaultWarps();
 			for(String name : loader.getFastWarps())
 				reg.registerCommand(new FastWarpCommand(name));
-			getRecipeCache().clearCache();
 			if(e.getSide().isServer())
+			{
 				getRecipeCache().setEnabled(ConfigurationHandler.getServerConfig().settings.other.recipeCacheEnabled);
+				FMLCommonHandler.instance().bus().register(getRecipeCache());
+			}
 		}
 		catch (Throwable t)
 		{
@@ -257,6 +259,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	{
 		MinecraftForge.EVENT_BUS.post(new ForgeModIdMappingEvent(e));
 		FurnaceRecipes.smelting().remap();
+		recipeCache.clearCache();
 	}
 	
 	@NetworkCheckHandler

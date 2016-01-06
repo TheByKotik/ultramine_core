@@ -325,16 +325,10 @@ public class UMEventHandler
 			e.holdings.setBalance(ConfigurationHandler.getServerConfig().tools.economy.startBalance);
 	}
 	
-	private boolean firstPlayer = true;
 	@SideOnly(Side.SERVER)
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onPlayerLoggedIn(PlayerLoggedInEvent e)
 	{
-		if(firstPlayer)
-		{
-			firstPlayer = false;
-			UltramineServerModContainer.getInstance().getRecipeCache().clearCache();
-		}
 		((EntityPlayerMP)e.player).getData().core().onLogin();
 	}
 }

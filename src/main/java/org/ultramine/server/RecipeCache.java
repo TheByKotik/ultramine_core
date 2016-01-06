@@ -1,78 +1,75 @@
 package org.ultramine.server;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import org.ultramine.server.util.ModificationControlList;
+
+import javax.annotation.Nullable;
 
 public class RecipeCache
 {
-	private final List<IRecipe> originList;
-	private final Map<RecipeKey, IRecipe> cache = new HashMap<RecipeKey, IRecipe>();
-	private final Set<RecipeKey> noRecipeSet = new HashSet<RecipeKey>();
+	private static final int CACHE_SIZE = 12287;
+	private static final int CLEANUP_INTERVAL = 20*10;
+	private final ModificationControlList<IRecipe> originList;
+	private final Map<RecipeKey, Optional<IRecipe>> cache = new HashMap<>();
 	private boolean enabled;
-	
+
 	@SuppressWarnings("unchecked")
 	public RecipeCache()
 	{
-		originList = CraftingManager.getInstance().getRecipeList();
+		CraftingManager craftMgr = CraftingManager.getInstance();
+		craftMgr.recipes = originList = new ModificationControlList<>(craftMgr.getRecipeList());
 	}
-	
+
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
 	}
-	
-	public IRecipe findRecipe(InventoryCrafting inv, World world)
+
+	public @Nullable IRecipe findRecipe(InventoryCrafting inv, World world)
 	{
 		if(!enabled)
 			return originalSearch(inv, world);
 		RecipeKey key = new RecipeKeyBuilder(inv).build();
 		if(key.width == 0)
 			return null;
-		
-		IRecipe rcp = cache.get(key);
-		if (rcp != null && rcp.matches(inv, world))
+
+		Optional<IRecipe> rcp = cache.get(key);
+		if (rcp != null)
 		{
-			return rcp;
+			if(!rcp.isPresent())
+				return null;
+			if(rcp.get().matches(inv, world))
+				return rcp.get();
 		}
-		else if(noRecipeSet.contains(key))
-		{
-			return null;
-		}
-		else
-		{
-			IRecipe recipe = originalSearch(inv, world);
-			if(recipe != null)
-			{
-				addToCache(key, recipe);
-				return recipe;
-			}
-		}
-		
-		if(noRecipeSet.size() >= 1048576)
-			noRecipeSet.clear();
-		noRecipeSet.add(key);
-		return null;
+
+		IRecipe recipe = originalSearch(inv, world);
+		addToCache(key, recipe);
+		return recipe;
 	}
-	
-	private void addToCache(RecipeKey key, IRecipe recipe)
+
+	private void addToCache(RecipeKey key, @Nullable IRecipe recipe)
 	{
-		if(cache.size() >= 1048576)
+		if(cache.size() >= CACHE_SIZE)
 			cache.clear();
-		cache.put(key, recipe);
+		cache.put(key, Optional.ofNullable(recipe));
 	}
-	
-	private IRecipe originalSearch(InventoryCrafting inv, World world)
+
+	private @Nullable IRecipe originalSearch(InventoryCrafting inv, World world)
 	{
 		for(IRecipe recipe : originList)
 		{
@@ -81,14 +78,28 @@ public class RecipeCache
 				return recipe;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public void clearCache()
 	{
 		cache.clear();
-		noRecipeSet.clear();
+	}
+	
+	@SubscribeEvent
+	public void onTick(TickEvent.ServerTickEvent e)
+	{
+		if(e.phase != TickEvent.Phase.END)
+			return;
+		if(originList.checkModifiedAndReset())
+		{
+			clearCache();
+		}
+		else if(MinecraftServer.getServer().getTickCounter() % CLEANUP_INTERVAL == 0)
+		{
+			cache.values().removeAll(Collections.singleton(Optional.<IRecipe>empty()));
+		}
 	}
 	
 	private static class RecipeKey implements Comparable<RecipeKey>
@@ -102,22 +113,22 @@ public class RecipeCache
 			this.width = width;
 		}
 		
+		@Override
 		public boolean equals(Object o)
 		{
-			if(!(o instanceof RecipeKey))
+			if(o == null || o.getClass() != RecipeKey.class)
 				return false;
 			RecipeKey rk = (RecipeKey)o;
 			return width == rk.width && Arrays.equals(contents, rk.contents);
 		}
-		
+
+		@Override
 		public int hashCode()
 		{
-			int hash = 0;
-			for(int i = 0; i < contents.length; i++)
-				hash ^= contents[i];
-			return hash;
+			return Arrays.hashCode(contents) ^ width;
 		}
-		
+
+		@Override
 		public int compareTo(RecipeKey rk)
 		{
 			int c1 = width - rk.width;
@@ -139,6 +150,7 @@ public class RecipeCache
 	
 	private static class RecipeKeyBuilder
 	{
+		private static final int[] EMPTY_INT_ARRAY = new int[0];
 		private int[] contents;
 		private int x;
 		private int y;
@@ -154,7 +166,7 @@ public class RecipeCache
 			{
 				ItemStack is = inv.getStackInSlot(i);
 				if(is != null)
-					contents[i] = (Item.getIdFromItem(is.getItem()) << 16) | (is.getItemDamage() & 0xFFFF);
+					contents[i] = (is.getItemDamage() << 16) | Item.getIdFromItem(is.getItem());
 			}
 			newWidth = width = inv.getWidth();
 			newHeight = height = contents.length/width;
@@ -162,7 +174,7 @@ public class RecipeCache
 			while(trimHorisontal(false));
 			if(y == height)
 			{
-				contents = new int[0];
+				contents = EMPTY_INT_ARRAY;
 				newWidth = 0;
 			}
 			else
