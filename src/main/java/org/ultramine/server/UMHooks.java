@@ -2,6 +2,7 @@ package org.ultramine.server;
 
 import java.util.UUID;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +23,7 @@ import com.mojang.authlib.GameProfile;
 public class UMHooks
 {
 	private static final Logger log = LogManager.getLogger();
+	private static final boolean IS_CLIENT = FMLCommonHandler.instance().getSide().isClient();
 	
 	public static void printStackTrace(Throwable t)
 	{
@@ -84,6 +86,8 @@ public class UMHooks
 	
 	public static GameProfile readObjectOwner(NBTTagCompound nbt)
 	{
+		if(IS_CLIENT)
+			return null;
 		UUID id = nbt.hasKey("$") ? new UUID(nbt.getLong("$"), nbt.getLong("%")) : null;
 		String username = nbt.hasKey("#") ? nbt.getString("#") : null;
 		if(id != null || username != null && !username.isEmpty())
@@ -93,6 +97,8 @@ public class UMHooks
 	
 	public static void writeObjectOwner(NBTTagCompound nbt, GameProfile owner)
 	{
+		if(IS_CLIENT)
+			return;
 		UUID id = owner.getId();
 		String username = owner.getName();
 		if(id != null)
@@ -106,6 +112,8 @@ public class UMHooks
 
 	public static IChatComponent onChatSend(EntityPlayerMP player, IChatComponent msg)
 	{
+		if(IS_CLIENT)
+			return msg;
 		if(msg instanceof ChatComponentTranslation)
 			return onChatSend(player, (ChatComponentTranslation) msg);
 		return msg;
