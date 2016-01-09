@@ -25,11 +25,11 @@ import org.ultramine.server.data.Databases;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerCoreData;
 import org.ultramine.server.event.ForgeModIdMappingEvent;
+import org.ultramine.server.internal.UMEventHandler;
 import org.ultramine.server.tools.ButtonCommand;
 import org.ultramine.server.tools.ItemBlocker;
 import org.ultramine.server.tools.WarpProtection;
 import org.ultramine.server.util.GlobalExecutors;
-import org.ultramine.server.util.SyncServerExecutor;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;

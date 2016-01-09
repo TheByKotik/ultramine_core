@@ -1,7 +1,10 @@
-package org.ultramine.server;
+package org.ultramine.server.internal;
 
 import org.ultramine.economy.CurrencyRegistry;
 import org.ultramine.economy.PlayerHoldingsEvent;
+import org.ultramine.server.ConfigurationHandler;
+import org.ultramine.server.PermissionHandler;
+import org.ultramine.server.Teleporter;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoBroacastConf;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoDebugInfoConf;
 import org.ultramine.server.chunk.ChunkProfiler;

@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ultramine.server.UMHooks;
+import org.ultramine.server.internal.UMHooks;
 
 import com.mojang.authlib.GameProfile;
 

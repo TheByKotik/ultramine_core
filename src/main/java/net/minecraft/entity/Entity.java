@@ -12,13 +12,12 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import org.ultramine.server.EntityType;
-import org.ultramine.server.UMHooks;
+import org.ultramine.server.internal.UMHooks;
 import org.ultramine.server.event.EntitySetFireEvent;
 
 import com.mojang.authlib.GameProfile;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;

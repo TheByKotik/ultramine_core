@@ -1,4 +1,4 @@
-package org.ultramine.server;
+package org.ultramine.server.internal;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MonitorInfo;
@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import org.ultramine.server.ConfigurationHandler;
 
 @SideOnly(Side.SERVER)
 public class WatchdogThread extends Thread

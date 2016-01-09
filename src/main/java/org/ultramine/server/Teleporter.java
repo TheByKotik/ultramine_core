@@ -98,7 +98,7 @@ public class Teleporter
 		}
 	}
 	
-	static void tick()
+	public static void tick()
 	{
 		for(Iterator<Teleporter> it = teleporters.iterator();it.hasNext();)
 		{

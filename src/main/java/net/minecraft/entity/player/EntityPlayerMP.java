@@ -6,7 +6,6 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -57,7 +56,6 @@ import net.minecraft.network.play.server.S1BPacketEntityAttach;
 import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.network.play.server.S1EPacketRemoveEntityEffect;
 import net.minecraft.network.play.server.S1FPacketSetExperience;
-import net.minecraft.network.play.server.S26PacketMapChunkBulk;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.network.play.server.S2DPacketOpenWindow;
 import net.minecraft.network.play.server.S2EPacketCloseWindow;
@@ -74,7 +72,6 @@ import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ItemInWorldManager;
-import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
@@ -96,17 +93,15 @@ import net.minecraft.util.JsonSerializableSet;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ReportedException;
 import net.minecraft.village.MerchantRecipeList;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.Chunk;
 
 import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.PermissionHandler;
-import org.ultramine.server.UMHooks;
+import org.ultramine.server.internal.UMHooks;
 import org.ultramine.server.chunk.ChunkSendManager;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.event.UMEventFactory;
@@ -116,7 +111,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
-import net.minecraftforge.event.world.ChunkWatchEvent;
 
 public class EntityPlayerMP extends EntityPlayer implements ICrafting
 {

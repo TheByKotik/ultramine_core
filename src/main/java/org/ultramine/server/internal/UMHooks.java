@@ -1,4 +1,4 @@
-package org.ultramine.server;
+package org.ultramine.server.internal;
 
 import java.util.UUID;
 

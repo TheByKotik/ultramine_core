@@ -83,7 +83,7 @@ import org.ultramine.permission.IPermissionManager;
 import org.ultramine.scheduler.Scheduler;
 import org.ultramine.server.BackupManager;
 import org.ultramine.server.ConfigurationHandler;
-import org.ultramine.server.WatchdogThread;
+import org.ultramine.server.internal.WatchdogThread;
 import org.ultramine.server.bootstrap.UMBootstrap;
 import org.ultramine.server.internal.ChatComponentLogMessage;
 import org.ultramine.server.world.MultiWorld;
