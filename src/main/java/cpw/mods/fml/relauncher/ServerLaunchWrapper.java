@@ -1,5 +1,7 @@
 package cpw.mods.fml.relauncher;
 
+import org.ultramine.server.bootstrap.UMBootstrap;
+
 import java.lang.reflect.Method;
 
 public class ServerLaunchWrapper {
@@ -19,9 +21,7 @@ public class ServerLaunchWrapper {
 
 	private void run(String[] args)
 	{
-		boolean useUMConsole = Boolean.parseBoolean(System.getProperty("org.ultramine.server.umconsole"));
-		System.out.println((useUMConsole ? "\u00A7e" : "") + "================[ Starting UltraMine server ]================");
-		System.setProperty("Log4jContextSelector", "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector"); //always async logging
+		UMBootstrap.handleFirstLine(args);
 		
 		Class<?> launchwrapper = null;
 		try

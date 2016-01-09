@@ -43,8 +43,11 @@ public class UltraminePlugin implements IFMLLoadingPlugin
 		location = (File)data.get("coremodLocation");
 		isObfEnv = (Boolean)data.get("runtimeDeobfuscationEnabled");
 		LaunchClassLoader cl = (LaunchClassLoader)this.getClass().getClassLoader();
+		cl.addClassLoaderExclusion("org.ultramine.server.bootstrap.");
 		cl.addTransformerExclusion("org.ultramine.server.asm.");
 		
+		cl.addClassLoaderExclusion("jline.");
+		cl.addClassLoaderExclusion("org.fusesource.jansi.");
 		cl.addTransformerExclusion("org.yaml.snakeyaml.");
 		cl.addTransformerExclusion("com.lmax.disruptor.");
 		cl.addTransformerExclusion("org.apache.commons.dbcp2.");

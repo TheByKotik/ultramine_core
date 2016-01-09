@@ -49,6 +49,8 @@ import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.UltramineServerConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig;
+import org.ultramine.server.bootstrap.UMBootstrap;
+import org.ultramine.server.internal.JLineSupport;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.GlobalExecutors;
 
@@ -100,7 +102,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 
 	protected boolean startServer() throws IOException
 	{
-		Thread thread = new Thread("Server console handler")
+		Thread thread = UMBootstrap.isJLine() ? JLineSupport.setupReadingThread(this) : new Thread("Server console handler")
 		{
 			private static final String __OBFID = "CL_00001786";
 			public void run()

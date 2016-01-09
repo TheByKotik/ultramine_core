@@ -93,6 +93,7 @@ dependencies {
 	compileCommon 'com.lmax:disruptor:3.2.1'
 	compileCommon 'org.apache.commons:commons-dbcp2:2.1.1'
 	compileCommon 'net.openhft:koloboke-api-jdk8:0.6.8'
+	compileServer 'jline:jline:2.13', {transitive = false}
 
 	runtimeCommon 'net.openhft:koloboke-impl-jdk8:0.6.8'
 	runtime 'mysql:mysql-connector-java:5.1.31'

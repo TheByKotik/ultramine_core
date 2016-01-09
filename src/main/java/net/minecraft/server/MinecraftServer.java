@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
@@ -85,7 +84,8 @@ import org.ultramine.scheduler.Scheduler;
 import org.ultramine.server.BackupManager;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.WatchdogThread;
-import org.ultramine.server.util.GlobalExecutors;
+import org.ultramine.server.bootstrap.UMBootstrap;
+import org.ultramine.server.internal.ChatComponentLogMessage;
 import org.ultramine.server.world.MultiWorld;
 
 import net.minecraftforge.common.DimensionManager;
@@ -401,7 +401,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			if (normalStarted = startServer())
 			{
 				FMLCommonHandler.instance().handleServerStarted();
-				logger.info((useUMConsole ? "\u00a7e" : "") + "Server loading totally finished");
+				logger.info((UMBootstrap.isColoredTerminal() ? "\u00a7e" : "") + "Server loading totally finished");
 				long i = getSystemTimeMillis();
 				long l = 0L;
 				this.field_147147_p.func_151315_a(new ChatComponentText(this.motd));
@@ -881,7 +881,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	public void addChatMessage(IChatComponent p_145747_1_)
 	{
-		logger.info(useUMConsole ? p_145747_1_.getFormattedText() : p_145747_1_.getUnformattedText());
+		logger.info(new ChatComponentLogMessage(p_145747_1_));
 	}
 
 	public boolean canCommandSenderUseCommand(int p_70003_1_, String p_70003_2_)
@@ -1497,7 +1497,6 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 	/* ========================================= ULTRAMINE START ======================================*/
 
-	private static final boolean useUMConsole = Boolean.parseBoolean(System.getProperty("org.ultramine.server.umconsole"));
 	private static final int TPS = 20;
 	private static final int TICK_TIME = 1000000000 / TPS;
 	public double currentTPS = 20;
