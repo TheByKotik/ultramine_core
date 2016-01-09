@@ -15,7 +15,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.ConfigurationHandler;
-import org.ultramine.server.RconCommandQueue;
+import org.ultramine.server.internal.RСonCommandRequest;
+import org.ultramine.server.util.GlobalExecutors;
 
 @SideOnly(Side.SERVER)
 public class RConThreadClient extends RConThreadBase
@@ -98,7 +99,7 @@ public class RConThreadClient extends RConThreadBase
 
 								try
 								{
-									this.sendMultipacketResponse(k, RconCommandQueue.instance().request(s1).await());
+									this.sendMultipacketResponse(k, GlobalExecutors.nextTick().await(new RСonCommandRequest(s1)));
 								}
 								catch (Exception exception)
 								{

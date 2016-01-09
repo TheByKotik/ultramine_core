@@ -17,7 +17,7 @@ public class GlobalExecutors
 			60L, TimeUnit.SECONDS,
 			new SynchronousQueue<Runnable>(),
 			new ThreadFactoryBuilder().setNameFormat("UM IO cached  #%d").setDaemon(true).build());
-	private static final Executor sync = new SyncServerExecutor();
+	private static final SyncServerExecutor sync = new SyncServerExecutor();
 
 	/**
 	 * Обрабатывает задачи на сохранение чего-либо на диск/в БД. Используется
@@ -54,7 +54,7 @@ public class GlobalExecutors
 	/**
 	 * Выполняет задачи в основном потоке сервера, на следующем тике
 	 */
-	public static Executor nextTick()
+	public static SyncServerExecutor nextTick()
 	{
 		return sync;
 	}

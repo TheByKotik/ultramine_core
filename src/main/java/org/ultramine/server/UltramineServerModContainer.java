@@ -132,7 +132,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		{
 			if(e.getSide().isServer())
 				ConfigurationHandler.saveServerConfig();
-			((SyncServerExecutor)GlobalExecutors.nextTick()).register();
+			(GlobalExecutors.nextTick()).register();
 		}
 		catch (Throwable t)
 		{
