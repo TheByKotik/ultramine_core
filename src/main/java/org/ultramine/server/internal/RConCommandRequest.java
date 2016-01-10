@@ -4,11 +4,11 @@ import net.minecraft.server.MinecraftServer;
 
 import java.util.function.Supplier;
 
-public class RСonCommandRequest implements Supplier<String>
+public class RConCommandRequest implements Supplier<String>
 {
 	private final String command;
 
-	public RСonCommandRequest(String command)
+	public RConCommandRequest(String command)
 	{
 		this.command = command;
 	}
