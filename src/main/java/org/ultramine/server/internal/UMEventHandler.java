@@ -9,6 +9,7 @@ import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoBroacastConf;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoDebugInfoConf;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.data.player.PlayerCoreData;
+import org.ultramine.server.event.ForgeModIdMappingEvent;
 import org.ultramine.server.util.BasicTypeFormatter;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.WarpLocation;
@@ -333,5 +334,11 @@ public class UMEventHandler
 	public void onPlayerLoggedIn(PlayerLoggedInEvent e)
 	{
 		((EntityPlayerMP)e.player).getData().core().onLogin();
+	}
+
+	@SubscribeEvent
+	public void onForgeModIdMapping(ForgeModIdMappingEvent e)
+	{
+		UMInternalRegistry.onRemap();
 	}
 }

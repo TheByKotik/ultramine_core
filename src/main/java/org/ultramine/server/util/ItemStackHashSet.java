@@ -15,8 +15,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.openhft.koloboke.collect.set.IntSet;
 import net.openhft.koloboke.collect.set.hash.HashIntSets;
+import org.ultramine.server.internal.UMInternalRegistry;
 
-public class ItemStackHashSet implements Set<ItemStack>
+public class ItemStackHashSet implements Set<ItemStack>, UMInternalRegistry.IRemapHandler
 {
 	private final List<ItemStack> list = new ArrayList<ItemStack>();
 	private final IntSet fastSet = HashIntSets.newMutableSet();
@@ -30,7 +31,7 @@ public class ItemStackHashSet implements Set<ItemStack>
 	public ItemStackHashSet(boolean register)
 	{
 		if(register)
-			MinecraftForge.EVENT_BUS.register(this);
+			UMInternalRegistry.registerRemapHandler(this);
 	}
 	
 	public void remap()
@@ -38,17 +39,6 @@ public class ItemStackHashSet implements Set<ItemStack>
 		fastSet.clear();
 		for(ItemStack is : list)
 			addToFastMap(is);
-	}
-	
-	@SubscribeEvent
-	public void onForgeModIdMapping(ForgeModIdMappingEvent e)
-	{
-		remap();
-	}
-	
-	public void unregister()
-	{
-		MinecraftForge.EVENT_BUS.unregister(this);
 	}
 	
 	private boolean addToFastMap(ItemStack is)

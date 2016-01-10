@@ -13,6 +13,7 @@ import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.tools.ItemBlocker.ItemBlockerSettings.BlockingSettings;
 import org.ultramine.server.tools.ItemBlocker.ItemBlockerSettings.BlockingWorldList;
 import org.ultramine.server.util.BasicTypeParser;
+import org.ultramine.server.util.ItemStackHashMap;
 import org.ultramine.server.util.YamlConfigProvider;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -157,18 +158,9 @@ public class ItemBlocker
 		return stack == null ? null : getBlockingSettings(dim, Item.getIdFromItem(stack.getItem()), stack.getItemDamage());
 	}
 	
-	public void remap()
-	{
-		for(PerWorldBlocker ws : map.valueCollection())
-		{
-			ws.remap();
-		}
-	}
-	
 	private class PerWorldBlocker
 	{
-		private final Map<ItemStack, BlockingSettings> itemMap = new HashMap<ItemStack, BlockingSettings>();
-		private final TIntObjectMap<BlockingSettings> fastMap = new TIntObjectHashMap<BlockingSettings>();
+		private final ItemStackHashMap<BlockingSettings> itemMap = new ItemStackHashMap<>();
 		
 		public PerWorldBlocker(List<BlockingSettings> list)
 		{
@@ -181,25 +173,11 @@ public class ItemBlocker
 		private void addBlocking(ItemStack type, BlockingSettings set)
 		{
 			itemMap.put(type, set);
-			fastMap.put((Item.getIdFromItem(type.getItem()) << 16) | (type.getItemDamage() & 0xFFFF), set);
-		}
-		
-		public void remap()
-		{
-			for(Entry<ItemStack, BlockingSettings> ent : itemMap.entrySet())
-			{
-				ItemStack input = ent.getKey();
-				fastMap.put((Item.getIdFromItem(input.getItem()) << 16) | (input.getItemDamage() & 0xFFFF), ent.getValue());
-			}
 		}
 		
 		public BlockingSettings getBlockingSettings(int id, int data)
 		{
-			int idPart = id << 16;
-			BlockingSettings ret = fastMap.get(idPart | (data & 0xFFFF));
-			if(ret == null)
-				ret = fastMap.get(idPart | Short.MAX_VALUE);
-			return ret;
+			return itemMap.get(id, data);
 		}
 	}
 	

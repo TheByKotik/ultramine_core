@@ -17,8 +17,8 @@ import net.minecraft.item.ItemStack;
 public class FurnaceRecipes
 {
 	private static final FurnaceRecipes smeltingBase = new FurnaceRecipes();
-	private Map smeltingList = new ItemStackHashMap<Object>(false);
-	private Map experienceList = new HashMap();
+	private Map smeltingList = new ItemStackHashMap<>();
+	private Map experienceList = new ItemStackHashMap<>();
 	private static final String __OBFID = "CL_00000085";
 
 	public static FurnaceRecipes smelting()
@@ -115,7 +115,9 @@ public class FurnaceRecipes
 	{
 		float ret = p_151398_1_.getItem().getSmeltingExperience(p_151398_1_);
 		if (ret != -1) return ret;
-
+		Float f = (Float)experienceList.get(p_151398_1_);//It's ItemStackHashMap
+		return f == null ? 0.0F : f;
+		/*
 		Iterator iterator = this.experienceList.entrySet().iterator();
 		Entry entry;
 
@@ -131,10 +133,6 @@ public class FurnaceRecipes
 		while (!this.func_151397_a(p_151398_1_, (ItemStack)entry.getKey()));
 
 		return ((Float)entry.getValue()).floatValue();
-	}
-	
-	public void remap()
-	{
-		((ItemStackHashMap<Object>)smeltingList).remap();
+		*/
 	}
 }

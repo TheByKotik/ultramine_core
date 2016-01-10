@@ -14,8 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.openhft.koloboke.collect.map.IntObjMap;
 import net.openhft.koloboke.collect.map.hash.HashIntObjMaps;
+import org.ultramine.server.internal.UMInternalRegistry;
 
-public class ItemStackHashMap<V> implements Map<ItemStack, V>
+public class ItemStackHashMap<V> implements Map<ItemStack, V>, UMInternalRegistry.IRemapHandler
 {
 	private final Map<ItemStack, V> map = new TreeMap<ItemStack, V>(ItemStackComparator.INSTANCE);
 	private final IntObjMap<V> fastMap = HashIntObjMaps.newMutableMap();
@@ -29,7 +30,7 @@ public class ItemStackHashMap<V> implements Map<ItemStack, V>
 	public ItemStackHashMap(boolean register)
 	{
 		if(register)
-			MinecraftForge.EVENT_BUS.register(this);
+			UMInternalRegistry.registerRemapHandler(this);
 	}
 	
 	public void remap()
@@ -37,17 +38,6 @@ public class ItemStackHashMap<V> implements Map<ItemStack, V>
 		fastMap.clear();
 		for(Map.Entry<ItemStack, V> ent : map.entrySet())
 			putToFastMap(ent.getKey(), ent.getValue());
-	}
-	
-	@SubscribeEvent
-	public void onForgeModIdMapping(ForgeModIdMappingEvent e)
-	{
-		remap();
-	}
-	
-	public void unregister()
-	{
-		MinecraftForge.EVENT_BUS.unregister(this);
 	}
 	
 	private V putToFastMap(ItemStack key, V value)

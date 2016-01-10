@@ -257,9 +257,15 @@ public class UltramineServerModContainer extends DummyModContainer
 	@Subscribe
 	public void remap(FMLModIdMappingEvent e)
 	{
-		MinecraftForge.EVENT_BUS.post(new ForgeModIdMappingEvent(e));
-		FurnaceRecipes.smelting().remap();
-		recipeCache.clearCache();
+		try
+		{
+			MinecraftForge.EVENT_BUS.post(new ForgeModIdMappingEvent(e));
+			recipeCache.clearCache();
+		}
+		catch (Throwable t)
+		{
+			controller.errorOccurred(this, t);
+		}
 	}
 	
 	@NetworkCheckHandler
