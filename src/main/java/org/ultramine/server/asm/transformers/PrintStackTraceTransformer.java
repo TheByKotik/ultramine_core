@@ -20,7 +20,7 @@ public class PrintStackTraceTransformer implements IClassTransformer
 {
 	private static final Logger log = LogManager.getLogger();
 	
-	private static final String UMHOOKS_TYPE = "org/ultramine/server/UMHooks";
+	private static final String UMHOOKS_TYPE = "org/ultramine/server/internal/UMHooks";
 	private static final Set<String> THROWABLE_TYPES = new HashSet<String>();
 	private static final String PST_NAME = "printStackTrace";
 	private static final String PST_DESC = "()V";
