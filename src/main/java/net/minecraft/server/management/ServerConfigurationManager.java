@@ -75,6 +75,7 @@ import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.chunk.IChunkLoadCallback;
 import org.ultramine.server.data.ServerDataLoader;
+import org.ultramine.server.internal.UMHooks;
 import org.ultramine.server.util.WarpLocation;
 
 public abstract class ServerConfigurationManager
@@ -1127,7 +1128,12 @@ public abstract class ServerConfigurationManager
 	public void sendChatMsgImpl(IChatComponent p_148544_1_, boolean p_148544_2_)
 	{
 		this.mcServer.addChatMessage(p_148544_1_);
-		this.sendPacketToAllPlayers(new S02PacketChat(p_148544_1_, p_148544_2_));
+//		this.sendPacketToAllPlayers(new S02PacketChat(p_148544_1_, p_148544_2_));
+		for (int i = 0; i < this.playerEntityList.size(); ++i)
+		{
+			EntityPlayerMP player = (EntityPlayerMP)this.playerEntityList.get(i);
+			player.playerNetServerHandler.sendPacket(new S02PacketChat(UMHooks.onChatSend(player, p_148544_1_), p_148544_2_));
+		}
 	}
 
 	public void sendChatMsg(IChatComponent p_148539_1_)
