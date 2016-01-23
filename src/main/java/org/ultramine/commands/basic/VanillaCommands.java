@@ -251,7 +251,7 @@ public class VanillaCommands
 	@Command(
 			name = "gamerule",
 			group = "vanilla",
-			permissions = {"command.vanilla.difficulty"},
+			permissions = {"command.vanilla.gamerule"},
 			syntax = {
 					"",
 					"<key>",
