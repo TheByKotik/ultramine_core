@@ -157,7 +157,10 @@ public abstract class ServerConfigurationManager
 		ChunkCoordinates chunkcoordinates = worldserver.getSpawnPoint();
 		this.func_72381_a(p_72355_2_, (EntityPlayerMP)null, worldserver);
 		p_72355_2_.playerNetServerHandler = nethandlerplayserver;
-		nethandlerplayserver.sendPacket(new S01PacketJoinGame(p_72355_2_.getEntityId(), p_72355_2_.theItemInWorldManager.getGameType(), worldserver.getWorldInfo().isHardcoreModeEnabled(), worldserver.provider.dimensionId, worldserver.difficultySetting, this.getMaxPlayers(), worldserver.getWorldInfo().getTerrainType()));
+		boolean isLongDimId = p_72355_2_.dimension != (byte)p_72355_2_.dimension;
+		nethandlerplayserver.sendPacket(new S01PacketJoinGame(p_72355_2_.getEntityId(), p_72355_2_.theItemInWorldManager.getGameType(), worldserver.getWorldInfo().isHardcoreModeEnabled(), isLongDimId ? 0 : worldserver.provider.dimensionId, worldserver.difficultySetting, this.getMaxPlayers(), worldserver.getWorldInfo().getTerrainType()));
+		if(isLongDimId)
+			nethandlerplayserver.sendPacket(new S07PacketRespawn(p_72355_2_.dimension, worldserver.difficultySetting, worldserver.getWorldInfo().getTerrainType(), p_72355_2_.theItemInWorldManager.getGameType()));
 		nethandlerplayserver.sendPacket(new S3FPacketCustomPayload("MC|Brand", this.getServerInstance().getServerModName().getBytes(Charsets.UTF_8)));
 		nethandlerplayserver.sendPacket(new S05PacketSpawnPosition(chunkcoordinates.posX, chunkcoordinates.posY, chunkcoordinates.posZ));
 		nethandlerplayserver.sendPacket(new S39PacketPlayerAbilities(p_72355_2_.capabilities));

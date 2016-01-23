@@ -298,8 +298,6 @@ public class MultiWorld
 		int dim = -2;
 		while(getDescByID(dim) != null || DimensionManager.isDimensionRegistered(dim))
 			dim--;
-		if(dim < -128)
-			throw new RuntimeException("Not enough free dimension IDs");
 		return dim;
 	}
 	
