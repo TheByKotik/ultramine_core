@@ -21,7 +21,7 @@ public class OpenInvCommands
 	@Command(
 			name = "openinv",
 			group = "basic",
-			permissions = {"command.admin.openinv"},
+			permissions = {"command.basic.openinv"},
 			syntax = {"<player>"}
 	)
 	public static void openinv(final CommandContext ctx)
@@ -39,7 +39,7 @@ public class OpenInvCommands
 	@Command(
 			name = "openender",
 			group = "basic",
-			permissions = {"command.admin.openender"},
+			permissions = {"command.basic.openender"},
 			syntax = {"<player>"}
 	)
 	public static void openender(final CommandContext ctx)
