@@ -331,11 +331,11 @@ command.reloadcfg.usage=/reloadcfg
 command.reloadcfg.description=Reloads UltraMine server configuration (in /settings directory)
 command.reloadcfg.success=Server configuration successfully reloaded
 
-command.reloadcfg.usage=/entitylist
-command.reloadcfg.description=Displays list of all loaded entities in all worlds
+command.entitylist.usage=/entitylist [world]
+command.entitylist.description=Displays list of all loaded entities in specified or all worlds
 
-command.reloadcfg.usage=/killentity <id>
-command.reloadcfg.description=Kills entity with specified ID
+command.killentity.usage=/killentity <id>
+command.killentity.description=Kills entity with specified ID
 
 command.mute.usage=/mute <player> [time]
 command.mute.description=Removes the ability to write in chat
@@ -359,9 +359,9 @@ command.unmute.fail=The player is not muted
 command.unmute.notify=You has been unmuted
 command.unmute.success=Player %s has been unmuted
 
-command.unmute.usage=/vanish
-command.unmute.description=Makes you invisible for other players
-command.unmute.success.hide=Now you're invisible
-command.unmute.success.show=Now you're visible
-command.unmute.notify.hide=became invisible
-command.unmute.notify.show=became visible
+command.vanish.usage=/vanish
+command.vanish.description=Makes you invisible for other players
+command.vanish.success.hide=Now you're invisible
+command.vanish.success.show=Now you're visible
+command.vanish.notify.hide=became invisible
+command.vanish.notify.show=became visible

@@ -841,17 +841,28 @@ public class TechCommands
 			name = "entitylist",
 			group = "technical",
 			permissions = {"command.technical.entitylist"},
-			syntax = {""}
+			syntax = {
+					"",
+					"<world>"
+			}
 	)
 	public static void entitylist(CommandContext ctx)
 	{
+		if(ctx.contains("world"))
+			printWorldEntities(ctx, ctx.get("world").asWorld());
 		for(WorldServer world : ctx.getServer().getMultiWorld().getLoadedWorlds())
-		{
-			for(Entity ent : GenericIterableFactory.newCastingIterable(world.loadedEntityList, Entity.class))
-			{
-				ctx.sendMessage("[%s](%s, %s, %s) ID: %s, Class: %s, Entity: %s", world.provider.dimensionId, ent.posX, ent.posY, ent.posZ, ent.getEntityId(), ent.getClass(), ent);
-			}
-		}
+			printWorldEntities(ctx, world);
+	}
+
+	private static void printWorldEntities(CommandContext ctx, WorldServer world)
+	{
+		for(Object o : world.loadedEntityList)
+			printEntityInfo(ctx, (Entity) o);
+	}
+
+	private static void printEntityInfo(CommandContext ctx, Entity ent)
+	{
+		ctx.sendMessage("[%s](%s, %s, %s) ID: %s, Class: %s, Entity: %s", ent.worldObj.provider.dimensionId, ent.posX, ent.posY, ent.posZ, ent.getEntityId(), ent.getClass(), ent);
 	}
 	
 	@Command(

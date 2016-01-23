@@ -114,11 +114,11 @@ command.home.usage=/home [название]
 command.home.description=Телепортация на точку дома, устанавливаемую командой /sethome
 command.home.fail.notset=Точка дома не установлена
 command.home.multi.fail=У вас нет прав на использование множества домов
-command.home.other.fail=У нас нет прав на искользование домов других игроков
+command.home.other.fail=У нас нет прав на использование домов других игроков
 command.home.fail.interworld=Телепортация в дом между мирами отключена
 
 command.sethome.usage=/sethome [название]
-command.sethome.description=Утанавливает точку телепортации /home
+command.sethome.description=Устанавливает точку телепортации /home
 command.sethome.success=Дом установлен
 command.sethome.multi.fail=У вас нет прав на установку множества домов
 
@@ -189,7 +189,7 @@ command.heal.success.other=Игрок %s был излечен
 
 command.dropall.usage=/dropall [игрок]
 command.dropall.description=Выбрасывает все вещи из инвентаря
-command.dropall.noperm.other=У вас нет прав на выбрасывание вещей дргого игрока
+command.dropall.noperm.other=У вас нет прав на выбрасывание вещей другого игрока
 
 command.item.usage=/item <предмет> [количество] ИЛИ /item <игрок> <предмет{NBT с пробелами}>
 command.item.description=Выдает указанный предмет
@@ -205,9 +205,9 @@ command.buttoncommand.usage=/buttoncommand <create> <команды ...> ИЛИ 
 command.buttoncommand.description=Устанавливает серверную команду на любой блок
 command.buttoncommand.fail.noblock=Кнопка не выбрана, наведите курсор на кнопку
 command.buttoncommand.fail.already=Кнопка уже создана. Используйте /buttoncommand remove
-command.buttoncommand.fail.none=ButtonCommand не установлен на выбранную кнопку
-command.buttoncommand.success.create=ButtonCommand был успешно создан
-command.buttoncommand.success.remove=ButtonCommand был успешно удален
+command.buttoncommand.fail.none=ButtonCommand не установлен на выбранный блок
+command.buttoncommand.success.create=ButtonCommand успешно создан
+command.buttoncommand.success.remove=ButtonCommand успешно удален
 command.buttoncommand.get.head=Список команд:
 command.buttoncommand.noperms=У вас нет прав для использования данной кнопки
 
@@ -270,7 +270,7 @@ command.clearentity.usage=/clearentity [all|mobs|items] <радиус>
 command.clearentity.description=Удаляет Entity по радиусу
 command.clearentity.success=Очищено %s Entity. Мобов: %s, Предметов: %s
 
-command.startlags.usage=/startlags процент ИЛИ /startlags stop
+command.startlags.usage=/startlags <процент> ИЛИ /startlags stop
 command.startlags.description=Симулирует определенный процент нагрузки на сервер
 command.startlags.start=Start lagging on %s%%
 command.startlags.stop=Stop lagging
@@ -287,14 +287,14 @@ command.javagc.success=Сборка мусора инициирована
 
 command.chunkgc.usage=/chunkgc
 command.chunkgc.description=Выгружает все неиспользуемые чанки
-command.chunkgc.success=Выгрзка чанков инициирована
+command.chunkgc.success=Выгрузка чанков инициирована
 
-command.custmsg.usage=/custmsg <игрок/ALL> <сообщение>
+command.custmsg.usage=/custmsg <игрок|ALL> <сообщение>
 command.custmsg.description=Отправляет кастомное сообщение игроку (поддерживает цвета)
 
 command.genworld.usage=/genworld [чанков за тик] ИЛИ /genworld radius <радиус> [чанков за тик] ИЛИ /genworld stop
 command.genworld.description=Генерирует мир по радиусу или в пределах мирового барьера
-command.genworld.already=Генерауия мира уже запущена. Сначала введите "/genworld stop"
+command.genworld.already=Генерация мира уже запущена. Сначала введите "/genworld stop"
 command.genworld.noborder=Мир не содержит барьера; добавьте барьер или используйте генерацию по радиусу
 command.genworld.start=Генерация мира запущена
 command.genworld.stop=Генерация мира остановлена (сгенерировано %s/%s чанков)
@@ -331,11 +331,11 @@ command.reloadcfg.usage=/reloadcfg
 command.reloadcfg.description=Перезагружает конфигурацию UltraMine сервера (из директории /settings)
 command.reloadcfg.success=Серверная конфигурация успешно перезагружена
 
-command.reloadcfg.usage=/entitylist
-command.reloadcfg.description=Показывает список всех загруженных Entity во всех мирах
+command.entitylist.usage=/entitylist [мир]
+command.entitylist.description=Показывает список всех загруженных Entity в указанном мире, либо во всех мирах
 
-command.reloadcfg.usage=/killentity <id>
-command.reloadcfg.description=Убивает Entity с указанным ID
+command.killentity.usage=/killentity <id>
+command.killentity.description=Убивает Entity с указанным ID
 
 command.mute.usage=/mute <игрок> [время]
 command.mute.description=Запрещает игроку писать в чат определенное время
@@ -359,9 +359,9 @@ command.unmute.fail=Указанный игрок не замьючен
 command.unmute.notify=Вам возвращено право писать в чат
 command.unmute.success=Игроку %s теперь разрешено писать в чат
 
-command.unmute.usage=/vanish
-command.unmute.description=Делает вас невидимым для других игроков
-command.unmute.success.hide=Вы в невидимости
-command.unmute.success.show=Теперь вас видно
-command.unmute.notify.hide=зашел в невидимость
-command.unmute.notify.show=вышел из невидимости
+command.vanish.usage=/vanish
+command.vanish.description=Делает вас невидимым для других игроков
+command.vanish.success.hide=Вы в невидимости
+command.vanish.success.show=Теперь вас видно
+command.vanish.notify.hide=зашел в невидимость
+command.vanish.notify.show=вышел из невидимости
