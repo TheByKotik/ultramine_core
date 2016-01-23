@@ -19,19 +19,20 @@ public class UMStripColorsRewritePolicy implements RewritePolicy
 	public LogEvent rewrite(LogEvent source)
 	{
 		Message message = source.getMessage();
-		if(message instanceof SimpleMessage || message instanceof MessageFormatMessage || message instanceof StringFormattedMessage)
+		if(message instanceof IUnformattedMessage)
+		{
+			message = new SimpleMessage(((IUnformattedMessage) message).getUnformattedMessage());
+		}
+		else if(message instanceof SimpleMessage || message instanceof MessageFormatMessage || message instanceof StringFormattedMessage)
 		{
 			String text = message.getFormattedMessage();
 			StringBuilder sb = new StringBuilder(text.length());
 			UMConsoleLayout.stripControlSequences(sb, text);
 			message = new SimpleMessage(sb.toString());
 		}
-		else if(message.getClass().getName().equals("org.ultramine.server.internal.ChatComponentLogMessage"))
+		else
 		{
-			// All log4j plugins loads by AppClassLoader, ChatComponentLogMessage uses
-			// minecraft classes and loads by LaunchClassLoader with transform. So
-			// we should compare class by name and use existing interface methods
-			message = new SimpleMessage(message.getFormat());
+			return source;
 		}
 
 		return new Log4jLogEvent(source.getLoggerName(), source.getMarker(), source.getFQCN(), source.getLevel(),

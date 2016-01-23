@@ -3,8 +3,9 @@ package org.ultramine.server.internal;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import org.apache.logging.log4j.message.Message;
+import org.ultramine.server.bootstrap.log4j.IUnformattedMessage;
 
-public class ChatComponentLogMessage implements Message
+public class ChatComponentLogMessage implements Message, IUnformattedMessage
 {
 	private final IChatComponent comp;
 	private String formattedMessage;
@@ -23,6 +24,7 @@ public class ChatComponentLogMessage implements Message
 		return formattedMessage;
 	}
 
+	@Override
 	public String getUnformattedMessage()
 	{
 		if(unformattedMessage == null)
@@ -30,11 +32,10 @@ public class ChatComponentLogMessage implements Message
 		return unformattedMessage;
 	}
 
-	/** Used in UMStripColorsRewritePolicy due to classloader issues */
 	@Override
 	public String getFormat()
 	{
-		return getUnformattedMessage();
+		return comp instanceof ChatComponentTranslation ? ((ChatComponentTranslation) comp).getKey() : getUnformattedMessage();
 	}
 
 	@Override
