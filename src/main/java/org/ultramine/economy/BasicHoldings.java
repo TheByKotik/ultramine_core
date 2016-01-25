@@ -2,7 +2,6 @@ package org.ultramine.economy;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
 
 public class BasicHoldings implements IHoldings
 {
@@ -70,7 +69,7 @@ public class BasicHoldings implements IHoldings
 	{
 		if(amount <= 0.0d)
 			throw new CommandException("economy.fail.negativeamount");
-		this.balance += MathHelper.floor_double(amount*100);
+		this.balance = Math.addExact(this.balance, floor(amount*100));
 		acc.onHoldingsChange(this);
 	}
 
@@ -79,14 +78,14 @@ public class BasicHoldings implements IHoldings
 	{
 		if(amount <= 0.0d)
 			throw new CommandException("economy.fail.negativeamount");
-		this.balance -= MathHelper.ceiling_double_int(amount*100);
+		this.balance = Math.subtractExact(this.balance, ceiling(amount*100));
 		acc.onHoldingsChange(this);
 	}
 
 	@Override
 	public void subtractChecked(double amount)
 	{
-		if((balance - MathHelper.ceiling_double_int(amount*100)) < 0L)
+		if(Math.subtractExact(balance, ceiling(amount*100)) < 0L)
 			throw new CommandException("economy.fail.notenough");
 		subtract(amount);
 	}
@@ -114,13 +113,13 @@ public class BasicHoldings implements IHoldings
 	@Override
 	public boolean hasEnough(double amount)
 	{
-		return MathHelper.ceiling_double_int(amount*100) <= this.balance;
+		return ceiling(amount*100) <= this.balance;
 	}
 
 	@Override
 	public boolean hasOver(double amount)
 	{
-		return MathHelper.ceiling_double_int(amount*100) < this.balance;
+		return ceiling(amount*100) < this.balance;
 	}
 
 	@Override
@@ -147,5 +146,17 @@ public class BasicHoldings implements IHoldings
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		this.balance = nbt.getLong("b");
+	}
+
+	private static long ceiling(double arg)
+	{
+		long i = (long)arg;
+		return arg > (double)i ? Math.addExact(i, 1) : i;
+	}
+
+	private static long floor(double arg)
+	{
+		long i = (long)arg;
+		return arg < (double)i ? Math.subtractExact(i, 1) : i;
 	}
 }
