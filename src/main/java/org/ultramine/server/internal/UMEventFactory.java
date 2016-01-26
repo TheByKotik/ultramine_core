@@ -1,9 +1,11 @@
-package org.ultramine.server.event;
+package org.ultramine.server.internal;
 
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
+import org.ultramine.server.event.HangingEvent;
+import org.ultramine.server.event.InventoryCloseEvent;
 
 public class UMEventFactory
 {

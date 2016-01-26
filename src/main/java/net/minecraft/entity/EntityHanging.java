@@ -3,7 +3,7 @@ package net.minecraft.entity;
 import java.util.Iterator;
 import java.util.List;
 
-import org.ultramine.server.event.UMEventFactory;
+import org.ultramine.server.internal.UMEventFactory;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;

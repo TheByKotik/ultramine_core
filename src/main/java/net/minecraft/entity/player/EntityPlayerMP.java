@@ -104,7 +104,7 @@ import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.internal.UMHooks;
 import org.ultramine.server.chunk.ChunkSendManager;
 import org.ultramine.server.data.player.PlayerData;
-import org.ultramine.server.event.UMEventFactory;
+import org.ultramine.server.internal.UMEventFactory;
 import org.ultramine.server.util.BasicTypeParser;
 
 import net.minecraft.entity.item.EntityItem;
