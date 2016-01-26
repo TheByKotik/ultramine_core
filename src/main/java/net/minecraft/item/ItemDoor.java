@@ -101,9 +101,19 @@ public class ItemDoor extends Item
 			flag2 = true;
 		}
 
+		if(p_150924_0_.captureBlockSnapshots)
+		{
+			// Fixed notifyBlocksOfNeighborChange calls if block place event was canceled (reed dupe)
+			// Because forge calls markAndNotifyBlock after placing all blocks, flag 3 is now appropriate
+			p_150924_0_.setBlock(p_150924_1_, p_150924_2_, p_150924_3_, p_150924_5_, p_150924_4_, 3);
+			p_150924_0_.setBlock(p_150924_1_, p_150924_2_ + 1, p_150924_3_, p_150924_5_, 8 | (flag2 ? 1 : 0), 3);
+		}
+		else
+		{
 		p_150924_0_.setBlock(p_150924_1_, p_150924_2_, p_150924_3_, p_150924_5_, p_150924_4_, 2);
 		p_150924_0_.setBlock(p_150924_1_, p_150924_2_ + 1, p_150924_3_, p_150924_5_, 8 | (flag2 ? 1 : 0), 2);
 		p_150924_0_.notifyBlocksOfNeighborChange(p_150924_1_, p_150924_2_, p_150924_3_, p_150924_5_);
 		p_150924_0_.notifyBlocksOfNeighborChange(p_150924_1_, p_150924_2_ + 1, p_150924_3_, p_150924_5_);
+		}
 	}
 }
