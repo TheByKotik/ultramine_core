@@ -567,7 +567,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 		{
 			double dist = playerEntity.theItemInWorldManager.getBlockReachDistance() + 1;
 			dist *= dist;
-			if (this.hasMoved && this.playerEntity.getDistanceSq((double)i + 0.5D, (double)j + 0.5D, (double)k + 0.5D) < dist && !this.serverController.isBlockProtected(worldserver, i, j, k, this.playerEntity))
+			if (this.hasMoved && this.playerEntity.getDistanceSq((double)i + 0.5D, (double)j + 0.5D - playerEntity.getEyeHeight(), (double)k + 0.5D) < dist && !this.serverController.isBlockProtected(worldserver, i, j, k, this.playerEntity))
 			{
 				// record block place result so we can update client itemstack size if place event was cancelled.
 				if (!this.playerEntity.theItemInWorldManager.activateBlockOrUseItem(this.playerEntity, worldserver, itemstack, i, j, k, l, p_147346_1_.func_149573_h(), p_147346_1_.func_149569_i(), p_147346_1_.func_149575_j()))
