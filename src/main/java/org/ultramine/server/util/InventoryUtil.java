@@ -18,7 +18,7 @@ public class InventoryUtil
 	{
 		return
 				is1 == null && is2 == null || is1 != null && is2 != null && is1.isItemEqual(is2) &&
-				(is1.stackTagCompound == null && is2.stackTagCompound != null ? false : is1.stackTagCompound == null || is1.stackTagCompound.equals(is2.stackTagCompound));
+				(!(is1.stackTagCompound == null && is2.stackTagCompound != null) && (is1.stackTagCompound == null || is1.stackTagCompound.equals(is2.stackTagCompound)));
 	}
 	
 	public static boolean contains(IInventory inv, ItemStack item)
@@ -222,6 +222,8 @@ public class InventoryUtil
 	{
 		if(is == null)
 			return;
+		while(is.stackSize > is.getMaxStackSize())
+			dropItem(world, x, y, z, is.splitStack(is.getMaxStackSize()));
 		EntityItem entity = new EntityItem(world, x, y, z, is.copy());
 		entity.motionX = world.rand.nextGaussian() * 0.05D;
 		entity.motionY = world.rand.nextGaussian() * 0.05D + 0.2D;
@@ -229,28 +231,25 @@ public class InventoryUtil
 		world.spawnEntityInWorld(entity);
 	}
 
-	public static void dropItemFixed(World world, double x, double y, double z, ItemStack item)
+	public static void dropItemFixed(World world, int x, int y, int z, ItemStack is)
 	{
-		if(item == null)
+		if(is == null)
 			return;
-		double var7 = world.rand.nextDouble() * 0.8D + 0.1D;
-		double var9 = world.rand.nextDouble() * 0.8D + 0.1D;
-		double var11 = world.rand.nextDouble() * 0.8D + 0.1D;
-		EntityItem var14 = new EntityItem(world, x + var7, y + var9, z + var11, item);
-		world.spawnEntityInWorld(var14);
+		while(is.stackSize > is.getMaxStackSize())
+			dropItemFixed(world, x, y, z, is.splitStack(is.getMaxStackSize()));
+		double rx = world.rand.nextDouble() * 0.8D + 0.1D;
+		double ry = world.rand.nextDouble() * 0.8D + 0.1D;
+		double rz = world.rand.nextDouble() * 0.8D + 0.1D;
+		world.spawnEntityInWorld(new EntityItem(world, x + rx, y + ry, z + rz, is.copy()));
 	}
-	
-	public static void dropAll(World world, IInventory inv, int x, int y, int z)
+
+	public static void dropItemFixed(World world, double x, double y, double z, ItemStack is)
 	{
-		for(int i = 0, s = inv.getSizeInventory(); i < s; i++)
-		{
-			ItemStack is = inv.getStackInSlot(i);
-			if(is != null)
-			{
-				dropItem(world, x, y, z, is);
-				inv.setInventorySlotContents(i, null);
-			}
-		}
+		if(is == null)
+			return;
+		while(is.stackSize > is.getMaxStackSize())
+			dropItemFixed(world, x, y, z, is.splitStack(is.getMaxStackSize()));
+		world.spawnEntityInWorld(new EntityItem(world, x, y, z, is.copy()));
 	}
 
 	public static int countItems(IInventory inv, ItemStack is)
