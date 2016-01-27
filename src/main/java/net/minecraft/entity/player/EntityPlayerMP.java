@@ -101,6 +101,7 @@ import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.PermissionHandler;
+import org.ultramine.server.event.PlayerDeathEvent;
 import org.ultramine.server.internal.UMHooks;
 import org.ultramine.server.chunk.ChunkSendManager;
 import org.ultramine.server.data.player.PlayerData;
@@ -353,11 +354,12 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public void onDeath(DamageSource p_70645_1_)
 	{
 		if (ForgeHooks.onLivingDeath(this, p_70645_1_)) return;
-		if(p_70645_1_ != DamageSource.command)
-			this.mcServer.getConfigurationManager().sendChatMsg(this.func_110142_aN().func_151521_b());
+		PlayerDeathEvent umEvent = UMEventFactory.firePlayerDeath(this, p_70645_1_, this.func_110142_aN().func_151521_b(),
+				this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"));
+		if(umEvent.getDeathMessage() != null)
+			this.mcServer.getConfigurationManager().sendChatMsg(umEvent.getDeathMessage());
 
-		if (p_70645_1_ != DamageSource.outOfWorld && !this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory") &&
-				!PermissionHandler.getInstance().has(this, "ability.admin.keepinventory"))
+		if (!umEvent.isKeepInventory() && umEvent.isProcessDrops())
 		{
 			captureDrops = true;
 			capturedDrops.clear();
@@ -376,7 +378,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		}
 		else
 		{
-			keepInventoryOnClone = true;
+			if(umEvent.isKeepInventory())
+				keepInventoryOnClone = true;
 		}
 
 		Collection collection = this.worldObj.getScoreboard().func_96520_a(IScoreObjectiveCriteria.deathCount);

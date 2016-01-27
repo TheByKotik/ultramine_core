@@ -1,5 +1,6 @@
 package org.ultramine.server.internal;
 
+import net.minecraft.util.DamageSource;
 import org.ultramine.economy.CurrencyRegistry;
 import org.ultramine.economy.PlayerHoldingsEvent;
 import org.ultramine.server.ConfigurationHandler;
@@ -10,6 +11,7 @@ import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoDebugInfoConf;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.data.player.PlayerCoreData;
 import org.ultramine.server.event.ForgeModIdMappingEvent;
+import org.ultramine.server.event.PlayerDeathEvent;
 import org.ultramine.server.util.BasicTypeFormatter;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.WarpLocation;
@@ -340,5 +342,14 @@ public class UMEventHandler
 	public void onForgeModIdMapping(ForgeModIdMappingEvent e)
 	{
 		UMInternalRegistry.onRemap();
+	}
+
+	@SubscribeEvent
+	public void onPlayerKeepInvCheckEvent(PlayerDeathEvent e)
+	{
+		if(e.damageSource == DamageSource.command)
+			e.setDeathMessage(null);
+		if(e.damageSource == DamageSource.outOfWorld || PermissionHandler.getInstance().has(e.entityPlayer, "ability.admin.keepinventory"))
+			e.setKeepInventory(true);
 	}
 }
