@@ -79,6 +79,7 @@ import org.ultramine.server.chunk.PendingBlockUpdate;
 import org.ultramine.server.event.ServerWorldEventProxy;
 import org.ultramine.server.event.WorldUpdateObjectType;
 import org.ultramine.server.mobspawn.MobSpawnManager;
+import org.ultramine.server.util.BasicTypeParser;
 
 public class WorldServer extends World
 {
@@ -1068,12 +1069,17 @@ public class WorldServer extends World
 	{
 		this.config = config;
 		if(isServer)
-			initOnServer();
+			applyConfig();
 	}
 	
 	@SideOnly(Side.SERVER)
-	private void initOnServer()
+	public void applyConfig()
 	{
+		difficultySetting = BasicTypeParser.parseDifficulty(config.settings.difficulty);
+		setAllowedSpawnTypes(config.mobSpawn.spawnMonsters, config.mobSpawn.spawnAnimals);
+		getGameRules().setOrCreateGameRule("doDaylightCycle", Boolean.toString(config.settings.time != WorldTime.FIXED));
+		getGameRules().setOrCreateGameRule("doMobSpawning", Boolean.toString(config.mobSpawn.spawnEngine != WorldConfig.MobSpawn.MobSpawnEngine.NONE));
+
 		if(config.mobSpawn.spawnEngine == WorldConfig.MobSpawn.MobSpawnEngine.NEW)
 		{
 			if(mobSpawner == null)

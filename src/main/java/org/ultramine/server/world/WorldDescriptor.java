@@ -218,16 +218,12 @@ public class WorldDescriptor
 	@SideOnly(Side.SERVER)
 	private void applyConfig()
 	{
-		world.difficultySetting = BasicTypeParser.parseDifficulty(config.settings.difficulty);
-		world.setAllowedSpawnTypes(config.mobSpawn.spawnMonsters, config.mobSpawn.spawnAnimals);
-		world.getGameRules().setOrCreateGameRule("doDaylightCycle", Boolean.toString(config.settings.time != WorldTime.FIXED));
-		world.getGameRules().setOrCreateGameRule("doMobSpawning", Boolean.toString(config.mobSpawn.spawnEngine != MobSpawnEngine.NONE));
 		world.setConfig(config);
 	}
 	
 	void onUnload()
 	{
-		((WorldServer)world).theChunkProviderServer.setWorldUnloaded();
+		world.theChunkProviderServer.setWorldUnloaded();
 		world = null;
 		if(getState().isLoaded())
 			setState(WorldState.AVAILABLE);
