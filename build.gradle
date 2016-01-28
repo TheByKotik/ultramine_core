@@ -79,8 +79,8 @@ dependencies {
 	compileCommon 'org.apache.commons:commons-lang3:3.3.2'
 	compileCommon 'commons-io:commons-io:2.4'
 	compileCommon 'commons-codec:commons-codec:1.9'
-	compileCommon 'net.java.jinput:jinput:2.0.5'
-	compileCommon 'net.java.jutils:jutils:1.0.0'
+	compileClient 'net.java.jinput:jinput:2.0.5'
+	compileClient 'net.java.jutils:jutils:1.0.0'
 	compileCommon 'com.google.code.gson:gson:2.2.4'
 	compileCommon 'com.mojang:authlib:1.5.16'
 	compileCommon 'org.apache.logging.log4j:log4j-api:2.0-beta9'
@@ -181,7 +181,7 @@ publishing {
 	publications {
 		if(publish_jars.contains('dev'))
 			mavenDevJar(MavenPublication) {
-				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar), configurations.runtimeCommon.getAllDependencies())
+				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar), configurations.runtimeAll.getAllDependencies())
 				artifacts.matching({it.classifier == "dev"}).all({it.classifier = null})
 				artifact tasks.jar_source
 			}
