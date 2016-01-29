@@ -1,4 +1,5 @@
 import org.gradle.api.internal.artifacts.publish.ArchivePublishArtifact
+import org.gradle.api.internal.file.copy.CopyAction
 import org.gradle.api.internal.java.JavaLibrary
 import org.ultramine.gradle.task.ReobfTask
 import org.ultramine.gradle.task.SideSplitTask
@@ -13,6 +14,10 @@ targetCompatibility = '1.8'
 
 compileJava.options.encoding = 'UTF-8'
 
+ext.commit = null
+ext.previousCommit = null
+ext.versionFile = null
+ext.revision = 0
 group = project_group
 version = (concat_mc_version_to=='version' ? (minecraft_version+'-') : '') + computeVersion()
 
@@ -171,12 +176,32 @@ task jar_source(type: Jar) {
 	classifier = 'sources'
 }
 
+task storeLastRevision {
+	inputs.property("version", version)
+	outputs.dir file("$buildDir/versions")
+	doLast {
+		doStoreLastRevision()
+	}
+}
+tasks.build.dependsOn tasks.storeLastRevision
+
+task changelog {
+	inputs.property("prev_commit", previousCommit)
+	inputs.property("commit", commit)
+	ext.changelogFile = file("$buildDir/libs/$project.name-$version-changelog.txt")
+	outputs.file changelogFile
+	doLast {
+		doGenerateChangelog(changelogFile);
+	}
+}
+
 artifacts {
 	if(produce_universal_jar == 'true')	archives jar_universal
 	if(produce_server_jar == 'true')	archives jar_server
 	if(produce_client_jar == 'true')	archives jar_client
 }
 
+tasks.publish.dependsOn changelog
 publishing {
 	publications {
 		if(publish_jars.contains('dev'))
@@ -184,6 +209,7 @@ publishing {
 				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar), configurations.runtimeAll.getAllDependencies())
 				artifacts.matching({it.classifier == "dev"}).all({it.classifier = null})
 				artifact tasks.jar_source
+				artifact tasks.changelog.getProperty('changelogFile'), {classifier = 'changelog'}
 			}
 		if(publish_jars.contains('universal'))
 			mavenUnivarsalJar(MavenPublication) {
@@ -232,7 +258,6 @@ String computeVersion() {
 		return override_version
 
 	String mmversion; // major.minor
-	String commit;
 	try {
 		String[] parts = getGitDesc().split('-')
 		if(parts.length != 3) throw new GradleException('no git tags found')
@@ -249,25 +274,54 @@ String computeVersion() {
 		mmversion = mmversion.substring(0, ind+1) + ((mmversion.substring(ind+1) as int) + 1) + '.0-' + release_type
 	}
 
-	int revision = 0;
 	if(project.hasProperty('override_revision')) {
 		revision = override_revision as int
 	} else if(release_type != 'indev' || project.hasProperty('increment_revision')) {
-		File verfile = file("$buildDir/versions/$mmversion")
+		File verfile = versionFile = file("$buildDir/versions/$mmversion")
 		String filetext;
 		if(verfile.exists() && !(filetext = verfile.getText().trim()).isEmpty()) {
 			String[] fileparts = filetext.split(':')
 			if(fileparts.length != 2) throw new GradleException('Version file is corrupted: ' + verfile.getAbsolutePath())
 			revision = fileparts[1] as int;
+			previousCommit = fileparts[0];
 			if(!commit.equals(fileparts[0]) || project.hasProperty('increment_revision')) {
 				revision++;
-				verfile.write(commit+':'+revision)
 			}
-		} else {
-			verfile.getParentFile().mkdirs()
-			verfile.write(commit+':0')
 		}
 	}
 
 	return (revision > 0 || release_type == 'stable') ? (mmversion+'.'+revision) : mmversion;
+}
+
+void doStoreLastRevision() {
+	if(versionFile != null) {
+		versionFile.getParentFile().mkdirs()
+		versionFile.write(commit+':'+revision)
+		file("$buildDir/versions/versions").append(commit+':'+version+'\n');
+	}
+}
+
+void doGenerateChangelog(File file) {
+	BufferedWriter writer = file.newWriter();
+	writer.writeLine("Changelog for $name-$version");
+	if(previousCommit == null) {
+		writer.writeLine('\tempty');
+	} else {
+		def stdout = new ByteArrayOutputStream()
+		exec {
+			commandLine 'git', 'log', '--abbrev-commit', '--pretty=short', previousCommit + '..HEAD'
+			standardOutput = stdout
+			errorOutput = stdout
+		}.rethrowFailure().assertNormalExitValue()
+		for(String s : stdout.toString().trim().split('\n')) {
+			s = s.trim();
+			if(s.isEmpty() || s.startsWith('Author'))
+				continue;
+			if(s.startsWith('commit'))
+				writer.writeLine('\t' + s.substring(7) + ':');
+			else
+				writer.writeLine('\t\t' + s);
+		}
+	}
+	writer.close();
 }
