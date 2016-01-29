@@ -380,6 +380,7 @@ public class TileEntity
 	/* ======================================== ULTRAMINE START ===================================== */
 	
 	private GameProfile owner;
+	public boolean removeThisTick;
 	
 	public final void setObjectOwner(GameProfile owner)
 	{

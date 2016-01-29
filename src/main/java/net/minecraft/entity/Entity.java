@@ -2490,6 +2490,7 @@ public abstract class Entity
 	
 	private final EntityType cachedEntityType = computeEntityType();
 	private GameProfile owner;
+	public boolean removeThisTick;
 	
 	public final void setObjectOwner(GameProfile owner)
 	{

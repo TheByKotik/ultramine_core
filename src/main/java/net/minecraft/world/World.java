@@ -1915,6 +1915,7 @@ public abstract class World implements IBlockAccess
 			if (entity.isDead)
 			{
 //				this.weatherEffects.remove(i--);
+				entity.removeThisTick = true;
 			}
 		}
 		weatherEffects.removeIf(LambdaHolder.ENTITY_REMOVAL_PREDICATE);
@@ -2008,6 +2009,7 @@ public abstract class World implements IBlockAccess
 				}
 
 //				this.loadedEntityList.remove(i--);
+				entity.removeThisTick = true;
 				this.onEntityRemoved(entity);
 			}
 
@@ -2061,6 +2063,7 @@ public abstract class World implements IBlockAccess
 			if (tileentity.isInvalid())
 			{
 //				iterator.remove();
+				tileentity.removeThisTick = true;
 
 				if (this.chunkExists(tileentity.xCoord >> 4, tileentity.zCoord >> 4))
 				{
