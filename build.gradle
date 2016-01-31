@@ -39,14 +39,15 @@ repositories {
 
 configurations {
 	compileCommon
-	compileClient.extendsFrom compileCommon
-	compileServer.extendsFrom compileCommon
-	compile.extendsFrom compileClient, compileServer
-	runtimeCommon.extendsFrom compileCommon
-	runtimeClient.extendsFrom runtimeCommon, compileClient
-	runtimeServer.extendsFrom runtimeCommon, compileServer
-	runtimeAll.extendsFrom runtimeClient, runtimeServer
+	compileClient
+	compileServer
+	compile.extendsFrom compileCommon, compileClient, compileServer
+	runtimeCommon
+	runtimeClient.extendsFrom runtimeCommon, compileCommon, compileClient
+	runtimeServer.extendsFrom runtimeCommon, compileCommon, compileServer
+	runtimeAll.extendsFrom runtimeCommon, compileCommon, compileClient, compileServer
 	runtime.setExtendsFrom([runtimeAll])
+	//runtimeClient & runtimeServer is not linking to IDE and must not be used for adding dependencies
 }
 
 dependencies {
