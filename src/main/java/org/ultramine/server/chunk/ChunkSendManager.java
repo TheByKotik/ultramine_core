@@ -70,7 +70,7 @@ public class ChunkSendManager
 		this.player = player;
 	}
 	
-	private int getViewDistance()
+	public int getViewDistance()
 	{
 		return Math.min(manager == null ? 10 : manager.getWorldServer().getViewDistance(), player.getRenderDistance());
 	}

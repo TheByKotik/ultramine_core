@@ -9,6 +9,7 @@ import java.util.Set;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -38,8 +39,7 @@ public class ChunkGC
 	public void onTick()
 	{
 		int confCacheSize = world.getConfig().chunkLoading.chunkCacheSize;
-		int chunksPerPlayer = (int)Math.pow(world.getViewDistance()*2 + 1, 2);
-		int boundChunks = world.playerEntities.size()*chunksPerPlayer + world.getPersistentChunks().size();
+		int boundChunks = countPlayerBoundChunks() + world.getPersistentChunks().size();
 		int chunkLimit = boundChunks + confCacheSize + MAX_CHUNKS_PER_OP;
 		
 		int curTime = world.func_73046_m().getTickCounter();
@@ -78,6 +78,17 @@ public class ChunkGC
 			lastGCTime = curTime;
 			lastChunkCount = provider.chunkMap.size() - provider.unloadQueue.size();
 		}
+	}
+
+	private int countPlayerBoundChunks()
+	{
+		int boundChunks = 0;
+		for(Object player : world.playerEntities)
+		{
+			int vd = ((EntityPlayerMP)player).getChunkMgr().getViewDistance() * 2 + 1;
+			boundChunks += vd*vd;
+		}
+		return boundChunks;
 	}
 	
 	public void forceCollect()
