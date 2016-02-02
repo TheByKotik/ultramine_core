@@ -11,8 +11,7 @@ import sun.misc.Unsafe;
 public class OffHeapChunkStorage
 {
 	private static final boolean IS_CLIENT = FMLCommonHandler.instance().getSide().isClient();
-	private static final Unsafe U = UnsafeUtil.getUnsafe();
-	private static final long BYTE_ARRAY_OFFSET = U.arrayBaseOffset(byte[].class);
+	static final Unsafe U = UnsafeUtil.getUnsafe();
 	private static final int SLOT_SIZE = 4096*3;
 	private static final int SLOTS_PER_CHUNK = IS_CLIENT ? 8*512 : 8*2048;
 	private static final int SLOT_LIMIT = ((int)Math.round(Integer.parseInt(System.getProperty("org.ultramine.server.offheapchunk.memlimit", "6"))*5.3333333333d))*(8*2048);
@@ -62,7 +61,7 @@ public class OffHeapChunkStorage
 	
 	public long getUsedMemory()
 	{
-		return (counter-freeSlots.size())*SLOT_SIZE;
+		return (counter+1-freeSlots.size())*SLOT_SIZE;
 	}
 	
 	private static class MemChunk
@@ -86,6 +85,7 @@ public class OffHeapChunkStorage
 	//BLOCK#SKY
 	public static class MemSlot
 	{
+		private static final long BYTE_ARRAY_OFFSET = U.arrayBaseOffset(byte[].class);
 		private static final int OFFSET_LSB		= 0;
 		private static final int OFFSET_MSB		= 4096;
 		private static final int OFFSET_META	= 4096+2048;
