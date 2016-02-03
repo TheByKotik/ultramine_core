@@ -4,7 +4,7 @@ ultramine.teleporter.fail.dim=Failed to teleport: the world is not exists or was
 ultramine.teleporter.delay=You will be teleported in %s seconds
 ultramine.teleporter.canceled=Teleportation canceled
 
-ultramine.autobroadcast.debugmsg=Server load: %s (Peak: %s), TPS: %s/20, Mobs: %s, Items: %s, Players: %s
+ultramine.autobroadcast.debugmsg=Server load: %s (Peak: %s), TPS: %s/20, Players: %s
 ultramine.autobackup.start=Autobackup started
 
 ultramine.tools.itemblocker.useitem=Use of this item is forbidden by server

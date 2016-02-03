@@ -160,23 +160,9 @@ public class UMEventHandler
 				loadcomp.getChatStyle().setColor(load > 100 ? RED : DARK_GREEN);
 				pickloadcomp.getChatStyle().setColor(pickload >= 200 ? RED : DARK_GREEN);
 				tpscomp.getChatStyle().setColor(tps < 15 ? RED : DARK_GREEN);
-				
-				int mobcount = 0;
-				int itemcount = 0;
-				
-				for(WorldServer world : server.getMultiWorld().getLoadedWorlds())
-				{
-					for(Entity ent : GenericIterableFactory.newCastingIterable(world.loadedEntityList, Entity.class))
-					{
-						if(ent.isEntityLiving() && !ent.isEntityPlayer())
-							mobcount++;
-						else if(ent instanceof EntityItem)
-							itemcount++;
-					}
-				}
-				
+
 				ChatComponentTranslation full = new ChatComponentTranslation("ultramine.autobroadcast.debugmsg", loadcomp, pickloadcomp, tpscomp,
-						Integer.toString(mobcount), Integer.toString(itemcount), server.getConfigurationManager().playerEntityList.size());
+						server.getConfigurationManager().playerEntityList.size());
 				full.getChatStyle().setColor(YELLOW);
 				
 				server.addChatMessage(full);

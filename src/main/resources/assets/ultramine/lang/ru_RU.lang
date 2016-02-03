@@ -4,7 +4,7 @@ ultramine.teleporter.fail.dim=Не удалось телепортировать
 ultramine.teleporter.delay=Вы будете телепортированы через %s секунд
 ultramine.teleporter.canceled=Телепортация отменена
 
-ultramine.autobroadcast.debugmsg=Сервер нагружен на %s (В пике - %s), Тиков в секунду: %s/20, Мобов: %s, Предметов: %s, Игроков: %s
+ultramine.autobroadcast.debugmsg=Сервер нагружен на %s (В пике - %s), Тиков в секунду: %s/20, Игроков: %s
 ultramine.autobackup.start=Выполняется автоматический бэкап мира
 
 ultramine.tools.itemblocker.useitem=Использование данного предмета запрещено сервером
