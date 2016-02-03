@@ -8,5 +8,6 @@ public class UMTransformerCollection extends UMTBatchTransformer
 	{
 		registerGlobalTransformer(new PrintStackTraceTransformer());
 		registerGlobalTransformer(new TrigMathTransformer());
+		registerSpecialTransformer(new BlockLeavesBaseFixer(), "net.minecraft.block.BlockLeavesBase");
 	}
 }

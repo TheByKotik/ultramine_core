@@ -29,9 +29,14 @@ public class BlockLeavesBase extends Block
 		Block block = p_149646_1_.getBlock(p_149646_2_, p_149646_3_, p_149646_4_);
 		return !this.field_150121_P && block == this ? false : super.shouldSideBeRendered(p_149646_1_, p_149646_2_, p_149646_3_, p_149646_4_, p_149646_5_);
 	}
-	
+
+	/**
+	 * This method added by UltraMine and may be replaced by mods.
+	 * @see org.ultramine.server.asm.transformers.BlockLeavesBaseFixer
+	 */
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
 	{
+		// If you modifying this code, don't forget to change signature in BlockLeavesBaseFixer
 		if(!world.isRemote && ((WorldServer)world).getConfig().settings.fastLeafDecay)
 		{
 			int meta = world.getBlockMetadata(x, y, z);
