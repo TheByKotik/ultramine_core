@@ -8,7 +8,7 @@ import java.util.Map;
 
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
-@SortingIndex(Integer.MAX_VALUE) //Java8ComputeFramesTransformer must be always the last
+@SortingIndex(Integer.MAX_VALUE) //UMTransformerCollection must be always the last
 public class UltraminePlugin implements IFMLLoadingPlugin
 {
 	public static File location;
@@ -18,10 +18,7 @@ public class UltraminePlugin implements IFMLLoadingPlugin
 	public String[] getASMTransformerClass()
 	{
 		return new String[]{
-				"org.ultramine.server.asm.transformers.TrigMathTransformer",
-				"org.ultramine.server.asm.transformers.PrintStackTraceTransformer",
-				
-				"org.ultramine.server.asm.transformers.Java8ComputeFramesTransformer", //must be always the last
+				"org.ultramine.server.asm.transformers.UMTransformerCollection", //must be always the last
 		};
 	}
 

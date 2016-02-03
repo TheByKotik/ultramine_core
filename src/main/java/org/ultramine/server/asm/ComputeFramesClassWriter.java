@@ -17,6 +17,7 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 public class ComputeFramesClassWriter extends ClassWriter
 {
 	private static final LaunchClassLoader CLASSLOADER = (LaunchClassLoader)ComputeFramesClassWriter.class.getClassLoader();
+	private static final String JAVA_LANG_OBJECT = "java/lang/Object";
 	
 	public ComputeFramesClassWriter()
 	{
@@ -28,21 +29,21 @@ public class ComputeFramesClassWriter extends ClassWriter
 	{
 		if(type1.equals(type2))
 			return type1;
-		if(type1.equals("java/lang/Object") || type2.equals("java/lang/Object"))
-			return "java/lang/Object";
+		if(type1.equals(JAVA_LANG_OBJECT) || type2.equals(JAVA_LANG_OBJECT))
+			return JAVA_LANG_OBJECT;
 		
 		ClassReader node1 = getClassNode(type1);
 		ClassReader node2 = getClassNode(type2);
 		
 		if((node1 != null && (node1.getAccess() & Opcodes.ACC_INTERFACE) != 0) || (node2 != null && (node2.getAccess() & Opcodes.ACC_INTERFACE) != 0))
-			return "java/lang/Object";
+			return JAVA_LANG_OBJECT;
 		
 		List<String> sup1 = getSuperTypesStack(type1, node1);
 		if(sup1 == null)
-			return "java/lang/Object";
+			return JAVA_LANG_OBJECT;
 		List<String> sup2 = getSuperTypesStack(type2, node2);
 		if(sup2 == null)
-			return "java/lang/Object";
+			return JAVA_LANG_OBJECT;
 		
 		if(sup2.contains(type1))
 			return type1;
@@ -50,7 +51,7 @@ public class ComputeFramesClassWriter extends ClassWriter
 			return type2;
 		
 		if(sup1.isEmpty() || sup2.isEmpty())
-			return "java/lang/Object";
+			return JAVA_LANG_OBJECT;
 		
 		for(int i = 0; i < sup1.size(); i++)
 		{
@@ -58,7 +59,7 @@ public class ComputeFramesClassWriter extends ClassWriter
 			if(sup2.contains(s1))
 				return s1;
 		}
-		return "java/lang/Object";
+		return JAVA_LANG_OBJECT;
 	}
 	
 	private static ClassReader getClassNode(String name)
@@ -105,7 +106,7 @@ public class ComputeFramesClassWriter extends ClassWriter
 	private static List<String> getSuperTypesStack(ClassReader node)
 	{
 		String superName = FMLDeobfuscatingRemapper.INSTANCE.map(node.getSuperName());
-		if(superName.equals("java/lang/Object"))
+		if(superName.equals(JAVA_LANG_OBJECT))
 			return Collections.emptyList();
 		List<String> list = new ArrayList<String>(4);
 		list.add(superName);
@@ -129,7 +130,7 @@ public class ComputeFramesClassWriter extends ClassWriter
 		if(node != null)
 		{
 			String superName = FMLDeobfuscatingRemapper.INSTANCE.map(node.getSuperName());
-			if(!superName.equals("java/lang/Object"))
+			if(!superName.equals(JAVA_LANG_OBJECT))
 			{
 				list.add(superName);
 				getSuperTypesStack(list, superName);

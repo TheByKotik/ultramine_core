@@ -7,16 +7,19 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.ultramine.server.asm.UMTBatchTransformer.IUMClassTransformer;
+import org.ultramine.server.asm.UMTBatchTransformer.TransformResult;
 
-import net.minecraft.launchwrapper.IClassTransformer;
-
-public class PrintStackTraceTransformer implements IClassTransformer
+/**
+ * This transformer redirects method invocations: <br />
+ * from {@link Throwable#printStackTrace()} to {@link org.ultramine.server.internal.UMHooks#printStackTrace(Throwable)};
+ */
+public class PrintStackTraceTransformer implements IUMClassTransformer
 {
 	private static final Logger log = LogManager.getLogger();
 	
@@ -35,34 +38,29 @@ public class PrintStackTraceTransformer implements IClassTransformer
 	}
 	
 	@Override
-	public byte[] transform(String name, String transformedName, byte[] basicClass)
+	public TransformResult transform(String name, String transformedName, ClassReader classReader, ClassNode classNode)
 	{
-		if(basicClass == null)
-			return null;
-		ClassNode classNode = new ClassNode();
-		ClassReader classReader = new ClassReader(basicClass);
-		classReader.accept(classNode, 0);
-
-		for(MethodNode m: classNode.methods)
+		boolean modified = false;
+		for(MethodNode m : classNode.methods)
 		{
 			for(ListIterator<AbstractInsnNode> it = m.instructions.iterator(); it.hasNext(); )
 			{
 				AbstractInsnNode insnNode = it.next();
 				if(insnNode.getType() == AbstractInsnNode.METHOD_INSN)
 				{
-					MethodInsnNode fi = (MethodInsnNode)insnNode;
-					if(THROWABLE_TYPES.contains(fi.owner) && PST_NAME.equals(fi.name) && PST_DESC.equals(fi.desc) && fi.getOpcode() == Opcodes.INVOKEVIRTUAL)
+					MethodInsnNode mi = (MethodInsnNode)insnNode;
+					if(THROWABLE_TYPES.contains(mi.owner) && PST_NAME.equals(mi.name) && PST_DESC.equals(mi.desc) && mi.getOpcode() == Opcodes.INVOKEVIRTUAL)
 					{
-						log.trace("Method {}.{}{}: Replacing INVOKEVIRTUAL {}.printStackTrace with INVOKESTATIC UMHooks.printStackTrace", name, m.name, m.desc, fi.owner);
+						log.trace("Method {}.{}{}: Replacing INVOKEVIRTUAL {}.printStackTrace with INVOKESTATIC UMHooks.printStackTrace", name, m.name, m.desc, mi.owner);
 						it.remove();
 						MethodInsnNode replace = new MethodInsnNode(Opcodes.INVOKESTATIC, UMHOOKS_TYPE, PST_NAME, UM_PST_DESC, false);
 						it.add(replace);
+						modified = true;
 					}
 				}
 			}
 		}
-		ClassWriter writer = new ClassWriter(0);
-		classNode.accept(writer);
-		return writer.toByteArray();
+
+		return modified ? TransformResult.MODIFIED : TransformResult.NOT_MODIFIED;
 	}
 }

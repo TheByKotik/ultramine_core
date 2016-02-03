@@ -5,16 +5,21 @@ import java.util.ListIterator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import net.minecraft.launchwrapper.IClassTransformer;
+import org.ultramine.server.asm.UMTBatchTransformer.IUMClassTransformer;
+import org.ultramine.server.asm.UMTBatchTransformer.TransformResult;
 
-public class TrigMathTransformer implements IClassTransformer
+/**
+ * This transformer redirects method invocations: <br />
+ * from {@link Math#atan(double)} to {@link org.ultramine.server.util.TrigMath#atan(double)}; <br />
+ * from {@link Math#atan2(double, double)} to {@link org.ultramine.server.util.TrigMath#atan2(double, double)}
+ */
+public class TrigMathTransformer implements IUMClassTransformer
 {
 	private static final Logger log = LogManager.getLogger();
 	
@@ -26,42 +31,38 @@ public class TrigMathTransformer implements IClassTransformer
 	private static final String ATAN_DESC = "(D)D";
 	
 	@Override
-	public byte[] transform(String name, String transformedName, byte[] basicClass)
+	public TransformResult transform(String name, String transformedName, ClassReader classReader, ClassNode classNode)
 	{
-		if (basicClass == null)
-			return null;
-		ClassNode classNode = new ClassNode();
-		ClassReader classReader = new ClassReader(basicClass);
-		classReader.accept(classNode, 0);
-
-		for (MethodNode m: classNode.methods)
+		boolean modified = false;
+		for (MethodNode m : classNode.methods)
 		{
 			for (ListIterator<AbstractInsnNode> it = m.instructions.iterator(); it.hasNext(); )
 			{
 				AbstractInsnNode insnNode = it.next();
 				if (insnNode.getType() == AbstractInsnNode.METHOD_INSN)
 				{
-					MethodInsnNode fi = (MethodInsnNode)insnNode;
-					if (MATH_TYPE.equals(fi.owner) && ATAN2_NAME.equals(fi.name) && ATAN2_DESC.equals(fi.desc) && fi.getOpcode() == Opcodes.INVOKESTATIC)
+					MethodInsnNode mi = (MethodInsnNode)insnNode;
+					if (MATH_TYPE.equals(mi.owner) && ATAN2_NAME.equals(mi.name) && ATAN2_DESC.equals(mi.desc) && mi.getOpcode() == Opcodes.INVOKESTATIC)
 					{
 						log.trace("Method {}.{}{}: Replacing INVOKESTATIC Math.atan2 with INVOKESTATIC TrigMath.atan2", name, m.name, m.desc);
 						it.remove();
 						MethodInsnNode replace = new MethodInsnNode(Opcodes.INVOKESTATIC, TRIGMATH_TYPE, ATAN2_NAME, ATAN2_DESC, false);
 						it.add(replace);
+						modified = true;
 					}
 					
-					if (MATH_TYPE.equals(fi.owner) && ATAN_NAME.equals(fi.name) && ATAN_DESC.equals(fi.desc) && fi.getOpcode() == Opcodes.INVOKESTATIC)
+					if (MATH_TYPE.equals(mi.owner) && ATAN_NAME.equals(mi.name) && ATAN_DESC.equals(mi.desc) && mi.getOpcode() == Opcodes.INVOKESTATIC)
 					{
 						log.trace("Method {}.{}{}: Replacing INVOKESTATIC Math.atan with INVOKESTATIC TrigMath.atan", name, m.name, m.desc);
 						it.remove();
 						MethodInsnNode replace = new MethodInsnNode(Opcodes.INVOKESTATIC, TRIGMATH_TYPE, ATAN_NAME, ATAN_DESC, false);
 						it.add(replace);
+						modified = true;
 					}
 				}
 			}
 		}
-		ClassWriter writer = new ClassWriter(0);
-		classNode.accept(writer);
-		return writer.toByteArray();
+
+		return modified ? TransformResult.MODIFIED : TransformResult.NOT_MODIFIED;
 	}
 }
