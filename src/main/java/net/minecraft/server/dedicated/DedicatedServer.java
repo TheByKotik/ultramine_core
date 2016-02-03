@@ -53,6 +53,7 @@ import org.ultramine.server.bootstrap.UMBootstrap;
 import org.ultramine.server.internal.JLineSupport;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.GlobalExecutors;
+import org.ultramine.server.world.WorldDescriptor;
 
 @SideOnly(Side.SERVER)
 public class DedicatedServer extends MinecraftServer implements IServer
@@ -71,7 +72,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	public DedicatedServer(File p_i1508_1_)
 	{
 		super(p_i1508_1_, Proxy.NO_PROXY);
-		field_152367_a = new File(getDataDirectory(), "usercache.json");
+		field_152367_a = getVanillaFile("usercache.json");
 		field_152366_X = new PlayerProfileCache(this, field_152367_a);
 		Thread thread = new Thread("Server Infinisleeper")
 		{
@@ -608,15 +609,21 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	}
 	
 	@Override
-	protected File getDataDirectory()
-	{
-		return ConfigurationHandler.getStorageDir();
-	}
-	
-	@Override
 	public File getHomeDirectory()
 	{
 		return FMLLaunchHandler.getMinecraftHome();
+	}
+
+	@Override
+	public File getVanillaFile(String name)
+	{
+		return new File(ConfigurationHandler.getVanillaConfigsDir(), name);
+	}
+
+	@Override
+	public File getStorageFile(String name)
+	{
+		return new File(ConfigurationHandler.getStorageDir(), name);
 	}
 	
 	@Override

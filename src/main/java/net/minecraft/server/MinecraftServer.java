@@ -1548,6 +1548,16 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	{
 		return getDataDirectory();
 	}
+
+	public File getVanillaFile(String name)
+	{
+		return getFile(name);
+	}
+
+	public File getStorageFile(String name)
+	{
+		return getFile(name);
+	}
 	
 	public File getBackupDir()
 	{

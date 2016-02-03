@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.command.CommandHandler;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -102,6 +101,7 @@ public class UltramineServerModContainer extends DummyModContainer
 				ConfigurationHandler.load();
 				Databases.init();
 				MinecraftServer.getServer().getMultiWorld().preloadConfigs();
+				ConfigurationHandler.postWorldDescsLoad();
 			}
 		}
 		catch (Throwable t)

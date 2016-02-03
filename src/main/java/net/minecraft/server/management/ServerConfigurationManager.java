@@ -64,7 +64,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.demo.DemoWorldManager;
 import net.minecraft.world.storage.IPlayerFileData;
 
@@ -72,18 +71,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.server.ConfigurationHandler;
-import org.ultramine.server.PermissionHandler;
-import org.ultramine.server.chunk.IChunkLoadCallback;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.internal.UMHooks;
 import org.ultramine.server.util.WarpLocation;
 
 public abstract class ServerConfigurationManager
 {
-	public static File field_152613_a = MinecraftServer.getServer().getFile("banned-players.json");
-	public static File field_152614_b = MinecraftServer.getServer().getFile("banned-ips.json");
-	public static File field_152615_c = MinecraftServer.getServer().getFile("ops.json");
-	public static File field_152616_d = MinecraftServer.getServer().getFile("whitelist.json");
+	public static File field_152613_a = MinecraftServer.getServer().getVanillaFile("banned-players.json");
+	public static File field_152614_b = MinecraftServer.getServer().getVanillaFile("banned-ips.json");
+	public static File field_152615_c = MinecraftServer.getServer().getVanillaFile("ops.json");
+	public static File field_152616_d = MinecraftServer.getServer().getVanillaFile("whitelist.json");
 	private static final Logger logger = LogManager.getLogger();
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd \'at\' HH:mm:ss z");
 	private final MinecraftServer mcServer;
@@ -104,10 +101,10 @@ public abstract class ServerConfigurationManager
 
 	public ServerConfigurationManager(MinecraftServer p_i1500_1_)
 	{
-		field_152613_a = p_i1500_1_.getFile("banned-players.json");
-		field_152614_b = p_i1500_1_.getFile("banned-ips.json");
-		field_152615_c = p_i1500_1_.getFile("ops.json");
-		field_152616_d = p_i1500_1_.getFile("whitelist.json");
+		field_152613_a = p_i1500_1_.getVanillaFile("banned-players.json");
+		field_152614_b = p_i1500_1_.getVanillaFile("banned-ips.json");
+		field_152615_c = p_i1500_1_.getVanillaFile("ops.json");
+		field_152616_d = p_i1500_1_.getVanillaFile("whitelist.json");
 	
 		this.bannedPlayers = new UserListBans(field_152613_a);
 		this.bannedIPs = new BanList(field_152614_b);

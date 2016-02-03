@@ -125,7 +125,7 @@ public class NBTFileDataProvider implements IDataProvider
 	@Override
 	public Map<String, WarpLocation> loadWarps()
 	{
-		File file = mgr.getServerInstance().getFile("warps.yml");
+		File file = mgr.getServerInstance().getStorageFile("warps.yml");
 		if(file.exists())
 		{
 			YamlWarpList warps = YamlConfigProvider.getOrCreateConfig(file, YamlWarpList.class);
@@ -246,7 +246,7 @@ public class NBTFileDataProvider implements IDataProvider
 	
 	private void writeWarpList()
 	{
-		File file = mgr.getServerInstance().getFile("warps.yml");
+		File file = mgr.getServerInstance().getStorageFile("warps.yml");
 		YamlWarpList warps = new YamlWarpList();
 		warps.warps = mgr.getDataLoader().getWarps();
 		warps.fastWarps = mgr.getDataLoader().getFastWarps();
