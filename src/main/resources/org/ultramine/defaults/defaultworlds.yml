@@ -58,7 +58,7 @@ global: &global
         fastLeafDecay: false
     borders: []
     chunkLoading: &global_cl
-        viewDistance: 10
+        viewDistance: 15
         chunkActivateRadius: 7
         chunkCacheSize: 1024
         enableChunkLoaders: true

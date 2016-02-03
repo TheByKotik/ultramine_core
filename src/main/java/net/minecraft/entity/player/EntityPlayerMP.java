@@ -101,6 +101,7 @@ import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.PermissionHandler;
+import org.ultramine.server.WorldConstants;
 import org.ultramine.server.event.PlayerDeathEvent;
 import org.ultramine.server.internal.UMHooks;
 import org.ultramine.server.chunk.ChunkSendManager;
@@ -921,7 +922,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		this.translator = p_147100_1_.func_149524_c();
 		int i = /*256 >>*/ p_147100_1_.func_149521_d();
 
-		this.renderDistance = MathHelper.clamp_int(i, 3, 15);
+		this.renderDistance = MathHelper.clamp_int(i, 3, WorldConstants.MAX_VIEW_DISTANCE);
 
 		this.chatVisibility = p_147100_1_.func_149523_e();
 		this.chatColours = p_147100_1_.func_149520_f();
