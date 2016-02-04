@@ -79,8 +79,12 @@ public class MultiWorld
 		channel.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
 		for (int dim : DimensionManager.getStaticDimensionIDs())
 		{
-			int pid = DimensionManager.getProviderType(dim);
-			channel.writeAndFlush(new ForgeMessage.DimensionRegisterMessage(dim, provTranslt.containsKey(pid) ? provTranslt.get(pid) : pid));
+			WorldDescriptor desc = getDescByID(dim);
+			if(desc != null && desc.isSendDimToPlayers())
+			{
+				int pid = DimensionManager.getProviderType(dim);
+				channel.writeAndFlush(new ForgeMessage.DimensionRegisterMessage(dim, provTranslt.containsKey(pid) ? provTranslt.get(pid) : pid));
+			}
 		}
 	}
 	
@@ -183,6 +187,7 @@ public class MultiWorld
 			desc = getOrCreateDescriptor(dim);
 			desc.setState(WorldState.AVAILABLE);
 			desc.setConfig(cloneGlobalConfig());
+			desc.setSendDimToPlayers(false);
 		}
 		if(desc != null)
 			desc.weakLoadNow();

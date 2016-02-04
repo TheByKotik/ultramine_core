@@ -200,6 +200,8 @@ public class ChunkSendManager
 	
 	public void update()
 	{
+		if(manager == null)
+			return;
 		if(!toSend.isEmpty())
 		{
 			int queueSize = sendingQueueSize.get();

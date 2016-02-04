@@ -674,6 +674,8 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 				return;
 			}
 		}
+		else if (p_147359_1_ instanceof net.minecraft.network.play.server.S07PacketRespawn)
+			playerEntity.getChunkMgr().stopSending();
 
 		try
 		{

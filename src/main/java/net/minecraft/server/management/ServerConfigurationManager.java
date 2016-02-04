@@ -572,7 +572,6 @@ public abstract class ServerConfigurationManager
 		if(worldserver1 == null)
 			throw new IllegalArgumentException("World not found for dimension " + p_72356_2_);
 		p_72356_1_.dimension = p_72356_2_;
-		p_72356_1_.getChunkMgr().stopSending(); //before sending S07PacketRespawn
 		p_72356_1_.playerNetServerHandler.sendPacket(new S07PacketRespawn(p_72356_1_.dimension, p_72356_1_.worldObj.difficultySetting, p_72356_1_.worldObj.getWorldInfo().getTerrainType(), p_72356_1_.theItemInWorldManager.getGameType()));
 		worldserver.removePlayerEntityDangerously(p_72356_1_);
 		p_72356_1_.isDead = false;

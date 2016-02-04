@@ -53,6 +53,7 @@ public class WorldDescriptor
 	private WorldState state = WorldState.UNREGISTERED;
 	private final AtomicBoolean transitState = new AtomicBoolean();
 	private boolean temp;
+	private boolean sendDimToPlayers = true;
 	private IWorldLoader worldLoader;
 	private WorldServer world;
 	
@@ -122,7 +123,17 @@ public class WorldDescriptor
 	{
 		this.temp = temp;
 	}
-	
+
+	public boolean isSendDimToPlayers()
+	{
+		return sendDimToPlayers;
+	}
+
+	public void setSendDimToPlayers(boolean sendDimToPlayers)
+	{
+		this.sendDimToPlayers = sendDimToPlayers;
+	}
+
 	public WorldServer getWorld()
 	{
 		return world;
