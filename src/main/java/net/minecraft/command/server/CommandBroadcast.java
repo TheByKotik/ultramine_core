@@ -34,7 +34,7 @@ public class CommandBroadcast extends CommandBase
 		if (p_71515_2_.length > 0 && p_71515_2_[0].length() > 0)
 		{
 			IChatComponent ichatcomponent = func_147176_a(p_71515_1_, p_71515_2_, 0, true);
-			ChatComponentTranslation text = new ChatComponentTranslation("chat.type.announcement", new Object[] {"Сервер", ichatcomponent});
+			ChatComponentTranslation text = new ChatComponentTranslation("chat.type.announcement", new ChatComponentTranslation("command.say.server"), ichatcomponent);
 			text.getChatStyle().setColor(EnumChatFormatting.DARK_PURPLE);
 			MinecraftServer.getServer().getConfigurationManager().sendChatMsg(text);
 		}

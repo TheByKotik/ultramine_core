@@ -54,6 +54,8 @@ command.weather.description=Sets weather in current or specified world
 command.time.usage=/time [world] [add|set] <day|night|time>
 command.time.description=Sets time in current or specified world
 
+command.say.server=Server
+
 # Permissions
 command.pconfig.usage=/pconfig <save|reload>
 command.pconfig.description=Save or reload all permissions configs

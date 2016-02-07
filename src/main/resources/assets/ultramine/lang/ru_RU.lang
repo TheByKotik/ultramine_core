@@ -54,6 +54,8 @@ command.weather.description=Устанавливает погоду в теку�
 command.time.usage=/time [мир] [add|set] <day|night|время>
 command.time.description=Устанавливает время суток в текущем или указанном мире
 
+command.say.server=Сервер
+
 # Permissions
 command.pconfig.usage=/pconfig <save|reload>
 command.pconfig.description=Save or reload all permissions configs
