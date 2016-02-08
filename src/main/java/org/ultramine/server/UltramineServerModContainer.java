@@ -19,6 +19,7 @@ import org.ultramine.economy.EconomyCommands;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.permission.commands.BasicPermissionCommands;
+import org.ultramine.server.chunk.ChunkGenerationQueue;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.data.Databases;
 import org.ultramine.server.data.ServerDataLoader;
@@ -145,6 +146,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	{
 		try
 		{
+			ChunkGenerationQueue.instance().register();
 			e.getServer().getMultiWorld().register();
 			if(e.getSide().isServer())
 			{
@@ -240,6 +242,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		try
 		{
 			MinecraftServer.getServer().getMultiWorld().unregister();
+			ChunkGenerationQueue.instance().unregister();
 			ChunkProfiler.instance().setEnabled(false);
 			
 			if(e.getSide().isServer())

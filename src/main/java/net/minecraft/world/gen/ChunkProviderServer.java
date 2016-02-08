@@ -46,6 +46,7 @@ import org.ultramine.server.WorldConstants;
 import org.ultramine.server.chunk.CallbackMultiChunkDependentTask;
 import org.ultramine.server.chunk.ChunkBindState;
 import org.ultramine.server.chunk.ChunkGC;
+import org.ultramine.server.chunk.ChunkGenerationQueue;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.ChunkMap;
 import org.ultramine.server.chunk.IChunkLoadCallback;
@@ -480,7 +481,7 @@ public class ChunkProviderServer implements IChunkProvider
 		return chunkGC;
 	}
 	
-	public void loadAsync(int x, int z, IChunkLoadCallback callback)
+	public boolean loadAsync(int x, int z, boolean generateOnRequest, IChunkLoadCallback callback)
 	{
 		Chunk chunk = chunkMap.get(x, z);
 		if(chunk != null)
@@ -491,10 +492,22 @@ public class ChunkProviderServer implements IChunkProvider
 		{
 			ChunkIOExecutor.queueChunkLoad(this.worldObj, (AnvilChunkLoader)currentChunkLoader, this, x, z, callback);
 		}
-		else
+		else if(generateOnRequest)
 		{
 			callback.onChunkLoaded(originalLoadChunk(x, z));
 		}
+		else
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	public void loadAsync(int x, int z, IChunkLoadCallback callback)
+	{
+		if(!loadAsync(x, z, false, callback))
+			ChunkGenerationQueue.instance().queueChunkGeneration(this, x, z, callback);
 	}
 	
 	public void loadAsync(int x, int z)
