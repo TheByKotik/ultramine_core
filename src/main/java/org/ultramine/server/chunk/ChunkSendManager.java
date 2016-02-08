@@ -52,17 +52,16 @@ public class ChunkSendManager
 	
 	private final TIntArrayListImpl toSend = new TIntArrayListImpl(441);
 	private final TIntIntMap sending = TCollections.synchronizedMap(new TIntIntHashMap());
-	private final TIntSet sendingSage2 = TCollections.synchronizedSet(new TIntHashSet());
-	private final IntSet sended = HashIntSets.newMutableSet();
+	private final TIntSet sendingStage2 = TCollections.synchronizedSet(new TIntHashSet());
+	private final IntSet sent = HashIntSets.newMutableSet();
 	private final Queue<ChunkIdStruct> toUpdate = Queues.newConcurrentLinkedQueue();
-	private final List<ChunkIdStruct> loadedChunksBuffer = new ArrayList<ChunkIdStruct>();
 	private final AtomicInteger sendingQueueSize = new AtomicInteger();
 	private final Object lock = new Object();
 	
 	private int lastQueueSize;
 	private double rate = 0;
 	private int intervalCounter = 1;
-	private boolean sendedLastTick = false;
+	private boolean sentLastTick = false;
 	private int sendIndexCounter;
 	
 	public ChunkSendManager(EntityPlayerMP player)
@@ -107,7 +106,7 @@ public class ChunkSendManager
 					}
 				}
 				
-				for(IntCursor it = sended.cursor(); it.moveNext();)
+				for(IntCursor it = sent.cursor(); it.moveNext();)
 				{
 					int key = it.elem();
 					if(!overlaps(cx, cz, ChunkHash.keyToX(key), ChunkHash.keyToZ(key), curView))
@@ -125,7 +124,7 @@ public class ChunkSendManager
 					for (int z = cz - curView; z <= cz + curView; ++z)
 					{
 						int key = ChunkHash.chunkToKey(x, z);
-						if(!toSend.contains(key) && !sended.contains(key) && !sending.containsKey(key))
+						if(!toSend.contains(key) && !sent.contains(key) && !sending.containsKey(key))
 						{
 							toSend.add(key);
 						}
@@ -177,13 +176,13 @@ public class ChunkSendManager
 			cancelSending(key);
 		}
 		
-		for(IntCursor it = sended.cursor(); it.moveNext();)
+		for(IntCursor it = sent.cursor(); it.moveNext();)
 		{
 			int key = it.elem();
 			PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(ChunkHash.keyToX(key), ChunkHash.keyToZ(key), false);
 			if (pi != null) pi.removePlayer(player);
 		}
-		sended.clear();
+		sent.clear();
 		
 		this.manager = null;
 	}
@@ -208,7 +207,7 @@ public class ChunkSendManager
 			int maxRate = manager.getWorldServer().getConfig().chunkLoading.maxSendRate;
 			int maxQueueSize = maxRate*2;
 			
-			if(sendedLastTick)
+			if(sentLastTick)
 			{
 				if(queueSize == 0)
 				{
@@ -235,7 +234,7 @@ public class ChunkSendManager
 			if(queueSize <= maxQueueSize)
 			{
 				lastQueueSize = queueSize;
-				sendedLastTick = true;
+				sentLastTick = true;
 			
 				if(rate >= 1)
 				{
@@ -255,7 +254,7 @@ public class ChunkSendManager
 		}
 		else
 		{
-			sendedLastTick = false;
+			sentLastTick = false;
 		}
 		
 		for(ChunkIdStruct chunkId; (chunkId = toUpdate.poll()) != null;)
@@ -266,14 +265,14 @@ public class ChunkSendManager
 			if(sending.get(key) == chunkId.id)
 			{
 				sending.remove(key);
-				sendingSage2.remove(key);
+				sendingStage2.remove(key);
 				try
 				{
 					manager.getOrCreateChunkWatcher(chunk.xPosition, chunk.zPosition, true).addPlayer(player);
 				}
 				catch (IllegalStateException e)
 				{
-					// in some cases chunk may be sended 2 times. It's not a big problem, I think. Just ignore it
+					// in some cases chunk may be sent 2 times. It's not a big problem, I think. Just ignore it
 					log.debug(e);
 					continue;
 				}
@@ -293,7 +292,7 @@ public class ChunkSendManager
 				manager.getWorldServer().getEntityTracker().func_85172_a(player, chunk);
 				MinecraftForge.EVENT_BUS.post(new ChunkWatchEvent.Watch(chunk.getChunkCoordIntPair(), player));
 				
-				sended.add(key);
+				sent.add(key);
 			}
 			else
 			{
@@ -315,7 +314,7 @@ public class ChunkSendManager
 			sendingQueueSize.incrementAndGet();
 			int ncx = ChunkHash.keyToX(key);
 			int ncz = ChunkHash.keyToZ(key);
-			manager.getWorldServer().theChunkProviderServer.loadAsyncWithRadius(ncx, ncz, 1, new ChukLoadCallback(curID));
+			manager.getWorldServer().theChunkProviderServer.loadAsyncWithRadius(ncx, ncz, 1, new ChunkLoadCallback(curID));
 		}
 		toSend.remove(0, count);
 	}
@@ -356,11 +355,11 @@ public class ChunkSendManager
 							int key = ChunkHash.chunkToKey(x - movX, z - movZ);
 							if(!toSend.remove(key))
 							{
-								if(sended.contains(key))
+								if(sent.contains(key))
 								{
 									PlayerManager.PlayerInstance pi = manager.getOrCreateChunkWatcher(x - movX, z - movZ, false);
 									if(pi != null) pi.removePlayer(player);
-									sended.removeInt(key);
+									sent.removeInt(key);
 								}
 								else
 								{
@@ -392,7 +391,7 @@ public class ChunkSendManager
 	{
 		int movX = x - lastX;
 		int movZ = z - lastZ;
-		return movX >= -radius && movX <= radius ? movZ >= -radius && movZ <= radius : false;
+		return (movX >= -radius && movX <= radius) && (movZ >= -radius && movZ <= radius);
 	}
 	
 	private void cancelSending(int key)
@@ -400,7 +399,7 @@ public class ChunkSendManager
 		synchronized(lock)
 		{
 			sending.remove(key);
-			if(sendingSage2.remove(key))
+			if(sendingStage2.remove(key))
 				player.playerNetServerHandler.netManager.scheduleOutboundPacket(S21PacketChunkData.makeForUnload(ChunkHash.keyToX(key), ChunkHash.keyToZ(key)));
 		}
 	}
@@ -412,8 +411,8 @@ public class ChunkSendManager
 	
 	private static class ChunkIdStruct
 	{
-		public Chunk chunk;
-		public int id;
+		public final Chunk chunk;
+		public final int id;
 		
 		public ChunkIdStruct(Chunk chunk, int id)
 		{
@@ -422,11 +421,11 @@ public class ChunkSendManager
 		}
 	}
 	
-	private class ChukLoadCallback implements IChunkLoadCallback
+	private class ChunkLoadCallback implements IChunkLoadCallback
 	{
-		private int id;
+		private final int id;
 		
-		public ChukLoadCallback(int id)
+		public ChunkLoadCallback(int id)
 		{
 			this.id = id;
 		}
@@ -492,8 +491,8 @@ public class ChunkSendManager
 			
 			packet.deflate();
 			
-			//Нужно одновременно отправить чанк и добавить его в список sendingSage2, чтобы можно было корректно отменить отправку:
-			//(Если чанк есть в списке sendingSage2, посылать пакет на отгрузку. В ином случае просто удалиь из списка sending)
+			//Нужно одновременно отправить чанк и добавить его в список sendingStage2, чтобы можно было корректно отменить отправку:
+			//(Если чанк есть в списке sendingStage2, посылать пакет на отгрузку. В ином случае просто удалиь из списка sending)
 			synchronized(lock)
 			{
 				if(!checkActual())
@@ -507,7 +506,7 @@ public class ChunkSendManager
 							sendingQueueSize.decrementAndGet();
 						}
 					});
-				sendingSage2.add(ChunkHash.chunkToKey(chunkId.chunk.xPosition, chunkId.chunk.zPosition));
+				sendingStage2.add(ChunkHash.chunkToKey(chunkId.chunk.xPosition, chunkId.chunk.zPosition));
 			}
 				
 			toUpdate.add(chunkId);
