@@ -60,10 +60,15 @@ public class GuiVideoSettings extends GuiScreen
 		{
 			if (p_146284_1_.id == 200)
 			{
-				this.mc.gameSettings.saveOptions();
+//				this.mc.gameSettings.saveOptions();
 				this.mc.displayGuiScreen(this.parentGuiScreen);
 			}
 		}
+	}
+
+	public void onGuiClosed()
+	{
+		this.mc.gameSettings.saveOptions();
 	}
 
 	protected void mouseClicked(int p_73864_1_, int p_73864_2_, int p_73864_3_)
