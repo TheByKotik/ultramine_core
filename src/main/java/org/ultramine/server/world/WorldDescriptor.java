@@ -253,7 +253,6 @@ public class WorldDescriptor
 			player.isDead = false;
 			world.getEntityTracker().removePlayerFromTrackers(player);
 			world.getPlayerManager().removePlayer(player);
-			player.getChunkMgr().setWorldDestroyed();
 			player.setWorld(null);
 			player.theItemInWorldManager.setWorld(null);
 		}

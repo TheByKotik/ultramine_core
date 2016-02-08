@@ -63,6 +63,7 @@ public class ChunkSendManager
 	private int intervalCounter = 1;
 	private boolean sentLastTick = false;
 	private int sendIndexCounter;
+	private boolean sortSendQueueLater;
 	
 	public ChunkSendManager(EntityPlayerMP player)
 	{
@@ -76,9 +77,17 @@ public class ChunkSendManager
 	
 	private void sortSendQueue()
 	{
+		sortSendQueueLater = true;
+	}
+
+	private void doSortSendQueue()
+	{
+		if(!sortSendQueueLater)
+			return;
+		sortSendQueueLater = false;
 		int cx = MathHelper.floor_double(player.posX) >> 4;
 		int cz = MathHelper.floor_double(player.posZ) >> 4;
-		toSend.sort(ChunkCoordComparator.get(lastFace = BlockFace.yawToFace(player.rotationYaw), cx, cz));
+		toSend.backSort(ChunkCoordComparator.get(lastFace = BlockFace.yawToFace(player.rotationYaw), cx, cz));
 	}
 	
 	private void checkDistance()
@@ -192,11 +201,6 @@ public class ChunkSendManager
 		removeFrom(manager);
 	}
 	
-	public void setWorldDestroyed()
-	{
-		sendingQueueSize.set(0);
-	}
-	
 	public void update()
 	{
 		if(manager == null)
@@ -302,13 +306,14 @@ public class ChunkSendManager
 			}
 		}
 	}
-	
+
 	private void sendChunks(int count)
 	{
+		doSortSendQueue();
 		count = Math.min(count, toSend.size());
 		for(int i = 0; i < count; i++)
 		{
-			int key = toSend.get(i);
+			int key = toSend.removeAt(toSend.size() - 1);
 			int curID = ++sendIndexCounter;
 			sending.put(key, curID);
 			sendingQueueSize.incrementAndGet();
@@ -316,26 +321,23 @@ public class ChunkSendManager
 			int ncz = ChunkHash.keyToZ(key);
 			manager.getWorldServer().theChunkProviderServer.loadAsyncWithRadius(ncx, ncz, 1, new ChunkLoadCallback(curID));
 		}
-		toSend.remove(0, count);
 	}
 	
 	public void updatePlayerPertinentChunks()
 	{
 		checkDistance();
-		
-		int cx = MathHelper.floor_double(player.posX) >> 4;
-		int cz = MathHelper.floor_double(player.posZ) >> 4;
+
+		int view = getViewDistance();
 		double d0 = player.managedPosX - player.posX;
 		double d1 = player.managedPosZ - player.posZ;
 		double square = d0 * d0 + d1 * d1;
-
-		boolean sorted = false;
 		
-		if (square >= 64.0D)
+		if (square >= 4 * view * view)
 		{
+			int cx = MathHelper.floor_double(player.posX) >> 4;
+			int cz = MathHelper.floor_double(player.posZ) >> 4;
 			int lastX = MathHelper.floor_double(player.managedPosX) >> 4;
 			int lastZ = MathHelper.floor_double(player.managedPosZ) >> 4;
-			int view = getViewDistance();
 			int movX = cx - lastX;
 			int movZ = cz - lastZ;
 
@@ -371,20 +373,13 @@ public class ChunkSendManager
 				}
 
 				sortSendQueue();
-				sorted = true;
 				player.managedPosX = player.posX;
 				player.managedPosZ = player.posZ;
 			}
 		}
-		
-		if(!sorted)
-		{
-			BlockFace face = BlockFace.yawToFace(player.rotationYaw);
-			if(face != lastFace)
-			{
-				sortSendQueue();
-			}
-		}
+
+		if(BlockFace.yawToFace(player.rotationYaw) != lastFace)
+			sortSendQueue();
 	}
 	
 	private boolean overlaps(int x, int z, int lastX, int lastZ, int radius)

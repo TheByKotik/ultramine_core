@@ -5,7 +5,6 @@ import gnu.trove.list.array.TIntArrayList;
 
 public class TIntArrayListImpl extends TIntArrayList
 {
-
 	public TIntArrayListImpl()
 	{
 		super();
@@ -39,5 +38,17 @@ public class TIntArrayListImpl extends TIntArrayList
 	public void sort(IntComparator comp)
 	{
 		CollectionUtil.sort(_data, 0, _pos, comp);
+	}
+
+	public void backSort(IntComparator comp)
+	{
+		sort(new IntComparator()
+		{
+			@Override
+			public int compare(int i1, int i2)
+			{
+				return comp.compare(i2, i1);
+			}
+		});
 	}
 }
