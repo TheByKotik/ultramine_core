@@ -26,7 +26,6 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentStyle;
@@ -37,7 +36,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
-import net.minecraft.world.WorldServer;
+
 import static net.minecraft.util.EnumChatFormatting.*;
 
 import net.minecraftforge.common.ForgeHooks;
@@ -151,17 +150,17 @@ public class UMEventHandler
 			{
 				double tps = Math.round(server.currentTPS*10)/10d;
 				double downtime = server.currentWait/1000/1000d;
-				double pickdowntime = server.pickWait/1000/1000d;
+				double peakdowntime = server.peakWait /1000/1000d;
 				int load = (int)Math.round((50-downtime)/50*100);
-				int pickload = (int)Math.round((50-pickdowntime)/50*100);
+				int peakload = (int)Math.round((50-peakdowntime)/50*100);
 				ChatComponentText loadcomp = new ChatComponentText(Integer.toString(load).concat("%"));
-				ChatComponentText pickloadcomp = new ChatComponentText(Integer.toString(pickload).concat("%"));
+				ChatComponentText peakloadcomp = new ChatComponentText(Integer.toString(peakload).concat("%"));
 				ChatComponentText tpscomp = new ChatComponentText(Double.toString(tps));
 				loadcomp.getChatStyle().setColor(load > 100 ? RED : DARK_GREEN);
-				pickloadcomp.getChatStyle().setColor(pickload >= 200 ? RED : DARK_GREEN);
+				peakloadcomp.getChatStyle().setColor(peakload >= 200 ? RED : DARK_GREEN);
 				tpscomp.getChatStyle().setColor(tps < 15 ? RED : DARK_GREEN);
 
-				ChatComponentTranslation full = new ChatComponentTranslation("ultramine.autobroadcast.debugmsg", loadcomp, pickloadcomp, tpscomp,
+				ChatComponentTranslation full = new ChatComponentTranslation("ultramine.autobroadcast.debugmsg", loadcomp, peakloadcomp, tpscomp,
 						server.getConfigurationManager().playerEntityList.size());
 				full.getChatStyle().setColor(YELLOW);
 				

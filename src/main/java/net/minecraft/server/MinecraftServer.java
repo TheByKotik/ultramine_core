@@ -84,7 +84,6 @@ import org.ultramine.scheduler.Scheduler;
 import org.ultramine.server.BackupManager;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.internal.WatchdogThread;
-import org.ultramine.server.bootstrap.UMBootstrap;
 import org.ultramine.server.internal.ChatComponentLogMessage;
 import org.ultramine.server.world.MultiWorld;
 
@@ -401,7 +400,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 			if (normalStarted = startServer())
 			{
 				FMLCommonHandler.instance().handleServerStarted();
-				logger.info((UMBootstrap.isColoredTerminal() ? "\u00a7e" : "") + "Server loading totally finished");
+				logger.info("\u00a7eServer loading totally finished");
 				long i = getSystemTimeMillis();
 				long l = 0L;
 				this.field_147147_p.func_151315_a(new ChatComponentText(this.motd));
@@ -411,7 +410,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 				if(!isSinglePlayer()) WatchdogThread.doStart();
 				
 				long curWait = 0L;
-				long curPickWait = 0L;
+				long curPeakWait = 0L;
 				for (long lastTick = System.nanoTime() - TICK_TIME; this.serverRunning; this.serverIsRunning = true)
 				{
 					long curTime = System.nanoTime();
@@ -432,12 +431,12 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 					currentTPS = (currentTPS * 0.95) + (1E9 / (curTime - lastTick) * 0.05);
 					currentWait = (long)(currentWait * 0.95 + curWait * 0.05);
-					if(curWait < curPickWait)
-						curPickWait = curWait;
+					if(curWait < curPeakWait)
+						curPeakWait = curWait;
 					if(tickCounter % 20 == 0)
 					{
-						pickWait = curPickWait;
-						curPickWait = TICK_TIME;
+						peakWait = curPeakWait;
+						curPeakWait = TICK_TIME;
 					}
 					curWait = 0;
 					
@@ -1502,7 +1501,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 	public double currentTPS = 20;
 	private long catchupTime = 0;
 	public long currentWait = TICK_TIME;
-	public long pickWait = TICK_TIME;
+	public long peakWait = TICK_TIME;
 	public final long startTime = System.currentTimeMillis();
 	private Thread serverThread;
 	private final MultiWorld multiworld = new MultiWorld(this);
