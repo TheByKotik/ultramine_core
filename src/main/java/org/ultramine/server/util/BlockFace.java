@@ -1,7 +1,6 @@
 package org.ultramine.server.util;
 
-import gnu.trove.map.TObjectByteMap;
-import gnu.trove.map.hash.TObjectByteHashMap;
+import java.util.EnumMap;
 
 public enum BlockFace
 {
@@ -130,11 +129,11 @@ public enum BlockFace
 	
 	private static final BlockFace[] AXIS = new BlockFace[4];
 	private static final BlockFace[] RADIAL = {SOUTH, SOUTH_WEST, WEST, NORTH_WEST, NORTH, NORTH_EAST, EAST, SOUTH_EAST};
-	private static final TObjectByteMap<BlockFace> NOTCHES = new TObjectByteHashMap<BlockFace>();
+	private static final EnumMap<BlockFace, Integer> NOTCHES = new EnumMap<BlockFace, Integer>(BlockFace.class);
 
 	static
 	{
-		for (byte i = 0; i < RADIAL.length; i++)
+		for (int i = 0; i < RADIAL.length; i++)
 		{
 			NOTCHES.put(RADIAL[i], i);
 		}

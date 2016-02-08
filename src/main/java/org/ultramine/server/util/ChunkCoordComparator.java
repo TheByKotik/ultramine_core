@@ -1,31 +1,23 @@
 package org.ultramine.server.util;
 
+import org.ultramine.server.WorldConstants;
 import org.ultramine.server.chunk.ChunkHash;
 
 public class ChunkCoordComparator implements IntComparator
 {
-	private static final int VIEW = 15;
-	private static final int VIEWWIDTH = VIEW*2+1;
+	private static final int VIEW = WorldConstants.MAX_VIEW_DISTANCE;
+	private static final int VIEW_WIDTH = VIEW*2+1;
 	
 	private static final ChunkCoordComparator[] comparators = new ChunkCoordComparator[8];
 
-	static{init();}
-	public static void init(/*ChunkSendMode mode*/)
+	static
 	{
 		try
 		{
 			for(int i = 0; i < 8; i++)
 			{
 				comparators[i] = new ChunkCoordComparator(BlockFace.notchToFace(i));
-//				switch(mode)
-//				{
-//				case SLOPE:
-					comparators[i].generateSlope();
-//					break;
-//				default:
-//					comparators[i].generateSpiral();
-//					break;
-//				}
+				comparators[i].generateSlope();
 			}
 		}
 		catch(Throwable t)
@@ -41,7 +33,7 @@ public class ChunkCoordComparator implements IntComparator
 
 	private int index = 0;
 	private final BlockFace direction;
-	private final int[][] indices;
+	private final int[] indices;
 	private final int middleX;
 	private final int middleZ;
 
@@ -56,25 +48,29 @@ public class ChunkCoordComparator implements IntComparator
 	private ChunkCoordComparator(BlockFace direction)
 	{
 		this.direction = direction;
-		this.indices = new int[VIEWWIDTH][VIEWWIDTH];
+		this.indices = new int[VIEW_WIDTH * VIEW_WIDTH];
 		middleX = 0;
 		middleZ = 0;
+	}
+
+	private int getRawIndex(int x, int z)
+	{
+		return indices[x * VIEW_WIDTH + z];
+	}
+
+	private void setRawIndex(int x, int z, int value)
+	{
+		indices[x * VIEW_WIDTH + z] = value;
 	}
 
 	private void generate(int dx, int dz)
 	{
 		dx += VIEW;
 		dz += VIEW;
-		if(dx >= 0 && dx < this.indices.length)
+		if(dx >= 0 && dx < VIEW_WIDTH && dz >= 0 && dz < VIEW_WIDTH)
 		{
-			int[] dzaint = this.indices[dx];
-			if(dz >= 0 && dz < dzaint.length)
-			{
-				if(dzaint[dz] == 0)
-				{
-					dzaint[dz] = this.index++;
-				}
-			}
+			if(getRawIndex(dx, dz) == 0)
+				setRawIndex(dx, dz, this.index++);
 		}
 	}
 
@@ -234,7 +230,7 @@ public class ChunkCoordComparator implements IntComparator
 		{
 			return Integer.MAX_VALUE;
 		}
-		return this.indices[x + VIEW][z + VIEW];
+		return getRawIndex(x + VIEW, z + VIEW);
 	}
 
 	@Override
