@@ -11,6 +11,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.ultramine.commands.CommandRegistry;
 import org.ultramine.commands.basic.BasicCommands;
 import org.ultramine.commands.basic.FastWarpCommand;
+import org.ultramine.commands.basic.GenWorldCommand;
 import org.ultramine.commands.basic.OpenInvCommands;
 import org.ultramine.commands.basic.TechCommands;
 import org.ultramine.commands.basic.VanillaCommands;
@@ -19,6 +20,7 @@ import org.ultramine.economy.EconomyCommands;
 import org.ultramine.permission.IPermissionManager;
 import org.ultramine.permission.MinecraftPermissions;
 import org.ultramine.permission.commands.BasicPermissionCommands;
+import org.ultramine.permission.internal.SyncServerExecutorImpl;
 import org.ultramine.server.chunk.ChunkGenerationQueue;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.data.Databases;
@@ -133,7 +135,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		{
 			if(e.getSide().isServer())
 				ConfigurationHandler.saveServerConfig();
-			(GlobalExecutors.nextTick()).register();
+			((SyncServerExecutorImpl) GlobalExecutors.nextTick()).register();
 		}
 		catch (Throwable t)
 		{
@@ -171,6 +173,7 @@ public class UltramineServerModContainer extends DummyModContainer
 			e.registerCommands(VanillaCommands.class);
 			e.registerCommands(BasicCommands.class);
 			e.registerCommands(TechCommands.class);
+			e.registerCommands(GenWorldCommand.class);
 			e.registerCommands(EconomyCommands.class);
 			e.registerCommands(OpenInvCommands.class);
 			
@@ -244,6 +247,7 @@ public class UltramineServerModContainer extends DummyModContainer
 			MinecraftServer.getServer().getMultiWorld().unregister();
 			ChunkGenerationQueue.instance().unregister();
 			ChunkProfiler.instance().setEnabled(false);
+			((SyncServerExecutorImpl) GlobalExecutors.nextTick()).unregister();
 			
 			if(e.getSide().isServer())
 			{

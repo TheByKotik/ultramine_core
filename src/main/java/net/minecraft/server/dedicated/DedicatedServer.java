@@ -51,6 +51,7 @@ import org.ultramine.server.UltramineServerConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.bootstrap.UMBootstrap;
 import org.ultramine.server.internal.JLineSupport;
+import org.ultramine.server.internal.UMHooks;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.GlobalExecutors;
 import org.ultramine.server.world.WorldDescriptor;
@@ -630,5 +631,11 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	public BackupManager getBackupManager()
 	{
 		return backupMgr;
+	}
+
+	@Override
+	protected void utilizeCPU(long nanos) throws InterruptedException
+	{
+		UMHooks.utilizeCPU(nanos);
 	}
 }

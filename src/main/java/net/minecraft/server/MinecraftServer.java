@@ -420,7 +420,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 
 					if (wait > 100000)
 					{
-						Thread.sleep(wait / 1000000);
+						utilizeCPU(wait);
 						catchupTime = 0;
 						continue;
 					}
@@ -1563,5 +1563,10 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IPlay
 		File file = new File(getHomeDirectory(), "backup");
 		file.mkdir();
 		return file;
+	}
+
+	protected void utilizeCPU(long nanos) throws InterruptedException
+	{
+		Thread.sleep(nanos / 1000000);
 	}
 }

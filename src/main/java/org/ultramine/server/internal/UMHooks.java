@@ -15,10 +15,13 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.permission.internal.SyncServerExecutorImpl;
+import org.ultramine.server.chunk.ChunkGenerationQueue;
 import org.ultramine.server.event.WorldEventProxy;
 import org.ultramine.server.event.WorldUpdateObject;
 
 import com.mojang.authlib.GameProfile;
+import org.ultramine.server.util.GlobalExecutors;
 
 public class UMHooks
 {
@@ -143,5 +146,28 @@ public class UMHooks
 		ChatComponentTranslation text = new ChatComponentTranslation(translated.isEmpty() ? key : translated, newArgs);
 		text.setChatStyle(msg.getChatStyle());
 		return text;
+	}
+
+	private static final long MS = 1_000_000;
+	private static final long BREAK_THRESHOLD = 100_000;
+	private static final long SLEEP_THRESHOLD = 2 * MS;
+	private static final long CHUNK_GEN_THRESHOLD = 10 * MS;
+
+	/** Called from main thread instead of Thread.sleep(nanos / 1000000) to wait until next tick time */
+	public static void utilizeCPU(long nanos) throws InterruptedException
+	{
+		long till = System.nanoTime() + nanos;
+		long toWait;
+		while((toWait = till - System.nanoTime()) > BREAK_THRESHOLD)
+		{
+			if(toWait <= SLEEP_THRESHOLD || !doOneAction(toWait))
+				Thread.sleep((till - System.nanoTime()) >= MS ? 1 : 0);
+		}
+	}
+
+	private static boolean doOneAction(long toWait)
+	{
+		return  ((SyncServerExecutorImpl) GlobalExecutors.nextTick()).processOneTask() ||
+				toWait > CHUNK_GEN_THRESHOLD && ChunkGenerationQueue.instance().generateOneChunk();
 	}
 }
