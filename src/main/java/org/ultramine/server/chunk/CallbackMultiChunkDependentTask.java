@@ -16,11 +16,11 @@ public class CallbackMultiChunkDependentTask implements IChunkLoadCallback, IChu
 	@Override
 	public void onChunkLoaded(Chunk chunk)
 	{
-		chunk.addDependency(this);
-		if(numChunksForLoad == 1)
+		// When task executes, this dependency is no longer binds chunks in loaded state
+		if(--numChunksForLoad == 0)
 			task.run();
-		
-		numChunksForLoad--;
+		else
+			chunk.addDependency(this);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package org.ultramine.server.internal;
 
 import net.minecraft.util.DamageSource;
+import org.ultramine.commands.basic.GenWorldCommand;
 import org.ultramine.economy.CurrencyRegistry;
 import org.ultramine.economy.PlayerHoldingsEvent;
 import org.ultramine.server.ConfigurationHandler;
@@ -132,6 +133,7 @@ public class UMEventHandler
 			MinecraftServer server = MinecraftServer.getServer();
 			
 			Teleporter.tick();
+			GenWorldCommand.tick();
 			ChunkProfiler.instance().tick(server.getTickCounter());
 		}
 	}

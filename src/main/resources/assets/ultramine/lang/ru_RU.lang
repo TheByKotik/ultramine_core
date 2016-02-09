@@ -294,12 +294,13 @@ command.chunkgc.success=Выгрузка чанков инициирована
 command.custmsg.usage=/custmsg <игрок|ALL> <сообщение>
 command.custmsg.description=Отправляет кастомное сообщение игроку (поддерживает цвета)
 
-command.genworld.usage=/genworld [чанков за тик] ИЛИ /genworld radius <радиус> [чанков за тик] ИЛИ /genworld stop
+command.genworld.usage=/genworld ИЛИ /genworld <радиус> ИЛИ /genworld <мир> <x> <z> <радиус> ИЛИ /genworld [мир] stop
 command.genworld.description=Генерирует мир по радиусу или в пределах мирового барьера
-command.genworld.already=Генерация мира уже запущена. Сначала введите "/genworld stop"
+command.genworld.already=Генерация указанного мира уже запущена. Сначала введите "/genworld stop"
 command.genworld.noborder=Мир не содержит барьера; добавьте барьер или используйте генерацию по радиусу
 command.genworld.start=Генерация мира запущена
 command.genworld.stop=Генерация мира остановлена (сгенерировано %s/%s чанков)
+command.genworld.stop.fail.notrun=Генерация указанного мира еще не была запущена
 command.genworld.complete=Генерация мира завершена (сгенерировано %s/%s чанков)
 command.genworld.process=Генерация мира: сгенерировано %s/%s чанков
 

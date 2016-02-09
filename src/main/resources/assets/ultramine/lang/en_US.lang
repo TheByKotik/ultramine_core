@@ -294,12 +294,13 @@ command.chunkgc.success=Chunk GC performed
 command.custmsg.usage=/custmsg <player/ALL> <message>
 command.custmsg.description=Sends custom formatted message to player (support colors, use &)
 
-command.genworld.usage=/genworld [chunks per tick] OR /genworld radius <radius> [chunks per tick] OR /genworld stop
-command.genworld.description=Generateas area radially or inside world border
-command.genworld.already=World is now generating. Type "/genworld stop" before
+command.genworld.usage=/genworld OR /genworld <radius> OR /genworld <world> <x> <z> <radius> OR /genworld [world] stop
+command.genworld.description=Generates area radially or inside world border
+command.genworld.already=Generation of specified world is already started. Type "/genworld stop" before
 command.genworld.noborder=The world don't contains any borders; add border or use radially generation
 command.genworld.start=World generation started
 command.genworld.stop=World generation stopped (generated %s/%s chunks)
+command.genworld.stop.fail.notrun=Generation of specified world has not yet been started
 command.genworld.complete=World generation completed (generated %s/%s chunks)
 command.genworld.process=World generation: generated %s/%s chunks
 
