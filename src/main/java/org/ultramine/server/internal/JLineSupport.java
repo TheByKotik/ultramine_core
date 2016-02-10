@@ -4,7 +4,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jline.console.ConsoleReader;
 import jline.console.completer.Completer;
-import net.minecraft.command.CommandHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +13,6 @@ import org.ultramine.server.util.GlobalExecutors;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @SideOnly(Side.SERVER)
 public class JLineSupport
@@ -53,9 +51,10 @@ public class JLineSupport
 		public int complete(String buffer, int cursor, List<CharSequence> candidates)
 		{
 			MinecraftServer server = MinecraftServer.getServer();
+			@SuppressWarnings("unchecked")
 			List<String> offers =
-					GlobalExecutors.nextTick().await(() -> ((CommandHandler) server.getCommandManager()).getRegistry().filterPossibleCommandsNames(server, buffer));
-			if(offers.isEmpty())
+					GlobalExecutors.nextTick().await(() -> (server.getCommandManager().getPossibleCommands(server, buffer)));
+			if(offers == null || offers.isEmpty())
 				return cursor;
 
 			candidates.addAll(offers);
