@@ -61,7 +61,7 @@ public class OffHeapChunkStorage
 	
 	public long getUsedMemory()
 	{
-		return (counter+1-freeSlots.size())*SLOT_SIZE;
+		return ((long)counter+1-freeSlots.size())*SLOT_SIZE;
 	}
 	
 	private static class MemChunk
