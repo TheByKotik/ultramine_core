@@ -29,7 +29,7 @@ public class DataWatcher
 	private final Entity field_151511_a;
 	private boolean isBlank = true;
 	private static final HashMap dataTypes = new HashMap();
-	private final TIntObjectMap watchedObjects = new TIntObjectHashMap();
+	private final WatchableObject[] watchedObjects = new WatchableObject[32];
 	private boolean objectChanged;
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	private static final String __OBFID = "CL_00001559";
@@ -51,7 +51,7 @@ public class DataWatcher
 		{
 			throw new IllegalArgumentException("Data value id is too big with " + p_75682_1_ + "! (Max is " + 31 + ")");
 		}
-		else if (this.watchedObjects.containsKey(p_75682_1_))
+		else if (this.watchedObjects[p_75682_1_] != null)
 		{
 			throw new IllegalArgumentException("Duplicate id value for " + p_75682_1_ + "!");
 		}
@@ -59,7 +59,7 @@ public class DataWatcher
 		{
 			DataWatcher.WatchableObject watchableobject = new DataWatcher.WatchableObject(integer.intValue(), p_75682_1_, p_75682_2_);
 			this.lock.writeLock().lock();
-			this.watchedObjects.put(p_75682_1_, watchableobject);
+			this.watchedObjects[p_75682_1_] = watchableobject;
 			this.lock.writeLock().unlock();
 			this.isBlank = false;
 		}
@@ -69,7 +69,7 @@ public class DataWatcher
 	{
 		DataWatcher.WatchableObject watchableobject = new DataWatcher.WatchableObject(p_82709_2_, p_82709_1_, (Object)null);
 		this.lock.writeLock().lock();
-		this.watchedObjects.put(p_82709_1_, watchableobject);
+		this.watchedObjects[p_82709_1_] = watchableobject;
 		this.lock.writeLock().unlock();
 		this.isBlank = false;
 	}
@@ -111,7 +111,7 @@ public class DataWatcher
 
 		try
 		{
-			watchableobject = (DataWatcher.WatchableObject)this.watchedObjects.get(p_75691_1_);
+			watchableobject = (DataWatcher.WatchableObject)this.watchedObjects[p_75691_1_];
 		}
 		catch (Throwable throwable)
 		{
@@ -172,11 +172,11 @@ public class DataWatcher
 		if (this.objectChanged)
 		{
 			this.lock.readLock().lock();
-			Iterator iterator = this.watchedObjects.valueCollection().iterator();
 
-			while (iterator.hasNext())
+			for (WatchableObject watchableobject : watchedObjects)
 			{
-				DataWatcher.WatchableObject watchableobject = (DataWatcher.WatchableObject)iterator.next();
+				if(watchableobject == null)
+					continue;
 
 				if (watchableobject.isWatched())
 				{
@@ -201,11 +201,11 @@ public class DataWatcher
 	public void func_151509_a(PacketBuffer p_151509_1_) throws IOException
 	{
 		this.lock.readLock().lock();
-		Iterator iterator = this.watchedObjects.valueCollection().iterator();
 
-		while (iterator.hasNext())
+		for (WatchableObject watchableobject : watchedObjects)
 		{
-			DataWatcher.WatchableObject watchableobject = (DataWatcher.WatchableObject)iterator.next();
+			if(watchableobject == null)
+				continue;
 			int type = watchableobject.getObjectType();
 			if(type < 7 && type != 5 && watchableobject.getObject() == null)
 			{
@@ -224,16 +224,18 @@ public class DataWatcher
 	{
 		ArrayList arraylist = null;
 		this.lock.readLock().lock();
-		DataWatcher.WatchableObject watchableobject;
 
-		for (Iterator iterator = this.watchedObjects.valueCollection().iterator(); iterator.hasNext(); arraylist.add(watchableobject))
+		for (WatchableObject watchableobject : watchedObjects)
 		{
-			watchableobject = (DataWatcher.WatchableObject)iterator.next();
+			if(watchableobject == null)
+				continue;
 
 			if (arraylist == null)
 			{
 				arraylist = new ArrayList();
 			}
+
+			arraylist.add(watchableobject);
 		}
 
 		this.lock.readLock().unlock();
@@ -331,7 +333,7 @@ public class DataWatcher
 		while (iterator.hasNext())
 		{
 			DataWatcher.WatchableObject watchableobject = (DataWatcher.WatchableObject)iterator.next();
-			DataWatcher.WatchableObject watchableobject1 = (DataWatcher.WatchableObject)this.watchedObjects.get(watchableobject.getDataValueId());
+			DataWatcher.WatchableObject watchableobject1 = (DataWatcher.WatchableObject)this.watchedObjects[watchableobject.getDataValueId()];
 
 			if (watchableobject1 != null)
 			{
