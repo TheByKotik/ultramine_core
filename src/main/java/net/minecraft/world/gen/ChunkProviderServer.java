@@ -50,6 +50,7 @@ import org.ultramine.server.chunk.ChunkGenerationQueue;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.ChunkMap;
 import org.ultramine.server.chunk.IChunkLoadCallback;
+import org.ultramine.server.internal.UMHooks;
 import org.ultramine.server.util.VanillaChunkHashMap;
 import org.ultramine.server.util.VanillaChunkHashSet;
 
@@ -322,6 +323,7 @@ public class ChunkProviderServer implements IChunkProvider
 				if(!worldObj.getConfig().generation.disableModGeneration)
 					GameRegistry.generateWorld(par2, par3, worldObj, currentChunkProvider, par1IChunkProvider);
 				chunk.setChunkModified();
+				UMHooks.onChunkPopulated(chunk);
 				isGenerating = lastIsGenerating;
 			}
 		}

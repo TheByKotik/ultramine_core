@@ -1,10 +1,14 @@
 package org.ultramine.server.internal;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,6 +17,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.permission.internal.SyncServerExecutorImpl;
@@ -169,5 +175,39 @@ public class UMHooks
 	{
 		return  ((SyncServerExecutorImpl) GlobalExecutors.nextTick()).processOneTask() ||
 				toWait > CHUNK_GEN_THRESHOLD && ChunkGenerationQueue.instance().generateOneChunk();
+	}
+
+	public static void onChunkPopulated(Chunk chunk)
+	{
+		WorldServer world = (WorldServer) chunk.worldObj;
+		long realTime = world.getWorldInfo().getWorldTotalTime();
+		long time = realTime;
+		List<Entity> entities = new ArrayList<>();
+		for(int i = 0; i < 10; i++)
+		{
+			while(chunk.getPendingUpdatesCount() != 0 && (time - realTime) < 10)
+			{
+				world.updatePendingOf(chunk);
+				world.getWorldInfo().incrementTotalWorldTime(++time);
+			}
+			world.getWorldInfo().incrementTotalWorldTime(realTime);
+			entities.clear();
+			for(List list : chunk.entityLists)
+				entities.addAll(list);
+			for(Entity ent : entities)
+			{
+				if(ent.isDead)
+					continue;
+				if(ent instanceof EntityFallingBlock)
+				{
+					for(int j = 0; j < 100 && !ent.isDead; j++)
+						ent.onUpdate();
+				}
+				else if(ent instanceof EntityItem)
+				{
+					ent.setDead();
+				}
+			}
+		}
 	}
 }

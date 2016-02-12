@@ -1018,7 +1018,7 @@ public class WorldServer extends World
 		return theChunkProviderServer.getChunkIfExists(cx, cz);
 	}
 	
-	private void updatePendingOf(Chunk chunk)
+	public void updatePendingOf(Chunk chunk)
 	{
 		long time = worldInfo.getWorldTotalTime();
 		int x = chunk.xPosition << 4;
