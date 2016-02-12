@@ -956,7 +956,6 @@ public class Chunk implements IChunkDependency
 
 		convertTileEntityMap();
 		loadTime = unbindTime = MinecraftServer.getServer().getTickCounter();
-		lastsavePendingCount = pendingUpdatesSet == null ? 0 : pendingUpdatesSet.size();
 	}
 
 	public void onChunkUnload()
@@ -1553,8 +1552,7 @@ public class Chunk implements IChunkDependency
 	private int loadTime;
 	private int unbindTime;
 	private boolean wasActive;
-	private int lastsavePendingCount;
-	
+
 	private short entityLivingCount;
 	private short entityMonsterCount;
 	private short entityAnimalCount;
@@ -1590,7 +1588,8 @@ public class Chunk implements IChunkDependency
 				pendingUpdatesSet = null;
 				pendingUpdatesQueue = null;
 			}
-			
+
+			isModified = true;
 			return p;
 		}
 		
@@ -1609,12 +1608,18 @@ public class Chunk implements IChunkDependency
 		{
 			pendingUpdatesSet.add(p);
 			pendingUpdatesQueue.add(p);
+			isModified = true;
 		}
 	}
 	
 	public Set<PendingBlockUpdate> getPendingUpdatesForSave()
 	{
 		return pendingUpdatesQueue;
+	}
+
+	public int getPendingUpdatesCount()
+	{
+		return pendingUpdatesSet == null ? 0 : pendingUpdatesSet.size();
 	}
 	
 	public ChunkBindState getBindState()
@@ -1696,17 +1701,16 @@ public class Chunk implements IChunkDependency
 	public void postSave()
 	{
 		wasActive = false;
-		lastsavePendingCount = pendingUpdatesSet == null ? 0 : pendingUpdatesSet.size();
 	}
 	
 	public boolean shouldSaveOnUnload()
 	{
-		return isModified || pendingUpdatesSet != null && lastsavePendingCount != pendingUpdatesSet.size() || wasActive && hasEntities;
+		return isModified || wasActive && hasEntities;
 	}
 	
 	private void onEntityAdd(Entity e)
 	{
-		wasActive = true; //Handling case where added entity to inactive chunk (wasActive && hasEntities) condition should be true
+		isModified = true;
 		if(e.isEntityLiving() && !e.isEntityPlayerMP())
 			entityLivingCount++;
 		
@@ -1724,6 +1728,7 @@ public class Chunk implements IChunkDependency
 	
 	private void onEntityRemove(Entity e)
 	{
+		isModified = true;
 		if(e.isEntityLiving() && !e.isEntityPlayerMP())
 			entityLivingCount--;
 		

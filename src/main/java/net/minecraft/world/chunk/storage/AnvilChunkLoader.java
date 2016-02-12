@@ -546,6 +546,8 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 				}
 			}
 		}
+
+		chunk.isModified = false;
 	}
 	
 	public int getSaveQueueSize()
