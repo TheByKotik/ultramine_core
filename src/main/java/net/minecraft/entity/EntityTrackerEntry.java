@@ -158,6 +158,10 @@ public class EntityTrackerEntry
 
 			this.sendMetadataToAllAssociatedPlayers();
 		}
+		else if(trackingPlayers.size() == 0)
+		{
+			// No players - no tracking
+		}
 		else if (this.ticks % this.updateFrequency == 0 || this.myEntity.isAirBorne || this.myEntity.getDataWatcher().hasChanges())
 		{
 			int i;

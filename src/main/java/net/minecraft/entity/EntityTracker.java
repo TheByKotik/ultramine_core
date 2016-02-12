@@ -263,6 +263,8 @@ public class EntityTracker
 
 	public void updateTrackedEntities()
 	{
+		if(theWorld.playerEntities.size() == 0)
+			return;
 		ArrayList arraylist = new ArrayList();
 		Iterator iterator = this.trackedEntities.iterator();
 
