@@ -1867,6 +1867,9 @@ public abstract class World implements IBlockAccess
 
 	public void func_147446_b(int p_147446_1_, int p_147446_2_, int p_147446_3_, Block p_147446_4_, int p_147446_5_, int p_147446_6_) {}
 
+	// This is not a local variable to prevent var reordering leading to bytecode breaking by mods
+	private boolean removeEntityThisTick;
+
 	public void updateEntities()
 	{
 		this.theProfiler.startSection("entities");
@@ -1916,9 +1919,12 @@ public abstract class World implements IBlockAccess
 			{
 //				this.weatherEffects.remove(i--);
 				entity.removeThisTick = true;
+				removeEntityThisTick = true;
 			}
 		}
-		weatherEffects.removeIf(LambdaHolder.ENTITY_REMOVAL_PREDICATE);
+		if(removeEntityThisTick)
+			weatherEffects.removeIf(LambdaHolder.ENTITY_REMOVAL_PREDICATE);
+		removeEntityThisTick = false;
 		eventProxy.popState();
 
 		this.theProfiler.endStartSection("remove");
@@ -2010,12 +2016,15 @@ public abstract class World implements IBlockAccess
 
 //				this.loadedEntityList.remove(i--);
 				entity.removeThisTick = true;
+				removeEntityThisTick = true;
 				this.onEntityRemoved(entity);
 			}
 
 			this.theProfiler.endSection();
 		}
-		loadedEntityList.removeIf(LambdaHolder.ENTITY_REMOVAL_PREDICATE);
+		if(removeEntityThisTick)
+			loadedEntityList.removeIf(LambdaHolder.ENTITY_REMOVAL_PREDICATE);
+		removeEntityThisTick = false;
 		eventProxy.popState();
 
 		this.theProfiler.endStartSection("blockEntities");
@@ -2081,6 +2090,7 @@ public abstract class World implements IBlockAccess
 			{
 //				iterator.remove();
 				tileentity.removeThisTick = true;
+				removeEntityThisTick = true;
 
 				if (this.chunkExists(tileentity.xCoord >> 4, tileentity.zCoord >> 4))
 				{
@@ -2093,7 +2103,9 @@ public abstract class World implements IBlockAccess
 				}
 			}
 		}
-		loadedTileEntityList.removeIf(LambdaHolder.TILE_ENTITY_REMOVAL_PREDICATE);
+		if(removeEntityThisTick)
+			loadedTileEntityList.removeIf(LambdaHolder.TILE_ENTITY_REMOVAL_PREDICATE);
+		removeEntityThisTick = false;
 		eventProxy.popState();
 
 		//UltraMine: "unload" section moved up, before TE processing
