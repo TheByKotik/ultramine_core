@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.ultramine.server.EntityType;
 import org.ultramine.server.internal.UMHooks;
@@ -164,10 +165,10 @@ public abstract class Entity
 		this.width = 0.6F;
 		this.height = 1.8F;
 		this.nextStepDistance = 1;
-		this.rand = new Random();
+		this.rand = ThreadLocalRandom.current(); // Really all access to rand replaces with TLR.current() by ThreadLocalRandomTransformer
 		this.fireResistance = 1;
 		this.firstUpdate = true;
-		this.entityUniqueID = UUID.randomUUID();
+		this.entityUniqueID = new UUID(ThreadLocalRandom.current().nextLong(), ThreadLocalRandom.current().nextLong());
 		this.myEntitySize = Entity.EnumEntitySize.SIZE_2;
 		this.worldObj = p_i1582_1_;
 		this.setPosition(0.0D, 0.0D, 0.0D);
