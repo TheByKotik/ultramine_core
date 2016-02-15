@@ -8,9 +8,9 @@ import net.minecraft.world.WorldServerMulti;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 
-public class UnsplitedWorldLoader extends AbstractWorldLoader
+public class NotSplittedWorldLoader extends AbstractWorldLoader
 {
-	public UnsplitedWorldLoader(WorldDescriptor desc, MinecraftServer server)
+	public NotSplittedWorldLoader(WorldDescriptor desc, MinecraftServer server)
 	{
 		super(desc, server);
 	}

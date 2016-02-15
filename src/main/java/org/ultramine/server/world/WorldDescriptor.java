@@ -24,16 +24,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.Teleporter;
 import org.ultramine.server.WorldsConfig.WorldConfig;
-import org.ultramine.server.WorldsConfig.WorldConfig.MobSpawn.MobSpawnEngine;
-import org.ultramine.server.WorldsConfig.WorldConfig.Settings.WorldTime;
-import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.util.GlobalExecutors;
 import org.ultramine.server.util.WarpLocation;
 import org.ultramine.server.world.load.IWorldLoader;
 import org.ultramine.server.world.load.ImportWorldLoader;
 import org.ultramine.server.world.load.OverworldLoader;
-import org.ultramine.server.world.load.SplitedWorldLoader;
-import org.ultramine.server.world.load.UnsplitedWorldLoader;
+import org.ultramine.server.world.load.SplittedWorldLoader;
+import org.ultramine.server.world.load.NotSplittedWorldLoader;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -212,8 +209,8 @@ public class WorldDescriptor
 		}
 		
 		if(!splitWorldDirs)
-			return new UnsplitedWorldLoader(this, server);
-		return new SplitedWorldLoader(this, server);
+			return new NotSplittedWorldLoader(this, server);
+		return new SplittedWorldLoader(this, server);
 	}
 	
 	@SideOnly(Side.SERVER)

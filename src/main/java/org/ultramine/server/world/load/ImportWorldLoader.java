@@ -11,7 +11,7 @@ import org.ultramine.server.world.imprt.ZipFileSaveHandler;
 
 import net.minecraft.server.MinecraftServer;
 
-public class ImportWorldLoader extends SplitedWorldLoader
+public class ImportWorldLoader extends SplittedWorldLoader
 {
 	private ImportSaveHandler saveHandler;
 	

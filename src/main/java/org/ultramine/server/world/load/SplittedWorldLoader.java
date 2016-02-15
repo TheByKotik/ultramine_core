@@ -7,9 +7,9 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
 import net.minecraft.world.storage.ISaveHandler;
 
-public class SplitedWorldLoader extends AbstractWorldLoader
+public class SplittedWorldLoader extends AbstractWorldLoader
 {
-	public SplitedWorldLoader(WorldDescriptor desc, MinecraftServer server)
+	public SplittedWorldLoader(WorldDescriptor desc, MinecraftServer server)
 	{
 		super(desc, server);
 	}
