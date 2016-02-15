@@ -1003,6 +1003,7 @@ public class Chunk implements IChunkDependency
 			{
 				Entity entity1 = (Entity)list1.get(l);
 
+				if (!entity1.isDead)
 				if (entity1 != p_76588_1_ && entity1.boundingBox.intersectsWith(p_76588_2_) && (p_76588_4_ == null || p_76588_4_.isEntityApplicable(entity1)))
 				{
 					p_76588_3_.add(entity1);
@@ -1040,6 +1041,7 @@ public class Chunk implements IChunkDependency
 			{
 				Entity entity = (Entity)list1.get(l);
 
+				if (!entity.isDead)
 				if (p_76618_1_.isAssignableFrom(entity.getClass()) && entity.boundingBox.intersectsWith(p_76618_2_) && (p_76618_4_ == null || p_76618_4_.isEntityApplicable(entity)))
 				{
 					p_76618_3_.add(entity);
