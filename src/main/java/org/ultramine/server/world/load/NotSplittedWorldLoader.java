@@ -1,5 +1,7 @@
 package org.ultramine.server.world.load;
 
+import net.minecraft.world.WorldProvider;
+import net.minecraft.world.chunk.storage.AnvilSaveHandler;
 import org.ultramine.server.world.WorldDescriptor;
 
 import net.minecraft.server.MinecraftServer;
@@ -20,15 +22,17 @@ public class NotSplittedWorldLoader extends AbstractWorldLoader
 	{
 		WorldServer mainWorld = server.getMultiWorld().getWorldByID(0);
 		ISaveHandler mainSaveHandler = mainWorld.getSaveHandler();
-		WorldInfo mainWorldInfo = mainWorld.getWorldInfo();
+		String name = desc.getDirectory().getName();
+		AnvilSaveHandler save = new AnvilSaveHandler(mainSaveHandler.getWorldDirectory(), name, true);
+		save.setSingleStorage();
 		return new WorldServerMulti(
 				server,
-				mainSaveHandler,
-				mainWorldInfo.getWorldName(),
+				save,
+				name,
 				desc.getDimension(),
-				makeSettings(mainWorldInfo, desc.getConfig()),
+				makeSettings(save.loadWorldInfo(), desc.getConfig()),
 				mainWorld,
 				server.theProfiler
-			);
+		);
 	}
 }

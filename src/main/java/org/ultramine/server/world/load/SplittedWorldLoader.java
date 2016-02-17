@@ -1,5 +1,6 @@
 package org.ultramine.server.world.load;
 
+import net.minecraft.world.WorldServerMulti;
 import org.ultramine.server.world.WorldDescriptor;
 
 import net.minecraft.server.MinecraftServer;
@@ -17,13 +18,24 @@ public class SplittedWorldLoader extends AbstractWorldLoader
 	@Override
 	public WorldServer doLoad()
 	{
+		WorldServer mainWorld = server.getMultiWorld().getWorldByID(0);
 		ISaveHandler save = getSaveHandler();
 		((AnvilSaveHandler)save).setSingleStorage();
-		return new WorldServer(server, save, desc.getName(), desc.getDimension(), makeSettings(save.loadWorldInfo(), desc.getConfig()), server.theProfiler);
+		WorldServerMulti world = new WorldServerMulti(
+				server,
+				save,
+				desc.getName(),
+				desc.getDimension(),
+				makeSettings(save.loadWorldInfo(), desc.getConfig()),
+				mainWorld,
+				server.theProfiler
+		);
+		world.isSplitted = true;
+		return world;
 	}
 	
 	protected ISaveHandler getSaveHandler()
 	{
-		return server.getActiveAnvilConverter().getSaveLoader(desc.getName(), false);
+		return server.getActiveAnvilConverter().getSaveLoader(desc.getName(), true);
 	}
 }

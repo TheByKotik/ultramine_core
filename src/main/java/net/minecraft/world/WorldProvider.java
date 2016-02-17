@@ -226,9 +226,10 @@ public abstract class WorldProvider
 	 */
 	public String getSaveFolder()
 	{
-		return (worldObj instanceof WorldServerMulti || MinecraftServer.getServer() == null || MinecraftServer.getServer().isSinglePlayer()) ?
-			(dimensionId == 0 ? null : "DIM" + dimensionId) :
-			"../" + MinecraftServer.getServer().getMultiWorld().getNameByID(dimensionId);
+		return (MinecraftServer.getServer() == null || MinecraftServer.getServer().isSinglePlayer() ||
+				worldObj instanceof WorldServerMulti && !((WorldServerMulti)worldObj).isSplitted) ?
+				(dimensionId == 0 ? null : "DIM" + dimensionId) :
+				"../" + MinecraftServer.getServer().getMultiWorld().getNameByID(dimensionId);
 	}
 
 	/**

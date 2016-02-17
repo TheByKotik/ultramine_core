@@ -14,6 +14,7 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldManager;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -61,7 +62,6 @@ public class WorldDescriptor
 		this.splitWorldDirs = splitWorldDirs;
 		this.dimension = dimension;
 		this.name = name;
-		this.directory = new File(server.getWorldsDir(), name);
 	}
 	
 	public int getDimension()
@@ -80,12 +80,30 @@ public class WorldDescriptor
 		{
 			this.mw.transitDescName(this, this.name, name);
 			this.name = name;
-			this.directory = new File(server.getWorldsDir(), this.name);
+			if(dimension == 0 || splitWorldDirs)
+				this.directory = new File(server.getWorldsDir(), this.name);
+		}
+	}
+
+	private void inferDirectory()
+	{
+		if(dimension == 0 || splitWorldDirs)
+		{
+			this.directory = new File(server.getWorldsDir(), name);
+		}
+		else
+		{
+			String dirName = WorldProvider.getProviderForDimension(dimension).getSaveFolder();
+			if(dirName == null || dirName.startsWith("../"))
+				dirName = "DIM" + dimension;
+			this.directory = new File(mw.getDescByID(0).getDirectory(), dirName);
 		}
 	}
 	
 	public File getDirectory()
 	{
+		if(this.directory == null)
+			inferDirectory();
 		return this.directory;
 	}
 	
@@ -140,8 +158,6 @@ public class WorldDescriptor
 	{
 		this.world = world;
 		this.directory = world.getSaveHandler().getWorldDirectory();
-		if(dimension != 0 && !splitWorldDirs)
-			this.directory = new File(this.directory, world.provider.getSaveFolder());
 	}
 	
 	public WorldServer getOrLoadWorld()
