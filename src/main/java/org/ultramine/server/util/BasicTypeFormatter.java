@@ -6,66 +6,85 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
+import java.time.Duration;
+
 public class BasicTypeFormatter
 {
-	public static String formatTime(long timeMills)
+	public static IChatComponent formatTime(Duration duration)
+	{
+		return formatTime(duration, false);
+	}
+
+	public static IChatComponent formatTime(Duration duration, boolean genitive)
+	{
+		return formatTime(duration, genitive, true);
+	}
+
+	public static IChatComponent formatTime(Duration duration, boolean genitive, boolean printSec)
+	{
+		return formatTime(duration.getSeconds()*1000, genitive, printSec);
+	}
+
+	public static IChatComponent formatTime(long timeMills)
 	{
 		return formatTime(timeMills, false);
 	}
 	
-	public static String formatTime(long timeMills, boolean genitive)
+	public static IChatComponent formatTime(long timeMills, boolean genitive)
 	{
 		return formatTime(timeMills, genitive, true);
 	}
 	
-	public static String formatTime(long timeMills, boolean genitive, boolean printSec)
+	public static IChatComponent formatTime(long timeMills, boolean genitive, boolean printSec)
 	{
 		int seconds = (int) ((timeMills / 1000) % 60);
 		int minutes = (int) ((timeMills / (60000)) % 60);
 		int hours   = (int) ((timeMills / (3600000)) % 24);
 		long days	= 		(timeMills / (86400000));
 		
-		String dayN = "дней";
+		String dayN;
 		int daydd = (int)(days % 10);
-		if(daydd == 0 || days > 4 && days < 21)
-			dayN = "дней";
-		else if(daydd == 1)
-			dayN = "день";
+		if(daydd == 1)
+			dayN = "ultramine.time.day.1";
 		else if(daydd > 1 && daydd < 5)
-			dayN = "дня";
+			dayN = "ultramine.time.day.2";
+		else
+			dayN = "ultramine.time.day.3";
 		
-		String hourN = "часов";
+		String hourN;
 		int hourdd = hours % 10;
-		if(hourdd == 0 || hours > 4 && hours < 21)
-			hourN = "часов";
-		else if(hourdd == 1)
-			hourN = "час";
+		if(hourdd == 1)
+			hourN = "ultramine.time.hour.1";
 		else if(hourdd > 1 && hourdd < 5)
-			hourN = "часа";
+			hourN = "ultramine.time.hour.2";
+		else
+			hourN = "ultramine.time.hour.3";
 		
-		String minN = "минут";
+		String minN;
 		int mindd = minutes % 10;
-		if(minutes == 0 || minutes > 4 && minutes < 21)
-			minN = "минут";
-		else if(mindd == 1)
-			minN = genitive ? "минуту" : "минута";
+		if(mindd == 1)
+			minN = genitive ? "ultramine.time.min.1.gen" : "ultramine.time.min.1";
 		else if(mindd > 1 && mindd < 5)
-			minN = "минуты";
+			minN = "ultramine.time.min.2";
+		else
+			minN = "ultramine.time.min.3";
 		
-		String secN = "секунд";
+		String secN;
 		int secdd = seconds % 10;
-		if(secdd == 0 || seconds > 4 && seconds < 21)
-			secN = "секунд";
-		else if(secdd == 1)
-			secN = genitive ? "секунду" : "секунда";
+		if(secdd == 1)
+			secN = genitive ? "ultramine.time.sec.1.gen" : "ultramine.time.sec.1";
 		else if(secdd > 1 && secdd < 5)
-			secN = "секунды";
-		
-		return
-				(days > 0 ? days + " " + dayN + " " : "") +
-				(hours > 0 ? hours + " " + hourN + " " : "") +
-				(minutes > 0 ? minutes + " " + minN + " " : "") +
-				(printSec && (seconds != 0 || minutes == 0 && hours == 0 && days == 0) ? seconds + " " + secN : "");
+			secN = "ultramine.time.sec.2";
+		else
+			secN = "ultramine.time.sec.3";
+
+		Object comp1 = days > 0 ? new ChatComponentTranslation("%s %s ", days, new ChatComponentTranslation(dayN)) : "";
+		Object comp2 = hours > 0 ? new ChatComponentTranslation("%s %s ", hours, new ChatComponentTranslation(hourN)) : "";
+		Object comp3 = minutes > 0 ? new ChatComponentTranslation("%s %s ", minutes, new ChatComponentTranslation(minN)) : "";
+		Object comp4 = (printSec && (seconds != 0 || minutes == 0 && hours == 0 && days == 0)) ?
+				new ChatComponentTranslation("%s %s", seconds, new ChatComponentTranslation(secN)) : "";
+
+		return new ChatComponentTranslation("%s%s%s%s", comp1, comp2, comp3, comp4);
 	}
 	
 	public static IChatComponent formatMessage(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)

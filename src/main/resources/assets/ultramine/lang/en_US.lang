@@ -21,6 +21,27 @@ ultramine.ability.chat=You don't have permissions to chat
 ultramine.notify.loggedhidden=Joined the server in invisibility
 ultramine.hidden.chat=You can't write to chat in invisibility
 
+ultramine.time.day.1=day
+ultramine.time.day.2=days
+ultramine.time.day.3=days
+ultramine.time.hour.1=hour
+ultramine.time.hour.2=hours
+ultramine.time.hour.3=hours
+ultramine.time.min.1=minute
+ultramine.time.min.1.gen=minute
+ultramine.time.min.2=minutes
+ultramine.time.min.3=minutes
+ultramine.time.sec.1=second
+ultramine.time.sec.1.gen=second
+ultramine.time.sec.2=seconds
+ultramine.time.sec.3=seconds
+
+ultramine.restart.after=The server will restart in %s
+ultramine.restart.now1=The server is restarting now!
+ultramine.restart.now2=You will be automatically disconnected from server
+ultramine.restart.kick1=The server has been restarted
+ultramine.restart.kick2=You will be able to login in few minutes
+
 #Command generic
 command.generic.world.invalid=Can't find world '%s'
 command.generic.itemstack.data=Failed to parse item data: %s

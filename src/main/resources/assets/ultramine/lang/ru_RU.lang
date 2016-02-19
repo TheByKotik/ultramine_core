@@ -21,6 +21,27 @@ ultramine.ability.chat=У вас нет прав писать в чате
 ultramine.notify.loggedhidden=Присоединился к игре невидимым
 ultramine.hidden.chat=Вы не можете писать в чат в невидимости
 
+ultramine.time.day.1=день
+ultramine.time.day.2=дня
+ultramine.time.day.3=дней
+ultramine.time.hour.1=час
+ultramine.time.hour.2=часа
+ultramine.time.hour.3=часов
+ultramine.time.min.1=минута
+ultramine.time.min.1.gen=минуту
+ultramine.time.min.2=минуты
+ultramine.time.min.3=минут
+ultramine.time.sec.1=секунда
+ultramine.time.sec.1.gen=секунду
+ultramine.time.sec.2=секунды
+ultramine.time.sec.3=секунд
+
+ultramine.restart.after=Рестарт сервера через %s
+ultramine.restart.now1=Рестарт сервера!
+ultramine.restart.now2=Вы будете автоматически отключены от сервера
+ultramine.restart.kick1=Сервер был перезапущен
+ultramine.restart.kick2=Вы сможете войти через несколько минут
+
 #Command generic
 command.generic.world.invalid=Указанный мир не существует или неинициализирован '%s'
 command.generic.itemstack.data=Не удалось разобрать предмет: %s

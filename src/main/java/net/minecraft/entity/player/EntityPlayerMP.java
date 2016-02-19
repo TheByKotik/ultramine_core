@@ -3,6 +3,7 @@ package net.minecraft.entity.player;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import io.netty.buffer.Unpooled;
 
 import java.io.IOException;
@@ -1041,6 +1042,14 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		String meta = getMeta("tablistcolor");
 		EnumChatFormatting color = meta.isEmpty() ? null : BasicTypeParser.parseColor(meta);
 		return color == null ? getCommandSenderName() : color.toString() + getCommandSenderName();
+	}
+
+	public String translate(String key)
+	{
+		String translated = LanguageRegistry.instance().getStringLocalization(key, getTranslator());
+		if(translated.isEmpty())
+			translated = LanguageRegistry.instance().getStringLocalization(key, "en_US");
+		return translated.isEmpty() ? key : translated;
 	}
 	
 	/**

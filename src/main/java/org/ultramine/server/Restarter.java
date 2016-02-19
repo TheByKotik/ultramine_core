@@ -1,5 +1,7 @@
 package org.ultramine.server;
 
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
 import org.ultramine.server.util.BasicTypeFormatter;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -11,7 +13,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.util.ChatComponentText;
+
+import static net.minecraft.util.EnumChatFormatting.DARK_PURPLE;
 
 @SideOnly(Side.SERVER)
 public class Restarter
@@ -48,11 +51,12 @@ public class Restarter
 			if(toRestart == 3600 || toRestart == 1800 || toRestart == 900 || toRestart == 600 || toRestart == 300 || toRestart == 120 || toRestart == 60 ||
 					toRestart == 40 || toRestart == 20 || toRestart == 15 || toRestart < 11)
 			{
-				mgr.sendChatMsg(new ChatComponentText("\u00a75Рестарт сервера через " + BasicTypeFormatter.formatTime(toRestart*1000, true)));
+				mgr.sendChatMsg(new ChatComponentTranslation("ultramine.restart.after", BasicTypeFormatter.formatTime(toRestart*1000, true))
+						.setChatStyle(new ChatStyle().setColor(DARK_PURPLE)));
 				if(toRestart == 1)
 				{
-					mgr.sendChatMsg(new ChatComponentText("\u00a75Рестарт сервера!"));
-					mgr.sendChatMsg(new ChatComponentText("\u00a75Вы будете автоматически отключены от сервера"));
+					mgr.sendChatMsg(new ChatComponentTranslation("ultramine.restart.now1").setChatStyle(new ChatStyle().setColor(DARK_PURPLE)));
+					mgr.sendChatMsg(new ChatComponentTranslation("ultramine.restart.now2").setChatStyle(new ChatStyle().setColor(DARK_PURPLE)));
 				}
 			}
 		}
@@ -64,7 +68,7 @@ public class Restarter
 	{
 		mgr.saveAllPlayerData();
 		for(EntityPlayerMP player : GenericIterableFactory.newCastingIterable(mgr.playerEntityList, EntityPlayerMP.class))
-			player.playerNetServerHandler.kickPlayerFromServer("\u00a75Сервер был перезапущен\n\u00a7dВы сможете войти через несколько минут");
+			player.playerNetServerHandler.kickPlayerFromServer("\u00a75"+player.translate("ultramine.restart.kick1")+"\n\u00a7d"+player.translate("ultramine.restart.kick2"));
 		
 		mgr.getServerInstance().initiateShutdown();
 	}
