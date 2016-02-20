@@ -37,6 +37,7 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import org.apache.commons.io.IOUtils;
+import org.ultramine.server.util.AsyncIOUtils;
 
 public class PlayerProfileCache
 {
@@ -184,9 +185,11 @@ public class PlayerProfileCache
 				this.func_152649_a(gameprofile);
 				profileentry = (PlayerProfileCache.ProfileEntry)this.field_152661_c.get(s1);
 			}
+
+			if(profileentry != null)
+				this.func_152658_c();
 		}
 
-		this.func_152658_c();
 		return profileentry == null ? null : profileentry.func_152668_a();
 	}
 
@@ -274,26 +277,7 @@ public class PlayerProfileCache
 	public void func_152658_c()
 	{
 		String s = this.field_152660_b.toJson(this.func_152656_a(1000));
-		BufferedWriter bufferedwriter = null;
-
-		try
-		{
-			bufferedwriter = Files.newWriter(this.field_152665_g, Charsets.UTF_8);
-			bufferedwriter.write(s);
-			return;
-		}
-		catch (FileNotFoundException filenotfoundexception)
-		{
-			return;
-		}
-		catch (IOException ioexception)
-		{
-			;
-		}
-		finally
-		{
-			IOUtils.closeQuietly(bufferedwriter);
-		}
+		AsyncIOUtils.writeString(field_152665_g, s);
 	}
 
 	private List func_152656_a(int p_152656_1_)
