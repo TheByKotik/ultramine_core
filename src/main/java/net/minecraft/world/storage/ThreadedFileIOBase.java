@@ -82,4 +82,10 @@ public class ThreadedFileIOBase implements Runnable
 
 		this.isThreadWaiting = false;
 	}
+
+	public void waitForFinish(IThreadedFileIO special) throws InterruptedException
+	{
+		while (threadedIOQueue.contains(special))
+			Thread.sleep(10L);
+	}
 }

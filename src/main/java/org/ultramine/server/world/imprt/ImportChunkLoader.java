@@ -67,11 +67,11 @@ public abstract class ImportChunkLoader extends AnvilChunkLoader
 		if(regionCache.size() > limit)
 		{
 			try {
-				ThreadedFileIOBase.threadedIOInstance.waitForFinish();
-			} catch (InterruptedException interruptedexception) {}
+				ThreadedFileIOBase.threadedIOInstance.waitForFinish(this);
+			} catch (InterruptedException ignored) {}
 			
 			for(RegionFile region : regionCache.values())
-				try{region.close();}catch(IOException igrored){}
+				try{region.close();}catch(IOException ignored){}
 			regionCache.clear();
 		}
 	}
