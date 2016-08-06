@@ -1,6 +1,5 @@
 package org.ultramine.server.internal;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -179,35 +178,69 @@ public class UMHooks
 
 	public static void onChunkPopulated(Chunk chunk)
 	{
+		forceProcessPendingAndFallingBlocks(chunk);
+	}
+
+	/**
+	 * After populate chunks often contains lots of pending updates, FallingBlock and item entities. In vanilla
+	 * entities and pending updates always executes each tick, but in ultramine they executes only in active
+	 * chunks. Newly generated inactive chunks may always take memory for these entities and pending updates.
+	 * This method forces execution of pending updates, FallingBlock entities and removes item entities.
+	 */
+	@SuppressWarnings("unchecked")
+	private static void forceProcessPendingAndFallingBlocks(Chunk chunk)
+	{
+		// PendingBlockUpdate processing causes more EntityFallingBlock spawning. In its turn, processing of
+		// EntityFallingBlock causes PendingBlockUpdate scheduling again. It solves by multiple iterations of
+		// processing both PendingBlockUpdate and EntityFallingBlock. Finally, we removing any EntityItem,
+		// that may be spawned at that time.
 		WorldServer world = (WorldServer) chunk.worldObj;
 		long realTime = world.getWorldInfo().getWorldTotalTime();
-		long time = realTime;
-		List<Entity> entities = new ArrayList<>();
+		boolean hasRemovedEntitiesTotal = false;
 		for(int i = 0; i < 10; i++)
 		{
-			while(chunk.getPendingUpdatesCount() != 0 && (time - realTime) < 10)
+			for(int j = 0; j < 10 && chunk.getPendingUpdatesCount() != 0; j++)
 			{
+				world.getWorldInfo().incrementTotalWorldTime(chunk.getFirstPendingUpdateTime());
 				world.updatePendingOf(chunk);
-				world.getWorldInfo().incrementTotalWorldTime(++time);
 			}
 			world.getWorldInfo().incrementTotalWorldTime(realTime);
-			entities.clear();
-			for(List list : chunk.entityLists)
-				entities.addAll(list);
-			for(Entity ent : entities)
+
+			boolean hasRemovedEntitiesThisIter = false;
+			for(List entities : chunk.entityLists)
 			{
-				if(ent.isDead)
-					continue;
-				if(ent instanceof EntityFallingBlock)
+				for(int k = 0; k < entities.size(); k++)
 				{
-					for(int j = 0; j < 100 && !ent.isDead; j++)
-						ent.onUpdate();
-				}
-				else if(ent instanceof EntityItem)
-				{
-					ent.setDead();
+					Entity ent = (Entity) entities.get(k);
+					if(!ent.isDead)
+					{
+						if(ent instanceof EntityFallingBlock)
+						{
+							for(int j = 0; j < 100 && !ent.isDead; j++)
+								ent.onUpdate(); // This method may add new entities to collection we iterating on
+						}
+						else if(ent instanceof EntityItem)
+						{
+							ent.setDead();
+						}
+					}
+					if(ent.isDead)
+					{
+						k--;
+						chunk.removeEntity(ent);
+						world.onEntityRemoved(ent);
+						ent.removeThisTick = true;
+						hasRemovedEntitiesThisIter = true;
+					}
 				}
 			}
+
+			hasRemovedEntitiesTotal |= hasRemovedEntitiesThisIter;
+			if(chunk.getPendingUpdatesCount() == 0 && !hasRemovedEntitiesThisIter)
+				break;
 		}
+
+		if(hasRemovedEntitiesTotal)
+			world.loadedEntityList.removeIf(LambdaHolder.ENTITY_REMOVAL_PREDICATE);
 	}
 }

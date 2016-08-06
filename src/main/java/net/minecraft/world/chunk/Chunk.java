@@ -1623,7 +1623,12 @@ public class Chunk implements IChunkDependency
 	{
 		return pendingUpdatesSet == null ? 0 : pendingUpdatesSet.size();
 	}
-	
+
+	public long getFirstPendingUpdateTime()
+	{
+		return pendingUpdatesQueue == null ? 0 : pendingUpdatesQueue.first().scheduledTime;
+	}
+
 	public ChunkBindState getBindState()
 	{
 		return bindState;
