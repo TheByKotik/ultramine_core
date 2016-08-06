@@ -18,7 +18,7 @@ public class ChunkHash
 	
 	public static short chunkCoordToHash(int x, int y, int z)
 	{
-		return (short)(((x&15)<<12) | ((z&15)<<8) | (y&255));
+		return (short)((y << 8) | (z << 4) | x);
 	}
 	
 	public static long worldChunkToKey(int dim, int x, int z)
