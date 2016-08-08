@@ -40,6 +40,11 @@ public class WorldEventProxy
 
 	public void startBlock(Block block, int x, int y, int z)
 	{
+		startBlock(block, x, y, z, null);
+	}
+
+	public void startBlock(Block block, int x, int y, int z, GameProfile initiator)
+	{
 	}
 
 	public void startNeighbor(int x, int y, int z)

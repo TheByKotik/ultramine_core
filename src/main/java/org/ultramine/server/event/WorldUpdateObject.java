@@ -24,6 +24,8 @@ public class WorldUpdateObject
 	private int intx;
 	private int inty;
 	private int intz;
+
+	private GameProfile blockUpdateInitiator;
 	
 	public WorldUpdateObject()
 	{
@@ -132,13 +134,24 @@ public class WorldUpdateObject
 	{
 		return intz;
 	}
-	
+
+	public GameProfile getBlockUpdateInitiator()
+	{
+		return blockUpdateInitiator;
+	}
+
+	public void setBlockUpdateInitiator(GameProfile blockUpdateInitiator)
+	{
+		this.blockUpdateInitiator = blockUpdateInitiator;
+	}
+
 	public GameProfile getOwner()
 	{
 		switch(type)
 		{
 		case BLOCK_EVENT:
 		case BLOCK_PENDING:
+			return blockUpdateInitiator;
 		case BLOCK_RANDOM:
 			
 			break;

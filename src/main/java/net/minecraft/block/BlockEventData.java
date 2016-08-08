@@ -1,5 +1,7 @@
 package net.minecraft.block;
 
+import com.mojang.authlib.GameProfile;
+
 public class BlockEventData
 {
 	private int coordX;
@@ -9,6 +11,8 @@ public class BlockEventData
 	private int eventID;
 	private int eventParameter;
 	private static final String __OBFID = "CL_00000131";
+
+	public GameProfile initiator;
 
 	public BlockEventData(int p_i45362_1_, int p_i45362_2_, int p_i45362_3_, Block p_i45362_4_, int p_i45362_5_, int p_i45362_6_)
 	{

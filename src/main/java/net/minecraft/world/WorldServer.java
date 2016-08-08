@@ -1,7 +1,6 @@
 package net.minecraft.world;
 
-import com.google.common.collect.Lists;
-
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -479,6 +478,7 @@ public class WorldServer extends World
 		if (chunk != null)
 		{
 			PendingBlockUpdate p = new PendingBlockUpdate(x&15, y, z&15, block, worldInfo.getWorldTotalTime() + (long)time, priority);
+			p.initiator = getEventProxy().getObjectOwner();
 			chunk.scheduleBlockUpdate(p, true);
 		}
 	}
@@ -822,6 +822,7 @@ public class WorldServer extends World
 	public void addBlockEvent(int p_147452_1_, int p_147452_2_, int p_147452_3_, Block p_147452_4_, int p_147452_5_, int p_147452_6_)
 	{
 		BlockEventData blockeventdata = new BlockEventData(p_147452_1_, p_147452_2_, p_147452_3_, p_147452_4_, p_147452_5_, p_147452_6_);
+		blockeventdata.initiator = getEventProxy().getObjectOwner();
 		Iterator iterator = this.field_147490_S[this.blockEventCacheIndex].iterator();
 		BlockEventData blockeventdata1;
 
@@ -852,7 +853,7 @@ public class WorldServer extends World
 				BlockEventData blockeventdata = (BlockEventData)iterator.next();
 				Block block = getBlockIfExists(blockeventdata.func_151340_a(), blockeventdata.func_151342_b(), blockeventdata.func_151341_c());
 				if(block == blockeventdata.getBlock())
-					getEventProxy().startBlock(block, blockeventdata.func_151340_a(), blockeventdata.func_151342_b(), blockeventdata.func_151341_c());
+					getEventProxy().startBlock(block, blockeventdata.func_151340_a(), blockeventdata.func_151342_b(), blockeventdata.func_151341_c(), blockeventdata.initiator);
 
 				if (this.func_147485_a(blockeventdata))
 				{
@@ -1028,15 +1029,15 @@ public class WorldServer extends World
 		PendingBlockUpdate p;
 		while((p = chunk.pollPending(time)) != null)
 		{
-			updateBlock(x + p.x, p.y, z + p.z, p.getBlock());
+			updateBlock(x + p.x, p.y, z + p.z, p.getBlock(), p.initiator);
 		}
 		getEventProxy().popState();
 	}
 	
-	private void updateBlock(int x, int y, int z, Block block1)
+	private void updateBlock(int x, int y, int z, Block block1, GameProfile initiator)
 	{
 		Block block = this.getBlock(x, y, z);
-		getEventProxy().startBlock(block, x, y, z);
+		getEventProxy().startBlock(block, x, y, z, initiator);
 
 		if (block.getMaterial() != Material.air && Block.isEqualTo(block, block1))
 		{

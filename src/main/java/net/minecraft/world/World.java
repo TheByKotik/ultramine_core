@@ -490,13 +490,6 @@ public abstract class World implements IBlockAccess
 				}
 
 				boolean flag = chunk.func_150807_a(p_147465_1_ & 15, p_147465_2_, p_147465_3_ & 15, p_147465_4_, p_147465_5_);
-				
-				if(p_147465_4_.hasTileEntity(p_147465_5_))
-				{
-					TileEntity te = getTileEntity(p_147465_1_, p_147465_2_, p_147465_3_);
-					if(te != null)
-						te.setObjectOwner(eventProxy.getObjectOwner());
-				}
 
 				if (!flag && blockSnapshot != null)
 				{
@@ -2712,6 +2705,8 @@ public abstract class World implements IBlockAccess
 			return;
 		}
 
+		if(p_147455_4_.getObjectOwner() == null) // Double check to prevent unnecessary getEventProxy().getObjectOwner() invocation
+			p_147455_4_.setObjectOwner(getEventProxy().getObjectOwner());
 		if (p_147455_4_.canUpdate())
 		{
 			if (this.field_147481_N)
