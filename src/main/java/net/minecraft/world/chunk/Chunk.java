@@ -54,6 +54,7 @@ import org.ultramine.server.chunk.ChunkBindState;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.IChunkDependency;
 import org.ultramine.server.chunk.PendingBlockUpdate;
+import org.ultramine.server.event.WorldUpdateObjectType;
 
 public class Chunk implements IChunkDependency
 {
@@ -877,8 +878,16 @@ public class Chunk implements IChunkDependency
 				return null;
 			}
 
+			// This vanilla code restores broken TileEntities. Invokes only on TileEntity GET.
+			// Newly created TileEntity should not be attached to WorldUpdateObject that invokes this method.
+			// So using this hack to override and then restore WorldUpdateObject
+			WorldUpdateObjectType type = worldObj.getEventProxy().getUpdateObject().getType();
+			worldObj.getEventProxy().pushState(WorldUpdateObjectType.UNKNOWN);
+
 			tileentity = block.createTileEntity(worldObj, meta);
 			this.worldObj.setTileEntity(this.xPosition * 16 + p_150806_1_, p_150806_2_, this.zPosition * 16 + p_150806_3_, tileentity);
+
+			worldObj.getEventProxy().pushState(type);
 		}
 
 		return tileentity;
