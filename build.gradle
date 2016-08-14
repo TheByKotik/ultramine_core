@@ -103,6 +103,8 @@ dependencies {
 
 	runtimeCommon 'net.openhft:koloboke-impl-jdk8:0.6.8'
 	runtime 'mysql:mysql-connector-java:5.1.31'
+
+	testCompile "org.spockframework:spock-core:1.1-groovy-2.4-rc-1"
 }
 
 task injectVersion(type: SpeicialClassTransformTask) {
