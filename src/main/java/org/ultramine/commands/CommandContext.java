@@ -15,11 +15,12 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
 
-import org.ultramine.server.PermissionHandler;
+import org.ultramine.core.service.InjectService;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.util.BasicTypeFormatter;
 import org.ultramine.server.util.BasicTypeParser;
+import org.ultramine.core.permissions.Permissions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,8 @@ import java.util.Set;
 
 public class CommandContext
 {
+	@InjectService
+	private static Permissions perms;
 	private ICommandSender sender;
 	private String[] args;
 	private IExtendedCommand command;
@@ -130,13 +133,13 @@ public class CommandContext
 	
 	public void checkSenderPermission(String permission, String msg)
 	{
-		if (!senderIsServer() && !PermissionHandler.getInstance().has(sender, permission))
+		if (!senderIsServer() && !perms.has(sender, permission))
 			throw new CommandException(msg);
 	}
 
 	public void checkSenderPermissionInWorld(String world, String permission)
 	{
-		if (!senderIsServer() && !PermissionHandler.getInstance().has(world, sender.getCommandSenderName(), permission))
+		if (!senderIsServer() && !perms.has(world, sender.getCommandSenderName(), permission))
 			throw new CommandException("command.generic.permission");
 	}
 	

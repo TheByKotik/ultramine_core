@@ -1,4 +1,4 @@
-package org.ultramine.permission.internal;
+package org.ultramine.server.internal;
 
 import com.google.common.collect.Queues;
 import cpw.mods.fml.common.FMLCommonHandler;

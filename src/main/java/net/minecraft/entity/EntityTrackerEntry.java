@@ -56,9 +56,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.storage.MapData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ultramine.permission.MinecraftPermissions;
 
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
+import org.ultramine.core.permissions.MinecraftPermissions;
 
 public class EntityTrackerEntry
 {

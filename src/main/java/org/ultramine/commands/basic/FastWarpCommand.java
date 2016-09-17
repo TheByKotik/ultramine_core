@@ -8,11 +8,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
 import org.ultramine.commands.IExtendedCommand;
-import org.ultramine.server.PermissionHandler;
+import org.ultramine.core.service.InjectService;
 import org.ultramine.server.Teleporter;
+import org.ultramine.core.permissions.Permissions;
 
 public class FastWarpCommand implements IExtendedCommand
 {
+	@InjectService
+	private static Permissions perms;
 	private final String name;
 	
 	public FastWarpCommand(String name)
@@ -47,7 +50,7 @@ public class FastWarpCommand implements IExtendedCommand
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender sender)
 	{
-		return sender instanceof EntityPlayerMP && PermissionHandler.getInstance().has(sender, "command.fastwarp."+name);
+		return sender instanceof EntityPlayerMP && perms.has(sender, "command.fastwarp."+name);
 	}
 
 	@Override

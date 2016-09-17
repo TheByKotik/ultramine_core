@@ -10,7 +10,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 import org.ultramine.server.ConfigurationHandler;
-import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.WarpProtectionEntry;
 import org.ultramine.server.util.WarpLocation;
 
@@ -34,7 +33,7 @@ public class WarpProtection
 	{
 		if(!e.getPlayer().isEntityPlayerMP() || ((EntityPlayerMP)e.getPlayer()).playerNetServerHandler == null)
 			return;
-		if(!PermissionHandler.getInstance().has(e.getPlayer(), "ability.admin.breakprivate"))
+		if(!((EntityPlayerMP) e.getPlayer()).hasPermission("ability.admin.breakprivate"))
 		{
 			for(WarpProtectionEntry warpConf : ConfigurationHandler.getServerConfig().tools.warpProtection)
 			{
@@ -51,7 +50,7 @@ public class WarpProtection
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onPlayerInteractEvent(PlayerInteractEvent e)
 	{
-		if(!PermissionHandler.getInstance().has(e.entityPlayer, "ability.admin.breakprivate"))
+		if(!((EntityPlayerMP) e.entityPlayer).hasPermission("ability.admin.breakprivate"))
 		{
 			for(WarpProtectionEntry warpConf : ConfigurationHandler.getServerConfig().tools.warpProtection)
 			{

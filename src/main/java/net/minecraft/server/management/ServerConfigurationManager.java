@@ -69,7 +69,7 @@ import net.minecraft.world.storage.IPlayerFileData;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ultramine.permission.MinecraftPermissions;
+import org.ultramine.core.permissions.MinecraftPermissions;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.internal.UMHooks;

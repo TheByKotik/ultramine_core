@@ -11,7 +11,6 @@ import java.util.List;
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
 import org.ultramine.server.ConfigurationHandler;
-import org.ultramine.server.PermissionHandler;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.event.SetBlockEvent;
 import org.ultramine.server.util.MinecraftUtil;
@@ -171,7 +170,7 @@ public class ButtonCommand
 		if(bt != null)
 		{
 			e.setCanceled(true);
-			if(bt.permission == null || PermissionHandler.getInstance().has(e.entityPlayer, bt.permission))
+			if(bt.permission == null || ((EntityPlayerMP) e.entityPlayer).hasPermission(bt.permission))
 			{
 				for(String cmd : bt.commands)
 					server.getCommandManager().executeCommand(server, cmd.replace("@p", e.entityPlayer.getGameProfile().getName()));

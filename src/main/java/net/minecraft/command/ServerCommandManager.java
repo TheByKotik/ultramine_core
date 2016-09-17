@@ -34,12 +34,15 @@ import net.minecraft.network.rcon.RConConsoleSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
-import org.ultramine.permission.MinecraftPermissions;
-import org.ultramine.server.PermissionHandler;
+import org.ultramine.core.service.InjectService;
+import org.ultramine.core.permissions.MinecraftPermissions;
+import org.ultramine.core.permissions.Permissions;
 
 public class ServerCommandManager extends CommandHandler implements IAdminCommand
 {
 	private static final String __OBFID = "CL_00000922";
+	@InjectService
+	private static Permissions perms;
 
 	public ServerCommandManager()
 	{
@@ -128,7 +131,7 @@ public class ServerCommandManager extends CommandHandler implements IAdminComman
 			{
 				EntityPlayerMP entityplayermp = (EntityPlayerMP)iterator.next();
 
-				if (entityplayermp != par1ICommandSender && PermissionHandler.getInstance().hasGlobally(entityplayermp, MinecraftPermissions.COMMAND_NOTIFICATION) && (!(par1ICommandSender instanceof RConConsoleSource) || MinecraftServer.getServer().func_152363_m()))
+				if (entityplayermp != par1ICommandSender && perms.has(entityplayermp, MinecraftPermissions.COMMAND_NOTIFICATION) && (!(par1ICommandSender instanceof RConConsoleSource) || MinecraftServer.getServer().func_152363_m()))
 				{
 					entityplayermp.addChatMessage(chatcomponenttranslation);
 				}

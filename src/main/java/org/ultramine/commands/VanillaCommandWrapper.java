@@ -3,12 +3,15 @@ package org.ultramine.commands;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import org.ultramine.server.PermissionHandler;
+import org.ultramine.core.service.InjectService;
+import org.ultramine.core.permissions.Permissions;
 
 import java.util.List;
 
 public class VanillaCommandWrapper implements IExtendedCommand
 {
+	@InjectService
+	private static Permissions perms;
 	private final ICommand wrappedCommand;
 	private final String permission;
 	private final String description;
@@ -49,7 +52,7 @@ public class VanillaCommandWrapper implements IExtendedCommand
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1)
 	{
-		return (PermissionHandler.getInstance().has(var1, permission) || !(var1 instanceof EntityPlayer)) && wrappedCommand.canCommandSenderUseCommand(var1);
+		return perms.useVanillaCommandPermissions() ? wrappedCommand.canCommandSenderUseCommand(var1) : perms.has(var1, permission) || !(var1 instanceof EntityPlayer);
 	}
 
 	@Override

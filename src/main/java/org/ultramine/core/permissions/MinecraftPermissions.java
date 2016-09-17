@@ -1,4 +1,4 @@
-package org.ultramine.permission;
+package org.ultramine.core.permissions;
 
 public final class MinecraftPermissions
 {

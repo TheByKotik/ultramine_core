@@ -21,7 +21,6 @@ import org.ultramine.commands.IExtendedCommand;
 import org.ultramine.commands.syntax.ArgumentsPatternParser;
 import org.ultramine.commands.syntax.IArgumentCompletionHandler;
 import org.ultramine.commands.syntax.IArgumentValidationHandler;
-import org.ultramine.server.PermissionHandler;
 
 public class FMLServerStartingEvent extends FMLStateEvent
 {
@@ -75,11 +74,6 @@ public class FMLServerStartingEvent extends FMLStateEvent
 	public void registerArgumentHandlers(Class<?> holder)
 	{
 		getArgumentsParser().registerHandlers(holder);
-	}
-
-	public PermissionHandler getPermissionHandler()
-	{
-		return PermissionHandler.getInstance();
 	}
 
 	private CommandRegistry getCommandRegistry()

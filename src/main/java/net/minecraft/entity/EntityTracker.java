@@ -38,9 +38,9 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ultramine.permission.MinecraftPermissions;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
+import org.ultramine.core.permissions.MinecraftPermissions;
 
 public class EntityTracker
 {

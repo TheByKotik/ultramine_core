@@ -16,18 +16,18 @@ import org.ultramine.commands.basic.OpenInvCommands;
 import org.ultramine.commands.basic.TechCommands;
 import org.ultramine.commands.basic.VanillaCommands;
 import org.ultramine.commands.syntax.DefaultCompleters;
+import org.ultramine.core.service.InjectService;
+import org.ultramine.core.service.ServiceManager;
 import org.ultramine.economy.EconomyCommands;
-import org.ultramine.permission.IPermissionManager;
-import org.ultramine.permission.MinecraftPermissions;
-import org.ultramine.permission.commands.BasicPermissionCommands;
-import org.ultramine.permission.internal.SyncServerExecutorImpl;
 import org.ultramine.server.chunk.ChunkGenerationQueue;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.data.Databases;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerCoreData;
 import org.ultramine.server.event.ForgeModIdMappingEvent;
+import org.ultramine.server.internal.SyncServerExecutorImpl;
 import org.ultramine.server.internal.UMEventHandler;
+import org.ultramine.server.internal.OpBasedPermissions;
 import org.ultramine.server.tools.ButtonCommand;
 import org.ultramine.server.tools.ItemBlocker;
 import org.ultramine.server.tools.WarpProtection;
@@ -54,10 +54,15 @@ import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import org.ultramine.core.permissions.Permissions;
 
 public class UltramineServerModContainer extends DummyModContainer
 {
 	private static UltramineServerModContainer instance;
+	@InjectService
+	private static ServiceManager services;
+	@InjectService
+	private static Permissions perms;
 	
 	private LoadController controller;
 	@SideOnly(Side.SERVER)
@@ -105,6 +110,11 @@ public class UltramineServerModContainer extends DummyModContainer
 				Databases.init();
 				MinecraftServer.getServer().getMultiWorld().preloadConfigs();
 				ConfigurationHandler.postWorldDescsLoad();
+				OpBasedPermissions vanPerms = new OpBasedPermissions();
+				vanPerms.addDefault("command.vanilla.help");
+				vanPerms.addDefault("command.vanilla.msg");
+				vanPerms.addDefault("command.vanilla.reply");
+				services.register(Permissions.class, vanPerms, 0);
 			}
 		}
 		catch (Throwable t)
@@ -169,37 +179,12 @@ public class UltramineServerModContainer extends DummyModContainer
 		{
 			e.getServer().getConfigurationManager().getDataLoader().registerPlayerDataExt(PlayerCoreData.class, "core");
 			e.registerArgumentHandlers(DefaultCompleters.class);
-			e.registerCommands(BasicPermissionCommands.class);
 			e.registerCommands(VanillaCommands.class);
 			e.registerCommands(BasicCommands.class);
 			e.registerCommands(TechCommands.class);
 			e.registerCommands(GenWorldCommand.class);
 			e.registerCommands(EconomyCommands.class);
 			e.registerCommands(OpenInvCommands.class);
-			
-			for(String perm : new String[]{
-					"command.vanilla.help",
-					"command.vanilla.msg",
-					"command.vanilla.me",
-					"command.vanilla.kill",
-					"command.vanilla.list",
-					"ability.player.useblock",
-					"ability.player.useitem",
-					"ability.player.blockplace",
-					"ability.player.blockbreak",
-					"ability.player.attack",
-					"ability.player.chat",
-					"command.fastwarp.spawn",
-					})
-			{
-				e.getPermissionHandler().addToGroup(IPermissionManager.DEFAULT_GROUP_NAME, IPermissionManager.GLOBAL_WORLD, perm);
-			}
-			e.getPermissionHandler().setGroupMeta(IPermissionManager.DEFAULT_GROUP_NAME, IPermissionManager.GLOBAL_WORLD, "color", "7");
-			e.getPermissionHandler().addToGroup("admin", IPermissionManager.GLOBAL_WORLD, "*");
-			e.getPermissionHandler().addToGroup("admin", IPermissionManager.GLOBAL_WORLD, "^"+MinecraftPermissions.HIDE_JOIN_MESSAGE);
-			e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "color", "c");
-			e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "tablistcolor", "c");
-			e.getPermissionHandler().setGroupMeta("admin", IPermissionManager.GLOBAL_WORLD, "prefix", "&4[admin] ");
 			
 			if(e.getSide().isServer())
 			{
@@ -220,7 +205,6 @@ public class UltramineServerModContainer extends DummyModContainer
 	{
 		try
 		{
-			PermissionHandler.getInstance().reload();
 			ServerDataLoader loader = MinecraftServer.getServer().getConfigurationManager().getDataLoader();
 			CommandRegistry reg = ((CommandHandler)MinecraftServer.getServer().getCommandManager()).getRegistry();
 			loader.loadCache();
