@@ -2,6 +2,8 @@ package net.minecraft.command;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
@@ -16,6 +18,8 @@ public class CommandHandler implements ICommandManager
 {
 	private static final Logger logger = LogManager.getLogger();
 	private final CommandRegistry registry = new CommandRegistry();
+	private final Map commandMap = registry.getCommandMap();
+	private final Set commandSet = registry.getCommandSet();
 	private static final String __OBFID = "CL_00001765";
 
 	public int executeCommand(ICommandSender par1ICommandSender, String par2Str)
