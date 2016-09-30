@@ -20,7 +20,6 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.MinecraftException;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.storage.IThreadedFileIO;
 import net.minecraft.world.storage.ThreadedFileIOBase;
 import net.minecraftforge.common.MinecraftForge;
@@ -444,28 +443,32 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(k);
 			byte b1 = nbttagcompound1.getByte("Y");
 			ExtendedBlockStorage extendedblockstorage = new ExtendedBlockStorage(b1 << 4, flag, false);
-			extendedblockstorage.getSlot().setLSB(nbttagcompound1.getByteArray("Blocks"));
+			byte[] lsb = nbttagcompound1.getByteArray("Blocks");
+			byte[] msb;
 
 			if (nbttagcompound1.hasKey("Add", 7))
 			{
-				extendedblockstorage.getSlot().setMSB(nbttagcompound1.getByteArray("Add"));
+				msb = nbttagcompound1.getByteArray("Add");
 			}
 			else
 			{
-				extendedblockstorage.getSlot().clearMSB();
+				msb = null;
 			}
 
-			extendedblockstorage.getSlot().setBlockMetadata(nbttagcompound1.getByteArray("Data"));
-			extendedblockstorage.getSlot().setBlocklight(nbttagcompound1.getByteArray("BlockLight"));
+			byte[] meta = nbttagcompound1.getByteArray("Data");
+			byte[] blockLight = nbttagcompound1.getByteArray("BlockLight");
+			byte[] skyLight;
 
 			if (flag)
 			{
-				extendedblockstorage.getSlot().setSkylight(nbttagcompound1.getByteArray("SkyLight"));
+				skyLight = nbttagcompound1.getByteArray("SkyLight");
 			}
 			else
 			{
-				extendedblockstorage.getSlot().clearSkylight();
+				skyLight = null;
 			}
+
+			extendedblockstorage.getSlot().setData(lsb, msb, meta, blockLight, skyLight);
 
 			extendedblockstorage.removeInvalidBlocks();
 			aextendedblockstorage[b1] = extendedblockstorage;

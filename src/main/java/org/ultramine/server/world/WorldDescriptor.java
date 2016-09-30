@@ -318,7 +318,7 @@ public class WorldDescriptor
 		
 		MinecraftForge.EVENT_BUS.post(new WorldEvent.Unload(world));
 		DimensionManager.setWorld(world.provider.dimensionId, null);
-		world.theChunkProviderServer.free();
+		world.theChunkProviderServer.release();
 		for(Object o : world.loadedTileEntityList)
 			((TileEntity)o).setWorldObj(null);
 		world.loadedTileEntityList.clear();

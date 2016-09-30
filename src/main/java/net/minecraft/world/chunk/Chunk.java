@@ -1202,7 +1202,7 @@ public class Chunk implements IChunkDependency
 				{
 					this.storageArrays[l] = new ExtendedBlockStorage(l << 4, flag1, false);
 					if(!flag1)
-						this.storageArrays[l].getSlot().clearSkylight();
+						this.storageArrays[l].getSlot().zerofillSkylight();
 				}
 
 				this.storageArrays[l].getSlot().setLSB(p_76607_1_, k);
@@ -1211,7 +1211,7 @@ public class Chunk implements IChunkDependency
 			else if (p_76607_4_ && this.storageArrays[l] != null)
 			{
 				this.storageArrays[l] = null;
-				this.storageArrays[l].free();
+				this.storageArrays[l].release();
 			}
 		}
 
@@ -1836,12 +1836,12 @@ public class Chunk implements IChunkDependency
 		return getEntityCountByType(e.getEntityType());
 	}
 	
-	public void free()
+	public void release()
 	{
 		for(ExtendedBlockStorage exbs : storageArrays)
 		{
 			if(exbs != null)
-				exbs.free();
+				exbs.release();
 		}
 		releasePendingUpdatesSets();
 	}

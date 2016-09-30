@@ -28,6 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.commands.Command;
 import org.ultramine.commands.CommandContext;
+import org.ultramine.core.service.InjectService;
 import org.ultramine.server.BackupManager;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.Restarter;
@@ -38,7 +39,7 @@ import org.ultramine.server.BackupManager.BackupDescriptor;
 import org.ultramine.server.WorldsConfig.WorldConfig;
 import org.ultramine.server.WorldsConfig.WorldConfig.ImportFrom;
 import org.ultramine.server.chunk.ChunkProfiler;
-import org.ultramine.server.chunk.OffHeapChunkStorage;
+import org.ultramine.server.chunk.alloc.ChunkAllocService;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.server.world.MultiWorld;
 import org.ultramine.server.world.WorldDescriptor;
@@ -58,7 +59,8 @@ import static org.ultramine.server.world.WorldState.*;
 public class TechCommands
 {
 	private static final Logger log = LogManager.getLogger();
-	
+	@InjectService private static ChunkAllocService alloc;
+
 	@Command(
 			name = "id",
 			group = "technical",
@@ -155,8 +157,8 @@ public class TechCommands
 		ctx.sendMessage("Heap max: %sm", Runtime.getRuntime().maxMemory() >> 20);
 		ctx.sendMessage("Heap total: %sm", Runtime.getRuntime().totalMemory() >> 20);
 		ctx.sendMessage("Heap free: %sm", Runtime.getRuntime().freeMemory() >> 20);
-		ctx.sendMessage("Off-Heap chunk total: %sm", OffHeapChunkStorage.instance().getTotalMemory() >> 20);
-		ctx.sendMessage("Off-Heap chunk used: %sm", OffHeapChunkStorage.instance().getUsedMemory() >> 20);
+		ctx.sendMessage("Off-Heap chunk total: %sm", alloc.getOffHeapTotalMemory() >> 20);
+		ctx.sendMessage("Off-Heap chunk used: %sm", alloc.getOffHeapUsedMemory() >> 20);
 		ctx.sendMessage("Threads: %s", Thread.activeCount());
 	}
 	

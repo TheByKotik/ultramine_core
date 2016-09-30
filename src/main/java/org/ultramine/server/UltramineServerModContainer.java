@@ -23,6 +23,8 @@ import org.ultramine.core.service.InjectService;
 import org.ultramine.core.service.ServiceManager;
 import org.ultramine.server.chunk.ChunkGenerationQueue;
 import org.ultramine.server.chunk.ChunkProfiler;
+import org.ultramine.server.chunk.alloc.ChunkAllocService;
+import org.ultramine.server.chunk.alloc.unsafe.UnsafeChunkAlloc;
 import org.ultramine.server.data.Databases;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerCoreData;
@@ -108,6 +110,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	{
 		try
 		{
+			services.register(ChunkAllocService.class, new UnsafeChunkAlloc(), 0);
 			if(e.getSide().isServer())
 			{
 				ConfigurationHandler.load();
