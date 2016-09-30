@@ -47,7 +47,7 @@ public class DataWatcher
 		{
 			throw new IllegalArgumentException("Unknown data type: " + p_75682_2_.getClass());
 		}
-		else if (p_75682_1_ > 31)
+		else if (p_75682_1_ > 31 || p_75682_1_ < 0)
 		{
 			throw new IllegalArgumentException("Data value id is too big with " + p_75682_1_ + "! (Max is " + 31 + ")");
 		}
