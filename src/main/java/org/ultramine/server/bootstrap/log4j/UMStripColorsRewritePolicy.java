@@ -9,6 +9,7 @@ import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.impl.Log4jLogEvent;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFormatMessage;
+import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.apache.logging.log4j.message.SimpleMessage;
 import org.apache.logging.log4j.message.StringFormattedMessage;
 
@@ -23,7 +24,7 @@ public class UMStripColorsRewritePolicy implements RewritePolicy
 		{
 			message = new SimpleMessage(((IUnformattedMessage) message).getUnformattedMessage());
 		}
-		else if(message instanceof SimpleMessage || message instanceof MessageFormatMessage || message instanceof StringFormattedMessage)
+		else if(message instanceof SimpleMessage || message instanceof ParameterizedMessage || message instanceof MessageFormatMessage || message instanceof StringFormattedMessage)
 		{
 			String text = message.getFormattedMessage();
 			StringBuilder sb = new StringBuilder(text.length());
