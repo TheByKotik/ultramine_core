@@ -727,6 +727,7 @@ public class TechCommands
 				{
 					ent.attackEntityFrom(DamageSource.outOfWorld, 10000f);
 					ent.setDead();
+					break;
 				}
 			}
 		}
