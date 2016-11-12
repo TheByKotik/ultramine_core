@@ -11,6 +11,7 @@ public class VanillaChunkHashMap extends LongHashMap
 	
 	public VanillaChunkHashMap(ChunkMap chunkMap)
 	{
+		super(null);
 		this.chunkMap = chunkMap;
 	}
 	
