@@ -440,14 +440,14 @@ public class BasicCommands
 		if(player.isHidden())
 		{
 			player.show();
-			ctx.sendMessage("command.unmute.success.show");
-			ctx.notifyOtherAdmins("command.unmute.notify.show");
+			ctx.sendMessage("command.vanish.success.show");
+			ctx.notifyOtherAdmins("command.vanish.notify.show");
 		}
 		else
 		{
 			player.hide();
-			ctx.sendMessage("command.unmute.success.hide");
-			ctx.notifyOtherAdmins("command.unmute.notify.hide");
+			ctx.sendMessage("command.vanish.success.hide");
+			ctx.notifyOtherAdmins("command.vanish.notify.hide");
 		}
 	}
 }
