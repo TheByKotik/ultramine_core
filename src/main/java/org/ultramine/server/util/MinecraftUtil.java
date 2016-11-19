@@ -1,9 +1,13 @@
 package org.ultramine.server.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+
+import java.util.Arrays;
 
 public class MinecraftUtil
 {
@@ -47,6 +51,90 @@ public class MinecraftUtil
 			for(int i = 0; i < level - 30; i++)
 				cost += 62 + i*7;
 			return cost;
+		}
+	}
+
+	public static boolean canLeavesStay(World world, int bx, int by, int bz, int searchDistance)
+	{
+		return new LeavesPathFinder(world, bx, by, bz, searchDistance).canLeavesStay();
+	}
+
+	private static class LeavesPathFinder
+	{
+		private static final byte SIZE = 16;
+		private static final int SIZE_HALF = SIZE / 2;
+		private static final byte[] AREA = new byte[SIZE * SIZE * SIZE];
+		private static final int EMPTY = 0;
+		private static final int WOOD = -1;
+		private static final int LEAVES = Byte.MAX_VALUE;
+		private static final int WALL = -2;
+
+		private final World world;
+		private final int bx;
+		private final int by;
+		private final int bz;
+		private final int distance;
+
+		public LeavesPathFinder(World world, int bx, int by, int bz, int distance)
+		{
+			this.world = world;
+			this.bx = bx;
+			this.by = by;
+			this.bz = bz;
+			this.distance = distance;
+		}
+
+		public boolean canLeavesStay()
+		{
+			if(distance > 7)
+				throw new IllegalArgumentException("distance should be less then 8, given: " + distance);
+			if(!world.checkChunksExist(bx - distance - 1, by - distance - 1, bz - distance - 1, bx + distance + 1, by + distance + 1, bz + distance + 1))
+				return true;
+
+			Arrays.fill(AREA, (byte)EMPTY);
+			setVal(0, 0, 0, LEAVES);
+			return recursivePathFind(0, 0, 0, 0);
+		}
+
+		private boolean recursivePathFind(int x, int y, int z, int depth)
+		{
+			int current = getVal(x, y, z);
+
+			if(current == EMPTY)
+			{
+				Block block = world.getBlock(bx + x, by + y, bz + z);
+				current = block.canSustainLeaves(world, bx + x, by + y, bz + z) ? WOOD : block.isLeaves(world, bx + x, by + y, bz + z) ? LEAVES : WALL;
+				setVal(x, y, z, current);
+			}
+
+			if(current == WOOD)
+				return true;
+			else if(current <= depth)
+				return false;
+
+			setVal(x, y, z, depth);
+
+			int newDepth = depth + 1;
+			if(newDepth > distance)
+				return false;
+
+			if(recursivePathFind(x+1, y, z, newDepth)) return true;
+			if(recursivePathFind(x, y+1, z, newDepth)) return true;
+			if(recursivePathFind(x, y, z+1, newDepth)) return true;
+			if(recursivePathFind(x-1, y, z, newDepth)) return true;
+			if(recursivePathFind(x, y-1, z, newDepth)) return true;
+			if(recursivePathFind(x, y, z-1, newDepth)) return true;
+			return false;
+		}
+
+		private static int getVal(int x, int y, int z)
+		{
+			return AREA[((x + SIZE_HALF) << 8) | ((y + SIZE_HALF) << 4) | (z + SIZE_HALF)];
+		}
+
+		private static void setVal(int x, int y, int z, int newVal)
+		{
+			AREA[((x + SIZE_HALF) << 8) | ((y + SIZE_HALF) << 4) | (z + SIZE_HALF)] = (byte)newVal;
 		}
 	}
 }
