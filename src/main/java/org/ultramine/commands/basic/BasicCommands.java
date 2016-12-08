@@ -364,7 +364,7 @@ public class BasicCommands
 	{
 		String msg = ctx.get("msg").asString().replace('&', '\u00a7');
 		if(ctx.getAction().equals("all"))
-			ctx.broadcast(WHITE, WHITE, msg);
+			ctx.broadcast(new ChatComponentText(msg));
 		else
 			ctx.get("player").asPlayer().addChatMessage(new ChatComponentText(msg));
 	}
@@ -440,14 +440,14 @@ public class BasicCommands
 		if(player.isHidden())
 		{
 			player.show();
-			ctx.sendMessage("command.unmute.success.show");
-			ctx.notifyOtherAdmins("command.unmute.notify.show");
+			ctx.sendMessage("command.vanish.success.show");
+			ctx.notifyOtherAdmins("command.vanish.notify.show");
 		}
 		else
 		{
 			player.hide();
-			ctx.sendMessage("command.unmute.success.hide");
-			ctx.notifyOtherAdmins("command.unmute.notify.hide");
+			ctx.sendMessage("command.vanish.success.hide");
+			ctx.notifyOtherAdmins("command.vanish.notify.hide");
 		}
 	}
 }

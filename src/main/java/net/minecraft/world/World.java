@@ -1968,11 +1968,16 @@ public abstract class World implements IBlockAccess
 			{
 				try
 				{
-					long startT = System.nanoTime();
-					this.updateEntity(entity);
-					long elapsed = System.nanoTime() - startT;
-					if(elapsed > 20000000)
-						FMLLog.warning("Possible lag source Entity %s %sms", entity, (elapsed/1000000));
+					if(balancer.canUpdateEntity(entity))
+					{
+						eventProxy.startEntity(entity);
+						chunkProfiler.startChunk(entity);
+						long startT = System.nanoTime();
+						this.updateEntity(entity);
+						long elapsed = System.nanoTime() - startT;
+						if(elapsed > 20000000)
+							FMLLog.warning("Possible lag source Entity %s %sms", entity, (elapsed/1000000));
+					}
 				}
 				catch (Throwable throwable1)
 				{
@@ -2162,7 +2167,7 @@ public abstract class World implements IBlockAccess
 		//boolean isForced = getPersistentChunks().containsKey(new ChunkCoordIntPair(i >> 4, j >> 4));
 		//byte b0 = isForced ? (byte)0 : 32;
 		//boolean canUpdate = !p_72866_2_ || this.checkChunksExist(i - b0, 0, j - b0, i + b0, 0, j + b0);
-		boolean canUpdate = balancer.canUpdateEntity(p_72866_1_);
+		boolean canUpdate = true; // checks moved up in call hierarchy
 		
 		//if (!canUpdate)
 		//{
@@ -2171,10 +2176,9 @@ public abstract class World implements IBlockAccess
 		//	canUpdate = event.canUpdate;
 		//}
 
+		//noinspection ConstantConditions
 		if (canUpdate)
 		{
-			eventProxy.startEntity(p_72866_1_);
-			chunkProfiler.startChunk(p_72866_1_);
 			p_72866_1_.lastTickPosX = p_72866_1_.posX;
 			p_72866_1_.lastTickPosY = p_72866_1_.posY;
 			p_72866_1_.lastTickPosZ = p_72866_1_.posZ;

@@ -8,15 +8,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+import org.ultramine.server.util.MinecraftUtil;
 
 public abstract class BlockLeaves extends BlockLeavesBase implements IShearable
 {
@@ -103,6 +102,7 @@ public abstract class BlockLeaves extends BlockLeavesBase implements IShearable
 
 			if ((l & 8) != 0 && (l & 4) == 0)
 			{
+				/*
 				byte b0 = 4;
 				int i1 = b0 + 1;
 				byte b1 = 32;
@@ -197,6 +197,8 @@ public abstract class BlockLeaves extends BlockLeavesBase implements IShearable
 				l1 = this.field_150128_a[k1 * j1 + k1 * b1 + k1];
 
 				if (l1 >= 0)
+				*/
+				if(MinecraftUtil.canLeavesStay(p_149674_1_, p_149674_2_, p_149674_3_, p_149674_4_, 4))
 				{
 					p_149674_1_.setBlockMetadataWithNotify(p_149674_2_, p_149674_3_, p_149674_4_, l & -9, 4);
 				}

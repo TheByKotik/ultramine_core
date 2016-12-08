@@ -1,6 +1,7 @@
 package net.minecraftforge.common;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -415,9 +416,14 @@ public class ForgeHooks
 			IChatComponent link = new ChatComponentText(url);
 
 			// Add schema so client doesn't crash.
-			if (URI.create(url).getScheme() == null)
-			{
-				url = "http://" + url;
+			try {
+				if (new URI(url).getScheme() == null)
+				{
+					url = "http://" + url;
+				}
+			} catch (URISyntaxException e) {
+				ichat.appendSibling(link);
+				continue;
 			}
 
 			// Set the click event and append the link.

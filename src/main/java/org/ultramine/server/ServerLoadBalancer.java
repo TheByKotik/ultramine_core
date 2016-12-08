@@ -69,6 +69,7 @@ public class ServerLoadBalancer
 		int prior = activeChunkSet.get(ChunkHash.chunkToKey(cx, cz));
 		if(prior == Byte.MAX_VALUE)
 		{
+			world.getEventProxy().startEntity(ent);
 			ent.updateInactive();
 			return false;
 		}

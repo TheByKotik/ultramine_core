@@ -847,6 +847,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		this.lastHealth = -1.0F;
 		this.lastFoodLevel = -1;
 		this.destroyedItemsNetCache.addAll(((EntityPlayerMP)p_71049_1_).destroyedItemsNetCache);
+		this.translator = ((EntityPlayerMP)p_71049_1_).translator;
 	}
 
 	protected void onNewPotionEffect(PotionEffect p_70670_1_)

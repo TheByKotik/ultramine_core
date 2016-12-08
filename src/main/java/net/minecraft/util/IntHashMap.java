@@ -1,17 +1,25 @@
 package net.minecraft.util;
 
+import net.openhft.koloboke.collect.map.IntObjMap;
+import net.openhft.koloboke.collect.map.hash.HashIntObjMaps;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class IntHashMap
 {
-	private transient IntHashMap.Entry[] slots = new IntHashMap.Entry[16];
-	private transient int count;
-	private int threshold = 12;
-	private final float growFactor = 0.75F;
-	private transient volatile int versionStamp;
-	private Set keySet = new HashSet();
+	private final IntObjMap<Object> map;
 	private static final String __OBFID = "CL_00001490";
+
+	public IntHashMap(IntObjMap<Object> map)
+	{
+		this.map = map;
+	}
+
+	public IntHashMap()
+	{
+		this(HashIntObjMaps.newMutableMap());
+	}
 
 	private static int computeHash(int p_76044_0_)
 	{
@@ -26,167 +34,52 @@ public class IntHashMap
 
 	public Object lookup(int p_76041_1_)
 	{
-		int j = computeHash(p_76041_1_);
-
-		for (IntHashMap.Entry entry = this.slots[getSlotIndex(j, this.slots.length)]; entry != null; entry = entry.nextEntry)
-		{
-			if (entry.hashEntry == p_76041_1_)
-			{
-				return entry.valueEntry;
-			}
-		}
-
-		return null;
+		return map.get(p_76041_1_);
 	}
 
 	public boolean containsItem(int p_76037_1_)
 	{
-		return this.lookupEntry(p_76037_1_) != null;
+		return map.containsKey(p_76037_1_);
 	}
 
 	final IntHashMap.Entry lookupEntry(int p_76045_1_)
 	{
-		int j = computeHash(p_76045_1_);
-
-		for (IntHashMap.Entry entry = this.slots[getSlotIndex(j, this.slots.length)]; entry != null; entry = entry.nextEntry)
-		{
-			if (entry.hashEntry == p_76045_1_)
-			{
-				return entry;
-			}
-		}
-
 		return null;
 	}
 
 	public void addKey(int p_76038_1_, Object p_76038_2_)
 	{
-		this.keySet.add(Integer.valueOf(p_76038_1_));
-		int j = computeHash(p_76038_1_);
-		int k = getSlotIndex(j, this.slots.length);
-
-		for (IntHashMap.Entry entry = this.slots[k]; entry != null; entry = entry.nextEntry)
-		{
-			if (entry.hashEntry == p_76038_1_)
-			{
-				entry.valueEntry = p_76038_2_;
-				return;
-			}
-		}
-
-		++this.versionStamp;
-		this.insert(j, p_76038_1_, p_76038_2_, k);
+		map.put(p_76038_1_, p_76038_2_);
 	}
 
 	private void grow(int p_76047_1_)
 	{
-		IntHashMap.Entry[] aentry = this.slots;
-		int j = aentry.length;
 
-		if (j == 1073741824)
-		{
-			this.threshold = Integer.MAX_VALUE;
-		}
-		else
-		{
-			IntHashMap.Entry[] aentry1 = new IntHashMap.Entry[p_76047_1_];
-			this.copyTo(aentry1);
-			this.slots = aentry1;
-			this.threshold = (int)((float)p_76047_1_ * this.growFactor);
-		}
 	}
 
 	private void copyTo(IntHashMap.Entry[] p_76048_1_)
 	{
-		IntHashMap.Entry[] aentry = this.slots;
-		int i = p_76048_1_.length;
 
-		for (int j = 0; j < aentry.length; ++j)
-		{
-			IntHashMap.Entry entry = aentry[j];
-
-			if (entry != null)
-			{
-				aentry[j] = null;
-				IntHashMap.Entry entry1;
-
-				do
-				{
-					entry1 = entry.nextEntry;
-					int k = getSlotIndex(entry.slotHash, i);
-					entry.nextEntry = p_76048_1_[k];
-					p_76048_1_[k] = entry;
-					entry = entry1;
-				}
-				while (entry1 != null);
-			}
-		}
 	}
 
 	public Object removeObject(int p_76049_1_)
 	{
-		this.keySet.remove(Integer.valueOf(p_76049_1_));
-		IntHashMap.Entry entry = this.removeEntry(p_76049_1_);
-		return entry == null ? null : entry.valueEntry;
+		return map.remove(p_76049_1_);
 	}
 
 	final IntHashMap.Entry removeEntry(int p_76036_1_)
 	{
-		int j = computeHash(p_76036_1_);
-		int k = getSlotIndex(j, this.slots.length);
-		IntHashMap.Entry entry = this.slots[k];
-		IntHashMap.Entry entry1;
-		IntHashMap.Entry entry2;
-
-		for (entry1 = entry; entry1 != null; entry1 = entry2)
-		{
-			entry2 = entry1.nextEntry;
-
-			if (entry1.hashEntry == p_76036_1_)
-			{
-				++this.versionStamp;
-				--this.count;
-
-				if (entry == entry1)
-				{
-					this.slots[k] = entry2;
-				}
-				else
-				{
-					entry.nextEntry = entry2;
-				}
-
-				return entry1;
-			}
-
-			entry = entry1;
-		}
-
-		return entry1;
+		return null;
 	}
 
 	public void clearMap()
 	{
-		++this.versionStamp;
-		IntHashMap.Entry[] aentry = this.slots;
-
-		for (int i = 0; i < aentry.length; ++i)
-		{
-			aentry[i] = null;
-		}
-
-		this.count = 0;
+		map.clear();
 	}
 
 	private void insert(int p_76040_1_, int p_76040_2_, Object p_76040_3_, int p_76040_4_)
 	{
-		IntHashMap.Entry entry = this.slots[p_76040_4_];
-		this.slots[p_76040_4_] = new IntHashMap.Entry(p_76040_1_, p_76040_2_, p_76040_3_, entry);
 
-		if (this.count++ >= this.threshold)
-		{
-			this.grow(2 * this.slots.length);
-		}
 	}
 
 	static class Entry

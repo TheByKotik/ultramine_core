@@ -1,13 +1,22 @@
 package net.minecraft.util;
 
+import net.openhft.koloboke.collect.map.LongObjMap;
+import net.openhft.koloboke.collect.map.hash.HashLongObjMaps;
+
 public class LongHashMap
 {
-	private transient LongHashMap.Entry[] hashArray = new LongHashMap.Entry[16];
-	private transient int numHashElements;
-	private int capacity = 12;
-	private final float percentUseable = 0.75F;
-	private transient volatile int modCount;
+	private final LongObjMap<Object> map;
 	private static final String __OBFID = "CL_00001492";
+
+	public LongHashMap(LongObjMap<Object> map)
+	{
+		this.map = map;
+	}
+
+	public LongHashMap()
+	{
+		this(HashLongObjMaps.newMutableMap());
+	}
 
 	private static int getHashedKey(long p_76155_0_)
 	{
@@ -27,157 +36,52 @@ public class LongHashMap
 
 	public int getNumHashElements()
 	{
-		return this.numHashElements;
+		return map.size();
 	}
 
 	public Object getValueByKey(long p_76164_1_)
 	{
-		int j = getHashedKey(p_76164_1_);
-
-		for (LongHashMap.Entry entry = this.hashArray[getHashIndex(j, this.hashArray.length)]; entry != null; entry = entry.nextEntry)
-		{
-			if (entry.key == p_76164_1_)
-			{
-				return entry.value;
-			}
-		}
-
-		return null;
+		return map.get(p_76164_1_);
 	}
 
 	public boolean containsItem(long p_76161_1_)
 	{
-		return this.getEntry(p_76161_1_) != null;
+		return map.containsKey(p_76161_1_);
 	}
 
 	final LongHashMap.Entry getEntry(long p_76160_1_)
 	{
-		int j = getHashedKey(p_76160_1_);
-
-		for (LongHashMap.Entry entry = this.hashArray[getHashIndex(j, this.hashArray.length)]; entry != null; entry = entry.nextEntry)
-		{
-			if (entry.key == p_76160_1_)
-			{
-				return entry;
-			}
-		}
-
 		return null;
 	}
 
 	public void add(long p_76163_1_, Object p_76163_3_)
 	{
-		int j = getHashedKey(p_76163_1_);
-		int k = getHashIndex(j, this.hashArray.length);
-
-		for (LongHashMap.Entry entry = this.hashArray[k]; entry != null; entry = entry.nextEntry)
-		{
-			if (entry.key == p_76163_1_)
-			{
-				entry.value = p_76163_3_;
-				return;
-			}
-		}
-
-		++this.modCount;
-		this.createKey(j, p_76163_1_, p_76163_3_, k);
+		map.put(p_76163_1_, p_76163_3_);
 	}
 
 	private void resizeTable(int p_76153_1_)
 	{
-		LongHashMap.Entry[] aentry = this.hashArray;
-		int j = aentry.length;
 
-		if (j == 1073741824)
-		{
-			this.capacity = Integer.MAX_VALUE;
-		}
-		else
-		{
-			LongHashMap.Entry[] aentry1 = new LongHashMap.Entry[p_76153_1_];
-			this.copyHashTableTo(aentry1);
-			this.hashArray = aentry1;
-			this.capacity = (int)((float)p_76153_1_ * this.percentUseable);
-		}
 	}
 
 	private void copyHashTableTo(LongHashMap.Entry[] p_76154_1_)
 	{
-		LongHashMap.Entry[] aentry = this.hashArray;
-		int i = p_76154_1_.length;
 
-		for (int j = 0; j < aentry.length; ++j)
-		{
-			LongHashMap.Entry entry = aentry[j];
-
-			if (entry != null)
-			{
-				aentry[j] = null;
-				LongHashMap.Entry entry1;
-
-				do
-				{
-					entry1 = entry.nextEntry;
-					int k = getHashIndex(entry.hash, i);
-					entry.nextEntry = p_76154_1_[k];
-					p_76154_1_[k] = entry;
-					entry = entry1;
-				}
-				while (entry1 != null);
-			}
-		}
 	}
 
 	public Object remove(long p_76159_1_)
 	{
-		LongHashMap.Entry entry = this.removeKey(p_76159_1_);
-		return entry == null ? null : entry.value;
+		return map.remove(p_76159_1_);
 	}
 
 	final LongHashMap.Entry removeKey(long p_76152_1_)
 	{
-		int j = getHashedKey(p_76152_1_);
-		int k = getHashIndex(j, this.hashArray.length);
-		LongHashMap.Entry entry = this.hashArray[k];
-		LongHashMap.Entry entry1;
-		LongHashMap.Entry entry2;
-
-		for (entry1 = entry; entry1 != null; entry1 = entry2)
-		{
-			entry2 = entry1.nextEntry;
-
-			if (entry1.key == p_76152_1_)
-			{
-				++this.modCount;
-				--this.numHashElements;
-
-				if (entry == entry1)
-				{
-					this.hashArray[k] = entry2;
-				}
-				else
-				{
-					entry.nextEntry = entry2;
-				}
-
-				return entry1;
-			}
-
-			entry = entry1;
-		}
-
-		return entry1;
+		return null;
 	}
 
 	private void createKey(int p_76156_1_, long p_76156_2_, Object p_76156_4_, int p_76156_5_)
 	{
-		LongHashMap.Entry entry = this.hashArray[p_76156_5_];
-		this.hashArray[p_76156_5_] = new LongHashMap.Entry(p_76156_1_, p_76156_2_, p_76156_4_, entry);
 
-		if (this.numHashElements++ >= this.capacity)
-		{
-			this.resizeTable(2 * this.hashArray.length);
-		}
 	}
 
 	static class Entry
