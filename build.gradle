@@ -41,13 +41,15 @@ configurations {
 	compileCommon
 	compileClient
 	compileServer
-	compile.extendsFrom compileCommon, compileClient, compileServer
 	runtimeCommon
-	runtimeClient.extendsFrom runtimeCommon, compileCommon, compileClient
-	runtimeServer.extendsFrom runtimeCommon, compileCommon, compileServer
-	runtimeAll.extendsFrom runtimeCommon, compileCommon, compileClient, compileServer
-	runtime.setExtendsFrom([runtimeAll])
-	//runtimeClient & runtimeServer is not linking to IDE and must not be used for adding dependencies
+	runtimeClient
+	runtimeServer
+	compile.extendsFrom compileCommon, compileClient, compileServer
+	packageClient.extendsFrom compileCommon, compileClient, runtimeCommon, runtimeClient
+	packageServer.extendsFrom compileCommon, compileServer, runtimeCommon, runtimeServer
+	packageAll.extendsFrom compileCommon, compileClient, compileServer, runtimeCommon, runtimeClient, runtimeServer
+	runtime.setExtendsFrom([packageAll])
+	//packageClient, packageServer & packageAll is not linking to IDE and must not be used for adding dependencies
 }
 
 dependencies {
@@ -102,7 +104,7 @@ dependencies {
 	compileServer 'jline:jline:2.13', {transitive = false}
 
 	runtimeCommon 'net.openhft:koloboke-impl-jdk8:0.6.8'
-	runtime 'mysql:mysql-connector-java:5.1.31'
+	runtimeServer 'mysql:mysql-connector-java:5.1.31'
 }
 
 task injectVersion(type: SpeicialClassTransformTask) {
@@ -151,7 +153,7 @@ task jar_server(type: Jar) {
 		attributes(
 			'Main-Class': 'cpw.mods.fml.relauncher.ServerLaunchWrapper',
 			'TweakClass': 'cpw.mods.fml.common.launcher.FMLTweaker',
-			'Class-Path': configurations.runtimeServer.collect { 'libraries/' + it.getName() }.join(' ')
+			'Class-Path': configurations.packageServer.collect { 'libraries/' + it.getName() }.join(' ')
 		)
 	}
 }
@@ -207,26 +209,26 @@ publishing {
 	publications {
 		if(publish_jars.contains('dev'))
 			mavenDevJar(MavenPublication) {
-				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar), configurations.runtimeAll.getAllDependencies())
+				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar), configurations.packageAll.getAllDependencies())
 				artifacts.matching({it.classifier == "dev"}).all({it.classifier = null})
 				artifact tasks.jar_source
 				artifact tasks.changelog.getProperty('changelogFile'), {classifier = 'changelog'}
 			}
 		if(publish_jars.contains('universal'))
 			mavenUnivarsalJar(MavenPublication) {
-				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar_universal), configurations.runtimeAll.getAllDependencies())
+				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar_universal), configurations.packageAll.getAllDependencies())
 				artifacts.matching({it.classifier == "universal"}).all({it.classifier = null})
 				artifactId = project.name + '-universal'
 			}
 		if(publish_jars.contains('server'))
 			mavenServerJar(MavenPublication) {
-				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar_server), configurations.runtimeServer.getAllDependencies())
+				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar_server), configurations.packageServer.getAllDependencies())
 				artifacts.matching({it.classifier == "server"}).all({it.classifier = null})
 				artifactId = project.name + '-server'
 			}
 		if(publish_jars.contains('client'))
 			mavenClientJar(MavenPublication) {
-				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar_client), configurations.runtimeClient.getAllDependencies())
+				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar_client), configurations.packageClient.getAllDependencies())
 				artifacts.matching({it.classifier == "client"}).all({it.classifier = null})
 				artifactId = project.name + '-client'
 			}
