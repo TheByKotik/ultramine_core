@@ -364,7 +364,7 @@ public class BasicCommands
 	{
 		String msg = ctx.get("msg").asString().replace('&', '\u00a7');
 		if(ctx.getAction().equals("all"))
-			ctx.broadcast(WHITE, WHITE, msg);
+			ctx.broadcast(new ChatComponentText(msg));
 		else
 			ctx.get("player").asPlayer().addChatMessage(new ChatComponentText(msg));
 	}

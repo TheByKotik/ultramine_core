@@ -161,10 +161,15 @@ public class CommandContext
 	{
 		sendMessage(EnumChatFormatting.YELLOW, msg, args);
 	}
+
+	public void broadcast(IChatComponent comp)
+	{
+		getServer().getConfigurationManager().sendChatMsg(comp);
+	}
 	
 	public void broadcast(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
 	{
-		getServer().getConfigurationManager().sendChatMsg(BasicTypeFormatter.formatMessage(tplColor, argsColor, msg, args));
+		broadcast(BasicTypeFormatter.formatMessage(tplColor, argsColor, msg, args));
 	}
 	
 	public void broadcast(EnumChatFormatting argsColor, String msg, Object... args)
