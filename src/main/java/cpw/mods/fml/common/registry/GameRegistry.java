@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import cpw.mods.fml.common.ModContainer;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -38,10 +39,10 @@ import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import org.apache.logging.log4j.Level;
-import org.ultramine.server.chunk.WrappedWorldGenerator;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
@@ -67,6 +68,7 @@ public class GameRegistry
 	private static Map<IWorldGenerator, Integer> worldGeneratorIndex = Maps.newHashMap();
 	private static List<IFuelHandler> fuelHandlers = Lists.newArrayList();
 	private static List<IWorldGenerator> sortedGeneratorList;
+	private static Map<IWorldGenerator, String> worldGeneratorOwners = Maps.newHashMap();
 
 	/**
 	 * Register a world generator - something that inserts new block types into the world
@@ -77,9 +79,11 @@ public class GameRegistry
 	 */
 	public static void registerWorldGenerator(IWorldGenerator generator, int modGenerationWeight)
 	{
-		generator = new WrappedWorldGenerator(generator, Loader.instance().activeModContainer());
 		worldGenerators.add(generator);
 		worldGeneratorIndex.put(generator, modGenerationWeight);
+		ModContainer mod = Loader.instance().activeModContainer();
+		if(mod != null)
+			worldGeneratorOwners.put(generator, mod.getModId());
 		if (sortedGeneratorList != null)
 		{
 			sortedGeneratorList = null;
@@ -110,6 +114,10 @@ public class GameRegistry
 
 		for (IWorldGenerator generator : sortedGeneratorList)
 		{
+			String owner = worldGeneratorOwners.get(generator);
+			List<String> modGenerationBlackList = ((WorldServer)world).getConfig().generation.modGenerationBlackList;
+			if(owner != null && modGenerationBlackList != null && modGenerationBlackList.contains(owner))
+				continue;
 			fmlRandom.setSeed(chunkSeed);
 			generator.generate(fmlRandom, chunkX, chunkZ, world, chunkGenerator, chunkProvider);
 		}
