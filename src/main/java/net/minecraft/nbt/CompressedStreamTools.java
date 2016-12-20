@@ -185,7 +185,7 @@ public class CompressedStreamTools
 
 	public static void write(NBTTagCompound p_74795_0_, File p_74795_1_) throws IOException
 	{
-		DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(p_74795_1_));
+		DataOutputStream dataoutputstream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(p_74795_1_)));
 
 		try
 		{
@@ -210,7 +210,7 @@ public class CompressedStreamTools
 		}
 		else
 		{
-			DataInputStream datainputstream = new DataInputStream(new FileInputStream(p_152458_0_));
+			DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new FileInputStream(p_152458_0_)));
 			NBTTagCompound nbttagcompound;
 
 			try
