@@ -27,9 +27,9 @@ public class AsyncIOUtils
 				{
 					FileUtils.writeStringToFile(file, data, Charsets.UTF_8);
 				}
-				catch(IOException e)
+				catch(Exception e)
 				{
-					log.warn("Failed to write file: "+file.getAbsolutePath(), e);
+					log.error("Failed to write file: "+file.getAbsolutePath(), e);
 				}
 			}
 		});
@@ -46,15 +46,20 @@ public class AsyncIOUtils
 				{
 					FileUtils.writeByteArrayToFile(file, data);
 				}
-				catch(IOException e)
+				catch(Exception e)
 				{
-					log.warn("Failed to write file: "+file.getAbsolutePath(), e);
+					log.error("Failed to write file: "+file.getAbsolutePath(), e);
 				}
 			}
 		});
 	}
-	
+
 	public static void safeWriteNBT(final File file, final NBTTagCompound nbt)
+	{
+		safeWriteNBT(file, nbt, null);
+	}
+	
+	public static void safeWriteNBT(final File file, final NBTTagCompound nbt, Runnable callback)
 	{
 		GlobalExecutors.writingIO().execute(new Runnable()
 		{
@@ -67,12 +72,14 @@ public class AsyncIOUtils
 					CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file1));
 
 					if (file.exists())
-						file.delete();
-					file1.renameTo(file);
+						FileUtils.forceDelete(file);
+					FileUtils.moveFile(file1, file);
+					if(callback != null)
+						callback.run();
 				}
-				catch(IOException e)
+				catch(Exception e)
 				{
-					log.warn("Failed to write file: "+file.getAbsolutePath(), e);
+					log.error("Failed to write file: "+file.getAbsolutePath(), e);
 				}
 			}
 		});
