@@ -13,6 +13,8 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 compileJava.options.encoding = 'UTF-8'
+if(compile_incremental == "true")
+	compileJava.options.incremental = true
 
 ext.commit = null
 ext.previousCommit = null
