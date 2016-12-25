@@ -5,6 +5,7 @@ import org.ultramine.core.service.Service;
 import org.ultramine.core.service.ServiceDelegate;
 import org.ultramine.core.service.ServiceManager;
 import org.ultramine.core.service.ServiceProviderLoader;
+import org.ultramine.core.service.ServiceStateHandler;
 import org.ultramine.core.service.ServiceSwitchEvent;
 
 import javax.annotation.Nonnull;
@@ -89,8 +90,14 @@ public class UMServiceManager implements ServiceManager
 			ServiceProviderRegistration<T> oldProvider = currentProvider;
 			MinecraftForge.EVENT_BUS.post(new ServiceSwitchEvent.Pre(serviceClass, delegate, oldProvider == null ? null : oldProvider.providerLoader, newProvider.providerLoader));
 			if(oldProvider != null)
+			{
+				if(delegate.getProvider() instanceof ServiceStateHandler)
+					((ServiceStateHandler)delegate.getProvider()).onDisabled();
 				oldProvider.providerLoader.unload();
+			}
 			newProvider.providerLoader.load(delegate);
+			if(delegate.getProvider() instanceof ServiceStateHandler)
+				((ServiceStateHandler)delegate.getProvider()).onEnabled();
 			currentProvider = newProvider;
 			MinecraftForge.EVENT_BUS.post(new ServiceSwitchEvent.Post(serviceClass, delegate, oldProvider == null ? null : oldProvider.providerLoader, newProvider.providerLoader));
 		}
