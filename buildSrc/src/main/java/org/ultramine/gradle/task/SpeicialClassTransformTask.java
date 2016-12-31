@@ -4,6 +4,7 @@ import groovy.lang.Closure;
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.ParallelizableTask;
 import org.gradle.api.tasks.TaskAction;
@@ -32,6 +33,7 @@ import java.util.Set;
 @ParallelizableTask
 public class SpeicialClassTransformTask extends DefaultTask
 {
+	@InputDirectory
 	private File inputDir;
 	@OutputDirectory
 	private File outputDir = new File(getProject().getBuildDir(), getName());
@@ -116,7 +118,7 @@ public class SpeicialClassTransformTask extends DefaultTask
 		if(file.isDirectory())
 			return;
 		String path = getRelPath(file);
-		processClass(path, transformerMap.get(file));
+		processClass(path, transformerMap.get(path));
 	}
 
 	private void processClass(String path, List<ISpecialTransformer> transfs)
@@ -210,6 +212,26 @@ public class SpeicialClassTransformTask extends DefaultTask
 		public void replace(String search, String replacement)
 		{
 			replaceMap.put(search, replacement);
+		}
+
+		@Override
+		public boolean equals(Object o)
+		{
+			if(this == o) return true;
+			if(o == null || getClass() != o.getClass()) return false;
+
+			ReplaceStringTransformer that = (ReplaceStringTransformer) o;
+
+			if(path != null ? !path.equals(that.path) : that.path != null) return false;
+			return replaceMap != null ? replaceMap.equals(that.replaceMap) : that.replaceMap == null;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			int result = path != null ? path.hashCode() : 0;
+			result = 31 * result + (replaceMap != null ? replaceMap.hashCode() : 0);
+			return result;
 		}
 	}
 }
