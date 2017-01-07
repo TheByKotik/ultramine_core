@@ -1,12 +1,25 @@
 package org.ultramine.core.service;
 
-import javax.annotation.Nullable;
+import org.ultramine.server.service.NotResolvedServiceProvider;
+
+import javax.annotation.Nonnull;
 
 public interface ServiceDelegate<T>
 {
-	void setProvider(T obj);
+	void setProvider(@Nonnull T obj);
 
-	@Nullable T getProvider();
+	@Nonnull
+	T getProvider();
 
-	T asService();
+	@Nonnull
+	@SuppressWarnings("unchecked")
+	default T asService()
+	{
+		return (T) this;
+	}
+
+	default boolean isResolved()
+	{
+		return !(getProvider() instanceof NotResolvedServiceProvider);
+	}
 }

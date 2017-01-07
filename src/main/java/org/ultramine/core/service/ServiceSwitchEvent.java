@@ -3,13 +3,12 @@ package org.ultramine.core.service;
 import cpw.mods.fml.common.eventhandler.Event;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public abstract class ServiceSwitchEvent extends Event
 {
 	private final Class<?> serviceClass;
 	private final ServiceDelegate<?> delegate;
-	private final @Nullable ServiceProviderLoader<?> oldProviderLoader;
+	private final @Nonnull ServiceProviderLoader<?> oldProviderLoader;
 	private final @Nonnull ServiceProviderLoader<?> newProviderLoader;
 
 	public ServiceSwitchEvent(Class<?> serviceClass, ServiceDelegate<?> delegate, ServiceProviderLoader<?> oldProviderLoader, @Nonnull ServiceProviderLoader<?> newProviderLoader)
@@ -30,7 +29,7 @@ public abstract class ServiceSwitchEvent extends Event
 		return serviceClass;
 	}
 
-	@Nullable
+	@Nonnull
 	public ServiceProviderLoader<?> getOldProviderLoader()
 	{
 		return oldProviderLoader;

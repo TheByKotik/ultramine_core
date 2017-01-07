@@ -16,7 +16,9 @@ import sun.misc.Unsafe;
 public class ServiceDelegateGenerator
 {
 	private static final Unsafe U = UnsafeUtil.getUnsafe();
-	
+	private static final String ServiceDelegate_INTERNAL_NAME = Type.getInternalName(ServiceDelegate.class);
+	private static final String NotImplementedServiceProvider_INTERNAL_NAME = Type.getInternalName(NotResolvedServiceProvider.class);
+
 	@SuppressWarnings("unchecked")
 	public static <T> Class<ServiceDelegate<T>> makeServiceDelegate(Class<?> base, String name, Class<T> iface)
 	{
@@ -34,7 +36,7 @@ public class ServiceDelegateGenerator
 		String ifaceInternalName = Type.getInternalName(iface);
 		String ifaceDesc = Type.getDescriptor(iface);
 
-		cw.visit(V1_5, ACC_PUBLIC | ACC_SUPER, thisClassInternalName, null, "java/lang/Object", new String[]{ ifaceInternalName, Type.getInternalName(ServiceDelegate.class) });
+		cw.visit(V1_5, ACC_PUBLIC | ACC_SUPER, thisClassInternalName, null, "java/lang/Object", new String[]{ ifaceInternalName, ServiceDelegate_INTERNAL_NAME });
 		cw.visitSource(".dynamic", null);
 
 		{
@@ -73,11 +75,58 @@ public class ServiceDelegateGenerator
 			mv.visitEnd();
 		}
 
+		for(Method method : iface.getDeclaredMethods())
 		{
-			MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "asService", "()Ljava/lang/Object;", null, null);
+			MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
+			mv.visitCode();
+
+			mv.visitVarInsn(ALOAD, 0);
+			mv.visitFieldInsn(GETFIELD, thisClassInternalName, "instance", ifaceDesc);
+			int argCounter = 1;
+			for(Parameter par : method.getParameters())
+			{
+				int insn = loadInsnForType(par.getType());
+				mv.visitVarInsn(insn, argCounter);
+				argCounter += insn == LLOAD || insn == DLOAD ? 2 : 1;
+			}
+			mv.visitMethodInsn(INVOKEINTERFACE, ifaceInternalName, method.getName(), Type.getMethodDescriptor(method), true);
+
+			mv.visitInsn(returnInsnForType(method.getReturnType()));
+			mv.visitMaxs(0, 0);
+			mv.visitEnd();
+		}
+
+		cw.visitEnd();
+		return cw.toByteArray();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> makeNotResolvedServiceProvider(Class<?> base, String name, Class<T> iface)
+	{
+		return (Class<T>) U.defineAnonymousClass(base, makeNotResolvedServiceProvider(name, iface), null);
+	}
+
+	public static byte[] makeNotResolvedServiceProvider(String name, Class<?> iface)
+	{
+		if(!iface.isInterface())
+			throw new IllegalArgumentException("iface should be an interface");
+
+		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+
+		String thisClassInternalName = name.replace('.',  '/');
+		String ifaceInternalName = Type.getInternalName(iface);
+		String ifaceDesc = Type.getDescriptor(iface);
+
+		cw.visit(V1_5, ACC_PUBLIC | ACC_SUPER, thisClassInternalName, null, NotImplementedServiceProvider_INTERNAL_NAME,
+				new String[]{ ifaceInternalName});
+		cw.visitSource(".dynamic", null);
+
+		{
+			MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
 			mv.visitCode();
 			mv.visitVarInsn(ALOAD, 0);
-			mv.visitInsn(ARETURN);
+			mv.visitMethodInsn(INVOKESPECIAL, NotImplementedServiceProvider_INTERNAL_NAME, "<init>", "()V", false);
+			mv.visitInsn(RETURN);
 			mv.visitMaxs(0, 0);
 			mv.visitEnd();
 		}
@@ -88,7 +137,7 @@ public class ServiceDelegateGenerator
 			mv.visitCode();
 
 			mv.visitVarInsn(ALOAD, 0);
-			mv.visitFieldInsn(GETFIELD, thisClassInternalName, "instance", ifaceDesc);
+			mv.visitMethodInsn(INVOKEVIRTUAL, thisClassInternalName, "resolveProvider", "()Ljava/lang/Object;", false);
 			int argCounter = 1;
 			for(Parameter par : method.getParameters())
 			{

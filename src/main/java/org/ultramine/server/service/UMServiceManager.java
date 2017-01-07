@@ -7,53 +7,60 @@ import org.ultramine.core.service.ServiceManager;
 import org.ultramine.core.service.ServiceProviderLoader;
 import org.ultramine.core.service.ServiceStateHandler;
 import org.ultramine.core.service.ServiceSwitchEvent;
+import org.ultramine.core.util.Undoable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+@ThreadSafe
 public class UMServiceManager implements ServiceManager
 {
-	private final Map<Class<?>, ServiceWrapper> services = new HashMap<>();
+	private final Map<Class<?>, ServiceWrapper> services = new ConcurrentHashMap<>();
 
-	private @Nonnull <T> ServiceWrapper<T> getOrCreateService(Class<T> serviceClass)
+	public UMServiceManager()
 	{
-		@SuppressWarnings("unchecked")
-		ServiceWrapper<T> service = services.get(serviceClass);
-		if(service == null)
-		{
+		NotResolvedServiceProvider.services = this;
+	}
+
+	@SuppressWarnings("unchecked")
+	private @Nonnull <T> ServiceWrapper<T> getOrCreateService(Class<T> serviceClass1)
+	{
+		return ((Map<Class<T>, ServiceWrapper<T>>) (Object) services).computeIfAbsent(serviceClass1, serviceClass -> {
 			Service desc = serviceClass.getAnnotation(Service.class);
 			if(desc == null)
 				throw new IllegalArgumentException("Given class is not a service class: "+serviceClass.getName());
 			ServiceDelegate<T> delegate;
+			T notResolvedProvider;
 			try {
 				delegate = ServiceDelegateGenerator.makeServiceDelegate(getClass(), serviceClass.getSimpleName() + "_delegate", serviceClass).newInstance();
+				notResolvedProvider = ServiceDelegateGenerator.makeNotResolvedServiceProvider(getClass(), serviceClass.getSimpleName() + "_notResolvedProvider", serviceClass).newInstance();
 			} catch(InstantiationException | IllegalAccessException e) {
 				throw new RuntimeException(e);
 			}
-			service = new ServiceWrapper<>(serviceClass, delegate, desc);
-			services.put(serviceClass, service);
-		}
-		return service;
+			return new ServiceWrapper<>(serviceClass, delegate, desc, new ServiceProviderRegistration<>(new SimpleServiceProviderLoader<>(notResolvedProvider), Integer.MIN_VALUE));
+		});
 	}
 
 	@Override
-	public <T> void register(@Nonnull Class<T> serviceClass, @Nonnull T provider, int priority)
+	public <T> Undoable register(@Nonnull Class<T> serviceClass, @Nonnull T provider, int priority)
 	{
 		serviceClass.getClass(); // NPE
 		provider.getClass(); // NPE
-		register(serviceClass, new SimpleServiceProviderLoader<>(provider), priority);
+		return register(serviceClass, new SimpleServiceProviderLoader<>(provider), priority);
 	}
 
 	@Override
-	public <T> void register(@Nonnull Class<T> serviceClass, @Nonnull ServiceProviderLoader<T> providerLoader, int priority)
+	public <T> Undoable register(@Nonnull Class<T> serviceClass, @Nonnull ServiceProviderLoader<T> providerLoader, int priority)
 	{
 		serviceClass.getClass(); // NPE
 		providerLoader.getClass(); // NPE
 		ServiceWrapper<T> service = getOrCreateService(serviceClass);
-		service.addProvider(new ServiceProviderRegistration<>(providerLoader, priority));
+		return service.addProvider(new ServiceProviderRegistration<>(providerLoader, priority));
 	}
 
 	@Nonnull
@@ -63,19 +70,29 @@ public class UMServiceManager implements ServiceManager
 		return getOrCreateService(service).provide();
 	}
 
+	Object resolveProvider(NotResolvedServiceProvider provider)
+	{
+		Class<?> serviceClass = provider.getClass().getInterfaces()[0];
+		return getOrCreateService(serviceClass).resolveProvider();
+	}
+
 	private static class ServiceWrapper<T>
 	{
 		private final Class<T> serviceClass;
 		private final ServiceDelegate<T> delegate;
 		private final Service desc;
+		private final ServiceProviderRegistration<T> notResolvedProviderRegistration;
 		private final List<ServiceProviderRegistration<T>> providers = new ArrayList<>();
 		private ServiceProviderRegistration<T> currentProvider;
 
-		public ServiceWrapper(Class<T> serviceClass, ServiceDelegate<T> delegate, Service desc)
+		public ServiceWrapper(Class<T> serviceClass, ServiceDelegate<T> delegate, Service desc, ServiceProviderRegistration<T> notResolvedRegistration)
 		{
 			this.serviceClass = serviceClass;
 			this.delegate = delegate;
 			this.desc = desc;
+			this.notResolvedProviderRegistration = notResolvedRegistration;
+			this.currentProvider = notResolvedProviderRegistration;
+			notResolvedRegistration.providerLoader.load(delegate);
 		}
 
 		public Service getDesc()
@@ -85,7 +102,7 @@ public class UMServiceManager implements ServiceManager
 
 		private void switchTo(ServiceProviderRegistration<T> newProvider)
 		{
-			if(providers.isEmpty())
+			if(providers.isEmpty() && newProvider != notResolvedProviderRegistration)
 				throw new IllegalStateException("Service provider is not registered");
 			ServiceProviderRegistration<T> oldProvider = currentProvider;
 			MinecraftForge.EVENT_BUS.post(new ServiceSwitchEvent.Pre(serviceClass, delegate, oldProvider == null ? null : oldProvider.providerLoader, newProvider.providerLoader));
@@ -102,19 +119,49 @@ public class UMServiceManager implements ServiceManager
 			MinecraftForge.EVENT_BUS.post(new ServiceSwitchEvent.Post(serviceClass, delegate, oldProvider == null ? null : oldProvider.providerLoader, newProvider.providerLoader));
 		}
 
-		public void addProvider(ServiceProviderRegistration<T> provider)
+		private void forceSwitchToMostRelevant()
+		{
+			if(providers.isEmpty())
+				switchTo(notResolvedProviderRegistration);
+			else
+				//noinspection OptionalGetWithoutIsPresent
+				switchTo(providers.stream().sorted(Comparator.comparingInt((ServiceProviderRegistration o) -> o.priority).reversed()).findFirst().get());
+		}
+
+		private boolean isResolved()
+		{
+			return currentProvider != notResolvedProviderRegistration;
+		}
+
+		public synchronized Undoable addProvider(ServiceProviderRegistration<T> provider)
 		{
 			if(desc.singleProvider() && providers.size() != 0)
 				throw new IllegalStateException("Tried to register second provider for single-impl service'"+serviceClass.getName() +
 						"'. First provider: " + providers.get(0).providerLoader + ", second provider: " + provider);
 			providers.add(provider);
-			if(currentProvider == null || provider.priority >= currentProvider.priority)
+			if((isResolved() || desc.singleProvider()) && provider.priority >= currentProvider.priority)
 				switchTo(provider);
+
+			return () -> {
+				synchronized(this) {
+					providers.remove(provider);
+					if(isResolved() && provider == currentProvider)
+						forceSwitchToMostRelevant();
+				}
+			};
 		}
 
-		public T provide()
+		public synchronized T provide()
 		{
 			return delegate.asService();
+		}
+
+		public synchronized T resolveProvider()
+		{
+			if(providers.isEmpty())
+				throw new IllegalStateException("Service provider is not registered for service " + serviceClass);
+			forceSwitchToMostRelevant();
+			return delegate.getProvider();
 		}
 	}
 
