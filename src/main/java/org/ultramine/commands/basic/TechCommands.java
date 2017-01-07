@@ -36,13 +36,10 @@ import org.ultramine.server.UltramineServerConfig;
 import org.ultramine.server.UltramineServerModContainer;
 import org.ultramine.server.BackupManager.BackupDescriptor;
 import org.ultramine.server.WorldsConfig.WorldConfig;
-import org.ultramine.server.WorldsConfig.WorldConfig.Border;
 import org.ultramine.server.WorldsConfig.WorldConfig.ImportFrom;
 import org.ultramine.server.chunk.ChunkProfiler;
-import org.ultramine.server.chunk.IChunkLoadCallback;
 import org.ultramine.server.chunk.OffHeapChunkStorage;
 import org.ultramine.server.util.BasicTypeParser;
-import org.ultramine.server.util.GlobalExecutors;
 import org.ultramine.server.world.MultiWorld;
 import org.ultramine.server.world.WorldDescriptor;
 import org.ultramine.server.world.WorldState;
@@ -290,7 +287,8 @@ public class TechCommands
 				ctx.sendMessage(success);
 			else
 				ctx.sendMessage(RED, RED, fail, e.toString());
-		}, GlobalExecutors.nextTick());
+			ctx.finish();
+		});
 	}
 
 	@Command(

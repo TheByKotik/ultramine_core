@@ -11,17 +11,24 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.ultramine.core.economy.service.Economy;
+import org.ultramine.core.economy.account.PlayerAccount;
 import org.ultramine.core.service.InjectService;
 import org.ultramine.server.data.ServerDataLoader;
 import org.ultramine.server.data.player.PlayerData;
 import org.ultramine.server.util.BasicTypeFormatter;
 import org.ultramine.server.util.BasicTypeParser;
 import org.ultramine.core.permissions.Permissions;
+import org.ultramine.server.util.GlobalExecutors;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,11 +36,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 public class CommandContext
 {
 	@InjectService
 	private static Permissions perms;
+	@InjectService
+	private static Economy economy;
+	private static final Logger log = LogManager.getLogger();
 	private ICommandSender sender;
 	private String[] args;
 	private IExtendedCommand command;
@@ -148,11 +160,20 @@ public class CommandContext
 		if(contains(arg))
 			checkSenderPermission(permission, msg);
 	}
-	
-	
+
+
+	/* thread-safe */
+	public void sendMessage(IChatComponent comp)
+	{
+		if(Thread.currentThread() == getServer().getServerThread())
+			sender.addChatMessage(comp);
+		else
+			GlobalExecutors.nextTick().execute(() -> sender.addChatMessage(comp));
+	}
+
 	public void sendMessage(EnumChatFormatting tplColor, EnumChatFormatting argsColor, String msg, Object... args)
 	{
-		sender.addChatMessage(BasicTypeFormatter.formatMessage(tplColor, argsColor, msg, args));
+		sendMessage(BasicTypeFormatter.formatMessage(tplColor, argsColor, msg, args));
 	}
 	
 	public void sendMessage(EnumChatFormatting argsColor, String msg, Object... args)
@@ -239,6 +260,63 @@ public class CommandContext
 	public ServerDataLoader getServerData()
 	{
 		return getServer().getConfigurationManager().getDataLoader();
+	}
+
+	/* thread-safe */
+	public void handleException(@Nullable Throwable throwable)
+	{
+		if(throwable == null)
+			return;
+		if(throwable instanceof CompletionException && throwable.getCause() != null)
+			throwable = throwable.getCause();
+		if(throwable instanceof WrongUsageException)
+		{
+			CommandException cmdEx = (CommandException) throwable;
+			ChatComponentTranslation msg = new ChatComponentTranslation("commands.generic.usage", new ChatComponentTranslation(cmdEx.getMessage(), cmdEx.getErrorOjbects()));
+			msg.getChatStyle().setColor(EnumChatFormatting.RED);
+			sendMessage(msg);
+		}
+		else if(throwable instanceof CommandException)
+		{
+			CommandException cmdEx = (CommandException) throwable;
+			ChatComponentTranslation msg = new ChatComponentTranslation(cmdEx.getMessage(), cmdEx.getErrorOjbects());
+			msg.getChatStyle().setColor(EnumChatFormatting.RED);
+			sendMessage(msg);
+		}
+		else
+		{
+			ChatComponentTranslation msg = new ChatComponentTranslation("commands.generic.exception");
+			msg.getChatStyle().setColor(EnumChatFormatting.RED);
+			sendMessage(msg);
+			log.error("Couldn\'t process command", throwable);
+		}
+	}
+
+	/* thread-safe */
+	public CompletableFuture<Void> handleException(CompletableFuture<?> future)
+	{
+		return future.handle((o, throwable) -> {
+			handleException(throwable);
+			return null;
+		});
+	}
+
+	/* thread-safe */
+	public void finishAfter(CompletableFuture<?> future)
+	{
+		future.whenComplete((o, throwable) -> finish(throwable));
+	}
+
+	/* thread-safe */
+	public void finish()
+	{
+		// TODO For async commands, respond RCon only after this method invocation
+	}
+
+	public void finish(@Nullable Throwable throwable)
+	{
+		handleException(throwable);
+		finish();
 	}
 
 
@@ -390,6 +468,11 @@ public class CommandContext
 		public OfflinePlayer asOfflinePlayer()
 		{
 			return new OfflinePlayer(getServer(), asPlayerData());
+		}
+
+		public PlayerAccount asAccount()
+		{
+			return economy.getPlayerAccount(asPlayerData().getProfile());
 		}
 		
 		public WorldServer asWorld()
