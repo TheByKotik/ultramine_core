@@ -4218,8 +4218,12 @@ public abstract class World implements IBlockAccess
 	
 	public Block getBlockIfExists(int x, int y, int z)
 	{
-		if(blockExists(x, y, z))
-			return getBlock(x, y, z);
+		if(x >= -MAX_BLOCK_COORD && x < MAX_BLOCK_COORD && z >= -MAX_BLOCK_COORD && z < MAX_BLOCK_COORD && y >= 0 && y < 256)
+		{
+			Chunk chunk = getChunkIfExists(x >> 4, z >> 4);
+			if(chunk != null)
+				return chunk.getBlock(x & 15, y, z & 15);
+		}
 		return Blocks.air;
 	}
 	
