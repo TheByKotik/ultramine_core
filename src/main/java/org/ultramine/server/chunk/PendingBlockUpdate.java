@@ -40,6 +40,11 @@ public class PendingBlockUpdate implements Comparable<PendingBlockUpdate>
 		PendingBlockUpdate p = (PendingBlockUpdate)o;
 		return this.hash == p.hash && Block.isEqualTo(this.block, p.block);
 	}
+
+	public short getChunkCoordHash()
+	{
+		return hash;
+	}
 	
 	public int hashCode()
 	{
