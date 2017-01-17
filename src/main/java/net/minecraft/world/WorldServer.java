@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
@@ -321,9 +322,10 @@ public class WorldServer extends World
 	protected void func_147456_g()
 	{
 		super.func_147456_g();
-		int i = 0;
-		int j = 0;
+//		int i = 0;
+//		int j = 0;
 
+		Random random = ThreadLocalRandom.current();
 		for (IntByteCursor iter = activeChunks.cursor(); iter.moveNext();)
 		{
 			int chunkCoord = iter.key();
@@ -349,7 +351,7 @@ public class WorldServer extends World
 			int k1;
 			int l1;
 
-			if (provider.canDoLightning(chunk) && this.rand.nextInt(100000) == 0 && this.isRaining() && this.isThundering())
+			if (provider.canDoLightning(chunk) && random.nextInt(100000) == 0 && this.isRaining() && this.isThundering())
 			{
 				this.updateLCG = this.updateLCG * 3 + 1013904223;
 				i1 = this.updateLCG >> 2;
@@ -365,7 +367,7 @@ public class WorldServer extends World
 
 			this.theProfiler.endStartSection("iceandsnow");
 
-			if (provider.canDoRainSnowIce(chunk) && this.rand.nextInt(16) == 0)
+			if (provider.canDoRainSnowIce(chunk) && random.nextInt(16) == 0)
 			{
 				getEventProxy().pushState(WorldUpdateObjectType.WEATHER);
 				this.updateLCG = this.updateLCG * 3 + 1013904223;
@@ -414,12 +416,12 @@ public class WorldServer extends World
 						int j2 = i2 & 15;
 						int k2 = i2 >> 8 & 15;
 						int l2 = i2 >> 16 & 15;
-						++j;
+//						++j;
 						Block block = extendedblockstorage.getBlockByExtId(j2, l2, k2);
 
 						if (block.getTickRandomly())
 						{
-							++i;
+//							++i;
 							getEventProxy().startBlock(block, j2 + k, l2 + extendedblockstorage.getYLocation(), k2 + l);
 							block.updateTick(this, j2 + k, l2 + extendedblockstorage.getYLocation(), k2 + l, this.rand);
 						}
