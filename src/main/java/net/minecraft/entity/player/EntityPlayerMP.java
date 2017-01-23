@@ -1045,7 +1045,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	{
 		String meta = getMeta("tablistcolor");
 		EnumChatFormatting color = meta.isEmpty() ? null : BasicTypeParser.parseColor(meta);
-		return color == null ? getCommandSenderName() : color.toString() + getCommandSenderName();
+		String name = color == null ? getCommandSenderName() : color.toString() + getCommandSenderName();
+		return name.length() > 16 ? name.substring(0, 16) : name;
 	}
 
 	public String translate(String key)
