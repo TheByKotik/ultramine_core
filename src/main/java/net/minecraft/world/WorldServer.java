@@ -497,7 +497,7 @@ public class WorldServer extends World
 
 	public void updateEntities()
 	{
-		if (this.playerEntities.isEmpty() && getPersistentChunks().isEmpty())
+		if (this.playerEntities.isEmpty() && (getPersistentChunks().isEmpty() || !getConfig().chunkLoading.enableChunkLoaders))
 		{
 			if (this.updateEntityTick++ >= 1200)
 			{
