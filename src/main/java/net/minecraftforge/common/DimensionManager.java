@@ -21,7 +21,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.MinecraftException;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldManager;
 import net.minecraft.world.WorldProvider;
@@ -327,7 +326,7 @@ public class DimensionManager
 				{
 					w.theChunkProviderServer.unloadAll(true);
 					w.theChunkProviderServer.setWorldUnloaded();
-					w.forceUnloadTileEntities();
+					w.processTileEntityUnload();
 					w.saveOtherData();
 				}
 				else

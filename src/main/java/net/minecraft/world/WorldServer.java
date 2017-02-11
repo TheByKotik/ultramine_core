@@ -1,7 +1,5 @@
 package net.minecraft.world;
 
-import com.google.common.collect.Lists;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -503,6 +501,8 @@ public class WorldServer extends World
 		{
 			if (this.updateEntityTick++ >= 1200)
 			{
+				processEntityUnload();
+				processTileEntityUnload();
 				return;
 			}
 		}

@@ -1928,7 +1928,7 @@ public abstract class World implements IBlockAccess
 		eventProxy.popState();
 
 		this.theProfiler.endStartSection("remove");
-		if(unloadedEntityList.size() != 0)
+		if(!unloadedEntityList.isEmpty())
 			this.loadedEntityList.removeAll(new HashSet(unloadedEntityList));
 		int j;
 		int l;
@@ -4273,15 +4273,42 @@ public abstract class World implements IBlockAccess
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void forceUnloadTileEntities()
+	public void processTileEntityUnload()
 	{
-		if (!this.field_147483_b.isEmpty())
+		if (this.field_147483_b.isEmpty())
+			return;
+
+		for (Object tile : field_147483_b)
+			((TileEntity)tile).onChunkUnload();
+		this.loadedTileEntityList.removeAll(this.field_147483_b);
+		this.field_147483_b.clear();
+	}
+
+	public void processEntityUnload()
+	{
+		if(unloadedEntityList.isEmpty())
+			return;
+		//noinspection unchecked
+		this.loadedEntityList.removeAll(new HashSet(unloadedEntityList));
+
+		for (int i = 0; i < this.unloadedEntityList.size(); i++)
 		{
-			for (Object tile : field_147483_b)
-				((TileEntity)tile).onChunkUnload();
-			this.loadedTileEntityList.removeAll(this.field_147483_b);
-			this.field_147483_b.clear();
+			Entity entity = (Entity)this.unloadedEntityList.get(i);
+			int x = entity.chunkCoordX;
+			int z = entity.chunkCoordZ;
+
+			if (entity.addedToChunk && this.chunkExists(x, z))
+			{
+				this.getChunkFromChunkCoords(x, z).removeEntity(entity);
+			}
 		}
+
+		for (int i = 0; i < this.unloadedEntityList.size(); i++)
+		{
+			this.onEntityRemoved((Entity)this.unloadedEntityList.get(i));
+		}
+
+		this.unloadedEntityList.clear();
 	}
 	
 	public WorldEventProxy getEventProxy()
