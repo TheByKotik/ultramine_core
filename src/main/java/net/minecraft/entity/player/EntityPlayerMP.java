@@ -101,6 +101,8 @@ import net.minecraft.world.biome.BiomeGenBase;
 import org.apache.commons.io.Charsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.core.economy.account.Account;
+import org.ultramine.core.economy.service.Economy;
 import org.ultramine.core.service.InjectService;
 import org.ultramine.server.WorldConstants;
 import org.ultramine.server.event.PlayerDeathEvent;
@@ -1001,6 +1003,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	private PlayerData playerData;
 	@InjectService
 	private static Permissions perms;
+	@InjectService
+	private static Economy economy;
 
 	public boolean hasPermission(String permission)
 	{
@@ -1010,6 +1014,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	public String getMeta(String key)
 	{
 		return perms.getMeta(this, key);
+	}
+
+	public Account getAccount()
+	{
+		return economy.getPlayerAccount(this);
 	}
 	
 	@Override

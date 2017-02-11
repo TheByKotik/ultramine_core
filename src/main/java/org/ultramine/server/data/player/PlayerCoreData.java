@@ -3,20 +3,29 @@ package org.ultramine.server.data.player;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.ultramine.economy.Account;
-import org.ultramine.economy.PlayerAccount;
+import net.minecraft.nbt.NBTBase;
+import org.ultramine.core.economy.Currency;
+import org.ultramine.core.economy.service.Economy;
+import org.ultramine.core.economy.service.EconomyRegistry;
+import org.ultramine.core.economy.holdings.Holdings;
+import org.ultramine.core.economy.account.PlayerAccount;
+import org.ultramine.core.service.InjectService;
 import org.ultramine.server.Teleporter;
+import org.ultramine.server.economy.CurrencyImpl;
+import org.ultramine.server.economy.UMIntegratedPlayerHoldings;
 import org.ultramine.server.util.WarpLocation;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import javax.annotation.Nullable;
 
 public class PlayerCoreData extends PlayerDataExtension
 {
 	private long firstLoginTime = System.currentTimeMillis();
 	private long lastLoginTime = firstLoginTime;
 	private final Map<String, WarpLocation> homes = new HashMap<String, WarpLocation>();
-	private final PlayerAccount account;
+	private final PlayerAccountHolder account;
 	private long unmuteTime;
 	private boolean commandsMuted;
 	private boolean hidden;
@@ -30,7 +39,7 @@ public class PlayerCoreData extends PlayerDataExtension
 	public PlayerCoreData(PlayerData data)
 	{
 		super(data);
-		this.account = new PlayerAccount(data);
+		this.account = new PlayerAccountHolder(data);
 	}
 	
 	public long getFirstLoginTime()
@@ -62,10 +71,16 @@ public class PlayerCoreData extends PlayerDataExtension
 	{
 		return homes;
 	}
-	
-	public Account getAccount()
+
+	@Nullable
+	public UMIntegratedPlayerHoldings getHoldingsInternal(Currency currency)
 	{
-		return account;
+		return account.getHoldings(currency);
+	}
+
+	public void setHoldingsInternal(UMIntegratedPlayerHoldings holdings)
+	{
+		account.setHoldings(holdings);
 	}
 	
 	public Teleporter getTeleporter()
@@ -204,5 +219,94 @@ public class PlayerCoreData extends PlayerDataExtension
 		unmuteTime = nbt.getLong("m");
 		commandsMuted = nbt.getBoolean("mc");
 		hidden = nbt.getBoolean("h");
+	}
+
+	private static class PlayerAccountHolder
+	{
+		@InjectService
+		private static EconomyRegistry economyRegistry;
+		@InjectService
+		private static Economy economy;
+
+		private final Map<String, Object> holdingsMap = new HashMap<>();
+		private final PlayerData data;
+		private PlayerAccountHolder(PlayerData data)
+		{
+			this.data = data;
+		}
+
+		@Nullable
+		public UMIntegratedPlayerHoldings getHoldings(Currency currency)
+		{
+			Object val = holdingsMap.get(currency.getId());
+			if(val instanceof UMIntegratedPlayerHoldings)
+			{
+				UMIntegratedPlayerHoldings holdings = (UMIntegratedPlayerHoldings) val;
+				if(holdings.getCurrency() != currency)
+				{
+					UMIntegratedPlayerHoldings newHoldings = new UMIntegratedPlayerHoldings(holdings.getAccount(), holdings.getCurrency(), data);
+					newHoldings.setBalanceInternal(holdings.getBalanceInternal());
+					holdingsMap.put(currency.getId(), newHoldings);
+					return newHoldings;
+				}
+				return holdings;
+			}
+			else if(val != null)
+			{
+				PlayerAccount realAccount = economy.getPlayerAccount(data.getProfile());
+				UMIntegratedPlayerHoldings holdings = new UMIntegratedPlayerHoldings(realAccount, currency, data);
+				holdings.readFromNBT((NBTTagCompound)val);
+				holdingsMap.put(currency.getId(), holdings);
+				return holdings;
+			}
+
+			return null;
+		}
+
+		public void setHoldings(UMIntegratedPlayerHoldings holdings)
+		{
+			holdingsMap.put(holdings.getCurrency().getId(), holdings);
+		}
+
+		public void writeToNBT(NBTTagCompound nbt)
+		{
+			for(Map.Entry<String, ?> ent : holdingsMap.entrySet())
+			{
+				Object val = ent.getValue();
+				if(val instanceof UMIntegratedPlayerHoldings)
+				{
+					NBTTagCompound nbt1 = new NBTTagCompound();
+					((UMIntegratedPlayerHoldings) val).writeToNBT(nbt1);
+					nbt.setTag(ent.getKey(), nbt1);
+				}
+				else
+				{
+					nbt.setTag(ent.getKey(), (NBTTagCompound) val);
+				}
+			}
+		}
+
+		public void readFromNBT(NBTTagCompound nbt)
+		{
+			PlayerAccount realAccount = economy.getPlayerAccount(data.getProfile());
+
+			for(Object code : nbt.func_150296_c())
+			{
+				NBTBase b = nbt.getTag((String)code);
+				if(!(b instanceof NBTTagCompound))
+					continue;
+				Currency currency = economyRegistry.getCurrencyNullable((String)code);
+				if(currency != null && currency instanceof CurrencyImpl)
+				{
+					UMIntegratedPlayerHoldings holdings = new UMIntegratedPlayerHoldings(realAccount, currency, data);
+					holdings.readFromNBT((NBTTagCompound)b);
+					holdingsMap.put(currency.getId(), holdings);
+				}
+				else
+				{
+					holdingsMap.put((String)code, nbt.getTag((String)code));
+				}
+			}
+		}
 	}
 }

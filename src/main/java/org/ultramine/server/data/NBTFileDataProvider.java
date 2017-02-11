@@ -228,7 +228,9 @@ public class NBTFileDataProvider implements IDataProvider
 	private PlayerData readPlayerData(NBTTagCompound nbt)
 	{
 		PlayerData pdata = new PlayerData(mgr.getDataLoader());
-		
+		if(nbt != null && nbt.hasKey("id") && nbt.hasKey("name"))
+			pdata.setProfile(new GameProfile(UUID.fromString(nbt.getString("id")), nbt.getString("name")));
+
 		List<PlayerDataExtensionInfo> infos = mgr.getDataLoader().getDataExtProviders();
 		List<PlayerDataExtension> data = new ArrayList<PlayerDataExtension>(infos.size());
 		
@@ -238,8 +240,6 @@ public class NBTFileDataProvider implements IDataProvider
 		}
 		
 		pdata.loadExtensions(data);
-		if(nbt != null && nbt.hasKey("id") && nbt.hasKey("name"))
-			pdata.setProfile(new GameProfile(UUID.fromString(nbt.getString("id")), nbt.getString("name")));
 		return pdata;
 	}
 	

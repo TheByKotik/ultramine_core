@@ -3,8 +3,6 @@ package org.ultramine.server.internal;
 import net.minecraft.util.DamageSource;
 import org.ultramine.commands.basic.GenWorldCommand;
 import org.ultramine.core.service.InjectService;
-import org.ultramine.economy.CurrencyRegistry;
-import org.ultramine.economy.PlayerHoldingsEvent;
 import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.Teleporter;
 import org.ultramine.server.UltramineServerConfig.ToolsConf.AutoBroacastConf;
@@ -312,14 +310,6 @@ public class UMEventHandler
 				player.addChatMessage(new ChatComponentTranslation("ultramine.ability.attack").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 			}
 		}
-	}
-	
-	@SideOnly(Side.SERVER)
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onHoldingsCreate(PlayerHoldingsEvent.CreateEvent e)
-	{
-		if(e.holdings.getCurrency() == CurrencyRegistry.GSC)
-			e.holdings.setBalance(ConfigurationHandler.getServerConfig().tools.economy.startBalance);
 	}
 	
 	@SideOnly(Side.SERVER)

@@ -48,6 +48,13 @@ command.generic.world.invalid=Can't find world '%s'
 command.generic.itemstack.data=Failed to parse item data: %s
 command.generic.itemstack.size=Failed to parse stack size: %s
 
+#Economy generic
+ultramine.economy.fail.currency_not_exists=Specified currency is not exists: %s
+ultramine.economy.fail.currency_not_supported=Specified currency (%2$s) is not supported by account: %1$s
+ultramine.economy.fail.account_type_not_supported=The type of the specified account is not supported for currency: %1$s
+ultramine.economy.fail.negative_amount=Amount must be greater than zero (specified %s)
+ultramine.economy.fail.insufficient_funds=Your account is not enough money to carry out this operation
+
 #Vanilla replacements
 command.tp.usage=/tp [target player] <destination player> OR /tp [target player] [world] <x> <y> <z>
 command.tp.description=Teleports target player (or you) to another player or coordinate
@@ -77,35 +84,6 @@ command.time.usage=/time [world] [add|set] <day|night|time>
 command.time.description=Sets time in current or specified world
 
 command.say.server=Server
-
-#Economy commands
-economy.fail.currency=Specified currency is not exists
-economy.fail.negativeamount=Amount must be greater than zero
-economy.fail.notenough=Your account is not enough money to carry out this operation
-
-command.pay.usage=/pay <player> [currency] <amount>
-command.pay.description=Transfers specified amount to the account of another player
-command.pay.sended=You are transferred to the account of the player %s amount of %s
-command.pay.received=Received %s from the player %s
-
-command.money.usage=/money [player] [currency]
-command.money.description=Displays information about your account or account of another player
-command.money.info=On account of the player %s is %s
-
-command.mgive.usage=/mgive <player> [currency] <amount>
-command.mgive.description=Gives specified amount to the player's account
-command.mgive.sended=Вы выдали игроку %s сумму в %s
-command.mgive.received=Вам выдано %s
-
-command.mset.usage=/mset <player> [currency] <amount>
-command.mset.description=Sets the specified account balance for player
-command.mset.sended=You has been changed balance of player %s account from %s to %s
-command.mset.received=Your account balance is changed from %s to %s
-
-command.msub.usage=/msub <player> [currency] <amount>
-command.msub.description=Confiscates player's account specified amount
-command.msub.sendedYou confiscated %s from the players account %s
-command.msub.received=With your account confiscated %s
 
 #Basic commands
 command.home.usage=/home [name]
