@@ -1,6 +1,7 @@
 #Server core
 ultramine.teleporter.fail.cooldownd=Вы сможете телепортироваться через %s секунд
 ultramine.teleporter.fail.dim=Не удалось телепортироваться: мир не существует или заблокирован
+ultramine.teleporter.fail.riding=Нельзя телепортироваться во время езды
 ultramine.teleporter.delay=Вы будете телепортированы через %s секунд
 ultramine.teleporter.canceled=Телепортация отменена
 

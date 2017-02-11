@@ -1,6 +1,7 @@
 #Server core
 ultramine.teleporter.fail.cooldownd=You will be able to teleport in %s seconds
 ultramine.teleporter.fail.dim=Failed to teleport: the world is not exists or was held
+ultramine.teleporter.fail.riding=You can not teleport while riding
 ultramine.teleporter.delay=You will be teleported in %s seconds
 ultramine.teleporter.canceled=Teleportation canceled
 
