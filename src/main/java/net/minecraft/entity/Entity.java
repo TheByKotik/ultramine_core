@@ -2489,7 +2489,7 @@ public abstract class Entity
 	
 	/* ===================================== ULTRAMINE START =====================================*/
 	
-	private final EntityType cachedEntityType = computeEntityType();
+	private EntityType cachedEntityType;
 	private GameProfile owner;
 	public boolean removeThisTick;
 	
@@ -2525,12 +2525,18 @@ public abstract class Entity
 			isCreatureType(EnumCreatureType.monster,		false) ? EntityType.MONSTER : 
 			isCreatureType(EnumCreatureType.creature,		false) ? EntityType.ANIMAL : 
 			isCreatureType(EnumCreatureType.ambient,		false) ? EntityType.AMBIENT : 
-			isCreatureType(EnumCreatureType.waterCreature,	false) ? EntityType.WATER : 
+			isCreatureType(EnumCreatureType.waterCreature,	false) ? EntityType.WATER :
+			isCreatureType(EnumCreatureType.monster,		true) ? EntityType.MONSTER :
+			isCreatureType(EnumCreatureType.creature,		true) ? EntityType.ANIMAL :
+			isCreatureType(EnumCreatureType.ambient,		true) ? EntityType.AMBIENT :
+			isCreatureType(EnumCreatureType.waterCreature,	true) ? EntityType.WATER :
 			EntityType.OTHER;
 	}
 	
 	public final EntityType getEntityType()
 	{
+		if(cachedEntityType == null)
+			return cachedEntityType = computeEntityType();
 		return cachedEntityType;
 	}
 	

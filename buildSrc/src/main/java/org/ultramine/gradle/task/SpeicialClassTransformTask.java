@@ -4,6 +4,7 @@ import groovy.lang.Closure;
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.ParallelizableTask;
 import org.gradle.api.tasks.TaskAction;
@@ -13,6 +14,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -32,6 +34,7 @@ import java.util.Set;
 @ParallelizableTask
 public class SpeicialClassTransformTask extends DefaultTask
 {
+	@InputDirectory
 	private File inputDir;
 	@OutputDirectory
 	private File outputDir = new File(getProject().getBuildDir(), getName());
@@ -116,7 +119,7 @@ public class SpeicialClassTransformTask extends DefaultTask
 		if(file.isDirectory())
 			return;
 		String path = getRelPath(file);
-		processClass(path, transformerMap.get(file));
+		processClass(path, transformerMap.get(path));
 	}
 
 	private void processClass(String path, List<ISpecialTransformer> transfs)
@@ -176,6 +179,8 @@ public class SpeicialClassTransformTask extends DefaultTask
 		@Override
 		public void transform(ClassNode node)
 		{
+			replaceAnnotations(node.visibleAnnotations);
+			replaceAnnotations(node.invisibleAnnotations);
 			for(Object o : node.methods)
 			{
 				MethodNode m = (MethodNode) o;
@@ -188,6 +193,38 @@ public class SpeicialClassTransformTask extends DefaultTask
 						String replacement;
 						if(ldc.cst instanceof String && (replacement = replaceMap.get(ldc.cst)) != null)
 							ldc.cst = replacement;
+					}
+				}
+			}
+		}
+
+		private void replaceAnnotations(List<AnnotationNode> anns)
+		{
+			if(anns == null)
+				return;
+			for(AnnotationNode ann : anns)
+			{
+				if(ann.values != null)
+				{
+					for(int x = 0; x < ann.values.size() - 1; x += 2)
+					{
+						Object value = ann.values.get(x+1);
+						if(value instanceof String)
+						{
+							String replacement = replaceMap.get(value);
+							if(replacement != null)
+								ann.values.set(x+1, replacement);
+						}
+						else if(value instanceof String[])
+						{
+							String[] arr = (String[]) value;
+							for(int j = 0; j < arr.length; j++)
+							{
+								String replacement = replaceMap.get(arr[j]);
+								if(replacement != null)
+									arr[j] = replacement;
+							}
+						}
 					}
 				}
 			}
@@ -210,6 +247,26 @@ public class SpeicialClassTransformTask extends DefaultTask
 		public void replace(String search, String replacement)
 		{
 			replaceMap.put(search, replacement);
+		}
+
+		@Override
+		public boolean equals(Object o)
+		{
+			if(this == o) return true;
+			if(o == null || getClass() != o.getClass()) return false;
+
+			ReplaceStringTransformer that = (ReplaceStringTransformer) o;
+
+			if(path != null ? !path.equals(that.path) : that.path != null) return false;
+			return replaceMap != null ? replaceMap.equals(that.replaceMap) : that.replaceMap == null;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			int result = path != null ? path.hashCode() : 0;
+			result = 31 * result + (replaceMap != null ? replaceMap.hashCode() : 0);
+			return result;
 		}
 	}
 }

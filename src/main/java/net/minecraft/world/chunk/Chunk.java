@@ -6,7 +6,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import gnu.trove.iterator.TByteIterator;
 import gnu.trove.set.TByteSet;
 import gnu.trove.set.hash.TByteHashSet;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.crash.CrashReport;
@@ -54,6 +52,8 @@ import org.ultramine.server.chunk.ChunkBindState;
 import org.ultramine.server.chunk.ChunkHash;
 import org.ultramine.server.chunk.IChunkDependency;
 import org.ultramine.server.chunk.PendingBlockUpdate;
+import org.ultramine.server.internal.LambdaHolder;
+import org.ultramine.server.util.WeakObjectPool;
 import org.ultramine.server.event.WorldUpdateObject;
 import org.ultramine.server.event.WorldUpdateObjectType;
 
@@ -1554,12 +1554,15 @@ public class Chunk implements IChunkDependency
 		}
 	}
 	
-	/* ======================================== ULTRAMINE START =====================================*/
-	
+	/*======================================== ULTRAMINE START =====================================*/
+
+	private static final WeakObjectPool<ShortObjMap<PendingBlockUpdate>> shortObjMapPool = new WeakObjectPool<>(LambdaHolder.newShortObjMap());
+	private static final WeakObjectPool<TreeSet<PendingBlockUpdate>> treeSetPool = new WeakObjectPool<>(LambdaHolder.newTreeSet());
+
 	private final ShortObjMap<TileEntity> fastTileEntityMap = HashShortObjMaps.newMutableMap();
 	private final TByteSet updateLightCoords = new TByteHashSet();
 	
-	private Set<PendingBlockUpdate> pendingUpdatesSet;
+	private ShortObjMap<PendingBlockUpdate> pendingUpdatesSet;
 	private TreeSet<PendingBlockUpdate> pendingUpdatesQueue;
 	
 	private ChunkBindState bindState = ChunkBindState.NONE;
@@ -1575,7 +1578,24 @@ public class Chunk implements IChunkDependency
 	private short entityWaterCount;
 	private short entityItemCount;
 	private short entityXPOrbCount;
-	
+
+	private void releasePendingUpdatesSets()
+	{
+		if(pendingUpdatesQueue != null)
+		{
+			if(!pendingUpdatesSet.isEmpty())
+				pendingUpdatesSet.clear();
+			if(!pendingUpdatesQueue.isEmpty())
+				pendingUpdatesQueue.clear();
+
+			shortObjMapPool.release(pendingUpdatesSet);
+			treeSetPool.release(pendingUpdatesQueue);
+
+			pendingUpdatesSet = null;
+			pendingUpdatesQueue = null;
+		}
+	}
+
 	private void convertTileEntityMap()
 	{
 		fastTileEntityMap.clear();
@@ -1595,14 +1615,11 @@ public class Chunk implements IChunkDependency
 		PendingBlockUpdate p = pendingUpdatesQueue.first();
 		if(p.scheduledTime <= time)
 		{
-			pendingUpdatesSet.remove(p);
+			pendingUpdatesSet.remove(p.getChunkCoordHash());
 			pendingUpdatesQueue.remove(p);
 			
-			if(pendingUpdatesQueue.size() == 0)
-			{
-				pendingUpdatesSet = null;
-				pendingUpdatesQueue = null;
-			}
+			if(pendingUpdatesQueue.isEmpty())
+				releasePendingUpdatesSets();
 
 			isModified = true;
 			return p;
@@ -1615,13 +1632,16 @@ public class Chunk implements IChunkDependency
 	{
 		if(pendingUpdatesQueue == null)
 		{
-			pendingUpdatesSet = new HashSet<PendingBlockUpdate>();
-			pendingUpdatesQueue = new TreeSet<PendingBlockUpdate>();
+			pendingUpdatesSet = shortObjMapPool.getOrCreateInstance();
+			pendingUpdatesQueue = treeSetPool.getOrCreateInstance();
 		}
-		
-		if(!check || !pendingUpdatesSet.contains(p))
+
+		PendingBlockUpdate prev = null;
+		if(!check || (prev = pendingUpdatesSet.get(p.getChunkCoordHash())) == null || !Block.isEqualTo(p.getBlock(), prev.getBlock()))
 		{
-			pendingUpdatesSet.add(p);
+			if(prev != null)
+				pendingUpdatesQueue.remove(prev);
+			pendingUpdatesSet.put(p.getChunkCoordHash(), p);
 			pendingUpdatesQueue.add(p);
 			isModified = true;
 		}
@@ -1823,5 +1843,6 @@ public class Chunk implements IChunkDependency
 			if(exbs != null)
 				exbs.free();
 		}
+		releasePendingUpdatesSets();
 	}
 }

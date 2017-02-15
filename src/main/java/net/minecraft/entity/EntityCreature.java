@@ -8,6 +8,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -26,6 +27,7 @@ public abstract class EntityCreature extends EntityLiving
 	private EntityAIBase field_110178_bs = new EntityAIMoveTowardsRestriction(this, 1.0D);
 	private boolean field_110180_bt;
 	private static final String __OBFID = "CL_00001558";
+	private int lastPathCountedTick;
 
 	public EntityCreature(World p_i1602_1_)
 	{
@@ -57,6 +59,7 @@ public abstract class EntityCreature extends EntityLiving
 			if (this.entityToAttack != null)
 			{
 				this.pathToEntity = this.worldObj.getPathEntityToEntity(this, this.entityToAttack, f4, true, false, false, true);
+				this.lastPathCountedTick = MinecraftServer.getServer().getTickCounter();
 			}
 		}
 		else if (this.entityToAttack.isEntityAlive())
@@ -82,7 +85,12 @@ public abstract class EntityCreature extends EntityLiving
 
 		if (!this.hasAttacked && this.entityToAttack != null && (this.pathToEntity == null || this.rand.nextInt(20) == 0))
 		{
-			this.pathToEntity = this.worldObj.getPathEntityToEntity(this, this.entityToAttack, f4, true, false, false, true);
+			// ultramine - fixed path recounting each tick if target is not reachable
+			if(MinecraftServer.getServer().getTickCounter() - lastPathCountedTick > 10)
+			{
+				this.pathToEntity = this.worldObj.getPathEntityToEntity(this, this.entityToAttack, f4, true, false, false, true);
+				this.lastPathCountedTick = MinecraftServer.getServer().getTickCounter();
+			}
 		}
 		else if (!this.hasAttacked && (this.pathToEntity == null && this.rand.nextInt(180) == 0 || this.rand.nextInt(120) == 0 || this.fleeingTick > 0) && this.entityAge < 100)
 		{

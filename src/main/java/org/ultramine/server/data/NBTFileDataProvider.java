@@ -2,13 +2,14 @@ package org.ultramine.server.data;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +34,8 @@ public class NBTFileDataProvider implements IDataProvider
 	private final ServerConfigurationManager mgr;
 	private File umPlayerDir;
 	private List<String> fastWarps = Collections.emptyList();
+	private final Map<File, CachedPlayerStruct> savingPlayersCache = new ConcurrentHashMap<>();
+	private long cachedPlayerCounter;
 
 	public NBTFileDataProvider(ServerConfigurationManager mgr)
 	{
@@ -168,8 +171,11 @@ public class NBTFileDataProvider implements IDataProvider
 
 	public NBTTagCompound loadPlayer(SaveHandler sh, GameProfile player)
 	{
-		File dir = sh.getPlayerSaveDir();
-		File file = new File(dir, player.getId().toString() + ".dat");
+		File file = getPlayerNbtFile(sh, player);
+		CachedPlayerStruct data = savingPlayersCache.get(file);
+		if(data != null)
+			return data.nbt;
+
 		if(file.exists())
 		{
 			try
@@ -187,7 +193,17 @@ public class NBTFileDataProvider implements IDataProvider
 
 	public void savePlayer(SaveHandler sh, GameProfile player, NBTTagCompound nbt)
 	{
-		AsyncIOUtils.safeWriteNBT(new File(sh.getPlayerSaveDir(), player.getId().toString() + ".dat"), nbt);
+		File file = getPlayerNbtFile(sh, player);
+		long nextId = cachedPlayerCounter++;
+		savingPlayersCache.put(file, new CachedPlayerStruct(nbt, nextId));
+		AsyncIOUtils.safeWriteNBT(file, nbt, () ->
+			savingPlayersCache.computeIfPresent(file, (file1, data) -> data.id == nextId ? null : data)
+		);
+	}
+
+	private static File getPlayerNbtFile(SaveHandler sh, GameProfile player)
+	{
+		return new File(sh.getPlayerSaveDir(), player.getId().toString() + ".dat");
 	}
 
 	private NBTTagCompound getPlayerDataNBT(String username)
@@ -227,23 +243,6 @@ public class NBTFileDataProvider implements IDataProvider
 		return pdata;
 	}
 	
-	private void safeWriteNBT(File file, NBTTagCompound nbt)
-	{
-		try
-		{
-			File file1 = new File(file.getParentFile(), file.getName()+".tmp");
-			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file1));
-
-			if (file.exists())
-				file.delete();
-			file1.renameTo(file);
-		}
-		catch(IOException e)
-		{
-			log.warn("Failed to write file: "+file.getAbsolutePath(), e);
-		}
-	}
-	
 	private void writeWarpList()
 	{
 		File file = mgr.getServerInstance().getStorageFile("warps.yml");
@@ -257,5 +256,17 @@ public class NBTFileDataProvider implements IDataProvider
 	{
 		public Map<String, WarpLocation> warps;
 		public List<String> fastWarps;
+	}
+
+	private static class CachedPlayerStruct
+	{
+		public NBTTagCompound nbt;
+		public long id;
+
+		public CachedPlayerStruct(NBTTagCompound nbt, long id)
+		{
+			this.nbt = nbt;
+			this.id = id;
+		}
 	}
 }

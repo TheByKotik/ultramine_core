@@ -312,7 +312,7 @@ public class WorldDescriptor
 		
 		world.theChunkProviderServer.setWorldUnloaded();
 		world.theChunkProviderServer.unloadAll(save);
-		world.forceUnloadTileEntities();
+		world.processTileEntityUnload();
 		if(save)
 			world.saveOtherData();
 		

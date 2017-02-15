@@ -848,6 +848,9 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 		this.lastFoodLevel = -1;
 		this.destroyedItemsNetCache.addAll(((EntityPlayerMP)p_71049_1_).destroyedItemsNetCache);
 		this.translator = ((EntityPlayerMP)p_71049_1_).translator;
+		this.renderDistance = ((EntityPlayerMP)p_71049_1_).renderDistance;
+		this.chatVisibility = ((EntityPlayerMP)p_71049_1_).chatVisibility;
+		this.chatColours = ((EntityPlayerMP)p_71049_1_).chatColours;
 	}
 
 	protected void onNewPotionEffect(PotionEffect p_70670_1_)
@@ -1045,7 +1048,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	{
 		String meta = getMeta("tablistcolor");
 		EnumChatFormatting color = meta.isEmpty() ? null : BasicTypeParser.parseColor(meta);
-		return color == null ? getCommandSenderName() : color.toString() + getCommandSenderName();
+		String name = color == null ? getCommandSenderName() : color.toString() + getCommandSenderName();
+		return name.length() > 16 ? name.substring(0, 16) : name;
 	}
 
 	public String translate(String key)

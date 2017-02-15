@@ -86,11 +86,17 @@ public class Teleporter
 	
 	private static void doTeleportation(EntityPlayerMP player, int dimension, double x, double y, double z, float yaw, float pitch)
 	{
-		player.getData().core().setLastLocation(WarpLocation.getFromPlayer(player));
-		
+		if(player.ridingEntity != null)
+		{
+			player.addChatMessage(new ChatComponentTranslation("ultramine.teleporter.fail.riding").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			return;
+		}
+
+		WarpLocation lastLocation = WarpLocation.getFromPlayer(player);
 		if(!player.setWorldPositionAndRotation(dimension, x, y, z, yaw, pitch))
 			player.addChatMessage(new ChatComponentTranslation("ultramine.teleporter.fail.dim").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
-		
+
+		player.getData().core().setLastLocation(lastLocation);
 		if(isServer)
 		{
 			player.getData().core().setNextTeleportationTime(System.currentTimeMillis() + ConfigurationHandler.getServerConfig().settings.teleportation.cooldown*1000);
@@ -100,11 +106,7 @@ public class Teleporter
 	
 	public static void tick()
 	{
-		for(Iterator<Teleporter> it = teleporters.iterator();it.hasNext();)
-		{
-			if(it.next().update())
-				it.remove();
-		}
+		teleporters.removeIf(Teleporter::update);
 	}
 	
 	private final EntityPlayerMP target;
