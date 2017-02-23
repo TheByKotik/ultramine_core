@@ -2207,7 +2207,6 @@ public abstract class World implements IBlockAccess
 			}
 			else if(p_72866_1_.isEntityPlayerMP())
 			{
-				((EntityPlayerMP)p_72866_1_).getChunkMgr().updatePlayerPertinentChunks();
 				((EntityPlayerMP)p_72866_1_).getChunkMgr().update();
 			}
 
