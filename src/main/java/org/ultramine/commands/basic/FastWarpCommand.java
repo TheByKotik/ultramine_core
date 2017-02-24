@@ -14,8 +14,7 @@ import org.ultramine.core.permissions.Permissions;
 
 public class FastWarpCommand implements IExtendedCommand
 {
-	@InjectService
-	private static Permissions perms;
+	@InjectService private static Permissions perms;
 	private final String name;
 	
 	public FastWarpCommand(String name)

@@ -50,8 +50,7 @@ import org.ultramine.core.permissions.Permissions;
 
 public class UMEventHandler
 {
-	@InjectService
-	private static Permissions perms;
+	@InjectService private static Permissions perms;
 	
 	@SideOnly(Side.SERVER)
 	@SubscribeEvent(priority = EventPriority.HIGH)

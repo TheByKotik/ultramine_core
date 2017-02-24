@@ -124,8 +124,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer
 	private double lastPosZ;
 	private boolean hasMoved = true;
 	private static final String __OBFID = "CL_00001452";
-	@InjectService
-	private static Permissions perms;
+	@InjectService private static Permissions perms;
 
 	public NetHandlerPlayServer(MinecraftServer p_i1530_1_, NetworkManager p_i1530_2_, EntityPlayerMP p_i1530_3_)
 	{

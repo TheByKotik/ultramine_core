@@ -15,8 +15,7 @@ import javax.annotation.Nonnull;
 
 public class UMIntegratedPlayerHoldingsFactory implements HoldingsFactory
 {
-	@InjectService
-	private static EconomyRegistry economyRegistry;
+	@InjectService private static EconomyRegistry economyRegistry;
 
 	@Nonnull
 	@Override

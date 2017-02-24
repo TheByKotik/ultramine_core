@@ -28,8 +28,7 @@ import org.ultramine.core.permissions.Permissions;
 
 public class VanillaCommands
 {
-	@InjectService
-	private static Permissions perms;
+	@InjectService private static Permissions perms;
 
 	@Command(
 			name = "help",

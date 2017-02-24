@@ -41,8 +41,7 @@ import org.ultramine.core.permissions.Permissions;
 public class ServerCommandManager extends CommandHandler implements IAdminCommand
 {
 	private static final String __OBFID = "CL_00000922";
-	@InjectService
-	private static Permissions perms;
+	@InjectService private static Permissions perms;
 
 	public ServerCommandManager()
 	{

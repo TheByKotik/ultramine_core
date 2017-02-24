@@ -574,8 +574,7 @@ public class DedicatedServer extends MinecraftServer implements IServer
 	
 	/* ======================================== ULTRAMINE START =====================================*/
 
-	@InjectService
-	private static Permissions perms;
+	@InjectService private static Permissions perms;
 	private final BackupManager backupMgr = new BackupManager(this);
 	
 	@Override

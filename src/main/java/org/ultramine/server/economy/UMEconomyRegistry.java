@@ -20,8 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UMEconomyRegistry implements EconomyRegistry
 {
 	private static final Double DEFAULT_PLAYER_BALANCE = 0.0d;
-	@InjectService
-	private static ServiceManager services;
+	@InjectService private static ServiceManager services;
 
 	private final Map<String, CurrencyImpl> currencies = new ConcurrentHashMap<>();
 	private final Map<Currency, Double> startPlayerBalances = new ConcurrentHashMap<>();

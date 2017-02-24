@@ -1001,10 +1001,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 	private int renderDistance;
 	private final ChunkSendManager chunkMgr = new ChunkSendManager(this);
 	private PlayerData playerData;
-	@InjectService
-	private static Permissions perms;
-	@InjectService
-	private static Economy economy;
+	@InjectService private static Permissions perms;
+	@InjectService private static Economy economy;
 
 	public boolean hasPermission(String permission)
 	{

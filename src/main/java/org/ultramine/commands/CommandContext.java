@@ -41,10 +41,8 @@ import java.util.concurrent.CompletionException;
 
 public class CommandContext
 {
-	@InjectService
-	private static Permissions perms;
-	@InjectService
-	private static Economy economy;
+	@InjectService private static Permissions perms;
+	@InjectService private static Economy economy;
 	private static final Logger log = LogManager.getLogger();
 	private ICommandSender sender;
 	private String[] args;

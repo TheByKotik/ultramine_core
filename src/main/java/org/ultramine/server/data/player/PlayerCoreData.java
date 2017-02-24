@@ -223,10 +223,8 @@ public class PlayerCoreData extends PlayerDataExtension
 
 	private static class PlayerAccountHolder
 	{
-		@InjectService
-		private static EconomyRegistry economyRegistry;
-		@InjectService
-		private static Economy economy;
+		@InjectService private static EconomyRegistry economyRegistry;
+		@InjectService private static Economy economy;
 
 		private final Map<String, Object> holdingsMap = new HashMap<>();
 		private final PlayerData data;

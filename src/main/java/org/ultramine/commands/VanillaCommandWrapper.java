@@ -10,8 +10,7 @@ import java.util.List;
 
 public class VanillaCommandWrapper implements IExtendedCommand
 {
-	@InjectService
-	private static Permissions perms;
+	@InjectService private static Permissions perms;
 	private final ICommand wrappedCommand;
 	private final String permission;
 	private final String description;

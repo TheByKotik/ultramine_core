@@ -18,8 +18,7 @@ import java.util.Set;
 
 public class HandlerBasedCommand implements IExtendedCommand
 {
-	@InjectService
-	private static Permissions perms;
+	@InjectService private static Permissions perms;
 	private String name;
 	private String usage;
 	private String group;
