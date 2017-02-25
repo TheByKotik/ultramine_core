@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.openhft.koloboke.collect.map.ShortObjMap;
 import net.openhft.koloboke.collect.map.hash.HashShortObjMaps;
+import org.ultramine.server.util.CachedEntry;
 
 import java.util.TreeSet;
 import java.util.function.Predicate;
@@ -15,18 +16,19 @@ public class LambdaHolder
 	public static final Predicate<?> ENTITY_REMOVAL_PREDICATE = o -> ((Entity)o).removeThisTick;
 	public static final Predicate<?> TILE_ENTITY_REMOVAL_PREDICATE = o -> ((TileEntity)o).removeThisTick;
 
-	private static final Supplier<TreeSet<?>> NEW_TREE_SET = TreeSet::new;
-	private static final Supplier<ShortObjMap<?>> NEW_SHORT_OBJ_MAP = HashShortObjMaps::newMutableMap;
-
-	@SuppressWarnings("unchecked")
 	public static <T> Supplier<TreeSet<T>> newTreeSet()
 	{
-		return (Supplier<TreeSet<T>>) (Object) NEW_TREE_SET;
+		return TreeSet::new;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> Supplier<ShortObjMap<T>> newShortObjMap()
 	{
-		return (Supplier<ShortObjMap<T>>) (Object) NEW_SHORT_OBJ_MAP;
+		return HashShortObjMaps::newMutableMap;
+	}
+
+	@SuppressWarnings({"Guava"})
+	public static <T> com.google.common.base.Function<CachedEntry<T>, T> cachedEntryGetValueGuavaFunc()
+	{
+		return CachedEntry::getValueAndUpdateTime;
 	}
 }

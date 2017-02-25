@@ -1,5 +1,12 @@
 package org.ultramine.server.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class CollectionUtil
 {
 	private static final int INSERTIONSORT_THRESHOLD = 7;
@@ -61,5 +68,35 @@ public class CollectionUtil
 		int t = x[a];
 		x[a] = x[b];
 		x[b] = t;
+	}
+
+	/** @return removed entries */
+	public static <T extends Comparable<? super T>> List<T> removeOldestEntries(Collection<T> collection, int entriesToRemove)
+	{
+		if(entriesToRemove <= 0)
+			throw new IllegalArgumentException();
+		List<T> list = new ArrayList<>(collection);
+		Collections.sort(list);
+
+		if(entriesToRemove >= collection.size())
+		{
+			collection.clear();
+			return list;
+		}
+
+		List<T> listToRemove = list.subList(0, entriesToRemove);
+		if(collection instanceof Set)
+			collection.removeAll(listToRemove);
+		else
+			collection.removeAll(new HashSet<>(listToRemove));
+		return listToRemove;
+	}
+
+	/** @return removed entries */
+	public static <T extends Comparable<? super T>> List<T> retainNewestEntries(Collection<T> collection, int entriesToRetain)
+	{
+		if(entriesToRetain >= collection.size())
+			return Collections.emptyList();
+		return removeOldestEntries(collection, collection.size() - entriesToRetain);
 	}
 }
