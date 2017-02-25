@@ -880,13 +880,13 @@ public abstract class World implements IBlockAccess
 	{
 		if (p_72976_1_ >= -MAX_BLOCK_COORD && p_72976_2_ >= -MAX_BLOCK_COORD && p_72976_1_ < MAX_BLOCK_COORD && p_72976_2_ < MAX_BLOCK_COORD)
 		{
-			if (!this.chunkExists(p_72976_1_ >> 4, p_72976_2_ >> 4))
+			Chunk chunk = this.getChunkIfExists(p_72976_1_ >> 4, p_72976_2_ >> 4);
+			if (chunk == null)
 			{
 				return 0;
 			}
 			else
 			{
-				Chunk chunk = this.getChunkFromChunkCoords(p_72976_1_ >> 4, p_72976_2_ >> 4);
 				return chunk.getHeightValue(p_72976_1_ & 15, p_72976_2_ & 15);
 			}
 		}
@@ -900,13 +900,13 @@ public abstract class World implements IBlockAccess
 	{
 		if (p_82734_1_ >= -MAX_BLOCK_COORD && p_82734_2_ >= -MAX_BLOCK_COORD && p_82734_1_ < MAX_BLOCK_COORD && p_82734_2_ < MAX_BLOCK_COORD)
 		{
-			if (!this.chunkExists(p_82734_1_ >> 4, p_82734_2_ >> 4))
+			Chunk chunk = this.getChunkIfExists(p_82734_1_ >> 4, p_82734_2_ >> 4);
+			if (chunk == null)
 			{
 				return 0;
 			}
 			else
 			{
-				Chunk chunk = this.getChunkFromChunkCoords(p_82734_1_ >> 4, p_82734_2_ >> 4);
 				return chunk.heightMapMinimum;
 			}
 		}
@@ -1003,13 +1003,13 @@ public abstract class World implements IBlockAccess
 			int l = p_72972_2_ >> 4;
 			int i1 = p_72972_4_ >> 4;
 
-			if (!this.chunkExists(l, i1))
+			Chunk chunk = this.getChunkIfExists(l, i1);
+			if (chunk == null)
 			{
 				return p_72972_1_.defaultLightValue;
 			}
 			else
 			{
-				Chunk chunk = this.getChunkFromChunkCoords(l, i1);
 				return chunk.getSavedLightValue(p_72972_1_, p_72972_2_ & 15, p_72972_3_, p_72972_4_ & 15);
 			}
 		}
@@ -1027,9 +1027,9 @@ public abstract class World implements IBlockAccess
 			{
 				if (p_72915_3_ < 256)
 				{
-					if (this.chunkExists(p_72915_2_ >> 4, p_72915_4_ >> 4))
+					Chunk chunk = this.getChunkIfExists(p_72915_2_ >> 4, p_72915_4_ >> 4);
+					if (chunk != null)
 					{
-						Chunk chunk = this.getChunkFromChunkCoords(p_72915_2_ >> 4, p_72915_4_ >> 4);
 						chunk.setLightValue(p_72915_1_, p_72915_2_ & 15, p_72915_3_, p_72915_4_ & 15, p_72915_5_);
 
 						for (int i1 = 0; i1 < this.worldAccesses.size(); ++i1)
