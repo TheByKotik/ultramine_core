@@ -118,16 +118,16 @@ public class UltramineServerModContainer extends DummyModContainer
 				MinecraftServer.getServer().getMultiWorld().preloadConfigs();
 				ConfigurationHandler.postWorldDescsLoad();
 
-				OpBasedPermissions vanPerms = new OpBasedPermissions();
-				vanPerms.addDefault("command.vanilla.help");
-				vanPerms.addDefault("command.vanilla.msg");
-				vanPerms.addDefault("command.vanilla.reply");
-				services.register(Permissions.class, vanPerms, 0);
-
 				services.register(EconomyRegistry.class, new UMEconomyRegistry(), 0);
 				services.register(Economy.class, new UMEconomy(), 0);
 				services.register(DefaultHoldingsProvider.class, new UMIntegratedHoldingsProvider(), 0);
 			}
+
+			OpBasedPermissions vanPerms = new OpBasedPermissions();
+			vanPerms.addDefault("command.vanilla.help");
+			vanPerms.addDefault("command.vanilla.msg");
+			vanPerms.addDefault("command.vanilla.reply");
+			services.register(Permissions.class, vanPerms, 0);
 		}
 		catch (Throwable t)
 		{
