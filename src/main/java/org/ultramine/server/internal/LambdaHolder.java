@@ -15,6 +15,7 @@ public class LambdaHolder
 {
 	public static final Predicate<?> ENTITY_REMOVAL_PREDICATE = o -> ((Entity)o).removeThisTick;
 	public static final Predicate<?> TILE_ENTITY_REMOVAL_PREDICATE = o -> ((TileEntity)o).removeThisTick;
+	public static final Supplier<Boolean> BOOLEAN_FALSE_SUPPLIER = () -> Boolean.FALSE;
 
 	public static <T> Supplier<TreeSet<T>> newTreeSet()
 	{
@@ -30,5 +31,10 @@ public class LambdaHolder
 	public static <T> com.google.common.base.Function<CachedEntry<T>, T> cachedEntryGetValueGuavaFunc()
 	{
 		return CachedEntry::getValueAndUpdateTime;
+	}
+
+	public static Supplier<byte[]> newByteArray(int size)
+	{
+		return () -> new byte[size];
 	}
 }

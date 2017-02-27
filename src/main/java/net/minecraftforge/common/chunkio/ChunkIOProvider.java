@@ -2,6 +2,7 @@ package net.minecraftforge.common.chunkio;
 
 
 import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.AsynchronousExecutor;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -47,6 +48,7 @@ class ChunkIOProvider implements AsynchronousExecutor.CallBackProvider<QueuedChu
 
 		queuedChunk.loader.loadEntities(queuedChunk.world, queuedChunk.compound.getCompoundTag("Level"), chunk);
 		MinecraftForge.EVENT_BUS.post(new ChunkDataEvent.Load(chunk, queuedChunk.compound)); // Don't call ChunkDataEvent.Load async
+		AnvilChunkLoader.releaseNbt(queuedChunk.compound);
 		chunk.lastSaveTime = queuedChunk.provider.worldObj.getTotalWorldTime();
 		queuedChunk.provider.chunkMap.put(ChunkHash.chunkToKey(queuedChunk.x, queuedChunk.z), chunk);
 		chunk.onChunkLoad();

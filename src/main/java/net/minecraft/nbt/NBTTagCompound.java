@@ -10,15 +10,25 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ReportedException;
+import net.openhft.koloboke.collect.hash.HashConfig;
+import net.openhft.koloboke.collect.map.hash.HashObjObjMapFactory;
+import net.openhft.koloboke.collect.map.hash.HashObjObjMaps;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.server.internal.LambdaHolder;
 
 public class NBTTagCompound extends NBTBase
 {
 	private static final Logger logger = LogManager.getLogger();
-	private Map tagMap = new HashMap();
+	private Map tagMap;
 	private static final String __OBFID = "CL_00001215";
+
+	public NBTTagCompound()
+	{
+		this(0);
+	}
 
 	void write(DataOutput p_74734_1_) throws IOException
 	{
@@ -336,7 +346,7 @@ public class NBTTagCompound extends NBTBase
 
 	public NBTBase copy()
 	{
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		NBTTagCompound nbttagcompound = new NBTTagCompound(tagMap.size());
 		Iterator iterator = this.tagMap.keySet().iterator();
 
 		while (iterator.hasNext())
@@ -406,5 +416,54 @@ public class NBTTagCompound extends NBTBase
 			crashreportcategory.addCrashSection("Tag type", Byte.valueOf(p_152449_0_));
 			throw new ReportedException(crashreport);
 		}
+	}
+
+	/*======================================== ULTRAMINE START =====================================*/
+
+	private static final boolean USE_KOLOBOKE_MAP = Boolean.getBoolean("org.ultramine.core.nbt.useKolobokeMap");
+	private static final ThreadLocal<Boolean> LOCAL_USE_KOLOBOKE_MAP = ThreadLocal.withInitial(LambdaHolder.BOOLEAN_FALSE_SUPPLIER);
+	private static final HashObjObjMapFactory<?, ?> K_MAP_FACTORY = HashObjObjMaps.getDefaultFactory()
+			.withHashConfig(HashConfig.getDefault().withGrowFactor(1.5).withMaxLoad(1.0).withTargetLoad(0.9)); // QHash used
+
+	public static boolean setUseKolobokeMap(boolean isUse)
+	{
+		boolean toRet = LOCAL_USE_KOLOBOKE_MAP.get();
+		LOCAL_USE_KOLOBOKE_MAP.set(isUse);
+		return toRet;
+	}
+
+	public NBTTagCompound(Map tagMap)
+	{
+		this.tagMap = tagMap;
+	}
+
+	public NBTTagCompound(int expectedSize)
+	{
+		createMap(expectedSize);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Map<String, NBTBase> geTagMap()
+	{
+		return tagMap;
+	}
+
+	public void setTagMap(Map tagMap)
+	{
+		this.tagMap = tagMap;
+	}
+
+	public void clear()
+	{
+		if(tagMap == null)
+			createMap(0);
+		else
+			tagMap.clear();
+	}
+
+	protected void createMap(int expectedSize)
+	{
+		boolean useKolobokeMap = USE_KOLOBOKE_MAP || LOCAL_USE_KOLOBOKE_MAP.get();
+		this.tagMap = USE_KOLOBOKE_MAP ? K_MAP_FACTORY.newMutableMap(expectedSize) : expectedSize == 0 ? new HashMap() : new HashMap(MathHelper.ceiling_float_int(expectedSize / 0.75f));
 	}
 }
