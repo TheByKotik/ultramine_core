@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ultramine.core.service.InjectService;
 import org.ultramine.server.WorldConstants;
 import org.ultramine.server.util.BlockFace;
 import org.ultramine.server.util.ChunkCoordComparator;
@@ -43,6 +44,7 @@ public class ChunkSendManager
 {
 	private static final Logger log = LogManager.getLogger();
 	private static final ExecutorService executor = Executors.newFixedThreadPool(1);
+	@InjectService private static AntiXRayService<Object> antiXRayService;
 	private static final double MIN_RATE = 0.2d;
 	
 	private final EntityPlayerMP player;
@@ -460,11 +462,13 @@ public class ChunkSendManager
 	{
 		private final ChunkIdStruct chunkId;
 		private final ChunkSnapshot chunkSnapshot;
-		
+		private final Object antiXRayParam;
+
 		public CompressAndSendChunkTask(ChunkIdStruct chunkId)
 		{
 			this.chunkId = chunkId;
 			this.chunkSnapshot = ChunkSnapshot.of(chunkId.chunk); // must be sync
+			this.antiXRayParam = antiXRayService.prepareChunkSync(this.chunkSnapshot, chunkId.chunk);
 		}
 		
 		private boolean checkActual()
@@ -488,6 +492,7 @@ public class ChunkSendManager
 				return;
 			}
 
+			antiXRayService.prepareChunkAsync(chunkSnapshot, antiXRayParam);
 			S21PacketChunkData packet = S21PacketChunkData.makeForSend(chunkSnapshot); // may be async for chunk snapshot
 			packet.deflate(); // chunkSnapshot released here
 			

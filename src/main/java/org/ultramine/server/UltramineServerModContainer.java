@@ -21,6 +21,7 @@ import org.ultramine.core.economy.service.Economy;
 import org.ultramine.core.economy.service.EconomyRegistry;
 import org.ultramine.core.service.InjectService;
 import org.ultramine.core.service.ServiceManager;
+import org.ultramine.server.chunk.AntiXRayService;
 import org.ultramine.server.chunk.ChunkGenerationQueue;
 import org.ultramine.server.chunk.ChunkProfiler;
 import org.ultramine.server.chunk.alloc.ChunkAllocService;
@@ -111,6 +112,7 @@ public class UltramineServerModContainer extends DummyModContainer
 		try
 		{
 			services.register(ChunkAllocService.class, new UnsafeChunkAlloc(), 0);
+			services.register(AntiXRayService.class, new AntiXRayService.EmptyImpl(), 0);
 			if(e.getSide().isServer())
 			{
 				ConfigurationHandler.load();
