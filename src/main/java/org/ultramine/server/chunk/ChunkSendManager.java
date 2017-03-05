@@ -459,12 +459,12 @@ public class ChunkSendManager
 	private class CompressAndSendChunkTask implements Runnable
 	{
 		private final ChunkIdStruct chunkId;
-		private final S21PacketChunkData packet;
+		private final ChunkSnapshot chunkSnapshot;
 		
 		public CompressAndSendChunkTask(ChunkIdStruct chunkId)
 		{
 			this.chunkId = chunkId;
-			this.packet = S21PacketChunkData.makeForSend(chunkId.chunk); //must be sync
+			this.chunkSnapshot = ChunkSnapshot.of(chunkId.chunk); // must be sync
 		}
 		
 		private boolean checkActual()
@@ -483,9 +483,13 @@ public class ChunkSendManager
 		public void run()
 		{
 			if(!checkActual())
+			{
+				chunkSnapshot.release();
 				return;
-			
-			packet.deflate();
+			}
+
+			S21PacketChunkData packet = S21PacketChunkData.makeForSend(chunkSnapshot); // may be async for chunk snapshot
+			packet.deflate(); // chunkSnapshot released here
 			
 			//Нужно одновременно отправить чанк и добавить его в список sendingStage2, чтобы можно было корректно отменить отправку:
 			//(Если чанк есть в списке sendingStage2, посылать пакет на отгрузку. В ином случае просто удалиь из списка sending)

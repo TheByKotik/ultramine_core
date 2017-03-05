@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.Semaphore;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -16,6 +17,8 @@ import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import org.ultramine.server.chunk.ChunkSnapshot;
+import org.ultramine.server.internal.UMHooks;
 
 public class S21PacketChunkData extends Packet
 {
@@ -32,6 +35,7 @@ public class S21PacketChunkData extends Packet
 	private Semaphore deflateGate;
 	
 	private static final byte[] unloadSequence = new byte[] {0x78, (byte) 0x9C, 0x63, 0x64, 0x1C, (byte) 0xD9, 0x00, 0x00, (byte) 0x81, (byte) 0x80, 0x01, 0x01};
+	private ChunkSnapshot chunkSnapshot;
 
 	public S21PacketChunkData() {}
 
@@ -45,6 +49,14 @@ public class S21PacketChunkData extends Packet
 		this.field_149283_c = extracted.field_150280_b;
 		this.field_149278_f = extracted.field_150282_a;
 		this.deflateGate = new Semaphore(1);
+	}
+
+	private S21PacketChunkData(ChunkSnapshot chunkSnapshot)
+	{
+		this.field_149284_a = chunkSnapshot.getX();
+		this.field_149282_b = chunkSnapshot.getZ();
+		this.field_149279_g = true;
+		this.chunkSnapshot = chunkSnapshot;
 	}
 	
 	private S21PacketChunkData(int cx, int cz) //for unload
@@ -62,10 +74,29 @@ public class S21PacketChunkData extends Packet
 		Deflater deflater = new Deflater(7);
 		try
 		{
+			if(chunkSnapshot != null)
+			{
+				UMHooks.ChunkPacketData data = UMHooks.extractAndDeflateChunkPacketData(deflater, chunkSnapshot);
+				field_149281_e = data.data;
+				field_149285_h = data.length;
+
+				this.field_149280_d = data.ebsMask;
+				this.field_149283_c = data.ebsMask;
+				this.field_149278_f = null;
+				chunkSnapshot.release();
+				chunkSnapshot = null;
+				return;
+			}
 			deflater.setInput(this.field_149278_f, 0, this.field_149278_f.length);
 			deflater.finish();
-			byte[] deflated = new byte[this.field_149278_f.length];
-			this.field_149285_h = deflater.deflate(deflated);
+			byte[] deflated = new byte[4096];
+			int dataLen = 0;
+			while (!deflater.finished()) {
+				if(dataLen == deflated.length)
+					deflated = Arrays.copyOf(deflated, deflated.length * 2);
+				dataLen += deflater.deflate(deflated, dataLen, deflated.length - dataLen);
+			}
+			this.field_149285_h = dataLen;
 			this.field_149281_e = deflated;
 		}
 		finally
@@ -309,6 +340,11 @@ public class S21PacketChunkData extends Packet
 	public static S21PacketChunkData makeForSend(Chunk chunk)
 	{
 		return new S21PacketChunkData(chunk, true, 65535);
+	}
+
+	public static S21PacketChunkData makeForSend(ChunkSnapshot chunkSnapshot)
+	{
+		return new S21PacketChunkData(chunkSnapshot);
 	}
 	
 	public static S21PacketChunkData makeForUnload(Chunk chunk)

@@ -34,10 +34,12 @@ public class ExtendedBlockStorage
 		this(p_i1997_1_, p_i1997_2_, true);
 	}
 
-	public ExtendedBlockStorage(int yBase, MemSlot slot)
+	public ExtendedBlockStorage(MemSlot slot, int yBase, int blockRefCount, int tickRefCount)
 	{
-		this.yBase = yBase;
 		this.slot = slot;
+		this.yBase = yBase;
+		this.blockRefCount = blockRefCount;
+		this.tickRefCount = tickRefCount;
 	}
 
 	public Block getBlockByExtId(int p_150819_1_, int p_150819_2_, int p_150819_3_)
@@ -246,7 +248,7 @@ public class ExtendedBlockStorage
 	public ExtendedBlockStorage copy()
 	{
 		slot.getClass(); //NPE
-		return new ExtendedBlockStorage(yBase, slot.copy());
+		return new ExtendedBlockStorage(slot.copy(), yBase, blockRefCount, tickRefCount);
 	}
 	
 	public void release()
@@ -254,5 +256,10 @@ public class ExtendedBlockStorage
 		MemSlot slotLocal = this.slot;
 		this.slot = null;
 		slotLocal.release();
+	}
+
+	public void incBlockRefCount()
+	{
+		blockRefCount++;
 	}
 }

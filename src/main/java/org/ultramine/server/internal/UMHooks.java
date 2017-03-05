@@ -1,7 +1,9 @@
 package org.ultramine.server.internal;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.zip.Deflater;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -18,9 +20,11 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkGenerationQueue;
+import org.ultramine.server.chunk.ChunkSnapshot;
 import org.ultramine.server.event.WorldEventProxy;
 import org.ultramine.server.event.WorldUpdateObject;
 
@@ -241,5 +245,137 @@ public class UMHooks
 
 		if(hasRemovedEntitiesTotal)
 			world.loadedEntityList.removeIf(LambdaHolder.ENTITY_REMOVAL_PREDICATE);
+	}
+
+	public static ChunkPacketData extractAndDeflateChunkPacketData(Deflater deflater, ChunkSnapshot chunkSnapshot)
+	{
+		return new ChunkPacker(deflater, chunkSnapshot).pack();
+	}
+
+	private static class ChunkPacker
+	{
+		private static final ThreadLocal<byte[]> LOCAL_BUFFER = ThreadLocal.withInitial(LambdaHolder.newByteArray(4096));
+		private static final byte[] EMPTY_CHUNK_SEQUENCE = {120, -38, -19, -63, 49, 1, 0, 0, 0, -62, -96, -11, 79, 109, 13, 15, -96, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -128, 119, 3, 48, 0, 0, 1};
+		private final Deflater deflater;
+		private final ChunkSnapshot chunkSnapshot;
+		private byte[] data;
+		private int dataLen;
+
+		private ChunkPacker(Deflater deflater, ChunkSnapshot chunkSnapshot)
+		{
+			this.deflater = deflater;
+			this.chunkSnapshot = chunkSnapshot;
+		}
+
+		public ChunkPacketData pack()
+		{
+			ChunkSnapshot chunkSnapshot = this.chunkSnapshot;
+			ExtendedBlockStorage[] ebsArr = chunkSnapshot.getEbsArr();
+			int mask = 0;
+
+			for(int i = 0; i < ebsArr.length; ++i)
+			{
+				ExtendedBlockStorage ebs = ebsArr[i];
+				if(ebs != null && !ebs.isEmpty())
+					mask |= 1 << i;
+			}
+
+			if(mask == 0)
+				return new ChunkPacketData(EMPTY_CHUNK_SEQUENCE, EMPTY_CHUNK_SEQUENCE.length, 1); // Simulates empty 0-level EBS
+
+			this.data = new byte[4096];
+			byte[] buf = LOCAL_BUFFER.get();
+
+			for(int i = 0; i < ebsArr.length; ++i)
+			{
+				ExtendedBlockStorage ebs = ebsArr[i];
+				if(ebs != null && !ebs.isEmpty())
+				{
+					ebs.getSlot().copyLSB(buf, 0);
+					write(buf, 4096);
+				}
+			}
+
+			for(int i = 0; i < ebsArr.length; ++i)
+			{
+				ExtendedBlockStorage ebs = ebsArr[i];
+				if(ebs != null && !ebs.isEmpty())
+				{
+					ebs.getSlot().copyBlockMetadata(buf, 0);
+					write(buf, 2048);
+				}
+			}
+
+			for(int i = 0; i < ebsArr.length; ++i)
+			{
+				ExtendedBlockStorage ebs = ebsArr[i];
+				if(ebs != null && !ebs.isEmpty())
+				{
+					ebs.getSlot().copyBlocklight(buf, 0);
+					write(buf, 2048);
+				}
+			}
+
+			if(!chunkSnapshot.isWorldHasNoSky())
+			{
+				for(int i = 0; i < ebsArr.length; ++i)
+				{
+					ExtendedBlockStorage ebs = ebsArr[i];
+					if(ebs != null && !ebs.isEmpty())
+					{
+						ebs.getSlot().copySkylight(buf, 0);
+						write(buf, 2048);
+					}
+				}
+			}
+
+			for(int i = 0; i < ebsArr.length; ++i)
+			{
+				ExtendedBlockStorage ebs = ebsArr[i];
+				if(ebs != null && !ebs.isEmpty())
+				{
+					ebs.getSlot().copyMSB(buf, 0);
+					write(buf, 2048);
+				}
+			}
+
+			write(chunkSnapshot.getBiomeArray(), chunkSnapshot.getBiomeArray().length);
+
+			deflater.finish();
+			while (!deflater.finished()) {
+				deflate();
+			}
+
+			return new ChunkPacketData(data, dataLen, mask);
+		}
+
+		private void write(byte[] src, int srcLen)
+		{
+			deflater.setInput(src, 0, srcLen);
+			while (!deflater.needsInput()) {
+				deflate();
+			}
+		}
+
+		private void deflate()
+		{
+			if(dataLen == data.length)
+				data = Arrays.copyOf(data, data.length * 2);
+			dataLen += deflater.deflate(data, dataLen, data.length - dataLen);
+		}
+	}
+
+	public static class ChunkPacketData
+	{
+		public final byte[] data;
+		public final int length;
+		public final int ebsMask;
+
+		public ChunkPacketData(byte[] data, int length, int ebsMask)
+		{
+			this.data = data;
+			this.length = length;
+			this.ebsMask = ebsMask;
+		}
 	}
 }
