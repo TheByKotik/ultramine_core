@@ -190,7 +190,7 @@ public class PlayerManager
 
 	public void updatePlayerPertinentChunks(EntityPlayerMP par1EntityPlayerMP)
 	{
-		par1EntityPlayerMP.getChunkMgr().updatePlayerPertinentChunks();
+//		par1EntityPlayerMP.getChunkMgr().updatePlayerPertinentChunks();
 	}
 
 	public boolean isPlayerWatchingChunk(EntityPlayerMP p_72694_1_, int p_72694_2_, int p_72694_3_)

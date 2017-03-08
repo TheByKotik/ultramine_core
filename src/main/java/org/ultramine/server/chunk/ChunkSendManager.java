@@ -205,6 +205,7 @@ public class ChunkSendManager
 	{
 		if(manager == null)
 			return;
+		updatePlayerPertinentChunks();
 		if(!toSend.isEmpty())
 		{
 			int queueSize = sendingQueueSize.get();
@@ -323,7 +324,7 @@ public class ChunkSendManager
 		}
 	}
 	
-	public void updatePlayerPertinentChunks()
+	private void updatePlayerPertinentChunks()
 	{
 		checkDistance();
 

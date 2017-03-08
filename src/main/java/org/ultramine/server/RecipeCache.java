@@ -1,12 +1,9 @@
 package org.ultramine.server;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.inventory.InventoryCrafting;
@@ -14,8 +11,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import org.ultramine.server.util.CachedEntry;
+import org.ultramine.server.util.CollectionUtil;
 import org.ultramine.server.util.ModificationControlList;
 
 import javax.annotation.Nullable;
@@ -23,9 +21,8 @@ import javax.annotation.Nullable;
 public class RecipeCache
 {
 	private static final int CACHE_SIZE = 12287;
-	private static final int CLEANUP_INTERVAL = 20*10;
 	private final ModificationControlList<IRecipe> originList;
-	private final Map<RecipeKey, Optional<IRecipe>> cache = new HashMap<>();
+	private final Map<RecipeKey, CachedEntry<IRecipe>> cache = new HashMap<>();
 	private boolean enabled;
 
 	@SuppressWarnings("unchecked")
@@ -48,13 +45,14 @@ public class RecipeCache
 		if(key.width == 0)
 			return null;
 
-		Optional<IRecipe> rcp = cache.get(key);
+		CachedEntry<IRecipe> rcp = cache.get(key);
 		if (rcp != null)
 		{
-			if(!rcp.isPresent())
+			IRecipe recipe = rcp.getValueAndUpdateTime();
+			if(recipe == null)
 				return null;
-			if(rcp.get().matches(inv, world))
-				return rcp.get();
+			if(recipe.matches(inv, world))
+				return recipe;
 		}
 
 		IRecipe recipe = originalSearch(inv, world);
@@ -65,8 +63,8 @@ public class RecipeCache
 	private void addToCache(RecipeKey key, @Nullable IRecipe recipe)
 	{
 		if(cache.size() >= CACHE_SIZE)
-			cache.clear();
-		cache.put(key, Optional.ofNullable(recipe));
+			CollectionUtil.retainNewestEntries(cache.values(), CACHE_SIZE / 2);
+		cache.put(key, CachedEntry.of(recipe));
 	}
 
 	private @Nullable IRecipe originalSearch(InventoryCrafting inv, World world)
@@ -95,10 +93,6 @@ public class RecipeCache
 		if(originList.checkModifiedAndReset())
 		{
 			clearCache();
-		}
-		else if(MinecraftServer.getServer().getTickCounter() % CLEANUP_INTERVAL == 0)
-		{
-			cache.values().removeAll(Collections.singleton(Optional.<IRecipe>empty()));
 		}
 	}
 	

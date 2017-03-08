@@ -8,11 +8,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
 import net.minecraft.world.storage.ThreadedFileIOBase;
+import org.ultramine.server.internal.LambdaHolder;
+import org.ultramine.server.util.CachedEntry;
+import org.ultramine.server.util.CollectionUtil;
 
 public class RegionFileCache
 {
-	private static final Map regionsByFilename = new HashMap();
+	private static final Map<File, CachedEntry<RegionFile>> regionsByFilenameUM = new HashMap<>();
+	private static final Map regionsByFilename = Maps.transformValues(regionsByFilenameUM, LambdaHolder.cachedEntryGetValueGuavaFunc());
 	private static final String __OBFID = "CL_00000383";
 
 	public static synchronized RegionFile createOrLoadRegionFile(File p_76550_0_, int p_76550_1_, int p_76550_2_)
@@ -34,11 +39,21 @@ public class RegionFileCache
 
 			if (regionsByFilename.size() >= 256)
 			{
-				clearRegionFileReferences();
+				for(CachedEntry<RegionFile> entry : CollectionUtil.retainNewestEntries(regionsByFilenameUM.values(), 128))
+				{
+					try
+					{
+						entry.getValueAndUpdateTime().close();
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
 			}
 
 			RegionFile regionfile1 = new RegionFile(file3);
-			regionsByFilename.put(file3, regionfile1);
+			regionsByFilenameUM.put(file3, CachedEntry.of(regionfile1));
 			return regionfile1;
 		}
 	}
