@@ -1,15 +1,18 @@
 package net.minecraft.world.gen.structure;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import org.ultramine.server.util.ListAsLinkedList;
 
 public abstract class StructureStart
 {
-	protected LinkedList components = new LinkedList();
+	protected ArrayList<StructureComponent> componentsUm = new ArrayList<>();
+	protected LinkedList components = new ListAsLinkedList<>(componentsUm);
 	protected StructureBoundingBox boundingBox;
 	private int field_143024_c;
 	private int field_143023_d;
@@ -71,7 +74,7 @@ public abstract class StructureStart
 		nbttagcompound.setInteger("ChunkX", p_143021_1_);
 		nbttagcompound.setInteger("ChunkZ", p_143021_2_);
 		nbttagcompound.setTag("BB", this.boundingBox.func_151535_h());
-		NBTTagList nbttaglist = new NBTTagList();
+		NBTTagList nbttaglist = new NBTTagList(components.size());
 		Iterator iterator = this.components.iterator();
 
 		while (iterator.hasNext())
@@ -99,11 +102,13 @@ public abstract class StructureStart
 
 		NBTTagList nbttaglist = p_143020_2_.getTagList("Children", 10);
 
+		componentsUm.ensureCapacity(nbttaglist.tagCount());
 		for (int i = 0; i < nbttaglist.tagCount(); ++i)
 		{
 			StructureComponent tmp = MapGenStructureIO.func_143032_b(nbttaglist.getCompoundTagAt(i), p_143020_1_);
 			if (tmp != null) this.components.add(tmp); //Forge: Prevent NPEs further down the line when a component can't be loaded.
 		}
+		componentsUm.trimToSize();
 
 		this.func_143017_b(p_143020_2_);
 	}

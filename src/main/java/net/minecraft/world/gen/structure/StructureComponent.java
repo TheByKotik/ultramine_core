@@ -1,13 +1,17 @@
 package net.minecraft.world.gen.structure;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemDoor;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityDispenser;
@@ -811,4 +815,17 @@ public abstract class StructureComponent
 				return this.selectedBlockMetaData;
 			}
 		}
+
+	/*======================================== ULTRAMINE START =====================================*/
+
+	public void writeToNbtStream(NBTOutputStream out, NBTTagCompound bufferNbt) throws IOException
+	{
+		out.writeString("id", MapGenStructureIO.func_143036_a(this));
+		out.writeTag("BB", this.boundingBox.func_151535_h());
+		out.writeInt("O", this.coordBaseMode);
+		out.writeInt("GD", this.componentType);
+		this.func_143012_a(bufferNbt);
+		for(Map.Entry<String, NBTBase> ent : bufferNbt.geTagMap().entrySet())
+			out.writeTag(ent.getKey(), ent.getValue());
+	}
 }

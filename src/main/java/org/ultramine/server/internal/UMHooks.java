@@ -1,9 +1,16 @@
 package org.ultramine.server.internal;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.zip.Deflater;
+import java.util.zip.GZIPOutputStream;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -12,6 +19,7 @@ import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
@@ -21,6 +29,11 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraft.world.gen.structure.MapGenStructureData;
+import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureMineshaftStart;
+import net.minecraft.world.gen.structure.StructureStart;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ultramine.server.chunk.ChunkGenerationQueue;
@@ -377,5 +390,81 @@ public class UMHooks
 			this.length = length;
 			this.ebsMask = ebsMask;
 		}
+	}
+
+	public static void writeMapGenStructureData(MapGenStructureData data, File file) throws IOException
+	{
+		org.apache.commons.io.output.ByteArrayOutputStream bout =  new org.apache.commons.io.output.ByteArrayOutputStream();
+		try(NBTOutputStream out = new NBTOutputStream(new DataOutputStream(bout))) {
+			out.startCompoundTag("data");
+			if(data.func_143041_a() != null)
+				out.writeTag("Features", data.func_143041_a());
+			else
+				writeStructureMap(data.getStructureMap(), out);
+			out.endCompoundTag();
+		}
+		GlobalExecutors.writingIO().execute(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				File tempFile = new File(file.getParentFile(), file.getName()+".tmp");
+				try {
+					try(OutputStream out = new GZIPOutputStream(new FileOutputStream(tempFile))) {
+						bout.writeTo(out);
+					}
+
+					if (file.exists())
+						FileUtils.forceDelete(file);
+					FileUtils.moveFile(tempFile, file);
+				} catch (Exception e) {
+					log.error("Failed to write file: "+file.getAbsolutePath(), e);
+				}
+			}
+		});
+	}
+
+	private static void writeStructureMap(Map<Long, StructureStart> structureMap, NBTOutputStream out) throws IOException
+	{
+		NBTTagCompound bufferNbt = null;
+		out.startCompoundTag("Features");
+		for(Map.Entry<Long, StructureStart> ent : structureMap.entrySet())
+		{
+			long key = ent.getKey();
+			StructureStart structure = ent.getValue();
+			int x = (int)(key & 0xFFFFFFFFL);
+			int z = (int)(key >> 32);
+			String tagName = MapGenStructureData.func_143042_b(x, z);
+			if(structure.getClass() == StructureMineshaftStart.class)
+			{
+				if(bufferNbt == null)
+					bufferNbt = new NBTTagCompound();
+				out.startCompoundTag(tagName);
+				{
+					out.writeString("id", "Mineshaft");
+					out.writeInt("ChunkX", x);
+					out.writeInt("ChunkZ", z);
+					out.writeTag("BB", structure.getBoundingBox().func_151535_h());
+					@SuppressWarnings("unchecked")
+					List<StructureComponent> components = structure.getComponents();
+					out.startTagList("Children", 10, components.size());
+					{
+						for(StructureComponent comp : components)
+						{
+							comp.writeToNbtStream(out, bufferNbt);
+							out.endCompoundTag();
+							bufferNbt.clear();
+						}
+					}
+					out.entTagList();
+				}
+				out.endCompoundTag();
+			}
+			else
+			{
+				out.writeTag(tagName, structure.func_143021_a(x, z));
+			}
+		}
+		out.endCompoundTag();
 	}
 }
