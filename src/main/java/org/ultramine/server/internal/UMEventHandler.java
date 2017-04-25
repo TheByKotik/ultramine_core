@@ -329,7 +329,7 @@ public class UMEventHandler
 	{
 		if(e.damageSource == DamageSource.command)
 			e.setDeathMessage(null);
-		if(e.damageSource == DamageSource.outOfWorld || perms.has(e.entityPlayer, "ability.admin.keepinventory"))
+		if(perms.has(e.entityPlayer, "ability.admin.keepinventory"))
 			e.setKeepInventory(true);
 	}
 }
