@@ -86,55 +86,6 @@ command.time.description=Sets time in current or specified world
 command.say.server=Server
 
 #Basic commands
-command.home.usage=/home [name]
-command.home.description=Teleports you to your home, sets with /sethome
-command.home.fail.notset=Home is not set
-command.home.multi.fail=You don't have permissions to use multiple homes
-command.home.other.fail=You don't have permissions to use homes of other players
-command.home.fail.interworld=Interdimensional teleportation to home is disabled
-
-command.sethome.usage=/sethome [name]
-command.sethome.description=Sets your /home teleportation point
-command.sethome.success=Home set
-command.sethome.multi.fail=You have no rights tp set multiple homes
-
-command.removehome.usage=/removehome <name>
-command.removehome.description=Removes your home with specified name
-command.removehome.fail=Home with specified name not found
-command.removehome.success=Home removed
-
-command.homelist.usage=/homelist
-command.homelist.description=Displays list of your homes
-command.homelist.head=Home list:
-
-command.warp.usage=/warp <name>
-command.warp.description=Teleports you to specified warp point
-command.warp.fail=Warp not found
-command.warp.noperm.other=You don't have permissions to teleport other players
-command.warp.fail.interworld=Interdimensional teleportation to warp is disabled
-
-command.setwarp.usage=/setwarp <name> [randomradius]
-command.setwarp.description=Sets new warp ar current location
-command.setwarp.fail=Warp with specified name already set
-command.setwarp.success=Warp set
-
-command.resetwarp.usage=/resetwarp <name> [randomradius]
-command.resetwarp.description=Sets new or overrides exists warp at current location
-command.resetwarp.success=Warp set
-
-command.removewarp.usage=/removewarp <name>
-command.removewarp.description=Removes warp with specified name
-command.removewarp.fail.spawn=Can't remove spawn warp
-command.removewarp.fail.nowarp=Warp not found
-command.removewarp.success=Warp removed
-
-command.warplist.usage=/warplist
-command.warplist.description=Displays list of all server warps
-command.warplist.head=Warp list:
-
-command.back.usage=/back
-command.back.description=Teleport to last location
-command.back.fail=Last location not found
 
 command.fastwarp.usage=/fastwarp <app|remove> <name>
 command.fastwarp.description=Add fastwarp
@@ -146,37 +97,6 @@ command.fastwarp.success.add=Fastwarp added
 command.fastwarp.success.remove=Fastwarp removed
 command.fastwarp.use.description=Teleport to this point
 
-command.setspawn.usage=/setspawn [randomradius]
-command.setspawn.description=Set spawn point
-command.setspawn.success=Spawn set
-
-command.setlocalspawn.usage=/setlocalspawn
-command.setlocalspawn.description=Set local spawn of current world (vanilla logic)
-command.setlocalspawn.success=Localspawn set
-
-command.localspawn.usage=/localspawn
-command.localspawn.description=Teleport to local spawn of current world (vanilla logic)
-
-command.heal.usage=/heal [player]
-command.heal.description=Restores health and hunger
-command.heal.noperm.other=Yout don't have permissions to heal other player
-command.heal.success=You have been healed
-command.heal.success.other=Player %s has been healed
-
-command.dropall.usage=/dropall [player]
-command.dropall.description=Drops all items in inventory
-command.dropall.noperm.other=Yout don't have permissions to dropall other player
-
-command.item.usage=/item <item> [count] OR /item <player> <item{NBT with spaces}>
-command.item.description=Get specified item stack
-
-command.dupe.usage=/dupe [count]
-command.dupe.description=Dupe the item in hand
-command.dupe.fail=Get item for dupe to the hand first
-
-command.gm.usage=/gm
-command.gm.description=Toggle gamemode
-
 command.buttoncommand.usage=/buttoncommand <create> <commands ...> OR /buttoncommand <permission> <commands ...> OR /buttoncommand <remove|get>
 command.buttoncommand.description=Binds server command to any block
 command.buttoncommand.fail.noblock=Button is not selected
@@ -186,13 +106,6 @@ command.buttoncommand.success.create=ButtonCommand has been successfuly created
 command.buttoncommand.success.remove=ButtonCommand has been successfuly removed
 command.buttoncommand.get.head=Command list:
 command.buttoncommand.noperms=You don't have permissions to use this button
-
-command.openinv.usage=/openinv <player>
-command.openinv.description=Opens the player's inventory
-command.openinv.fail.dead=The player is dead (has no inventory)
-
-command.openender.usage=/openender <player>
-command.openender.description=Opens the player's ender chest
 
 #Technical commands
 command.id.usage=/id <id>
@@ -265,9 +178,6 @@ command.chunkgc.usage=/chunkgc
 command.chunkgc.description=Unloads all unused chunks
 command.chunkgc.success=Chunk GC performed
 
-command.custmsg.usage=/custmsg <player/ALL> <message>
-command.custmsg.description=Sends custom formatted message to player (support colors, use &)
-
 command.genworld.usage=/genworld OR /genworld <radius> OR /genworld <world> <x> <z> <radius> OR /genworld [world] stop
 command.genworld.description=Generates area radially or inside world border
 command.genworld.already=Generation of specified world is already started. Type "/genworld stop" before
@@ -314,31 +224,8 @@ command.entitylist.description=Displays list of all loaded entities in specified
 command.killentity.usage=/killentity <id>
 command.killentity.description=Kills entity with specified ID
 
-command.mute.usage=/mute <player> [time]
-command.mute.description=Removes the ability to write in chat
-command.mute.notify=You has been muted
-command.mute.broadcast=The player %s forbidden to write in chat %s
-command.mute.broadcast.forever=The player %s forbidden to write in chat forever
 ultramine.ability.chat.muted=You has been muted. You will be unmuted in %s
 ultramine.ability.chat.muted.forever=You has been muted forever
 
-command.commandmute.usage=/commandmute <player> [time]
-command.commandmute.description=Removes the ability to write in chat and execute commands
-command.commandmute.notify=You have taken away the right to write in chat and execute commands
-command.commandmute.broadcast=The player %s forbidden to write in chat and execute commands %s
-command.commandmute.broadcast.forever=The player %s forbidden to write in chat and execute commands forever
 ultramine.ability.command.muted=You don't have ability to execute commands. You will be unmuted in %s
 ultramine.ability.command.muted.forever=You has been muted forever. You don't have ability to execute commands
-
-command.unmute.usage=/unmute <player>
-command.unmute.description=Unmutes the player
-command.unmute.fail=The player is not muted
-command.unmute.notify=You has been unmuted
-command.unmute.success=Player %s has been unmuted
-
-command.vanish.usage=/vanish
-command.vanish.description=Makes you invisible for other players
-command.vanish.success.hide=Now you're invisible
-command.vanish.success.show=Now you're visible
-command.vanish.notify.hide=became invisible
-command.vanish.notify.show=became visible

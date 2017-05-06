@@ -86,55 +86,6 @@ command.time.description=Устанавливает время суток в т�
 command.say.server=Сервер
 
 #Basic commands
-command.home.usage=/home [название]
-command.home.description=Телепортация на точку дома, устанавливаемую командой /sethome
-command.home.fail.notset=Точка дома не установлена
-command.home.multi.fail=У вас нет прав на использование множества домов
-command.home.other.fail=У нас нет прав на использование домов других игроков
-command.home.fail.interworld=Телепортация в дом между мирами отключена
-
-command.sethome.usage=/sethome [название]
-command.sethome.description=Устанавливает точку телепортации /home
-command.sethome.success=Дом установлен
-command.sethome.multi.fail=У вас нет прав на установку множества домов
-
-command.removehome.usage=/removehome <название>
-command.removehome.description=Удаляет точку дома с указанным названием
-command.removehome.fail=Точка дома с указанным названием не найдена
-command.removehome.success=Дом удален
-
-command.homelist.usage=/homelist
-command.homelist.description=Выводит список ваших домов
-command.homelist.head=Список домов:
-
-command.warp.usage=/warp <название>
-command.warp.description=Телепортирует вас на указанный варп
-command.warp.fail=Варп не найден
-command.warp.noperm.other=У вас нет прав на телепортацию других игроков
-command.warp.fail.interworld=Телепортация на варп между мирами отключена
-
-command.setwarp.usage=/setwarp <название> [случайный радиус]
-command.setwarp.description=Устанавливает новый варп на текущих координатах
-command.setwarp.fail=Варп с указанным именем уже существует
-command.setwarp.success=Варп установлен
-
-command.resetwarp.usage=/resetwarp <название> [случайный радиус]
-command.resetwarp.description=Устанавливает новый или перезаписывает существующий варп на текущих координатах
-command.resetwarp.success=Варп установлен
-
-command.removewarp.usage=/removewarp <название>
-command.removewarp.description=Удаляет варп с указанным именем
-command.removewarp.fail.spawn=Нельзя удалить варп спавна
-command.removewarp.fail.nowarp=Варп не найден
-command.removewarp.success=Варп удален
-
-command.warplist.usage=/warplist
-command.warplist.description=Выводит список всех публичных варпов
-command.warplist.head=Список варпов:
-
-command.back.usage=/back
-command.back.description=Телепортация в предыдущее расположение
-command.back.fail=Предыдущее расположение не найдено
 
 command.fastwarp.usage=/fastwarp <app|remove> <название>
 command.fastwarp.description=Добавляет фастварп
@@ -146,37 +97,6 @@ command.fastwarp.success.add=Фастварп добавлен
 command.fastwarp.success.remove=Фастварп удален
 command.fastwarp.use.description=Телепортация к этой точке
 
-command.setspawn.usage=/setspawn [случайный радиус]
-command.setspawn.description=Устанавливает точку спавна
-command.setspawn.success=Спавн установлен
-
-command.setlocalspawn.usage=/setlocalspawn
-command.setlocalspawn.description=Устанавливает локальный спавн текущего мира (ванильная логика)
-command.setlocalspawn.success=Локальный спавн установлен
-
-command.localspawn.usage=/localspawn
-command.localspawn.description=Телепортация на локальный спавн текущего мира (ванильная логика)
-
-command.heal.usage=/heal [игрок]
-command.heal.description=Восстанавливает здоровье и голод
-command.heal.noperm.other=У вас нет прав на излечение других игроков
-command.heal.success=Вы были излечены
-command.heal.success.other=Игрок %s был излечен
-
-command.dropall.usage=/dropall [игрок]
-command.dropall.description=Выбрасывает все вещи из инвентаря
-command.dropall.noperm.other=У вас нет прав на выбрасывание вещей другого игрока
-
-command.item.usage=/item <предмет> [количество] ИЛИ /item <игрок> <предмет{NBT с пробелами}>
-command.item.description=Выдает указанный предмет
-
-command.dupe.usage=/dupe [количество]
-command.dupe.description=Дюпает предмет в руке
-command.dupe.fail=Сначала возьмите в руку предмет для дюпа
-
-command.gm.usage=/gm
-command.gm.description=Переключает режим игры
-
 command.buttoncommand.usage=/buttoncommand <create> <команды ...> ИЛИ /buttoncommand <permission> <команды ...> ИЛИ /buttoncommand <remove|get>
 command.buttoncommand.description=Устанавливает серверную команду на любой блок
 command.buttoncommand.fail.noblock=Кнопка не выбрана, наведите курсор на кнопку
@@ -186,13 +106,6 @@ command.buttoncommand.success.create=ButtonCommand успешно создан
 command.buttoncommand.success.remove=ButtonCommand успешно удален
 command.buttoncommand.get.head=Список команд:
 command.buttoncommand.noperms=У вас нет прав для использования данной кнопки
-
-command.openinv.usage=/openinv <игрок>
-command.openinv.description=Открывает инвентарь указанного игрока
-command.openinv.fail.dead=Игрок мертв (инвентаря нет)
-
-command.openender.usage=/openender <игрок>
-command.openender.description=Открывает сундук края указанного игрока
 
 #Technical commands
 command.id.usage=/id <id>
@@ -265,9 +178,6 @@ command.chunkgc.usage=/chunkgc
 command.chunkgc.description=Выгружает все неиспользуемые чанки
 command.chunkgc.success=Выгрузка чанков инициирована
 
-command.custmsg.usage=/custmsg <игрок|ALL> <сообщение>
-command.custmsg.description=Отправляет кастомное сообщение игроку (поддерживает цвета)
-
 command.genworld.usage=/genworld ИЛИ /genworld <радиус> ИЛИ /genworld <мир> <x> <z> <радиус> ИЛИ /genworld [мир] stop
 command.genworld.description=Генерирует мир по радиусу или в пределах мирового барьера
 command.genworld.already=Генерация указанного мира уже запущена. Сначала введите "/genworld stop"
@@ -314,31 +224,8 @@ command.entitylist.description=Показывает список всех заг
 command.killentity.usage=/killentity <id>
 command.killentity.description=Убивает Entity с указанным ID
 
-command.mute.usage=/mute <игрок> [время]
-command.mute.description=Запрещает игроку писать в чат определенное время
-command.mute.notify=У вас забрали право писать в чат
-command.mute.broadcast=Игроку %s запрещено писать в чат %s
-command.mute.broadcast.forever=Игроку %s навсегда запрещено писать в чат
 ultramine.ability.chat.muted=Возможность писать в чат была заблокирована на %s
 ultramine.ability.chat.muted.forever=Возможность писать в чат была заблокирована навсегда
 
-command.commandmute.usage=/commandmute <игрок> [время]
-command.commandmute.description=Запрещает игроку писать в чат и выполнять команды определенное время
-command.commandmute.notify=У вас забрали право писать в чат и выполнять команды
-command.commandmute.broadcast=Игроку %s запрещено писать в чат и выполнять команды %s
-command.commandmute.broadcast.forever=Игроку %s навсегда запрещено писать в чат и выполнять команды
 ultramine.ability.command.muted=Возможность выполнять команды была заблокирована на %s
 ultramine.ability.command.muted.forever=Возможность выполнять команды была заблокирована навсегда
-
-command.unmute.usage=/unmute <игрок>
-command.unmute.description=Возвращает право писать в чат
-command.unmute.fail=Указанный игрок не замьючен
-command.unmute.notify=Вам возвращено право писать в чат
-command.unmute.success=Игроку %s теперь разрешено писать в чат
-
-command.vanish.usage=/vanish
-command.vanish.description=Делает вас невидимым для других игроков
-command.vanish.success.hide=Вы в невидимости
-command.vanish.success.show=Теперь вас видно
-command.vanish.notify.hide=зашел в невидимость
-command.vanish.notify.show=вышел из невидимости
