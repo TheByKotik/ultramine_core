@@ -90,16 +90,6 @@ command.fastwarp.success.add=Фастварп добавлен
 command.fastwarp.success.remove=Фастварп удален
 command.fastwarp.use.description=Телепортация к этой точке
 
-command.buttoncommand.usage=/buttoncommand <create> <команды ...> ИЛИ /buttoncommand <permission> <команды ...> ИЛИ /buttoncommand <remove|get>
-command.buttoncommand.description=Устанавливает серверную команду на любой блок
-command.buttoncommand.fail.noblock=Кнопка не выбрана, наведите курсор на кнопку
-command.buttoncommand.fail.already=Кнопка уже создана. Используйте /buttoncommand remove
-command.buttoncommand.fail.none=ButtonCommand не установлен на выбранный блок
-command.buttoncommand.success.create=ButtonCommand успешно создан
-command.buttoncommand.success.remove=ButtonCommand успешно удален
-command.buttoncommand.get.head=Список команд:
-command.buttoncommand.noperms=У вас нет прав для использования данной кнопки
-
 #Technical commands
 command.id.usage=/id <id>
 command.id.description=Показывает информацию об указанном id
