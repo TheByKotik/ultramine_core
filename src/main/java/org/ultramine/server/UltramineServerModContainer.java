@@ -36,7 +36,6 @@ import org.ultramine.server.internal.UMEventHandler;
 import org.ultramine.server.internal.OpBasedPermissions;
 import org.ultramine.server.tools.ButtonCommand;
 import org.ultramine.server.tools.ItemBlocker;
-import org.ultramine.server.tools.WarpProtection;
 import org.ultramine.server.util.GlobalExecutors;
 
 import com.google.common.collect.ImmutableList;
@@ -199,7 +198,6 @@ public class UltramineServerModContainer extends DummyModContainer
 			{
 				buttonCommand.load(e);
 				itemBlocker.load();
-				MinecraftForge.EVENT_BUS.register(new WarpProtection());
 				e.getServer().getScheduler().start();
 			}
 		}

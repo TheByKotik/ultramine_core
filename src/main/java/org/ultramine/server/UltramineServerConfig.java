@@ -122,7 +122,6 @@ public class UltramineServerConfig
 		public AutoBroacastConf autobroadcast = new AutoBroacastConf();
 		public AutoDebugInfoConf autoDebugInfo = new AutoDebugInfoConf();
 		public AutoBackupConf autobackup = new AutoBackupConf();
-		public WarpProtectionEntry[] warpProtection = new WarpProtectionEntry[0];
 		public EconomyConf economy = new EconomyConf();
 		
 		public static class AutoBroacastConf
