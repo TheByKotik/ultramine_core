@@ -275,6 +275,7 @@ public class UltramineServerModContainer extends DummyModContainer
 	public List<String> getOwnedPackages()
 	{
 		return ImmutableList.of(
+			"org.ultramine.core.service",
 			"org.ultramine.server",
 			"org.ultramine.commands",
 			"org.ultramine.server.util"
