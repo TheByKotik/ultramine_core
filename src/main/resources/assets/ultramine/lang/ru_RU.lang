@@ -12,13 +12,6 @@ ultramine.tools.itemblocker.useitem=Использование данного п
 ultramine.tools.itemblocker.useblock=Использование данного блока запрещено сервером
 ultramine.tools.itemblocker.rmitem=Данный предмет запрещен сервером
 
-ultramine.ability.blockbreak=У вас нет прав на разрушение блоков
-ultramine.ability.blockplace=У вас нет прав на установку блоков
-ultramine.ability.useitem=У вас нет прав на использование предметов
-ultramine.ability.useblock=У вас нет прав на использование блоков
-ultramine.ability.attack=У вас нет права наносить урон
-ultramine.ability.chat=У вас нет прав писать в чате
-
 ultramine.notify.loggedhidden=Присоединился к игре невидимым
 ultramine.hidden.chat=Вы не можете писать в чат в невидимости
 

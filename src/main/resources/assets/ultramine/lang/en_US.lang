@@ -12,13 +12,6 @@ ultramine.tools.itemblocker.useitem=Use of this item is forbidden by server
 ultramine.tools.itemblocker.useblock=Use of this block is forbidden by server
 ultramine.tools.itemblocker.rmitem=This item is forbidden by server
 
-ultramine.ability.blockbreak=You don't have permissions to break blocks
-ultramine.ability.blockplace=You don't have permissions to place blocks
-ultramine.ability.useitem=You don't have permissions to use items
-ultramine.ability.useblock=You don't have permissions to use blocks
-ultramine.ability.attack=You don't have permissions to damage entities
-ultramine.ability.chat=You don't have permissions to chat
-
 ultramine.notify.loggedhidden=Joined the server in invisibility
 ultramine.hidden.chat=You can't write to chat in invisibility
 
