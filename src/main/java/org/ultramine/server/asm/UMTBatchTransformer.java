@@ -15,6 +15,7 @@ import java.util.Map;
 
 public class UMTBatchTransformer implements IClassTransformer
 {
+	private static final boolean REPAIR_FRAMES = Boolean.parseBoolean(System.getProperty("org.ultramine.core.asm.repairJavaClassFrames", "true"));
 	private List<IUMClassTransformer> globalTransformers = new ArrayList<>();
 	private Map<String, List<IUMClassTransformer>> specialTransformers = new HashMap<>();
 
@@ -50,7 +51,7 @@ public class UMTBatchTransformer implements IClassTransformer
 			flags |= transformer.transform(name, transformedName, classReader, classNode).ordinal();
 
 		// Computing frames even if we did not changed class to fix other mod changes of 1.7 & 1.8 classes
-		boolean shouldComputeFrames = (classNode.version & 0xFFFF) > Opcodes.V1_6;
+		boolean shouldComputeFrames = REPAIR_FRAMES && (classNode.version & 0xFFFF) > Opcodes.V1_6;
 		if(flags == 0 && !shouldComputeFrames)
 			return basicClass;
 
