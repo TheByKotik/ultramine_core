@@ -1,11 +1,13 @@
 package org.ultramine.server;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
 import net.minecraft.command.CommandHandler;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.StringTranslate;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.ultramine.commands.CommandRegistry;
@@ -108,6 +110,10 @@ public class UltramineServerModContainer extends DummyModContainer
 			services.register(AntiXRayService.class, new AntiXRayService.EmptyImpl(), 0);
 			if(e.getSide().isServer())
 			{
+				// In the case of launch from IDE translation table is not loaded automatically
+				InputStream langFile = getClass().getResourceAsStream("/assets/ultramine/lang/en_US.lang");
+				if (langFile != null) StringTranslate.inject(langFile);
+
 				ConfigurationHandler.load();
 				Databases.init();
 				MinecraftServer.getServer().getMultiWorld().preloadConfigs();

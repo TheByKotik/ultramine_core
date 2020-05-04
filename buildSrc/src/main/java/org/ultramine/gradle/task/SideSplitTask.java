@@ -7,7 +7,6 @@ import org.gradle.api.file.FileVisitor;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.OutputDirectory;
-import org.gradle.api.tasks.ParallelizableTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.incremental.IncrementalTaskInputs;
 import org.gradle.api.tasks.incremental.InputFileDetails;
@@ -26,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-@ParallelizableTask
 public class SideSplitTask extends DefaultTask
 {
 	private static final String SIDEONLY_DESK = "Lcpw/mods/fml/relauncher/SideOnly;";
