@@ -12,7 +12,6 @@ import org.gradle.api.file.FileVisitor;
 import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputDirectory;
-import org.gradle.api.tasks.ParallelizableTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.incremental.IncrementalTaskInputs;
 import org.gradle.api.tasks.incremental.InputFileDetails;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-@ParallelizableTask
 public class ReobfTask extends DefaultTask
 {
 	@InputDirectory
