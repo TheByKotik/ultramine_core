@@ -230,7 +230,7 @@ public class NetworkManager extends SimpleChannelInboundHandler
 				long startT = System.nanoTime();
 				packet.processPacket(this.netHandler);
 				long elapsed = System.nanoTime() - startT;
-				if(elapsed > 20000000)
+				if(elapsed > 2000000000)
 				{
 					logger.warn("Possible lag source on processiong packet {} from {} {}ms", packet.getClass().getSimpleName(), player, (elapsed/1000000));
 					if(packet instanceof C0EPacketClickWindow && player != null)
