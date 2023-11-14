@@ -26,7 +26,7 @@ version = (concat_mc_version_to=='version' ? (minecraft_version+'-') : '') + com
 repositories {
 	maven {
 		name 'forge'
-		url 'http://files.minecraftforge.net/maven'
+		url 'https://files.minecraftforge.net/maven'
 	}
 	mavenCentral()
 	maven {
