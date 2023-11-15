@@ -46,10 +46,10 @@ configurations {
 	runtimeCommon
 	runtimeClient
 	runtimeServer
-	compile.extendsFrom compileCommon, compileClient, compileServer
+	implementation.extendsFrom compileCommon, compileClient, compileServer
 	packageClient.extendsFrom compileCommon, compileClient, runtimeCommon, runtimeClient
 	packageServer.extendsFrom compileCommon, compileServer, runtimeCommon, runtimeServer
-	packageAll.extendsFrom compileCommon, compileClient, compileServer, runtimeCommon, runtimeClient, runtimeServer
+	packageAll.extendsFrom packageClient, packageServer
 	runtime.setExtendsFrom([packageAll])
 	//packageClient, packageServer & packageAll is not linking to IDE and must not be used for adding dependencies
 }

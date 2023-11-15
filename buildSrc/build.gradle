@@ -8,8 +8,8 @@ repositories {
 }
 
 dependencies {
-	compile gradleApi()
-	compile 'org.ow2.asm:asm-debug-all:5.0.3'
-	compile 'commons-io:commons-io:2.4'
-	compile 'net.md-5:SpecialSource:1.7.3'
+	implementation gradleApi()
+	implementation 'org.ow2.asm:asm-debug-all:5.0.3'
+	implementation 'commons-io:commons-io:2.4'
+	implementation 'net.md-5:SpecialSource:1.7.3'
 }

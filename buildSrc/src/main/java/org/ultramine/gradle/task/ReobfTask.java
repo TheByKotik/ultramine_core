@@ -11,6 +11,7 @@ import org.gradle.api.file.FileVisitDetails;
 import org.gradle.api.file.FileVisitor;
 import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.InputFile;
+import org.gradle.api.tasks.CompileClasspath;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.incremental.IncrementalTaskInputs;
@@ -36,6 +37,7 @@ public class ReobfTask extends DefaultTask
 	private File overrideInputDir;
 	@InputFile
 	private File srg;
+	@CompileClasspath
 	private FileCollection classpath;
 	@OutputDirectory
 	private File outputDir = new File(getProject().getBuildDir(), getName());
